@@ -9,7 +9,10 @@
 
 
 #define KEY_PAUSE sf::Key::P
-
+#define KEY_DOWN sf::Key::Up
+#define KEY_UP sf::Key::Down
+#define KEY_VALID sf::Key::Return
+#define KEY_ESC sf::Key::Escape
 Game::Game(sf::RenderWindow& app) :
     Screen       (app),
     bullets_     (BulletManager::GetInstance()),
@@ -44,13 +47,17 @@ Screen::Choice Game::Run()
             }
             else if (event.Type == sf::Event::KeyPressed)
             {
-                if (event.Key.Code == sf::Key::Escape)
+                if (event.Key.Code == KEY_ESC)
                 {
                     running = false;
                 }
                 if (event.Key.Code == KEY_PAUSE)
                 {
-                    Pause();
+                    MenuAction what = InGameMenu();
+		    if (what == EXIT)
+		    {
+			running = false;
+		    }
                 }
             }
         }
@@ -178,26 +185,60 @@ void Game::RemoveEntities()
 }
 
 // Autre souci: comment intercepter proprement les événements de fermeture de l'appli?
-void Game::Pause()
+// Retourne: Valeur enumérée Action:
+Game::MenuAction Game::InGameMenu()
 {
+#define NB_ITEMS 3
     sf::Event event;
     sf::Image capture = app_.Capture(); // Problem: Image is pitch black.
     sf::Sprite back(capture);
     sf::String text("P A U S E D"); text.SetPosition(255,160); text.SetSize(30.0);
 
+    sf::String* items[3];
+    items[0] = new sf::String("Resume Game"); items[0]->SetPosition(300,200);
+    items[1] = new sf::String("Exit Game"); items[1]->SetPosition(300,228);
+    items[2] = new sf::String("Options"); items[2]->SetPosition(300,256);
+    short i, selected_item = 0;
     while (1)
     {
-	app_.Draw(back); app_.Draw(text); app_.Display();
+	app_.Draw(back); app_.Draw(text);
+        for (i = 0; i < NB_ITEMS; ++i)
+        {
+            items[i]->SetStyle( (i == selected_item)?  sf::String::Bold : sf::String::Regular);
+            app_.Draw(*items[i]);
+        }
+        app_.Display();
         while (app_.GetEvent(event))
         {
             if (event.Type == sf::Event::KeyPressed)
             {
+                if (event.Key.Code == KEY_ESC)
+                {
+                    return EXIT;
+                }
                 if (event.Key.Code == KEY_PAUSE)
                 {
-                    return;
+                    return RESUME;
+                }
+                if (event.Key.Code == KEY_UP)
+                {
+                    selected_item = (selected_item + 1) % 3;
+                }
+                if (event.Key.Code == KEY_DOWN)
+                {
+                    selected_item = ((selected_item)? selected_item - 1 : selected_item = NB_ITEMS - 1);
+                }
+                if (event.Key.Code == KEY_VALID)
+                {
+                    if (selected_item == 0) return RESUME;
+		    if (selected_item == 1) return EXIT;
+                    if (selected_item == 2) Options();
                 }
             }
         }
     }
 }
 
+void Game::Options()
+{
+}

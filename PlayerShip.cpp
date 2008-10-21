@@ -83,8 +83,8 @@ void PlayerShip::Action()
 
 void PlayerShip::Move(float frametime)
 {
-    static const int WIDTH = sprite_.GetSize().x;
-    static const int HEIGHT = sprite_.GetSize().y;
+    static const float WIDTH = sprite_.GetSize().x;
+    static const float HEIGHT = sprite_.GetSize().y;
     
     // déplacement
     const sf::Vector2f& offset = GetPosition();

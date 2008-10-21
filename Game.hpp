@@ -30,13 +30,25 @@ public:
      * Ajout d'une nouvelle unité dans le jeu
      */
     void AddEntity(Entity* entity);
-
-    /*
-     * Mise en pause du jeu
-     */
-    void Pause();
     
 private:
+
+    /*
+     * Types de retour des menus
+     */
+    enum MenuAction
+    {
+	OPTIONS,
+	RESUME,
+	EXIT
+    };
+
+
+    /*
+     * Mise en pause du jeu - Menu
+     */
+    MenuAction InGameMenu();
+
     /*
      * Méthode temporaire d'ajout d'ennemi
      */
@@ -52,6 +64,8 @@ private:
      */
     void RemoveEntities();
     
+    void Options();
+
     BulletManager& bullets_;
     ParticleSystem& particle_sys_;
     
