@@ -1,4 +1,0 @@
-blaster-shot-1.wav
-blaster-shot-2.wav
-boom.wav
-warp.wav
