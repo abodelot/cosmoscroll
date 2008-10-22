@@ -1,8 +1,15 @@
-asteroid-big.png
-asteroid-medium.png
-asteroid-small.png
+asteroid-big-1.png
+asteroid-big-2.png
+asteroid-big-3.png
+asteroid-medium-1.png
+asteroid-medium-2.png
+asteroid-medium-3.png
+asteroid-small-1.png
+asteroid-small-2.png
+asteroid-small-3.png
 background.png
 blue_fiery.png
+ennemy-A.png
 hellfire.png
 impact.png
 laserbeam.png
@@ -11,6 +18,6 @@ shield.png
 spaceship_light.png
 spaceship.png
 star.png
+wasp.png
 WIP_capsule.png
-WIP_interceptor.png
 WIP_score-board.png

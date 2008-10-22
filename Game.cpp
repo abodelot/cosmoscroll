@@ -2,8 +2,8 @@
 #include "MediaManager.hpp"
 #include "Window.hpp"
 #include "Asteroid.hpp"
+#include "Ennemy.hpp"
 #include "Blorb.hpp"
-#include "Blorb2.hpp"
 #include "Menu.hpp"
 
 #include <SFML/System.hpp>
@@ -66,7 +66,7 @@ Screen::Choice Game::Run()
         
         std::vector<Entity*>::iterator it;
         // <hack>
-        if (entities_.size() < 12)
+        if (entities_.size() < 8)
         {
             AddFoo();
         }
@@ -143,21 +143,21 @@ void Game::AddFoo()
     sf::Vector2f offset;
     offset.x = WIN_WIDTH;
     offset.y = sf::Randomizer::Random(0, WIN_HEIGHT);
-    int ploufplouf = sf::Randomizer::Random(0, 2);
-    if (ploufplouf == 0)
+    int ploufplouf = sf::Randomizer::Random(0, 10);
+    if (ploufplouf > 6)
     {
     // cast en Entity** car on ne peut pas subsituer un super pointeur enfant
     // à un parent. (un pointeur oui, une référence oui, mais pas un super
     // pointeur :( )
-        entities_.push_back(new Blorb(offset, (Entity**) &player_));
+        entities_.push_back(new Ennemy(offset, (Entity**) &player_));
     }
-    else if (ploufplouf == 1)
-    {
-        entities_.push_back(new Blorb2(offset, (Entity**) &player_));
-    }
-    else if (ploufplouf == 2)
+    else if (ploufplouf > 2)
     {
         entities_.push_back(new Asteroid(offset, Asteroid::BIG, *this));
+    }
+    else
+    {
+        entities_.push_back(new Blorb(offset, (Entity**) &player_));
     }
     // </hack>
 }

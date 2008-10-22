@@ -18,7 +18,7 @@ Weapon::Weapon(Type type)
             sound_.SetBuffer(GET_SOUNDBUF("blaster-shot-2"));
             break;
         case PLASMACANNON:
-            shot_per_second = 2.f;
+            shot_per_second = 3.f;
             energy_cost_ = 5.f;
             break;
         default:

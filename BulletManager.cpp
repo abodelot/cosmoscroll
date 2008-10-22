@@ -32,7 +32,7 @@ void BulletManager::Add(Weapon::Type type, const sf::Vector2f& offset, float ang
         case Weapon::LASERBEAM:
             bullet.sprite.SetImage(GET_IMG("laserbeam"));
             bullet.damage = 2;
-            bullet.speed = 380;
+            bullet.speed = 360;
             break;
         case Weapon::HELLFIRE:
             bullet.sprite.SetImage(GET_IMG("hellfire"));

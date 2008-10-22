@@ -6,6 +6,7 @@
 #include "Window.hpp"
 
 #include <SFML/System.hpp>
+#include <sstream>
 
 // orientation en degrés
 #define MIN_ANGLE 150.0f
@@ -22,12 +23,15 @@
 
 inline const sf::Image& select_image(Asteroid::Size size)
 {
-    static const char* image_keys[] = {
+    const int NB = 3;
+    static const char* image_bases[] = {
         "asteroid-small",
         "asteroid-medium",
         "asteroid-big"
     };
-    return GET_IMG(image_keys[size]);
+    std::ostringstream key;
+    key << image_bases[size] << '-' << sf::Randomizer::Random(1, NB);
+    return GET_IMG(key.str().c_str());
 }
 
 

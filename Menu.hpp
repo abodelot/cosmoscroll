@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 /*
  * Permet de sélectionner une action
@@ -99,6 +100,7 @@ private:
     int linespace_; // interligne en pixels
     ItemLook highlight_look_;
     ItemLook normal_look_;
+    sf::Sound sound_;
 };
 
 #endif /* guard MENU_HPP */

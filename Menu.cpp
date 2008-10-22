@@ -9,11 +9,13 @@ Menu::Menu()
     linespace_ = 10;
     normal_look_.style = sf::String::Regular;
     normal_look_.color = sf::Color::White;
-    highlight_look_.style = sf::String::Bold;
-    highlight_look_.color = sf::Color::Cyan;
+    highlight_look_.style = sf::String::Underlined;
+    highlight_look_.color = sf::Color::Green;
     
     // pas encore d'éléments, donc pas de sélection
     selected_ = -1;
+    
+    sound_.SetBuffer(GET_SOUNDBUF("menu-select"));
 }
 
 
@@ -81,11 +83,13 @@ bool Menu::ActionChosen(const sf::Event::KeyEvent& key, int& id)
             ApplyStyle(items_[selected_], normal_look_);
             selected_ = (selected_ - 1) % items_.size();
             ApplyStyle(items_[selected_], highlight_look_);
+            sound_.Play();
             break;
         case sf::Key::Down:
             ApplyStyle(items_[selected_], normal_look_);
             selected_ = (selected_ + 1) % items_.size();
             ApplyStyle(items_[selected_], highlight_look_);
+            sound_.Play();
             break;
         case sf::Key::Return:
             id = items_[selected_].id;

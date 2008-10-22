@@ -1,37 +1,20 @@
-#ifndef H_BLORB
-#define H_BLORB
+#ifndef BLORB_HPP
+#define BLORB_HPP
 
-#include "Entity.hpp"
-#include "Weapon.hpp"
+#include "Ennemy.hpp"
 
 #include <SFML/Graphics.hpp>
 
 /*
- * Un machin qui tire des laserbeams sur le player
+ * Un ennemy historique :)
  */
-class Blorb: public Entity
+class Blorb: public Ennemy
 {
 public:
-    /*
-     * @param[in] offset: position de départ
-     * @param[in] target: vaisseau cible
-     */
     Blorb(const sf::Vector2f& offset, Entity** target);
     
-    void Hit(int damage);
-    
-    /*
-     * Déplacement
-     */
-    void Move(float frametime);
-    
     void Action();
-    
-protected:
-    Entity** target_;
-    bool old_orient_;
-    Weapon weapon_;
 };
 
-#endif /* guard H_BLORB */
+#endif /* guard BLORB_HPP */
 
