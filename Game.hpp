@@ -1,5 +1,5 @@
-#ifndef H_GAME
-#define H_GAME
+#ifndef GAME_HPP
+#define GAME_HPP
 
 #include "Screen.hpp"
 #include "Entity.hpp"
@@ -38,9 +38,9 @@ private:
      */
     enum MenuAction
     {
-	OPTIONS,
-	RESUME,
-	EXIT
+        OPTIONS,
+        RESUME,
+        EXIT
     };
 
 
@@ -75,5 +75,5 @@ private:
     ControlPanel& panel_;
 };
 
-#endif /* guard H_GAME */
+#endif /* guard GAME_HPP */
 

@@ -12,7 +12,7 @@ else
 endif
 
 
-$(EXEC): Asteroid.o Blorb.o Blorb2.o BulletManager.o ControlPanel.o Entity.o Game.o GameOver.o Intro.o Main.o MediaManager.o ParticleSystem.o PlayerShip.o Weapon.o
+$(EXEC): Asteroid.o Blorb.o Blorb2.o BulletManager.o ControlPanel.o Entity.o Game.o GameOver.o Intro.o Main.o MediaManager.o Menu.o ParticleSystem.o PlayerShip.o Weapon.o
 	$(CC) $^ -o $(EXEC) $(LDFLAGS)
 
 Asteroid.o: Asteroid.cpp Asteroid.hpp
@@ -46,6 +46,9 @@ Main.o: Main.cpp
 	$(CC) $< -c $(CFLAGS)
 
 MediaManager.o: MediaManager.cpp MediaManager.hpp
+	$(CC) $< -c $(CFLAGS)
+
+Menu.o: Menu.cpp Menu.hpp
 	$(CC) $< -c $(CFLAGS)
 
 ParticleSystem.o: ParticleSystem.cpp ParticleSystem.hpp

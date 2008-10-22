@@ -4,15 +4,14 @@
 #include "Asteroid.hpp"
 #include "Blorb.hpp"
 #include "Blorb2.hpp"
+#include "Menu.hpp"
 
 #include <SFML/System.hpp>
 
-
 #define KEY_PAUSE sf::Key::P
-#define KEY_DOWN sf::Key::Up
-#define KEY_UP sf::Key::Down
-#define KEY_VALID sf::Key::Return
 #define KEY_ESC sf::Key::Escape
+
+
 Game::Game(sf::RenderWindow& app) :
     Screen       (app),
     bullets_     (BulletManager::GetInstance()),
@@ -188,55 +187,60 @@ void Game::RemoveEntities()
 // Retourne: Valeur enumérée Action:
 Game::MenuAction Game::InGameMenu()
 {
-#define NB_ITEMS 3
     sf::Event event;
-    sf::Image capture = app_.Capture(); // Problem: Image is pitch black.
-    sf::Sprite back(capture);
-    sf::String text("P A U S E D"); text.SetPosition(255,160); text.SetSize(30.0);
+    sf::String title("P A U S E D");
+    title.SetPosition(255, 160);
+    title.SetSize(30.0);
 
-    sf::String* items[3];
-    items[0] = new sf::String("Resume Game"); items[0]->SetPosition(300,200);
-    items[1] = new sf::String("Exit Game"); items[1]->SetPosition(300,228);
-    items[2] = new sf::String("Options"); items[2]->SetPosition(300,256);
-    short i, selected_item = 0;
-    while (1)
+    Menu menu;
+    menu.SetOffset(sf::Vector2f(300, 200));
+    menu.AddItem("Resume Game", RESUME);
+    menu.AddItem("Options", OPTIONS);
+    menu.AddItem("Exit Game", EXIT);
+    
+    bool paused = true;
+    int what;
+    while (paused)
     {
-	app_.Draw(back); app_.Draw(text);
-        for (i = 0; i < NB_ITEMS; ++i)
-        {
-            items[i]->SetStyle( (i == selected_item)?  sf::String::Bold : sf::String::Regular);
-            app_.Draw(*items[i]);
-        }
-        app_.Display();
         while (app_.GetEvent(event))
         {
+            if (event.Type == sf::Event::Closed)
+            {
+                what = EXIT;
+                paused = false;
+            }
             if (event.Type == sf::Event::KeyPressed)
             {
                 if (event.Key.Code == KEY_ESC)
                 {
-                    return EXIT;
+                    what = EXIT;
+                    paused = false;
                 }
-                if (event.Key.Code == KEY_PAUSE)
+                else if (menu.ActionChosen(event.Key, what))
                 {
-                    return RESUME;
-                }
-                if (event.Key.Code == KEY_UP)
-                {
-                    selected_item = (selected_item + 1) % 3;
-                }
-                if (event.Key.Code == KEY_DOWN)
-                {
-                    selected_item = ((selected_item)? selected_item - 1 : selected_item = NB_ITEMS - 1);
-                }
-                if (event.Key.Code == KEY_VALID)
-                {
-                    if (selected_item == 0) return RESUME;
-		    if (selected_item == 1) return EXIT;
-                    if (selected_item == 2) Options();
+                    paused = false;
                 }
             }
         }
+        
+        // seules les particules sont mises à jour
+        particle_sys_.Update(app_.GetFrameTime());
+        
+        // rendering
+        bullets_.Show(app_);
+        particle_sys_.Show(app_);
+        std::vector<Entity*>::const_iterator it;
+        for (it = entities_.begin(); it != entities_.end(); ++it)
+        {
+            (**it).Show(app_);
+        }
+        panel_.Show(app_);
+        
+        app_.Draw(title);
+        menu.Show(app_);
+        app_.Display();
     }
+    return static_cast<MenuAction>(what);
 }
 
 void Game::Options()

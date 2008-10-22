@@ -1,5 +1,6 @@
 #include "GameOver.hpp"
 #include "MediaManager.hpp"
+#include "Menu.hpp"
 
 
 GameOver::GameOver(sf::RenderWindow& app) :
@@ -11,16 +12,21 @@ GameOver::GameOver(sf::RenderWindow& app) :
 
 Screen::Choice GameOver::Run()
 {
-    const char* message = "Perdu !\nR : Rejour\nQ : Quitter";
+    sf::String title;
+    title.SetText("T'as perdu, t'es trop naze");
+    title.SetFont(GET_FONT());
+    title.SetColor(sf::Color::White);
+    title.SetPosition(42, 42);
+    
+    Menu menu;
+    menu.SetOffset(sf::Vector2f(42, 80));
+    menu.AddItem("Rejouer", Screen::GAME);
+    menu.AddItem("Quitter", Screen::EXIT_APP);
+    
     bool running = true;
-    Screen::Choice choice = Screen::EXIT_APP;
+    int choice;
     
     sf::Event event;
-    sf::String string(message);
-    string.SetColor(sf::Color::White);
-    string.SetPosition(42, 42);
-    string.SetFont(GET_FONT());
-    
     while (running)
     {
         while (app_.GetEvent(event))
@@ -31,24 +37,16 @@ Screen::Choice GameOver::Run()
             }
             else if (event.Type == sf::Event::KeyPressed)
             {
-                switch (event.Key.Code)
+                if (menu.ActionChosen(event.Key, choice))
                 {
-                    case sf::Key::Escape:
-                    case 'q':
-                        running = false;
-                        break;
-                    case 'r':
-                        running = false;
-                        choice = Screen::GAME;
-                        break;
-                    default:
-                        break;
+                    running = false;
                 }
             }
         }
-        app_.Draw(string);
+        app_.Draw(title);
+        menu.Show(app_);
         app_.Display();
     }
-    return choice;
+    return static_cast<Screen::Choice>(choice);
 }
 
