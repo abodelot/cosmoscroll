@@ -1,7 +1,26 @@
 #include "ControlPanel.hpp"
 #include "MediaManager.hpp"
 
-#include <sstream>
+#include <cstdarg>
+
+// <3 printf format
+static std::string epic_sprintf(const char format[], ...)
+{
+    va_list args;
+    va_start(args, format);
+    
+    int length = vsnprintf(NULL, 0, format, args);
+    char* p = new char [length + 1];
+    va_end(args);
+    va_start(args, format);
+    vsprintf(p, format, args);
+    va_end(args);    
+    
+    std::string str(p);
+    delete [] p;
+    return str;
+}
+
 
 ControlPanel& ControlPanel::GetInstance()
 {
@@ -12,28 +31,31 @@ ControlPanel& ControlPanel::GetInstance()
 
 void ControlPanel::SetShipHP(int hp)
 {
-    std::ostringstream s;
-    s << "Vaisseau : " << hp << "HP";
-    str_[HP].SetText(s.str());
+    str_[HP].SetText(epic_sprintf("Vaisseau : %d HP", hp));
 }
+
 
 void ControlPanel::SetShield(int n)
 {
-    std::ostringstream s;
-    s << "Bouclier : " << n;
-    str_[SHIELD].SetText(s.str());    
+    str_[SHIELD].SetText(epic_sprintf("Bouclier : %d", n));    
 }
+
 
 void ControlPanel::SetInfo(const char* text)
 {
     str_[INFO].SetText(text);
 }
 
+
 void ControlPanel::SetHeat(float heat)
 {
-    std::ostringstream s;
-    s << "Chaleur : " << static_cast<int>(heat);
-    str_[HEAT].SetText(s.str());
+    str_[HEAT].SetText(epic_sprintf("Chaleur : %02.0f %%", heat));
+}
+
+
+void ControlPanel::SetChrono(int seconds)
+{
+    str_[CHRONO].SetText(epic_sprintf("Temps : %02d:%02d", seconds / 60, seconds % 60));
 }
 
 
@@ -50,21 +72,18 @@ void ControlPanel::Show(sf::RenderWindow& app)
 ControlPanel::ControlPanel()
 {
     panel_.SetImage(GET_IMG("WIP_score-board"));
-    if (!font_.LoadFromFile("font/neogrey.otf", 12))
-    {
-        exit(EXIT_FAILURE);
-    }
     for (int i = 0; i < STR_COUNT; ++i)
     {
-        str_[i].SetSize(12);
+        str_[i].SetFont(GET_FONT());
+        str_[i].SetSize(16);
         str_[i].SetColor(sf::Color::White);
-        str_[i].SetFont(font_);
     }
-    str_[HP].SetPosition(50, 5);
-    str_[SHIELD].SetPosition(50, 25);
-    str_[HEAT].SetPosition(200, 5);
-    str_[INFO].SetPosition(200, 25);
+    str_[HP].SetPosition(50, 2);
+    str_[SHIELD].SetPosition(50, 20);
+    str_[HEAT].SetPosition(200, 2);
+    str_[INFO].SetPosition(200, 20);
     str_[INFO].SetColor(sf::Color::Red);
+    str_[CHRONO].SetPosition(400, 2);
 }
 
 

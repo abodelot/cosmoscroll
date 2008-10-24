@@ -5,7 +5,7 @@
 #define GUN_OFFSET        sf::Vector2f(-1, 14)
 
 
-Blorb::Blorb(const sf::Vector2f& offset, Entity** target):
+Blorb::Blorb(const sf::Vector2f& offset, Entity* target):
     Ennemy(offset, target)
 {
     // crade
@@ -16,7 +16,7 @@ Blorb::Blorb(const sf::Vector2f& offset, Entity** target):
 void Blorb::Action()
 {
     float my_y = sprite_.GetPosition().y;
-    float player_y = (**target_).GetPosition().y;
+    float player_y = target_->GetPosition().y;
     // Doit on tirer ?
     if (std::abs(player_y - my_y) < 30)
     {

@@ -8,8 +8,8 @@
 #define GUN_OFFSET_INVERT sf::Vector2f(48, 30)
 
 
-Ennemy::Ennemy(const sf::Vector2f& offset, Entity** target) :
-    Entity(GET_IMG("ennemy-A"), offset),
+Ennemy::Ennemy(const sf::Vector2f& offset, Entity* target) :
+    Entity(GET_IMG("ennemy-A"), offset, 4),
     weapon_(Weapon::PLASMACANNON)
 {
     left_ = true;
@@ -20,7 +20,7 @@ Ennemy::Ennemy(const sf::Vector2f& offset, Entity** target) :
 void Ennemy::Hit(int damage)
 {
     Entity::Hit(damage);
-    if (health_ <= 0)
+    if (IsDead())
     {
         ParticleSystem::GetInstance().AddExplosion(sprite_.GetPosition());   
     }
@@ -32,7 +32,7 @@ void Ennemy::Move(float frametime)
     float velocity = SHIP_SPEED * frametime;
     float vy = 0;
     float vx = 0;
-    sf::Vector2f player_pos = (**target_).GetPosition();
+    sf::Vector2f player_pos = target_->GetPosition();
     sf::Vector2f my_pos = sprite_.GetPosition();
     
     bool left = true;
@@ -64,7 +64,7 @@ void Ennemy::Move(float frametime)
 
 void Ennemy::Action()
 {
-    float radians = ANGLE((**target_).GetPosition(), sprite_.GetPosition());
+    float radians = ANGLE(target_->GetPosition(), sprite_.GetPosition());
     if (!left_)
     {
         weapon_.Shoot(sprite_.GetPosition() + GUN_OFFSET_INVERT, radians);

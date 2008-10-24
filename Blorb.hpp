@@ -11,7 +11,7 @@
 class Blorb: public Ennemy
 {
 public:
-    Blorb(const sf::Vector2f& offset, Entity** target);
+    Blorb(const sf::Vector2f& offset, Entity* target);
     
     void Action();
 };

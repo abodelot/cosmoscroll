@@ -1,5 +1,5 @@
-#ifndef H_PARTICLE_SYSTEM
-#define H_PARTICLE_SYSTEM
+#ifndef PARTICLESYSTEM_HPP
+#define PARTICLESYSTEM_HPP
 
 #include <list>
 #include <SFML/Graphics.hpp>
@@ -30,9 +30,9 @@ public:
     /*
      * Ajouter "count" étoiles défilantes dans la scène
      */
-    void AddStars(unsigned int count = 25);
+    void AddStars(int count = 25);
     
-    void AddShield(unsigned int count, const sf::Sprite* handle);
+    void AddShield(int count, const sf::Sprite* handle);
     
     void RemoveShield(const sf::Sprite* handle);
         
@@ -124,8 +124,11 @@ private:
     class LinkedParticle: public Particle
     {
     public:
-        LinkedParticle() {} // FIXME: faire une classe abstraite
-        LinkedParticle(const sf::Sprite* handle, float angle);
+        /* TODO: faire une classe abstraite
+        toutes les LinkedParticle sont des éléments de bouclier !
+        */
+        LinkedParticle() {} 
+        LinkedParticle(const sf::Sprite* handle, float angle, float radius);
         
         virtual bool OnUpdate(float frametime);
         
@@ -149,5 +152,5 @@ private:
     sf::Sound boom_sfx_;
 };
 
-#endif /* guard H_PARTICLE_SYSTEM */
+#endif /* guard PARTICLESYSTEM_HPP */
 

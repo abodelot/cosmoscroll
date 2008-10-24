@@ -9,7 +9,7 @@
 #define GUN_OFFSET      sf::Vector2f(50, 24)
 
 // taux de regénération du bouclier en boules/secondes
-#define SHIELD_RECOVERY_RATE 0.2
+#define SHIELD_RECOVERY_RATE 0.3
 #define SHIELD_MAX           6
 #define SHIELD_DEFAULT       3
 
@@ -35,7 +35,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
     ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, &sprite_);
     
-    panel_.SetShipHP(health_);
+    panel_.SetShipHP(hp_);
     panel_.SetShield(shield_);
     panel_.SetHeat(heat_);
     panel_.SetInfo("");
@@ -132,10 +132,14 @@ void PlayerShip::Move(float frametime)
     if (heat_ > 0.f)
     {
         heat_ -= COLDING_RATE * frametime;
-        if (overheated_ && heat_ <= 0.f)
+        if (heat_ <= 0.f)
         {
-            overheated_ = false;
-            panel_.SetInfo("");
+            heat_ = 0.f;
+            if (overheated_ )
+            {
+                overheated_ = false;
+                panel_.SetInfo("");
+            }
         }
     }
     panel_.SetHeat(heat_);
@@ -167,7 +171,7 @@ void PlayerShip::Hit(int damage)
     else
     {
         Entity::Hit(damage);
-        panel_.SetShipHP(health_);
+        panel_.SetShipHP(hp_);
         p.AddImpact(sprite_.GetPosition(), 20);
     }
     

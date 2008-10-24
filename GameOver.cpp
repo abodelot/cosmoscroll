@@ -9,7 +9,6 @@ GameOver::GameOver(sf::RenderWindow& app) :
 }
 
 
-
 Screen::Choice GameOver::Run()
 {
     sf::String title;
@@ -19,7 +18,7 @@ Screen::Choice GameOver::Run()
     title.SetPosition(42, 42);
     
     Menu menu;
-    menu.SetOffset(sf::Vector2f(42, 80));
+    menu.SetOffset(sf::Vector2f(42, 100));
     menu.AddItem("Rejouer", Screen::GAME);
     menu.AddItem("Quitter", Screen::EXIT_APP);
     

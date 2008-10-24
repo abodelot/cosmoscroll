@@ -43,7 +43,6 @@ private:
         EXIT
     };
 
-
     /*
      * Mise en pause du jeu - Menu
      */

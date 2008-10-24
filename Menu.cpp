@@ -31,7 +31,7 @@ void Menu::SetHighlightLook(unsigned long style, const sf::Color& color)
     highlight_look_.style = style;
     highlight_look_.color = color;
 }
-    
+
 
 void Menu::SetTextSize(int size)
 {
@@ -55,7 +55,7 @@ void Menu::AddItem(const std::string label, int id)
 {
     MenuItem item;
     item.label.SetText(label);
-    item.label.SetFont(RessourceManager::GetInstance().GetFont());
+    item.label.SetFont(GET_FONT());
     item.id = id;
     
     // si on a ajouté le premier élément
@@ -81,7 +81,7 @@ bool Menu::ActionChosen(const sf::Event::KeyEvent& key, int& id)
     {
         case sf::Key::Up:
             ApplyStyle(items_[selected_], normal_look_);
-            selected_ = (selected_ - 1) % items_.size();
+            selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
             ApplyStyle(items_[selected_], highlight_look_);
             sound_.Play();
             break;

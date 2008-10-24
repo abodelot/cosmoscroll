@@ -2,7 +2,6 @@
 #include "MediaManager.hpp"
 #include "Window.hpp"
 
-
 Intro::Intro(sf::RenderWindow& app) :
 	Screen(app)
 {   
@@ -19,7 +18,8 @@ Screen::Choice Intro::Run()
 	title.SetSize(60);
 	title.SetColor(sf::Color::White);
 	sf::FloatRect rect = title.GetRect();
-	title.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2, 42);
+	title.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
+	    (WIN_HEIGHT - rect.GetHeight()) / 2);
 	
 	sf::Sprite ship(GET_IMG("spaceship"));
 	ship.SetPosition(-20, 100);
@@ -48,13 +48,16 @@ Screen::Choice Intro::Run()
 		}
 		float time = app_.GetFrameTime();
 		ship.Move(180 * time, 25 * time);
+		title.Move(0, -30 * time);
+		
 		if (ship.GetPosition().x > WIN_WIDTH)
 		{
 		    running = false;
 		}
+		
 		app_.Draw(background_);
-		app_.Draw(ship);
 		app_.Draw(title);
+		app_.Draw(ship);
 		app_.Display();
 	}
 	return choice;

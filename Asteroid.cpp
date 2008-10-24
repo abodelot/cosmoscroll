@@ -36,13 +36,12 @@ inline const sf::Image& select_image(Asteroid::Size size)
 
 
 Asteroid::Asteroid(const sf::Vector2f& offset, Size size, Game& game):
-    Entity(select_image(size), offset),
+    Entity(select_image(size), offset, size + 1),
     game_(game)
 {
     size_ = size;
     speed_ = sf::Randomizer::Random(MIN_SPEED, MAX_SPEED);
     angle_ = DEG_TO_RAD(sf::Randomizer::Random(MIN_ANGLE, MAX_ANGLE));
-    health_ = static_cast<int>(size) + 1;
 }
 
 
@@ -60,7 +59,7 @@ void Asteroid::Move(float frametime)
     offset.y = offset.y - framespeed * std::sin(angle_);
     if (offset.x < 0 || offset.x > WIN_WIDTH || offset.y < 0 || offset.y > WIN_HEIGHT)
     {
-        health_ = 0;
+        Kill();
     }
     else
     {
@@ -74,8 +73,8 @@ void Asteroid::Hit(int damage)
     static ParticleSystem& p = ParticleSystem::GetInstance();
     sf::Vector2f offset = sprite_.GetPosition();
     
-    health_ -= damage;
-    if (health_ <= 0)
+    Entity::Hit(damage);
+    if (IsDead())
     {
         Asteroid* as = NULL;
         switch (size_)

@@ -14,7 +14,7 @@ public:
      * @param[in] offset: position de départ
      * @param[in] target: vaisseau cible
      */
-    Ennemy(const sf::Vector2f& offset, Entity** target);
+    Ennemy(const sf::Vector2f& offset, Entity* target);
     
     void Hit(int damage);
     
@@ -26,7 +26,7 @@ public:
     void Action();
     
 protected:
-    Entity** target_;
+    Entity* target_;
     bool left_;
     Weapon weapon_;
 };

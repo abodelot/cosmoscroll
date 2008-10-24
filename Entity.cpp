@@ -1,11 +1,11 @@
 #include "Entity.hpp"
 
 
-Entity::Entity(const sf::Image& img, const sf::Vector2f& offset)
+Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp)
 {
     sprite_.SetImage(img);
     sprite_.SetPosition(offset);
-    health_ = 3;
+    hp_ = hp;
 }
 
 
@@ -14,7 +14,7 @@ Entity::~Entity()
 }
 
 
-void Entity::Show(sf::RenderWindow& app)
+void Entity::Show(sf::RenderWindow& app) const
 {
     app.Draw(sprite_);
 }
@@ -22,13 +22,19 @@ void Entity::Show(sf::RenderWindow& app)
 
 void Entity::Hit(int damage)
 {
-    health_ -= damage;
+    hp_ -= damage;
 }
 
 
 bool Entity::IsDead()
 {
-    return health_ <= 0;
+    return hp_ <= 0;
+}
+
+
+void Entity::Kill()
+{
+    hp_ = 0;
 }
 
 

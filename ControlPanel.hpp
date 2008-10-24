@@ -1,7 +1,9 @@
-#ifndef H_CONTROL_PANEL
-#define H_CONTROL_PANEL
+#ifndef CONTROLPANEL_HPP
+#define CONTROLPANEL_HPP
 
 #include <SFML/Graphics.hpp>
+
+#define CONTROL_PANEL_HEIGHT
 
 class ControlPanel
 {
@@ -16,8 +18,9 @@ public:
 
     void SetHeat(float heat);
 
+    void SetChrono(int seconds);
+    
     void Show(sf::RenderWindow& app);
-
 
 private:
     ControlPanel();
@@ -25,12 +28,12 @@ private:
     
     enum 
     {
-        SHIELD, HP, HEAT, INFO, STR_COUNT
+        SHIELD, HP, HEAT, INFO, CHRONO, STR_COUNT
     };
     sf::String str_[STR_COUNT];
     sf::Sprite panel_;
     sf::Font font_;
 };
 
-#endif /* guard H_CONTROL_PANEL */
+#endif /* guard CONTROLPANEL_HPP */
 

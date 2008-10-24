@@ -40,21 +40,23 @@ void ParticleSystem::AddImpact(const sf::Vector2f& offset, int n)
 }
 
 
-void ParticleSystem::AddStars(unsigned int count)
+void ParticleSystem::AddStars(int count)
 {
-    for (unsigned int i = 0; i < count; ++i)
+    for (int i = 0; i < count; ++i)
     {
         particles_.push_back(new Star());
     }
 }
 
 
-void ParticleSystem::AddShield(unsigned int count, const sf::Sprite* handle)
+void ParticleSystem::AddShield(int count, const sf::Sprite* handle)
 {
     float angle = 2 * PI / count;
-    for (unsigned int i = 0; i < count; ++i)
+    int radius = count * 7 + 15;
+    for (int i = 0; i < count; ++i)
     {
-        particles_.push_back(new LinkedParticle(handle, angle * (i + 1)));
+        particles_.push_back(
+            new LinkedParticle(handle, angle * (i + 1), radius));
     }
 }
 
@@ -198,12 +200,13 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 }
 
 
-ParticleSystem::LinkedParticle::LinkedParticle(const sf::Sprite* handle, float angle)
+ParticleSystem::LinkedParticle::LinkedParticle(const sf::Sprite* handle,
+    float angle, float radius)
 {
     SetImage(GET_IMG("shield"));
     SetCenter(GetSize().x / 2, GetSize().y / 2);
     handle_ = handle;
-    speed_ = 50.f; // FIXME: magique (distance vaisseau <-> bouclier)
+    speed_ = radius; // huh, logique ! (distance vaisseau <-> particule)
     angle_ = angle;
     SetRotation(RAD_TO_DEG(angle + 0.5 * PI));
 }
@@ -221,6 +224,7 @@ bool ParticleSystem::LinkedParticle::OnUpdate(float frametime)
     SetRotation(RAD_TO_DEG(angle_ + (0.5 * PI)));
     return false;
 }
+
 
 bool ParticleSystem::LinkedParticle::IsMyHandle(const sf::Sprite* handle)
 {

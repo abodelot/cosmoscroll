@@ -9,14 +9,14 @@
 /*
  * Classe singleton pour gérer les ressources (images, font)
  */
-class RessourceManager
+class MediaManager
 {
 public:
     /*
      * Récupérer l'instance unique
      * @return référence sur le gestionnaire de ressources
      */
-    static RessourceManager& GetInstance();
+    static MediaManager& GetInstance();
     
     /*
      * Récupérer une image
@@ -33,7 +33,8 @@ public:
     const sf::SoundBuffer& GetSoundBuf(const char* key) const;
     
     /*
-     * Récupérer la police
+     * Récupérer la police de caractères
+     * @param[in] size: taille énuméree
      * @return référence sur la police
      */
     const sf::Font& GetFont() const;
@@ -42,10 +43,10 @@ private:
     /*
      * Initialisation (chargement des images)
      */
-    RessourceManager();
+    MediaManager();
     
-    RessourceManager(const RessourceManager& other);
-    RessourceManager& operator=(const RessourceManager& other);
+    MediaManager(const MediaManager& other);
+    MediaManager& operator=(const MediaManager& other);
     
     std::map<std::string, sf::Image> images_;
     std::map<std::string, sf::SoundBuffer> sounds_;
@@ -57,17 +58,17 @@ private:
 
 inline const sf::Image& GET_IMG(const char* key)
 {
-    return RessourceManager::GetInstance().GetImage(key);
+    return MediaManager::GetInstance().GetImage(key);
 }
 
 inline const sf::SoundBuffer& GET_SOUNDBUF(const char* key)
 {
-    return RessourceManager::GetInstance().GetSoundBuf(key);
+    return MediaManager::GetInstance().GetSoundBuf(key);
 }
 
 inline const sf::Font& GET_FONT()
 {
-    return RessourceManager::GetInstance().GetFont();
+    return MediaManager::GetInstance().GetFont();
 }
 
 #endif /* guard H_RESSOURCE_MANAGER */

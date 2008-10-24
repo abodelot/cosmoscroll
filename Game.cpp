@@ -7,6 +7,7 @@
 #include "Menu.hpp"
 
 #include <SFML/System.hpp>
+#include <typeinfo>
 
 #define KEY_PAUSE sf::Key::P
 #define KEY_ESC sf::Key::Escape
@@ -31,6 +32,7 @@ Screen::Choice Game::Run()
 {
     sf::Event event;
     bool running = true;
+    float timer = 0;
     Screen::Choice choice = Screen::EXIT_APP;
     
     Respawn();
@@ -53,10 +55,10 @@ Screen::Choice Game::Run()
                 if (event.Key.Code == KEY_PAUSE)
                 {
                     MenuAction what = InGameMenu();
-		    if (what == EXIT)
-		    {
-			running = false;
-		    }
+                    if (what == EXIT)
+                    {
+                        running = false;
+                    }
                 }
             }
         }
@@ -66,7 +68,9 @@ Screen::Choice Game::Run()
         
         std::vector<Entity*>::iterator it;
         // <hack>
-        if (entities_.size() < 8)
+        // un ennemi en plus toutes les 10s + 7
+        unsigned int max_foo = (timer / 10 + 7);
+        if (entities_.size() < max_foo)
         {
             AddFoo();
         }
@@ -80,6 +84,8 @@ Screen::Choice Game::Run()
         
         // moving
         float time = app_.GetFrameTime();
+        timer += time;
+        panel_.SetChrono(timer);
         
         for (it = entities_.begin(); it != entities_.end();)
         {
@@ -149,7 +155,7 @@ void Game::AddFoo()
     // cast en Entity** car on ne peut pas subsituer un super pointeur enfant
     // à un parent. (un pointeur oui, une référence oui, mais pas un super
     // pointeur :( )
-        entities_.push_back(new Ennemy(offset, (Entity**) &player_));
+        entities_.push_back(new Ennemy(offset, player_));
     }
     else if (ploufplouf > 2)
     {
@@ -157,7 +163,7 @@ void Game::AddFoo()
     }
     else
     {
-        entities_.push_back(new Blorb(offset, (Entity**) &player_));
+        entities_.push_back(new Blorb(offset, player_));
     }
     // </hack>
 }
@@ -246,3 +252,4 @@ Game::MenuAction Game::InGameMenu()
 void Game::Options()
 {
 }
+

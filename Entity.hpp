@@ -1,5 +1,5 @@
-#ifndef H_ENTITY
-#define H_ENTITY
+#ifndef ENTITY_HPP
+#define ENTITY_HPP
 
 #include <SFML/Graphics.hpp>
 
@@ -19,15 +19,16 @@ public:
     /*
      * @param[in] img: image du vaisseau
      * @param[in] offset: position de départ
+     * @param[in] hp: points de vie
      */
-    Entity(const sf::Image& img, const sf::Vector2f& offset);
+    Entity(const sf::Image& img, const sf::Vector2f& offset, int hp=3);
 
     virtual ~Entity();
         
     /*
      * Afficher le vaisseau
      */
-    virtual void Show(sf::RenderWindow& app);
+    virtual void Show(sf::RenderWindow& app) const;
     
     /*
      * Encaisser des dommages
@@ -39,7 +40,9 @@ public:
     
     virtual void Action() = 0;
     
-    virtual bool IsDead();
+    bool IsDead();
+    
+    void Kill();
     
     /*
      * Obtenir la position du vaisseau
@@ -53,8 +56,8 @@ public:
     
 protected:
     sf::Sprite sprite_;
-    int health_;
+    int hp_;
 };
 
-#endif /* guard H_ENTITY */
+#endif /* guard ENTITY_HPP */
 

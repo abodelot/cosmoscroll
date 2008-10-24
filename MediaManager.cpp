@@ -41,7 +41,9 @@ static bool load_from_list(const char* filelist, std::map<std::string, Ressource
         std::string line;
         while (getline(f, line))
         {
+#ifdef DEBUG
             std::cout << "loading: " << line << std::endl;
+#endif
             // la clef de la ressource dans la map est le nom du fichier
             // sans son extension
             size_t found = line.find_last_of('.');
@@ -66,14 +68,14 @@ static bool load_from_list(const char* filelist, std::map<std::string, Ressource
 }
 
 
-RessourceManager& RessourceManager::GetInstance()
+MediaManager& MediaManager::GetInstance()
 {
-    static RessourceManager self;
+    static MediaManager self;
     return self;
 }
 
 
-const sf::Image& RessourceManager::GetImage(const char* image) const
+const sf::Image& MediaManager::GetImage(const char* image) const
 {
     std::map<std::string, sf::Image>::const_iterator it;
     it = images_.find(image);
@@ -86,7 +88,7 @@ const sf::Image& RessourceManager::GetImage(const char* image) const
 }
 
 
-const sf::SoundBuffer& RessourceManager::GetSoundBuf(const char* key) const
+const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
 {
     std::map<std::string, sf::SoundBuffer>::const_iterator it;
     it = sounds_.find(key);
@@ -99,13 +101,13 @@ const sf::SoundBuffer& RessourceManager::GetSoundBuf(const char* key) const
 }
 
 
-const sf::Font& RessourceManager::GetFont() const
+const sf::Font& MediaManager::GetFont() const
 {
     return font_;
 }
 
 
-RessourceManager::RessourceManager()
+MediaManager::MediaManager()
 {
     // chargement des images
     if (!load_from_list(IMG_LIST, images_))
@@ -120,14 +122,10 @@ RessourceManager::RessourceManager()
         std::cerr << "can't open sound list: " << SOUND_LIST << std::endl;
         exit(EXIT_FAILURE);
     }
-    
-    // chargement de la police
+    // chargement des fontes
     if (!font_.LoadFromFile("font/hemi-head.ttf", 60))
 	{
 	    exit(EXIT_FAILURE);
     }
 }
-
-
-
 

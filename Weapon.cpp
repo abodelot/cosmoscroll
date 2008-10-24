@@ -8,12 +8,12 @@ Weapon::Weapon(Type type)
     switch (type)
     {
         case LASERBEAM:
-            shot_per_second = 8.f;
+            shot_per_second = 10.f;
             energy_cost_ = 3.f;
             sound_.SetBuffer(GET_SOUNDBUF("blaster-shot-1"));
             break;
         case HELLFIRE:
-            shot_per_second = 20.f;
+            shot_per_second = 24.f;
             energy_cost_ = 1.7f;
             sound_.SetBuffer(GET_SOUNDBUF("blaster-shot-2"));
             break;
