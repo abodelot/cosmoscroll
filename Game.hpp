@@ -1,7 +1,6 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "Screen.hpp"
 #include "Entity.hpp"
 #include "BulletManager.hpp"
 #include "PlayerShip.hpp"
@@ -12,19 +11,19 @@
 #include <vector>
 
 /*
- * Écran du jeu
+ * Gestion du déroulement du jeu
  */
-class Game: public Screen
+class Game
 {
 public:
-    Game(sf::RenderWindow& app);
+    Game();
     
     ~Game();
     
     /*
      * Lancer une partie de CosmoScroll
      */
-    Screen::Choice Run();
+    void Run();
 
     /*
      * Ajout d'une nouvelle unité dans le jeu
@@ -33,16 +32,26 @@ public:
     
 private:
 
+    enum Choice
+    {
+        INTRO, OPTIONS, PLAY, GAME_OVER, EXIT_APP
+    };
+    
+    Choice Intro();
+    Choice Options();
+    Choice Play();
+    Choice GameOver();
+    
     /*
      * Types de retour des menus
      */
     enum MenuAction
     {
-        OPTIONS,
-        RESUME,
-        EXIT
+        MENU_OPTIONS,
+        MENU_RESUME,
+        MENU_EXIT
     };
-
+    
     /*
      * Mise en pause du jeu - Menu
      */
@@ -63,15 +72,22 @@ private:
      */
     void RemoveEntities();
     
-    void Options();
-
+    // ne pas mélanger la gestion du joueur avec PlayerShip
+    struct Player
+    {
+        float best_time;
+        PlayerShip* ship;
+    };
+    
+    sf::RenderWindow app_;
+    Player player_;
+    
     BulletManager& bullets_;
-    ParticleSystem& particle_sys_;
+    ParticleSystem& particles_;
+    ControlPanel& panel_;
     
     // toutes les unités sont allouées dynamiquement
     std::vector<Entity*> entities_;
-    PlayerShip* player_;
-    ControlPanel& panel_;
 };
 
 #endif /* guard GAME_HPP */

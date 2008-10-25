@@ -1,25 +1,6 @@
 #include "ControlPanel.hpp"
 #include "MediaManager.hpp"
-
-#include <cstdarg>
-
-// <3 printf format
-static std::string epic_sprintf(const char format[], ...)
-{
-    va_list args;
-    va_start(args, format);
-    
-    int length = vsnprintf(NULL, 0, format, args);
-    char* p = new char [length + 1];
-    va_end(args);
-    va_start(args, format);
-    vsprintf(p, format, args);
-    va_end(args);    
-    
-    std::string str(p);
-    delete [] p;
-    return str;
-}
+#include "Misc.hpp"
 
 
 ControlPanel& ControlPanel::GetInstance()
@@ -82,7 +63,7 @@ ControlPanel::ControlPanel()
     str_[SHIELD].SetPosition(50, 20);
     str_[HEAT].SetPosition(200, 2);
     str_[INFO].SetPosition(200, 20);
-    str_[INFO].SetColor(sf::Color::Red);
+    str_[INFO].SetColor(sf::Color(255, 128 ,0));
     str_[CHRONO].SetPosition(400, 2);
 }
 

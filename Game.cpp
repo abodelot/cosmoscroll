@@ -1,10 +1,11 @@
 #include "Game.hpp"
 #include "MediaManager.hpp"
-#include "Window.hpp"
 #include "Asteroid.hpp"
 #include "Ennemy.hpp"
 #include "Blorb.hpp"
 #include "Menu.hpp"
+#include "Window.hpp"
+#include "Misc.hpp"
 
 #include <SFML/System.hpp>
 #include <typeinfo>
@@ -13,30 +14,134 @@
 #define KEY_ESC sf::Key::Escape
 
 
-Game::Game(sf::RenderWindow& app) :
-    Screen       (app),
-    bullets_     (BulletManager::GetInstance()),
-    particle_sys_(ParticleSystem::GetInstance()),
-    panel_       (ControlPanel::GetInstance())
-{ 
+Game::Game() :
+    bullets_  (BulletManager::GetInstance()),
+    particles_(ParticleSystem::GetInstance()),
+    panel_    (ControlPanel::GetInstance())
+{
+    // TODO: load settings here
+    bool fullscreen = false;
+    // mise en place de la fenêtre de rendu
+    if (!fullscreen)
+    {
+        app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE);
+    }
+    else
+    {
+        app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE,
+            sf::Style::Fullscreen);
+    }
+    app_.SetFramerateLimit(WIN_FPS);
+    app_.ShowMouseCursor(false);
 }
 
 
 Game::~Game()
 {
     RemoveEntities();
+    app_.Close();
 }
 
 
-Screen::Choice Game::Run()
+void Game::Run()
+{
+    // première scène = Intro
+    Choice what = Intro();
+    do
+    {
+        switch (what)
+        {
+            case PLAY:
+                what = Play();
+                break;
+            case GAME_OVER:
+                what = GameOver();
+                break;
+            default:
+                break;
+        }
+    } while (what != EXIT_APP);
+}
+
+
+Game::Choice Game::Intro()
+{
+    Choice what = PLAY;
+    float duration = 5;
+    
+    sf::Sprite background;
+    background.SetImage(GET_IMG("background"));
+	sf::String title;
+	title.SetText("CosmoScroll");
+	title.SetFont(GET_FONT());
+	title.SetSize(60);
+	title.SetColor(sf::Color::White);
+	sf::String sfml;
+	sfml.SetText("Powered by SFML");
+	sfml.SetFont(GET_FONT());
+	sfml.SetSize(24);
+	sfml.SetColor(sf::Color::White);
+	
+	sf::FloatRect rect = title.GetRect();
+	title.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
+	    (WIN_HEIGHT - rect.GetHeight()) / 2);
+	
+	rect = sfml.GetRect();
+	sfml.SetPosition(WIN_WIDTH - rect.GetWidth(), WIN_HEIGHT - rect.GetHeight());
+	
+	sf::Sprite ship(GET_IMG("spaceship"));
+	ship.SetPosition(-20, 100);
+	
+	sf::Event event;
+	while (duration > 0)
+	{
+		while (app_.GetEvent(event)) 
+		{
+		    if (event.Type == sf::Event::Closed)
+		    {
+		        duration = 0;
+		        what = EXIT_APP;
+		    }
+		    else if (event.Type == sf::Event::KeyPressed)
+		    {
+		        duration = 0;
+                if (event.Key.Code == sf::Key::Escape)
+				{
+				    what = EXIT_APP;
+				}
+			}
+		}
+		float time = app_.GetFrameTime();
+		duration -= time;
+		// FIXME: déplacement magique !
+		ship.Move(180 * time, 25 * time);
+		title.Move(0, -30 * time);
+		
+		app_.Draw(background);
+		app_.Draw(sfml);
+		app_.Draw(title);
+		app_.Draw(ship);
+		app_.Display();
+	}
+	return what;
+}
+
+
+Game::Choice Game::Options()
+{
+    return EXIT_APP;
+}
+
+
+Game::Choice Game::Play()
 {
     sf::Event event;
     bool running = true;
     float timer = 0;
-    Screen::Choice choice = Screen::EXIT_APP;
+    Choice choice = EXIT_APP;
     
     Respawn();
-    particle_sys_.AddStars();
+    particles_.AddStars();
     
     while (running)
     {
@@ -55,7 +160,7 @@ Screen::Choice Game::Run()
                 if (event.Key.Code == KEY_PAUSE)
                 {
                     MenuAction what = InGameMenu();
-                    if (what == EXIT)
+                    if (what == MENU_EXIT)
                     {
                         running = false;
                     }
@@ -94,7 +199,7 @@ Screen::Choice Game::Run()
                 if (typeid(**it) == typeid(PlayerShip))
                 {
                     running = false;
-                    choice = Screen::GAME_OVER;
+                    choice = GAME_OVER;
                     break;
                 }
                 delete *it;
@@ -103,10 +208,10 @@ Screen::Choice Game::Run()
             else
             {
                 (**it).Move(time);
-                if (player_ != *it
-                    && player_->GetRect().Intersects((**it).GetRect()))
+                if (player_.ship != *it
+                    && player_.ship->GetRect().Intersects((**it).GetRect()))
                 {
-                    player_->Hit(1); // FIXME: magique
+                    player_.ship->Hit(1); // FIXME: dégâts magiques !
                     (**it).Hit(1);
                 }
                 ++it;
@@ -114,13 +219,13 @@ Screen::Choice Game::Run()
         }
         
         bullets_.Update(time);
-        particle_sys_.Update(time);
+        particles_.Update(time);
         
         bullets_.Collide(entities_);
         
         // rendering
         bullets_.Show(app_);
-        particle_sys_.Show(app_);
+        particles_.Show(app_);
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
             (**it).Show(app_);
@@ -129,11 +234,55 @@ Screen::Choice Game::Run()
         app_.Display();
     }
     
+    player_.best_time = timer;
     // clean up
     RemoveEntities();
-    particle_sys_.Clear();
+    particles_.Clear();
     bullets_.Clear();
     return choice;
+}
+
+
+Game::Choice Game::GameOver()
+{
+    sf::String title;
+    int min = (int) player_.best_time / 60;
+    int sec = (int) player_.best_time % 60;
+    title.SetText(epic_sprintf("Tu as tenu seulement %d min et %d sec", min, sec));
+    title.SetFont(GET_FONT());
+    title.SetColor(sf::Color::White);
+    title.SetPosition(42, 42);
+    
+    Menu menu;
+    menu.SetOffset(sf::Vector2f(42, 100));
+    menu.AddItem("Rejouer", PLAY);    
+    menu.AddItem("Quitter", EXIT_APP);
+    
+    bool running = true;
+    int choice;
+    
+    sf::Event event;
+    while (running)
+    {
+        while (app_.GetEvent(event))
+        {
+            if (event.Type == sf::Event::Closed)
+            {
+                running = false;
+            }
+            else if (event.Type == sf::Event::KeyPressed)
+            {
+                if (menu.ActionChosen(event.Key, choice))
+                {
+                    running = false;
+                }
+            }
+        }
+        app_.Draw(title);
+        menu.Show(app_);
+        app_.Display();
+    }
+    return static_cast<Choice>(choice);
 }
 
 
@@ -155,7 +304,7 @@ void Game::AddFoo()
     // cast en Entity** car on ne peut pas subsituer un super pointeur enfant
     // à un parent. (un pointeur oui, une référence oui, mais pas un super
     // pointeur :( )
-        entities_.push_back(new Ennemy(offset, player_));
+        entities_.push_back(new Ennemy(offset, player_.ship));
     }
     else if (ploufplouf > 2)
     {
@@ -163,7 +312,7 @@ void Game::AddFoo()
     }
     else
     {
-        entities_.push_back(new Blorb(offset, player_));
+        entities_.push_back(new Blorb(offset, player_.ship));
     }
     // </hack>
 }
@@ -174,8 +323,8 @@ void Game::Respawn()
     sf::Vector2f offset;
     offset.x = 0;
     offset.y = WIN_HEIGHT / 2.0;
-    player_ = new PlayerShip(offset, app_.GetInput());
-    entities_.push_back(player_);
+    player_.ship = new PlayerShip(offset, app_.GetInput());
+    entities_.push_back(player_.ship);
 }
 
 
@@ -199,9 +348,9 @@ Game::MenuAction Game::InGameMenu()
 
     Menu menu;
     menu.SetOffset(sf::Vector2f(300, 200));
-    menu.AddItem("Resume Game", RESUME);
-    menu.AddItem("Options", OPTIONS);
-    menu.AddItem("Exit Game", EXIT);
+    menu.AddItem("Resume Game", MENU_RESUME);
+    menu.AddItem("Options", MENU_OPTIONS);
+    menu.AddItem("Exit Game", MENU_EXIT);
     
     bool paused = true;
     int what;
@@ -211,14 +360,14 @@ Game::MenuAction Game::InGameMenu()
         {
             if (event.Type == sf::Event::Closed)
             {
-                what = EXIT;
+                what = MENU_EXIT;
                 paused = false;
             }
             if (event.Type == sf::Event::KeyPressed)
             {
                 if (event.Key.Code == KEY_ESC)
                 {
-                    what = EXIT;
+                    what = MENU_EXIT;
                     paused = false;
                 }
                 else if (menu.ActionChosen(event.Key, what))
@@ -229,11 +378,11 @@ Game::MenuAction Game::InGameMenu()
         }
         
         // seules les particules sont mises à jour
-        particle_sys_.Update(app_.GetFrameTime());
+        particles_.Update(app_.GetFrameTime());
         
         // rendering
         bullets_.Show(app_);
-        particle_sys_.Show(app_);
+        particles_.Show(app_);
         std::vector<Entity*>::const_iterator it;
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
@@ -246,9 +395,5 @@ Game::MenuAction Game::InGameMenu()
         app_.Display();
     }
     return static_cast<MenuAction>(what);
-}
-
-void Game::Options()
-{
 }
 

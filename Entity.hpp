@@ -32,7 +32,6 @@ public:
     
     /*
      * Encaisser des dommages
-     * @return true si le vaisseau est détruit, sinon false
      */
     virtual void Hit(int damage);
     
