@@ -4,7 +4,7 @@ CC=g++
 FLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
 LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 EXEC=cosmoscroll
-DEBUG=yes
+DEBUG=no
 ifeq ($(DEBUG), yes)
 	CFLAGS=$(FLAGS) -g -DDEBUG
 else

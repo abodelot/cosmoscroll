@@ -69,7 +69,7 @@ Screen::Choice Game::Run()
         std::vector<Entity*>::iterator it;
         // <hack>
         // un ennemi en plus toutes les 10s + 7
-        unsigned int max_foo = (timer / 10 + 7);
+        unsigned int max_foo = (static_cast<unsigned int>(timer) / 10 + 7);
         if (entities_.size() < max_foo)
         {
             AddFoo();
@@ -85,7 +85,7 @@ Screen::Choice Game::Run()
         // moving
         float time = app_.GetFrameTime();
         timer += time;
-        panel_.SetChrono(timer);
+        panel_.SetChrono(static_cast<unsigned int>(timer));
         
         for (it = entities_.begin(); it != entities_.end();)
         {
@@ -189,8 +189,7 @@ void Game::RemoveEntities()
     entities_.clear();
 }
 
-// Autre souci: comment intercepter proprement les événements de fermeture de l'appli?
-// Retourne: Valeur enumérée Action:
+
 Game::MenuAction Game::InGameMenu()
 {
     sf::Event event;
