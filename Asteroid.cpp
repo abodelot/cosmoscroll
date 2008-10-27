@@ -83,7 +83,7 @@ void Asteroid::Hit(int damage)
                 for (int i = 0; i < BIG_SPLIT_INTO; ++i)
                 {
                     as = new Asteroid(offset, MEDIUM, game_);
-                    game_.AddEntity(as);
+                    game_.AddEntity(as, 0);
                 };
                 p.AddImpact(offset, 20);
                 break;
@@ -91,7 +91,7 @@ void Asteroid::Hit(int damage)
                 for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
                 {
                     as = new Asteroid(offset, SMALL, game_);
-                    game_.AddEntity(as);
+                    game_.AddEntity(as, 0);
                 }
                 p.AddImpact(offset, 10);
             case SMALL:

@@ -11,5 +11,13 @@
  */
 std::string epic_sprintf(const char format[], ...);
 
+
+/*
+ * @param[in|out] target: chaîne cible
+ * @param[in] look_for: sous-chaîne recherchée
+ * @param[in] replace_by: sous-chaîne à caser
+ * @return string transformée
+ */
+int find_replace(std::string& target, const std::string& look_for, const std::string& replace_by);
 #endif /* guard MISC_HPP */
 

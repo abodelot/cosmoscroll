@@ -1,6 +1,8 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
+#include <map>
+#include <utility>
 #include <SFML/Graphics.hpp>
 
 /*
@@ -53,6 +55,28 @@ public:
      */
     virtual sf::FloatRect GetRect();
     
+    enum Status {
+                 BASE= 0,        // Entité non spawnée, non blocante
+                 BLOCK= 0 << 1,  // Entité blocante
+                 SPAWNED= 0 << 2 // Entité spawnée [pas morte]
+                };
+    
+struct ltstatus
+{
+  bool operator()(const Status s1, const Status s2) const
+  {
+    return static_cast<int>(s1) < static_cast<int>(s2);
+  }
+
+};
+    struct TimedEntity {
+            int t;
+            Entity* self;
+    };
+    
+    typedef std::multimap<Entity::Status, TimedEntity, ltstatus > ManagedContainer;
+    typedef std::multimap<Entity::Status, TimedEntity, ltstatus >::iterator ManagedIterator;
+    typedef std::multimap<Entity::Status, TimedEntity, ltstatus >::const_iterator ManagedConstIterator;
 protected:
     sf::Sprite sprite_;
     int hp_;

@@ -1,6 +1,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include "Level.hpp"
 #include "Entity.hpp"
 #include "BulletManager.hpp"
 #include "PlayerShip.hpp"
@@ -28,7 +29,7 @@ public:
     /*
      * Ajout d'une nouvelle unité dans le jeu
      */
-    void AddEntity(Entity* entity);
+    void AddEntity(Entity* entity, int t = 0);
     
 private:
 
@@ -81,13 +82,30 @@ private:
     
     sf::RenderWindow app_;
     Player player_;
-    
+    float timer_;
     BulletManager& bullets_;
     ParticleSystem& particles_;
     ControlPanel& panel_;
+    Level& levels_;
+    std::string level_desc_; // Description du niveau courant
     
     // toutes les unités sont allouées dynamiquement
-    std::vector<Entity*> entities_;
+    //std::vector<Entity*> entities_;
+    Entity::ManagedContainer entities_;
+    bool Update_Entity_List();
+    
+    
+    inline unsigned int GetTimer(unsigned int& i)
+    {  
+        i = static_cast<unsigned int>(timer_);
+        return i;
+    }
+    
+    inline float GetTimer(float& f)
+    {
+        f = timer_;
+        return f;
+    }
 };
 
 #endif /* guard GAME_HPP */

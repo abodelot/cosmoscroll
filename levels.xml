@@ -1,0 +1,32 @@
+<?xml version="1.0" standalone=no>
+<levels count="1" name= "CosmoScroll Test Levels">
+    <level id ="1" desc="Alors que vous vous baladez\ndans le vide interstellaire\n on vous attaque !!!">
+        <defs>
+            <group id="0" t="10">
+                <item t="10">
+                    Blorb
+                    <spawn x="50" y="100" />
+                </item>
+                <item>
+                    Blorb
+                    <spawn x="60" y="100" t="10"/>
+                </item>
+            </group>
+            <item id="1" t = "100">
+                Deathtructor
+                <spawn x="50" y="100" />
+            </item>            
+        </defs>
+        <decl> <!-- == spawn -->
+            <group id="0" t="0" x="52">
+                <call id="0" x="50" y="10" t="2"/>
+                <item>
+                    Asteroid-Big
+                    <spawn x="25" y="100" />
+                </item>
+            </group>
+            <!-- balise block remplaçée par un attribut -->
+            <item class="Boss1" x="10" y="20" t="3" />
+        </decl>
+    </level>
+</levels>

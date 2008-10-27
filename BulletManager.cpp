@@ -55,7 +55,7 @@ void BulletManager::Add(Weapon::Type type, const sf::Vector2f& offset, float ang
 }
 
 
-void BulletManager::Collide(std::vector<Entity*>& entities)
+void BulletManager::Collide(Entity::ManagedContainer& entities)
 {
     static sf::FloatRect window_rect(0, 0, WIN_WIDTH, WIN_HEIGHT);
     
@@ -66,15 +66,15 @@ void BulletManager::Collide(std::vector<Entity*>& entities)
         bool dead = false; // état du beam
         float beam_x = it_b->sprite.GetPosition().x;
         float beam_y = it_b->sprite.GetPosition().y;
-        std::vector<Entity*>::iterator it_e;
+        Entity::ManagedIterator it_e;
         // pour chaque vaisseau
         for (it_e = entities.begin(); it_e != entities.end(); ++it_e)
         {
             // si la position du beam est dans la surface du vaisseau
-            if ((*it_e)->GetRect().Contains(beam_x, beam_y))
+            if ((*it_e).second.self->GetRect().Contains(beam_x, beam_y))
             {
                 dead = true;
-                (*it_e)->Hit(it_b->damage);
+                (*it_e).second.self->Hit(it_b->damage);
                 break;
             }
         }

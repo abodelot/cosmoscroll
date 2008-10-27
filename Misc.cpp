@@ -1,5 +1,5 @@
 #include "Misc.hpp"
-
+#include <string>
 
 std::string epic_sprintf(const char format[], ...)
 {
@@ -18,3 +18,21 @@ std::string epic_sprintf(const char format[], ...)
     return str;
 }
 
+
+int find_replace(std::string& target, const std::string& look_for, const std::string& replace_by)
+{
+    short unsigned cpt = 0;
+    size_t pos = 0;
+    size_t step = replace_by.size();
+    size_t offset = look_for.size();
+
+    pos = target.find(look_for, pos);
+
+    while ( pos != std::string::npos)
+        {
+         target.replace(pos, offset, replace_by);
+         pos = target.find(look_for, pos + step);
+         ++ cpt;
+        }
+   return cpt;
+}

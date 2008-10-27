@@ -2,6 +2,7 @@
 # this is an auto-generated makefile
 CC=g++
 FLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
+TINYXMLFILES= tinyxml/tinyxml.o tinyxml/tinyxmlerror.o tinyxml/tinyxmlparser.o tinyxml/tinystr.o
 LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 EXEC=cosmoscroll
 DEBUG=yes
@@ -12,8 +13,10 @@ else
 endif
 
 
-$(EXEC): Asteroid.o Blorb.o BulletManager.o ControlPanel.o Ennemy.o Entity.o Game.o Main.o MediaManager.o Menu.o Misc.o ParticleSystem.o PlayerShip.o Weapon.o
-	$(CC) $^ -o $(EXEC) $(LDFLAGS)
+
+$(EXEC): Asteroid.o Blorb.o BulletManager.o ControlPanel.o Ennemy.o Entity.o Game.o  Main.o MediaManager.o Menu.o ParticleSystem.o PlayerShip.o Weapon.o Level.o Misc.o
+	$(CC) $^ $(TINYXMLFILES) -o $(EXEC) $(LDFLAGS)
+
 
 Asteroid.o: Asteroid.cpp Asteroid.hpp
 	$(CC) $< -c $(CFLAGS)
@@ -55,6 +58,9 @@ PlayerShip.o: PlayerShip.cpp PlayerShip.hpp
 	$(CC) $< -c $(CFLAGS)
 
 Weapon.o: Weapon.cpp Weapon.hpp
+	$(CC) $< -c $(CFLAGS)
+
+Level.o: Level.cpp Level.hpp
 	$(CC) $< -c $(CFLAGS)
 
 

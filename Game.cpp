@@ -17,7 +17,8 @@
 Game::Game() :
     bullets_  (BulletManager::GetInstance()),
     particles_(ParticleSystem::GetInstance()),
-    panel_    (ControlPanel::GetInstance())
+    panel_    (ControlPanel::GetInstance()),
+    levels_   (Level::GetInstance())
 {
     // TODO: load settings here
     bool fullscreen = false;
@@ -137,11 +138,20 @@ Game::Choice Game::Play()
 {
     sf::Event event;
     bool running = true;
-    float timer = 0;
+    timer_ = 0;
     Choice choice = EXIT_APP;
     
     Respawn();
     particles_.AddStars();
+    if (levels_.SetLevel(1, level_desc_) == Level::SUCCESS)
+    {
+        std::cout << level_desc_ << std::endl ;
+    }
+    else
+    {
+        std::cerr << "Erreur au chargement du niveau" << std::endl;
+        running = false;
+    }
     
     while (running)
     {
@@ -171,48 +181,53 @@ Game::Choice Game::Play()
         // la boucle du GetEvent, alors que tout ce qui passe par GetInput se
         // fait après la boucle (ici, donc).
         
-        std::vector<Entity*>::iterator it;
+        Entity::ManagedIterator it;
         // <hack>
         // un ennemi en plus toutes les 10s + 7
-        unsigned int max_foo = (static_cast<unsigned int>(timer) / 10 + 7);
+        unsigned int max_foo = GetTimer(max_foo) /10 + 7;
         if (entities_.size() < max_foo)
         {
             AddFoo();
         }
         // </hack>
         
+        running = Update_Entity_List();
+        
         // action
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
-            (**it).Action();
+            (*it).second.self->Action();
         }
         
         // moving
         float time = app_.GetFrameTime();
-        timer += time;
-        panel_.SetChrono(static_cast<unsigned int>(timer));
+        timer_ += time;
+        panel_.SetChrono(GetTimer(max_foo));
         
         for (it = entities_.begin(); it != entities_.end();)
         {
-            if ((**it).IsDead())
+            if ((*it).second.self->IsDead())
             {
-                if (typeid(**it) == typeid(PlayerShip))
+            //std::cerr << typeid(((*it).second.self)) << ", " << typeid(PlayerShip) << std::endl;
+                if (typeid((*(*it).second.self)) == typeid(PlayerShip))
                 {
                     running = false;
                     choice = GAME_OVER;
                     break;
                 }
-                delete *it;
-                it = entities_.erase(it);
+                Entity::ManagedIterator del_ = it;
+                ++ it;
+                delete (*del_).second.self; 
+                entities_.erase(del_);
             }
             else
             {
-                (**it).Move(time);
-                if (player_.ship != *it
-                    && player_.ship->GetRect().Intersects((**it).GetRect()))
+                (*it).second.self->Move(time); 
+                if (player_.ship != (*it).second.self   // FIXME: invalid read of size 8 - Freed by ~PlayerShip
+                    && player_.ship->GetRect().Intersects((*it).second.self->GetRect()))
                 {
                     player_.ship->Hit(1); // FIXME: dégâts magiques !
-                    (**it).Hit(1);
+                    (*it).second.self->Hit(1);
                 }
                 ++it;
             }
@@ -228,13 +243,13 @@ Game::Choice Game::Play()
         particles_.Show(app_);
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
-            (**it).Show(app_);
+            (*it).second.self->Show(app_);
         }
         panel_.Show(app_);
         app_.Display();
     }
     
-    player_.best_time = timer;
+    player_.best_time = timer_;
     // clean up
     RemoveEntities();
     particles_.Clear();
@@ -286,9 +301,14 @@ Game::Choice Game::GameOver()
 }
 
 
-void Game::AddEntity(Entity* entity)
+void Game::AddEntity(Entity* entity, int t)
 {
-    entities_.push_back(entity);
+
+    Entity::TimedEntity tmp_te_;
+    tmp_te_.t=t;
+    tmp_te_.self=entity;
+    
+    entities_.insert(std::pair<Entity::Status, Entity::TimedEntity>(Entity::BASE, tmp_te_));
 }
 
 
@@ -304,15 +324,15 @@ void Game::AddFoo()
     // cast en Entity** car on ne peut pas subsituer un super pointeur enfant
     // à un parent. (un pointeur oui, une référence oui, mais pas un super
     // pointeur :( )
-        entities_.push_back(new Ennemy(offset, player_.ship));
+        AddEntity(new Ennemy(offset, player_.ship));
     }
     else if (ploufplouf > 2)
     {
-        entities_.push_back(new Asteroid(offset, Asteroid::BIG, *this));
+        AddEntity(new Asteroid(offset, Asteroid::BIG, *this));
     }
     else
     {
-        entities_.push_back(new Blorb(offset, player_.ship));
+        AddEntity(new Blorb(offset, player_.ship));
     }
     // </hack>
 }
@@ -324,18 +344,23 @@ void Game::Respawn()
     offset.x = 0;
     offset.y = WIN_HEIGHT / 2.0;
     player_.ship = new PlayerShip(offset, app_.GetInput());
-    entities_.push_back(player_.ship);
+    AddEntity(player_.ship);
 }
 
 
 void Game::RemoveEntities()
 {
-    const size_t length = entities_.size();
-    for (size_t i = 0; i < length; ++i)
+    Entity::ManagedIterator it;
+    Entity::ManagedIterator del_;
+    for (it = entities_.begin(); it != entities_.end();)
     {
-        delete entities_[i];
+        del_ = it;
+        ++ it;
+        delete (*del_).second.self;
     }
     entities_.clear();
+    
+    
 }
 
 
@@ -383,10 +408,10 @@ Game::MenuAction Game::InGameMenu()
         // rendering
         bullets_.Show(app_);
         particles_.Show(app_);
-        std::vector<Entity*>::const_iterator it;
+        Entity::ManagedConstIterator it;
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
-            (**it).Show(app_);
+            (*it).second.self->Show(app_);
         }
         panel_.Show(app_);
         
@@ -396,4 +421,13 @@ Game::MenuAction Game::InGameMenu()
     }
     return static_cast<MenuAction>(what);
 }
+
+bool Game::Update_Entity_List()
+{
+    Level::Error err = levels_.GetNextGroup(entities_);
+    
+    
+    return true; //err == Level::END;
+}
+
 
