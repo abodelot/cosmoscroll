@@ -21,6 +21,7 @@ static void load_or_die(sf::Image& image, const char* filename)
     image.SetSmooth(false);
 }
 
+#ifndef NO_AUDIO
 // charger un buffer audio
 static void load_or_die(sf::SoundBuffer& buffer, const char* filename)
 {
@@ -30,6 +31,7 @@ static void load_or_die(sf::SoundBuffer& buffer, const char* filename)
         exit(EXIT_FAILURE);
     }
 }
+#endif
 
 // charger une liste de ressources depuis un fichier
 template <typename Ressource>
@@ -87,7 +89,7 @@ const sf::Image& MediaManager::GetImage(const char* image) const
     return it->second;
 }
 
-
+#ifndef NO_AUDIO
 const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
 {
     std::map<std::string, sf::SoundBuffer>::const_iterator it;
@@ -99,7 +101,7 @@ const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
     }
     return it->second;
 }
-
+#endif
 
 const sf::Font& MediaManager::GetFont() const
 {
@@ -115,13 +117,15 @@ MediaManager::MediaManager()
         std::cerr << "can't open image list: " << IMG_LIST << std::endl;
         exit(EXIT_FAILURE);
     }
-    
+
+#ifndef NO_AUDIO
     // chargement des buffers audio
     if (!load_from_list(SOUND_LIST, sounds_))
     {
         std::cerr << "can't open sound list: " << SOUND_LIST << std::endl;
         exit(EXIT_FAILURE);
     }
+#endif
     // chargement des fontes
     if (!font_.LoadFromFile("font/hemi-head.ttf", 60))
 	{

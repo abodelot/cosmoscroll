@@ -27,7 +27,9 @@ void ParticleSystem::AddExplosion(const sf::Vector2f& offset)
     {
         particles_.push_back(new Fiery(offset));
     }
+#ifndef NO_AUDIO
     boom_sfx_.Play();
+#endif
 }
 
 
@@ -124,7 +126,9 @@ void ParticleSystem::Clear()
 
 ParticleSystem::ParticleSystem()
 {
+#ifndef NO_AUDIO
     boom_sfx_.SetBuffer(GET_SOUNDBUF("boom"));
+#endif
 }
 
 
@@ -136,7 +140,7 @@ ParticleSystem::~ParticleSystem()
 
 ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset)
 {
-    SetImage(GET_IMG("blue_fiery"));
+    SetImage(GET_IMG("fiery"));
     SetPosition(offset);
     float scale = sf::Randomizer::Random(0.4f, 1.2f);
     SetScale(scale, scale);

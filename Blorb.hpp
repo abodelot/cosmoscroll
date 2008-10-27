@@ -3,8 +3,6 @@
 
 #include "Ennemy.hpp"
 
-#include <SFML/Graphics.hpp>
-
 /*
  * Un ennemy historique :)
  */
@@ -14,6 +12,7 @@ public:
     Blorb(const sf::Vector2f& offset, Entity* target);
     
     void Action();
+    void Move(float frametime);
 };
 
 #endif /* guard BLORB_HPP */

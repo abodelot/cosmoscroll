@@ -2,17 +2,17 @@
 #include "MediaManager.hpp"
 #include "Math.hpp"
 #include "ParticleSystem.hpp"
+#include "Window.hpp"
 
-#define SHIP_SPEED      25 // pixels/seconde
-#define GUN_OFFSET        sf::Vector2f(0,  32)
-#define GUN_OFFSET_INVERT sf::Vector2f(48, 30)
+#include "Interceptor.hpp"
+#include "Blorb.hpp"
+#include "Drone.hpp"
 
 
-Ennemy::Ennemy(const sf::Vector2f& offset, Entity* target) :
-    Entity(GET_IMG("ennemy-A"), offset, 4),
-    weapon_(Weapon::PLASMACANNON)
+Ennemy::Ennemy(const sf::Vector2f& offset, const sf::Image& img, int hp,
+    Entity* target) :
+    Entity(img, offset, hp)
 {
-    left_ = true;
     target_ = target;
 }
 
@@ -29,49 +29,26 @@ void Ennemy::Hit(int damage)
 
 void Ennemy::Move(float frametime)
 {
-    float velocity = SHIP_SPEED * frametime;
-    float vy = 0;
-    float vx = 0;
-    sf::Vector2f player_pos = target_->GetPosition();
-    sf::Vector2f my_pos = sprite_.GetPosition();
-    
-    bool left = true;
-    if (my_pos.x > player_pos.x)
+    if (outside_universe(GetRect()))
     {
-    	vx = -velocity;
+        Kill();
     }
-    else if (my_pos.x < player_pos.x)
-    {
-    	vx = velocity;
-    	left = false;
-    }
-	
-	if (my_pos.y > player_pos.y)
-	    vy = -velocity;
-	else if (my_pos.y < player_pos.y)
-	    vy = velocity;
-	    
-	if (left != left_)
-	{
-	    sprite_.FlipX(!left);
-	    left_ = left;
-	}
-
-    sprite_.Move(vx, vy);
-    weapon_.Update(frametime);
+    (void) frametime;
 }
 
 
-void Ennemy::Action()
+Ennemy* Ennemy::Make(Type type, const sf::Vector2f& offset, Entity* target)
 {
-    float radians = ANGLE(target_->GetPosition(), sprite_.GetPosition());
-    if (!left_)
+    switch (type)
     {
-        weapon_.Shoot(sprite_.GetPosition() + GUN_OFFSET_INVERT, radians);
+    case BLORB:
+        return new Blorb(offset, target);
+    case DRONE:
+        return new Drone(offset, target);
+    case INTERCEPTOR:
+        return new Interceptor(offset, target);
     }
-    else
-    {
-        weapon_.Shoot(sprite_.GetPosition() + GUN_OFFSET, radians);
-    }
+    return NULL;
 }
+
 

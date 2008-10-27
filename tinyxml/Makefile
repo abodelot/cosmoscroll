@@ -1,33 +1,17 @@
-
-# this is an auto-generated makefile
 CC=g++
-FLAGS=-Wall -Wextra -Wwrite-strings -pedantic
-LDFLAGS=
-DEBUG=yes
-ifeq ($(DEBUG), yes)
-	CFLAGS=$(FLAGS) -g -DDEBUG
-else
-	CFLAGS=$(FLAGS) -O3
-endif
+CFLAGS=-Wall -Wextra -Wwrite-strings -O2
 
+TinyXML: tinyxml.o tinyxmlparser.o tinyxmlerror.o
 
 tinyxml.o: tinyxml.cpp tinyxml.h
 	$(CC) $< -c $(CFLAGS)
 
-tinyxmlparser.o: tinyxmlparser.cpp
+tinyxmlparser.o: tinyxmlparser.cpp tinyxml.h
 	$(CC) $< -c $(CFLAGS)
 
-tinyxmlerror.o: tinyxmlerror.cpp
+tinyxmlerror.o: tinyxmlerror.cpp tinyxml.h
 	$(CC) $< -c $(CFLAGS)
-
-tinystr.o: tinystr.cpp
-	$(CC) $< -c $(CFLAGS)
-
 
 clean:
 	-rm *.o
-
-mrproper: clean
-
-all: mrproper tinyxml.o tinyxmlparser.o tinyxmlerror.o tinystr.o
 

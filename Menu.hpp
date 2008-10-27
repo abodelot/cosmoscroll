@@ -4,7 +4,10 @@
 #include <vector>
 #include <string>
 #include <SFML/Graphics.hpp>
+
+#ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
+#endif
 
 /*
  * Permet de sélectionner une action
@@ -100,7 +103,9 @@ private:
     int linespace_; // interligne en pixels
     ItemLook highlight_look_;
     ItemLook normal_look_;
+#ifndef NO_AUDIO
     sf::Sound sound_;
+#endif
 };
 
 #endif /* guard MENU_HPP */

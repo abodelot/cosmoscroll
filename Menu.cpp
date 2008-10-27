@@ -14,8 +14,9 @@ Menu::Menu()
     
     // pas encore d'éléments, donc pas de sélection
     selected_ = -1;
-    
+#ifndef NO_AUDIO    
     sound_.SetBuffer(GET_SOUNDBUF("menu-select"));
+#endif
 }
 
 
@@ -83,13 +84,17 @@ bool Menu::ActionChosen(const sf::Event::KeyEvent& key, int& id)
             ApplyStyle(items_[selected_], normal_look_);
             selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
             ApplyStyle(items_[selected_], highlight_look_);
+#ifndef NO_AUDIO
             sound_.Play();
+#endif
             break;
         case sf::Key::Down:
             ApplyStyle(items_[selected_], normal_look_);
             selected_ = (selected_ + 1) % items_.size();
             ApplyStyle(items_[selected_], highlight_look_);
+#ifndef NO_AUDIO
             sound_.Play();
+#endif
             break;
         case sf::Key::Return:
             id = items_[selected_].id;

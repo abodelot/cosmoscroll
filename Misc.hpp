@@ -9,7 +9,7 @@
  * @param[in] ...: arguments
  * @return string formée
  */
-std::string epic_sprintf(const char format[], ...);
+std::string str_sprintf(const char format[], ...);
 
 
 /*
@@ -19,5 +19,6 @@ std::string epic_sprintf(const char format[], ...);
  * @return string transformée
  */
 int find_replace(std::string& target, const std::string& look_for, const std::string& replace_by);
+
 #endif /* guard MISC_HPP */
 

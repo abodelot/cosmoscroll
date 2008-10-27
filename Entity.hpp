@@ -1,8 +1,8 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
-#include <map>
-#include <utility>
+/*#include <map>
+#include <utility>*/
 #include <SFML/Graphics.hpp>
 
 /*
@@ -54,7 +54,7 @@ public:
      * Obtenir la surface de collision du vaisseau
      */
     virtual sf::FloatRect GetRect();
-    
+/*
     enum Status {
                  BASE= 0,        // Entité non spawnée, non blocante
                  BLOCK= 0 << 1,  // Entité blocante
@@ -77,6 +77,7 @@ struct ltstatus
     typedef std::multimap<Entity::Status, TimedEntity, ltstatus > ManagedContainer;
     typedef std::multimap<Entity::Status, TimedEntity, ltstatus >::iterator ManagedIterator;
     typedef std::multimap<Entity::Status, TimedEntity, ltstatus >::const_iterator ManagedConstIterator;
+*/
 protected:
     sf::Sprite sprite_;
     int hp_;

@@ -30,17 +30,17 @@ void BulletManager::Add(Weapon::Type type, const sf::Vector2f& offset, float ang
     switch (type)
     {
         case Weapon::LASERBEAM:
-            bullet.sprite.SetImage(GET_IMG("laserbeam"));
+            bullet.sprite.SetImage(GET_IMG("ammo_laserbeam"));
             bullet.damage = 2;
             bullet.speed = 360;
             break;
         case Weapon::HELLFIRE:
-            bullet.sprite.SetImage(GET_IMG("hellfire"));
+            bullet.sprite.SetImage(GET_IMG("ammo_hellfire"));
             bullet.damage = 1;
             bullet.speed = 480;
             break;
         case Weapon::PLASMACANNON:
-            bullet.sprite.SetImage(GET_IMG("plasma"));
+            bullet.sprite.SetImage(GET_IMG("ammo_plasma"));
             bullet.damage = 1;
             bullet.speed = 420;
             break;
@@ -55,7 +55,8 @@ void BulletManager::Add(Weapon::Type type, const sf::Vector2f& offset, float ang
 }
 
 
-void BulletManager::Collide(Entity::ManagedContainer& entities)
+//void BulletManager::Collide(Entity::ManagedContainer& entities)
+void BulletManager::Collide(std::vector<Entity*>& entities)
 {
     static sf::FloatRect window_rect(0, 0, WIN_WIDTH, WIN_HEIGHT);
     
@@ -66,15 +67,18 @@ void BulletManager::Collide(Entity::ManagedContainer& entities)
         bool dead = false; // état du beam
         float beam_x = it_b->sprite.GetPosition().x;
         float beam_y = it_b->sprite.GetPosition().y;
-        Entity::ManagedIterator it_e;
+        //Entity::ManagedIterator it_e;
+        std::vector<Entity*>::iterator it_e;
         // pour chaque vaisseau
         for (it_e = entities.begin(); it_e != entities.end(); ++it_e)
         {
             // si la position du beam est dans la surface du vaisseau
-            if ((*it_e).second.self->GetRect().Contains(beam_x, beam_y))
+            //if ((*it_e).second.self->GetRect().Contains(beam_x, beam_y))
+            if ((*it_e)->GetRect().Contains(beam_x, beam_y))
             {
                 dead = true;
-                (*it_e).second.self->Hit(it_b->damage);
+                //(*it_e).second.self->Hit(it_b->damage);
+                (*it_e)->Hit(it_b->damage);
                 break;
             }
         }

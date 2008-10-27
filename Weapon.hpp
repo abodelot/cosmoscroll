@@ -1,7 +1,9 @@
 #ifndef H_WEAPON
 #define H_WEAPON
 
+#ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
+#endif
 #include <SFML/System/Vector2.hpp>
 
 
@@ -28,8 +30,10 @@ private:
     // cadence de tir
     float fire_rate_;
     Type type_;
-    
+
+#ifndef NO_AUDIO
     sf::Sound sound_;
+#endif
 };
 
 #endif /* guard H_WEAPON */

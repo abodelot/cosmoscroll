@@ -5,8 +5,6 @@
 
 #include <SFML/Graphics.hpp>
 
-class Game;
-
 class Asteroid: public Entity
 {
 public:
@@ -21,7 +19,7 @@ public:
      * @param[in] size: taille
      * @param[in] game: référence sur le gestionnaire d'entités
      */
-    Asteroid(const sf::Vector2f& offset, Size size, Game& game);
+    Asteroid(const sf::Vector2f& offset, Size size);
     
     void Action();
     
@@ -33,7 +31,6 @@ private:
     Size size_;
     float angle_;
     float speed_;
-    Game& game_;
 };
 
 #endif /* guard H_ASTEROID */

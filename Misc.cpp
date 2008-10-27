@@ -1,7 +1,7 @@
 #include "Misc.hpp"
-#include <string>
 
-std::string epic_sprintf(const char format[], ...)
+
+std::string str_sprintf(const char format[], ...)
 {
     va_list args;
     va_start(args, format);
@@ -28,11 +28,12 @@ int find_replace(std::string& target, const std::string& look_for, const std::st
 
     pos = target.find(look_for, pos);
 
-    while ( pos != std::string::npos)
-        {
-         target.replace(pos, offset, replace_by);
-         pos = target.find(look_for, pos + step);
-         ++ cpt;
-        }
-   return cpt;
+    while (pos != std::string::npos)
+    {
+        target.replace(pos, offset, replace_by);
+        pos = target.find(look_for, pos + step);
+        ++cpt;
+    }
+    return cpt;
 }
+

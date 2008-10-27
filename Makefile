@@ -1,27 +1,34 @@
+CC=g++ #-DNO_AUDIO
+TINYXML_DIR=tinyxml
+TINYXML_LIBS=$(TINYXML_DIR)/tinyxml.o $(TINYXML_DIR)/tinyxmlerror.o $(TINYXML_DIR)/tinyxmlparser.o
 
-# this is an auto-generated makefile
-CC=g++
 FLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
-TINYXMLFILES= tinyxml/tinyxml.o tinyxml/tinyxmlerror.o tinyxml/tinyxmlparser.o tinyxml/tinystr.o
 LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 EXEC=cosmoscroll
 DEBUG=yes
+
 ifeq ($(DEBUG), yes)
 	CFLAGS=$(FLAGS) -g -DDEBUG
 else
 	CFLAGS=$(FLAGS) -O3
 endif
 
+$(EXEC): $(TINYXML_LIBS) Asteroid.o Interceptor.o Drone.o Blorb.o BulletManager.o ControlPanel.o Ennemy.o Entity.o Game.o  Main.o MediaManager.o Menu.o ParticleSystem.o PlayerShip.o Weapon.o Level.o Misc.o
+	$(CC) $^ -o $(EXEC) $(LDFLAGS)
 
-
-$(EXEC): Asteroid.o Blorb.o BulletManager.o ControlPanel.o Ennemy.o Entity.o Game.o  Main.o MediaManager.o Menu.o ParticleSystem.o PlayerShip.o Weapon.o Level.o Misc.o
-	$(CC) $^ $(TINYXMLFILES) -o $(EXEC) $(LDFLAGS)
-
+$(TINYXML_LIBS):
+	@(cd $(TINYXML_DIR) && $(MAKE))
 
 Asteroid.o: Asteroid.cpp Asteroid.hpp
 	$(CC) $< -c $(CFLAGS)
 
+Interceptor.o: Interceptor.cpp Interceptor.hpp
+	$(CC) $< -c $(CFLAGS)
+
 Blorb.o: Blorb.cpp Blorb.hpp
+	$(CC) $< -c $(CFLAGS)
+	
+Drone.o: Drone.cpp Drone.hpp
 	$(CC) $< -c $(CFLAGS)
 
 BulletManager.o: BulletManager.cpp BulletManager.hpp
@@ -38,7 +45,7 @@ Entity.o: Entity.cpp Entity.hpp
 
 Game.o: Game.cpp Game.hpp
 	$(CC) $< -c $(CFLAGS)
-
+	
 Main.o: Main.cpp
 	$(CC) $< -c $(CFLAGS)
 

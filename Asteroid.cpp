@@ -35,9 +35,8 @@ inline const sf::Image& select_image(Asteroid::Size size)
 }
 
 
-Asteroid::Asteroid(const sf::Vector2f& offset, Size size, Game& game):
-    Entity(select_image(size), offset, size + 1),
-    game_(game)
+Asteroid::Asteroid(const sf::Vector2f& offset, Size size) :
+    Entity(select_image(size), offset, size + 1)
 {
     size_ = size;
     speed_ = sf::Randomizer::Random(MIN_SPEED, MAX_SPEED);
@@ -57,20 +56,17 @@ void Asteroid::Move(float frametime)
     sf::Vector2f offset = sprite_.GetPosition();
     offset.x = offset.x + framespeed * std::cos(angle_);
     offset.y = offset.y - framespeed * std::sin(angle_);
-    if (offset.x < 0 || offset.x > WIN_WIDTH || offset.y < 0 || offset.y > WIN_HEIGHT)
+    sprite_.SetPosition(offset);
+    if (outside_universe(GetRect()))
     {
         Kill();
-    }
-    else
-    {
-        sprite_.SetPosition(offset);
     }
 }
 
 
 void Asteroid::Hit(int damage)
 {
-    static ParticleSystem& p = ParticleSystem::GetInstance();
+    ParticleSystem& p = ParticleSystem::GetInstance();
     sf::Vector2f offset = sprite_.GetPosition();
     
     Entity::Hit(damage);
@@ -82,16 +78,16 @@ void Asteroid::Hit(int damage)
             case BIG:
                 for (int i = 0; i < BIG_SPLIT_INTO; ++i)
                 {
-                    as = new Asteroid(offset, MEDIUM, game_);
-                    game_.AddEntity(as, 0);
+                    as = new Asteroid(offset, MEDIUM);
+                    Game::GetInstance().AddEntity(as);
                 };
                 p.AddImpact(offset, 20);
                 break;
             case MEDIUM:
                 for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
                 {
-                    as = new Asteroid(offset, SMALL, game_);
-                    game_.AddEntity(as, 0);
+                    as = new Asteroid(offset, SMALL);
+                    Game::GetInstance().AddEntity(as);
                 }
                 p.AddImpact(offset, 10);
             case SMALL:

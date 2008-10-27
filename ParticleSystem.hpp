@@ -3,7 +3,9 @@
 
 #include <list>
 #include <SFML/Graphics.hpp>
+#ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
+#endif
 
 /*
  * Moteur de particules pour gérer des effets graphiques
@@ -30,7 +32,7 @@ public:
     /*
      * Ajouter "count" étoiles défilantes dans la scène
      */
-    void AddStars(int count = 25);
+    void AddStars(int count = 33);
     
     void AddShield(int count, const sf::Sprite* handle);
     
@@ -149,7 +151,9 @@ private:
     typedef std::list<Particle*> ParticleList;
     
     ParticleList particles_;
+#ifndef NO_AUDIO
     sf::Sound boom_sfx_;
+#endif
 };
 
 #endif /* guard PARTICLESYSTEM_HPP */

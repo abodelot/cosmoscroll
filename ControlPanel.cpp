@@ -12,13 +12,13 @@ ControlPanel& ControlPanel::GetInstance()
 
 void ControlPanel::SetShipHP(int hp)
 {
-    str_[HP].SetText(epic_sprintf("Vaisseau : %d HP", hp));
+    str_[HP].SetText(str_sprintf("Vaisseau : %d HP", hp));
 }
 
 
 void ControlPanel::SetShield(int n)
 {
-    str_[SHIELD].SetText(epic_sprintf("Bouclier : %d", n));    
+    str_[SHIELD].SetText(str_sprintf("Bouclier : %d", n));    
 }
 
 
@@ -30,13 +30,14 @@ void ControlPanel::SetInfo(const char* text)
 
 void ControlPanel::SetHeat(float heat)
 {
-    str_[HEAT].SetText(epic_sprintf("Chaleur : %02.0f %%", heat));
+    str_[HEAT].SetText(str_sprintf("Chaleur : %02.0f %%", heat));
 }
 
 
-void ControlPanel::SetChrono(int seconds)
+void ControlPanel::SetChrono(float seconds)
 {
-    str_[CHRONO].SetText(epic_sprintf("Temps : %02d:%02d", seconds / 60, seconds % 60));
+    int s = (int) seconds; // arrondi
+    str_[CHRONO].SetText(str_sprintf("Temps : %02d:%02d", s / 60, s % 60));
 }
 
 
@@ -52,7 +53,7 @@ void ControlPanel::Show(sf::RenderWindow& app)
 
 ControlPanel::ControlPanel()
 {
-    panel_.SetImage(GET_IMG("WIP_score-board"));
+    panel_.SetImage(GET_IMG("score-board"));
     for (int i = 0; i < STR_COUNT; ++i)
     {
         str_[i].SetFont(GET_FONT());

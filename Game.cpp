@@ -1,24 +1,30 @@
 #include "Game.hpp"
 #include "MediaManager.hpp"
+
 #include "Asteroid.hpp"
 #include "Ennemy.hpp"
-#include "Blorb.hpp"
+
 #include "Menu.hpp"
 #include "Window.hpp"
 #include "Misc.hpp"
+#include "Level.hpp"
 
 #include <SFML/System.hpp>
 #include <typeinfo>
 
 #define KEY_PAUSE sf::Key::P
-#define KEY_ESC sf::Key::Escape
+
+Game& Game::GetInstance()
+{
+    static Game self;
+    return self;
+}
 
 
 Game::Game() :
     bullets_  (BulletManager::GetInstance()),
     particles_(ParticleSystem::GetInstance()),
-    panel_    (ControlPanel::GetInstance()),
-    levels_   (Level::GetInstance())
+    panel_    (ControlPanel::GetInstance())
 {
     // TODO: load settings here
     bool fullscreen = false;
@@ -52,7 +58,11 @@ void Game::Run()
     {
         switch (what)
         {
-            case PLAY:
+            case MAIN_MENU:
+                what = MainMenu();
+                break;
+            case ARCADE_MODE:
+            case STORY_MODE:
                 what = Play();
                 break;
             case GAME_OVER:
@@ -67,7 +77,7 @@ void Game::Run()
 
 Game::Choice Game::Intro()
 {
-    Choice what = PLAY;
+    Choice what = MAIN_MENU;
     float duration = 5;
     
     sf::Sprite background;
@@ -134,25 +144,18 @@ Game::Choice Game::Options()
 }
 
 
-Game::Choice Game::Play()
+Game::Choice Game::MainMenu()
 {
-    sf::Event event;
+    puts("Main menu launched");
+    Menu menu;
+    menu.SetOffset(sf::Vector2f(42, 100));
+    menu.AddItem("Mode Aventure", STORY_MODE);
+    menu.AddItem("Mode Arcade", ARCADE_MODE);
+    menu.AddItem("Quitter", EXIT_APP);
     bool running = true;
-    timer_ = 0;
-    Choice choice = EXIT_APP;
+    int choice;
     
-    Respawn();
-    particles_.AddStars();
-    if (levels_.SetLevel(1, level_desc_) == Level::SUCCESS)
-    {
-        std::cout << level_desc_ << std::endl ;
-    }
-    else
-    {
-        std::cerr << "Erreur au chargement du niveau" << std::endl;
-        running = false;
-    }
-    
+    sf::Event event;
     while (running)
     {
         while (app_.GetEvent(event))
@@ -163,17 +166,68 @@ Game::Choice Game::Play()
             }
             else if (event.Type == sf::Event::KeyPressed)
             {
-                if (event.Key.Code == KEY_ESC)
+                if (menu.ActionChosen(event.Key, choice))
                 {
                     running = false;
                 }
-                if (event.Key.Code == KEY_PAUSE)
+            }
+        }
+        menu.Show(app_);
+        app_.Display();
+    }
+    arcade_ = choice == ARCADE_MODE;
+    puts("exiting main menu");
+    return static_cast<Choice>(choice);
+}
+
+Game::Choice Game::Play()
+{
+    puts("game launched");
+    sf::Event event;
+    bool running = true;
+    timer_ = 0.0f;
+    Choice choice = EXIT_APP;
+    
+    Respawn();
+    particles_.AddStars();
+    if (!arcade_)
+    {
+        Level::GetInstance().Load(LEVEL_FILE);    
+    }
+    
+    /*if (levels_.SetLevel(1, level_desc_) == Level::SUCCESS)
+    {
+        std::cout << level_desc_ << std::endl ;
+    }
+    else
+    {
+        std::cerr << "Erreur au chargement du niveau" << std::endl;
+        running = false;
+    }
+    */
+    while (running)
+    {
+        while (app_.GetEvent(event))
+        {
+            if (event.Type == sf::Event::Closed)
+            {
+                running = false;
+            }
+            else if (event.Type == sf::Event::KeyPressed)
+            {
+                switch (event.Key.Code)
                 {
-                    MenuAction what = InGameMenu();
-                    if (what == MENU_EXIT)
-                    {
+                    case sf::Key::Escape: // QUICK QUIT
                         running = false;
-                    }
+                        break;
+                    case KEY_PAUSE:
+                        if (InGameMenu() == MENU_EXIT)
+                        {
+                            running = false;
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -181,30 +235,62 @@ Game::Choice Game::Play()
         // la boucle du GetEvent, alors que tout ce qui passe par GetInput se
         // fait après la boucle (ici, donc).
         
-        Entity::ManagedIterator it;
-        // <hack>
-        // un ennemi en plus toutes les 10s + 7
-        unsigned int max_foo = GetTimer(max_foo) /10 + 7;
-        if (entities_.size() < max_foo)
+        if (running)
         {
-            AddFoo();
+            running = MoreBadGuys() || entities_.size() > 1;
+            if (!running)
+            {
+                // il n'y a plus d'ennemis en liste d'attente, et plus
+                // d'ennemis dans le vecteur = VICTOIRE EPIC WIN
+                // TODO: mettre un flag changer l'enum pour indiquer la victoire
+                choice = GAME_OVER;
+            }
         }
-        // </hack>
+        //Entity::ManagedIterator it;
+        std::vector<Entity*>::iterator it;
         
-        running = Update_Entity_List();
+//        running = Update_Entity_List();
         
         // action
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
-            (*it).second.self->Action();
+            //(*it).second.self->Action();
+            (**it).Action();
         }
         
         // moving
         float time = app_.GetFrameTime();
         timer_ += time;
-        panel_.SetChrono(GetTimer(max_foo));
+        panel_.SetChrono(timer_);
+        
         
         for (it = entities_.begin(); it != entities_.end();)
+        {
+            if ((**it).IsDead())
+            {
+                if (typeid(**it) == typeid(PlayerShip))
+                {
+                    running = false;
+                    choice = GAME_OVER;
+                    break;
+                }
+                delete *it;
+                it = entities_.erase(it);
+            }
+            else
+            {
+                (**it).Move(time);
+                if (player_.ship != *it
+                    && player_.ship->GetRect().Intersects((**it).GetRect()))
+                {
+                    player_.ship->Hit(1); // FIXME: dégâts magiques !
+                    (**it).Hit(1);
+                }
+                ++it;
+            }
+        }
+
+        /*for (it = entities_.begin(); it != entities_.end();)
         {
             if ((*it).second.self->IsDead())
             {
@@ -231,7 +317,7 @@ Game::Choice Game::Play()
                 }
                 ++it;
             }
-        }
+        }*/
         
         bullets_.Update(time);
         particles_.Update(time);
@@ -243,7 +329,8 @@ Game::Choice Game::Play()
         particles_.Show(app_);
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
-            (*it).second.self->Show(app_);
+            //(*it).second.self->Show(app_);
+            (**it).Show(app_);
         }
         panel_.Show(app_);
         app_.Display();
@@ -258,19 +345,79 @@ Game::Choice Game::Play()
 }
 
 
+// retourne true s'il y a encore des ennemis à envoyer plus tard
+// sinon false (niveau fini, bravo :D)
+bool Game::MoreBadGuys()
+{
+    // si mode arcade
+    if (arcade_)
+    {
+        // un ennemi en plus toutes les 10s + 7
+        unsigned int max_bad_guys = timer_ / 10 + 7;
+        if (entities_.size() < max_bad_guys)
+        {
+            // ajout d'une ennemi au hasard
+            // <hack>
+            sf::Vector2f offset;
+            offset.x = WIN_WIDTH;
+            offset.y = sf::Randomizer::Random(0, WIN_HEIGHT);
+            int random = sf::Randomizer::Random(0, 10);
+            if (random > 6)
+            {
+                AddEntity(Ennemy::Make(Ennemy::INTERCEPTOR, offset, player_.ship));
+            }
+            else if (random > 4)
+            {
+                AddEntity(Ennemy::Make(Ennemy::BLORB, offset, player_.ship));
+            }
+            else if (random > 2)
+            {
+                AddEntity(Ennemy::Make(Ennemy::DRONE, offset, player_.ship));
+            }
+            else
+            {
+                AddEntity(new Asteroid(offset, Asteroid::BIG));
+            };
+            // </hack>
+        }
+        // endless badguys! arcade mode will kill you til you die from it.
+        return true;
+    }
+    
+    Level& level = Level::GetInstance();
+    // sinon mode histoire
+    Entity* p = level.GiveNext(timer_);
+    while (p != NULL)
+    {
+        AddEntity(p);
+        p = level.GiveNext(timer_);
+    }
+    // si le niveau n'est pas fini, alors il y a encore des ennemis
+    return level.RemainingEntities() > 0;
+}
+
+
 Game::Choice Game::GameOver()
 {
     sf::String title;
-    int min = (int) player_.best_time / 60;
-    int sec = (int) player_.best_time % 60;
-    title.SetText(epic_sprintf("Tu as tenu seulement %d min et %d sec", min, sec));
+    if (arcade_)
+    {
+        int min = (int) player_.best_time / 60;
+        int sec = (int) player_.best_time % 60;
+        title.SetText(str_sprintf("Tu as tenu seulement %d min et %d sec",
+            min, sec));
+    }
+    else
+    {
+        title.SetText("Fin de niveau");
+    }
     title.SetFont(GET_FONT());
     title.SetColor(sf::Color::White);
     title.SetPosition(42, 42);
     
     Menu menu;
     menu.SetOffset(sf::Vector2f(42, 100));
-    menu.AddItem("Rejouer", PLAY);    
+    menu.AddItem("Menu principal", MAIN_MENU);    
     menu.AddItem("Quitter", EXIT_APP);
     
     bool running = true;
@@ -301,40 +448,14 @@ Game::Choice Game::GameOver()
 }
 
 
-void Game::AddEntity(Entity* entity, int t)
+void Game::AddEntity(Entity* entity)
 {
 
-    Entity::TimedEntity tmp_te_;
-    tmp_te_.t=t;
-    tmp_te_.self=entity;
-    
-    entities_.insert(std::pair<Entity::Status, Entity::TimedEntity>(Entity::BASE, tmp_te_));
-}
-
-
-void Game::AddFoo()
-{
-    // <hack>
-    sf::Vector2f offset;
-    offset.x = WIN_WIDTH;
-    offset.y = sf::Randomizer::Random(0, WIN_HEIGHT);
-    int ploufplouf = sf::Randomizer::Random(0, 10);
-    if (ploufplouf > 6)
-    {
-    // cast en Entity** car on ne peut pas subsituer un super pointeur enfant
-    // à un parent. (un pointeur oui, une référence oui, mais pas un super
-    // pointeur :( )
-        AddEntity(new Ennemy(offset, player_.ship));
-    }
-    else if (ploufplouf > 2)
-    {
-        AddEntity(new Asteroid(offset, Asteroid::BIG, *this));
-    }
-    else
-    {
-        AddEntity(new Blorb(offset, player_.ship));
-    }
-    // </hack>
+//    Entity::TimedEntity tmp_te_;
+//    tmp_te_.t=t;
+//    tmp_te_.self=entity;
+//    entities_.insert(std::pair<Entity::Status, Entity::TimedEntity>(Entity::BASE, tmp_te_));
+    entities_.push_back(entity);
 }
 
 
@@ -350,7 +471,14 @@ void Game::Respawn()
 
 void Game::RemoveEntities()
 {
-    Entity::ManagedIterator it;
+    const size_t length = entities_.size();
+    for (size_t i = 0; i < length; ++i)
+    {
+        delete entities_[i];
+    }
+    entities_.clear();
+    
+    /*Entity::ManagedIterator it;
     Entity::ManagedIterator del_;
     for (it = entities_.begin(); it != entities_.end();)
     {
@@ -359,8 +487,7 @@ void Game::RemoveEntities()
         delete (*del_).second.self;
     }
     entities_.clear();
-    
-    
+    */
 }
 
 
@@ -390,9 +517,9 @@ Game::MenuAction Game::InGameMenu()
             }
             if (event.Type == sf::Event::KeyPressed)
             {
-                if (event.Key.Code == KEY_ESC)
+                if (event.Key.Code == KEY_PAUSE)
                 {
-                    what = MENU_EXIT;
+                    what = MENU_RESUME;
                     paused = false;
                 }
                 else if (menu.ActionChosen(event.Key, what))
@@ -408,10 +535,12 @@ Game::MenuAction Game::InGameMenu()
         // rendering
         bullets_.Show(app_);
         particles_.Show(app_);
-        Entity::ManagedConstIterator it;
+        //Entity::ManagedConstIterator it;
+        std::vector<Entity*>::iterator it;
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
-            (*it).second.self->Show(app_);
+            //(*it).second.self->Show(app_);
+            (**it).Show(app_);
         }
         panel_.Show(app_);
         
@@ -422,12 +551,17 @@ Game::MenuAction Game::InGameMenu()
     return static_cast<MenuAction>(what);
 }
 
+
+PlayerShip* Game::GetPlayer() const
+{
+    return player_.ship;
+}
+
+/*
 bool Game::Update_Entity_List()
 {
     Level::Error err = levels_.GetNextGroup(entities_);
-    
-    
     return true; //err == Level::END;
 }
-
+*/
 

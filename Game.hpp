@@ -1,7 +1,6 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "Level.hpp"
 #include "Entity.hpp"
 #include "BulletManager.hpp"
 #include "PlayerShip.hpp"
@@ -17,31 +16,33 @@
 class Game
 {
 public:
-    Game();
-    
-    ~Game();
-    
+    static Game& GetInstance();
+
     /*
      * Lancer une partie de CosmoScroll
      */
     void Run();
-
+    
     /*
      * Ajout d'une nouvelle unité dans le jeu
      */
-    void AddEntity(Entity* entity, int t = 0);
+    void AddEntity(Entity* entity);
+    
+    PlayerShip* GetPlayer() const;
     
 private:
-
+    Game();
+    ~Game();
     enum Choice
     {
-        INTRO, OPTIONS, PLAY, GAME_OVER, EXIT_APP
+        INTRO, OPTIONS, MAIN_MENU, STORY_MODE, ARCADE_MODE, GAME_OVER, EXIT_APP
     };
     
     Choice Intro();
     Choice Options();
     Choice Play();
     Choice GameOver();
+    Choice MainMenu();
     
     /*
      * Types de retour des menus
@@ -58,10 +59,7 @@ private:
      */
     MenuAction InGameMenu();
 
-    /*
-     * Méthode temporaire d'ajout d'ennemi
-     */
-    void AddFoo();
+    bool MoreBadGuys();
     
     /*
      * Création du vaisseau du joueur
@@ -86,15 +84,16 @@ private:
     BulletManager& bullets_;
     ParticleSystem& particles_;
     ControlPanel& panel_;
-    Level& levels_;
-    std::string level_desc_; // Description du niveau courant
+    //std::string level_desc_; // Description du niveau courant
+    
+    bool arcade_;
     
     // toutes les unités sont allouées dynamiquement
-    //std::vector<Entity*> entities_;
-    Entity::ManagedContainer entities_;
-    bool Update_Entity_List();
+    std::vector<Entity*> entities_;
+    //Entity::ManagedContainer entities_;
+    //bool Update_Entity_List();
     
-    
+    /*
     inline unsigned int GetTimer(unsigned int& i)
     {  
         i = static_cast<unsigned int>(timer_);
@@ -106,6 +105,7 @@ private:
         f = timer_;
         return f;
     }
+    */
 };
 
 #endif /* guard GAME_HPP */

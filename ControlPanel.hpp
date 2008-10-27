@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#define CONTROL_PANEL_HEIGHT
+#define CONTROL_PANEL_HEIGHT 56
 
 class ControlPanel
 {
@@ -18,7 +18,7 @@ public:
 
     void SetHeat(float heat);
 
-    void SetChrono(int seconds);
+    void SetChrono(float seconds);
     
     void Show(sf::RenderWindow& app);
 

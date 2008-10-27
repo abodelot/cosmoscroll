@@ -2,7 +2,9 @@
 #define H_RESSOURCE_MANAGER
 
 #include <SFML/Graphics.hpp>
+#ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
+#endif
 #include <map>
 #include <string>
 
@@ -24,13 +26,15 @@ public:
      * @return référence sur l'image
      */
     const sf::Image& GetImage(const char* key) const;
-    
+
+#ifndef NO_AUDIO    
     /*
      * Récupérer un buffer audio
      * @param[in] key: identifiant du buffer
      * @return référence sur le buffer
      */
     const sf::SoundBuffer& GetSoundBuf(const char* key) const;
+#endif
     
     /*
      * Récupérer la police de caractères
@@ -49,7 +53,9 @@ private:
     MediaManager& operator=(const MediaManager& other);
     
     std::map<std::string, sf::Image> images_;
+#ifndef NO_AUDIO
     std::map<std::string, sf::SoundBuffer> sounds_;
+#endif
     sf::Font font_;
 };
 
@@ -61,10 +67,12 @@ inline const sf::Image& GET_IMG(const char* key)
     return MediaManager::GetInstance().GetImage(key);
 }
 
+#ifndef NO_AUDIO
 inline const sf::SoundBuffer& GET_SOUNDBUF(const char* key)
 {
     return MediaManager::GetInstance().GetSoundBuf(key);
 }
+#endif
 
 inline const sf::Font& GET_FONT()
 {

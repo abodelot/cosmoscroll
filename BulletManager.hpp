@@ -33,7 +33,8 @@ public:
     /*
      * Gestion des collisions
      */
-    void Collide(Entity::ManagedContainer& entities);
+    //void Collide(Entity::ManagedContainer& entities);
+    void Collide(std::vector<Entity*>& entities);
     
     /*
      * Afficher les beams dans la fenêtre de rendu

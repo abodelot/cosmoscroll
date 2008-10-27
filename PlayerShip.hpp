@@ -1,7 +1,9 @@
-#ifndef H_PLAYER_SHIP
-#define H_PLAYER_SHIP
+#ifndef PLAYERSHIP_HPP
+#define PLAYER_SHIP_HPP
 
+#ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
+#endif
 
 #include "Entity.hpp"
 #include "Weapon.hpp"
@@ -35,11 +37,13 @@ private:
     
     int shield_;
     float shield_timer_;
+#ifndef NO_AUDIO
     sf::Sound shield_sfx_;
+#endif
     
     Weapon laserbeam_;
     Weapon hellfire_;
 };
 
-#endif /* guard H_PLAYER_SHIP */
+#endif /* guard PLAYERSHIP_HPP */
 

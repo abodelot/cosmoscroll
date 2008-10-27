@@ -9,12 +9,12 @@
 #define GUN_OFFSET      sf::Vector2f(50, 24)
 
 // taux de regénération du bouclier en boules/secondes
-#define SHIELD_RECOVERY_RATE 0.3
+#define SHIELD_RECOVERY_RATE 0.2
 #define SHIELD_MAX           6
 #define SHIELD_DEFAULT       3
 
 #define HEAT_MAX     100
-#define COLDING_RATE 10
+#define COLDING_RATE 13
 
 #define GUN_ORIENT_MAX  15
 #define GUN_ORIENT_MIN -15
@@ -32,7 +32,9 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     heat_ = 0.0f;
     shield_ = SHIELD_DEFAULT;
     shield_timer_ = 0;
+#ifndef NO_AUDIO
     shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
+#endif
     ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, &sprite_);
     
     panel_.SetShipHP(hp_);
@@ -95,7 +97,7 @@ void PlayerShip::Move(float frametime)
     
     if (input_.IsKeyDown(sf::Key::Up))
     {
-        y = (y - dist < 0) ? 0 : y - dist;
+        y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
     }
     if (input_.IsKeyDown(sf::Key::Down))
     {
@@ -162,7 +164,9 @@ void PlayerShip::Hit(int damage)
         }
         else
         {
+#ifndef NO_AUDIO
             shield_sfx_.Play();
+#endif
             shield_ = 0;
         }
         panel_.SetShield(shield_);
