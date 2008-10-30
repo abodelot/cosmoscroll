@@ -33,31 +33,26 @@ public:
 private:
     Game();
     ~Game();
+    
     enum Choice
     {
-        INTRO, OPTIONS, MAIN_MENU, STORY_MODE, ARCADE_MODE, GAME_OVER, EXIT_APP
+        INTRO, OPTIONS, IN_GAME_MENU,
+        MAIN_MENU, STORY_MODE, ARCADE_MODE, GAME_OVER, EXIT_APP
     };
     
+    // scène d'intro
     Choice Intro();
-    Choice Options();
-    Choice Play();
-    Choice GameOver();
+    // menu principal
     Choice MainMenu();
-    
-    /*
-     * Types de retour des menus
-     */
-    enum MenuAction
-    {
-        MENU_OPTIONS,
-        MENU_RESUME,
-        MENU_EXIT
-    };
-    
-    /*
-     * Mise en pause du jeu - Menu
-     */
-    MenuAction InGameMenu();
+    // les options de configurations
+    Choice Options();
+    // jouer (arcade ou story)
+    Choice Play();
+    // menu en cours de jeu (pause)
+    Choice InGameMenu();
+    // partie terminée
+    Choice GameOver();
+
 
     bool MoreBadGuys();
     

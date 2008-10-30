@@ -72,22 +72,20 @@ void Asteroid::Hit(int damage)
     Entity::Hit(damage);
     if (IsDead())
     {
-        Asteroid* as = NULL;
+        Game& game = Game::GetInstance();
         switch (size_)
         {
             case BIG:
                 for (int i = 0; i < BIG_SPLIT_INTO; ++i)
                 {
-                    as = new Asteroid(offset, MEDIUM);
-                    Game::GetInstance().AddEntity(as);
+                    game.AddEntity(new Asteroid(offset, MEDIUM));
                 };
                 p.AddImpact(offset, 20);
                 break;
             case MEDIUM:
                 for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
                 {
-                    as = new Asteroid(offset, SMALL);
-                    Game::GetInstance().AddEntity(as);
+                    game.AddEntity(new Asteroid(offset, SMALL));
                 }
                 p.AddImpact(offset, 10);
             case SMALL:

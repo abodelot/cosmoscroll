@@ -29,6 +29,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 {
     is_lighten_ = false;
     overheated_ = false;
+    hellfire_.SetTriple(true);
     heat_ = 0.0f;
     shield_ = SHIELD_DEFAULT;
     shield_timer_ = 0;

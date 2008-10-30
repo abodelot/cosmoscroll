@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<level><!-- id="1" desc="qu'est-ce qui se passe dans l'espace ?">-->
+<level>
     <!-- Blorb formation triangle -->
     <item name="Blorb" x="640" y="250" t="0.0" />
+    
     <item name="Blorb" x="640" y="300" t="1.0" />
     <item name="Blorb" x="640" y="200" t="0.0" />
+    <item name="Blorb" x="640" y="250" t="0.0" />
+    
     <item name="Blorb" x="640" y="350" t="1.0" />
     <item name="Blorb" x="640" y="150" t="0.0" />
+    <item name="Blorb" x="640" y="300" t="0.0" />
+    <item name="Blorb" x="640" y="200" t="0.0" />
+    
+    <item name="Blorb" x="640" y="350" t="1.0" />
+    <item name="Blorb" x="640" y="150" t="0.0" />    
     
     <!-- ligne de Drone -->
     <item name="Drone" x="640" y="270" t="4.0" />
@@ -23,11 +31,11 @@
     
     <!-- interceptors -->
     <item name="Interceptor" x="640" y="100" t="5.0" />
-    <item name="Interceptor" x="640" y="140" t="1.2" />
-    <item name="Interceptor" x="640" y="180" t="1.2" />
-    <item name="Interceptor" x="640" y="220" t="1.2" />
-    <item name="Interceptor" x="640" y="260" t="1.2" />
-    <item name="Interceptor" x="640" y="300" t="1.2" />
-    <item name="Interceptor" x="640" y="340" t="1.2" />
+    <item name="Interceptor" x="640" y="140" t="1.8" />
+    <item name="Interceptor" x="640" y="180" t="1.8" />
+    <item name="Interceptor" x="640" y="220" t="1.8" />
+    <item name="Interceptor" x="640" y="260" t="1.8" />
+    <item name="Interceptor" x="640" y="300" t="1.8" />
+    <item name="Interceptor" x="640" y="340" t="1.8" />
 </level>
 

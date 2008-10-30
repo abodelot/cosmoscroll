@@ -32,6 +32,7 @@ Weapon::Weapon(Type type)
     type_ = type;
     fire_timer_ = 0.f;
     fire_rate_ = 1 / shot_per_second;
+    triple_ = false;
 }
 
 
@@ -48,6 +49,11 @@ float Weapon::Shoot(const sf::Vector2f& offset, float angle)
     if (fire_timer_ <= 0.f)
     {
         bm.Add(type_, offset, angle);
+        if (triple_)
+        {
+            bm.Add(type_, offset, angle - 0.15);
+            bm.Add(type_, offset, angle + 0.15);
+        }
 #ifndef NO_AUDIO
         sound_.Play();
 #endif
@@ -55,5 +61,11 @@ float Weapon::Shoot(const sf::Vector2f& offset, float angle)
         return energy_cost_;
     }
     return 0.f;
+}
+
+
+void Weapon::SetTriple(bool triple)
+{
+    triple_ = triple;
 }
 

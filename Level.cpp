@@ -89,7 +89,7 @@ bool Level::Parse()
         elem->QueryFloatAttribute("y", &offset.y);
         elem->QueryFloatAttribute("t", &t);
         last_t += t;
-    
+        
         slot.spawntime = last_t;
         
         if (classname == "Blorb")

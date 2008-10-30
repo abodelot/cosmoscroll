@@ -21,6 +21,8 @@ public:
     
     void Update(float frametime);
     
+    void SetTriple(bool triple);
+    
 private:
     float energy_cost_;
     // timer "compte à rebours" pour que la cadence de tir soit indépendante
@@ -30,7 +32,8 @@ private:
     // cadence de tir
     float fire_rate_;
     Type type_;
-
+    
+    bool triple_;
 #ifndef NO_AUDIO
     sf::Sound sound_;
 #endif

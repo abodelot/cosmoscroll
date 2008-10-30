@@ -34,7 +34,7 @@ bool Entity::IsDead()
 
 void Entity::Kill()
 {
-    puts("l'entité est probablement sorti de l'univers");
+    puts("  Kill()");
     hp_ = 0;
 }
 

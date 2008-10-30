@@ -65,6 +65,9 @@ void Game::Run()
             case STORY_MODE:
                 what = Play();
                 break;
+            case IN_GAME_MENU:
+                what = InGameMenu();
+                break;
             case GAME_OVER:
                 what = GameOver();
                 break;
@@ -74,9 +77,11 @@ void Game::Run()
     } while (what != EXIT_APP);
 }
 
+// les méthodes-écrans
 
 Game::Choice Game::Intro()
 {
+    puts("-> Game::Intro");
     Choice what = MAIN_MENU;
     float duration = 5;
     
@@ -140,13 +145,15 @@ Game::Choice Game::Intro()
 
 Game::Choice Game::Options()
 {
+    puts("-> Game::Options");
+    puts("not implemented yet (quit)");
     return EXIT_APP;
 }
 
 
 Game::Choice Game::MainMenu()
 {
-    puts("Main menu launched");
+    puts("-> Game::MainMenu");
     Menu menu;
     menu.SetOffset(sf::Vector2f(42, 100));
     menu.AddItem("Mode Aventure", STORY_MODE);
@@ -175,36 +182,40 @@ Game::Choice Game::MainMenu()
         menu.Show(app_);
         app_.Display();
     }
-    arcade_ = choice == ARCADE_MODE;
-    puts("exiting main menu");
+    // si on lance une nouvelle partie, on nettoie les restes des éventuelles
+    // parties précédentes et l'on respawn un joueur neuf
+    if (choice == ARCADE_MODE || choice == STORY_MODE)
+    {
+        // clean up
+        RemoveEntities();
+        particles_.Clear();
+        bullets_.Clear();
+        
+        // init
+        timer_ = 0.0f;
+        particles_.AddStars();
+        Respawn();
+        if (choice == STORY_MODE)
+        {
+            Level::GetInstance().Load(LEVEL_FILE);
+            arcade_ = false;
+        }
+        else
+        {
+            arcade_ = true;
+        }
+    }
     return static_cast<Choice>(choice);
 }
 
+
 Game::Choice Game::Play()
 {
-    puts("game launched");
+    puts("-> Game::Play");
     sf::Event event;
     bool running = true;
-    timer_ = 0.0f;
-    Choice choice = EXIT_APP;
+    Choice what = EXIT_APP;
     
-    Respawn();
-    particles_.AddStars();
-    if (!arcade_)
-    {
-        Level::GetInstance().Load(LEVEL_FILE);    
-    }
-    
-    /*if (levels_.SetLevel(1, level_desc_) == Level::SUCCESS)
-    {
-        std::cout << level_desc_ << std::endl ;
-    }
-    else
-    {
-        std::cerr << "Erreur au chargement du niveau" << std::endl;
-        running = false;
-    }
-    */
     while (running)
     {
         while (app_.GetEvent(event))
@@ -221,10 +232,8 @@ Game::Choice Game::Play()
                         running = false;
                         break;
                     case KEY_PAUSE:
-                        if (InGameMenu() == MENU_EXIT)
-                        {
-                            running = false;
-                        }
+                        what = InGameMenu();
+                        running = false;
                         break;
                     default:
                         break;
@@ -243,13 +252,10 @@ Game::Choice Game::Play()
                 // il n'y a plus d'ennemis en liste d'attente, et plus
                 // d'ennemis dans le vecteur = VICTOIRE EPIC WIN
                 // TODO: mettre un flag changer l'enum pour indiquer la victoire
-                choice = GAME_OVER;
+                what = GAME_OVER;
             }
         }
-        //Entity::ManagedIterator it;
         std::vector<Entity*>::iterator it;
-        
-//        running = Update_Entity_List();
         
         // action
         for (it = entities_.begin(); it != entities_.end(); ++it)
@@ -271,7 +277,7 @@ Game::Choice Game::Play()
                 if (typeid(**it) == typeid(PlayerShip))
                 {
                     running = false;
-                    choice = GAME_OVER;
+                    what = GAME_OVER;
                     break;
                 }
                 delete *it;
@@ -337,11 +343,122 @@ Game::Choice Game::Play()
     }
     
     player_.best_time = timer_;
-    // clean up
-    RemoveEntities();
-    particles_.Clear();
-    bullets_.Clear();
-    return choice;
+    return what;
+}
+
+
+Game::Choice Game::InGameMenu()
+{
+    puts("-> Game::InGameMenu");
+    sf::Event event;
+    sf::String title("P A U S E D");
+    title.SetPosition(255, 160);
+    title.SetSize(30.0);
+
+    Menu menu;
+    menu.SetOffset(sf::Vector2f(300, 200));
+    Choice resume = arcade_ ? ARCADE_MODE : STORY_MODE;
+    menu.AddItem("Resume Game", resume);
+    menu.AddItem("Back to main menu", MAIN_MENU);
+    menu.AddItem("Options", OPTIONS);
+    menu.AddItem("Exit Game", EXIT_APP);
+    
+    bool paused = true;
+    int what;
+    while (paused)
+    {
+        while (app_.GetEvent(event))
+        {
+            if (event.Type == sf::Event::Closed)
+            {
+                what = EXIT_APP;
+                paused = false;
+            }
+            if (event.Type == sf::Event::KeyPressed)
+            {
+                if (event.Key.Code == KEY_PAUSE)
+                {
+                    what = resume;
+                    paused = false;
+                }
+                else if (menu.ActionChosen(event.Key, what))
+                {
+                    paused = false;
+                }
+            }
+        }
+        
+        // seules les particules sont mises à jour
+        particles_.Update(app_.GetFrameTime());
+        
+        // rendering
+        bullets_.Show(app_);
+        particles_.Show(app_);
+        //Entity::ManagedConstIterator it;
+        std::vector<Entity*>::iterator it;
+        for (it = entities_.begin(); it != entities_.end(); ++it)
+        {
+            //(*it).second.self->Show(app_);
+            (**it).Show(app_);
+        }
+        panel_.Show(app_);
+        
+        app_.Draw(title);
+        menu.Show(app_);
+        app_.Display();
+    }
+    return static_cast<Choice>(what);
+}
+
+
+Game::Choice Game::GameOver()
+{
+    sf::String title;
+    if (arcade_)
+    {
+        int min = (int) player_.best_time / 60;
+        int sec = (int) player_.best_time % 60;
+        title.SetText(str_sprintf("Tu as tenu seulement %d min et %d sec",
+            min, sec));
+    }
+    else
+    {
+        title.SetText("Fin de niveau");
+    }
+    title.SetFont(GET_FONT());
+    title.SetColor(sf::Color::White);
+    title.SetPosition(42, 42);
+    
+    Menu menu;
+    menu.SetOffset(sf::Vector2f(42, 100));
+    menu.AddItem("Menu principal", MAIN_MENU);    
+    menu.AddItem("Quitter", EXIT_APP);
+    
+    bool running = true;
+    int choice;
+    
+    sf::Event event;
+    while (running)
+    {
+        while (app_.GetEvent(event))
+        {
+            if (event.Type == sf::Event::Closed)
+            {
+                running = false;
+            }
+            else if (event.Type == sf::Event::KeyPressed)
+            {
+                if (menu.ActionChosen(event.Key, choice))
+                {
+                    running = false;
+                }
+            }
+        }
+        app_.Draw(title);
+        menu.Show(app_);
+        app_.Display();
+    }
+    return static_cast<Choice>(choice);
 }
 
 
@@ -397,75 +514,9 @@ bool Game::MoreBadGuys()
 }
 
 
-Game::Choice Game::GameOver()
-{
-    sf::String title;
-    if (arcade_)
-    {
-        int min = (int) player_.best_time / 60;
-        int sec = (int) player_.best_time % 60;
-        title.SetText(str_sprintf("Tu as tenu seulement %d min et %d sec",
-            min, sec));
-    }
-    else
-    {
-        title.SetText("Fin de niveau");
-    }
-    title.SetFont(GET_FONT());
-    title.SetColor(sf::Color::White);
-    title.SetPosition(42, 42);
-    
-    Menu menu;
-    menu.SetOffset(sf::Vector2f(42, 100));
-    menu.AddItem("Menu principal", MAIN_MENU);    
-    menu.AddItem("Quitter", EXIT_APP);
-    
-    bool running = true;
-    int choice;
-    
-    sf::Event event;
-    while (running)
-    {
-        while (app_.GetEvent(event))
-        {
-            if (event.Type == sf::Event::Closed)
-            {
-                running = false;
-            }
-            else if (event.Type == sf::Event::KeyPressed)
-            {
-                if (menu.ActionChosen(event.Key, choice))
-                {
-                    running = false;
-                }
-            }
-        }
-        app_.Draw(title);
-        menu.Show(app_);
-        app_.Display();
-    }
-    return static_cast<Choice>(choice);
-}
-
-
 void Game::AddEntity(Entity* entity)
 {
-
-//    Entity::TimedEntity tmp_te_;
-//    tmp_te_.t=t;
-//    tmp_te_.self=entity;
-//    entities_.insert(std::pair<Entity::Status, Entity::TimedEntity>(Entity::BASE, tmp_te_));
     entities_.push_back(entity);
-}
-
-
-void Game::Respawn()
-{
-    sf::Vector2f offset;
-    offset.x = 0;
-    offset.y = WIN_HEIGHT / 2.0;
-    player_.ship = new PlayerShip(offset, app_.GetInput());
-    AddEntity(player_.ship);
 }
 
 
@@ -477,78 +528,16 @@ void Game::RemoveEntities()
         delete entities_[i];
     }
     entities_.clear();
-    
-    /*Entity::ManagedIterator it;
-    Entity::ManagedIterator del_;
-    for (it = entities_.begin(); it != entities_.end();)
-    {
-        del_ = it;
-        ++ it;
-        delete (*del_).second.self;
-    }
-    entities_.clear();
-    */
 }
 
 
-Game::MenuAction Game::InGameMenu()
+void Game::Respawn()
 {
-    sf::Event event;
-    sf::String title("P A U S E D");
-    title.SetPosition(255, 160);
-    title.SetSize(30.0);
-
-    Menu menu;
-    menu.SetOffset(sf::Vector2f(300, 200));
-    menu.AddItem("Resume Game", MENU_RESUME);
-    menu.AddItem("Options", MENU_OPTIONS);
-    menu.AddItem("Exit Game", MENU_EXIT);
-    
-    bool paused = true;
-    int what;
-    while (paused)
-    {
-        while (app_.GetEvent(event))
-        {
-            if (event.Type == sf::Event::Closed)
-            {
-                what = MENU_EXIT;
-                paused = false;
-            }
-            if (event.Type == sf::Event::KeyPressed)
-            {
-                if (event.Key.Code == KEY_PAUSE)
-                {
-                    what = MENU_RESUME;
-                    paused = false;
-                }
-                else if (menu.ActionChosen(event.Key, what))
-                {
-                    paused = false;
-                }
-            }
-        }
-        
-        // seules les particules sont mises à jour
-        particles_.Update(app_.GetFrameTime());
-        
-        // rendering
-        bullets_.Show(app_);
-        particles_.Show(app_);
-        //Entity::ManagedConstIterator it;
-        std::vector<Entity*>::iterator it;
-        for (it = entities_.begin(); it != entities_.end(); ++it)
-        {
-            //(*it).second.self->Show(app_);
-            (**it).Show(app_);
-        }
-        panel_.Show(app_);
-        
-        app_.Draw(title);
-        menu.Show(app_);
-        app_.Display();
-    }
-    return static_cast<MenuAction>(what);
+    sf::Vector2f offset;
+    offset.x = 0;
+    offset.y = WIN_HEIGHT / 2.0;
+    player_.ship = new PlayerShip(offset, app_.GetInput());
+    AddEntity(player_.ship);
 }
 
 
