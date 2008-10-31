@@ -10,14 +10,14 @@
 class Game;
 
 
-#define LEVEL_FILE "levels/level_alexandre.xml"
+#define LEVEL_FILE "levels.xml"
 
 
 class Level
 {
 
 public:
-/*
+
 enum Error {
             SUCCESS = 0,
             FILE,   // Erreur d'e-s
@@ -25,7 +25,7 @@ enum Error {
             PARSE,  // Erreur de parsing
             END     // Fin de chaînage  
             };
-*/
+
 
     /*
      * Récupérer l'instance unique
@@ -44,31 +44,23 @@ enum Error {
     /*
      * Obtenir le nombre d'unités restantes dans la file d'attente du niveau
      */
-    int RemainingEntities() const;
-    
-    bool Load(const char* filename);
+    inline int RemainingEntities() const {
+        return waiting_line_.size();
+    };
     
     /*
      * Définit le level courant, affecte à Description le contenu de l'attribut description, 
      * s'îl est non vide.
      */
-//Level::Error SetLevel(int Level, std::string& Description);
+    Level::Error Set(int Level, std::string& Description);
 
-/*
- * Retourne l'entier codant pour le dernier level du fichier
- */
- 
-//int GetLastID();
 
-/*
- * Retourne le groupe suivant sous forme (status, t, entité)
- * ou une valeur négative pour le t du/des premier(s) element(s), si on doit "bloquer" 
- * |t| secondes. (Exemple: on spawn 5 sec après la mort du dernier ennemi à l'ecran ->
- *        < -5, Entity> )
- */
- 
-//Level::Error GetNextGroup(Entity::ManagedContainer &);
-
+    /*
+     * Retourne l'entier codant pour le dernier level du fichier
+     */
+    inline int GetLastID() {
+        return levels_.size();
+    };
 
 private:
     struct EntitySlot
@@ -78,24 +70,20 @@ private:
     };
     
     Level();
-    bool Parse();
+    
+    Level::Error ParseFile(const char* file);
+    
+    Level::Error ParseLevel(TiXmlElement* elem);
+    
+    inline void Purge() {
+      while (!waiting_line_.empty())
+          waiting_line_.pop();
+    };
     
     std::queue<EntitySlot> waiting_line_;
-    
-
-
-    
- //   Level::Error LoadFile();
-
+    std::vector<TiXmlElement*> levels_;
     TiXmlDocument doc_;
-//int last_loaded_;
-//int last_id_;
 
-//TiXmlDocument* doc_;
-//TiXmlNode* level_;        // Pointera sur le Niveau en cours.
-//TiXmlNode* current_node_; // Pointera sur le groupe courant.
-
-//bool Blocks();
 };
 
 #endif // LEVEL_HPP

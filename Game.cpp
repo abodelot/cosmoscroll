@@ -24,7 +24,9 @@ Game& Game::GetInstance()
 Game::Game() :
     bullets_  (BulletManager::GetInstance()),
     particles_(ParticleSystem::GetInstance()),
-    panel_    (ControlPanel::GetInstance())
+    panel_    (ControlPanel::GetInstance()),
+    level_    (Level::GetInstance())
+    
 {
     // TODO: load settings here
     bool fullscreen = false;
@@ -70,6 +72,12 @@ void Game::Run()
                 break;
             case GAME_OVER:
                 what = GameOver();
+                break;
+            case CONTINUE:
+                what = Continue();
+                break;
+            case INTERTITRE:
+                what = Intertitre();
                 break;
             default:
                 break;
@@ -197,7 +205,17 @@ Game::Choice Game::MainMenu()
         Respawn();
         if (choice == STORY_MODE)
         {
-            Level::GetInstance().Load(LEVEL_FILE);
+            cur_lvl_ = 1;
+            if (level_.Set(cur_lvl_, level_desc_) == Level::SUCCESS)
+            {
+                find_replace(level_desc_, "\\n", "\n");
+                std::cout << level_desc_ << std::endl ;
+            }
+            else
+            {
+                std::cerr << "Erreur au chargement du niveau" << std::endl;
+                running = false;
+            }  
             arcade_ = false;
         }
         else
@@ -243,24 +261,37 @@ Game::Choice Game::Play()
         // attention à la gestion des évènements, event doit être traité DANS
         // la boucle du GetEvent, alors que tout ce qui passe par GetInput se
         // fait après la boucle (ici, donc).
-        
+
         if (running)
         {
+            
             running = MoreBadGuys() || entities_.size() > 1;
             if (!running)
             {
                 // il n'y a plus d'ennemis en liste d'attente, et plus
                 // d'ennemis dans le vecteur = VICTOIRE EPIC WIN
                 // TODO: mettre un flag changer l'enum pour indiquer la victoire
-                what = GAME_OVER;
+                
+                // On demande niveau suivant, si pas de niveau suivant, fin.
+
+
+                if (cur_lvl_ > level_.GetLastID())
+                {
+                    what = GAME_OVER;
+                }
+                else
+                {
+                    what = INTERTITRE;
+                   
+                }
             }
         }
         std::vector<Entity*>::iterator it;
+
         
         // action
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
-            //(*it).second.self->Action();
             (**it).Action();
         }
         
@@ -295,35 +326,6 @@ Game::Choice Game::Play()
                 ++it;
             }
         }
-
-        /*for (it = entities_.begin(); it != entities_.end();)
-        {
-            if ((*it).second.self->IsDead())
-            {
-            //std::cerr << typeid(((*it).second.self)) << ", " << typeid(PlayerShip) << std::endl;
-                if (typeid((*(*it).second.self)) == typeid(PlayerShip))
-                {
-                    running = false;
-                    choice = GAME_OVER;
-                    break;
-                }
-                Entity::ManagedIterator del_ = it;
-                ++ it;
-                delete (*del_).second.self; 
-                entities_.erase(del_);
-            }
-            else
-            {
-                (*it).second.self->Move(time); 
-                if (player_.ship != (*it).second.self   // FIXME: invalid read of size 8 - Freed by ~PlayerShip
-                    && player_.ship->GetRect().Intersects((*it).second.self->GetRect()))
-                {
-                    player_.ship->Hit(1); // FIXME: dégâts magiques !
-                    (*it).second.self->Hit(1);
-                }
-                ++it;
-            }
-        }*/
         
         bullets_.Update(time);
         particles_.Update(time);
@@ -335,7 +337,6 @@ Game::Choice Game::Play()
         particles_.Show(app_);
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
-            //(*it).second.self->Show(app_);
             (**it).Show(app_);
         }
         panel_.Show(app_);
@@ -407,7 +408,9 @@ Game::Choice Game::InGameMenu()
         menu.Show(app_);
         app_.Display();
     }
+
     return static_cast<Choice>(what);
+
 }
 
 
@@ -461,6 +464,107 @@ Game::Choice Game::GameOver()
     return static_cast<Choice>(choice);
 }
 
+Game::Choice Game::Intertitre()
+{
+    sf::String title;
+    sf::String subtitle;
+    int min = (int) player_.best_time / 60;
+    int sec = (int) player_.best_time % 60;
+    subtitle.SetText(str_sprintf("Terminé en %d min et %d sec",
+            min, sec));
+    
+    title.SetText(str_sprintf("Fin du niveau %d", cur_lvl_));
+
+    title.SetFont(GET_FONT());
+    title.SetColor(sf::Color::White);
+    title.SetPosition(42, 42);
+    subtitle.SetFont(GET_FONT());
+    subtitle.SetColor(sf::Color::White);
+    subtitle.SetPosition(32, 72);
+    
+    Menu menu;
+    menu.SetOffset(sf::Vector2f(42, 112));
+    menu.AddItem("Continuer", CONTINUE);    
+    // menu.AddItem("Réessayer", RETRY);
+    
+    bool running = true;
+    int choice;
+    
+    sf::Event event;
+    while (running)
+    {
+        while (app_.GetEvent(event))
+        {
+            if (event.Type == sf::Event::Closed)
+            {
+                running = false;
+            }
+            else if (event.Type == sf::Event::KeyPressed)
+            {
+                if (menu.ActionChosen(event.Key, choice))
+                {
+                    running = false;
+                }
+            }
+        }
+        app_.Draw(title);
+        app_.Draw(subtitle);
+        menu.Show(app_);
+        app_.Display();
+    }
+    return static_cast<Choice>(choice);
+}
+
+Game::Choice Game::Continue()
+{
+    sf::String title;
+    sf::String subtitle;
+    
+    level_.Set(++cur_lvl_, level_desc_);
+
+
+    find_replace(level_desc_, "\\n", "\n");
+    title.SetText(str_sprintf("Niveau %d", cur_lvl_));
+    subtitle.SetText(level_desc_);
+    
+    title.SetFont(GET_FONT());
+    title.SetColor(sf::Color::White);
+    title.SetPosition(42, 42);
+    subtitle.SetFont(GET_FONT());
+    subtitle.SetColor(sf::Color::White);
+    subtitle.SetPosition(32, 72);
+    
+    Menu menu;
+    menu.SetOffset(sf::Vector2f(42, 558));
+    menu.AddItem("Jouer", STORY_MODE);    
+
+    bool running = true;
+    int choice;
+    sf::Event event;
+    while (running)
+    {
+        
+        while (app_.GetEvent(event))
+        {
+            if (event.Type == sf::Event::Closed)
+            {
+                running = false;
+            }
+            else if (event.Type == sf::Event::KeyPressed)
+            {
+                if (menu.ActionChosen(event.Key, choice))
+                {
+                    running = false;
+                }
+            }
+        }
+        app_.Draw(subtitle);
+        app_.Draw(title);
+        menu.Show(app_);
+        app_.Display();
+    }
+    return static_cast<Choice>(choice);
+}
 
 // retourne true s'il y a encore des ennemis à envoyer plus tard
 // sinon false (niveau fini, bravo :D)
@@ -470,7 +574,7 @@ bool Game::MoreBadGuys()
     if (arcade_)
     {
         // un ennemi en plus toutes les 10s + 7
-        unsigned int max_bad_guys = timer_ / 10 + 7;
+        unsigned int max_bad_guys = static_cast<unsigned int>(timer_ / 10 + 7);
         if (entities_.size() < max_bad_guys)
         {
             // ajout d'une ennemi au hasard
@@ -511,6 +615,7 @@ bool Game::MoreBadGuys()
     }
     // si le niveau n'est pas fini, alors il y a encore des ennemis
     return level.RemainingEntities() > 0;
+
 }
 
 
@@ -538,6 +643,7 @@ void Game::Respawn()
     offset.y = WIN_HEIGHT / 2.0;
     player_.ship = new PlayerShip(offset, app_.GetInput());
     AddEntity(player_.ship);
+
 }
 
 

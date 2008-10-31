@@ -6,6 +6,7 @@
 #include "PlayerShip.hpp"
 #include "ParticleSystem.hpp"
 #include "ControlPanel.hpp"
+#include "Level.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -37,7 +38,7 @@ private:
     enum Choice
     {
         INTRO, OPTIONS, IN_GAME_MENU,
-        MAIN_MENU, STORY_MODE, ARCADE_MODE, GAME_OVER, EXIT_APP
+        MAIN_MENU, STORY_MODE, ARCADE_MODE, GAME_OVER, EXIT_APP, INTERTITRE, CONTINUE
     };
     
     // scène d'intro
@@ -52,6 +53,10 @@ private:
     Choice InGameMenu();
     // partie terminée
     Choice GameOver();
+    // fin d'un niveau þNon-fin du jeu]
+    Choice Intertitre();
+    // lancement niveau suivant
+    Choice Continue();
 
 
     bool MoreBadGuys();
@@ -79,9 +84,11 @@ private:
     BulletManager& bullets_;
     ParticleSystem& particles_;
     ControlPanel& panel_;
-    //std::string level_desc_; // Description du niveau courant
+    Level& level_;
+    std::string level_desc_; // Description du niveau courant
     
     bool arcade_;
+    unsigned short cur_lvl_;
     
     // toutes les unités sont allouées dynamiquement
     std::vector<Entity*> entities_;

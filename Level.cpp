@@ -7,8 +7,10 @@
 #include "Game.hpp"
 
 
-#define UNDEF_DESC "Level coudn't be loaded.\n This is a mostly serious error, heh.\n"
-
+Level::Level()
+{
+   ParseFile(LEVEL_FILE);
+}
 
 Level& Level::GetInstance()
 {
@@ -17,59 +19,55 @@ Level& Level::GetInstance()
 }
 
 
-Entity* Level::GiveNext(float timer)
+Level::Error Level::ParseFile(const char* file)
 {
-    if (!waiting_line_.empty())
+
+    if (! doc_.LoadFile(file))
     {
-        EntitySlot next = waiting_line_.front();
-        if (next.spawntime < timer)
-        {
-            waiting_line_.pop();
-            return next.self;
-        }
+        std::cerr << "erreur lors du chargement de " << file << std::endl;
+        std::cerr << "erreur #" << doc_.ErrorId() << " (" << doc_.ErrorDesc() << ')'
+            << std::endl;
+    return FILE;
     }
-    return NULL;
-}
-
-
-int Level::RemainingEntities() const
-{
-    return waiting_line_.size();
-}
-
-
-
-Level::Level() 
-{
-    //Load(LEVEL_FILE);
-}
-
-
-bool Level::Load(const char* filename)
-{
-    // purge 
-    while (!waiting_line_.empty())
-    {
-        waiting_line_.pop();
-    }
+    // Constitution de la liste de pointeurs vers niveaux
+    #ifdef DEBUG 
+    std::cerr << "Construction LevelList:" << std::flush;
+    #endif
+    TiXmlNode* node = doc_.RootElement()->FirstChild();
     
-    if (doc_.LoadFile(filename))
+    while (node)
     {
-        return Parse();
+        levels_.push_back(node->ToElement());
+        node = node->NextSibling();
     }
-    std::cerr << "erreur lors du chargement de " << filename << std::endl;
-    std::cerr << "erreur #" << doc_.ErrorId() << " (" << doc_.ErrorDesc() << ')'
-        << std::endl;
-    exit(EXIT_FAILURE);
-    return false;
+    #ifdef DEBUG
+    std:: cerr << levels_.size() << " niveaux." << std::endl;
+    #endif
+    return SUCCESS;
 }
 
-
-bool Level::Parse()
+Level::Error Level::Set(int level, std::string& description)
 {
+   Purge();
+   -- level;
+   if (level > static_cast<int>(levels_.size()))
+   {
+       return UNDEF;
+   }
+   
+   description = levels_[level]->Attribute("desc");
+   return ParseLevel(levels_[level]);
+}
+
+Level::Error Level::ParseLevel(TiXmlElement* elem)
+{
+    elem = elem->FirstChild()->ToElement();
+
+    std::cerr << elem;
+
+    elem = elem->NextSiblingElement();
+    elem = elem->FirstChildElement();    
     Entity* player = Game::GetInstance().GetPlayer();
-    TiXmlHandle handle(&doc_);
-    TiXmlElement *elem = handle.FirstChildElement().FirstChildElement().Element();
     
     if(elem == NULL)
     {
@@ -110,7 +108,8 @@ bool Level::Parse()
 	    }
         else
         {
-            puts("Invalid bad guy name. DIE");
+            puts("Unimplemented element. Dying.");
+            std::cerr << elem;
             exit(EXIT_FAILURE);
         }
         
@@ -120,134 +119,22 @@ bool Level::Parse()
         elem = elem->NextSiblingElement();
     }
     puts("------ end level ------");
-    return true;
+    return SUCCESS;
 }
 
-
-/*
-Level::Error Level::SetLevel(int level, std::string& Description)
+Entity* Level::GiveNext(float timer)
 {
-    Level::Error err;
-    TiXmlNode* node = doc_->RootElement()->FirstChild(); // Level 1
-
-    while (node && level > 1)
+    if (!waiting_line_.empty())
     {
-        node = node->NextSibling();
-        -- level;
-    }
-    if (node)
-    {
-        err = SUCCESS;
-        Description = node->ToElement()->Attribute("desc");
-        find_replace(Description, "\\n", "\n");
-        level_ = node;
-        current_node_ = node->FirstChild("decl")->FirstChild();
-        if (!current_node_)
+        EntitySlot next = waiting_line_.front();
+        if (next.spawntime < timer)
         {
-        err = PARSE;
+            waiting_line_.pop();
+            return next.self;
         }
     }
-    else
-    {
-        level_ = current_node_ = NULL;
-        err = UNDEF;
-        Description = UNDEF_DESC;
-    }
-    return err;
-}
-*/
-/*
- * Retourne l'entier codant pour le dernier level du fichier
- */
- /*
-int Level::GetLastID()
-{
-	if (last_id_ == 0)
-	{
-		TiXmlNode* node = doc_->RootElement()->FirstChild(); // Level 1
-		int count = 1;
-	    while (node)
-	    {
-	        node = node->NextSibling();
-	        ++ count;
-	    }
-		last_id_ = count - 1;
-	}
-	return last_id_;
-}
-*/
-/*
- * Retourne le groupe suivant
- */
- /*
-Level::Error Level::GetNextGroup(Entity::ManagedContainer & cont_) 
-{
- bool blocked = Blocks(); // Le prochain item aura Status::BLOCKS, et blocked repassera a false, s'il est à true là
-  Level::Error err = SUCCESS;
-  if (!current_node_)
-  {
-    std::cerr << "END: current_node_ vaut NULL" << std::endl;
-    err = END;
-  }
-  else
-  {
-  
-	TiXmlElement* current_element_ = current_node_->ToElement();
-*/  
-  /*
-    Si balise GROUP ouvrante
-        -> on lit x y t
-        
-    Sinon si balise ITEM ouvrante
-        -> on renvoie et consomme Item (Sortie de la methode)
-  */
-  
-  
-  /*
-    -> On a eu une balise GROUP ouvrante
-    
-     * WHILE (balise GROUP pas fermée)
-         -> On tombe sur un CALL:
-                ExpandCall()
-         -> On tombe sur un ITEM:
-                ExpandItem()
-  */
-/*  }
-  return err;
-}
-*/
-/*
-Level::Error Level::LoadFile()
-{
-    Level::Error err = SUCCESS;
-    last_id_ = 0;
-    bool load_ok = doc_->LoadFile(LEVEL_FILE);
-    if (!load_ok)
-    {
-        std::cerr << "Error loading " << LEVEL_FILE << std::endl;
-        std::cerr << doc_->ErrorDesc() << std::endl << "@ Row:"  << doc_->ErrorRow() << ", Col:"
-            << doc_->ErrorCol() << std::endl;
-        err = PARSE;
-    }
-    else 
-    {
-        TiXmlElement* elem = doc_->RootElement();
-        TiXmlAttribute* attrib = elem->FirstAttribute();
-            
-    #ifdef DEBUG
-        std::cerr << "Fichier XML Charge: " << std::endl;
-        std::cerr << "Nombre de niveaux: " << attrib->IntValue() << std::endl;
-        std::cerr << "Pack: " << (attrib->Next())->Value() << std::endl;
-    #endif
-    }
-    return err;
+    return NULL;
 }
 
-bool Level::Blocks()
-{
-// Retourne TRUE si balise <Block /> rencontrée
 
-    return false;
-}
-*/
 

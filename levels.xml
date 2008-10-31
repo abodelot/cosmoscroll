@@ -2,7 +2,7 @@
 <levels count="1" name= "CosmoScroll Test Levels">
     <level id ="1" desc="Alors que vous vous baladez\ndans le vide interstellaire\n on vous attaque !!!">
         <defs>
-            <group id="0" t="10">
+            <!--<group id="0" t="10">
                 <item t="10">
                     Blorb
                     <spawn x="50" y="100" />
@@ -15,18 +15,85 @@
             <item id="1" t = "100">
                 Deathtructor
                 <spawn x="50" y="100" />
-            </item>            
+            </item>-->            
         </defs>
         <decl> <!-- == spawn -->
-            <group id="0" t="0" x="52">
-                <call id="0" x="50" y="10" t="2"/>
+            <item name="Blorb" x="640" y="250" t="0.0" />
+            <item name="Blorb" x="640" y="300" t="1.0" />
+            <item name="Blorb" x="640" y="200" t="0.0" />
+            <item name="Blorb" x="640" y="350" t="1.0" />
+            <item name="Blorb" x="640" y="150" t="0.0" />
+    
+            <!-- ligne de Drone -->
+            <item name="Drone" x="640" y="270" t="4.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+    
+            <!-- astéroïdes -->
+            <item name="Asteroid" x="640" y="100" t="4.0" />
+            <item name="Asteroid" x="640" y="300" t="0.0" />
+            <item name="Asteroid" x="640" y="200" t="2.0" />
+            <item name="Asteroid" x="640" y="400" t="0.0" />
+    
+            <!-- interceptors -->
+            <item name="Interceptor" x="640" y="100" t="5.0" />
+            <item name="Interceptor" x="640" y="140" t="1.2" />
+            <item name="Interceptor" x="640" y="180" t="1.2" />
+            <item name="Interceptor" x="640" y="220" t="1.2" />
+            <item name="Interceptor" x="640" y="260" t="1.2" />
+            <item name="Interceptor" x="640" y="300" t="1.2" />
+            <item name="Interceptor" x="640" y="340" t="1.2" />
+        </decl>
+    </level>
+ <level id ="2" desc="Vous continuez votre ballade\ndans le vide interstellaire\n heh !!!">
+        <defs>
+            <!--<group id="0" t="10">
+                <item t="10">
+                    Blorb
+                    <spawn x="50" y="100" />
+                </item>
                 <item>
-                    Asteroid-Big
-                    <spawn x="25" y="100" />
+                    Blorb
+                    <spawn x="60" y="100" t="10"/>
                 </item>
             </group>
-            <!-- balise block remplaçée par un attribut -->
-            <item class="Boss1" x="10" y="20" t="3" />
+            <item id="1" t = "100">
+                Deathtructor
+                <spawn x="50" y="100" />
+            </item>-->            
+        </defs>
+        <decl> <!-- == spawn -->
+            <!-- interceptors -->
+            <item name="Interceptor" x="640" y="100" t="5.0" />
+            <item name="Interceptor" x="640" y="140" t="1.2" />
+            <item name="Interceptor" x="640" y="180" t="1.2" />
+            <item name="Interceptor" x="640" y="220" t="1.2" />
+            <item name="Interceptor" x="640" y="260" t="1.2" />
+            <item name="Interceptor" x="640" y="300" t="1.2" />
+            <item name="Interceptor" x="640" y="340" t="1.2" />
+            <!-- astéroïdes -->
+            <item name="Asteroid" x="640" y="100" t="4.0" />
+            <item name="Asteroid" x="640" y="300" t="0.0" />
+            <item name="Asteroid" x="640" y="200" t="2.0" />
+            <item name="Asteroid" x="640" y="400" t="0.0" />
+
+            <item name="Blorb" x="640" y="250" t="0.0" />
+            <item name="Blorb" x="640" y="300" t="1.0" />
+            <item name="Blorb" x="640" y="200" t="0.0" />
+            <item name="Blorb" x="640" y="350" t="1.0" />
+            <item name="Blorb" x="640" y="150" t="0.0" />
+            
+            <!-- ligne de Drone -->
+            <item name="Drone" x="640" y="270" t="4.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            
         </decl>
     </level>
 </levels>
