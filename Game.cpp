@@ -300,7 +300,6 @@ Game::Choice Game::Play()
         timer_ += time;
         panel_.SetChrono(timer_);
         
-        
         for (it = entities_.begin(); it != entities_.end();)
         {
             if ((**it).IsDead())
@@ -320,8 +319,8 @@ Game::Choice Game::Play()
                 if (player_.ship != *it
                     && player_.ship->GetRect().Intersects((**it).GetRect()))
                 {
-                    player_.ship->Hit(1); // FIXME: dégâts magiques !
-                    (**it).Hit(1);
+                    player_.ship->Collide(**it);
+                    (**it).Collide(*player_.ship);
                 }
                 ++it;
             }
@@ -395,11 +394,9 @@ Game::Choice Game::InGameMenu()
         // rendering
         bullets_.Show(app_);
         particles_.Show(app_);
-        //Entity::ManagedConstIterator it;
         std::vector<Entity*>::iterator it;
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
-            //(*it).second.self->Show(app_);
             (**it).Show(app_);
         }
         panel_.Show(app_);
@@ -521,8 +518,10 @@ Game::Choice Game::Continue()
     sf::String subtitle;
     
     level_.Set(++cur_lvl_, level_desc_);
-
-
+    // hacky re-init
+    timer_ = 0.0f;
+    bullets_.Clear();
+    
     find_replace(level_desc_, "\\n", "\n");
     title.SetText(str_sprintf("Niveau %d", cur_lvl_));
     subtitle.SetText(level_desc_);
@@ -651,12 +650,4 @@ PlayerShip* Game::GetPlayer() const
 {
     return player_.ship;
 }
-
-/*
-bool Game::Update_Entity_List()
-{
-    Level::Error err = levels_.GetNextGroup(entities_);
-    return true; //err == Level::END;
-}
-*/
 

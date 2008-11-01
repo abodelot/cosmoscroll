@@ -3,10 +3,14 @@
 #include "Math.hpp"
 #include "ParticleSystem.hpp"
 #include "Window.hpp"
+#include "Bonus.hpp"
+#include "Game.hpp"
 
 #include "Interceptor.hpp"
 #include "Blorb.hpp"
 #include "Drone.hpp"
+
+#include <SFML/System/Randomizer.hpp>
 
 
 Ennemy::Ennemy(const sf::Vector2f& offset, const sf::Image& img, int hp,
@@ -22,6 +26,10 @@ void Ennemy::Hit(int damage)
     Entity::Hit(damage);
     if (IsDead())
     {
+        if (sf::Randomizer::Random(0, 10) == 0)
+        {
+            Game::GetInstance().AddEntity(new Bonus(GetPosition()));
+        }
         ParticleSystem::GetInstance().AddExplosion(sprite_.GetPosition());   
     }
 }

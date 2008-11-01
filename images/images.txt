@@ -22,3 +22,4 @@ shield.png
 spaceship_light.png
 spaceship.png
 star.png
+bonus.png

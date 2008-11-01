@@ -20,6 +20,7 @@ public:
     // phase de tir
     void Action();
     
+    void Collide(const Entity& ent);
     /*
      * Déplacer le vaisseau
      */

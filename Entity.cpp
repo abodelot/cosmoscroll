@@ -1,4 +1,7 @@
 #include "Entity.hpp"
+#include "Bonus.hpp"
+
+#include <typeinfo>
 
 
 Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp)
@@ -13,6 +16,10 @@ Entity::~Entity()
 {
 }
 
+void Entity::Action()
+{
+}
+
 
 void Entity::Show(sf::RenderWindow& app) const
 {
@@ -23,6 +30,23 @@ void Entity::Show(sf::RenderWindow& app) const
 void Entity::Hit(int damage)
 {
     hp_ -= damage;
+}
+
+
+void Entity::Collide(const Entity& ent)
+{
+    // TODO: gérer les collisions de façon plus réaliste, l'angle de this
+    // devrait être modifié en fonction de l'angle de ent
+    // -> comment définir GetAngle() pour chaque entité ?
+    // -> trouver la formule physique adéquate pour gérer les rebonds
+    if (typeid (ent) == typeid (Bonus))
+    {
+        ++hp_;
+    }
+    else
+    {
+        --hp_;
+    }
 }
 
 

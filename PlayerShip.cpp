@@ -182,3 +182,15 @@ void PlayerShip::Hit(int damage)
     
 }
 
+
+void PlayerShip::Collide(const Entity& ent)
+{
+    int old = hp_;
+    Entity::Collide(ent);
+    if (old != hp_)
+    {
+        panel_.SetShipHP(hp_);
+    }
+}
+
+
