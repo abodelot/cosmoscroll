@@ -6,7 +6,7 @@
 
 
 #define SHIP_SPEED      200
-#define GUN_OFFSET      sf::Vector2f(50, 24)
+#define GUN_OFFSET      sf::Vector2f(52, 24)
 
 // taux de regénération du bouclier en boules/secondes
 #define SHIELD_RECOVERY_RATE 0.2
