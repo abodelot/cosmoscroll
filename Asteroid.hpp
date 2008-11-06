@@ -17,11 +17,9 @@ public:
      * Création d'un astéroïde
      * @param[in] offset: position
      * @param[in] size: taille
-     * @param[in] game: référence sur le gestionnaire d'entités
+     * @param[in] angle: orientation
      */
-    Asteroid(const sf::Vector2f& offset, Size size);
-    
-    void Action();
+    Asteroid(const sf::Vector2f& offset, Size size, float angle=180);
     
     void Move(float frametime);
     

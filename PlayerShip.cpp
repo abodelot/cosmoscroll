@@ -4,6 +4,10 @@
 #include "ParticleSystem.hpp"
 #include "Math.hpp"
 
+#include <SFML/System.hpp>
+#include <cassert>
+#include <typeinfo>
+
 
 #define SHIP_SPEED      200
 #define GUN_OFFSET      sf::Vector2f(52, 24)
@@ -29,19 +33,34 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 {
     is_lighten_ = false;
     overheated_ = false;
-    hellfire_.SetTriple(true);
     heat_ = 0.0f;
     shield_ = SHIELD_DEFAULT;
     shield_timer_ = 0;
 #ifndef NO_AUDIO
     shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
 #endif
+
+    trigun_timer_ = false;
+    thread_ = NULL;
+    
     ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, &sprite_);
     
     panel_.SetShipHP(hp_);
     panel_.SetShield(shield_);
     panel_.SetHeat(heat_);
     panel_.SetInfo("");
+}
+
+
+PlayerShip::~PlayerShip()
+{
+    if (thread_ != NULL)
+    {
+        trigun_timer_ = 0;
+        thread_->Wait();
+        delete thread_;
+    }
+    puts("~PlayerShip()");
 }
 
 
@@ -130,7 +149,7 @@ void PlayerShip::Move(float frametime)
             panel_.SetShield(shield_);
         }
     }
-        
+    
     // refroidissement
     if (heat_ > 0.f)
     {
@@ -183,14 +202,76 @@ void PlayerShip::Hit(int damage)
 }
 
 
-void PlayerShip::Collide(const Entity& ent)
+void PlayerShip::Collide(Entity& ent)
 {
-    int old = hp_;
-    Entity::Collide(ent);
-    if (old != hp_)
+    if (typeid (ent) == typeid (Bonus))
     {
-        panel_.SetShipHP(hp_);
+        Bonus* bonus = dynamic_cast<Bonus*>(&ent);
+        assert(bonus != NULL);
+        HandleBonus(*bonus);
+    }
+    else
+    {
+        --hp_;
     }
 }
 
+
+void PlayerShip::EndBonusWrapper(void* data)
+{
+    PlayerShip* self = (PlayerShip*) data;
+    self->EndBonus();
+}
+
+
+void PlayerShip::EndBonus()
+{
+    trigun_timer_ = 10; // 10 secondes
+    while (trigun_timer_ > 0)
+    {
+        printf("\t-- %ds\n", trigun_timer_);
+        --trigun_timer_;
+        sf::Sleep(1.0f);
+    }
+    hellfire_.SetTriple(false);
+    laserbeam_.SetTriple(false);
+    puts("\t-- fin bonus arme");
+    delete thread_;
+    thread_ = NULL;
+}
+
+
+void PlayerShip::HandleBonus(const Bonus& bonus)
+{
+    switch (bonus.GetType())
+    {
+        // bonus d'armes, tir triplé pour un laps de temps
+        case Bonus::TRIGUN:
+            
+            hellfire_.SetTriple(true);
+            laserbeam_.SetTriple(true);
+            // thread pour désactiver le bonus plus tard
+            if (thread_ == NULL)
+            {
+                puts("\t|bonus arme|");
+                thread_ = new sf::Thread(EndBonusWrapper, this);
+                thread_->Launch();
+            }
+            else
+            {
+                puts("\t|bonus arme relancé|");
+                trigun_timer_ += 10;
+            }
+            break;
+        // bonus point de vie
+        case Bonus::HEALTH:
+            puts("\t|bonus hp|");
+            ++hp_;
+            panel_.SetShipHP(hp_);
+            break;
+        default:
+            break;
+    }
+    puts("exit handlebonus");
+}
 

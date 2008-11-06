@@ -22,4 +22,5 @@ shield.png
 spaceship_light.png
 spaceship.png
 star.png
-bonus.png
+bonus-trigun.png
+bonus-health.png

@@ -47,6 +47,9 @@ void BulletManager::Add(Weapon::Type type, const sf::Vector2f& offset, float ang
         default:
             break;
     }
+#ifndef NO_AUDIO
+    sounds_[type].Play();
+#endif
     bullet.sprite.SetPosition(offset);
     bullet.sprite.SetRotation(RAD_TO_DEG(angle));
     bullet.angle = angle;
@@ -55,7 +58,6 @@ void BulletManager::Add(Weapon::Type type, const sf::Vector2f& offset, float ang
 }
 
 
-//void BulletManager::Collide(Entity::ManagedContainer& entities)
 void BulletManager::Collide(std::vector<Entity*>& entities)
 {
     static sf::FloatRect window_rect(0, 0, WIN_WIDTH, WIN_HEIGHT);
@@ -67,17 +69,15 @@ void BulletManager::Collide(std::vector<Entity*>& entities)
         bool dead = false; // état du beam
         float beam_x = it_b->sprite.GetPosition().x;
         float beam_y = it_b->sprite.GetPosition().y;
-        //Entity::ManagedIterator it_e;
+        
         std::vector<Entity*>::iterator it_e;
         // pour chaque vaisseau
         for (it_e = entities.begin(); it_e != entities.end(); ++it_e)
         {
             // si la position du beam est dans la surface du vaisseau
-            //if ((*it_e).second.self->GetRect().Contains(beam_x, beam_y))
             if ((*it_e)->GetRect().Contains(beam_x, beam_y))
             {
                 dead = true;
-                //(*it_e).second.self->Hit(it_b->damage);
                 (*it_e)->Hit(it_b->damage);
                 break;
             }
@@ -118,6 +118,11 @@ void BulletManager::Clear()
 
 BulletManager::BulletManager()
 {
+#ifndef NO_AUDIO
+    sounds_[Weapon::LASERBEAM].SetBuffer(GET_SOUNDBUF("blaster-shot-1"));
+    sounds_[Weapon::HELLFIRE].SetBuffer(GET_SOUNDBUF("blaster-shot-2"));
+    //sounds_[Weapon::PLASMACANNON]
+#endif
 }
 
 

@@ -19,11 +19,6 @@ public:
     
     void Hit(int damage);
     
-    /*
-     * Déplacement
-     */
-    virtual void Move(float frametime) = 0;
-    
     enum Type
     {
         BLORB, INTERCEPTOR, DRONE

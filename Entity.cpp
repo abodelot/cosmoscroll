@@ -1,5 +1,6 @@
 #include "Entity.hpp"
 #include "Bonus.hpp"
+#include "Window.hpp"
 
 #include <typeinfo>
 
@@ -33,20 +34,14 @@ void Entity::Hit(int damage)
 }
 
 
-void Entity::Collide(const Entity& ent)
+void Entity::Collide(Entity& ent)
 {
     // TODO: gérer les collisions de façon plus réaliste, l'angle de this
     // devrait être modifié en fonction de l'angle de ent
     // -> comment définir GetAngle() pour chaque entité ?
     // -> trouver la formule physique adéquate pour gérer les rebonds
-    if (typeid (ent) == typeid (Bonus))
-    {
-        ++hp_;
-    }
-    else
-    {
-        --hp_;
-    }
+    (void) ent;
+    --hp_;
 }
 
 
@@ -58,8 +53,17 @@ bool Entity::IsDead()
 
 void Entity::Kill()
 {
-    puts("  Kill()");
     hp_ = 0;
+}
+
+
+void Entity::KillIfOut()
+{
+    if (outside_universe(GetRect()))
+    {
+        hp_ = 0;
+        puts("(entity is out)");
+    }
 }
 
 
@@ -79,4 +83,5 @@ sf::FloatRect Entity::GetRect()
     rect.Bottom = rect.Top + sprite_.GetSize().y;
     return rect;
 }
+
 

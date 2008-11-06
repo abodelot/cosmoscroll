@@ -3,20 +3,31 @@
 
 #include "Entity.hpp"
 
-/*
- * Donne +1 HP
- * (attention l'effet est codé dans Entity::Collid, trouver un moyen
- * d'obtenir les effets du bonus depuis Entity::Collid (un/des getter sus Bonus,
- * un truc du genre...)
- */
+
 class Bonus: public Entity
 {
 public:
-    Bonus(const sf::Vector2f& offset);
+    enum Type
+    {
+        HEALTH, TRIGUN, BONUS_COUNT
+    };
+    
+    Bonus(Type type, const sf::Vector2f& offset);
+    
+    // allouer un bonus aléatoirement
+    static Bonus* MakeRandom(const sf::Vector2f& offset);
     
     void Hit(int damage);
     
     void Move(float frametime);
+    
+    inline Type GetType() const
+    {
+        return type_;
+    }
+    
+private:
+    Type type_;
 };
 
 #endif /* guard BONUS_HPP */

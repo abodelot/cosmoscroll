@@ -1,16 +1,7 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
-/*#include <map>
-#include <utility>*/
 #include <SFML/Graphics.hpp>
-
-/*
-TODO: (re)faire une classe intermédiare SpaceShip pour mieux factoriser le code
-de Shoot (fire_timer, fire_rate...), Asteroid n'en a pas besoin :o)
-Et gérer les sorties de l'écran dans la méthode Move (mettre heath à 0)
-*/
-
 
 /*
  * Classe abstraite représentant une entité du jeu
@@ -45,11 +36,13 @@ public:
     /*
      * Comportement de l'entité si ent entre en collision avec elle
      */
-    virtual void Collide(const Entity& ent);
+    virtual void Collide(Entity& ent);
     
     bool IsDead();
     
     void Kill();
+    
+    void KillIfOut();
     
     /*
      * Obtenir la position du vaisseau

@@ -89,7 +89,7 @@ void Game::Run()
 
 Game::Choice Game::Intro()
 {
-    puts("-> Game::Intro");
+    puts("[ Game::Intro ]");
     Choice what = MAIN_MENU;
     float duration = 5;
     
@@ -161,7 +161,7 @@ Game::Choice Game::Options()
 
 Game::Choice Game::MainMenu()
 {
-    puts("-> Game::MainMenu");
+    puts("[ Game::MainMenu ]");
     Menu menu;
     menu.SetOffset(sf::Vector2f(42, 100));
     menu.AddItem("Mode Aventure", STORY_MODE);
@@ -229,7 +229,7 @@ Game::Choice Game::MainMenu()
 
 Game::Choice Game::Play()
 {
-    puts("-> Game::Play");
+    puts("[ Game::Play ]");
     sf::Event event;
     bool running = true;
     Choice what = EXIT_APP;
@@ -349,19 +349,19 @@ Game::Choice Game::Play()
 
 Game::Choice Game::InGameMenu()
 {
-    puts("-> Game::InGameMenu");
+    puts("[ Game::InGameMenu ]");
     sf::Event event;
-    sf::String title("P A U S E D");
-    title.SetPosition(255, 160);
+    sf::String title("P A U S E");
+    title.SetPosition(180, 160);
     title.SetSize(30.0);
 
     Menu menu;
-    menu.SetOffset(sf::Vector2f(300, 200));
+    menu.SetOffset(sf::Vector2f(220, 200));
     Choice resume = arcade_ ? ARCADE_MODE : STORY_MODE;
-    menu.AddItem("Resume Game", resume);
-    menu.AddItem("Back to main menu", MAIN_MENU);
-    menu.AddItem("Options", OPTIONS);
-    menu.AddItem("Exit Game", EXIT_APP);
+    menu.AddItem("Reprendre la partie", resume);
+    menu.AddItem("Revenir au menu principal", MAIN_MENU);
+    //menu.AddItem("Options", OPTIONS);
+    menu.AddItem("Quitter le jeu", EXIT_APP);
     
     bool paused = true;
     int what;
@@ -413,6 +413,7 @@ Game::Choice Game::InGameMenu()
 
 Game::Choice Game::GameOver()
 {
+    puts("[ Game::GameOver ]");
     sf::String title;
     if (arcade_)
     {
@@ -435,7 +436,7 @@ Game::Choice Game::GameOver()
     menu.AddItem("Quitter", EXIT_APP);
     
     bool running = true;
-    int choice;
+    int choice = EXIT_APP;
     
     sf::Event event;
     while (running)

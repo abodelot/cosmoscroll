@@ -2,7 +2,6 @@
 #include "MediaManager.hpp"
 #include "Math.hpp"
 #include "ParticleSystem.hpp"
-#include "Window.hpp"
 #include "Bonus.hpp"
 #include "Game.hpp"
 
@@ -28,20 +27,10 @@ void Ennemy::Hit(int damage)
     {
         if (sf::Randomizer::Random(0, 10) == 0)
         {
-            Game::GetInstance().AddEntity(new Bonus(GetPosition()));
+            Game::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
         }
         ParticleSystem::GetInstance().AddExplosion(sprite_.GetPosition());   
     }
-}
-
-
-void Ennemy::Move(float frametime)
-{
-    if (outside_universe(GetRect()))
-    {
-        Kill();
-    }
-    (void) frametime;
 }
 
 

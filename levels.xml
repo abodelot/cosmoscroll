@@ -1,4 +1,4 @@
-<?xml version="1.0" standalone=no>
+<?xml version="1.0" encoding="utf-8" ?>
 <levels count="1" name= "CosmoScroll Test Levels">
     <level id ="1" desc="Alors que vous vous baladez\ndans le vide interstellaire\n on vous attaque !!!">
         <defs>
@@ -63,16 +63,28 @@
             <item id="1" t = "100">
                 Deathtructor
                 <spawn x="50" y="100" />
-            </item>-->            
+            </item>-->
         </defs>
         <decl> <!-- == spawn -->
             <!-- interceptors -->
             <item name="Interceptor" x="640" y="100" t="5.0" />
             <item name="Interceptor" x="640" y="140" t="1.2" />
-            <item name="Interceptor" x="640" y="180" t="1.2" />
+            <item name="Drone" x="640" y="180" t="1.2" />
             <item name="Interceptor" x="640" y="220" t="1.2" />
             <item name="Interceptor" x="640" y="260" t="1.2" />
-            <item name="Interceptor" x="640" y="300" t="1.2" />
+            <item name="Drone" x="640" y="300" t="1.2" />
+            <item name="Interceptor" x="640" y="340" t="1.2" />
+            <item name="Interceptor" x="640" y="140" t="1.2" />
+            <item name="Drone" x="640" y="180" t="1.2" />
+            <item name="Interceptor" x="640" y="220" t="1.2" />
+            <item name="Interceptor" x="640" y="260" t="1.2" />
+            <item name="Drone" x="640" y="300" t="1.2" />
+            <item name="Interceptor" x="640" y="340" t="1.2" />
+            <item name="Interceptor" x="640" y="140" t="1.2" />
+            <item name="Drone" x="640" y="180" t="1.2" />
+            <item name="Interceptor" x="640" y="220" t="1.2" />
+            <item name="Interceptor" x="640" y="260" t="1.2" />
+            <item name="Drone" x="640" y="300" t="1.2" />
             <item name="Interceptor" x="640" y="340" t="1.2" />
             <!-- astéroïdes -->
             <item name="Asteroid" x="640" y="100" t="4.0" />

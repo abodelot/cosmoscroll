@@ -2,7 +2,7 @@
 #include "MediaManager.hpp"
 
 
-#define SPEED 50
+#define SPEED 75
 
 
 Blorb::Blorb(const sf::Vector2f& offset, Entity* target) :
@@ -10,14 +10,10 @@ Blorb::Blorb(const sf::Vector2f& offset, Entity* target) :
 {
 }
 
-void Blorb::Action()
-{
-    // VOID
-}
 
 void Blorb::Move(float frametime)
 {
     sprite_.Move(-SPEED * frametime, 0);
-    Ennemy::Move(frametime);
+    KillIfOut();
 }
 

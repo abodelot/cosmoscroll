@@ -12,7 +12,7 @@ class Weapon
 public:
     enum Type
     {
-        LASERBEAM, HELLFIRE, PLASMACANNON
+        LASERBEAM, HELLFIRE, PLASMACANNON, WEAPON_COUNT
     };
     
     Weapon(Type type);
@@ -34,9 +34,6 @@ private:
     Type type_;
     
     bool triple_;
-#ifndef NO_AUDIO
-    sf::Sound sound_;
-#endif
 };
 
 #endif /* guard H_WEAPON */

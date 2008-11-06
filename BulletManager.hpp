@@ -60,7 +60,9 @@ private:
     BulletManager& operator=(const BulletManager& other);
     
     typedef std::list<Bullet>::iterator BulletIterator;
-    
+#ifndef NO_AUDIO
+    sf::Sound sounds_[Weapon::WEAPON_COUNT];
+#endif
     std::list<Bullet> bullets_;
 };
 
