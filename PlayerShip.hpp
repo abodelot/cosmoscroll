@@ -40,9 +40,16 @@ public:
     void EndBonus();
 
     void HandleBonus(const Bonus& bonus);
+	
 
     
 private:
+
+	inline sf::Thread& GetTrigunThread() {
+		static sf::Thread thread_(PlayerShip::EndBonusWrapper, this);
+		return thread_;
+	};
+
     ControlPanel& panel_;
     const sf::Input& input_;
     bool is_lighten_;
@@ -60,7 +67,7 @@ le thread sert a désactiver le bonus au bout de n secondes
 on aurait aussi pu faire sans (un if dans le Update pour savoir s'il y a bonus)
 -> je teste :)
 */
-    sf::Thread* thread_;
+    //sf::Thread thread_;
     int trigun_timer_;
     
     Weapon laserbeam_;

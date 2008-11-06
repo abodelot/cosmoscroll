@@ -23,7 +23,6 @@
 #define GUN_ORIENT_MAX  15
 #define GUN_ORIENT_MIN -15
 
-
 PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     Entity(GET_IMG("spaceship"), offset),
     panel_(ControlPanel::GetInstance()),
@@ -41,8 +40,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 #endif
 
     trigun_timer_ = false;
-    thread_ = NULL;
-    
+
+	
     ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, &sprite_);
     
     panel_.SetShipHP(hp_);
@@ -54,12 +53,12 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 
 PlayerShip::~PlayerShip()
 {
-    if (thread_ != NULL)
+    if (trigun_timer_ != 0)
     {
         trigun_timer_ = 0;
-        thread_->Wait();
-        delete thread_;
+        GetTrigunThread().Wait();
     }
+
     puts("~PlayerShip()");
 }
 
@@ -195,6 +194,12 @@ void PlayerShip::Hit(int damage)
     else
     {
         Entity::Hit(damage);
+		
+		if ((hp_ == 0) && (trigun_timer_ != 0))
+		{
+			trigun_timer_ = 0;
+			GetTrigunThread().Wait();
+		}
         panel_.SetShipHP(hp_);
         p.AddImpact(sprite_.GetPosition(), 20);
     }
@@ -213,6 +218,11 @@ void PlayerShip::Collide(Entity& ent)
     else
     {
         --hp_;
+		if ((hp_ == 0) && (trigun_timer_ != 0))
+		{
+			trigun_timer_ = 0;
+			GetTrigunThread().Wait();
+		}
     }
 }
 
@@ -236,8 +246,6 @@ void PlayerShip::EndBonus()
     hellfire_.SetTriple(false);
     laserbeam_.SetTriple(false);
     puts("\t-- fin bonus arme");
-    delete thread_;
-    thread_ = NULL;
 }
 
 
@@ -251,11 +259,10 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
             hellfire_.SetTriple(true);
             laserbeam_.SetTriple(true);
             // thread pour désactiver le bonus plus tard
-            if (thread_ == NULL)
+            if (trigun_timer_ == 0)
             {
                 puts("\t|bonus arme|");
-                thread_ = new sf::Thread(EndBonusWrapper, this);
-                thread_->Launch();
+                GetTrigunThread().Launch();
             }
             else
             {
@@ -274,4 +281,7 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
     }
     puts("exit handlebonus");
 }
+
+
+
 
