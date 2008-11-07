@@ -61,12 +61,7 @@ Level::Error Level::Set(int level, std::string& description)
 
 Level::Error Level::ParseLevel(TiXmlElement* elem)
 {
-    elem = elem->FirstChild()->ToElement();
-
-    std::cerr << elem;
-
-    elem = elem->NextSiblingElement();
-    elem = elem->FirstChildElement();    
+    elem = elem->FirstChild()->ToElement()->NextSiblingElement()->FirstChildElement();    
     Entity* player = Game::GetInstance().GetPlayer();
     
     if(elem == NULL)

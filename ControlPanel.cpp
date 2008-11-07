@@ -40,6 +40,10 @@ void ControlPanel::SetChrono(float seconds)
     str_[CHRONO].SetText(str_sprintf("Temps : %02d:%02d", s / 60, s % 60));
 }
 
+void ControlPanel::SetCoolers(short unsigned coolers)
+{
+	str_[COOL].SetText(str_sprintf("Glaçons : %01d", coolers));
+}
 
 void ControlPanel::Show(sf::RenderWindow& app)
 {
@@ -66,6 +70,7 @@ ControlPanel::ControlPanel()
     str_[INFO].SetPosition(200, 20);
     str_[INFO].SetColor(sf::Color(255, 128 ,0));
     str_[CHRONO].SetPosition(400, 2);
+	str_[COOL].SetPosition(200, 20);
 }
 
 

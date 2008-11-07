@@ -17,11 +17,18 @@
 #define SHIELD_MAX           6
 #define SHIELD_DEFAULT       3
 
+#define COOLER_MAX			 3
+#define COOLER_DEFAULT		 0
+
 #define HEAT_MAX     100
 #define COLDING_RATE 13
 
 #define GUN_ORIENT_MAX  15
 #define GUN_ORIENT_MIN -15
+
+#define COOL_KEY	sf::Key::C
+
+#include <iostream>
 
 PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     Entity(GET_IMG("spaceship"), offset),
@@ -34,6 +41,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     overheated_ = false;
     heat_ = 0.0f;
     shield_ = SHIELD_DEFAULT;
+	coolers_ = COOLER_DEFAULT;
     shield_timer_ = 0;
 #ifndef NO_AUDIO
     shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
@@ -47,19 +55,20 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     panel_.SetShipHP(hp_);
     panel_.SetShield(shield_);
     panel_.SetHeat(heat_);
+	panel_.SetCoolers(coolers_);
     panel_.SetInfo("");
 }
 
 
 PlayerShip::~PlayerShip()
 {
+	puts("~PlayerShip()");
+	std::cerr << trigun_timer_ << " (trigun_timer_ a l'appel)" << std::endl;
     if (trigun_timer_ != 0)
     {
         trigun_timer_ = 0;
         GetTrigunThread().Wait();
     }
-
-    puts("~PlayerShip()");
 }
 
 
@@ -130,6 +139,13 @@ void PlayerShip::Move(float frametime)
     {
         x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
     }
+	if (input_.IsKeyDown(COOL_KEY) && (coolers_ > 0))
+	{
+		-- coolers_;
+		overheated_ = false;
+		heat_ = 0.f;
+		panel_.SetCoolers(coolers_);
+	}	
     sprite_.SetPosition(x, y);
     
     // regénération bouclier
@@ -276,6 +292,14 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
             ++hp_;
             panel_.SetShipHP(hp_);
             break;
+		case Bonus::COOLER:
+			puts("\t|bonus cooler|");
+			if (coolers_ < COOLER_MAX)
+			{
+				++coolers_;
+				panel_.SetCoolers(coolers_);
+			}
+			break;
         default:
             break;
     }

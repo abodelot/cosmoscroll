@@ -10,6 +10,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <limits>
 
 /*
  * Gestion du déroulement du jeu
@@ -92,22 +93,11 @@ private:
     
     // toutes les unités sont allouées dynamiquement
     std::vector<Entity*> entities_;
-    //Entity::ManagedContainer entities_;
-    //bool Update_Entity_List();
-    
-    /*
-    inline unsigned int GetTimer(unsigned int& i)
-    {  
-        i = static_cast<unsigned int>(timer_);
-        return i;
-    }
-    
-    inline float GetTimer(float& f)
-    {
-        f = timer_;
-        return f;
-    }
-    */
+
+	std::string MakePassword();
+	bool UsePassword(std::string& source);
+	
+	bool Passwd_HACK();
 };
 
 #endif /* guard GAME_HPP */

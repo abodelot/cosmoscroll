@@ -9,7 +9,7 @@ class Bonus: public Entity
 public:
     enum Type
     {
-        HEALTH, TRIGUN, BONUS_COUNT
+        HEALTH, TRIGUN, COOLER, BONUS_COUNT
     };
     
     Bonus(Type type, const sf::Vector2f& offset);

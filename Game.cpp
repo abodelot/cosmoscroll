@@ -1,3 +1,4 @@
+
 #include "Game.hpp"
 #include "MediaManager.hpp"
 
@@ -13,6 +14,7 @@
 #include <typeinfo>
 
 #define KEY_PAUSE sf::Key::P
+#define HACKY_KEY sf::Key::H
 
 Game& Game::GetInstance()
 {
@@ -204,18 +206,9 @@ Game::Choice Game::MainMenu()
         particles_.AddStars();
         Respawn();
         if (choice == STORY_MODE)
-        {
-            cur_lvl_ = 1;
-            if (level_.Set(cur_lvl_, level_desc_) == Level::SUCCESS)
-            {
-                find_replace(level_desc_, "\\n", "\n");
-                std::cout << level_desc_ << std::endl ;
-            }
-            else
-            {
-                std::cerr << "Erreur au chargement du niveau" << std::endl;
-                running = false;
-            }  
+        {	
+            cur_lvl_ = 0;
+			choice = CONTINUE;
             arcade_ = false;
         }
         else
@@ -277,6 +270,7 @@ Game::Choice Game::Play()
 
                 if (cur_lvl_ > level_.GetLastID())
                 {
+					std::cerr << "Fin du dernier niveau\n";
                     what = GAME_OVER;
                 }
                 else
@@ -286,6 +280,7 @@ Game::Choice Game::Play()
                 }
             }
         }
+
         std::vector<Entity*>::iterator it;
 
         
@@ -464,21 +459,27 @@ Game::Choice Game::GameOver()
 
 Game::Choice Game::Intertitre()
 {
+    puts("[ Game::Intertitre ]");
     sf::String title;
-    sf::String subtitle;
+    sf::String subtitle1;
+	sf::String subtitle2;
     int min = (int) player_.best_time / 60;
     int sec = (int) player_.best_time % 60;
-    subtitle.SetText(str_sprintf("Terminé en %d min et %d sec",
+    subtitle1.SetText(str_sprintf("Terminé en %d min et %d sec",
             min, sec));
+	subtitle2.SetText(str_sprintf("Pass: %s", MakePassword().c_str()));
     
     title.SetText(str_sprintf("Fin du niveau %d", cur_lvl_));
 
     title.SetFont(GET_FONT());
     title.SetColor(sf::Color::White);
     title.SetPosition(42, 42);
-    subtitle.SetFont(GET_FONT());
-    subtitle.SetColor(sf::Color::White);
-    subtitle.SetPosition(32, 72);
+    subtitle1.SetFont(GET_FONT());
+    subtitle1.SetColor(sf::Color::White);
+    subtitle1.SetPosition(32, 72);
+	subtitle2.SetFont(GET_FONT());
+    subtitle2.SetColor(sf::Color::White);
+    subtitle2.SetPosition(32, 92);
     
     Menu menu;
     menu.SetOffset(sf::Vector2f(42, 112));
@@ -503,10 +504,17 @@ Game::Choice Game::Intertitre()
                 {
                     running = false;
                 }
+				
+				if (event.Key.Code == HACKY_KEY)
+				{
+					//HACK
+					Passwd_HACK();
+				}
             }
         }
         app_.Draw(title);
-        app_.Draw(subtitle);
+        app_.Draw(subtitle1);
+		app_.Draw(subtitle2);
         menu.Show(app_);
         app_.Display();
     }
@@ -515,6 +523,7 @@ Game::Choice Game::Intertitre()
 
 Game::Choice Game::Continue()
 {
+    puts("[ Game::Continue ]");
     sf::String title;
     sf::String subtitle;
     
@@ -556,6 +565,18 @@ Game::Choice Game::Continue()
                 {
                     running = false;
                 }
+				
+				if (event.Key.Code == HACKY_KEY)
+				{
+					//<HACK>
+					Passwd_HACK();
+					level_.Set(cur_lvl_, level_desc_);
+					find_replace(level_desc_, "\\n", "\n");
+					title.SetText(str_sprintf("Niveau %d", cur_lvl_));
+					subtitle.SetText(level_desc_);
+					//</HACK>
+				}
+				
             }
         }
         app_.Draw(subtitle);
@@ -627,6 +648,7 @@ void Game::AddEntity(Entity* entity)
 
 void Game::RemoveEntities()
 {
+
     const size_t length = entities_.size();
     for (size_t i = 0; i < length; ++i)
     {
@@ -652,3 +674,83 @@ PlayerShip* Game::GetPlayer() const
     return player_.ship;
 }
 
+std::string Game::MakePassword()
+{
+	// playership hp
+	// niveau
+	std::string dest;
+	int pass_1_ = player_.ship->GetHP();
+	int pass_2_ = cur_lvl_;
+	
+	/*
+		Algorithme génération mdp:
+	
+	
+	
+	*/
+	dest = pass_1_;
+	dest.push_back('_');
+	dest += pass_2_;
+	return dest;
+}
+
+bool Game::UsePassword(std::string & source)
+{
+	bool ok = false;
+	int pass_1_, pass_2_;
+	short int sep = source.find_first_of('_');
+	{
+		std::istringstream tmp(source.substr(0, sep));
+		tmp >> pass_1_;
+	}
+	{
+		std::istringstream tmp(source.substr(sep + 1));
+		tmp >> pass_2_;
+	}
+	std::cerr << "pass_1_: " << pass_1_ << std::endl;
+	std::cerr << "pass_2_: " << pass_2_ << std::endl;
+	
+	if (pass_1_ <= std::numeric_limits<int>::max())
+	{
+		std::cerr << "Elem 1 OK\n";
+	}
+	
+	std::cerr << level_.GetLastID() << " est le max level\n";
+	
+	if (pass_2_ <= level_.GetLastID())
+	{
+		std::cerr << "Elem 2 OK\n";
+	}
+	
+	if ((pass_1_ <= std::numeric_limits<int>::max()) and (pass_2_ <= level_.GetLastID()))
+	{
+			std::cerr << "A priori valide" << std::endl;
+			ok = true;
+			player_.ship->SetHP(pass_1_);
+			panel_.SetShipHP(player_.ship->GetHP());
+			if (level_.Set(pass_2_, level_desc_) == Level::SUCCESS) 
+			{
+				cur_lvl_ = pass_2_;
+				std::cerr << "Niveau setted" << std::endl;
+			}
+			else
+			{
+				ok = false;
+				std::cerr << "Niveau NON setted" << std::endl;
+			}
+	}
+	return ok;
+}
+// Oh un joli hack bien rédigé :D
+bool Game::Passwd_HACK() {
+	bool ok = false; std::string src;	
+	std::cout << "Entrez pass, ou X pour passer\n";
+	std::cin >> src;
+	if (src[0] != 'X' && src[0] != 'x') {
+		if (UsePassword(src)) {
+			std::cout << "Okay\n"; ok ^=1;
+		} else std::cout << "Erreur ! \n";
+	} else {
+		std::cout << "Pas de pass entre\n";
+		ok ^= 1; } return ok;
+}

@@ -10,7 +10,8 @@ static inline const sf::Image& select_image(Bonus::Type type)
 {
     static const char* keys[Bonus::BONUS_COUNT] = {
         "bonus-health",
-        "bonus-trigun"
+        "bonus-trigun",
+		"bonus-cooler"
     };
     return GET_IMG(keys[type]);
 }

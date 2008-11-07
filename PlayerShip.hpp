@@ -57,6 +57,8 @@ private:
     bool overheated_;
     float heat_;
     
+	int coolers_;
+	
     int shield_;
     float shield_timer_;
 #ifndef NO_AUDIO

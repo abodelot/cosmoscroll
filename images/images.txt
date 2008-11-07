@@ -24,3 +24,4 @@ spaceship.png
 star.png
 bonus-trigun.png
 bonus-health.png
+bonus-cooler.png

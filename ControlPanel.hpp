@@ -19,6 +19,8 @@ public:
     void SetHeat(float heat);
 
     void SetChrono(float seconds);
+	
+	void SetCoolers(short unsigned coolers);
     
     void Show(sf::RenderWindow& app);
 
@@ -28,7 +30,7 @@ private:
     
     enum 
     {
-        SHIELD, HP, HEAT, INFO, CHRONO, STR_COUNT
+        SHIELD, HP, HEAT, INFO, CHRONO, COOL, STR_COUNT
     };
     sf::String str_[STR_COUNT];
     sf::Sprite panel_;

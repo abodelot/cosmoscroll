@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
+
 /*
  * Classe abstraite représentant une entité du jeu
  */
@@ -44,7 +45,13 @@ public:
     
     void KillIfOut();
     
-    /*
+	inline int GetHP() {
+		return hp_;};
+	
+	inline void SetHP(int val) {
+		assert(val > -1 && val <= std::numeric_limits<int>::max());
+		hp_ = val;};
+  /*
      * Obtenir la position du vaisseau
      */
     virtual sf::Vector2f GetPosition();
