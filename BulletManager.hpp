@@ -28,7 +28,8 @@ public:
     /*
      * Ajouter un projectile dans le gestionnaire
      */
-    void Add(Weapon::Type type, const sf::Vector2f& offset, float angle);
+
+	void Add(Weapon::Type type, Entity* sender, const sf::Vector2f& offset, float angle);
     
     /*
      * Gestion des collisions
@@ -45,6 +46,11 @@ public:
      * Suppression de tous les projectiles
      */
     void Clear();
+	
+	/* 
+	* Nettoyage des pointeurs sur Entity lors de la destruction de l'Entity
+	*/
+	void CleanSenders(Entity* target);
     
 private:
     struct Bullet
@@ -53,6 +59,7 @@ private:
         float angle;
         int damage;
         int speed;
+		Entity* owner;
     };
     
     BulletManager();

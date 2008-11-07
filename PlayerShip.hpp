@@ -57,6 +57,7 @@ private:
     float heat_;
     
 	int coolers_;
+	bool cool_key_down_;
 	
     int shield_;
     float shield_timer_;

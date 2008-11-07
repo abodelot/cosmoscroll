@@ -1,6 +1,8 @@
 #ifndef H_WEAPON
 #define H_WEAPON
 
+#include "Entity.hpp"
+
 #ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
 #endif
@@ -12,10 +14,10 @@ class Weapon
 public:
     enum Type
     {
-        LASERBEAM, HELLFIRE, PLASMACANNON, WEAPON_COUNT
+        LASERBEAM, HELLFIRE, PLASMACANNON, DEVILSEYES, WEAPON_COUNT
     };
     
-    Weapon(Type type);
+	Weapon(Type type, Entity* sender = NULL);
     
     float Shoot(const sf::Vector2f& offset, float angle = 0.f);
     
@@ -34,6 +36,7 @@ private:
     Type type_;
     
     bool triple_;
+	Entity* owner_;
 };
 
 #endif /* guard H_WEAPON */

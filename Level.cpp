@@ -4,6 +4,7 @@
 #include "Misc.hpp"
 #include "Asteroid.hpp"
 #include "Ennemy.hpp"
+#include "EvilBoss.hpp"
 #include "Game.hpp"
 
 
@@ -50,6 +51,7 @@ Level::Error Level::Set(int level, std::string& description)
 {
    Purge();
    -- level;
+
    if ((level > 0) && level > static_cast<int>(levels_.size()))
    {
        return UNDEF;
@@ -100,6 +102,10 @@ Level::Error Level::ParseLevel(TiXmlElement* elem)
         else if (classname == "Asteroid")
         {
             slot.self = new Asteroid(offset, Asteroid::BIG);
+	    }
+		else if (classname == "EvilBoss")
+        {
+            slot.self = new EvilBoss(offset, player);
 	    }
         else
         {

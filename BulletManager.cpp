@@ -24,7 +24,7 @@ void BulletManager::Update(float frametime)
 }
 
 
-void BulletManager::Add(Weapon::Type type, const sf::Vector2f& offset, float angle)
+void BulletManager::Add(Weapon::Type type, Entity* sender, const sf::Vector2f& offset, float angle)
 {
     Bullet bullet;
     switch (type)
@@ -44,6 +44,10 @@ void BulletManager::Add(Weapon::Type type, const sf::Vector2f& offset, float ang
             bullet.damage = 1;
             bullet.speed = 420;
             break;
+		case Weapon::DEVILSEYES:
+			bullet.sprite.SetImage(GET_IMG("ammo_devil"));
+			bullet.damage = 3;
+			bullet.speed = 500;
         default:
             break;
     }
@@ -53,7 +57,7 @@ void BulletManager::Add(Weapon::Type type, const sf::Vector2f& offset, float ang
     bullet.sprite.SetPosition(offset);
     bullet.sprite.SetRotation(RAD_TO_DEG(angle));
     bullet.angle = angle;
-    
+    bullet.owner = sender;
     bullets_.push_back(bullet);
 }
 
@@ -74,6 +78,12 @@ void BulletManager::Collide(std::vector<Entity*>& entities)
         // pour chaque vaisseau
         for (it_e = entities.begin(); it_e != entities.end(); ++it_e)
         {
+			// La collision se fait entre le bullet et l'entité qui possède l'arme qui l'a tirée
+			if (((*it_b).owner) && ((*it_b).owner == (*it_e)))
+			{
+				continue;
+			}
+			else
             // si la position du beam est dans la surface du vaisseau
             if ((*it_e)->GetRect().Contains(beam_x, beam_y))
             {
@@ -125,5 +135,16 @@ BulletManager::BulletManager()
 #endif
 }
 
-
+void BulletManager::CleanSenders(Entity* target)
+{
+	BulletIterator it;
+	
+	for (it = bullets_.begin(); it != bullets_.end(); ++it)
+	{
+		if (it->owner == target)
+		{
+			it->owner = NULL;
+		}
+	}
+}
 

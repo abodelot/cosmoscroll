@@ -4,6 +4,7 @@
 
 #include "Asteroid.hpp"
 #include "Ennemy.hpp"
+#include "EvilBoss.hpp"
 
 #include "Menu.hpp"
 #include "Window.hpp"
@@ -305,6 +306,7 @@ Game::Choice Game::Play()
                     what = GAME_OVER;
                     break;
                 }
+				bullets_.CleanSenders(*it);
                 delete *it;
                 it = entities_.erase(it);
             }
@@ -327,12 +329,12 @@ Game::Choice Game::Play()
         bullets_.Collide(entities_);
         
         // rendering
-        bullets_.Show(app_);
         particles_.Show(app_);
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
             (**it).Show(app_);
         }
+		bullets_.Show(app_);
         panel_.Show(app_);
         app_.Display();
     }
@@ -466,7 +468,7 @@ Game::Choice Game::Intertitre()
 	sf::String subtitle2;
     int min = (int) player_.best_time / 60;
     int sec = (int) player_.best_time % 60;
-    subtitle1.SetText(str_sprintf("Terminé en %d min et %d sec",
+    subtitle1.SetText(str_sprintf("Termine en %d min et %d sec",
             min, sec));
 	subtitle2.SetText(str_sprintf("Pass: %s", MakePassword().c_str()));
     
@@ -527,15 +529,32 @@ Game::Choice Game::Continue()
     puts("[ Game::Continue ]");
     sf::String title;
     sf::String subtitle;
-    
-    level_.Set(++cur_lvl_, level_desc_);
-    // hacky re-init
-    timer_ = 0.0f;
+
+    Menu menu;
+    menu.SetOffset(sf::Vector2f(42, 558));
+	
+	// hacky re-init
+	timer_ = 0.0f;
     bullets_.Clear();
+	
+    if (cur_lvl_ < level_.GetLastID())
+	{
+		level_.Set(++cur_lvl_, level_desc_);
+		find_replace(level_desc_, "\\n", "\n");
+		title.SetText(str_sprintf("Niveau %d", cur_lvl_));
+		subtitle.SetText(level_desc_);
+		
+		menu.AddItem("Jouer", STORY_MODE);  
+	}
+	else	// On a fini le jeu :)
+	{
+		title.SetText("Felicitations :-D");
+		subtitle.SetText(str_sprintf("Vous avez fini les %d niveaux \ndu jeu. Vous etes vraiment doue(e) :D", cur_lvl_));
+		menu.AddItem("Retour", MAIN_MENU);
+	}
+
     
-    find_replace(level_desc_, "\\n", "\n");
-    title.SetText(str_sprintf("Niveau %d", cur_lvl_));
-    subtitle.SetText(level_desc_);
+
     
     title.SetFont(GET_FONT());
     title.SetColor(sf::Color::White);
@@ -544,9 +563,8 @@ Game::Choice Game::Continue()
     subtitle.SetColor(sf::Color::White);
     subtitle.SetPosition(32, 72);
     
-    Menu menu;
-    menu.SetOffset(sf::Vector2f(42, 558));
-    menu.AddItem("Jouer", STORY_MODE);    
+
+      
 
     bool running = true;
     int choice;
@@ -635,6 +653,10 @@ bool Game::MoreBadGuys()
         AddEntity(p);
         p = level.GiveNext(timer_);
     }
+	
+	
+	//p = new EvilBoss(sf::Vector2f(640, 270), player_.ship);
+	//AddEntity(p);
     // si le niveau n'est pas fini, alors il y a encore des ennemis
     return level.RemainingEntities() > 0;
 
@@ -677,28 +699,20 @@ PlayerShip* Game::GetPlayer() const
 
 std::string Game::MakePassword()
 {
-	// playership hp
-	// niveau
-	std::string dest;
+	std::ostringstream to;
 	int pass_1_ = player_.ship->GetHP();
 	int pass_2_ = cur_lvl_;
+
+	to << pass_1_ << '_' << pass_2_;
 	
-	/*
-		Algorithme génération mdp:
-	
-	
-	
-	*/
-	dest = pass_1_;
-	dest.push_back('_');
-	dest += pass_2_;
-	return dest;
+	return to.str();
 }
 
 bool Game::UsePassword(std::string & source)
 {
 	bool ok = false;
 	int pass_1_, pass_2_;
+	bool ok_1, ok_2;
 	short int sep = source.find_first_of('_');
 	{
 		std::istringstream tmp(source.substr(0, sep));
@@ -708,30 +722,30 @@ bool Game::UsePassword(std::string & source)
 		std::istringstream tmp(source.substr(sep + 1));
 		tmp >> pass_2_;
 	}
-	std::cerr << "pass_1_: " << pass_1_ << std::endl;
-	std::cerr << "pass_2_: " << pass_2_ << std::endl;
 	
 	if (pass_1_ <= std::numeric_limits<int>::max())
 	{
-		std::cerr << "Elem 1 OK\n";
+		std::cerr << " Elem 1 OK";
+		ok_1 = true;
 	}
 	
-	std::cerr << level_.GetLastID() << " est le max level\n";
-	
-	if (pass_2_ <= level_.GetLastID())
+	if (0 < pass_2_ && pass_2_ <= level_.GetLastID())
 	{
-		std::cerr << "Elem 2 OK\n";
+		std::cerr << " Elem 2 OK\n";
+		ok_2 = true;
 	}
 	
-	if ((pass_1_ <= std::numeric_limits<int>::max()) and (pass_2_ <= level_.GetLastID()))
+	if (ok_1 and ok_2)
 	{
 			std::cerr << "A priori valide" << std::endl;
 			ok = true;
 			player_.ship->SetHP(pass_1_);
 			panel_.SetShipHP(player_.ship->GetHP());
+			std::cerr << player_.ship->GetHP();
 			if (level_.Set(pass_2_, level_desc_) == Level::SUCCESS) 
 			{
 				cur_lvl_ = pass_2_;
+				find_replace(level_desc_, "\\n", "\n");
 				std::cerr << "Niveau setted" << std::endl;
 			}
 			else

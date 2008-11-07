@@ -105,6 +105,23 @@
             <item name="Drone" x="640" y="270" t="2.0" />
             <item name="Drone" x="640" y="270" t="2.0" />
             <item name="Drone" x="640" y="270" t="2.0" />
+			
+
+            
+        </decl>
+    </level>
+	<level id ="2" desc="C'est la confrontation\navec le boss final\n ouille !!!">
+        <defs>
+        </defs>
+        <decl> <!-- == spawn -->
+			<item name="EvilBoss" x="120" y="170" t = "0.5" />
+			
+			<item name="Drone" x="640" y="270" t="4.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
+            <item name="Drone" x="640" y="270" t="2.0" />
             
         </decl>
     </level>

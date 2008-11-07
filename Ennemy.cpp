@@ -8,6 +8,7 @@
 #include "Interceptor.hpp"
 #include "Blorb.hpp"
 #include "Drone.hpp"
+#include "EvilBoss.hpp"
 
 #include <SFML/System/Randomizer.hpp>
 

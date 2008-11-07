@@ -2,6 +2,7 @@ ammo_hellfire.png
 ammo_laserbeam.png
 ammo_plasma.png
 ammo_wasp.png
+ammo_devil.png
 asteroid-big-1.png
 asteroid-big-2.png
 asteroid-big-3.png
@@ -15,6 +16,7 @@ background.png
 capsule.png
 ennemy-A.png
 ennemy-B.png
+evil_boss.png
 fiery.png
 impact.png
 score-board.png

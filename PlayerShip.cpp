@@ -32,13 +32,14 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     Entity(GET_IMG("spaceship"), offset),
     panel_(ControlPanel::GetInstance()),
     input_(input),
-    laserbeam_(Weapon::LASERBEAM),
-    hellfire_(Weapon::HELLFIRE)
+    laserbeam_(Weapon::LASERBEAM, this),
+    hellfire_(Weapon::HELLFIRE, this)
 {
     overheated_ = false;
     heat_ = 0.0f;
     shield_ = SHIELD_DEFAULT;
 	coolers_ = COOLER_DEFAULT;
+	cool_key_down_ = false;
     shield_timer_ = 0;
 #ifndef NO_AUDIO
     shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
@@ -54,7 +55,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     
     panel_.SetShipHP(hp_);
     panel_.SetShield(shield_);
-    panel_.SetHeat(heat_);
+    panel_.SetHeat(static_cast<int>(heat_));
 	panel_.SetCoolers(coolers_);
     panel_.SetInfo("");
 }
@@ -101,7 +102,6 @@ void PlayerShip::Move(float frametime)
 {
     static const float WIDTH = sprite_.GetSize().x;
     static const float HEIGHT = sprite_.GetSize().y;
-    
     // déplacement
     const sf::Vector2f& offset = GetPosition();
     float x = offset.x;
@@ -125,14 +125,19 @@ void PlayerShip::Move(float frametime)
     {
         x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
     }
-	if (input_.IsKeyDown(COOL_KEY) && (coolers_ > 0))
+	if (cool_key_down_ == false && input_.IsKeyDown(COOL_KEY) && (coolers_ > 0))
 	{
 		-- coolers_;
+		cool_key_down_ = true;
 		overheated_ = false;
 		panel_.SetInfo("");
 		heat_ = 0.f;
 		panel_.SetCoolers(coolers_);
-	}	
+	}
+	if (cool_key_down_ && !input_.IsKeyDown(COOL_KEY))
+	{
+		cool_key_down_ = false;
+	}
     sprite_.SetPosition(x, y);
     
     // regénération bouclier
@@ -166,7 +171,7 @@ void PlayerShip::Move(float frametime)
             }
         }
     }
-    panel_.SetHeat(heat_);
+	panel_.SetHeat(static_cast<int>(heat_));
     
     laserbeam_.Update(frametime);
     hellfire_.Update(frametime);

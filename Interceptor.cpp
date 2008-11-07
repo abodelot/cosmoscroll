@@ -9,7 +9,7 @@
 
 Interceptor::Interceptor(const sf::Vector2f& offset, Entity* target) :
     Ennemy(offset, GET_IMG("ennemy-A"), 8, target),
-    weapon_(Weapon::PLASMACANNON)
+    weapon_(Weapon::PLASMACANNON, this)
 {
     left_ = true;
 }

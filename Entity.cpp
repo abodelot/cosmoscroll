@@ -22,6 +22,7 @@ void Entity::Action()
 }
 
 
+
 void Entity::Show(sf::RenderWindow& app) const
 {
     app.Draw(sprite_);
