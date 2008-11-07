@@ -10,29 +10,53 @@ class ControlPanel
 public:
     static ControlPanel& GetInstance();
 
-    void SetShipHP(int hp);
+    void SetShipHP(int value);
 
-    void SetShield(int n);
+    void SetMaxShipHP(int max);
+
+    void SetShield(int value);
+
+    void SetMaxShield(int max);
+
+    void SetHeat(int value);
+
+    void SetMaxHeat(int max);
+
 
     void SetInfo(const char* text);
-
-    void SetHeat(float heat);
-
-    void SetChrono(float seconds);
-	
-	void SetCoolers(short unsigned coolers);
     
-    void Show(sf::RenderWindow& app);
-
+    void SetTimer(float seconds);
+    
+    void SetCoolers(int coolers);
+    
+    void Show(sf::RenderWindow& app) const;
+    
 private:
     ControlPanel();
     ControlPanel(const ControlPanel& other);
     
-    enum 
+    enum
     {
-        SHIELD, HP, HEAT, INFO, CHRONO, COOL, STR_COUNT
+        SHIELD, HP, HEAT, PBAR_COUNT
     };
-    sf::String str_[STR_COUNT];
+    
+    struct ProgressBar
+    {
+        sf::String label;
+        sf::Shape background;
+        sf::Sprite bar;
+        int max_value;
+        
+        ProgressBar();
+        // redimensionne la barre
+        void SetPercent(int value);
+        void SetPosition(float x, float y);
+    };
+    
+    ProgressBar pbars_[PBAR_COUNT];
+    sf::String timer_;
+    sf::String info_;
+    sf::String coolers_;
     sf::Sprite panel_;
     sf::Font font_;
 };

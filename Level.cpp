@@ -50,7 +50,7 @@ Level::Error Level::Set(int level, std::string& description)
 {
    Purge();
    -- level;
-   if (level > static_cast<int>(levels_.size()))
+   if ((level > 0) && level > static_cast<int>(levels_.size()))
    {
        return UNDEF;
    }

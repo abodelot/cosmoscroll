@@ -52,7 +52,6 @@ private:
 
     ControlPanel& panel_;
     const sf::Input& input_;
-    bool is_lighten_;
     
     bool overheated_;
     float heat_;

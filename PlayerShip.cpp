@@ -23,12 +23,10 @@
 #define HEAT_MAX     100
 #define COLDING_RATE 13
 
-#define GUN_ORIENT_MAX  15
-#define GUN_ORIENT_MIN -15
-
 #define COOL_KEY	sf::Key::C
 
 #include <iostream>
+
 
 PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     Entity(GET_IMG("spaceship"), offset),
@@ -37,7 +35,6 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     laserbeam_(Weapon::LASERBEAM),
     hellfire_(Weapon::HELLFIRE)
 {
-    is_lighten_ = false;
     overheated_ = false;
     heat_ = 0.0f;
     shield_ = SHIELD_DEFAULT;
@@ -49,8 +46,11 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 
     trigun_timer_ = false;
 
-	
     ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, &sprite_);
+
+    panel_.SetMaxShipHP(5);
+    panel_.SetMaxShield(SHIELD_MAX);
+    panel_.SetMaxHeat(HEAT_MAX);
     
     panel_.SetShipHP(hp_);
     panel_.SetShield(shield_);
@@ -74,12 +74,6 @@ PlayerShip::~PlayerShip()
 
 void PlayerShip::Action()
 {
-    if (is_lighten_)
-    {
-        sprite_.SetImage(GET_IMG("spaceship"));
-        is_lighten_ = false;
-    }
-    
     if (!overheated_)
     {
         float h = 0.0f;
@@ -93,14 +87,6 @@ void PlayerShip::Action()
             h += hellfire_.Shoot(offset);
         }
         
-        if (h > 0.0f)
-        {
-            // si chaleur, alors il y a eu tir.
-            // problème : si une arme peut tirer sans dégager de chaleur
-            // (retourne toujours 0.f)
-            sprite_.SetImage(GET_IMG("spaceship_light"));
-            is_lighten_ = true;
-        }
         heat_ += h;
         if (heat_ >= HEAT_MAX)
         {
@@ -143,6 +129,7 @@ void PlayerShip::Move(float frametime)
 	{
 		-- coolers_;
 		overheated_ = false;
+		panel_.SetInfo("");
 		heat_ = 0.f;
 		panel_.SetCoolers(coolers_);
 	}	

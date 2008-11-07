@@ -11,7 +11,7 @@ static inline const sf::Image& select_image(Bonus::Type type)
     static const char* keys[Bonus::BONUS_COUNT] = {
         "bonus-health",
         "bonus-trigun",
-		"bonus-cooler"
+        "bonus-cooler"
     };
     return GET_IMG(keys[type]);
 }
@@ -40,5 +40,6 @@ void Bonus::Hit(int damage)
 void Bonus::Move(float frametime)
 {
     sprite_.Move(-SPEED * frametime, 0);
+    KillIfOut();
 }
 

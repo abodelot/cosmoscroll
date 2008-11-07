@@ -49,7 +49,7 @@ public:
 		return hp_;};
 	
 	inline void SetHP(int val) {
-		assert(val > -1 && val <= std::numeric_limits<int>::max());
+		/*assert(val > -1 && val <= std::numeric_limits<int>::max());*/
 		hp_ = val;};
   /*
      * Obtenir la position du vaisseau

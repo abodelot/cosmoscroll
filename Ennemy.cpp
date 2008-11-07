@@ -25,7 +25,7 @@ void Ennemy::Hit(int damage)
     Entity::Hit(damage);
     if (IsDead())
     {
-        if (sf::Randomizer::Random(0, 10) == 0)
+        if (sf::Randomizer::Random(0, 2) == 0)
         {
             Game::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
         }

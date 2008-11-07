@@ -293,7 +293,7 @@ Game::Choice Game::Play()
         // moving
         float time = app_.GetFrameTime();
         timer_ += time;
-        panel_.SetChrono(timer_);
+        panel_.SetTimer(timer_);
         
         for (it = entities_.begin(); it != entities_.end();)
         {
@@ -457,6 +457,7 @@ Game::Choice Game::GameOver()
     return static_cast<Choice>(choice);
 }
 
+
 Game::Choice Game::Intertitre()
 {
     puts("[ Game::Intertitre ]");
@@ -482,7 +483,7 @@ Game::Choice Game::Intertitre()
     subtitle2.SetPosition(32, 92);
     
     Menu menu;
-    menu.SetOffset(sf::Vector2f(42, 112));
+    menu.SetOffset(sf::Vector2f(42, 200));
     menu.AddItem("Continuer", CONTINUE);    
     // menu.AddItem("Réessayer", RETRY);
     
@@ -754,3 +755,4 @@ bool Game::Passwd_HACK() {
 		std::cout << "Pas de pass entre\n";
 		ok ^= 1; } return ok;
 }
+

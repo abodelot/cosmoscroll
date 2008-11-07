@@ -10,67 +10,128 @@ ControlPanel& ControlPanel::GetInstance()
 }
 
 
-void ControlPanel::SetShipHP(int hp)
+void ControlPanel::SetShipHP(int value)
 {
-    str_[HP].SetText(str_sprintf("Vaisseau : %d HP", hp));
+    pbars_[HP].SetPercent(value);
 }
 
 
-void ControlPanel::SetShield(int n)
+void ControlPanel::SetMaxShipHP(int max)
 {
-    str_[SHIELD].SetText(str_sprintf("Bouclier : %d", n));    
+    pbars_[HP].max_value = max;
+}
+
+
+void ControlPanel::SetShield(int value)
+{
+    pbars_[SHIELD].SetPercent(value);
+}
+
+
+void ControlPanel::SetMaxShield(int max)
+{
+    pbars_[SHIELD].max_value = max;
+}
+
+
+void ControlPanel::SetHeat(int value)
+{
+    pbars_[HEAT].SetPercent(value);
+}
+
+
+void ControlPanel::SetMaxHeat(int max)
+{
+    pbars_[HEAT].max_value = max;
 }
 
 
 void ControlPanel::SetInfo(const char* text)
 {
-    str_[INFO].SetText(text);
+    info_.SetText(text);
 }
 
 
-void ControlPanel::SetHeat(float heat)
+void ControlPanel::SetCoolers(int coolers)
 {
-    str_[HEAT].SetText(str_sprintf("Chaleur : %02.0f %%", heat));
+	coolers_.SetText(str_sprintf("Glaçons : %d", coolers));
 }
 
 
-void ControlPanel::SetChrono(float seconds)
+void ControlPanel::SetTimer(float seconds)
 {
     int s = (int) seconds; // arrondi
-    str_[CHRONO].SetText(str_sprintf("Temps : %02d:%02d", s / 60, s % 60));
+    timer_.SetText(str_sprintf("Temps : %02d:%02d", s / 60, s % 60));
 }
 
-void ControlPanel::SetCoolers(short unsigned coolers)
-{
-	str_[COOL].SetText(str_sprintf("Glaçons : %01d", coolers));
-}
 
-void ControlPanel::Show(sf::RenderWindow& app)
+void ControlPanel::Show(sf::RenderWindow& app) const
 {
     app.Draw(panel_);
-    for (int i = 0; i < STR_COUNT; ++i)
+    for (int i = 0; i < PBAR_COUNT; ++i)
     {
-        app.Draw(str_[i]);
+        app.Draw(pbars_[i].label);
+        app.Draw(pbars_[i].background);
+        app.Draw(pbars_[i].bar);
     }
+    app.Draw(info_);
+    app.Draw(timer_);
+    app.Draw(coolers_);
 }
 
 
 ControlPanel::ControlPanel()
 {
     panel_.SetImage(GET_IMG("score-board"));
-    for (int i = 0; i < STR_COUNT; ++i)
+    for (int i = 0; i < PBAR_COUNT; ++i)
     {
-        str_[i].SetFont(GET_FONT());
-        str_[i].SetSize(16);
-        str_[i].SetColor(sf::Color::White);
+        pbars_[i].label.SetSize(12);
+        pbars_[i].label.SetColor(sf::Color::White);
     }
-    str_[HP].SetPosition(50, 2);
-    str_[SHIELD].SetPosition(50, 20);
-    str_[HEAT].SetPosition(200, 2);
-    str_[INFO].SetPosition(200, 20);
-    str_[INFO].SetColor(sf::Color(255, 128 ,0));
-    str_[CHRONO].SetPosition(400, 2);
-	str_[COOL].SetPosition(200, 20);
+    
+    pbars_[HP].SetPosition(50, 10);
+    pbars_[HP].label.SetText("Coque");
+    pbars_[HP].bar.SetColor(sf::Color::Red);
+    pbars_[SHIELD].SetPosition(50, 30);
+    pbars_[SHIELD].label.SetText("Bouclier");
+    pbars_[SHIELD].bar.SetColor(sf::Color::Blue);
+    pbars_[HEAT].SetPosition(220, 10);
+    pbars_[HEAT].label.SetText("Chaleur");
+    pbars_[HEAT].bar.SetColor(sf::Color::Green);
+    
+    timer_.SetPosition(400, 2);
+    timer_.SetSize(14);
+    timer_.SetColor(sf::Color::White);
+    
+    info_.SetPosition(400, 16);
+    info_.SetSize(14);
+    info_.SetColor(sf::Color(255, 128 ,0));
+    
+    coolers_.SetPosition(400, 30);
+    coolers_.SetSize(14);
+    coolers_.SetColor(sf::Color::White);
+}
+
+#define LABEL_LENGTH 55
+#define BAR_HEIGHT 15
+
+ControlPanel::ProgressBar::ProgressBar()
+{
+    background = sf::Shape::Rectangle(0, 0, 100, BAR_HEIGHT, sf::Color::White, 1.f);
+}
+
+
+void ControlPanel::ProgressBar::SetPosition(float x, float y)
+{
+    label.SetPosition(x, y);
+    background.SetPosition(x + LABEL_LENGTH, y);
+    bar.SetPosition(x + LABEL_LENGTH, y);
+}
+
+
+void ControlPanel::ProgressBar::SetPercent(int value)
+{
+    bar.Resize((float) value / max_value * 100, BAR_HEIGHT);
 }
 
 
