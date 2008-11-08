@@ -27,6 +27,7 @@
 #endif
 
 #include <cstring>
+#include <cassert>
 #include <iostream>
 
 #include "Password.hpp"

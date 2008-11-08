@@ -1,5 +1,5 @@
-#ifndef BLORB_HPP
-#define BLORB_HPP
+#ifndef EVILBOSS_HPP
+#define EVILBOSS_HPP
 
 #include "Weapon.hpp"
 #include "Game.hpp"
@@ -24,5 +24,5 @@ private:
 	float frametime_;	//frametime du dernier Move. Utilisé par Action
 };
 
-#endif /* guard EVILB OSS_HPP */
+#endif /* guard EVILBOSS_HPP */
 

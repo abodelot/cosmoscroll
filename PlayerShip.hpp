@@ -22,6 +22,8 @@ public:
     
     ~PlayerShip();
     
+    void HandleKey(const sf::Event::KeyEvent& key);
+    
     // phase de tir
     void Action();
     
@@ -61,7 +63,6 @@ private:
     float heat_;
     
 	int coolers_;
-	bool cool_key_down_;
 	
     int shield_;
     float shield_timer_;

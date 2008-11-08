@@ -39,7 +39,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     heat_ = 0.0f;
     shield_ = SHIELD_DEFAULT;
 	coolers_ = COOLER_DEFAULT;
-	pause_effects_ = cool_key_down_ = false;
+	pause_effects_ = false;
     shield_timer_ = 0;
 #ifndef NO_AUDIO
     shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
@@ -71,6 +71,22 @@ PlayerShip::~PlayerShip()
     {
         trigun_timer_ = 0;
         GetTrigunThread().Wait();
+    }
+}
+
+
+void PlayerShip::HandleKey(const sf::Event::KeyEvent& key)
+{
+    if (key.Code == COOL_KEY)
+    {
+        if (coolers_ > 0)
+        {
+            --coolers_;
+            panel_.SetCoolers(coolers_);
+            heat_ = 0.f;
+            overheated_ = false;
+            panel_.SetInfo("");
+        }
     }
 }
 
@@ -127,26 +143,13 @@ void PlayerShip::Move(float frametime)
     {
         x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
     }
-	if (cool_key_down_ == false && input_.IsKeyDown(COOL_KEY) && (coolers_ > 0))
-	{
-		-- coolers_;
-		cool_key_down_ = true;
-		overheated_ = false;
-		panel_.SetInfo("");
-		heat_ = 0.f;
-		panel_.SetCoolers(coolers_);
-	}
-	if (cool_key_down_ && !input_.IsKeyDown(COOL_KEY))
-	{
-		cool_key_down_ = false;
-	}
-	#ifdef DEBUG
+    
+#ifdef DEBUG
 	if (input_.IsKeyDown(sf::Key::H))
     {
         hp_ = 100;
     }
-	
-	#endif
+#endif
     sprite_.SetPosition(x, y);
     
     // regénération bouclier

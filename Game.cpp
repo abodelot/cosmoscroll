@@ -45,13 +45,15 @@ Game::Game() :
     }
     app_.SetFramerateLimit(WIN_FPS);
     app_.ShowMouseCursor(false);
+    app_.EnableKeyRepeat(false);
 }
 
 
 Game::~Game()
 {
-    RemoveEntities();
-    app_.Close();
+	RemoveEntities();
+	app_.EnableKeyRepeat(true); // bug SFML 1.3 sous linux : il faut réactiver à la main le keyrepeat
+	app_.Close();
 }
 
 
@@ -244,6 +246,7 @@ Game::Choice Game::Play()
             }
             else if (event.Type == sf::Event::KeyPressed)
             {
+            	player_.ship->HandleKey(event.Key);
                 switch (event.Key.Code)
                 {
                     case sf::Key::Escape: // QUICK QUIT

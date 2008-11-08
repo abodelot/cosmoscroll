@@ -131,7 +131,12 @@ void ControlPanel::ProgressBar::SetPosition(float x, float y)
 
 void ControlPanel::ProgressBar::SetPercent(int value)
 {
-    bar.Resize((float) value / max_value * 100, BAR_HEIGHT);
+	float length = (float) value / max_value * 100;
+	if (length == 0.0f)
+	{
+		length = 0.1f;
+	}
+    bar.Resize(length, BAR_HEIGHT);
 }
 
 
