@@ -39,7 +39,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     heat_ = 0.0f;
     shield_ = SHIELD_DEFAULT;
 	coolers_ = COOLER_DEFAULT;
-	cool_key_down_ = false;
+	pause_effects_ = cool_key_down_ = false;
     shield_timer_ = 0;
 #ifndef NO_AUDIO
     shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
@@ -63,8 +63,10 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 
 PlayerShip::~PlayerShip()
 {
+#ifdef DEBUG
 	puts("~PlayerShip()");
 	std::cerr << trigun_timer_ << " (trigun_timer_ a l'appel)" << std::endl;
+#endif
     if (trigun_timer_ != 0)
     {
         trigun_timer_ = 0;
@@ -138,6 +140,13 @@ void PlayerShip::Move(float frametime)
 	{
 		cool_key_down_ = false;
 	}
+	#ifdef DEBUG
+	if (input_.IsKeyDown(sf::Key::H))
+    {
+        hp_ = 100;
+    }
+	
+	#endif
     sprite_.SetPosition(x, y);
     
     // regénération bouclier
@@ -245,15 +254,31 @@ void PlayerShip::EndBonusWrapper(void* data)
 void PlayerShip::EndBonus()
 {
     trigun_timer_ = 10; // 10 secondes
-    while (trigun_timer_ > 0)
+loop_back:
+	while (!pause_effects_ && trigun_timer_ > 0)
     {
+	#ifdef DEBUG
         printf("\t-- %ds\n", trigun_timer_);
+	#endif
         --trigun_timer_;
         sf::Sleep(1.0f);
     }
-    hellfire_.SetTriple(false);
-    laserbeam_.SetTriple(false);
-    puts("\t-- fin bonus arme");
+	if (!pause_effects_)
+	{
+		hellfire_.SetTriple(false);
+		laserbeam_.SetTriple(false);
+	#ifdef DEBUG
+		puts("\t-- fin bonus arme");
+	#endif
+	}
+	else
+	{
+		while (pause_effects_)
+		{
+			sf::Sleep(1.0f);
+		}
+		goto loop_back;	// Le goto syndical, et il est utile :D
+	}
 }
 
 
@@ -269,23 +294,31 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
             // thread pour désactiver le bonus plus tard
             if (trigun_timer_ == 0)
             {
+			#ifdef DEBUG
                 puts("\t|bonus arme|");
-                GetTrigunThread().Launch();
+            #endif
+				GetTrigunThread().Launch();
             }
             else
             {
-                puts("\t|bonus arme relancé|");
-                trigun_timer_ += 10;
+			#ifdef DEBUG
+                puts("\t|bonus arme relance|");
+            #endif
+				trigun_timer_ += 10;
             }
             break;
         // bonus point de vie
         case Bonus::HEALTH:
-            puts("\t|bonus hp|");
-            ++hp_;
+        #ifdef DEBUG
+			puts("\t|bonus hp|");
+        #endif
+			++hp_;
             panel_.SetShipHP(hp_);
             break;
 		case Bonus::COOLER:
+		#ifdef DEBUG
 			puts("\t|bonus cooler|");
+		#endif
 			if (coolers_ < COOLER_MAX)
 			{
 				++coolers_;
@@ -295,7 +328,9 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
         default:
             break;
     }
+#ifdef DEBUG
     puts("exit handlebonus");
+#endif
 }
 
 

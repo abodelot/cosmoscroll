@@ -92,7 +92,9 @@ void Game::Run()
 
 Game::Choice Game::Intro()
 {
+#ifdef DEBUG
     puts("[ Game::Intro ]");
+#endif
     Choice what = MAIN_MENU;
     float duration = 5;
     
@@ -164,7 +166,9 @@ Game::Choice Game::Options()
 
 Game::Choice Game::MainMenu()
 {
+#ifdef DEBUG
     puts("[ Game::MainMenu ]");
+#endif
     Menu menu;
     menu.SetOffset(sf::Vector2f(42, 100));
     menu.AddItem("Mode Aventure", STORY_MODE);
@@ -223,7 +227,9 @@ Game::Choice Game::MainMenu()
 
 Game::Choice Game::Play()
 {
+#ifdef DEBUG
     puts("[ Game::Play ]");
+#endif
     sf::Event event;
     bool running = true;
     Choice what = EXIT_APP;
@@ -284,7 +290,12 @@ Game::Choice Game::Play()
 
         std::vector<Entity*>::iterator it;
 
-        
+        // On relance la thread de bonus
+		if (GetPlayer()->EffectsPaused())
+		{
+			GetPlayer()->PauseEffects(false);
+		}
+		
         // action
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
@@ -346,7 +357,9 @@ Game::Choice Game::Play()
 
 Game::Choice Game::InGameMenu()
 {
+#ifdef DEBUG
     puts("[ Game::InGameMenu ]");
+#endif
     sf::Event event;
     sf::String title("P A U S E");
     title.SetPosition(180, 160);
@@ -360,6 +373,10 @@ Game::Choice Game::InGameMenu()
     //menu.AddItem("Options", OPTIONS);
     menu.AddItem("Quitter le jeu", EXIT_APP);
     
+	// On suspend la thread de bonus
+	GetPlayer()->PauseEffects(true);
+
+	
     bool paused = true;
     int what;
     while (paused)
@@ -410,7 +427,9 @@ Game::Choice Game::InGameMenu()
 
 Game::Choice Game::GameOver()
 {
+#ifdef DEBUG
     puts("[ Game::GameOver ]");
+#endif
     sf::String title;
     if (arcade_)
     {
@@ -462,7 +481,9 @@ Game::Choice Game::GameOver()
 
 Game::Choice Game::Intertitre()
 {
+#ifdef DEBUG
     puts("[ Game::Intertitre ]");
+#endif
     sf::String title;
     sf::String subtitle1;
 	sf::String subtitle2;
@@ -488,7 +509,10 @@ Game::Choice Game::Intertitre()
     menu.SetOffset(sf::Vector2f(42, 200));
     menu.AddItem("Continuer", CONTINUE);    
     // menu.AddItem("Réessayer", RETRY);
-    
+
+    // On suspend la thread de bonus
+	GetPlayer()->PauseEffects(true);
+
     bool running = true;
     int choice;
     
@@ -526,7 +550,9 @@ Game::Choice Game::Intertitre()
 
 Game::Choice Game::Continue()
 {
+#ifdef DEBUG
     puts("[ Game::Continue ]");
+#endif
     sf::String title;
     sf::String subtitle;
 
@@ -699,7 +725,9 @@ std::string Game::MakePassword()
 	pass.setLives(lives);	pass.setLevel(level);
 	
 	std::string res = pass.getEncoded(); // SNCF:: RASHGL 
+#ifdef DEBUG
 	std::cerr << "\t PASS: " << res << "\n";
+#endif
 	return res;
 }
 
@@ -708,6 +736,7 @@ bool Game::UsePassword(std::string & source)
 	bool ok = false;
 	unsigned char pass_1_, pass_2_;
 	bool ok_1, ok_2;
+	ok_1 = ok_2 = false;
 	
 	Password pass(dynamic_cast<const std::string &>(source));
 	
@@ -717,19 +746,25 @@ bool Game::UsePassword(std::string & source)
 	
 	if (pass_1_ > 0)
 	{
+	#ifdef DEBUG
 		std::cerr << " Elem 1 OK";
+	#endif
 		ok_1 = true;
 	}
 	
 	if (0 < pass_2_ && pass_2_ <= level_.GetLastID())
 	{
-		std::cerr << " Elem 2 OK\n";
+	#ifdef DEBUG
+		std::cerr << " Elem 2 OK";
+	#endif
 		ok_2 = true;
 	}
 	
 	if (ok_1 and ok_2)
 	{
-			std::cerr << "A priori valide" << std::endl;
+		#ifdef DEBUG
+			std::cerr << "\tValide\n";
+		#endif
 			ok = true;
 			player_.ship->SetHP(static_cast<int>(pass_1_));
 			panel_.SetShipHP(player_.ship->GetHP());
@@ -738,27 +773,26 @@ bool Game::UsePassword(std::string & source)
 			{
 				cur_lvl_ = static_cast<int>(pass_2_);
 				find_replace(level_desc_, "\\n", "\n");
-				std::cerr << "Niveau setted" << std::endl;
 			}
 			else
 			{
 				ok = false;
-				std::cerr << "Niveau NON setted" << std::endl;
 			}
 	}
 	return ok;
 }
+
 // Oh un joli hack bien rédigé :D
 bool Game::Passwd_HACK() {
 	bool ok = false; std::string src;	
 	std::cout << "Entrez pass, ou X pour passer\n";
 	std::cin >> src;
-	if (src[0] != 'X' && src[0] != 'x') {
+	if (!(src[0] - 88) || !(src[0] - 120)){
+		std::cout << "Pas de pass entre\n";
+		ok ^= 1; } else {
 		if (UsePassword(src)) {
 			std::cout << "Okay\n"; ok ^=1;
 		} else std::cout << "Erreur ! \n";
-	} else {
-		std::cout << "Pas de pass entre\n";
-		ok ^= 1; } return ok;
+	} return ok;
 }
 

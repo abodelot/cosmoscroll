@@ -41,7 +41,11 @@ public:
 
     void HandleBonus(const Bonus& bonus);
 	
-
+	inline bool EffectsPaused() {
+		return pause_effects_;};
+		
+	inline void PauseEffects(bool b) {
+		pause_effects_ = b;};
     
 private:
 
@@ -74,6 +78,7 @@ on aurait aussi pu faire sans (un if dans le Update pour savoir s'il y a bonus)
     
     Weapon laserbeam_;
     Weapon hellfire_;
+	bool pause_effects_;
 };
 
 #endif /* guard PLAYERSHIP_HPP */

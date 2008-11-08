@@ -32,7 +32,7 @@ Level::Error Level::ParseFile(const char* file)
     }
     // Constitution de la liste de pointeurs vers niveaux
     #ifdef DEBUG 
-    std::cerr << "Construction LevelList:" << std::flush;
+    std::cerr << "Building Level List: " << std::flush;
     #endif
     TiXmlNode* node = doc_.RootElement()->FirstChild();
     
@@ -42,7 +42,7 @@ Level::Error Level::ParseFile(const char* file)
         node = node->NextSibling();
     }
     #ifdef DEBUG
-    std:: cerr << levels_.size() << " niveaux." << std::endl;
+    std:: cerr << levels_.size() << " elements." << std::endl;
     #endif
     return SUCCESS;
 }
@@ -76,7 +76,9 @@ Level::Error Level::ParseLevel(TiXmlElement* elem)
     sf::Vector2f offset;
     float t = 0.0f, last_t = 0.0f;
     std::string classname;
+	#ifdef DEBUG
     puts("------ begin level ------");
+	#endif
     while (elem)
     {
 	    classname = elem->Attribute("name");
@@ -109,17 +111,22 @@ Level::Error Level::ParseLevel(TiXmlElement* elem)
 	    }
         else
         {
+			
             puts("Unimplemented element. Dying.");
             std::cerr << elem;
             exit(EXIT_FAILURE);
         }
         
         waiting_line_.push(slot);
+		#ifdef DEBUG
         printf("scheduled <%s> at %.2f sec\n", classname.c_str(), last_t);
+		#endif
         
         elem = elem->NextSiblingElement();
     }
+	#ifdef DEBUG
     puts("------ end level ------");
+	#endif
     return SUCCESS;
 }
 

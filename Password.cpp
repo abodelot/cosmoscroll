@@ -32,7 +32,10 @@
 #include "Password.hpp"
 
 
-const std::string Password::ALPHABET("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+//const std::string Password::ALPHABET("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+//                                      "abcdefghijklmnopqrstuvwxyz?- ");
+									  
+const std::string Password::ALPHABET("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                       "abcdefghijklmnopqrstuvwxyz?- ");
 
 Password::Password() {

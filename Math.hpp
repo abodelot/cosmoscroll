@@ -2,8 +2,6 @@
 #define H_MATH
 
 #include <cmath>
-#include <SFML/System/Vector2.hpp>
-
 
 #define PI 3.14159f
 
@@ -26,12 +24,7 @@ inline void TRANSLATE(sf::Vector2f& offset, float angle, float distance)
     offset.y = offset.y - distance * std::sin(angle);
 }
 
-/*
-inline float DISTANCE(const sf::Vector2f& p1, const sf::Vector2f& p2)
-{
-    return sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
-}
-*/
+
 inline float Distance(const float x1, const float y1, const float x2 = 0.f, const float y2 = 0.f)
 {
     // Formule de calcul de la distance entre deux points :

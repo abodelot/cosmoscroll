@@ -2,7 +2,6 @@
 #define ENTITY_HPP
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 /*
  * Classe abstraite représentant une entité du jeu

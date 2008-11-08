@@ -63,7 +63,9 @@ void Entity::KillIfOut()
     if (outside_universe(GetRect()))
     {
         hp_ = 0;
+	#ifdef DEBUG
         puts("(entity is out)");
+	#endif
     }
 }
 

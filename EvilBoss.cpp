@@ -15,8 +15,8 @@
 
 EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
     Ennemy(offset, GET_IMG("evil_boss"), 25, target),
-	weaponA_(Weapon::HELLFIRE, this),
-	weaponB_(Weapon::LASERBEAM, this),
+	weaponA_(Weapon::LASERBEAM, this),
+	weaponB_(Weapon::DEVILSEYES, this),
 	game_(Game::GetInstance())
 {
 }
@@ -25,7 +25,6 @@ EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
 void EvilBoss::Move(float frametime)
 {
 	frametime_ = frametime;
-	std::cerr << "Move()\n";
 	bool left = true;
 	static bool direction_ = false;
 	static float mover_ = 10.0;
@@ -64,21 +63,18 @@ void EvilBoss::Collide(Entity& ent)
 
 void EvilBoss::Action()
 {
-	static float cpt = 5.0;
+	/*static float cpt = 5.0;
 	cpt -= frametime_;
 	int mode = sf::Randomizer::Random(0, 1);
 	if (cpt <= 0)
 	{
 		cpt = 5.0;
 		mode = 2;
-	}
-	
-    std::cerr << "Action() " << mode << "\n";
+	}*/
 	float radians_L = ANGLE(target_->GetPosition(), sprite_.GetPosition() + L_EYE_OFFSET);
 	float radians_R = ANGLE(target_->GetPosition(), sprite_.GetPosition() + R_EYE_OFFSET);
 	//if (mode == 1 || mode == 2)
 	//{
-		std::cerr << "\tMode A\n";
 		weaponA_.Update(frametime_);
 		if (weaponA_.Shoot(sprite_.GetPosition() + L_EYE_OFFSET, radians_L) != 0.f)
 		{
@@ -89,7 +85,6 @@ void EvilBoss::Action()
 	//}
 	//if (mode == 2)
 	//{
-		std::cerr << "\tMode B\n";
 		for (int i = 0; i < CHILDS; ++i)
 		{
 			weaponB_.Shoot(sprite_.GetPosition() + GUN_OFFSET, sf::Randomizer::Random(0, 360));
