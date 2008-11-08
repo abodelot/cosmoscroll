@@ -2,7 +2,7 @@
 #define ENTITY_HPP
 
 #include <SFML/Graphics.hpp>
-
+#include <iostream>
 
 /*
  * Classe abstraite représentant une entité du jeu
@@ -49,7 +49,6 @@ public:
 		return hp_;};
 	
 	inline void SetHP(int val) {
-		/*assert(val > -1 && val <= std::numeric_limits<int>::max());*/
 		hp_ = val;};
   /*
      * Obtenir la position du vaisseau
@@ -60,6 +59,10 @@ public:
      * Obtenir la surface de collision du vaisseau
      */
     virtual sf::FloatRect GetRect();
+	
+	
+	inline void SetPosition(sf::Vector2f pos) {
+		sprite_.SetPosition(pos);};
     
 protected:
     sf::Sprite sprite_;

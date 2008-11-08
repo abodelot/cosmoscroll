@@ -7,6 +7,9 @@
 #include "ParticleSystem.hpp"
 #include "ControlPanel.hpp"
 #include "Level.hpp"
+#include "Window.hpp"
+
+#include "Password.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -77,6 +80,10 @@ private:
     {
         float best_time;
         PlayerShip* ship;
+		
+		inline void Place() {
+			static const sf::Vector2f offset (0, WIN_HEIGHT / 2.0);
+			if (ship) ship->SetPosition(offset);};
     };
     
     sf::RenderWindow app_;
@@ -98,6 +105,8 @@ private:
 	bool UsePassword(std::string& source);
 	
 	bool Passwd_HACK();
+	
+
 };
 
 #endif /* guard GAME_HPP */

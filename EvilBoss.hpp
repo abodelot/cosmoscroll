@@ -19,7 +19,7 @@ public:
 private:
 	bool left_;
 	Weapon weaponA_;
-	//Weapon weaponB_;
+	Weapon weaponB_;
 	Game& game_;
 	float frametime_;	//frametime du dernier Move. Utilisé par Action
 };

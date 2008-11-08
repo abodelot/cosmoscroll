@@ -7,7 +7,7 @@
 #include "EvilBoss.hpp"
 
 #include "Menu.hpp"
-#include "Window.hpp"
+
 #include "Misc.hpp"
 #include "Level.hpp"
 
@@ -537,6 +537,8 @@ Game::Choice Game::Continue()
 	timer_ = 0.0f;
     bullets_.Clear();
 	
+	
+	
     if (cur_lvl_ < level_.GetLastID())
 	{
 		level_.Set(++cur_lvl_, level_desc_);
@@ -545,6 +547,7 @@ Game::Choice Game::Continue()
 		subtitle.SetText(level_desc_);
 		
 		menu.AddItem("Jouer", STORY_MODE);  
+		 player_.Place();
 	}
 	else	// On a fini le jeu :)
 	{
@@ -552,26 +555,19 @@ Game::Choice Game::Continue()
 		subtitle.SetText(str_sprintf("Vous avez fini les %d niveaux \ndu jeu. Vous etes vraiment doue(e) :D", cur_lvl_));
 		menu.AddItem("Retour", MAIN_MENU);
 	}
-
-    
-
-    
+   
     title.SetFont(GET_FONT());
     title.SetColor(sf::Color::White);
     title.SetPosition(42, 42);
     subtitle.SetFont(GET_FONT());
     subtitle.SetColor(sf::Color::White);
     subtitle.SetPosition(32, 72);
-    
-
-      
 
     bool running = true;
     int choice;
     sf::Event event;
     while (running)
-    {
-        
+    {        
         while (app_.GetEvent(event))
         {
             if (event.Type == sf::Event::Closed)
@@ -584,7 +580,6 @@ Game::Choice Game::Continue()
                 {
                     running = false;
                 }
-				
 				if (event.Key.Code == HACKY_KEY)
 				{
 					//<HACK>
@@ -595,7 +590,6 @@ Game::Choice Game::Continue()
 					subtitle.SetText(level_desc_);
 					//</HACK>
 				}
-				
             }
         }
         app_.Draw(subtitle);
@@ -655,8 +649,6 @@ bool Game::MoreBadGuys()
     }
 	
 	
-	//p = new EvilBoss(sf::Vector2f(640, 270), player_.ship);
-	//AddEntity(p);
     // si le niveau n'est pas fini, alors il y a encore des ennemis
     return level.RemainingEntities() > 0;
 
@@ -699,31 +691,31 @@ PlayerShip* Game::GetPlayer() const
 
 std::string Game::MakePassword()
 {
-	std::ostringstream to;
-	int pass_1_ = player_.ship->GetHP();
-	int pass_2_ = cur_lvl_;
-
-	to << pass_1_ << '_' << pass_2_;
+	Password pass;	
+	unsigned char lives, level;
 	
-	return to.str();
+	lives = static_cast<unsigned char>(player_.ship->GetHP());
+	level = static_cast<unsigned char>(cur_lvl_);
+	pass.setLives(lives);	pass.setLevel(level);
+	
+	std::string res = pass.getEncoded(); // SNCF:: RASHGL 
+	std::cerr << "\t PASS: " << res << "\n";
+	return res;
 }
 
 bool Game::UsePassword(std::string & source)
 {
 	bool ok = false;
-	int pass_1_, pass_2_;
+	unsigned char pass_1_, pass_2_;
 	bool ok_1, ok_2;
-	short int sep = source.find_first_of('_');
-	{
-		std::istringstream tmp(source.substr(0, sep));
-		tmp >> pass_1_;
-	}
-	{
-		std::istringstream tmp(source.substr(sep + 1));
-		tmp >> pass_2_;
-	}
 	
-	if (pass_1_ <= std::numeric_limits<int>::max())
+	Password pass(dynamic_cast<const std::string &>(source));
+	
+	pass_1_ = pass.getLives();
+	
+	pass_2_ = pass.getLevel();
+	
+	if (pass_1_ > 0)
 	{
 		std::cerr << " Elem 1 OK";
 		ok_1 = true;
@@ -739,12 +731,12 @@ bool Game::UsePassword(std::string & source)
 	{
 			std::cerr << "A priori valide" << std::endl;
 			ok = true;
-			player_.ship->SetHP(pass_1_);
+			player_.ship->SetHP(static_cast<int>(pass_1_));
 			panel_.SetShipHP(player_.ship->GetHP());
-			std::cerr << player_.ship->GetHP();
+
 			if (level_.Set(pass_2_, level_desc_) == Level::SUCCESS) 
 			{
-				cur_lvl_ = pass_2_;
+				cur_lvl_ = static_cast<int>(pass_2_);
 				find_replace(level_desc_, "\\n", "\n");
 				std::cerr << "Niveau setted" << std::endl;
 			}

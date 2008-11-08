@@ -16,7 +16,7 @@
 EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
     Ennemy(offset, GET_IMG("evil_boss"), 25, target),
 	weaponA_(Weapon::HELLFIRE, this),
-	//weaponB_(Weapon::LASERBEAM, this),
+	weaponB_(Weapon::LASERBEAM, this),
 	game_(Game::GetInstance())
 {
 }
@@ -87,13 +87,13 @@ void EvilBoss::Action()
 		};
 
 	//}
-	/*if (mode == 2)
-	{
+	//if (mode == 2)
+	//{
 		std::cerr << "\tMode B\n";
 		for (int i = 0; i < CHILDS; ++i)
 		{
 			weaponB_.Shoot(sprite_.GetPosition() + GUN_OFFSET, sf::Randomizer::Random(0, 360));
 			weaponB_.Update(1000.0f);
 		}
-	}*/
+	//}*/
 }
