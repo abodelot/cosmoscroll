@@ -14,7 +14,7 @@
 #define GUN_OFFSET	    sf::Vector2f(248, 91)
 
 EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
-    Ennemy(offset, GET_IMG("evil_boss"), 25, target),
+    Ennemy(offset, GET_IMG("evil_boss"), 30, target),
 	weaponA_(Weapon::LASERBEAM, this),
 	weaponB_(Weapon::DEVILSEYES, this),
 	game_(Game::GetInstance())
@@ -54,6 +54,8 @@ void EvilBoss::Move(float frametime)
 	    sprite_.FlipX(!left);
 	    left_ = left;
 	}
+	weaponA_.Update(frametime);
+	weaponB_.Update(frametime);
 }
 
 void EvilBoss::Collide(Entity& ent)
@@ -78,7 +80,7 @@ void EvilBoss::Action()
 		weaponA_.Update(frametime_);
 		if (weaponA_.Shoot(sprite_.GetPosition() + L_EYE_OFFSET, radians_L) != 0.f)
 		{
-			weaponA_.Update(10000.f);
+			//weaponA_.Update(10000.f);
 			weaponA_.Shoot(sprite_.GetPosition() + R_EYE_OFFSET, radians_R);
 		};
 
@@ -88,7 +90,7 @@ void EvilBoss::Action()
 		for (int i = 0; i < CHILDS; ++i)
 		{
 			weaponB_.Shoot(sprite_.GetPosition() + GUN_OFFSET, sf::Randomizer::Random(0, 360));
-			weaponB_.Update(1000.0f);
+			//weaponB_.Update(1000.0f);
 		}
 	//}*/
 }

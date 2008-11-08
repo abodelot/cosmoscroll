@@ -1,6 +1,7 @@
 #include "Weapon.hpp"
 #include "BulletManager.hpp"
 
+
 Weapon::Weapon(Type type, Entity* sender)
 {
     float shot_per_second;
@@ -19,8 +20,9 @@ Weapon::Weapon(Type type, Entity* sender)
             energy_cost_ = 5.f;
             break;
 		case DEVILSEYES:
-			shot_per_second = 6.f;
+			shot_per_second = 4.f;
 			energy_cost_ = 1.f;
+			break;
         default:
             exit(EXIT_FAILURE);
     }
