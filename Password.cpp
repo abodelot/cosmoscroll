@@ -91,6 +91,18 @@ void Password::setLevel(unsigned char level) {
     encode();
 }
 
+void Password::setShield(unsigned char shield) {
+    data[SHIELD_COUNT_BYTE] = shield;
+    
+    encode();
+}
+
+void Password::setCoolers(unsigned char coolers) {
+    data[COOLER_COUNT_BYTE] = coolers;
+    
+    encode();
+}
+
 void Password::setShift(unsigned char shift) {
     data[SHIFT_BYTE] = shift;
     

@@ -49,6 +49,19 @@ public:
 	inline void PauseEffects(bool b) {
 		pause_effects_ = b;};
     
+		
+	inline int getShield() {
+		return shield_;};
+	
+	inline int getCoolers() {
+		return coolers_;};
+		
+	inline void setShield(int s) {
+		shield_ = s;};
+
+	inline void  setCoolers(int c) {
+		coolers_ = c;};
+
 private:
 
 	inline sf::Thread& GetTrigunThread() {

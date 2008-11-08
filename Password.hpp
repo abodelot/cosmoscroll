@@ -32,6 +32,8 @@
 		std::string encoded;
         unsigned char data[18];
         
+		static const int COOLER_COUNT_BYTE = 8;
+		static const int SHIELD_COUNT_BYTE = 9;
         static const int LIVES_COUNT_BYTE = 10;
 		static const int LEVEL_COUNT_BYTE = 11;
         static const int SHIFT_BYTE = 16;
@@ -108,6 +110,10 @@
         unsigned char getLives() const;
 		
 		unsigned char getLevel() const;
+		
+        unsigned char getShield() const;
+		
+		unsigned char getCoolers() const;
         
         /**
 
@@ -127,6 +133,10 @@
 		void setLives(unsigned char lives);
 		
 		void setLevel(unsigned char level);
+		
+		void setCoolers(unsigned char coolers);
+		
+		void setShield(unsigned char shield);
     };
     
     inline const std::string& Password::getEncoded() const { return encoded; }
@@ -134,6 +144,10 @@
         { return data[LIVES_COUNT_BYTE]; }
 	inline unsigned char Password::getLevel() const
         { return data[LEVEL_COUNT_BYTE]; }
+	inline unsigned char Password::getShield() const
+        { return data[SHIELD_COUNT_BYTE]; }
+	inline unsigned char Password::getCoolers() const
+        { return data[COOLER_COUNT_BYTE]; }
     inline unsigned char Password::getShift() const { return data[SHIFT_BYTE]; }
 
 

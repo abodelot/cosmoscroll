@@ -80,7 +80,7 @@ void EvilBoss::Action()
 		weaponA_.Update(frametime_);
 		if (weaponA_.Shoot(sprite_.GetPosition() + L_EYE_OFFSET, radians_L) != 0.f)
 		{
-			//weaponA_.Update(10000.f);
+			weaponA_.Update(10000.f);
 			weaponA_.Shoot(sprite_.GetPosition() + R_EYE_OFFSET, radians_R);
 		};
 

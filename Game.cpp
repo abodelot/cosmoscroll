@@ -246,7 +246,7 @@ Game::Choice Game::Play()
             }
             else if (event.Type == sf::Event::KeyPressed)
             {
-            	player_.ship->HandleKey(event.Key);
+            	GetPlayer()->HandleKey(event.Key);
                 switch (event.Key.Code)
                 {
                     case sf::Key::Escape: // QUICK QUIT
@@ -327,11 +327,11 @@ Game::Choice Game::Play()
             else
             {
                 (**it).Move(time);
-                if (player_.ship != *it
-                    && player_.ship->GetRect().Intersects((**it).GetRect()))
+                if (GetPlayer() != *it
+                    && GetPlayer()->GetRect().Intersects((**it).GetRect()))
                 {
-                    player_.ship->Collide(**it);
-                    (**it).Collide(*player_.ship);
+                    GetPlayer()->Collide(**it);
+                    (**it).Collide(*GetPlayer());
                 }
                 ++it;
             }
@@ -648,15 +648,15 @@ bool Game::MoreBadGuys()
             int random = sf::Randomizer::Random(0, 10);
             if (random > 6)
             {
-                AddEntity(Ennemy::Make(Ennemy::INTERCEPTOR, offset, player_.ship));
+                AddEntity(Ennemy::Make(Ennemy::INTERCEPTOR, offset, GetPlayer()));
             }
             else if (random > 4)
             {
-                AddEntity(Ennemy::Make(Ennemy::BLORB, offset, player_.ship));
+                AddEntity(Ennemy::Make(Ennemy::BLORB, offset, GetPlayer()));
             }
             else if (random > 2)
             {
-                AddEntity(Ennemy::Make(Ennemy::DRONE, offset, player_.ship));
+                AddEntity(Ennemy::Make(Ennemy::DRONE, offset, GetPlayer()));
             }
             else
             {
@@ -708,7 +708,7 @@ void Game::Respawn()
     offset.x = 0;
     offset.y = WIN_HEIGHT / 2.0;
     player_.ship = new PlayerShip(offset, app_.GetInput());
-    AddEntity(player_.ship);
+    AddEntity(GetPlayer());
 
 }
 
@@ -721,11 +721,14 @@ PlayerShip* Game::GetPlayer() const
 std::string Game::MakePassword()
 {
 	Password pass;	
-	unsigned char lives, level;
+	unsigned char lives, level, shield, icecubes;
 	
-	lives = static_cast<unsigned char>(player_.ship->GetHP());
+	lives = static_cast<unsigned char>(GetPlayer()->GetHP());
 	level = static_cast<unsigned char>(cur_lvl_);
+	icecubes = static_cast<unsigned char>(GetPlayer()->getCoolers());
+	shield = static_cast<unsigned char>(GetPlayer()->getShield());
 	pass.setLives(lives);	pass.setLevel(level);
+	pass.setCoolers(icecubes); pass.setShield(shield);
 	
 	std::string res = pass.getEncoded(); // SNCF:: RASHGL 
 #ifdef DEBUG
@@ -734,54 +737,41 @@ std::string Game::MakePassword()
 	return res;
 }
 
+// AAAAAAAAAAADAwICAAAAAAAK
+// AAAAAAAAAAACBAIDAAAAAAAL
+
 bool Game::UsePassword(std::string & source)
 {
 	bool ok = false;
-	unsigned char pass_1_, pass_2_;
-	bool ok_1, ok_2;
-	ok_1 = ok_2 = false;
-	
+	unsigned char pass_1_, pass_2_, pass_3_, pass_4_;
+
 	Password pass(dynamic_cast<const std::string &>(source));
 	
 	pass_1_ = pass.getLives();
 	
 	pass_2_ = pass.getLevel();
 	
-	if (pass_1_ > 0)
-	{
-	#ifdef DEBUG
-		std::cerr << " Elem 1 OK";
-	#endif
-		ok_1 = true;
-	}
-	
-	if (0 < pass_2_ && pass_2_ <= level_.GetLastID())
-	{
-	#ifdef DEBUG
-		std::cerr << " Elem 2 OK";
-	#endif
-		ok_2 = true;
-	}
-	
-	if (ok_1 and ok_2)
-	{
-		#ifdef DEBUG
-			std::cerr << "\tValide\n";
-		#endif
-			ok = true;
-			player_.ship->SetHP(static_cast<int>(pass_1_));
-			panel_.SetShipHP(player_.ship->GetHP());
+	pass_3_ = pass.getShield();
 
-			if (level_.Set(pass_2_, level_desc_) == Level::SUCCESS) 
-			{
-				cur_lvl_ = static_cast<int>(pass_2_);
-				find_replace(level_desc_, "\\n", "\n");
-			}
-			else
-			{
-				ok = false;
-			}
-	}
+	pass_4_ = pass.getCoolers();
+
+		GetPlayer()->SetHP(static_cast<int>(pass_1_));
+		GetPlayer()->setShield(static_cast<int>(pass_3_));
+		GetPlayer()->setCoolers(static_cast<int>(pass_4_));
+		
+		panel_.SetShipHP(GetPlayer()->GetHP());
+		panel_.SetShield(GetPlayer()->getShield());
+		panel_.SetCoolers(GetPlayer()->getCoolers());
+		
+		if (level_.Set(pass_2_, level_desc_) == Level::SUCCESS) 
+		{
+			cur_lvl_ = static_cast<int>(pass_2_);
+			find_replace(level_desc_, "\\n", "\n");
+		}
+		else
+		{
+			ok = false;
+		}
 	return ok;
 }
 
