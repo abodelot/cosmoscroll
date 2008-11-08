@@ -180,7 +180,7 @@ ParticleSystem::Star::Star()
 {
     SetImage(GET_IMG("star"));
     float x = sf::Randomizer::Random(0, WIN_WIDTH);
-    float y = sf::Randomizer::Random(0, WIN_HEIGHT);
+    float y = sf::Randomizer::Random(0, WIN_HEIGHT + CONTROL_PANEL_HEIGHT);
     SetPosition(sf::Vector2f(x, y));
     angle_ = PI;
     float scale = sf::Randomizer::Random(0.5f, 1.5f);
@@ -236,7 +236,7 @@ bool ParticleSystem::LinkedParticle::IsMyHandle(const sf::Sprite* handle)
 }
 
 
-/*
+/* ne pas effacer =)
 ParticleSystem::Follow::Follow(const sf::Sprite* handle)
 {
     handle_ = handle;

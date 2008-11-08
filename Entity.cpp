@@ -42,7 +42,7 @@ void Entity::Collide(Entity& ent)
     // -> comment définir GetAngle() pour chaque entité ?
     // -> trouver la formule physique adéquate pour gérer les rebonds
     (void) ent;
-    --hp_;
+    Hit(1);
 }
 
 
@@ -63,9 +63,9 @@ void Entity::KillIfOut()
     if (outside_universe(GetRect()))
     {
         hp_ = 0;
-	#ifdef DEBUG
+#ifdef DEBUG
         puts("(entity is out)");
-	#endif
+#endif
     }
 }
 

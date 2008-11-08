@@ -14,7 +14,7 @@
 #define GUN_OFFSET	    sf::Vector2f(248, 91)
 
 EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
-    Ennemy(offset, GET_IMG("evil_boss"), 30, target),
+    Ennemy(offset, GET_IMG("evil_boss"), 50, target),
 	weaponA_(Weapon::LASERBEAM, this),
 	weaponB_(Weapon::DEVILSEYES, this),
 	game_(Game::GetInstance())

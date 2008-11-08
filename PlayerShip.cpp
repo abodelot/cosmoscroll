@@ -13,7 +13,7 @@
 #define GUN_OFFSET      sf::Vector2f(52, 24)
 
 // taux de regénération du bouclier en boules/secondes
-#define SHIELD_RECOVERY_RATE 0.2
+#define SHIELD_RECOVERY_RATE 0.3
 #define SHIELD_MAX           6
 #define SHIELD_DEFAULT       3
 
@@ -23,9 +23,10 @@
 #define HEAT_MAX     100
 #define COLDING_RATE 13
 
-#define COOL_KEY	sf::Key::C
+#define HP_DEFAULT   3
+#define HP_MAX       5
 
-#include <iostream>
+#define COOL_KEY	sf::Key::C
 
 
 PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
@@ -35,6 +36,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     laserbeam_(Weapon::LASERBEAM, this),
     hellfire_(Weapon::HELLFIRE, this)
 {
+	hp_ = 3;
     overheated_ = false;
     heat_ = 0.0f;
     shield_ = SHIELD_DEFAULT;
@@ -49,7 +51,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 
     ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, &sprite_);
 
-    panel_.SetMaxShipHP(5);
+    panel_.SetMaxShipHP(HP_MAX);
     panel_.SetMaxShield(SHIELD_MAX);
     panel_.SetMaxHeat(HEAT_MAX);
     
@@ -65,7 +67,7 @@ PlayerShip::~PlayerShip()
 {
 #ifdef DEBUG
 	puts("~PlayerShip()");
-	std::cerr << trigun_timer_ << " (trigun_timer_ a l'appel)" << std::endl;
+	printf("%d (trigun_timer_ a l'appel)\n", trigun_timer_);
 #endif
     if (trigun_timer_ != 0)
     {
@@ -209,21 +211,17 @@ void PlayerShip::Hit(int damage)
             shield_ = 0;
         }
         panel_.SetShield(shield_);
-        p.AddImpact(sprite_.GetPosition(), 10);
     }
     else
     {
         Entity::Hit(damage);
-		
 		if ((hp_ == 0) && (trigun_timer_ != 0))
 		{
 			trigun_timer_ = 0;
 			GetTrigunThread().Wait();
 		}
         panel_.SetShipHP(hp_);
-        p.AddImpact(sprite_.GetPosition(), 20);
     }
-    
 }
 
 
@@ -237,7 +235,7 @@ void PlayerShip::Collide(Entity& ent)
     }
     else
     {
-        --hp_;
+        Hit(1);
 		if ((hp_ == 0) && (trigun_timer_ != 0))
 		{
 			trigun_timer_ = 0;
@@ -297,31 +295,22 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
             // thread pour désactiver le bonus plus tard
             if (trigun_timer_ == 0)
             {
-			#ifdef DEBUG
-                puts("\t|bonus arme|");
-            #endif
 				GetTrigunThread().Launch();
             }
             else
             {
-			#ifdef DEBUG
-                puts("\t|bonus arme relance|");
-            #endif
 				trigun_timer_ += 10;
             }
             break;
         // bonus point de vie
         case Bonus::HEALTH:
-        #ifdef DEBUG
-			puts("\t|bonus hp|");
-        #endif
-			++hp_;
-            panel_.SetShipHP(hp_);
-            break;
+			if (hp_ + 1 < HP_MAX)
+			{
+				++hp_;
+				panel_.SetShipHP(hp_);				
+			}
+			break;
 		case Bonus::COOLER:
-		#ifdef DEBUG
-			puts("\t|bonus cooler|");
-		#endif
 			if (coolers_ < COOLER_MAX)
 			{
 				++coolers_;
@@ -330,9 +319,12 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			break;
         default:
             break;
-    }
+	}
 #ifdef DEBUG
-    puts("exit handlebonus");
+	/* WhatItIs pourrait être utilisé pour afficher un petit texte au niveau
+	du vaisseau et qui monterait en devenant de plus en plus transparant pour
+	finir par disparaître au bout de quelques secondes */
+	printf("\tbonus %s\n", bonus.WhatItIs());
 #endif
 }
 

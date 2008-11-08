@@ -114,7 +114,7 @@
         <defs>
         </defs>
         <decl> <!-- == spawn -->
-			<item name="EvilBoss" x="120" y="170" t = "0.5" />
+			<item name="EvilBoss" x="320" y="170" t = "0.5" />
 			
 			<item name="Drone" x="640" y="270" t="4.0" />
             <item name="Drone" x="640" y="270" t="2.0" />

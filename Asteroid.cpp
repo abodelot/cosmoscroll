@@ -72,7 +72,6 @@ void Asteroid::Hit(int damage)
                     game.AddEntity(new Asteroid(offset, MEDIUM,
                         sf::Randomizer::Random(0, 360)));
                 };
-                p.AddImpact(offset, 20);
                 break;
             case MEDIUM:
                 for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
@@ -80,10 +79,8 @@ void Asteroid::Hit(int damage)
                     game.AddEntity(new Asteroid(offset, SMALL,
                         sf::Randomizer::Random(0, 360)));
                 }
-                p.AddImpact(offset, 10);
                 break;
-            case SMALL:
-                p.AddImpact(offset, 5);
+            default:
                 break;
         }
     }

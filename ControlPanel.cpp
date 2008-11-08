@@ -83,21 +83,16 @@ void ControlPanel::Show(sf::RenderWindow& app) const
 ControlPanel::ControlPanel()
 {
     panel_.SetImage(GET_IMG("score-board"));
-    for (int i = 0; i < PBAR_COUNT; ++i)
-    {
-        pbars_[i].label.SetSize(12);
-        pbars_[i].label.SetColor(sf::Color::White);
-    }
     
     pbars_[HP].SetPosition(50, 10);
     pbars_[HP].label.SetText("Coque");
-    pbars_[HP].bar.SetColor(sf::Color::Red);
+    pbars_[HP].bar.SetImage(GET_IMG("bar_hp"));
     pbars_[SHIELD].SetPosition(50, 30);
     pbars_[SHIELD].label.SetText("Bouclier");
-    pbars_[SHIELD].bar.SetColor(sf::Color::Blue);
+    pbars_[SHIELD].bar.SetImage(GET_IMG("bar_shield"));
     pbars_[HEAT].SetPosition(220, 10);
     pbars_[HEAT].label.SetText("Chaleur");
-    pbars_[HEAT].bar.SetColor(sf::Color::Green);
+    pbars_[HEAT].bar.SetImage(GET_IMG("bar_heat"));
     
     timer_.SetPosition(400, 2);
     timer_.SetSize(14);
@@ -117,12 +112,14 @@ ControlPanel::ControlPanel()
 
 ControlPanel::ProgressBar::ProgressBar()
 {
-    background = sf::Shape::Rectangle(0, 0, 100, BAR_HEIGHT, sf::Color::White, 1.f);
+    background = sf::Shape::Rectangle(0, 0, 100, BAR_HEIGHT, sf::Color(64, 64, 64), 1.f);
 }
 
 
 void ControlPanel::ProgressBar::SetPosition(float x, float y)
 {
+	label.SetSize(12);
+	label.SetColor(sf::Color::White);
     label.SetPosition(x, y);
     background.SetPosition(x + LABEL_LENGTH, y);
     bar.SetPosition(x + LABEL_LENGTH, y);

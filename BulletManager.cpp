@@ -65,6 +65,7 @@ void BulletManager::Add(Weapon::Type type, Entity* sender, const sf::Vector2f& o
 void BulletManager::Collide(std::vector<Entity*>& entities)
 {
     static sf::FloatRect window_rect(0, 0, WIN_WIDTH, WIN_HEIGHT);
+    static ParticleSystem& particles = ParticleSystem::GetInstance();
     
     BulletIterator it_b;
     // pour chaque beam
@@ -89,6 +90,7 @@ void BulletManager::Collide(std::vector<Entity*>& entities)
             {
                 dead = true;
                 (*it_e)->Hit(it_b->damage);
+                particles.AddImpact(sf::Vector2f(beam_x, beam_y), 10);
                 break;
             }
         }

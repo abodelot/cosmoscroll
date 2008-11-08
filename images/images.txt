@@ -1,8 +1,8 @@
+ammo_devil.png
 ammo_hellfire.png
 ammo_laserbeam.png
 ammo_plasma.png
 ammo_wasp.png
-ammo_devil.png
 asteroid-big-1.png
 asteroid-big-2.png
 asteroid-big-3.png
@@ -13,6 +13,12 @@ asteroid-small-1.png
 asteroid-small-2.png
 asteroid-small-3.png
 background.png
+bar_heat.png
+bar_hp.png
+bar_shield.png
+bonus-cooler.png
+bonus-health.png
+bonus-trigun.png
 capsule.png
 ennemy-A.png
 ennemy-B.png
@@ -24,6 +30,3 @@ shield.png
 spaceship_light.png
 spaceship.png
 star.png
-bonus-trigun.png
-bonus-health.png
-bonus-cooler.png
