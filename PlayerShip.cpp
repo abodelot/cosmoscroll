@@ -329,12 +329,7 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
         default:
             break;
 	}
-#ifdef DEBUG
-	/* WhatItIs pourrait être utilisé pour afficher un petit texte au niveau
-	du vaisseau et qui monterait en devenant de plus en plus transparant pour
-	finir par disparaître au bout de quelques secondes */
-	printf("\tbonus %s\n", bonus.WhatItIs());
-#endif
+	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(), bonus.WhatItIs());
 }
 
 

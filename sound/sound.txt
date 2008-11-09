@@ -3,3 +3,4 @@ blaster-shot-2.wav
 boom.wav
 warp.wav
 menu-select.wav
+bonus.wav

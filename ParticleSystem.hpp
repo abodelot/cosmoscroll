@@ -37,7 +37,14 @@ public:
     void AddShield(int count, const sf::Sprite* handle);
     
     void RemoveShield(const sf::Sprite* handle);
-        
+    
+    /*
+     * Ajouter un message temporaire
+     * @param[in] offset: position
+     * @param[in] text: contenu du message
+     */
+    void AddMessage(const sf::Vector2f& offset, const wchar_t* text);
+    
     /*
      * Mise à jour des particules (déplacement)
      */
@@ -151,8 +158,15 @@ private:
     typedef std::list<Particle*> ParticleList;
     
     ParticleList particles_;
+    struct TextParticle
+    {
+    	sf::String string;
+    	float timer;
+    };
+    std::list<TextParticle> messages_;
 #ifndef NO_AUDIO
-    sf::Sound boom_sfx_;
+    sf::Sound sfx_boom_;
+    sf::Sound sfx_msg_;
 #endif
 };
 

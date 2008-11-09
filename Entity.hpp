@@ -52,12 +52,12 @@ public:
   /*
      * Obtenir la position du vaisseau
      */
-    virtual sf::Vector2f GetPosition();
+    virtual sf::Vector2f GetPosition() const;
     
     /*
      * Obtenir la surface de collision du vaisseau
      */
-    virtual sf::FloatRect GetRect();
+    virtual sf::FloatRect GetRect() const;
 	
 	
 	inline void SetPosition(sf::Vector2f pos) {

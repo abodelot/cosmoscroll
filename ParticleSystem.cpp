@@ -28,7 +28,7 @@ void ParticleSystem::AddExplosion(const sf::Vector2f& offset)
         particles_.push_back(new Fiery(offset));
     }
 #ifndef NO_AUDIO
-    boom_sfx_.Play();
+    sfx_boom_.Play();
 #endif
 }
 
@@ -82,8 +82,22 @@ void ParticleSystem::RemoveShield(const sf::Sprite* handle)
 }
 
 
+void ParticleSystem::AddMessage(const sf::Vector2f& offset, const wchar_t* text)
+{
+	TextParticle p;
+	p.string.SetText(text);
+	p.string.SetSize(12);
+	p.string.SetColor(sf::Color::White);
+	p.string.SetPosition(offset);
+	p.timer = 0.0f;
+	messages_.push_back(p);
+	sfx_msg_.Play();
+}
+
+
 /*void ParticleSystem::KillAllLinkedBy(const sf::Sprite* handle) */
 
+#define MESSAGE_LIFETIME 5.0
 
 void ParticleSystem::Update(float frametime)
 {
@@ -100,6 +114,25 @@ void ParticleSystem::Update(float frametime)
             ++it;
         }
     }
+	std::list<TextParticle>::iterator it2;
+	for (it2 = messages_.begin(); it2 != messages_.end();)
+	{
+		if (it2->timer >= MESSAGE_LIFETIME)
+		{
+			it2 = messages_.erase(it2);
+#ifdef DEBUG
+			puts("erase msg");
+#endif
+		}
+		else
+		{
+			it2->string.Move(0, -50 * frametime);
+			it2->string.SetColor(sf::Color(255, 255, 255,
+				255 - (255 * it2->timer / MESSAGE_LIFETIME)));
+			it2->timer += frametime;
+			++it2;
+		}
+	}
 }
 
 
@@ -109,6 +142,11 @@ void ParticleSystem::Show(sf::RenderWindow& app)
     for (it = particles_.begin(); it != particles_.end(); ++it)
     {
         app.Draw(**it);
+    }
+    std::list<TextParticle>::const_iterator it2;
+    for (it2 = messages_.begin(); it2 != messages_.end(); ++it2)
+    {
+    	app.Draw(it2->string);
     }
 }
 
@@ -121,13 +159,15 @@ void ParticleSystem::Clear()
         delete *it;
     }
     particles_.clear();
+    messages_.clear();
 }
 
 
 ParticleSystem::ParticleSystem()
 {
 #ifndef NO_AUDIO
-    boom_sfx_.SetBuffer(GET_SOUNDBUF("boom"));
+    sfx_boom_.SetBuffer(GET_SOUNDBUF("boom"));
+    sfx_msg_.SetBuffer(GET_SOUNDBUF("bonus"));
 #endif
 }
 

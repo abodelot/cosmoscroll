@@ -26,7 +26,7 @@ public:
 	/*
 	 * Description textuelle du bonus
 	 */
-	const char* WhatItIs() const;
+	const wchar_t* WhatItIs() const;
 	
 	inline Type GetType() const
 	{

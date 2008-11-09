@@ -51,16 +51,16 @@ void Bonus::Move(float frametime)
 }
 
 
-const char* Bonus::WhatItIs() const
+const wchar_t* Bonus::WhatItIs() const
 {
 	switch (type_)
 	{
 		case HEALTH:
-			return "Health";
+			return L"Health";
 		case TRIGUN:
-			return "Triple tir";
+			return L"Triple tir";
 		case COOLER:
-			return "Glaçon";
+			return L"Glaçon";
 		default:
 			return NULL;
 	}

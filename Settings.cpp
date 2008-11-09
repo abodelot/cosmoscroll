@@ -56,12 +56,6 @@ bool Settings::Load(const char* filename)
 				continue;
 			}
 			ParseLine(line);
-            size_t pos = line.find(SEPARATOR);
-            if (pos != std::string::npos)
-            {
-            	ParseLine(line);
-
-            }
         }
         file.close();
         return true;
