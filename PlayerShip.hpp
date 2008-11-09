@@ -18,6 +18,7 @@
 class PlayerShip: public Entity
 {
 public:
+	
     PlayerShip(const sf::Vector2f& offset, const sf::Input& input);
     
     ~PlayerShip();
@@ -43,34 +44,57 @@ public:
 
     void HandleBonus(const Bonus& bonus);
 	
-	inline bool EffectsPaused() {
-		return pause_effects_;};
+	inline bool EffectsPaused() const
+	{
+		return pause_effects_;
+	};
 		
-	inline void PauseEffects(bool b) {
-		pause_effects_ = b;};
+	inline void PauseEffects(bool b)
+	{
+		pause_effects_ = b;
+	};
     
-		
-	inline int getShield() {
-		return shield_;};
+	inline int GetShield() const
+	{
+		return shield_;
+	};
 	
-	inline int getCoolers() {
-		return coolers_;};
-		
-	inline void setShield(int s) {
-		shield_ = s;};
-
-	inline void  setCoolers(int c) {
-		coolers_ = c;};
+	inline int GetCoolers() const
+	{
+		return coolers_;
+	};
+	
+	inline void SetShield(int s)
+	{
+		shield_ = s;
+	};
+	
+	inline void SetCoolers(int c)
+	{
+		coolers_ = c;
+	};
 
 private:
-
-	inline sf::Thread& GetTrigunThread() {
+	struct Config
+	{
+		sf::Key::Code up;
+		sf::Key::Code down;
+		sf::Key::Code left;
+		sf::Key::Code right;
+		sf::Key::Code weapon_a;
+		sf::Key::Code weapon_b;
+		sf::Key::Code bonus_cooler;
+	};
+	
+	inline sf::Thread& GetTrigunThread()
+	{
 		static sf::Thread thread_(PlayerShip::EndBonusWrapper, this);
 		return thread_;
 	};
 
     ControlPanel& panel_;
     const sf::Input& input_;
+    Config binds_;
     
     bool overheated_;
     float heat_;

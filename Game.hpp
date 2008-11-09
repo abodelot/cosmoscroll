@@ -87,6 +87,7 @@ private:
     };
     
     sf::RenderWindow app_;
+    sf::Key::Code key_pause_;
     Player player_;
     float timer_;
     BulletManager& bullets_;

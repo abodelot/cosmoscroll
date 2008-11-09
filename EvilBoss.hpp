@@ -21,7 +21,7 @@ private:
 	Weapon weaponA_;
 	Weapon weaponB_;
 	Game& game_;
-	float frametime_;	//frametime du dernier Move. Utilisé par Action
+	float frametime_;	//frametime du dernier Move. Utilisié par Action
 };
 
 #endif /* guard EVILBOSS_HPP */

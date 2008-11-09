@@ -3,6 +3,7 @@
 #include "Window.hpp"
 #include "ParticleSystem.hpp"
 #include "Math.hpp"
+#include "Settings.hpp"
 
 #include <SFML/System.hpp>
 #include <cassert>
@@ -26,8 +27,6 @@
 #define HP_DEFAULT   3
 #define HP_MAX       5
 
-#define COOL_KEY	sf::Key::C
-
 
 PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     Entity(GET_IMG("spaceship"), offset),
@@ -36,7 +35,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     laserbeam_(Weapon::LASERBEAM, this),
     hellfire_(Weapon::HELLFIRE, this)
 {
-	hp_ = 3;
+	hp_ = HP_DEFAULT;
     overheated_ = false;
     heat_ = 0.0f;
     shield_ = SHIELD_DEFAULT;
@@ -60,6 +59,16 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     panel_.SetHeat(static_cast<int>(heat_));
 	panel_.SetCoolers(coolers_);
     panel_.SetInfo("");
+    
+    // init bindings config
+    const Settings& settings = Settings::GetInstance();
+    binds_.up = settings.GetKey(Settings::UP);
+	binds_.down = settings.GetKey(Settings::DOWN);
+	binds_.left = settings.GetKey(Settings::LEFT);
+	binds_.right = settings.GetKey(Settings::RIGHT);
+	binds_.weapon_a = settings.GetKey(Settings::WEAPON1);
+	binds_.weapon_b = settings.GetKey(Settings::WEAPON2);
+	binds_.bonus_cooler = settings.GetKey(Settings::BONUS_COOLER);
 }
 
 
@@ -79,7 +88,7 @@ PlayerShip::~PlayerShip()
 
 void PlayerShip::HandleKey(const sf::Event::KeyEvent& key)
 {
-    if (key.Code == COOL_KEY)
+    if (key.Code == binds_.bonus_cooler)
     {
         if (coolers_ > 0)
         {
@@ -99,11 +108,11 @@ void PlayerShip::Action()
     {
         float h = 0.0f;
         sf::Vector2f offset = sprite_.GetPosition() + GUN_OFFSET;
-        if (input_.IsKeyDown(sf::Key::Space))
+        if (input_.IsKeyDown(binds_.weapon_a))
         { 
             h += laserbeam_.Shoot(offset);
         }
-        if (input_.IsKeyDown(sf::Key::A))
+        if (input_.IsKeyDown(binds_.weapon_b))
         {
             h += hellfire_.Shoot(offset);
         }
@@ -129,19 +138,19 @@ void PlayerShip::Move(float frametime)
     
     float dist = frametime * SHIP_SPEED;
     
-    if (input_.IsKeyDown(sf::Key::Up))
+    if (input_.IsKeyDown(binds_.up))
     {
         y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
     }
-    if (input_.IsKeyDown(sf::Key::Down))
+    if (input_.IsKeyDown(binds_.down))
     {
         y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
     }
-    if (input_.IsKeyDown(sf::Key::Left))
+    if (input_.IsKeyDown(binds_.left))
     {
         x = (x - dist < 0) ? 0 : x - dist;
     }
-    if (input_.IsKeyDown(sf::Key::Right))
+    if (input_.IsKeyDown(binds_.right))
     {
         x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
     }
@@ -304,7 +313,7 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
             break;
         // bonus point de vie
         case Bonus::HEALTH:
-			if (hp_ + 1 < HP_MAX)
+			if (hp_ < HP_MAX)
 			{
 				++hp_;
 				panel_.SetShipHP(hp_);				

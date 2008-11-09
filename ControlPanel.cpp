@@ -54,7 +54,7 @@ void ControlPanel::SetInfo(const char* text)
 
 void ControlPanel::SetCoolers(int coolers)
 {
-	coolers_.SetText(str_sprintf("Glaçons : %d", coolers));
+	coolers_.SetText(str_sprintf("GlaÃ§ons : %d", coolers));
 }
 
 

@@ -1,20 +1,19 @@
-
 #include "Game.hpp"
 #include "MediaManager.hpp"
+#include "Settings.hpp"
 
 #include "Asteroid.hpp"
 #include "Ennemy.hpp"
 #include "EvilBoss.hpp"
 
 #include "Menu.hpp"
-
 #include "Misc.hpp"
 #include "Level.hpp"
 
 #include <SFML/System.hpp>
 #include <typeinfo>
 
-#define KEY_PAUSE sf::Key::P
+#define CONFIG_FILE "config/settings.txt"
 #define HACKY_KEY sf::Key::H
 
 Game& Game::GetInstance()
@@ -31,10 +30,10 @@ Game::Game() :
     level_    (Level::GetInstance())
     
 {
-    // TODO: load settings here
-    bool fullscreen = false;
+	Settings& settings = Settings::GetInstance();
+	settings.Load(CONFIG_FILE);
     // mise en place de la fenêtre de rendu
-    if (!fullscreen)
+    if (!settings.Fullscreen())
     {
         app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE);
     }
@@ -46,6 +45,7 @@ Game::Game() :
     app_.SetFramerateLimit(WIN_FPS);
     app_.ShowMouseCursor(false);
     app_.EnableKeyRepeat(false);
+    key_pause_ = settings.GetKey(Settings::PAUSE);
 }
 
 
@@ -246,19 +246,16 @@ Game::Choice Game::Play()
             }
             else if (event.Type == sf::Event::KeyPressed)
             {
-            	GetPlayer()->HandleKey(event.Key);
-                switch (event.Key.Code)
-                {
-                    case sf::Key::Escape: // QUICK QUIT
-                        running = false;
-                        break;
-                    case KEY_PAUSE:
-                        what = InGameMenu();
-                        running = false;
-                        break;
-                    default:
-                        break;
-                }
+				GetPlayer()->HandleKey(event.Key);
+				if (event.Key.Code == key_pause_)
+				{
+					what = IN_GAME_MENU;
+					running = false;
+				}
+				else if (event.Key.Code == sf::Key::Escape) // QUICK QUIT
+				{
+					running = false;
+				}
             }
         }
         // attention à la gestion des évènements, event doit être traité DANS
@@ -393,7 +390,7 @@ Game::Choice Game::InGameMenu()
             }
             if (event.Type == sf::Event::KeyPressed)
             {
-                if (event.Key.Code == KEY_PAUSE)
+                if (event.Key.Code == key_pause_)
                 {
                     what = resume;
                     paused = false;
@@ -725,8 +722,8 @@ std::string Game::MakePassword()
 	
 	lives = static_cast<unsigned char>(GetPlayer()->GetHP());
 	level = static_cast<unsigned char>(cur_lvl_);
-	icecubes = static_cast<unsigned char>(GetPlayer()->getCoolers());
-	shield = static_cast<unsigned char>(GetPlayer()->getShield());
+	icecubes = static_cast<unsigned char>(GetPlayer()->GetCoolers());
+	shield = static_cast<unsigned char>(GetPlayer()->GetShield());
 	pass.setLives(lives);	pass.setLevel(level);
 	pass.setCoolers(icecubes); pass.setShield(shield);
 	
@@ -756,12 +753,12 @@ bool Game::UsePassword(std::string & source)
 	pass_4_ = pass.getCoolers();
 
 		GetPlayer()->SetHP(static_cast<int>(pass_1_));
-		GetPlayer()->setShield(static_cast<int>(pass_3_));
-		GetPlayer()->setCoolers(static_cast<int>(pass_4_));
+		GetPlayer()->SetShield(static_cast<int>(pass_3_));
+		GetPlayer()->SetCoolers(static_cast<int>(pass_4_));
 		
 		panel_.SetShipHP(GetPlayer()->GetHP());
-		panel_.SetShield(GetPlayer()->getShield());
-		panel_.SetCoolers(GetPlayer()->getCoolers());
+		panel_.SetShield(GetPlayer()->GetShield());
+		panel_.SetCoolers(GetPlayer()->GetCoolers());
 		
 		if (level_.Set(pass_2_, level_desc_) == Level::SUCCESS) 
 		{

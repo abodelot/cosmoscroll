@@ -27,6 +27,5 @@ fiery.png
 impact.png
 score-board.png
 shield.png
-spaceship_light.png
 spaceship.png
 star.png

@@ -57,9 +57,8 @@ TODO
 
 void Asteroid::Hit(int damage)
 {
-    ParticleSystem& p = ParticleSystem::GetInstance();
-    sf::Vector2f offset = sprite_.GetPosition();
-    
+	sf::Vector2f offset = sprite_.GetPosition();
+	
     Entity::Hit(damage);
     if (IsDead())
     {

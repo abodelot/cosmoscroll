@@ -1,0 +1,9 @@
+## this is cosmoscroll config file.
+
+# quelques exemples où l'on écrase les valeurs par défaut
+
+# les espaces n'ont pas d'importance :)
+	fullscreen	= true
+# code de la touche G pour le bonus
+bonus_cooler=103
+
