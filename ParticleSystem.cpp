@@ -128,7 +128,7 @@ void ParticleSystem::Update(float frametime)
 		{
 			it2->string.Move(0, -50 * frametime);
 			it2->string.SetColor(sf::Color(255, 255, 255,
-				255 - (255 * it2->timer / MESSAGE_LIFETIME)));
+				static_cast<sf::Uint8>(255 - (255 * it2->timer / MESSAGE_LIFETIME))));
 			it2->timer += frametime;
 			++it2;
 		}

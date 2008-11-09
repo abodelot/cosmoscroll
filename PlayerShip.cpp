@@ -46,7 +46,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
 #endif
 
-    trigun_timer_ = false;
+	SetTimer(0);
 
     ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, &sprite_);
 
@@ -76,13 +76,11 @@ PlayerShip::~PlayerShip()
 {
 #ifdef DEBUG
 	puts("~PlayerShip()");
-	printf("%d (trigun_timer_ a l'appel)\n", trigun_timer_);
 #endif
-    if (trigun_timer_ != 0)
+    if (GetTimer() != 0)
     {
-        trigun_timer_ = 0;
-        GetTrigunThread().Wait();
-    }
+		Neutralize();
+	}
 }
 
 
@@ -224,10 +222,9 @@ void PlayerShip::Hit(int damage)
     else
     {
         Entity::Hit(damage);
-		if ((hp_ == 0) && (trigun_timer_ != 0))
+		if ((hp_ == 0) && (GetTimer() != 0))
 		{
-			trigun_timer_ = 0;
-			GetTrigunThread().Wait();
+			Neutralize();
 		}
         panel_.SetShipHP(hp_);
     }
@@ -245,10 +242,9 @@ void PlayerShip::Collide(Entity& ent)
     else
     {
         Hit(1);
-		if ((hp_ == 0) && (trigun_timer_ != 0))
+		if ((hp_ == 0) && (GetTimer() != 0))
 		{
-			trigun_timer_ = 0;
-			GetTrigunThread().Wait();
+			Neutralize();
 		}
     }
 }
@@ -263,14 +259,16 @@ void PlayerShip::EndBonusWrapper(void* data)
 
 void PlayerShip::EndBonus()
 {
-    trigun_timer_ = 10; // 10 secondes
+    SetTimer(10); // 10 secondes
 loop_back:
-	while (!pause_effects_ && trigun_timer_ > 0)
+	while (!pause_effects_ && GetTimer() > 0)
     {
 	#ifdef DEBUG
-        printf("\t-- %ds\n", trigun_timer_);
+        printf("\t-- %ds\n", GetTimer());
 	#endif
+		GetMutex().Lock();
         --trigun_timer_;
+		GetMutex().Unlock();
         sf::Sleep(1.0f);
     }
 	if (!pause_effects_)
@@ -302,13 +300,15 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
             hellfire_.SetTriple(true);
             laserbeam_.SetTriple(true);
             // thread pour désactiver le bonus plus tard
-            if (trigun_timer_ == 0)
+            if (GetTimer() == 0)
             {
-				GetTrigunThread().Launch();
+				GetThread().Launch();
             }
             else
             {
+				GetMutex().Lock();
 				trigun_timer_ += 10;
+				GetMutex().Unlock();
             }
             break;
         // bonus point de vie

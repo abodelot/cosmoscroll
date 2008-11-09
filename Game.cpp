@@ -88,6 +88,11 @@ void Game::Run()
                 break;
         }
     } while (what != EXIT_APP);
+	// si what == EXIT_APP
+	if (GetPlayer() != NULL && GetPlayer()->GetTimer() > 0)
+	{
+		GetPlayer()->Neutralize();	//On tue le thread bonus
+	}
 }
 
 // les méthodes-écrans

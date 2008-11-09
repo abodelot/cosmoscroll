@@ -4,7 +4,7 @@
 #ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
 #endif
-
+#include <iostream>
 #include "Entity.hpp"
 #include "Weapon.hpp"
 #include "ControlPanel.hpp"
@@ -18,6 +18,7 @@
 class PlayerShip: public Entity
 {
 public:
+	
 	
     PlayerShip(const sf::Vector2f& offset, const sf::Input& input);
     
@@ -38,20 +39,18 @@ public:
     
     // je doc plus tard
     
-    static void EndBonusWrapper(void* data);
-
-    void EndBonus();
-
-    void HandleBonus(const Bonus& bonus);
 	
 	inline bool EffectsPaused() const
 	{
 		return pause_effects_;
 	};
 		
-	inline void PauseEffects(bool b)
+	void PauseEffects(bool b)
 	{
+		GetMutex().Lock();
 		pause_effects_ = b;
+		GetMutex().Unlock();
+		std::cerr << "pause_effects_ vaut " << b << "\n";
 	};
     
 	inline int GetShield() const
@@ -85,38 +84,57 @@ private:
 		sf::Key::Code weapon_b;
 		sf::Key::Code bonus_cooler;
 	};
-	
-	inline sf::Thread& GetTrigunThread()
-	{
-		static sf::Thread thread_(PlayerShip::EndBonusWrapper, this);
-		return thread_;
-	};
 
+	void HandleBonus(const Bonus& bonus);
+
+	static void EndBonusWrapper(void* data);				
+
+	void EndBonus();
+	
+	inline sf::Thread& GetThread() {
+		static sf::Thread thread_(PlayerShip::EndBonusWrapper, this);
+		return thread_; };
+	
+	inline static sf::Mutex& GetMutex() {
+		static sf::Mutex mutex_;
+		return mutex_;};
+
+public:		// Attention 2 méthodes publiques pour permettre fermeture rapide de l'appli
+	inline void Neutralize() {
+		SetTimer(0);
+		GetThread().Wait();};
+		
+	inline int GetTimer() {
+		GetMutex().Lock();
+		int i = trigun_timer_;
+		GetMutex().Unlock();
+		return i;};
+private:	
+	inline void SetTimer(int t) {
+		GetMutex().Lock();
+		trigun_timer_ = t;
+		GetMutex().Unlock();};
+
+
+	
+	int trigun_timer_;
+   	int coolers_;	
     ControlPanel& panel_;
     const sf::Input& input_;
     Config binds_;
-    
+    bool pause_effects_;
     bool overheated_;
     float heat_;
     
-	int coolers_;
 	
     int shield_;
     float shield_timer_;
 #ifndef NO_AUDIO
     sf::Sound shield_sfx_;
 #endif
-/*
-le thread sert a désactiver le bonus au bout de n secondes
-on aurait aussi pu faire sans (un if dans le Update pour savoir s'il y a bonus)
--> je teste :)
-*/
-    //sf::Thread thread_;
-    int trigun_timer_;
-    
     Weapon laserbeam_;
     Weapon hellfire_;
-	bool pause_effects_;
+	
 };
 
 #endif /* guard PLAYERSHIP_HPP */
