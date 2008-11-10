@@ -114,7 +114,10 @@ Game::Choice Game::Intro()
 #endif
     Choice what = MAIN_MENU;
     float duration = 5;
-    
+#ifndef NO_AUDIO
+	bool played = false;
+	sf::Sound intro_sound (GET_SOUNDBUF("title"));
+#endif
     sf::Sprite background;
     background.SetImage(GET_IMG("background"));
 	sf::String title;
@@ -159,6 +162,13 @@ Game::Choice Game::Intro()
 		}
 		float time = app_.GetFrameTime();
 		duration -= time;
+#ifndef NO_AUDIO
+		if (static_cast<int>(duration) == 3 && !played)
+		{
+			played = true;
+			intro_sound.Play();
+		}
+#endif
 		// FIXME: déplacement magique !
 		ship.Move(180 * time, 25 * time);
 		title.Move(0, -30 * time);

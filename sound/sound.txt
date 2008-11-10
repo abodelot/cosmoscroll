@@ -4,3 +4,4 @@ boom.wav
 warp.wav
 menu-select.wav
 bonus.wav
+title.wav
