@@ -20,7 +20,7 @@ Weapon::Weapon(Type type, Entity* sender)
             energy_cost_ = 5.f;
             break;
 		case DEVILSEYES:
-			shot_per_second = 4.f;
+			shot_per_second = 2.f;
 			energy_cost_ = 1.f;
 			break;
         default:

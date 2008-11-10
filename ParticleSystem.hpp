@@ -101,6 +101,7 @@ private:
         Fiery(const sf::Vector2f& offset);
         virtual bool OnUpdate(float frametime);
     protected:
+    	float timer_;
         float lifetime_;
         // FIXME: speed_ est non utilisé ! supprimer lifetime_ ? 
         // utiliser speed_ comme facteur de déplacement ?

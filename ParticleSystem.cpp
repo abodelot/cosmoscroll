@@ -10,7 +10,7 @@
 #define FIERY_MAX_LIFETIME      4.0f
 
 #define STAR_MIN_SPEED          30.0f
-#define STAR_MAX_SPEED          5000.0f
+#define STAR_MAX_SPEED          3000.0f
 
 
 ParticleSystem& ParticleSystem::GetInstance()
@@ -91,7 +91,9 @@ void ParticleSystem::AddMessage(const sf::Vector2f& offset, const wchar_t* text)
 	p.string.SetPosition(offset);
 	p.timer = 0.0f;
 	messages_.push_back(p);
+#ifndef NO_AUDIO
 	sfx_msg_.Play();
+#endif
 }
 
 
@@ -188,20 +190,22 @@ ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset)
     speed_ = 0;
     SetRotation(RAD_TO_DEG(angle_));
     lifetime_ = sf::Randomizer::Random(FIERY_MIN_LIFETIME, FIERY_MAX_LIFETIME);
+    timer_ = 0.f;
 }
 
 
 bool ParticleSystem::Fiery::OnUpdate(float frametime)
 {
-    lifetime_ -= frametime;
+    timer_ -= frametime;
     // déplacement de la particule
     // la vitesse de déplacement est proportionnelle à la durée de vie
-    float speed = lifetime_ * 150 * frametime; // FIXME: magique (facteur vitesse)
+    float speed = (lifetime_ - timer_) * 150 * frametime; // FIXME: magique (facteur vitesse)
     sf::Vector2f offset = GetPosition();
     offset.x = offset.x + speed * std::cos(angle_);
     offset.y = offset.y - speed * std::sin(angle_);
     SetPosition(offset);
-    return lifetime_ <= 0;
+    SetColor(sf::Color(255, 255, 255, 255 * timer_ / lifetime_));
+    return timer_ >= lifetime_;
 }
 
 
@@ -213,6 +217,7 @@ ParticleSystem::Impact::Impact(const sf::Vector2f& offset)
     speed_ = 0;
     SetRotation(RAD_TO_DEG(angle_));
     lifetime_ = sf::Randomizer::Random(FIERY_MIN_LIFETIME, FIERY_MAX_LIFETIME);
+    timer_ = 0.f;
 }
 
 

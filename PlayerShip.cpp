@@ -10,7 +10,7 @@
 #include <typeinfo>
 
 #ifdef DEBUG
-	#include <iostream>
+#include <iostream>
 #endif
 
 #define SHIP_SPEED      200
@@ -21,8 +21,9 @@
 #define SHIELD_MAX           6
 #define SHIELD_DEFAULT       3
 
-#define COOLER_MAX			 3
-#define COOLER_DEFAULT		 0
+#define COOLER_MAX           3
+#define COOLER_DEFAULT       0
+#define COOLER_DURATION     10
 
 #define HEAT_MAX     100
 #define COLDING_RATE 13
@@ -38,6 +39,9 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
     laserbeam_(Weapon::LASERBEAM, this),
     hellfire_(Weapon::HELLFIRE, this)
 {
+#ifdef DEBUG
+	puts("PlayerShip()");
+#endif
 	hp_ = HP_DEFAULT;
     overheated_ = false;
     heat_ = 0.0f;
@@ -89,17 +93,25 @@ PlayerShip::~PlayerShip()
 
 void PlayerShip::HandleKey(const sf::Event::KeyEvent& key)
 {
-    if (key.Code == binds_.bonus_cooler)
-    {
-        if (coolers_ > 0)
-        {
-            --coolers_;
-            panel_.SetCoolers(coolers_);
-            heat_ = 0.f;
-            overheated_ = false;
-            panel_.SetInfo("");
-        }
-    }
+	if (key.Code == binds_.bonus_cooler)
+	{
+		if (coolers_ > 0)
+		{
+			--coolers_;
+			panel_.SetCoolers(coolers_);
+			heat_ = 0.f;
+			overheated_ = false;
+			panel_.SetInfo("");
+		}
+	}
+#ifdef DEBUG
+	if (input_.IsKeyDown(sf::Key::H))
+	{
+		hp_ = 100;
+		panel_.SetShipHP(hp_);
+		ParticleSystem::GetInstance().AddMessage(sprite_.GetPosition(), L"Haxxx 100 HP !!");
+	}
+#endif
 }
 
 
@@ -155,13 +167,6 @@ void PlayerShip::Move(float frametime)
     {
         x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
     }
-    
-#ifdef DEBUG
-	if (input_.IsKeyDown(sf::Key::H))
-    {
-        hp_ = 100;
-    }
-#endif
     sprite_.SetPosition(x, y);
     
     // regénération bouclier
@@ -262,7 +267,7 @@ void PlayerShip::EndBonusWrapper(void* data)
 
 void PlayerShip::EndBonus()
 {
-    SetTimer(10); // 10 secondes
+    SetTimer(COOLER_DURATION);
 loop_back:
 	while (!pause_effects_ && GetTimer() > 0)
     {
@@ -310,7 +315,7 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
             else
             {
 				GetMutex().Lock();
-				trigun_timer_ += 10;
+				trigun_timer_ += COOLER_DURATION;
 				GetMutex().Unlock();
             }
             break;

@@ -206,9 +206,9 @@ Game::Choice Game::MainMenu()
     
 	if (GetPlayer() != NULL)
 	{
-std::cerr << "Neutralization";
+		std::cerr << "Neutralization";
 		GetPlayer()->Neutralize();	//On tue le thread bonus
-std::cerr << " effectuee\n";
+		std::cerr << " effectuee\n";
 	}
 	
     sf::Event event;
@@ -291,13 +291,9 @@ Game::Choice Game::Play()
 				}
             }
         }
-        // attention à la gestion des évènements, event doit être traité DANS
-        // la boucle du GetEvent, alors que tout ce qui passe par GetInput se
-        // fait après la boucle (ici, donc).
 
         if (running)
         {
-            
             running = MoreBadGuys() || entities_.size() > 1;
             if (!running)
             {
@@ -306,7 +302,6 @@ Game::Choice Game::Play()
                 // TODO: mettre un flag changer l'enum pour indiquer la victoire
                 
                 // On demande niveau suivant, si pas de niveau suivant, fin.
-
 
                 if (cur_lvl_ > level_.GetLastID())
                 {
@@ -321,7 +316,7 @@ Game::Choice Game::Play()
             }
         }
 
-        std::vector<Entity*>::iterator it;
+        std::list<Entity*>::iterator it;
 
         // On relance la thread de bonus
 		if (GetPlayer()->EffectsPaused())
@@ -340,37 +335,42 @@ Game::Choice Game::Play()
         timer_ += time;
         panel_.SetTimer(timer_);
         
-        for (it = entities_.begin(); it != entities_.end();)
-        {
-            if ((**it).IsDead())
-            {
-                if (typeid(**it) == typeid(PlayerShip))
-                {
-                    running = false;
-                    what = GAME_OVER;
-                    break;
-                }
+	
+		for (it = entities_.begin(); it != entities_.end();)
+		{
+			if ((**it).IsDead())
+			{
+			    if (player_.ship == *it)
+				{
+					running = false;
+					what = GAME_OVER;
+#ifdef DEBUG
+					puts("\nyou are dead :(\n");
+#endif
+				}
 				bullets_.CleanSenders(*it);
-                delete *it;
-                it = entities_.erase(it);
-            }
-            else
-            {
-                (**it).Move(time);
-                if (GetPlayer() != *it
-                    && GetPlayer()->GetRect().Intersects((**it).GetRect()))
-                {
-                    GetPlayer()->Collide(**it);
-                    (**it).Collide(*GetPlayer());
-                }
-                ++it;
-            }
-        }
-        
-        bullets_.Update(time);
+				delete *it;
+				it = entities_.erase(it);
+			}
+			else
+			{
+				(**it).Move(time);
+				// collision Joueur <-> autres unités
+				if (player_.ship != *it &&
+					player_.ship->GetRect().Intersects((**it).GetRect()))
+				{
+					// collision sur les deux éléments
+					player_.ship->Collide(**it);
+					(**it).Collide(*player_.ship);
+				}
+				++it;
+			}
+		}
+		
+		bullets_.Update(time);
+		bullets_.Collide(entities_); // fusion avec Update ?
+		
         particles_.Update(time);
-        
-        bullets_.Collide(entities_);
         
         // rendering
         particles_.Show(app_);
@@ -441,7 +441,7 @@ Game::Choice Game::InGameMenu()
         // rendering
         bullets_.Show(app_);
         particles_.Show(app_);
-        std::vector<Entity*>::iterator it;
+        std::list<Entity*>::iterator it;
         for (it = entities_.begin(); it != entities_.end(); ++it)
         {
             (**it).Show(app_);
@@ -666,15 +666,15 @@ bool Game::MoreBadGuys()
     // si mode arcade
     if (arcade_)
     {
-        // un ennemi en plus toutes les 10s + 7
-        unsigned int max_bad_guys = static_cast<unsigned int>(timer_ / 10 + 7);
+        // un ennemi en plus toutes les 10s + 5
+        unsigned int max_bad_guys = static_cast<unsigned int>(timer_ / 10 + 5);
         if (entities_.size() < max_bad_guys)
         {
             // ajout d'une ennemi au hasard
             // <hack>
             sf::Vector2f offset;
             offset.x = WIN_WIDTH;
-            offset.y = sf::Randomizer::Random(0, WIN_HEIGHT);
+            offset.y = sf::Randomizer::Random(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
             int random = sf::Randomizer::Random(0, 10);
             if (random > 6)
             {
@@ -716,22 +716,21 @@ bool Game::MoreBadGuys()
 
 void Game::AddEntity(Entity* entity)
 {
-    entities_.push_back(entity);
+    entities_.push_front(entity);
 }
 
 
 void Game::RemoveEntities()
 {
-
 	// Ne pas détruire l'instance si elle héberge une thread
 	// qui tourne, sinon vlam :)
-	
-    const size_t length = entities_.size();
-    for (size_t i = 0; i < length; ++i)
-    {
-        delete entities_[i];
-    }
-    entities_.clear();
+	// alexandre: euh... est-ce un TODO ? si oui -> à faire dans ~PlayerShip, non ?
+	std::list<Entity*>::iterator it;
+	for (it = entities_.begin(); it != entities_.end(); ++it)
+	{
+		delete *it;
+	}
+	entities_.clear();
 }
 
 
@@ -788,23 +787,23 @@ bool Game::UsePassword(std::string & source)
 
 	pass_4_ = pass.getCoolers();
 
-		GetPlayer()->SetHP(static_cast<int>(pass_1_));
-		GetPlayer()->SetShield(static_cast<int>(pass_3_));
-		GetPlayer()->SetCoolers(static_cast<int>(pass_4_));
-		
-		panel_.SetShipHP(GetPlayer()->GetHP());
-		panel_.SetShield(GetPlayer()->GetShield());
-		panel_.SetCoolers(GetPlayer()->GetCoolers());
-		
-		if (level_.Set(pass_2_, level_desc_) == Level::SUCCESS) 
-		{
-			cur_lvl_ = static_cast<int>(pass_2_);
-			find_replace(level_desc_, "\\n", "\n");
-		}
-		else
-		{
-			ok = false;
-		}
+	GetPlayer()->SetHP(static_cast<int>(pass_1_));
+	GetPlayer()->SetShield(static_cast<int>(pass_3_));
+	GetPlayer()->SetCoolers(static_cast<int>(pass_4_));
+	
+	panel_.SetShipHP(GetPlayer()->GetHP());
+	panel_.SetShield(GetPlayer()->GetShield());
+	panel_.SetCoolers(GetPlayer()->GetCoolers());
+	
+	if (level_.Set(pass_2_, level_desc_) == Level::SUCCESS) 
+	{
+		cur_lvl_ = static_cast<int>(pass_2_);
+		find_replace(level_desc_, "\\n", "\n");
+	}
+	else
+	{
+		ok = false;
+	}
 	return ok;
 }
 

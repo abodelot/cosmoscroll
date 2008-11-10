@@ -1,9 +1,9 @@
-#ifndef Music_HPP
-#define Music_HPP
+#ifndef MUSIC_HPP
+#define MUSIC_HPP
 
 #include <dumb.h>
-#include <SFML/system.hpp>
-#include <SFML/audio.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Audio.hpp>
 
 #define SAMPLING_RATE 44100
 #define N_CHANNELS 2
@@ -14,7 +14,7 @@
 class Music : public sf::SoundStream
 {
 public:
-    Music(char* name);
+    Music(const char* name);
     ~Music();
 	
 	virtual bool OnStart();
@@ -22,7 +22,6 @@ public:
 	virtual bool OnGetData(Chunk& data);
 	
 private:
-
 	sf::Int16 samples_[BUFFER_SIZE * N_CHANNELS];
 
 	DUH* module_;
@@ -30,5 +29,5 @@ private:
 };
 
 
-#endif /* guard Music_HPP */
+#endif /* guard MUSIC_HPP */
 

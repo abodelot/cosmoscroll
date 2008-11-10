@@ -18,8 +18,9 @@ public:
 	void Action();
 private:
 	bool left_;
-	Weapon weaponA_;
-	Weapon weaponB_;
+	Weapon eye_left_;
+	Weapon eye_right_;
+	Weapon canon_;
 	Game& game_;
 	float frametime_;	//frametime du dernier Move. Utilisié par Action
 };

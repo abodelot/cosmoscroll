@@ -12,7 +12,7 @@ OBJ= $(SRC:.cpp=.o)
 
 ifeq ($(DEBUG), yes)
 	CFLAGS=$(cFLAGS) -g -DDEBUG
-	LDFLAGS= $(ldFLAGS) -ldumbd
+	LDFLAGS= $(ldFLAGS) -ldumb
 else
 	CFLAGS=$(cFLAGS) -O3
 	LDFLAGS= $(ldFLAGS) -ldumb

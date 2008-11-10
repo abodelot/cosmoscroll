@@ -43,35 +43,37 @@ public:
 	inline bool EffectsPaused() const
 	{
 		return pause_effects_;
-	};
+	}
 		
 	void PauseEffects(bool b)
 	{
 		GetMutex().Lock();
 		pause_effects_ = b;
 		GetMutex().Unlock();
-	};
+	}
     
 	inline int GetShield() const
 	{
 		return shield_;
-	};
+	}
 	
 	inline int GetCoolers() const
 	{
 		return coolers_;
-	};
+	}
 	
 	inline void SetShield(int s)
 	{
 		shield_ = s;
-	};
+	}
 	
 	inline void SetCoolers(int c)
 	{
 		coolers_ = c;
-	};
+	}
 
+	void Neutralize();
+	
 private:
 	struct Config
 	{
@@ -90,27 +92,32 @@ private:
 
 	void EndBonus();
 	
-	inline sf::Thread& GetThread() {
+	inline sf::Thread& GetThread()
+	{
 		static sf::Thread thread_(PlayerShip::EndBonusWrapper, this);
-		return thread_; };
+		return thread_;
+	}
 	
-	inline static sf::Mutex& GetMutex() {
+	inline static sf::Mutex& GetMutex()
+	{
 		static sf::Mutex mutex_;
-		return mutex_;};
-
-public:		// Attention 2 méthodes publiques pour permettre fermeture rapide de l'appli
-	void Neutralize();
-private:		
-	inline int GetTimer() {
+		return mutex_;
+	}
+	
+	inline int GetTimer()
+	{
 		GetMutex().Lock();
 		int i = trigun_timer_;
 		GetMutex().Unlock();
-		return i;};
+		return i;
+	}
 	
-	inline void SetTimer(int t) {
+	inline void SetTimer(int t)
+	{
 		GetMutex().Lock();
 		trigun_timer_ = t;
-		GetMutex().Unlock();};
+		GetMutex().Unlock();
+	}
 
 
 	
@@ -131,7 +138,6 @@ private:
 #endif
     Weapon laserbeam_;
     Weapon hellfire_;
-	
 };
 
 #endif /* guard PLAYERSHIP_HPP */
