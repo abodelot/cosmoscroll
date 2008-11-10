@@ -2,8 +2,8 @@ CC=g++ #-DNO_AUDIO
 TINYXML_DIR=tinyxml
 TINYXML_OBJ=$(TINYXML_DIR)/tinyxml.o $(TINYXML_DIR)/tinyxmlerror.o $(TINYXML_DIR)/tinyxmlparser.o
 
-FLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
-LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+cFLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
+ldFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 EXEC=cosmoscroll
 DEBUG=yes
 
@@ -11,9 +11,11 @@ SRC= $(wildcard *.cpp)
 OBJ= $(SRC:.cpp=.o)
 
 ifeq ($(DEBUG), yes)
-	CFLAGS=$(FLAGS) -g -DDEBUG
+	CFLAGS=$(cFLAGS) -g -DDEBUG
+	LDFLAGS= $(ldFLAGS) -ldumbd
 else
-	CFLAGS=$(FLAGS) -O3
+	CFLAGS=$(cFLAGS) -O3
+	LDFLAGS= $(ldFLAGS) -ldumb
 endif
 
 

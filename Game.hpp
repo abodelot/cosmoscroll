@@ -9,6 +9,7 @@
 #include "Level.hpp"
 #include "Window.hpp"
 
+#include "Music.hpp"
 #include "Password.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -94,6 +95,7 @@ private:
     ParticleSystem& particles_;
     ControlPanel& panel_;
     Level& level_;
+	Music* music_;
     std::string level_desc_; // Description du niveau courant
     
     bool arcade_;

@@ -61,6 +61,10 @@ void Game::Run()
 {
     // première scène = Intro
     Choice what = Intro();
+#ifndef NO_SOUND
+	music_ = new Music("music/aurora.mod");
+	music_->Play();
+#endif	
     do
     {
         switch (what)
@@ -89,6 +93,12 @@ void Game::Run()
         }
     } while (what != EXIT_APP);
 	// si what == EXIT_APP
+#ifndef NO_SOUND
+	music_->Stop();
+	delete music_;
+	music_ = NULL;
+#endif
+	
 	if (GetPlayer() != NULL && GetPlayer()->GetTimer() > 0)
 	{
 		GetPlayer()->Neutralize();	//On tue le thread bonus
@@ -732,7 +742,7 @@ std::string Game::MakePassword()
 	pass.setLives(lives);	pass.setLevel(level);
 	pass.setCoolers(icecubes); pass.setShield(shield);
 	
-	std::string res = pass.getEncoded(); // SNCF:: RASHGL 
+	std::string res = pass.getEncoded(); 
 #ifdef DEBUG
 	std::cerr << "\t PASS: " << res << "\n";
 #endif

@@ -4,7 +4,7 @@
 #ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
 #endif
-#include <iostream>
+
 #include "Entity.hpp"
 #include "Weapon.hpp"
 #include "ControlPanel.hpp"
@@ -50,7 +50,6 @@ public:
 		GetMutex().Lock();
 		pause_effects_ = b;
 		GetMutex().Unlock();
-		std::cerr << "pause_effects_ vaut " << b << "\n";
 	};
     
 	inline int GetShield() const
