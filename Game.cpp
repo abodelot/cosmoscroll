@@ -99,7 +99,7 @@ void Game::Run()
 	music_ = NULL;
 #endif
 	
-	if (GetPlayer() != NULL && GetPlayer()->GetTimer() > 0)
+	if (GetPlayer() != NULL)
 	{
 		GetPlayer()->Neutralize();	//On tue le thread bonus
 	}
@@ -194,6 +194,13 @@ Game::Choice Game::MainMenu()
     bool running = true;
     int choice;
     
+	if (GetPlayer() != NULL)
+	{
+std::cerr << "Neutralization";
+		GetPlayer()->Neutralize();	//On tue le thread bonus
+std::cerr << " effectuee\n";
+	}
+	
     sf::Event event;
     while (running)
     {
@@ -223,6 +230,7 @@ Game::Choice Game::MainMenu()
         particles_.Clear();
         bullets_.Clear();
         
+		
         // init
         timer_ = 0.0f;
         particles_.AddStars();
@@ -705,6 +713,9 @@ void Game::AddEntity(Entity* entity)
 void Game::RemoveEntities()
 {
 
+	// Ne pas détruire l'instance si elle héberge une thread
+	// qui tourne, sinon vlam :)
+	
     const size_t length = entities_.size();
     for (size_t i = 0; i < length; ++i)
     {

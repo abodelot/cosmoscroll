@@ -99,16 +99,14 @@ private:
 		return mutex_;};
 
 public:		// Attention 2 méthodes publiques pour permettre fermeture rapide de l'appli
-	inline void Neutralize() {
-		SetTimer(0);
-		GetThread().Wait();};
-		
+	void Neutralize();
+private:		
 	inline int GetTimer() {
 		GetMutex().Lock();
 		int i = trigun_timer_;
 		GetMutex().Unlock();
 		return i;};
-private:	
+	
 	inline void SetTimer(int t) {
 		GetMutex().Lock();
 		trigun_timer_ = t;

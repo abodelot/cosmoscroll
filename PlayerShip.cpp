@@ -9,6 +9,9 @@
 #include <cassert>
 #include <typeinfo>
 
+#ifdef DEBUG
+	#include <iostream>
+#endif
 
 #define SHIP_SPEED      200
 #define GUN_OFFSET      sf::Vector2f(52, 24)
@@ -332,6 +335,24 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(), bonus.WhatItIs());
 }
 
-
-
+void PlayerShip::Neutralize()
+{
+#ifdef DEBUG
+std::cerr << "\tNeutralization: ";
+#endif
+if(GetTimer())
+	{
+#ifdef DEBUG
+	std::cerr << "necessaire:";
+#endif
+		SetTimer(0);
+		GetThread().Terminate();
+#ifdef DEBUG
+		std::cerr << " effectuee.\n";
+#endif
+	}
+#ifdef DEBUG	
+std::cerr << " inutile\n";
+#endif
+}
 
