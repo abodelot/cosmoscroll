@@ -61,10 +61,10 @@ void Game::Run()
 {
     // première scène = Intro
     Choice what = Intro();
-#ifndef NO_SOUND
+#ifndef NO_AUDIO
 	music_ = GET_MUSIC("aurora");
 	music_->Play();
-#endif	
+#endif
     do
     {
         switch (what)
@@ -93,7 +93,7 @@ void Game::Run()
         }
     } while (what != EXIT_APP);
 	// si what == EXIT_APP
-#ifndef NO_SOUND
+#ifndef NO_AUDIO
 	music_->Stop();
 	delete music_;
 	music_ = NULL;
@@ -110,20 +110,23 @@ void Game::Run()
 Game::Choice Game::Intro()
 {
 #ifdef DEBUG
-    puts("[ Game::Intro ]");
+	puts("[ Game::Intro ]");
 #endif
-    Choice what = MAIN_MENU;
-    float duration = 5;
+	Choice what = MAIN_MENU;
+	const int DURATION = 5;
+	float elapsed = 0;
+#ifdef DEBUG
 #ifndef NO_AUDIO
 	bool played = false;
 	sf::Sound intro_sound (GET_SOUNDBUF("title"));
+#endif
 #endif
     sf::Sprite background;
     background.SetImage(GET_IMG("background"));
 	sf::String title;
 	title.SetText("CosmoScroll");
 	title.SetFont(GET_FONT());
-	title.SetSize(60);
+	title.SetSize(1000);
 	title.SetColor(sf::Color::White);
 	sf::String sfml;
 	sfml.SetText("Powered by SFML");
@@ -132,8 +135,7 @@ Game::Choice Game::Intro()
 	sfml.SetColor(sf::Color::White);
 	
 	sf::FloatRect rect = title.GetRect();
-	title.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
-	    (WIN_HEIGHT - rect.GetHeight()) / 2);
+	title.SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
 	
 	rect = sfml.GetRect();
 	sfml.SetPosition(WIN_WIDTH - rect.GetWidth(), WIN_HEIGHT - rect.GetHeight());
@@ -142,18 +144,18 @@ Game::Choice Game::Intro()
 	ship.SetPosition(-20, 100);
 	
 	sf::Event event;
-	while (duration > 0)
+	while (elapsed < DURATION)
 	{
 		while (app_.GetEvent(event)) 
 		{
 		    if (event.Type == sf::Event::Closed)
 		    {
-		        duration = 0;
+		        elapsed = DURATION;
 		        what = EXIT_APP;
 		    }
 		    else if (event.Type == sf::Event::KeyPressed)
 		    {
-		        duration = 0;
+		        elapsed = DURATION;
                 if (event.Key.Code == sf::Key::Escape)
 				{
 				    what = EXIT_APP;
@@ -161,17 +163,20 @@ Game::Choice Game::Intro()
 			}
 		}
 		float time = app_.GetFrameTime();
-		duration -= time;
+		elapsed += time;
+#ifdef DEBUG
 #ifndef NO_AUDIO
-		if (static_cast<int>(duration) == 3 && !played)
+		if (static_cast<int>(elapsed) == 2 && !played)
 		{
 			played = true;
 			intro_sound.Play();
 		}
 #endif
-		// FIXME: déplacement magique !
-		ship.Move(180 * time, 25 * time);
-		title.Move(0, -30 * time);
+#endif
+		ship.Move(180 * time, 25 * time); // FIXME: déplacement magique !
+		title.Scale(0.99, 0.99); // FIXME: dépendant des FPS
+		title.SetColor(sf::Color(255, 255, 255, 255 * elapsed / DURATION));
+		title.SetPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 		
 		app_.Draw(background);
 		app_.Draw(sfml);
@@ -347,6 +352,7 @@ Game::Choice Game::Play()
 #ifdef DEBUG
 					puts("\nyou are dead :(\n");
 #endif
+					break;
 				}
 				bullets_.CleanSenders(*it);
 				delete *it;
@@ -527,7 +533,7 @@ Game::Choice Game::Intertitre()
 	subtitle2.SetText(str_sprintf("Pass: %s", MakePassword().c_str()));
     
     title.SetText(str_sprintf("Fin du niveau %d", cur_lvl_));
-
+	
     title.SetFont(GET_FONT());
     title.SetColor(sf::Color::White);
     title.SetPosition(42, 42);

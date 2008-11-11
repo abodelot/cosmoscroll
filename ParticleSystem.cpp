@@ -204,7 +204,7 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
     offset.x = offset.x + speed * std::cos(angle_);
     offset.y = offset.y - speed * std::sin(angle_);
     SetPosition(offset);
-    SetColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(255 * timer_ / lifetime_)));
+    SetColor(sf::Color(255, 255, 255, (sf::Uint8) 255 - 255 * timer_ / lifetime_));
     return timer_ >= lifetime_;
 }
 

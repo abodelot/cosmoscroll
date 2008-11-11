@@ -290,7 +290,7 @@ loop_back:
 		thread_dead_ = true;
 #ifdef DEBUG
 		puts("\t-- fin bonus arme");
-	#endif
+#endif
 	}
 	else
 	{
@@ -309,9 +309,6 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
     {
         // bonus d'armes, tir triplé pour un laps de temps
         case Bonus::TRIGUN:
-#ifdef DEBUG
-			puts("\t got TRIGUN");	
-#endif
             hellfire_.SetTriple(true);
             laserbeam_.SetTriple(true);
             // thread pour désactiver le bonus plus tard
@@ -328,9 +325,6 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
             break;
         // bonus point de vie
         case Bonus::HEALTH:
-#ifdef DEBUG
-			puts("\t got HEALTH");	
-#endif
 		if (hp_ < HP_MAX)
 			{
 				++hp_;
@@ -338,9 +332,6 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			}
 			break;
 		case Bonus::COOLER:
-#ifdef DEBUG
-			puts("\t got COOLER");	
-#endif
 			if (coolers_ < COOLER_MAX)
 			{
 				++coolers_;
@@ -350,6 +341,9 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
         default:
             break;
 	}
+#ifdef DEBUG
+	std::wcout << L"\tgot bonus " << bonus.WhatItIs() << std::endl; // gla?on... problème de LC_LOCALE peut être
+#endif
 	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(), bonus.WhatItIs());
 }
 
