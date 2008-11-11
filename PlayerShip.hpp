@@ -92,17 +92,27 @@ private:
 
 	void EndBonus();
 	
+	inline bool IsThDead()
+	{
+		return thread_dead_;
+	};
+	
+	inline void KillThDead()
+	{
+		thread_dead_ = false;
+	};
+	
 	inline sf::Thread& GetThread()
 	{
 		static sf::Thread thread_(PlayerShip::EndBonusWrapper, this);
 		return thread_;
-	}
+	};
 	
 	inline static sf::Mutex& GetMutex()
 	{
 		static sf::Mutex mutex_;
 		return mutex_;
-	}
+	};
 	
 	inline int GetTimer()
 	{
@@ -110,14 +120,14 @@ private:
 		int i = trigun_timer_;
 		GetMutex().Unlock();
 		return i;
-	}
+	};
 	
 	inline void SetTimer(int t)
 	{
 		GetMutex().Lock();
 		trigun_timer_ = t;
 		GetMutex().Unlock();
-	}
+	};
 
 
 	
@@ -130,6 +140,7 @@ private:
     bool overheated_;
     float heat_;
     
+	bool thread_dead_;
 	
     int shield_;
     float shield_timer_;

@@ -23,7 +23,8 @@
 
 #define COOLER_MAX           3
 #define COOLER_DEFAULT       0
-#define COOLER_DURATION     10
+
+#define TRIGUN_DURATION     10
 
 #define HEAT_MAX     100
 #define COLDING_RATE 13
@@ -260,20 +261,23 @@ void PlayerShip::Collide(Entity& ent)
 
 void PlayerShip::EndBonusWrapper(void* data)
 {
-    PlayerShip* self = (PlayerShip*) data;
-    self->EndBonus();
+    PlayerShip* self = (PlayerShip*) data; 
+	self->EndBonus();
 }
 
 
 void PlayerShip::EndBonus()
 {
-    SetTimer(COOLER_DURATION);
+    SetTimer(TRIGUN_DURATION);
+	thread_dead_ = false;
 loop_back:
 	while (!pause_effects_ && GetTimer() > 0)
     {
-	#ifdef DEBUG
+#ifdef DEBUG
+#ifdef DEBUG_THREAD
         printf("\t-- %ds\n", GetTimer());
-	#endif
+#endif
+#endif
 		GetMutex().Lock();
         --trigun_timer_;
 		GetMutex().Unlock();
@@ -283,7 +287,8 @@ loop_back:
 	{
 		hellfire_.SetTriple(false);
 		laserbeam_.SetTriple(false);
-	#ifdef DEBUG
+		thread_dead_ = true;
+#ifdef DEBUG
 		puts("\t-- fin bonus arme");
 	#endif
 	}
@@ -304,30 +309,38 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
     {
         // bonus d'armes, tir triplé pour un laps de temps
         case Bonus::TRIGUN:
-            
+#ifdef DEBUG
+			puts("\t got TRIGUN");	
+#endif
             hellfire_.SetTriple(true);
             laserbeam_.SetTriple(true);
             // thread pour désactiver le bonus plus tard
-            if (GetTimer() == 0)
+            if (IsThDead())
             {
 				GetThread().Launch();
             }
             else
             {
 				GetMutex().Lock();
-				trigun_timer_ += COOLER_DURATION;
+				trigun_timer_ += TRIGUN_DURATION;
 				GetMutex().Unlock();
             }
             break;
         // bonus point de vie
         case Bonus::HEALTH:
-			if (hp_ < HP_MAX)
+#ifdef DEBUG
+			puts("\t got HEALTH");	
+#endif
+		if (hp_ < HP_MAX)
 			{
 				++hp_;
 				panel_.SetShipHP(hp_);				
 			}
 			break;
 		case Bonus::COOLER:
+#ifdef DEBUG
+			puts("\t got COOLER");	
+#endif
 			if (coolers_ < COOLER_MAX)
 			{
 				++coolers_;
@@ -356,8 +369,11 @@ if(GetTimer())
 		std::cerr << " effectuee.\n";
 #endif
 	}
+	else
+	{
 #ifdef DEBUG	
-std::cerr << " inutile\n";
+		std::cerr << " inutile\n";
 #endif
+	}
 }
 

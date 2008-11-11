@@ -9,6 +9,9 @@
 #define SOUND_LIST "sound/sound.txt"
 #define SOUND_PATH "sound/"
 
+#define MUSIC_LIST "music/music.txt"
+#define MUSIC_PATH "music/"
+
 
 // charger une image
 static void load_or_die(sf::Image& image, const char* filename)
@@ -31,6 +34,17 @@ static void load_or_die(sf::SoundBuffer& buffer, const char* filename)
         exit(EXIT_FAILURE);
     }
 }
+
+
+#ifndef NO_MUSIC
+// charger un buffer lié a une instance de la lib dumb
+static void load_or_die(std::string& music_name, const char* filename)
+{
+	music_name = filename;
+}
+#endif
+
+	
 #endif
 
 // charger une liste de ressources depuis un fichier
@@ -101,6 +115,26 @@ const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
     }
     return it->second;
 }
+
+#ifndef NO_MUSIC
+Music* MediaManager::GetMusic(const char* key) const
+{
+    std::map<std::string, std::string>::const_iterator it;
+    it = musics_.find(key);
+    if (it == musics_.end())
+    {
+        std::cerr << "can't give you music file " << key << std::endl;
+        exit(EXIT_FAILURE);
+    }
+	
+	std::string path(MUSIC_PATH);
+	Music* mus = new Music((path + it->second).c_str());
+	std::cerr << path << it->second << " made." <<  std::endl;
+	
+    return mus;
+}
+#endif
+
 #endif
 
 const sf::Font& MediaManager::GetFont() const
@@ -125,6 +159,16 @@ MediaManager::MediaManager()
         std::cerr << "can't open sound list: " << SOUND_LIST << std::endl;
         exit(EXIT_FAILURE);
     }
+
+#ifndef NO_MUSIC
+// chargement des musiques
+if (!load_from_list(MUSIC_LIST, musics_))
+{
+	std::cerr << "can't open music list: " << MUSIC_LIST << std::endl;
+	exit(EXIT_FAILURE);
+}
+#endif
+
 #endif
     // chargement des fontes
     if (!font_.LoadFromFile("font/hemi-head.ttf", 60))

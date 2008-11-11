@@ -34,7 +34,6 @@ public:
     /*
      * Gestion des collisions
      */
-    //void Collide(Entity::ManagedContainer& entities);
     void Collide(std::list<Entity*>& entities);
     
     /*

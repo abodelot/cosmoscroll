@@ -61,7 +61,6 @@ void BulletManager::Add(Weapon::Type type, Entity* sender, const sf::Vector2f& o
     bullets_.push_back(bullet);
 }
 
-
 void BulletManager::Collide(std::list<Entity*>& entities)
 {
     static sf::FloatRect window_rect(0, 0, WIN_WIDTH, WIN_HEIGHT);
@@ -75,6 +74,7 @@ void BulletManager::Collide(std::list<Entity*>& entities)
         float beam_x = it_b->sprite.GetPosition().x;
         float beam_y = it_b->sprite.GetPosition().y;
         
+
         std::list<Entity*>::iterator it_e;
         // pour chaque vaisseau
         for (it_e = entities.begin(); it_e != entities.end(); ++it_e)

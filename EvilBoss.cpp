@@ -8,16 +8,20 @@
 #define SPEED 25
 #define CHILDS 8
 
-#define L_EYE_OFFSET     sf::Vector2f(128, 60)
-#define R_EYE_OFFSET     sf::Vector2f(238, 60)
-#define MOUTH_OFFSET     sf::Vector2f(148, 128)
+#define L_EYE_OFFSET        sf::Vector2f(131,  67)
+#define R_EYE_OFFSET	    sf::Vector2f(233, 70)
+
+#define L_MOUTH_X_OFFSET 85
+#define R_MOUTH_X_OFFSET 201
+#define MOUTH_Y_OFFSET 128
+
 
 
 EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
     Ennemy(offset, GET_IMG("evil_boss"), 400, target),
-    eye_left_(Weapon::DEVILSEYES, this),
-	eye_right_(Weapon::DEVILSEYES, this),
-	canon_(Weapon::LASERBEAM, this),
+    eye_left_(Weapon::LASERBEAM, this),
+	eye_right_(Weapon::LASERBEAM, this),
+	canon_(Weapon::DEVILSEYES, this),
 	game_(Game::GetInstance())
 {
 	left_ = true;
@@ -88,7 +92,10 @@ void EvilBoss::Action()
 	//}
 	//if (mode == 2)
 	//{
-		canon_.Shoot(sprite_.GetPosition() + MOUTH_OFFSET, sf::Randomizer::Random(0.f, 2 * PI));
+		sf::Vector2f randV2f;
+		randV2f.x = (sf::Randomizer::Random(L_MOUTH_X_OFFSET, R_MOUTH_X_OFFSET));
+		randV2f.y = MOUTH_Y_OFFSET;
+		canon_.Shoot(sprite_.GetPosition() + randV2f, sf::Randomizer::Random(0.f, 2 * PI));
 		//for (int i = 0; i < CHILDS; ++i)
 		//{
 

@@ -6,8 +6,8 @@
 #include <SFML/System.hpp>
 
 #define PARTICLES_PER_EXPLOSION 40
-#define FIERY_MIN_LIFETIME      1.0f
-#define FIERY_MAX_LIFETIME      4.0f
+#define FIERY_MIN_LIFETIME      0.5f
+#define FIERY_MAX_LIFETIME      2.0f
 
 #define STAR_MIN_SPEED          30.0f
 #define STAR_MAX_SPEED          3000.0f
@@ -122,7 +122,7 @@ void ParticleSystem::Update(float frametime)
 		if (it2->timer >= MESSAGE_LIFETIME)
 		{
 			it2 = messages_.erase(it2);
-#ifdef DEBUG
+#ifdef DEBUG_PARTICLE
 			puts("erase msg");
 #endif
 		}
@@ -196,7 +196,7 @@ ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset)
 
 bool ParticleSystem::Fiery::OnUpdate(float frametime)
 {
-    timer_ -= frametime;
+    timer_ += frametime;
     // déplacement de la particule
     // la vitesse de déplacement est proportionnelle à la durée de vie
     float speed = (lifetime_ - timer_) * 150 * frametime; // FIXME: magique (facteur vitesse)
@@ -204,7 +204,7 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
     offset.x = offset.x + speed * std::cos(angle_);
     offset.y = offset.y - speed * std::sin(angle_);
     SetPosition(offset);
-    SetColor(sf::Color(255, 255, 255, 255 * timer_ / lifetime_));
+    SetColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(255 * timer_ / lifetime_)));
     return timer_ >= lifetime_;
 }
 

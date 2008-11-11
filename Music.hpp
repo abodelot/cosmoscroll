@@ -1,6 +1,8 @@
 #ifndef MUSIC_HPP
 #define MUSIC_HPP
 
+#ifndef NO_MUSIC
+
 #include <dumb.h>
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
@@ -28,6 +30,6 @@ private:
 	DUH_SIGRENDERER* player_;
 };
 
-
+#endif /* NO_MUSIC */
 #endif /* guard MUSIC_HPP */
 

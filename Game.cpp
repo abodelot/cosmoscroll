@@ -62,7 +62,7 @@ void Game::Run()
     // première scène = Intro
     Choice what = Intro();
 #ifndef NO_SOUND
-	music_ = new Music("music/aurora.mod");
+	music_ = GET_MUSIC("aurora");
 	music_->Play();
 #endif	
     do
