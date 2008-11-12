@@ -13,17 +13,11 @@
 #include <SFML/Graphics/Rect.hpp>
 
 
-inline sf::FloatRect get_universe_rect()
-{
-    static const sf::FloatRect UNIVERSE(CONTROL_PANEL_HEIGHT, 0,
-        WIN_WIDTH, WIN_HEIGHT);
-    return UNIVERSE;
-}
-
-
 inline bool outside_universe(const sf::FloatRect& rect)
 {
-    return !get_universe_rect().Intersects(rect);
+	static const sf::FloatRect UNIVERSE(0, CONTROL_PANEL_HEIGHT, WIN_WIDTH,
+		WIN_HEIGHT);
+	return !UNIVERSE.Intersects(rect);
 }
 
 #endif /* guard WINDOW_HPP */

@@ -118,7 +118,7 @@ Game::Choice Game::Intro()
 #ifdef DEBUG
 #ifndef NO_AUDIO
 	bool played = false;
-	sf::Sound intro_sound (GET_SOUNDBUF("title"));
+	sf::Sound intro_sound(GET_SOUNDBUF("title"));
 #endif
 #endif
     sf::Sprite background;
@@ -130,15 +130,16 @@ Game::Choice Game::Intro()
 	title.SetColor(sf::Color::White);
 	sf::String sfml;
 	sfml.SetText("Powered by SFML");
-	sfml.SetFont(GET_FONT());
-	sfml.SetSize(24);
+	sfml.SetSize(16);
 	sfml.SetColor(sf::Color::White);
 	
 	sf::FloatRect rect = title.GetRect();
 	title.SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
 	
+	const int PADDING = 10;
 	rect = sfml.GetRect();
-	sfml.SetPosition(WIN_WIDTH - rect.GetWidth(), WIN_HEIGHT - rect.GetHeight());
+	sfml.SetPosition(WIN_WIDTH - rect.GetWidth() - PADDING,
+		WIN_HEIGHT - rect.GetHeight() - PADDING);
 	
 	sf::Sprite ship(GET_IMG("spaceship"));
 	ship.SetPosition(-20, 100);
