@@ -602,8 +602,8 @@ Game::Choice Game::Continue()
 	// hacky re-init
 	timer_ = 0.0f;
     bullets_.Clear();
-	
-	
+	particles_.Clear();
+	particles_.AddStars();
 	
     if (cur_lvl_ < level_.GetLastID())
 	{
@@ -618,7 +618,7 @@ Game::Choice Game::Continue()
 	else	// On a fini le jeu :)
 	{
 		title.SetText("Felicitations :-D");
-		subtitle.SetText(str_sprintf("Vous avez fini les %d niveaux \ndu jeu. Vous etes vraiment doue(e) :D", cur_lvl_));
+		subtitle.SetText(str_sprintf("Vous avez fini les %d niveaux du jeu.\n\nVous etes vraiment doue(e) :D", cur_lvl_));
 		menu.AddItem("Retour", MAIN_MENU);
 	}
    
@@ -628,7 +628,7 @@ Game::Choice Game::Continue()
     subtitle.SetFont(GET_FONT());
     subtitle.SetColor(sf::Color::White);
     subtitle.SetPosition(32, 72);
-
+	
     bool running = true;
     int choice;
     sf::Event event;

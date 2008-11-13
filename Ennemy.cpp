@@ -14,39 +14,42 @@
 
 
 Ennemy::Ennemy(const sf::Vector2f& offset, const sf::Image& img, int hp,
-    Entity* target) :
-    Entity(img, offset, hp)
+	Entity* target) :
+	Entity(img, offset, hp)
 {
-    target_ = target;
+	target_ = target;
 }
 
 
 void Ennemy::Hit(int damage)
 {
-    Entity::Hit(damage);
-    if (IsDead())
-    {
-        if (sf::Randomizer::Random(0, 2) == 0)
-        {
-            Game::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
-        }
-        ParticleSystem::GetInstance().AddExplosion(sprite_.GetPosition());
-    }
+	Entity::Hit(damage);
+	if (IsDead())
+	{
+#ifdef DEBUG
+		if (sf::Randomizer::Random(0, 2) == 0)
+#else
+		if (sf::Randomizer::Random(0, 8) == 0)
+#endif		
+		{
+			Game::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
+		}
+		ParticleSystem::GetInstance().AddExplosion(sprite_.GetPosition());
+	}
 }
 
 
 Ennemy* Ennemy::Make(Type type, const sf::Vector2f& offset, Entity* target)
 {
-    switch (type)
-    {
-    case BLORB:
-        return new Blorb(offset, target);
-    case DRONE:
-        return new Drone(offset, target);
-    case INTERCEPTOR:
-        return new Interceptor(offset, target);
-    }
-    return NULL;
+	switch (type)
+	{
+		case BLORB:
+			return new Blorb(offset, target);
+		case DRONE:
+			return new Drone(offset, target);
+		case INTERCEPTOR:
+			return new Interceptor(offset, target);
+	}
+	return NULL;
 }
-
 

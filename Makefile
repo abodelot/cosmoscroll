@@ -3,7 +3,7 @@ TINYXML_DIR=tinyxml
 TINYXML_OBJ=$(TINYXML_DIR)/tinyxml.o $(TINYXML_DIR)/tinyxmlerror.o $(TINYXML_DIR)/tinyxmlparser.o
 
 cFLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
-ldFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -ldumb
 EXEC=cosmoscroll
 DEBUG=yes
 
@@ -12,10 +12,8 @@ OBJ= $(SRC:.cpp=.o)
 
 ifeq ($(DEBUG), yes)
 	CFLAGS=$(cFLAGS) -g -DDEBUG
-	LDFLAGS= $(ldFLAGS) -ldumb
 else
 	CFLAGS=$(cFLAGS) -O3
-	LDFLAGS= $(ldFLAGS) -ldumb
 endif
 
 
