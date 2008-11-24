@@ -46,7 +46,7 @@ void BulletManager::Add(Weapon::Type type, Entity* sender, const sf::Vector2f& o
             break;
 		case Weapon::DEVILSEYES:
 			bullet.sprite.SetImage(GET_IMG("ammo_devil"));
-			bullet.damage = 3;
+			bullet.damage = 6;
 			bullet.speed = 500;
         default:
             break;

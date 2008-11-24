@@ -13,16 +13,16 @@
 #include <iostream>
 #endif
 
-#define DEFAULT_SPEED	  200
-#define GUN_OFFSET	  sf::Vector2f(52, 24)
+#define DEFAULT_SPEED     200
+#define GUN_OFFSET        sf::Vector2f(52, 24)
 
 // taux de regénération du bouclier en boules/secondes
 #define SHIELD_RECOVERY_RATE 0.3
-#define SHIELD_MAX		   6
-#define SHIELD_DEFAULT	   3
+#define SHIELD_MAX         6
+#define SHIELD_DEFAULT     3
 
-#define COOLER_MAX		   3
-#define COOLER_DEFAULT	   0
+#define COOLER_MAX         3
+#define COOLER_DEFAULT     0
 
 #define TIMED_BONUS_DURATION 10
 

@@ -203,7 +203,7 @@ Game::Choice Game::MainMenu()
 	menu.AddItem("Mode Arcade", ARCADE_MODE);
 	menu.AddItem("Quitter", EXIT_APP);
 	bool running = true;
-	int choice;
+	int choice = EXIT_APP;
 	
 	sf::Event event;
 	while (running)
@@ -601,10 +601,10 @@ Game::Choice Game::Continue()
 	title.SetPosition(42, 42);
 	subtitle.SetFont(GET_FONT());
 	subtitle.SetColor(sf::Color::White);
-	subtitle.SetPosition(32, 72);
+	subtitle.SetPosition(42, 120);
 	
 	bool running = true;
-	int choice;
+	int choice = EXIT_APP;
 	sf::Event event;
 	while (running)
 	{		
