@@ -18,40 +18,23 @@
 class PlayerShip: public Entity
 {
 public:
+	PlayerShip(const sf::Vector2f& offset, const sf::Input& input);
 	
+	~PlayerShip();
 	
-    PlayerShip(const sf::Vector2f& offset, const sf::Input& input);
-    
-    ~PlayerShip();
-    
-    void HandleKey(const sf::Event::KeyEvent& key);
-    
-    // phase de tir
-    void Action();
-    
-    void Collide(Entity& ent);
-    /*
-     * Déplacer le vaisseau
-     */
-    void Move(float frametime);
-    
-    void Hit(int damage);
-    
-    // je doc plus tard
-    
+	void HandleKey(const sf::Event::KeyEvent& key);
 	
-	inline bool EffectsPaused() const
-	{
-		return pause_effects_;
-	}
-		
-	void PauseEffects(bool b)
-	{
-		GetMutex().Lock();
-		pause_effects_ = b;
-		GetMutex().Unlock();
-	}
-    
+	// phase de tir
+	void Action();
+	
+	void Collide(Entity& ent);
+	/*
+	 * Déplacer le vaisseau
+	 */
+	void Move(float frametime);
+	
+	void Hit(int damage);
+	
 	inline int GetShield() const
 	{
 		return shield_;
@@ -71,8 +54,6 @@ public:
 	{
 		coolers_ = c;
 	}
-
-	void Neutralize();
 	
 private:
 	struct Config
@@ -85,70 +66,34 @@ private:
 		sf::Key::Code weapon_b;
 		sf::Key::Code bonus_cooler;
 	};
-
+	
+	enum TimedBonus
+	{
+		T_TRISHOT, T_SPEED, TIMED_BONUS_COUNT
+	};
+	
 	void HandleBonus(const Bonus& bonus);
-
-	static void EndBonusWrapper(void* data);				
-
-	void EndBonus();
 	
-	inline bool IsThDead()
-	{
-		return thread_dead_;
-	};
+	void DisableTimedBonus(TimedBonus tbonus);
 	
-	inline void KillThDead()
-	{
-		thread_dead_ = false;
-	};
+	// timers des bonus
+	float bonus_[TIMED_BONUS_COUNT];
 	
-	inline sf::Thread& GetThread()
-	{
-		static sf::Thread thread_(PlayerShip::EndBonusWrapper, this);
-		return thread_;
-	};
+	ControlPanel& panel_;
+	const sf::Input& input_;
+	Config binds_;
+	bool overheated_;
+	float heat_;
 	
-	inline static sf::Mutex& GetMutex()
-	{
-		static sf::Mutex mutex_;
-		return mutex_;
-	};
-	
-	inline int GetTimer()
-	{
-		GetMutex().Lock();
-		int i = trigun_timer_;
-		GetMutex().Unlock();
-		return i;
-	};
-	
-	inline void SetTimer(int t)
-	{
-		GetMutex().Lock();
-		trigun_timer_ = t;
-		GetMutex().Unlock();
-	};
-
-
-	
-	int trigun_timer_;
-   	int coolers_;	
-    ControlPanel& panel_;
-    const sf::Input& input_;
-    Config binds_;
-    bool pause_effects_;
-    bool overheated_;
-    float heat_;
-    
-	bool thread_dead_;
-	
-    int shield_;
-    float shield_timer_;
+	int coolers_;
+	int shield_;
+	float shield_timer_;
+	int speed_;
 #ifndef NO_AUDIO
-    sf::Sound shield_sfx_;
+	sf::Sound shield_sfx_;
 #endif
-    Weapon laserbeam_;
-    Weapon hellfire_;
+	Weapon laserbeam_;
+	Weapon hellfire_;
 };
 
 #endif /* guard PLAYERSHIP_HPP */

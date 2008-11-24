@@ -2,16 +2,18 @@
 #include "MediaManager.hpp"
 
 #include <SFML/System/Randomizer.hpp>
+#include <cassert>
 
-#define SPEED 100
+#define BONUS_SPEED 100
 
 
 static inline const sf::Image& select_image(Bonus::Type type)
 {
 	static const char* keys[Bonus::BONUS_COUNT] = {
-	"bonus-health",
-	"bonus-trigun",
-	"bonus-cooler"
+		"bonus-cooler",
+		"bonus-health",
+		"bonus-speed",
+		"bonus-trishot"
 	};
 	return GET_IMG(keys[type]);
 }
@@ -27,7 +29,7 @@ Bonus::Bonus(Type type, const sf::Vector2f& offset) :
 Bonus* Bonus::MakeRandom(const sf::Vector2f& offset)
 {
 	Type type = (Type) sf::Randomizer::Random(0, BONUS_COUNT - 1);
-	return new Bonus(type, offset);
+	return new Bonus((Type) type, offset);
 }
 
 
@@ -46,7 +48,7 @@ void Bonus::Collide(Entity& ent)
 
 void Bonus::Move(float frametime)
 {
-	sprite_.Move(-SPEED * frametime, 0);
+	sprite_.Move(-BONUS_SPEED * frametime, 0);
 	KillIfOut();
 }
 
@@ -55,14 +57,16 @@ const wchar_t* Bonus::WhatItIs() const
 {
 	switch (type_)
 	{
-		case HEALTH:
-			return L"Health";
-		case TRIGUN:
-			return L"Triple tir";
 		case COOLER:
 			return L"Glaçon";
+		case HEALTH:
+			return L"Health";
+		case SPEED:
+			return L"Vitesse";
+		case TRISHOT:
+			return L"Triple tir";
 		default:
-			return NULL;
+			assert(0);
 	}
 }
 

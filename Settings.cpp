@@ -137,7 +137,7 @@ Settings::Settings()
 	keys_[RIGHT] = sf::Key::Right;
 	keys_[WEAPON1] = sf::Key::Space;
 	keys_[WEAPON2] = sf::Key::A;
-	keys_[BONUS_COOLER] = sf::Key::C;
+	keys_[BONUS_COOLER] = sf::Key::LControl;
 	
 	fullscreen_ = false;
 	best_time_ = 0.0f;

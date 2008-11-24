@@ -9,7 +9,11 @@ class Bonus: public Entity
 public:
 	enum Type
 	{
-		HEALTH, TRIGUN, COOLER, BONUS_COUNT
+		COOLER,   // ajoute 1 glaçon
+		HEALTH,   // ajoute 1 point de vie 
+		SPEED,    // vitesse x2
+		TRISHOT,  // tir x3
+		BONUS_COUNT
 	};
 	
 	Bonus(Type type, const sf::Vector2f& offset);
