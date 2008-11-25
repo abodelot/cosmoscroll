@@ -47,7 +47,7 @@ void BulletManager::Add(Weapon::Type type, Entity* sender, const sf::Vector2f& o
 		case Weapon::DEVILSEYES:
 			bullet.sprite.SetImage(GET_IMG("ammo_devil"));
 			bullet.damage = 6;
-			bullet.speed = 500;
+			bullet.speed = 400;
         default:
             break;
     }
@@ -61,20 +61,24 @@ void BulletManager::Add(Weapon::Type type, Entity* sender, const sf::Vector2f& o
     bullets_.push_back(bullet);
 }
 
+
 void BulletManager::Collide(std::list<Entity*>& entities)
 {
     static sf::FloatRect window_rect(0, 0, WIN_WIDTH, WIN_HEIGHT);
     static ParticleSystem& particles = ParticleSystem::GetInstance();
     
+    sf::FloatRect beamrect;
     BulletIterator it_b;
     // pour chaque beam
     for (it_b = bullets_.begin(); it_b != bullets_.end();)
     {
         bool dead = false; // état du beam
-        float beam_x = it_b->sprite.GetPosition().x;
-        float beam_y = it_b->sprite.GetPosition().y;
-        
-
+        const sf::Vector2f& vec_pos = it_b->sprite.GetPosition();
+        const sf::Vector2f& vec_size = it_b->sprite.GetSize();
+        beamrect.Left = vec_pos.x;
+        beamrect.Top = vec_pos.y;
+        beamrect.Right = beamrect.Left + vec_size.x;
+        beamrect.Bottom = beamrect.Top + vec_size.y;
         std::list<Entity*>::iterator it_e;
         // pour chaque vaisseau
         for (it_e = entities.begin(); it_e != entities.end(); ++it_e)
@@ -86,16 +90,16 @@ void BulletManager::Collide(std::list<Entity*>& entities)
 			}
 			else
             // si la position du beam est dans la surface du vaisseau
-            if ((*it_e)->GetRect().Contains(beam_x, beam_y))
+            if ((*it_e)->GetRect().Intersects(beamrect))
             {
                 dead = true;
                 (*it_e)->Hit(it_b->damage);
-                particles.AddImpact(sf::Vector2f(beam_x, beam_y), 10);
+                particles.AddImpact(sf::Vector2f(vec_pos.x, vec_pos.y), 10);
                 break;
             }
         }
         // si hors de l'éran
-        if (!window_rect.Contains(beam_x, beam_y))
+        if (!window_rect.Contains(vec_pos.x, vec_pos.y))
         {
             dead = true;
         }

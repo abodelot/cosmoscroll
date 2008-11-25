@@ -56,11 +56,9 @@ void ParticleSystem::AddMessage(const sf::Vector2f& offset, const wchar_t* text)
 void ParticleSystem::AddShield(int count, const sf::Sprite* handle)
 {
 	float angle = 2 * PI / count;
-	int radius = count * 7 + 15;
 	for (int i = 0; i < count; ++i)
 	{
-		particles_.push_front(new LinkedParticle(
-			handle, angle * (i + 1), radius));
+		particles_.push_front(new LinkedParticle(handle, angle * (i + 1)));
 	}
 }
 
@@ -225,15 +223,16 @@ bool ParticleSystem::TextParticle::OnUpdate(float frametime)
 
 
 // LinkedParticle
+// distance vaisseau <-> particule (plus elle est éloignée, plus elle va vite)
+#define SHIELD_RADIUS 42
 
 ParticleSystem::LinkedParticle::LinkedParticle(const sf::Sprite* handle,
-	float angle, int radius)
+	float angle)
 {
 	sprite_.SetImage(GET_IMG("shield"));
 	sprite_.SetCenter(sprite_.GetSize().x / 2, sprite_.GetSize().y / 2);
 	handle_ = handle;
-	// distance vaisseau <-> particule (plus elle est éloignée, plus elle va vite)
-	speed_ = radius;
+	
 	angle_ = angle;
 	sprite_.SetRotation(RAD_TO_DEG(angle + 0.5 * PI));
 }
@@ -245,8 +244,8 @@ bool ParticleSystem::LinkedParticle::OnUpdate(float frametime)
 	angle_ += (2 * PI * frametime); // rotation de 2 * PI par seconde
 	offset.x += handle_->GetSize().x / 2;
 	offset.y += handle_->GetSize().y / 2;
-	offset.x = offset.x + speed_ * std::cos(angle_);
-	offset.y = offset.y - speed_ * std::sin(angle_);
+	offset.x = offset.x + SHIELD_RADIUS * std::cos(angle_);
+	offset.y = offset.y - SHIELD_RADIUS * std::sin(angle_);
 	sprite_.SetPosition(offset);
 	sprite_.SetRotation(RAD_TO_DEG(angle_ + (0.5 * PI)));
 	return false;

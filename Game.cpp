@@ -481,7 +481,7 @@ Game::Choice Game::InGameMenu()
 					{
 						paused = false;
 					}
-				if (event.JoyButton.Button = settings_.GetJoyKey(Settings::jRETURN))
+				if (event.JoyButton.Button == settings_.GetJoyKey(Settings::jRETURN))
 				{
 					what = EXIT_APP;
 				}
@@ -560,7 +560,7 @@ Game::Choice Game::GameOver()
 #ifdef JOYSTICK_ENABLED
 			else if (event.Type == sf::Event::JoyButtonPressed)
 			{
-				if (event.JoyButton.Button = settings_.GetJoyKey(Settings::jRETURN))
+				if (event.JoyButton.Button == settings_.GetJoyKey(Settings::jRETURN))
 				{
 					choice = EXIT_APP;
 				}

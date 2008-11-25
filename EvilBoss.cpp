@@ -24,6 +24,7 @@ EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
 	game_(Game::GetInstance())
 {
 	left_ = true;
+	phase_ = EVIL;
 }
 
 
@@ -71,34 +72,28 @@ void EvilBoss::Collide(Entity& ent)
 }
 
 
+void EvilBoss::Hit(int damage)
+{
+	Entity::Hit(damage);
+	if (phase_ == EVIL && hp_ < 200)
+	{
+		phase_ = MORE_EVIL;
+		sprite_.SetImage(GET_IMG("evil_boss2"));
+		canon_.SetTriple(true);
+	}
+}
+
+
 void EvilBoss::Action()
 {
-	/*static float cpt = 5.0;
-	cpt -= frametime_;
-	int mode = sf::Randomizer::Random(0, 1);
-	if (cpt <= 0)
-	{
-		cpt = 5.0;
-		mode = 2;
-	}*/
 	float radians_L = ANGLE(target_->GetPosition(), sprite_.GetPosition() + L_EYE_OFFSET);
 	float radians_R = ANGLE(target_->GetPosition(), sprite_.GetPosition() + R_EYE_OFFSET);
-	//if (mode == 1 || mode == 2)
-	//{
-	
-		eye_left_.Shoot(sprite_.GetPosition() + L_EYE_OFFSET, radians_L);
-		eye_right_.Shoot(sprite_.GetPosition() + R_EYE_OFFSET, radians_R);
-	//}
-	//if (mode == 2)
-	//{
-		sf::Vector2f randV2f, my = sprite_.GetPosition();
-		randV2f.x = my.x + sf::Randomizer::Random(L_MOUTH_X_OFFSET, R_MOUTH_X_OFFSET);
-		randV2f.y = my.y + MOUTH_Y_OFFSET;
-		canon_.Shoot(randV2f, ANGLE(target_->GetPosition(), randV2f));
-		//for (int i = 0; i < CHILDS; ++i)
-		//{
 
-		//}
-	//}*/
+	eye_left_.Shoot(sprite_.GetPosition() + L_EYE_OFFSET, radians_L);
+	eye_right_.Shoot(sprite_.GetPosition() + R_EYE_OFFSET, radians_R);
+	sf::Vector2f randV2f, my = sprite_.GetPosition();
+	randV2f.x = my.x + sf::Randomizer::Random(L_MOUTH_X_OFFSET, R_MOUTH_X_OFFSET);
+	randV2f.y = my.y + MOUTH_Y_OFFSET;
+	canon_.Shoot(randV2f, ANGLE(target_->GetPosition(), randV2f));
 }
 

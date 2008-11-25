@@ -3,7 +3,7 @@
 #include "Math.hpp"
 
 
-#define GUN_OFFSET  sf::Vector2f(-1, 14)
+#define GUN_OFFSET  sf::Vector2f(-8, 16)
 #define SPEED       200
 
 Drone::Drone(const sf::Vector2f& offset, Entity* target) :

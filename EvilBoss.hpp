@@ -16,7 +16,13 @@ public:
     void Move(float frametime);
 	void Collide(Entity& ent);
 	void Action();
+	void Hit(int damage);
 private:
+	enum Phase
+	{
+		EVIL, MORE_EVIL
+	};
+	Phase phase_;
 	bool left_;
 	Weapon eye_left_;
 	Weapon eye_right_;

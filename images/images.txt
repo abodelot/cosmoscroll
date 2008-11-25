@@ -24,6 +24,7 @@ capsule.png
 ennemy-A.png
 ennemy-B.png
 evil_boss.png
+evil_boss2.png
 fiery.png
 impact.png
 score-board.png

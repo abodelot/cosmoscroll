@@ -161,7 +161,7 @@ private:
 	class LinkedParticle: public Particle
 	{
 	public:
-		LinkedParticle(const sf::Sprite* handle, float angle, int radius);
+		LinkedParticle(const sf::Sprite* handle, float angle);
 		~LinkedParticle() {};
 		bool OnUpdate(float frametime);
 		 
@@ -177,7 +177,6 @@ private:
 	private:
 		const sf::Sprite* handle_; // hack... le sprite cible sert de handle
 		sf::Sprite sprite_;
-		int speed_;
 		float angle_; // en radians
 	};
 	
