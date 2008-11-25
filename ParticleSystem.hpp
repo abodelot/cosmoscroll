@@ -85,7 +85,7 @@ private:
 		virtual bool OnUpdate(float frametime) = 0;
 		
 	
-		virtual ~Particle();
+		virtual ~Particle() {};
 		/*
 		 * Affichage de la particule
 		 */
@@ -100,7 +100,7 @@ private:
 	{
 	public:
 		Fiery(const sf::Vector2f& offset, const sf::Image& img);
-		
+		~Fiery() {};
 		bool OnUpdate(float frametime);
 		
 		inline void Show(sf::RenderWindow& app) const
@@ -122,7 +122,7 @@ private:
 	{
 	public:
 		Star();
-		
+		~Star() {};
 		bool OnUpdate(float frametime);
 				
 		inline void Show(sf::RenderWindow& app) const
@@ -142,7 +142,7 @@ private:
 	{
 	public:
 		TextParticle(const sf::Vector2f& offset, const wchar_t* text);
-		
+		~TextParticle() {};
 		bool OnUpdate(float frametime);
 		
 		inline void Show(sf::RenderWindow& app) const
@@ -162,7 +162,7 @@ private:
 	{
 	public:
 		LinkedParticle(const sf::Sprite* handle, float angle, int radius);
-		
+		~LinkedParticle() {};
 		bool OnUpdate(float frametime);
 		 
 		inline void Show(sf::RenderWindow& app) const

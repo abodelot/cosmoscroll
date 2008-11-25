@@ -371,7 +371,7 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 		default:
 			break;
 	}
-	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(), bonus.UWhatItIs());
+	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(), bonus.WhatItIs());
 
 }
 

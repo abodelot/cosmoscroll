@@ -173,13 +173,12 @@ Game::Choice Game::Intro()
 			}
 		
 #endif
-		}
 	}
 		float time = app_.GetFrameTime();
 		elapsed += time;
 #ifdef DEBUG
 #ifndef NO_AUDIO
-		if (static_cast<int>(elapsed) == 2 && !played)
+		if (static_cast<int>(elapsed) == 1 && !played)
 		{
 			played = true;
 			intro_sound.Play();
@@ -196,6 +195,7 @@ Game::Choice Game::Intro()
 		app_.Draw(title);
 		app_.Draw(ship);
 		app_.Display();
+	}
 		
 	return what;
 }

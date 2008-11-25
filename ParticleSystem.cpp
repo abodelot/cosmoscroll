@@ -161,10 +161,10 @@ ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset, const sf::Image& img)
 bool ParticleSystem::Fiery::OnUpdate(float frametime)
 {
 	timer_ += frametime;
-	int speed = (lifetime_ - timer_) * FIERY_VELOCITY * frametime;
+	int speed = static_cast<int> ((lifetime_ - timer_) * FIERY_VELOCITY * frametime);
 	sprite_.Move(speed * std::cos(angle_), -speed * std::sin(angle_));
 	// transparence
-	sprite_.SetColor(sf::Color(255, 255, 255, (sf::Uint8) 255 - 255 * timer_ / lifetime_));
+	sprite_.SetColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(255 - 255 * timer_ / lifetime_)));
 	return timer_ >= lifetime_;
 }
 
@@ -181,7 +181,7 @@ ParticleSystem::Star::Star()
 	sprite_.SetPosition(x, y);
 	float scale = sf::Randomizer::Random(0.5f, 1.5f);
 	sprite_.SetScale(scale, scale);
-	speed_ = sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED);
+	speed_ = static_cast<int> (sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED));
 }
 
 
@@ -219,7 +219,7 @@ bool ParticleSystem::TextParticle::OnUpdate(float frametime)
 	timer_ += frametime;
 	text_.Move(0, -MESSAGE_SPEED * frametime);
 	// transparence
-	text_.SetColor(sf::Color(255, 255, 255, (sf::Uint8) 255 - 255 * timer_ / MESSAGE_LIFETIME));
+	text_.SetColor(sf::Color(255, 255, 255, static_cast<sf::Uint8> (255 - 255 * timer_ / MESSAGE_LIFETIME)));
 	return timer_ >= MESSAGE_LIFETIME;
 }
 
