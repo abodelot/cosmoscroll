@@ -21,12 +21,19 @@ public:
 	{
 		PAUSE, UP, DOWN, LEFT, RIGHT, WEAPON1, WEAPON2, BONUS_COOLER
 	};
+
+	enum JoystickBind
+	{		// Valid vaut aussi pour l'in-game-menu
+		jPAUSE, jUP, jDOWN, jLEFT, jRIGHT, jWEAPON1, jWEAPON2, jBONUS_COOLER, jVALID, jRETURN
+	};
 	
 	/**
 	 * Obtenir le code SFML d'une touche
 	 */
-	 sf::Key::Code GetKey(Key key) const;
+	sf::Key::Code GetKey(Key key) const;
 	 
+	unsigned int GetJoyKey(JoystickBind bind) const;
+
 	bool Fullscreen() const;
 
 	float GetBestTime() const;
@@ -48,7 +55,9 @@ private:
 	void ParseLine(std::string& line);
 	
 	typedef std::map<Key, sf::Key::Code> OptKeys;
+	typedef std::map<JoystickBind, unsigned int> OptJoyControls;
 	mutable OptKeys keys_;
+	mutable OptJoyControls joy_binds_;
 	bool fullscreen_;
 	float best_time_;
 };

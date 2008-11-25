@@ -12,6 +12,8 @@
 #include "Music.hpp"
 #include "Password.hpp"
 
+#include "Settings.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <limits>
@@ -110,6 +112,8 @@ private:
 	
 	// toutes les unités sont allouées dynamiquement
 	std::list<Entity*> entities_;
+	
+	Settings& settings_;
 };
 	
 #endif /* guard GAME_HPP */

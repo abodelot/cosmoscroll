@@ -5,6 +5,10 @@
 #include <SFML/Audio.hpp>
 #endif
 
+#ifndef JOYSTICK_ENABLED
+#define JOYSTICK_ENABLED
+#endif
+
 #include "Entity.hpp"
 #include "Weapon.hpp"
 #include "ControlPanel.hpp"
@@ -23,7 +27,7 @@ public:
 	~PlayerShip();
 	
 	void HandleKey(const sf::Event::KeyEvent& key);
-	
+	void HandleJoyButton(const sf::Event::JoyButtonEvent& event);
 	// phase de tir
 	void Action();
 	
@@ -65,7 +69,18 @@ private:
 		sf::Key::Code weapon_a;
 		sf::Key::Code weapon_b;
 		sf::Key::Code bonus_cooler;
+
+
+#ifdef JOYSTICK_ENABLED	
+		unsigned int Jbonus_cooler;
+		unsigned int Jweapon_a;
+		unsigned int Jweapon_b;
+		unsigned int Jvalid;
+		unsigned int Jreturn;
+#endif
 	};
+	
+
 	
 	enum TimedBonus
 	{
@@ -84,7 +99,6 @@ private:
 	Config binds_;
 	bool overheated_;
 	float heat_;
-	
 	int coolers_;
 	int shield_;
 	float shield_timer_;

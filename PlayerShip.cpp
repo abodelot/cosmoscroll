@@ -29,6 +29,8 @@
 #define HEAT_MAX	 100
 #define COLDING_RATE 13
 
+#define JOY_ID 0
+
 #define HP_DEFAULT   3
 #define HP_MAX	   5
 
@@ -53,6 +55,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 #ifndef NO_AUDIO
 	shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
 #endif
+
 	ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, &sprite_);
 	
 	panel_.SetMaxShipHP(HP_MAX);
@@ -62,7 +65,14 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 	panel_.SetShipHP(hp_);
 	panel_.SetShield(shield_);
 	panel_.SetHeat(static_cast<int>(heat_));
+
 	panel_.SetCoolers(coolers_);
+
+    
+//	thread_dead_ = true;
+	
+	
+
 	panel_.SetInfo("");
 	
 	// init timed bonus
@@ -80,6 +90,13 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 	binds_.weapon_a = settings.GetKey(Settings::WEAPON1);
 	binds_.weapon_b = settings.GetKey(Settings::WEAPON2);
 	binds_.bonus_cooler = settings.GetKey(Settings::BONUS_COOLER);
+#ifdef JOYSTICK_ENABLED
+	binds_.Jweapon_a = settings.GetJoyKey(Settings::jWEAPON1);
+	binds_.Jweapon_b = settings.GetJoyKey(Settings::jWEAPON2);
+	binds_.Jbonus_cooler = settings.GetJoyKey(Settings::jBONUS_COOLER);
+	binds_.Jvalid = settings.GetJoyKey(Settings::jVALID);
+	binds_.Jreturn = settings.GetJoyKey(Settings::jRETURN);
+#endif
 }
 
 
@@ -116,21 +133,46 @@ void PlayerShip::HandleKey(const sf::Event::KeyEvent& key)
 #endif
 }
 
+void PlayerShip::HandleJoyButton(const sf::Event::JoyButtonEvent& event)
+{
+	if (event.Button == binds_.Jbonus_cooler)
+	{
+		if (coolers_ > 0)
+		{
+			--coolers_;
+			panel_.SetCoolers(coolers_);
+			heat_ = 0.f;
+			overheated_ = false;
+			panel_.SetInfo("");
+		}
+	}
+}
+
 
 void PlayerShip::Action()
 {
+
 	if (!overheated_)
 	{
 		float h = 0.0f;
 		sf::Vector2f offset = sprite_.GetPosition() + GUN_OFFSET;
+#ifdef JOYSTICK_ENABLED
+		if ((input_.IsJoystickButtonDown(1, binds_.Jweapon_a)) || (input_.IsKeyDown(binds_.weapon_a)) )
+#else
 		if (input_.IsKeyDown(binds_.weapon_a))
+#endif
 		{ 
 			h += laserbeam_.Shoot(offset);
 		}
+#ifdef JOYSTICK_ENABLED
+		if ((input_.IsJoystickButtonDown(1, binds_.Jweapon_b)) || (input_.IsKeyDown(binds_.weapon_b)) )
+#else
 		if (input_.IsKeyDown(binds_.weapon_b))
+#endif
 		{
 			h += hellfire_.Shoot(offset);
 		}
+
 		
 		heat_ += h;
 		if (heat_ >= HEAT_MAX)
@@ -169,6 +211,24 @@ void PlayerShip::Move(float frametime)
 	{
 		x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
 	}
+	
+#ifdef JOYSTICK_ENABLED
+float pos;
+pos = input_.GetJoystickAxis(1, sf::Joy::AxisY);
+
+if (pos > 0)
+	y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
+else if (pos < 0 )
+	y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
+
+pos = input_.GetJoystickAxis(1, sf::Joy::AxisX);
+if (pos > 0)
+	x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
+else if (pos < 0)
+	x = (x - dist < 0) ? 0 : x - dist;
+	
+#endif
+	
 	sprite_.SetPosition(x, y);
 	
 	// regénération bouclier
@@ -202,6 +262,7 @@ void PlayerShip::Move(float frametime)
 			}
 		}
 	}
+
 	panel_.SetHeat(static_cast<int>(heat_));
 	
 	// timer bonus
@@ -310,8 +371,8 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 		default:
 			break;
 	}
-	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(),
-		bonus.WhatItIs());
+	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(), bonus.UWhatItIs());
+
 }
 
 
@@ -333,4 +394,3 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 	}
 	bonus_[tbonus] = 0;
 }
-

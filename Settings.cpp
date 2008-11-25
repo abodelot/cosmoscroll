@@ -32,6 +32,10 @@ sf::Key::Code Settings::GetKey(Key key) const
 	return keys_[key];
 }
 
+unsigned int Settings::GetJoyKey(JoystickBind bind) const
+{
+	return joy_binds_[bind];
+}
 
 bool Settings::Load(const char* filename)
 {
@@ -115,6 +119,56 @@ void Settings::ParseLine(std::string& line)
 		{
 			fullscreen_ = str_to_bool(value);
 		}
+		else if (option == "joy_pause")
+		{
+			joy_binds_[jPAUSE] = (unsigned int) str_to_int(value);
+		}
+		/*
+		else if (option == "joy_up")
+		{
+			joy_binds_[UP] = (unsigned int) str_to_int(value);
+		}
+		else if (option == "joy_down")
+		{
+			joy_binds_[DOWN] = (unsigned int) str_to_int(value);
+		}
+		else if (option == "joy_left")
+		{
+			joy_binds_[LEFT] = (unsigned int) str_to_int(value);
+		}
+		else if (option == "joy_right")
+		{
+			joy_binds_[RIGHT] = (unsigned int) str_to_int(value);
+		}
+		*/
+		else if (option == "joy_weapon1")
+		{
+			joy_binds_[jWEAPON1] = (unsigned int) str_to_int(value);
+		}
+		else if (option == "joy_weapon2")
+		{
+			joy_binds_[jWEAPON2] = (unsigned int) str_to_int(value);
+		}
+		else if (option == "joy_bonus_cooler")
+		{
+			joy_binds_[jBONUS_COOLER] = (unsigned int) str_to_int(value);
+		}
+		else if (option == "joy_valid")
+		{
+			joy_binds_[jVALID] = (unsigned int) str_to_int(value);
+		}
+		else if (option == "joy_return")
+		{
+			joy_binds_[jRETURN] = (unsigned int) str_to_int(value);
+		}
+		else if (option == "best_time")
+		{
+			best_time_ = str_to_float(value);
+		}
+		else if (option == "fullscreen")
+		{
+			fullscreen_ = str_to_bool(value);
+		}
 		else
 		{
 			std::cerr << "option inconnue : " << option << std::endl;
@@ -138,7 +192,18 @@ Settings::Settings()
 	keys_[WEAPON1] = sf::Key::Space;
 	keys_[WEAPON2] = sf::Key::A;
 	keys_[BONUS_COOLER] = sf::Key::LControl;
-	
+
+	joy_binds_[jPAUSE] = 1;
+/*	joy_binds_[jUP] = sf::Key::Up;
+	joy_binds_[jDOWN] = sf::Key::Down;
+	joy_binds_[jLEFT] = sf::Key::Left;
+	joy_binds_[jRIGHT] = sf::Key::Right; */
+	joy_binds_[jWEAPON1] = 2;
+	joy_binds_[jWEAPON2] = 3;
+	joy_binds_[jBONUS_COOLER] = 4;
+	joy_binds_[jVALID] = 5;
+	joy_binds_[jRETURN] = 6;
+
 	fullscreen_ = false;
 	best_time_ = 0.0f;
 }

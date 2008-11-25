@@ -84,6 +84,8 @@ private:
 		 */
 		virtual bool OnUpdate(float frametime) = 0;
 		
+	
+		virtual ~Particle();
 		/*
 		 * Affichage de la particule
 		 */

@@ -2,6 +2,6 @@
 
 
 # les espaces n'ont pas d'importance :)
-	fullscreen	= false
+	fullscreen	= true
 
-
+# essai joystick

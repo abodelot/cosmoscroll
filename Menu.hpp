@@ -9,6 +9,8 @@
 #include <SFML/Audio.hpp>
 #endif
 
+#include "Settings.hpp"
+
 /*
  * Permet de sélectionner une action
  */
@@ -63,6 +65,8 @@ public:
      * @return true si une action a été validée, sinon fasle
      */
     bool ActionChosen(const sf::Event::KeyEvent& key, int& id);
+
+	bool JActionChosen(const unsigned int& key, int& id);
     
     /*
      * Afficher les éléments du menu
@@ -106,6 +110,7 @@ private:
 #ifndef NO_AUDIO
     sf::Sound sound_;
 #endif
+	Settings& settings_;
 };
 
 #endif /* guard MENU_HPP */

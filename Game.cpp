@@ -16,6 +16,10 @@
 #define CONFIG_FILE "config/settings.txt"
 #define HACKY_KEY sf::Key::H
 
+#ifndef JOYSTICK_ENABLED
+#define JOYSTICK_ENABLED
+#endif
+
 Game& Game::GetInstance()
 {
 	static Game self;
@@ -27,7 +31,8 @@ Game::Game() :
 	bullets_  (BulletManager::GetInstance()),
 	particles_(ParticleSystem::GetInstance()),
 	panel_	(ControlPanel::GetInstance()),
-	level_	(Level::GetInstance())
+	level_	(Level::GetInstance()),
+	settings_ (Settings::GetInstance())
 	
 {
 	Settings& settings = Settings::GetInstance();
@@ -157,7 +162,19 @@ Game::Choice Game::Intro()
 					what = EXIT_APP;
 				}
 			}
+#ifdef JOYSTICK_ENABLED
+			else if (event.Type == sf::Event::JoyButtonPressed)
+			{
+				elapsed = DURATION;
+				if (event.JoyButton.Button == settings_.GetJoyKey(Settings::jRETURN))
+				{
+					what = EXIT_APP;
+				}
+			}
+		
+#endif
 		}
+	}
 		float time = app_.GetFrameTime();
 		elapsed += time;
 #ifdef DEBUG
@@ -171,7 +188,7 @@ Game::Choice Game::Intro()
 #endif
 		ship.Move(180 * time, 25 * time); // FIXME: déplacement magique !
 		title.Scale(0.99, 0.99); // FIXME: dépendant des FPS
-		title.SetColor(sf::Color(255, 255, 255, 255 * elapsed / DURATION));
+		title.SetColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(255 * elapsed / DURATION)));
 		title.SetPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 		
 		app_.Draw(background);
@@ -179,7 +196,7 @@ Game::Choice Game::Intro()
 		app_.Draw(title);
 		app_.Draw(ship);
 		app_.Display();
-	}
+		
 	return what;
 }
 
@@ -221,9 +238,19 @@ Game::Choice Game::MainMenu()
 					running = false;
 				}
 			}
+#ifdef JOYSTICK_ENABLED
+			else if (event.Type == sf::Event::JoyButtonPressed)
+			{
+				if (menu.JActionChosen(event.JoyButton.Button, choice))
+				{
+					running = false;
+				}
+			}
+#endif
 		}
 		menu.Show(app_);
 		app_.Display();
+
 	}
 	// si on lance une nouvelle partie, on nettoie les restes des éventuelles
 	// parties précédentes et l'on respawn un joueur neuf
@@ -284,8 +311,23 @@ Game::Choice Game::Play()
 					running = false;
 				}
 			}
+#ifdef JOYSTICK_ENABLED
+			else if (event.Type == sf::Event::JoyButtonPressed)
+			{
+				GetPlayer()->HandleJoyButton(event.JoyButton);
+				if (event.JoyButton.Button == settings_.GetJoyKey(Settings::jRETURN))
+				{
+					running = false;
+				}
+				else if (event.JoyButton.Button == settings_.GetJoyKey(Settings::jPAUSE))
+				{
+					what = IN_GAME_MENU;
+					running = false;
+				}
+			}
+#endif
 		}
-
+	
 		if (running)
 		{
 			running = MoreBadGuys() || entities_.size() > 1;
@@ -310,9 +352,11 @@ Game::Choice Game::Play()
 			}
 		}
 
+
 		std::list<Entity*>::iterator it;
 		// action
 		for (it = entities_.begin(); it != entities_.end(); ++it)
+
 		{
 			(**it).Action();
 		}
@@ -417,6 +461,25 @@ Game::Choice Game::InGameMenu()
 					paused = false;
 				}
 			}
+#ifdef JOYSTICK_ENABLED
+			else if (event.Type == sf::Event::JoyMoved)
+			{
+				if (event.JoyMove.Axis == sf::Joy::AxisY)
+				{
+					if (menu.JActionChosen( event.JoyMove.Position > 0 ? Settings::jDOWN : Settings::jUP, what) )
+					{
+						paused = false;
+					}
+				}
+			}
+			else if (event.Type == sf::Event::JoyButtonPressed)
+			{
+				if (event.JoyButton.Button = settings_.GetJoyKey(Settings::jRETURN))
+				{
+					what = EXIT_APP;
+				}
+			}
+#endif
 		}
 		
 		// seules les particules sont mises à jour
@@ -487,6 +550,15 @@ Game::Choice Game::GameOver()
 					running = false;
 				}
 			}
+#ifdef JOYSTICK_ENABLED
+			else if (event.Type == sf::Event::JoyButtonPressed)
+			{
+				if (event.JoyButton.Button = settings_.GetJoyKey(Settings::jRETURN))
+				{
+					choice = EXIT_APP;
+				}
+			}
+#endif
 		}
 		app_.Draw(title);
 		menu.Show(app_);
@@ -545,7 +617,7 @@ Game::Choice Game::Intertitre()
 				{
 					running = false;
 				}
-				
+
 				if (event.Key.Code == HACKY_KEY)
 				{
 					//HACK
@@ -751,8 +823,8 @@ std::string Game::MakePassword()
 	return res;
 }
 
-// AAAAAAAAAAADAwICAAAAAAAK
-// AAAAAAAAAAACBAIDAAAAAAAL
+// AAAAAAAAAAADAwICAAAAAAAK <- L2
+// AAAAAAAAAAACBAIDAAAAAAAL <- L3
 
 bool Game::UsePassword(std::string & source)
 {

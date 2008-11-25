@@ -2,7 +2,8 @@
 #include "MediaManager.hpp"
 
 
-Menu::Menu()
+Menu::Menu() :
+	settings_ (Settings::GetInstance())
 {
     // valeurs par défaut
     textsize_ = 20;
@@ -104,7 +105,16 @@ bool Menu::ActionChosen(const sf::Event::KeyEvent& key, int& id)
     }
     return false;
 }
-    
+
+bool Menu::JActionChosen(const unsigned int& key, int& id)
+{
+    if (key == settings_.GetJoyKey(Settings::jRETURN))
+	{
+        id = items_[selected_].id;
+        return true;
+	}
+    return false;
+}
 
 void Menu::Show(const sf::RenderWindow& app) const
 {
