@@ -106,6 +106,17 @@ bool Menu::ActionChosen(const sf::Event::KeyEvent& key, int& id)
     return false;
 }
 
+void Menu::JMoved(const float offset)
+{
+sf::Event::KeyEvent k;
+int fake;
+	if (offset > 0)
+		k.Code = settings_.GetKey(Settings::DOWN);
+	if (offset < 0)
+		k.Code = settings_.GetKey(Settings::UP);
+	ActionChosen(k, fake);
+}
+
 bool Menu::JActionChosen(const unsigned int& key, int& id)
 {
     if (key == settings_.GetJoyKey(Settings::jRETURN))

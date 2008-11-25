@@ -40,7 +40,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 	panel_(ControlPanel::GetInstance()),
 	input_(input),
 	laserbeam_(Weapon::LASERBEAM, this),
-	hellfire_(Weapon::HELLFIRE, this)
+	hellfire_(Weapon::HELLFIRE, this),
+	settings_(Settings::GetInstance())
 {
 #ifdef DEBUG
 	puts("PlayerShip()");
@@ -214,14 +215,14 @@ void PlayerShip::Move(float frametime)
 	
 #ifdef JOYSTICK_ENABLED
 float pos;
-pos = input_.GetJoystickAxis(1, sf::Joy::AxisY);
+pos = input_.GetJoystickAxis(1, sf::Joy::AxisY) + settings_.GetCalibration()->y;
 
 if (pos > 0)
 	y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
 else if (pos < 0 )
 	y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
 
-pos = input_.GetJoystickAxis(1, sf::Joy::AxisX);
+pos = input_.GetJoystickAxis(1, sf::Joy::AxisX) + settings_.GetCalibration()->x;
 if (pos > 0)
 	x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
 else if (pos < 0)

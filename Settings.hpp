@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <SFML/Window/Event.hpp>
+#include <SFML/System.hpp>
 
 
 /**
@@ -45,6 +46,15 @@ public:
 	 */
 	bool Load(const char* filename);
 
+	inline const sf::Vector2f* GetCalibration() const
+	{
+		return &calibration_;
+	};
+	
+	inline void SetCalibration(const sf::Vector2f& val)
+	{
+		calibration_ = val;
+	};
 	
 private:
 	Settings();
@@ -60,6 +70,7 @@ private:
 	mutable OptJoyControls joy_binds_;
 	bool fullscreen_;
 	float best_time_;
+	sf::Vector2f calibration_;
 };
 
 #endif /* guard SETTINGS_HPP */

@@ -13,6 +13,7 @@
 #include "Weapon.hpp"
 #include "ControlPanel.hpp"
 #include "Bonus.hpp"
+#include "Settings.hpp"
 
 #include <SFML/System.hpp>
 
@@ -95,6 +96,7 @@ private:
 	float bonus_[TIMED_BONUS_COUNT];
 	
 	ControlPanel& panel_;
+
 	const sf::Input& input_;
 	Config binds_;
 	bool overheated_;
@@ -108,6 +110,8 @@ private:
 #endif
 	Weapon laserbeam_;
 	Weapon hellfire_;
+	
+	Settings settings_;
 };
 
 #endif /* guard PLAYERSHIP_HPP */

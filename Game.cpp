@@ -51,6 +51,10 @@ Game::Game() :
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
 	key_pause_ = settings.GetKey(Settings::PAUSE);
+	
+#ifdef JOYSICK_ENABLED
+	CalibrateJoystick();
+#endif
 }
 
 
@@ -163,6 +167,7 @@ Game::Choice Game::Intro()
 				}
 			}
 #ifdef JOYSTICK_ENABLED
+
 			else if (event.Type == sf::Event::JoyButtonPressed)
 			{
 				elapsed = DURATION;
@@ -171,9 +176,9 @@ Game::Choice Game::Intro()
 					what = EXIT_APP;
 				}
 			}
-		
+
 #endif
-	}
+		}
 		float time = app_.GetFrameTime();
 		elapsed += time;
 #ifdef DEBUG
@@ -245,6 +250,10 @@ Game::Choice Game::MainMenu()
 				{
 					running = false;
 				}
+			}
+			else if (event.Type == sf::Event::JoyMoved && event.JoyMove.Axis == sf::Joy::AxisY)
+			{
+				menu.JMoved(event.JoyMove.Position + settings_.GetCalibration()->y);
 			}
 #endif
 		}
@@ -462,18 +471,16 @@ Game::Choice Game::InGameMenu()
 				}
 			}
 #ifdef JOYSTICK_ENABLED
-			else if (event.Type == sf::Event::JoyMoved)
+			else if (event.Type == sf::Event::JoyMoved && event.JoyMove.Axis == sf::Joy::AxisY)
 			{
-				if (event.JoyMove.Axis == sf::Joy::AxisY)
-				{
-					if (menu.JActionChosen( event.JoyMove.Position > 0 ? Settings::jDOWN : Settings::jUP, what) )
-					{
-						paused = false;
-					}
-				}
+				menu.JMoved(event.JoyMove.Position + settings_.GetCalibration()->y);
 			}
 			else if (event.Type == sf::Event::JoyButtonPressed)
 			{
+					if (menu.JActionChosen(event.JoyButton.Button, what) )
+					{
+						paused = false;
+					}
 				if (event.JoyButton.Button = settings_.GetJoyKey(Settings::jRETURN))
 				{
 					what = EXIT_APP;
@@ -557,6 +564,10 @@ Game::Choice Game::GameOver()
 				{
 					choice = EXIT_APP;
 				}
+			}
+			else if (event.Type == sf::Event::JoyMoved && event.JoyMove.Axis == sf::Joy::AxisY)
+			{
+				menu.JMoved(event.JoyMove.Position + settings_.GetCalibration()->y);
 			}
 #endif
 		}
@@ -875,3 +886,11 @@ bool Game::Passwd_HACK() {
 	} return ok;
 }
 
+void Game::CalibrateJoystick() 
+{
+	sf::Input i;
+	sf::Vector2f res;
+	res.x = 0.f - i.GetJoystickAxis(1, sf::Joy::AxisX);
+	res.y = 0.f - i.GetJoystickAxis(1, sf::Joy::AxisY);
+	settings_.SetCalibration(res);
+}

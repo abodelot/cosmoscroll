@@ -68,6 +68,8 @@ public:
 
 	bool JActionChosen(const unsigned int& key, int& id);
     
+	
+	void JMoved(const float offset);
     /*
      * Afficher les éléments du menu
      * @param[in] app: fenêtre de rendu

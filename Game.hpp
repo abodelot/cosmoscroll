@@ -38,6 +38,7 @@ public:
 	
 	PlayerShip* GetPlayer() const;
 	
+	
 private:
 	Game();
 	~Game();
@@ -77,6 +78,8 @@ private:
 	 * Suppression de toutes les unités en jeu
 	 */
 	void RemoveEntities();
+
+	void CalibrateJoystick();
 	
 	// ne pas mélanger la gestion du joueur avec PlayerShip
 	struct Player
@@ -114,6 +117,7 @@ private:
 	std::list<Entity*> entities_;
 	
 	Settings& settings_;
+	
 };
 	
 #endif /* guard GAME_HPP */

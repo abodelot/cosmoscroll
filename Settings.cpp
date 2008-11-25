@@ -206,5 +206,7 @@ Settings::Settings()
 
 	fullscreen_ = false;
 	best_time_ = 0.0f;
+	
+	calibration_.x = calibration_.y = 0.f;
 }
 
