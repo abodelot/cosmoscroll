@@ -1,6 +1,6 @@
 #include "AbstractController.hpp"
 #include "Game.hpp"
-
+#define JOY_ID 0
 
 #include <cassert>
 
@@ -57,7 +57,7 @@ bool AbstractController::GetAction(Action& action)
 				{
 					action = MOVE_RIGHT;
 				}
-				else if (event.JoyMove.Position < JOY_DEADZONE)
+				else if (event.JoyMove.Position < - JOY_DEADZONE)
 				{
 					action = MOVE_LEFT;
 				}
@@ -68,7 +68,7 @@ bool AbstractController::GetAction(Action& action)
 				{
 					action = MOVE_DOWN;
 				}
-				else if (event.JoyMove.Position < JOY_DEADZONE)
+				else if (event.JoyMove.Position < - JOY_DEADZONE)
 				{
 					action = MOVE_UP;
 				}				
@@ -88,25 +88,25 @@ bool AbstractController::HasInput(Action action)
 	{
 		return true;
 	}
-	if (input_.IsJoystickButtonDown(1, joystick_binds_[action]))
+	if (input_.IsJoystickButtonDown(JOY_ID, joystick_binds_[action]))
 	{
 		return true;
 	}
 	if (action == MOVE_UP)
 	{
-		return input_.GetJoystickAxis(1, sf::Joy::AxisY) < -JOY_DEADZONE;
+		return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisY) < -JOY_DEADZONE;
 	}
 	if (action == MOVE_DOWN)
 	{
-		return input_.GetJoystickAxis(1, sf::Joy::AxisY) > JOY_DEADZONE;
+		return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisY) > JOY_DEADZONE;
 	}
 	if (action == MOVE_LEFT)
 	{
-		return input_.GetJoystickAxis(1, sf::Joy::AxisX) < -JOY_DEADZONE;
+		return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisX) < -JOY_DEADZONE;
 	}
 	if (action == MOVE_RIGHT)
 	{
-		return input_.GetJoystickAxis(1, sf::Joy::AxisX) > JOY_DEADZONE;
+		return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisX) > JOY_DEADZONE;
 	}
 	return false;
 }

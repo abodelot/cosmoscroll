@@ -52,9 +52,6 @@ Game::Game() :
 	app_.EnableKeyRepeat(false);
 	key_pause_ = settings.GetKey(Settings::PAUSE);
 	
-#ifdef JOYSICK_ENABLED
-	CalibrateJoystick();
-#endif
 }
 
 
@@ -912,13 +909,3 @@ bool Game::Passwd_HACK() {
 		} else std::cout << "Erreur ! \n";
 	} return ok;
 }
-/*
-void Game::CalibrateJoystick() 
-{
-	sf::Input i;
-	sf::Vector2f res;
-	res.x = 0.f - i.GetJoystickAxis(1, sf::Joy::AxisX);
-	res.y = 0.f - i.GetJoystickAxis(1, sf::Joy::AxisY);
-	settings_.SetCalibration(res);
-}*/
-

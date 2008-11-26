@@ -89,8 +89,7 @@ private:
 	 */
 	void RemoveEntities();
 
-	void CalibrateJoystick();
-	
+
 	// ne pas mélanger la gestion du joueur avec PlayerShip
 	struct Player
 	{
