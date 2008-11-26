@@ -14,10 +14,13 @@
 #include <typeinfo>
 
 #define CONFIG_FILE "config/settings.txt"
-#define HACKY_KEY sf::Key::H
 
 #ifndef JOYSTICK_ENABLED
 #define JOYSTICK_ENABLED
+#endif
+
+#ifndef SVN_REV
+#define SVN_REV "???"
 #endif
 
 Game& Game::GetInstance()
@@ -201,8 +204,14 @@ Game::Choice Game::MainMenu()
 #ifdef DEBUG
 	puts("[ Game::MainMenu ]");
 #endif
+	sf::String title(str_sprintf("CosmoScroll - r%s", SVN_REV));
+	title.SetFont(GET_FONT());
+	title.SetSize(40);
+	title.SetY(42);
+	title.SetX((WIN_WIDTH - title.GetRect().GetWidth()) / 2);
+	
 	Menu menu;
-	menu.SetOffset(sf::Vector2f(42, 100));
+	menu.SetOffset(sf::Vector2f(60, 120));
 	menu.AddItem("Mode Aventure", STORY_MODE);
 	menu.AddItem("Mode Arcade", ARCADE_MODE);
 	menu.AddItem("Quitter", EXIT_APP);
@@ -222,28 +231,8 @@ Game::Choice Game::MainMenu()
 			{
 				running = false;
 			}
-			/*else if (event.Type == sf::Event::KeyPressed)
-			{
-				if (menu.ActionChosen(event.Key, choice))
-				{
-					running = false;
-				}
-			}
-#ifdef JOYSTICK_ENABLED
-			else if (event.Type == sf::Event::JoyButtonPressed)
-			{
-				if (menu.JActionChosen(event.JoyButton.Button, choice))
-				{
-					running = false;
-				}
-			}
-			else if (event.Type == sf::Event::JoyMoved && event.JoyMove.Axis == sf::Joy::AxisY)
-			{
-				menu.JMoved(event.JoyMove.Position + settings_.GetCalibration()->y);
-			}
-#endif
-*/
 		}
+		app_.Draw(title);
 		menu.Show(app_);
 		app_.Display();
 
@@ -256,7 +245,6 @@ Game::Choice Game::MainMenu()
 		RemoveEntities();
 		particles_.Clear();
 		bullets_.Clear();
-		
 		
 		// init
 		timer_ = 0.0f;
@@ -303,36 +291,6 @@ Game::Choice Game::Play()
 			{
 				GetPlayer()->HandleAction(action);
 			}
-			/*
-			else if (event.Type == sf::Event::KeyPressed)
-			{
-				GetPlayer()->HandleKey(event.Key);
-				if (event.Key.Code == key_pause_)
-				{
-					what = IN_GAME_MENU;
-					running = false;
-				}
-				else if (event.Key.Code == sf::Key::Escape) // QUICK QUIT
-				{
-					running = false;
-				}
-			}
-#ifdef JOYSTICK_ENABLED
-			else if (event.Type == sf::Event::JoyButtonPressed)
-			{
-				GetPlayer()->HandleJoyButton(event.JoyButton);
-				if (event.JoyButton.Button == settings_.GetJoyKey(Settings::jRETURN))
-				{
-					running = false;
-				}
-				else if (event.JoyButton.Button == settings_.GetJoyKey(Settings::jPAUSE))
-				{
-					what = IN_GAME_MENU;
-					running = false;
-				}
-			}
-#endif
-*/
 		}
 	
 		if (running)
@@ -383,7 +341,7 @@ Game::Choice Game::Play()
 					running = false;
 					what = GAME_OVER;
 #ifdef DEBUG
-					puts("\nyou are dead :(\n");
+					puts("\nplayer killed");
 #endif
 					break;
 				}
@@ -436,7 +394,7 @@ Game::Choice Game::InGameMenu()
 	sf::String title("P A U S E");
 	title.SetPosition(180, 160);
 	title.SetSize(30.0);
-
+	
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(220, 200));
 	Choice resume = arcade_ ? ARCADE_MODE : STORY_MODE;
@@ -465,34 +423,6 @@ Game::Choice Game::InGameMenu()
 			{
 				paused = false;
 			}
-			/*if (event.Type == sf::Event::KeyPressed)
-			{
-				if (event.Key.Code == key_pause_)
-				{
-					
-				}
-				else if (menu.ActionChosen(event.Key, what))
-				{
-					paused = false;
-				}
-			}
-#ifdef JOYSTICK_ENABLED
-			else if (event.Type == sf::Event::JoyMoved && event.JoyMove.Axis == sf::Joy::AxisY)
-			{
-				menu.JMoved(event.JoyMove.Position + settings_.GetCalibration()->y);
-			}
-			else if (event.Type == sf::Event::JoyButtonPressed)
-			{
-					if (menu.JActionChosen(event.JoyButton.Button, what) )
-					{
-						paused = false;
-					}
-				if (event.JoyButton.Button == settings_.GetJoyKey(Settings::jRETURN))
-				{
-					what = EXIT_APP;
-				}
-			}
-#endif*/
 		}
 		
 		// seules les particules sont mises à jour
@@ -528,7 +458,7 @@ Game::Choice Game::GameOver()
 	{
 		int min = (int) player_.best_time / 60;
 		int sec = (int) player_.best_time % 60;
-		title.SetText(str_sprintf("Tu as tenu seulement %d min et %d sec",
+		title.SetText(str_sprintf("Vous avez tenu seulement %d min et %d sec",
 			min, sec));
 	}
 	else
@@ -559,27 +489,7 @@ Game::Choice Game::GameOver()
 			else if (menu.ItemChosen(action, choice))
 			{
 				running = false;
-			}/*
-			else if (event.Type == sf::Event::KeyPressed)
-			{
-				if (menu.ActionChosen(event.Key, choice))
-				{
-					running = false;
-				}
 			}
-#ifdef JOYSTICK_ENABLED
-			else if (event.Type == sf::Event::JoyButtonPressed)
-			{
-				if (event.JoyButton.Button == settings_.GetJoyKey(Settings::jRETURN))
-				{
-					choice = EXIT_APP;
-				}
-			}
-			else if (event.Type == sf::Event::JoyMoved && event.JoyMove.Axis == sf::Joy::AxisY)
-			{
-				menu.JMoved(event.JoyMove.Position + settings_.GetCalibration()->y);
-			}
-#endif*/
 		}
 		app_.Draw(title);
 		menu.Show(app_);
@@ -717,27 +627,6 @@ Game::Choice Game::Continue()
 				subtitle.SetText(level_desc_);
 				//</HACK>
 			}
-			/*if (event.Type == sf::Event::Closed)
-			{
-				running = false;
-			}
-			else if (event.Type == sf::Event::KeyPressed)
-			{
-				if (menu.ActionChosen(event.Key, choice))
-				{
-					running = false;
-				}
-				if (event.Key.Code == HACKY_KEY)
-				{
-					//<HACK>
-					Passwd_HACK();
-					level_.Set(cur_lvl_, level_desc_);
-					find_replace(level_desc_, "\\n", "\n");
-					title.SetText(str_sprintf("Niveau %d", cur_lvl_));
-					subtitle.SetText(level_desc_);
-					//</HACK>
-				}
-			}*/
 		}
 		app_.Draw(subtitle);
 		app_.Draw(title);
@@ -794,7 +683,6 @@ bool Game::MoreBadGuys()
 		AddEntity(p);
 		p = level.GiveNext(timer_);
 	}
-	
 	
 	// si le niveau n'est pas fini, alors il y a encore des ennemis
 	return level.RemainingEntities() > 0;
