@@ -12,6 +12,7 @@
 #include "Music.hpp"
 #include "Password.hpp"
 
+#include "AbstractController.hpp"
 #include "Settings.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -38,6 +39,15 @@ public:
 	
 	PlayerShip* GetPlayer() const;
 	
+	inline sf::RenderWindow& GetApp()
+	{
+		return app_;
+	}
+	
+	inline const sf::Input& GetInput() const
+	{
+		return app_.GetInput();
+	}
 	
 private:
 	Game();
@@ -117,7 +127,7 @@ private:
 	std::list<Entity*> entities_;
 	
 	Settings& settings_;
-	
+	AbstractController& controls_;
 };
 	
 #endif /* guard GAME_HPP */

@@ -35,13 +35,13 @@
 #define HP_MAX	   5
 
 
-PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
+PlayerShip::PlayerShip(const sf::Vector2f& offset) :
 	Entity(GET_IMG("spaceship"), offset),
 	panel_(ControlPanel::GetInstance()),
-	input_(input),
 	laserbeam_(Weapon::LASERBEAM, this),
 	hellfire_(Weapon::HELLFIRE, this),
-	settings_(Settings::GetInstance())
+	//settings_(Settings::GetInstance())
+	controls_(AC::GetInstance())
 {
 #ifdef DEBUG
 	puts("PlayerShip()");
@@ -68,12 +68,6 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 	panel_.SetHeat(static_cast<int>(heat_));
 
 	panel_.SetCoolers(coolers_);
-
-    
-//	thread_dead_ = true;
-	
-	
-
 	panel_.SetInfo("");
 	
 	// init timed bonus
@@ -83,7 +77,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 	}
 	
 	// init bindings config
-	const Settings& settings = Settings::GetInstance();
+	/*const Settings& settings = Settings::GetInstance();
 	binds_.up = settings.GetKey(Settings::UP);
 	binds_.down = settings.GetKey(Settings::DOWN);
 	binds_.left = settings.GetKey(Settings::LEFT);
@@ -97,7 +91,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const sf::Input& input) :
 	binds_.Jbonus_cooler = settings.GetJoyKey(Settings::jBONUS_COOLER);
 	binds_.Jvalid = settings.GetJoyKey(Settings::jVALID);
 	binds_.Jreturn = settings.GetJoyKey(Settings::jRETURN);
-#endif
+#endif*/
 }
 
 
@@ -109,9 +103,9 @@ PlayerShip::~PlayerShip()
 }
 
 
-void PlayerShip::HandleKey(const sf::Event::KeyEvent& key)
+void PlayerShip::HandleAction(AC::Action action)
 {
-	if (key.Code == binds_.bonus_cooler)
+	if (action == AC::USE_COOLER)
 	{
 		if (coolers_ > 0)
 		{
@@ -123,7 +117,7 @@ void PlayerShip::HandleKey(const sf::Event::KeyEvent& key)
 		}
 	}
 #ifdef DEBUG
-	if (input_.IsKeyDown(sf::Key::H))
+	if (action == AC::USE_HACK)
 	{
 		hp_ = 30;
 		panel_.SetShipHP(hp_);
@@ -134,21 +128,6 @@ void PlayerShip::HandleKey(const sf::Event::KeyEvent& key)
 #endif
 }
 
-void PlayerShip::HandleJoyButton(const sf::Event::JoyButtonEvent& event)
-{
-	if (event.Button == binds_.Jbonus_cooler)
-	{
-		if (coolers_ > 0)
-		{
-			--coolers_;
-			panel_.SetCoolers(coolers_);
-			heat_ = 0.f;
-			overheated_ = false;
-			panel_.SetInfo("");
-		}
-	}
-}
-
 
 void PlayerShip::Action()
 {
@@ -157,19 +136,21 @@ void PlayerShip::Action()
 	{
 		float h = 0.0f;
 		sf::Vector2f offset = sprite_.GetPosition() + GUN_OFFSET;
-#ifdef JOYSTICK_ENABLED
+/*#ifdef JOYSTICK_ENABLED
 		if ((input_.IsJoystickButtonDown(1, binds_.Jweapon_a)) || (input_.IsKeyDown(binds_.weapon_a)) )
 #else
 		if (input_.IsKeyDown(binds_.weapon_a))
-#endif
+#endif*/
+		if (controls_.HasInput(AC::WEAPON_1))
 		{ 
 			h += laserbeam_.Shoot(offset);
 		}
-#ifdef JOYSTICK_ENABLED
+/*#ifdef JOYSTICK_ENABLED
 		if ((input_.IsJoystickButtonDown(1, binds_.Jweapon_b)) || (input_.IsKeyDown(binds_.weapon_b)) )
 #else
 		if (input_.IsKeyDown(binds_.weapon_b))
-#endif
+#endif*/
+		if (controls_.HasInput(AC::WEAPON_2))
 		{
 			h += hellfire_.Shoot(offset);
 		}
@@ -196,23 +177,23 @@ void PlayerShip::Move(float frametime)
 	
 	float dist = frametime * speed_;
 	
-	if (input_.IsKeyDown(binds_.up))
+	if (controls_.HasInput(AC::MOVE_UP))
 	{
 		y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
 	}
-	if (input_.IsKeyDown(binds_.down))
+	if (controls_.HasInput(AC::MOVE_DOWN))
 	{
 		y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
 	}
-	if (input_.IsKeyDown(binds_.left))
+	if (controls_.HasInput(AC::MOVE_LEFT))
 	{
 		x = (x - dist < 0) ? 0 : x - dist;
 	}
-	if (input_.IsKeyDown(binds_.right))
+	if (controls_.HasInput(AC::MOVE_RIGHT))
 	{
 		x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
 	}
-	
+	/*
 #ifdef JOYSTICK_ENABLED
 float pos;
 pos = input_.GetJoystickAxis(1, sf::Joy::AxisY) + settings_.GetCalibration()->y;
@@ -229,7 +210,7 @@ else if (pos < 0)
 	x = (x - dist < 0) ? 0 : x - dist;
 	
 #endif
-	
+	*/
 	sprite_.SetPosition(x, y);
 	
 	// regénération bouclier

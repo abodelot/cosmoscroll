@@ -13,7 +13,8 @@
 #include "Weapon.hpp"
 #include "ControlPanel.hpp"
 #include "Bonus.hpp"
-#include "Settings.hpp"
+//#include "Settings.hpp"
+#include "AbstractController.hpp"
 
 #include <SFML/System.hpp>
 
@@ -23,12 +24,13 @@
 class PlayerShip: public Entity
 {
 public:
-	PlayerShip(const sf::Vector2f& offset, const sf::Input& input);
+	PlayerShip(const sf::Vector2f& offset);
 	
 	~PlayerShip();
 	
-	void HandleKey(const sf::Event::KeyEvent& key);
-	void HandleJoyButton(const sf::Event::JoyButtonEvent& event);
+	void HandleAction(AC::Action action);
+/*	void HandleKey(const sf::Event::KeyEvent& key);
+	void HandleJoyButton(const sf::Event::JoyButtonEvent& event);*/
 	// phase de tir
 	void Action();
 	
@@ -61,7 +63,7 @@ public:
 	}
 	
 private:
-	struct Config
+	/*struct Config
 	{
 		sf::Key::Code up;
 		sf::Key::Code down;
@@ -80,7 +82,7 @@ private:
 		unsigned int Jreturn;
 #endif
 	};
-	
+	*/
 
 	
 	enum TimedBonus
@@ -97,8 +99,7 @@ private:
 	
 	ControlPanel& panel_;
 
-	const sf::Input& input_;
-	Config binds_;
+	//Config binds_;
 	bool overheated_;
 	float heat_;
 	int coolers_;
@@ -111,7 +112,8 @@ private:
 	Weapon laserbeam_;
 	Weapon hellfire_;
 	
-	Settings settings_;
+	//Settings settings_;
+	AbstractController& controls_;
 };
 
 #endif /* guard PLAYERSHIP_HPP */

@@ -2,8 +2,8 @@
 #include "MediaManager.hpp"
 
 
-Menu::Menu() :
-	settings_ (Settings::GetInstance())
+Menu::Menu() /*:
+	settings_ (Settings::GetInstance())*/
 {
     // valeurs par défaut
     textsize_ = 20;
@@ -77,11 +77,11 @@ void Menu::AddItem(const std::string label, int id)
 }
 
 
-bool Menu::ActionChosen(const sf::Event::KeyEvent& key, int& id)
+bool Menu::ItemChosen(AC::Action action, int& id)
 {
-    switch (key.Code)
+    switch (action)
     {
-        case sf::Key::Up:
+        case AC::MOVE_UP:
             ApplyStyle(items_[selected_], normal_look_);
             selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
             ApplyStyle(items_[selected_], highlight_look_);
@@ -89,7 +89,7 @@ bool Menu::ActionChosen(const sf::Event::KeyEvent& key, int& id)
             sound_.Play();
 #endif
             break;
-        case sf::Key::Down:
+        case AC::MOVE_DOWN:
             ApplyStyle(items_[selected_], normal_look_);
             selected_ = (selected_ + 1) % items_.size();
             ApplyStyle(items_[selected_], highlight_look_);
@@ -97,7 +97,7 @@ bool Menu::ActionChosen(const sf::Event::KeyEvent& key, int& id)
             sound_.Play();
 #endif
             break;
-        case sf::Key::Return:
+        case AC::VALID:
             id = items_[selected_].id;
             return true;
         default:
@@ -106,26 +106,6 @@ bool Menu::ActionChosen(const sf::Event::KeyEvent& key, int& id)
     return false;
 }
 
-void Menu::JMoved(const float offset)
-{
-sf::Event::KeyEvent k;
-int fake;
-	if (offset > 0)
-		k.Code = settings_.GetKey(Settings::DOWN);
-	if (offset < 0)
-		k.Code = settings_.GetKey(Settings::UP);
-	ActionChosen(k, fake);
-}
-
-bool Menu::JActionChosen(const unsigned int& key, int& id)
-{
-    if (key == settings_.GetJoyKey(Settings::jRETURN))
-	{
-        id = items_[selected_].id;
-        return true;
-	}
-    return false;
-}
 
 void Menu::Show(const sf::RenderWindow& app) const
 {

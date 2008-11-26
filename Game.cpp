@@ -32,8 +32,8 @@ Game::Game() :
 	particles_(ParticleSystem::GetInstance()),
 	panel_	(ControlPanel::GetInstance()),
 	level_	(Level::GetInstance()),
-	settings_ (Settings::GetInstance())
-	
+	settings_ (Settings::GetInstance()),
+	controls_(AbstractController::GetInstance())
 {
 	Settings& settings = Settings::GetInstance();
 	settings.Load(CONFIG_FILE);
@@ -68,6 +68,7 @@ Game::~Game()
 
 void Game::Run()
 {
+	puts("running...");
 	// première scène = Intro
 	Choice what = Intro();
 #ifndef NO_AUDIO
@@ -148,36 +149,20 @@ Game::Choice Game::Intro()
 	sf::Sprite ship(GET_IMG("spaceship"));
 	ship.SetPosition(-20, 100);
 	
-	sf::Event event;
+	AbstractController::Action action;
 	while (elapsed < DURATION)
 	{
-		while (app_.GetEvent(event)) 
+		while (controls_.GetAction(action)) 
 		{
-			if (event.Type == sf::Event::Closed)
+			if (action == AC::EXIT_APP)
 			{
 				elapsed = DURATION;
 				what = EXIT_APP;
 			}
-			else if (event.Type == sf::Event::KeyPressed)
+			else if (action == AC::VALID)
 			{
 				elapsed = DURATION;
-				if (event.Key.Code == sf::Key::Escape)
-				{
-					what = EXIT_APP;
-				}
 			}
-#ifdef JOYSTICK_ENABLED
-
-			else if (event.Type == sf::Event::JoyButtonPressed)
-			{
-				elapsed = DURATION;
-				if (event.JoyButton.Button == settings_.GetJoyKey(Settings::jRETURN))
-				{
-					what = EXIT_APP;
-				}
-			}
-
-#endif
 		}
 		float time = app_.GetFrameTime();
 		elapsed += time;
@@ -227,16 +212,20 @@ Game::Choice Game::MainMenu()
 	bool running = true;
 	int choice = EXIT_APP;
 	
-	sf::Event event;
+	AC::Action action;
 	while (running)
 	{
-		while (app_.GetEvent(event))
+		while (controls_.GetAction(action))
 		{
-			if (event.Type == sf::Event::Closed)
+			if (action == AC::EXIT_APP)
 			{
 				running = false;
 			}
-			else if (event.Type == sf::Event::KeyPressed)
+			else if (menu.ItemChosen(action, choice))
+			{
+				running = false;
+			}
+			/*else if (event.Type == sf::Event::KeyPressed)
 			{
 				if (menu.ActionChosen(event.Key, choice))
 				{
@@ -256,6 +245,7 @@ Game::Choice Game::MainMenu()
 				menu.JMoved(event.JoyMove.Position + settings_.GetCalibration()->y);
 			}
 #endif
+*/
 		}
 		menu.Show(app_);
 		app_.Display();
@@ -295,18 +285,28 @@ Game::Choice Game::Play()
 #ifdef DEBUG
 	puts("[ Game::Play ]");
 #endif
-	sf::Event event;
+	AC::Action action;
 	bool running = true;
 	Choice what = EXIT_APP;
 	
 	while (running)
 	{
-		while (app_.GetEvent(event))
+		while (controls_.GetAction(action))
 		{
-			if (event.Type == sf::Event::Closed)
+			if (action == AC::EXIT_APP)
 			{
 				running = false;
 			}
+			else if (action == AC::PAUSE)
+			{
+				running = false;
+				what = IN_GAME_MENU;
+			}
+			else
+			{
+				GetPlayer()->HandleAction(action);
+			}
+			/*
 			else if (event.Type == sf::Event::KeyPressed)
 			{
 				GetPlayer()->HandleKey(event.Key);
@@ -335,6 +335,7 @@ Game::Choice Game::Play()
 				}
 			}
 #endif
+*/
 		}
 	
 		if (running)
@@ -434,7 +435,7 @@ Game::Choice Game::InGameMenu()
 #ifdef DEBUG
 	puts("[ Game::InGameMenu ]");
 #endif
-	sf::Event event;
+	AC::Action action;
 	sf::String title("P A U S E");
 	title.SetPosition(180, 160);
 	title.SetSize(30.0);
@@ -451,19 +452,27 @@ Game::Choice Game::InGameMenu()
 	int what;
 	while (paused)
 	{
-		while (app_.GetEvent(event))
+		while (controls_.GetAction(action))
 		{
-			if (event.Type == sf::Event::Closed)
+			if (action == AC::EXIT_APP)
 			{
 				what = EXIT_APP;
 				paused = false;
 			}
-			if (event.Type == sf::Event::KeyPressed)
+			else if (action == AC::PAUSE)
+			{
+				what = resume;
+				paused = false;
+			}
+			else if (menu.ItemChosen(action, what))
+			{
+				paused = false;
+			}
+			/*if (event.Type == sf::Event::KeyPressed)
 			{
 				if (event.Key.Code == key_pause_)
 				{
-					what = resume;
-					paused = false;
+					
 				}
 				else if (menu.ActionChosen(event.Key, what))
 				{
@@ -486,7 +495,7 @@ Game::Choice Game::InGameMenu()
 					what = EXIT_APP;
 				}
 			}
-#endif
+#endif*/
 		}
 		
 		// seules les particules sont mises à jour
@@ -541,15 +550,19 @@ Game::Choice Game::GameOver()
 	bool running = true;
 	int choice = EXIT_APP;
 	
-	sf::Event event;
+	AC::Action action;
 	while (running)
 	{
-		while (app_.GetEvent(event))
+		while (controls_.GetAction(action))
 		{
-			if (event.Type == sf::Event::Closed)
+			if (action == AC::EXIT_APP)
 			{
 				running = false;
 			}
+			else if (menu.ItemChosen(action, choice))
+			{
+				running = false;
+			}/*
 			else if (event.Type == sf::Event::KeyPressed)
 			{
 				if (menu.ActionChosen(event.Key, choice))
@@ -569,7 +582,7 @@ Game::Choice Game::GameOver()
 			{
 				menu.JMoved(event.JoyMove.Position + settings_.GetCalibration()->y);
 			}
-#endif
+#endif*/
 		}
 		app_.Draw(title);
 		menu.Show(app_);
@@ -613,27 +626,23 @@ Game::Choice Game::Intertitre()
 	bool running = true;
 	int choice;
 	
-	sf::Event event;
+	AC::Action action;
 	while (running)
 	{
-		while (app_.GetEvent(event))
+		while (controls_.GetAction(action))
 		{
-			if (event.Type == sf::Event::Closed)
+			if (action == AC::EXIT_APP)
 			{
 				running = false;
 			}
-			else if (event.Type == sf::Event::KeyPressed)
+			else if (menu.ItemChosen(action, choice))
 			{
-				if (menu.ActionChosen(event.Key, choice))
-				{
-					running = false;
-				}
-
-				if (event.Key.Code == HACKY_KEY)
-				{
-					//HACK
-					Passwd_HACK();
-				}
+				running = false;
+			}
+			else if (action == AC::USE_HACK)
+			{
+				//HACK
+				Passwd_HACK();
 			}
 		}
 		app_.Draw(title);
@@ -688,12 +697,30 @@ Game::Choice Game::Continue()
 	
 	bool running = true;
 	int choice = EXIT_APP;
-	sf::Event event;
+	AC::Action action;
 	while (running)
 	{		
-		while (app_.GetEvent(event))
+		while (controls_.GetAction(action))
 		{
-			if (event.Type == sf::Event::Closed)
+			if (action == AC::EXIT_APP)
+			{
+				running = false;
+			}
+			else if (menu.ItemChosen(action, choice))
+			{
+				running = false;
+			}
+			else if (action == AC::USE_HACK)
+			{
+				//<HACK>
+				Passwd_HACK();
+				level_.Set(cur_lvl_, level_desc_);
+				find_replace(level_desc_, "\\n", "\n");
+				title.SetText(str_sprintf("Niveau %d", cur_lvl_));
+				subtitle.SetText(level_desc_);
+				//</HACK>
+			}
+			/*if (event.Type == sf::Event::Closed)
 			{
 				running = false;
 			}
@@ -713,7 +740,7 @@ Game::Choice Game::Continue()
 					subtitle.SetText(level_desc_);
 					//</HACK>
 				}
-			}
+			}*/
 		}
 		app_.Draw(subtitle);
 		app_.Draw(title);
@@ -803,7 +830,7 @@ void Game::Respawn()
 	sf::Vector2f offset;
 	offset.x = 0;
 	offset.y = WIN_HEIGHT / 2.0;
-	player_.ship = new PlayerShip(offset, app_.GetInput());
+	player_.ship = new PlayerShip(offset);
 	AddEntity(GetPlayer());
 
 }
@@ -885,7 +912,7 @@ bool Game::Passwd_HACK() {
 		} else std::cout << "Erreur ! \n";
 	} return ok;
 }
-
+/*
 void Game::CalibrateJoystick() 
 {
 	sf::Input i;
@@ -893,4 +920,5 @@ void Game::CalibrateJoystick()
 	res.x = 0.f - i.GetJoystickAxis(1, sf::Joy::AxisX);
 	res.y = 0.f - i.GetJoystickAxis(1, sf::Joy::AxisY);
 	settings_.SetCalibration(res);
-}
+}*/
+

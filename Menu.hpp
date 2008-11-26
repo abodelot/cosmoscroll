@@ -9,7 +9,8 @@
 #include <SFML/Audio.hpp>
 #endif
 
-#include "Settings.hpp"
+#include "AbstractController.hpp"
+
 
 /*
  * Permet de sélectionner une action
@@ -64,12 +65,8 @@ public:
      * @param[out] id: identifiant de l'action validée
      * @return true si une action a été validée, sinon fasle
      */
-    bool ActionChosen(const sf::Event::KeyEvent& key, int& id);
-
-	bool JActionChosen(const unsigned int& key, int& id);
+    bool ItemChosen(AC::Action action, int& id);
     
-	
-	void JMoved(const float offset);
     /*
      * Afficher les éléments du menu
      * @param[in] app: fenêtre de rendu
@@ -112,7 +109,6 @@ private:
 #ifndef NO_AUDIO
     sf::Sound sound_;
 #endif
-	Settings& settings_;
 };
 
 #endif /* guard MENU_HPP */
