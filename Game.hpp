@@ -1,23 +1,21 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "Entity.hpp"
-#include "BulletManager.hpp"
-#include "PlayerShip.hpp"
-#include "ParticleSystem.hpp"
-#include "ControlPanel.hpp"
-#include "Level.hpp"
-#include "Window.hpp"
-
-#include "Music.hpp"
-#include "Password.hpp"
+#include <limits>
+#include <list>
+#include <SFML/Graphics.hpp>
 
 #include "AbstractController.hpp"
+#include "BulletManager.hpp"
+#include "ControlPanel.hpp"
+#include "Entity.hpp"
+#include "Level.hpp"
+#include "Music.hpp"
+#include "ParticleSystem.hpp"
+#include "Password.hpp"
+#include "PlayerManager.hpp"
 #include "Settings.hpp"
 
-#include <SFML/Graphics.hpp>
-#include <list>
-#include <limits>
 
 /*
  * Gestion du déroulement du jeu
@@ -32,13 +30,6 @@ public:
 	 */
 	void Run();
 	
-	/*
-	 * Ajout d'une nouvelle unité dans le jeu
-	 */
-	void AddEntity(Entity* entity);
-	
-	PlayerShip* GetPlayer() const;
-	
 	inline sf::RenderWindow& GetApp()
 	{
 		return app_;
@@ -48,6 +39,12 @@ public:
 	{
 		return app_.GetInput();
 	}
+
+	/*
+	 * Ajout d'une nouvelle unité dans le jeu
+	 */
+	void AddEntity(Entity* entity);
+
 	
 private:
 	Game();
@@ -55,8 +52,13 @@ private:
 	
 	enum Choice
 	{
-		INTRO, OPTIONS, IN_GAME_MENU,
-		MAIN_MENU, STORY_MODE, ARCADE_MODE, GAME_OVER, EXIT_APP, INTERTITRE, CONTINUE
+		INTRO, OPTIONS, IN_GAME_MENU, MAIN_MENU, ARCADE_MODE, STORY_MODE, DOUBLE_STORY_MODE, 
+		GAME_OVER, EXIT_APP, INTERTITRE, CONTINUE
+	};
+
+	enum GameMode
+	{
+		STORY, ARCADE, STORY2X
 	};
 	
 	// scène d'intro
@@ -76,7 +78,6 @@ private:
 	// lancement niveau suivant
 	Choice Continue();
 
-
 	bool MoreBadGuys();
 	
 	/*
@@ -88,45 +89,37 @@ private:
 	 * Suppression de toutes les unités en jeu
 	 */
 	void RemoveEntities();
-
-
-	// ne pas mélanger la gestion du joueur avec PlayerShip
-	struct Player
-	{
-		float best_time;
-		PlayerShip* ship;
-		
-		inline void Place()
-		{
-			static const sf::Vector2f offset (0, WIN_HEIGHT / 2.0);
-			if (ship)
-				ship->SetPosition(offset);
-		}
-	};
 	
 	std::string MakePassword();
+	
 	bool UsePassword(std::string& source);
+	
 	bool Passwd_HACK();
 	
 	sf::RenderWindow app_;
-	sf::Key::Code key_pause_;
-	Player player_;
+
+	std::vector<PM::Player> players_;
+
 	float timer_;
-	BulletManager& bullets_;
-	ParticleSystem& particles_;
-	ControlPanel& panel_;
-	Level& level_;
-	Music* music_;
+
 	std::string level_desc_; // Description du niveau courant
-	
-	bool arcade_;
+	GameMode mode_;
 	unsigned short cur_lvl_;
+	int player_1_, player_2_;
 	
 	// toutes les unités sont allouées dynamiquement
 	std::list<Entity*> entities_;
 	
-	Settings& settings_;
+	// Singletons
 	AbstractController& controls_;
+	BulletManager& bullets_;
+	ControlPanel& panel_;
+	Level& level_;
+	ParticleSystem& particles_;
+	PlayerManager& PM_;
+	Settings& settings_;
+	
+	Music* music_;
 };
 	
 #endif /* guard GAME_HPP */

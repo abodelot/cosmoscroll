@@ -77,22 +77,25 @@ public:
 	/*
 	 * Obtenir la position du vaisseau
 	 */
-	virtual sf::Vector2f GetPosition() const;
+	virtual sf::Vector2f GetPosition() const
+	{
+		return sprite_.GetPosition();
+	}
+
+	inline void SetPosition(const sf::Vector2f& offset)
+	{
+		sprite_.SetPosition(offset);
+	}
 	
 	/*
 	 * Obtenir la surface de collision du vaisseau
 	 */
 	virtual sf::FloatRect GetRect() const;
-	
-	inline void SetPosition(sf::Vector2f pos)
-	{
-		sprite_.SetPosition(pos);
-	}
-	
+
+
 protected:
 	sf::Sprite sprite_;
 	int hp_;
 };
 
 #endif /* guard ENTITY_HPP */
-

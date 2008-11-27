@@ -1,10 +1,10 @@
-#include "AbstractController.hpp"
-#include "Game.hpp"
-#define JOY_ID 0
-
 #include <cassert>
 
-#define JOY_DEADZONE 5.f
+#include "AbstractController.hpp"
+#include "Game.hpp"
+
+#define JOY_ID			 0
+#define JOY_DEADZONE	15.f
 
 AbstractController& AbstractController::GetInstance()
 {
@@ -140,53 +140,3 @@ AbstractController::AbstractController()
 	
 	puts("end AC init");
 }
-
-
-/*
-bool AbstractController::HasMoved(Movement movement)
-{
-	if (input_.IsKeyDown(keyboard_moves_[movement]]
-	{
-		return true;
-	}
-	if (input_.GetJoystickAxis(1, (movement == UP || movement == DOWN)? Joy::AxisY : Joy::AxisX) > 5)
-	{
-		return true;
-	}
-	return false;
-}
-
-
-if (input_.GetJoystickAxis(1, (movement == UP || movement == DOWN)? Joy::AxisY : Joy::AxisX) (movement == DOWN || movement == RIGHT)? > 5 : < -5)
-
-
-void AbstractController::SetKeyboardAction(Action action, sf::Key::Code code)
-{
-	keyboard_action_[action] = code;
-}
-
-void AbstractController::SetKeyboardMove(Movement movement, sf::Key::Code code);
-{
-	keyboard_moves_[movement] = code;
-}
-
-
-void AbstractController::SetJoystickAction(Action action, sf::JoystickButton::Button button);
-{
-	joystick_action_[action] = button;
-}
-
-
-void AbstractController::SetJoystickMove(Movement movement, sf::Joy::Axis axis);
-{
-if (movement == UP || movement == DOWN)
-	{
-		joystick_moves_[UP] = joystick_moves_[DOWN] = axis;
-	}
-	else
-	{
-		joystick_moves_[LEFT] = joystick_moves_[RIGHT] = axis;
-	}
-}
-*/
-

@@ -53,13 +53,6 @@ void Entity::KillIfOut()
 	}
 }
 
-
-sf::Vector2f Entity::GetPosition() const
-{
-	return sprite_.GetPosition();
-}
-
-
 sf::FloatRect Entity::GetRect() const
 {
 	// Utiliser à la place GetLocalRect avec SFML 1.4

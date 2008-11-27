@@ -1,23 +1,17 @@
-#include "Game.hpp"
-#include "MediaManager.hpp"
-#include "Settings.hpp"
+#include <typeinfo>
+#include <SFML/System.hpp>
 
 #include "Asteroid.hpp"
 #include "Ennemy.hpp"
 #include "EvilBoss.hpp"
-
+#include "Game.hpp"
+#include "Level.hpp"
+#include "MediaManager.hpp"
 #include "Menu.hpp"
 #include "Misc.hpp"
-#include "Level.hpp"
-
-#include <SFML/System.hpp>
-#include <typeinfo>
+#include "Settings.hpp"
 
 #define CONFIG_FILE "config/settings.txt"
-
-#ifndef JOYSTICK_ENABLED
-#define JOYSTICK_ENABLED
-#endif
 
 #ifndef SVN_REV
 #define SVN_REV "???"
@@ -29,18 +23,18 @@ Game& Game::GetInstance()
 	return self;
 }
 
-
 Game::Game() :
-	bullets_  (BulletManager::GetInstance()),
-	particles_(ParticleSystem::GetInstance()),
-	panel_	(ControlPanel::GetInstance()),
-	level_	(Level::GetInstance()),
-	settings_ (Settings::GetInstance()),
-	controls_(AbstractController::GetInstance())
+	controls_	(AbstractController::GetInstance()),
+	bullets_	(BulletManager::GetInstance()),
+	panel_		(ControlPanel::GetInstance()),
+	level_		(Level::GetInstance()),
+	particles_	(ParticleSystem::GetInstance()),
+	PM_			(PlayerManager::GetInstance()),
+	settings_	(Settings::GetInstance())
 {
 	Settings& settings = Settings::GetInstance();
 	settings.Load(CONFIG_FILE);
-	// mise en place de la fenêtre de rendu
+
 	if (!settings.Fullscreen())
 	{
 		app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE);
@@ -53,10 +47,8 @@ Game::Game() :
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
-	key_pause_ = settings.GetKey(Settings::PAUSE);
-	
+	player_1_ = player_2_ = -1;
 }
-
 
 Game::~Game()
 {
@@ -64,7 +56,6 @@ Game::~Game()
 	app_.EnableKeyRepeat(true); // bug SFML 1.3 sous linux : il faut réactiver à la main le keyrepeat
 	app_.Close();
 }
-
 
 void Game::Run()
 {
@@ -82,6 +73,7 @@ void Game::Run()
 			case MAIN_MENU:
 				what = MainMenu();
 				break;
+			case DOUBLE_STORY_MODE:
 			case ARCADE_MODE:
 			case STORY_MODE:
 				what = Play();
@@ -102,8 +94,7 @@ void Game::Run()
 				break;
 		}
 	} while (what != EXIT_APP);
-	// si what == EXIT_APP
-#ifndef NO_AUDIO
+#ifndef NO_AUDIO // si what == EXIT_APP
 	music_->Stop();
 	delete music_;
 	music_ = NULL;
@@ -117,39 +108,41 @@ Game::Choice Game::Intro()
 #ifdef DEBUG
 	puts("[ Game::Intro ]");
 #endif
+	AC::Action action;
 	Choice what = MAIN_MENU;
-	const int DURATION = 5;
-	float elapsed = 0;
+	const int DURATION = 5, PADDING = 10;
+	float time, elapsed = 0;
 #ifdef DEBUG
 #ifndef NO_AUDIO
 	bool played = false;
 	sf::Sound intro_sound(GET_SOUNDBUF("title"));
 #endif
 #endif
+	sf::FloatRect rect;
+	
 	sf::Sprite background;
-	background.SetImage(GET_IMG("background"));
+		background.SetImage(GET_IMG("background"));
+	
 	sf::String title;
-	title.SetText("CosmoScroll");
-	title.SetFont(GET_FONT());
-	title.SetSize(1000);
-	title.SetColor(sf::Color::White);
+		title.SetText("CosmoScroll");
+		title.SetFont(GET_FONT());
+		title.SetSize(1000);
+		title.SetColor(sf::Color::White);
+		title.SetPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
+		rect = title.GetRect();
+		title.SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
+	
 	sf::String sfml;
-	sfml.SetText("Powered by SFML");
-	sfml.SetSize(16);
-	sfml.SetColor(sf::Color::White);
-	
-	sf::FloatRect rect = title.GetRect();
-	title.SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
-	
-	const int PADDING = 10;
-	rect = sfml.GetRect();
-	sfml.SetPosition(WIN_WIDTH - rect.GetWidth() - PADDING,
-		WIN_HEIGHT - rect.GetHeight() - PADDING);
+		sfml.SetText("Powered by SFML");
+		sfml.SetSize(16);
+		sfml.SetColor(sf::Color::White);
+		rect = sfml.GetRect();
+		sfml.SetPosition(WIN_WIDTH - rect.GetWidth() - PADDING,
+			WIN_HEIGHT - rect.GetHeight() - PADDING);	
 	
 	sf::Sprite ship(GET_IMG("spaceship"));
-	ship.SetPosition(-20, 100);
-	
-	AbstractController::Action action;
+		ship.SetPosition(-20, 100);
+
 	while (elapsed < DURATION)
 	{
 		while (controls_.GetAction(action)) 
@@ -164,7 +157,7 @@ Game::Choice Game::Intro()
 				elapsed = DURATION;
 			}
 		}
-		float time = app_.GetFrameTime();
+		time = app_.GetFrameTime();
 		elapsed += time;
 #ifdef DEBUG
 #ifndef NO_AUDIO
@@ -175,50 +168,47 @@ Game::Choice Game::Intro()
 		}
 #endif
 #endif
-		ship.Move(180 * time, 25 * time); // FIXME: déplacement magique !
-		title.Scale(0.99, 0.99); // FIXME: dépendant des FPS
-		title.SetColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(255 * elapsed / DURATION)));
-		title.SetPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
+		ship.Move(180 * time, 25 * time);	// FIXME: déplacement magique !
+		title.Scale(0.99, 0.99);			// FIXME: dépendant des FPS
+		title.SetColor(sf::Color(255, 255, 255,
+			static_cast<sf::Uint8>(255 * elapsed / DURATION)));
 		
-		app_.Draw(background);
-		app_.Draw(sfml);
-		app_.Draw(title);
-		app_.Draw(ship);
+		app_.Draw(background);	app_.Draw(sfml);
+		app_.Draw(title);		app_.Draw(ship);
 		app_.Display();
 	}
-		
 	return what;
 }
 
-
 Game::Choice Game::Options()
 {
-	puts("-> Game::Options");
-	puts("not implemented yet (quit)");
+	puts("-> Game::Options\nnot implemented yet (quit)");
 	return EXIT_APP;
 }
-
 
 Game::Choice Game::MainMenu()
 {
 #ifdef DEBUG
 	puts("[ Game::MainMenu ]");
 #endif
-	sf::String title(str_sprintf("CosmoScroll - r%s", SVN_REV));
-	title.SetFont(GET_FONT());
-	title.SetSize(40);
-	title.SetY(42);
-	title.SetX((WIN_WIDTH - title.GetRect().GetWidth()) / 2);
-	
-	Menu menu;
-	menu.SetOffset(sf::Vector2f(60, 120));
-	menu.AddItem("Mode Aventure", STORY_MODE);
-	menu.AddItem("Mode Arcade", ARCADE_MODE);
-	menu.AddItem("Quitter", EXIT_APP);
 	bool running = true;
 	int choice = EXIT_APP;
 	
 	AC::Action action;
+
+	sf::String title(str_sprintf("CosmoScroll - r%s", SVN_REV));
+		title.SetFont(GET_FONT());
+		title.SetSize(40);
+		title.SetY(42);
+		title.SetX((WIN_WIDTH - title.GetRect().GetWidth()) / 2);
+	
+	Menu menu;
+		menu.SetOffset(sf::Vector2f(60, 120));
+		menu.AddItem("Aventure solo", STORY_MODE);
+	//	menu.AddItem("Aventure duo", DOUBLE_STORY_MODE);
+		menu.AddItem("Arcade", ARCADE_MODE);
+		menu.AddItem("Quitter", EXIT_APP);
+
 	while (running)
 	{
 		while (controls_.GetAction(action))
@@ -235,7 +225,6 @@ Game::Choice Game::MainMenu()
 		app_.Draw(title);
 		menu.Show(app_);
 		app_.Display();
-
 	}
 	// si on lance une nouvelle partie, on nettoie les restes des éventuelles
 	// parties précédentes et l'on respawn un joueur neuf
@@ -249,21 +238,20 @@ Game::Choice Game::MainMenu()
 		// init
 		timer_ = 0.0f;
 		particles_.AddStars();
-		Respawn();
-		if (choice == STORY_MODE)
+		if (choice == STORY_MODE || choice == DOUBLE_STORY_MODE)
 		{	
 			cur_lvl_ = 0;
 			choice = CONTINUE;
-			arcade_ = false;
+			mode_ = (choice == DOUBLE_STORY_MODE)? STORY2X : STORY;
 		}
 		else
 		{
-			arcade_ = true;
+			mode_ = ARCADE;
 		}
+		Respawn();
 	}
 	return static_cast<Choice>(choice);
 }
-
 
 Game::Choice Game::Play()
 {
@@ -289,7 +277,7 @@ Game::Choice Game::Play()
 			}
 			else
 			{
-				GetPlayer()->HandleAction(action);
+				PM_.GetShip()->HandleAction(action);
 			}
 		}
 	
@@ -311,17 +299,14 @@ Game::Choice Game::Play()
 				}
 				else
 				{
-					what = INTERTITRE;
-				   
+					what = INTERTITRE;   
 				}
 			}
 		}
 
-
 		std::list<Entity*>::iterator it;
 		// action
 		for (it = entities_.begin(); it != entities_.end(); ++it)
-
 		{
 			(**it).Action();
 		}
@@ -331,12 +316,11 @@ Game::Choice Game::Play()
 		timer_ += time;
 		panel_.SetTimer(timer_);
 		
-	
 		for (it = entities_.begin(); it != entities_.end();)
 		{
 			if ((**it).IsDead())
 			{
-				if (player_.ship == *it)
+				if (PM_.GetShip() == *it)
 				{
 					running = false;
 					what = GAME_OVER;
@@ -353,12 +337,12 @@ Game::Choice Game::Play()
 			{
 				(**it).Move(time);
 				// collision Joueur <-> autres unités
-				if (player_.ship != *it &&
-					player_.ship->GetRect().Intersects((**it).GetRect()))
+				if (PM_.GetShip() != *it &&
+					PM_.GetShip()->GetRect().Intersects((**it).GetRect()))
 				{
 					// collision sur les deux éléments
-					player_.ship->Collide(**it);
-					(**it).Collide(*player_.ship);
+					PM_.GetShip()->Collide(**it);
+					(**it).Collide(*PM_.GetShip());
 				}
 				++it;
 			}
@@ -380,10 +364,9 @@ Game::Choice Game::Play()
 		app_.Display();
 	}
 	
-	player_.best_time = timer_;
+	PM_.Get().best_time = timer_;
 	return what;
 }
-
 
 Game::Choice Game::InGameMenu()
 {
@@ -397,7 +380,7 @@ Game::Choice Game::InGameMenu()
 	
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(220, 200));
-	Choice resume = arcade_ ? ARCADE_MODE : STORY_MODE;
+	Choice resume = mode_ == ARCADE ? ARCADE_MODE : mode_ == STORY ? STORY_MODE : DOUBLE_STORY_MODE;
 	menu.AddItem("Reprendre la partie", resume);
 	menu.AddItem("Revenir au menu principal", MAIN_MENU);
 	//menu.AddItem("Options", OPTIONS);
@@ -447,17 +430,16 @@ Game::Choice Game::InGameMenu()
 
 }
 
-
 Game::Choice Game::GameOver()
 {
 #ifdef DEBUG
 	puts("[ Game::GameOver ]");
 #endif
 	sf::String title;
-	if (arcade_)
+	if (mode_ == ARCADE)
 	{
-		int min = (int) player_.best_time / 60;
-		int sec = (int) player_.best_time % 60;
+		int min = (int) PM_.Get().best_time / 60;
+		int sec = (int) PM_.Get().best_time % 60;
 		title.SetText(str_sprintf("Vous avez tenu seulement %d min et %d sec",
 			min, sec));
 	}
@@ -498,7 +480,6 @@ Game::Choice Game::GameOver()
 	return static_cast<Choice>(choice);
 }
 
-
 Game::Choice Game::Intertitre()
 {
 #ifdef DEBUG
@@ -507,8 +488,8 @@ Game::Choice Game::Intertitre()
 	sf::String title;
 	sf::String subtitle1;
 	sf::String subtitle2;
-	int min = (int) player_.best_time / 60;
-	int sec = (int) player_.best_time % 60;
+	int min = (int) PM_.Get().best_time / 60;
+	int sec = (int) PM_.Get().best_time % 60;
 	subtitle1.SetText(str_sprintf("Termine en %d min et %d sec",
 			min, sec));
 	subtitle2.SetText(str_sprintf("Pass: %s", MakePassword().c_str()));
@@ -586,7 +567,7 @@ Game::Choice Game::Continue()
 		subtitle.SetText(level_desc_);
 		
 		menu.AddItem("Jouer", STORY_MODE);  
-		 player_.Place();
+		 PM_.Get().Place();
 	}
 	else	// On a fini le jeu :)
 	{
@@ -641,7 +622,7 @@ Game::Choice Game::Continue()
 bool Game::MoreBadGuys()
 {
 	// si mode arcade
-	if (arcade_)
+	if (mode_ == ARCADE)
 	{
 		// un ennemi en plus toutes les 10s + 5
 		unsigned int max_bad_guys = static_cast<unsigned int>(timer_ / 10 + 5);
@@ -655,15 +636,15 @@ bool Game::MoreBadGuys()
 			int random = sf::Randomizer::Random(0, 10);
 			if (random > 6)
 			{
-				AddEntity(Ennemy::Make(Ennemy::INTERCEPTOR, offset, GetPlayer()));
+				AddEntity(Ennemy::Make(Ennemy::INTERCEPTOR, offset, PM_.GetShip()));
 			}
 			else if (random > 4)
 			{
-				AddEntity(Ennemy::Make(Ennemy::BLORB, offset, GetPlayer()));
+				AddEntity(Ennemy::Make(Ennemy::BLORB, offset, PM_.GetShip()));
 			}
 			else if (random > 2)
 			{
-				AddEntity(Ennemy::Make(Ennemy::DRONE, offset, GetPlayer()));
+				AddEntity(Ennemy::Make(Ennemy::DRONE, offset, PM_.GetShip()));
 			}
 			else
 			{
@@ -689,18 +670,8 @@ bool Game::MoreBadGuys()
 
 }
 
-
-void Game::AddEntity(Entity* entity)
-{
-	entities_.push_front(entity);
-}
-
-
 void Game::RemoveEntities()
 {
-	// Ne pas détruire l'instance si elle héberge une thread
-	// qui tourne, sinon vlam :)
-	// alexandre: euh... est-ce un TODO ? si oui -> à faire dans ~PlayerShip, non ?
 	std::list<Entity*>::iterator it;
 	for (it = entities_.begin(); it != entities_.end(); ++it)
 	{
@@ -712,30 +683,66 @@ void Game::RemoveEntities()
 
 void Game::Respawn()
 {
+#ifdef DEBUG
+	puts("\tGame::Respawn()");
+#endif
 	sf::Vector2f offset;
-	offset.x = 0;
 	offset.y = WIN_HEIGHT / 2.0;
-	player_.ship = new PlayerShip(offset);
-	AddEntity(GetPlayer());
-
+	PlayerShip* ship = NULL;
+	
+	switch (mode_)
+	{
+		case STORY2X:
+			offset.x = WIN_HEIGHT;
+			if (player_2_ == -1)
+			{
+				player_2_ = PM_.New();
+				ship = PM_.GetShip(player_2_);
+			}
+			else
+			{
+				ship = PM_.GetShip(player_2_);
+				delete ship;
+				ship = new PlayerShip(offset);
+			}
+			ship->SetPosition(offset);
+			AddEntity(ship);
+		case ARCADE:
+		case STORY:
+			offset.x = 0;
+			if (player_1_ == -1)
+			{
+				player_1_ = PM_.New();
+				ship = PM_.GetShip(player_1_);
+			}
+			else
+			{
+				ship = PM_.GetShip(player_1_);
+				delete ship;
+				ship = new PlayerShip(offset);
+			}
+			ship->SetPosition(offset);
+			AddEntity(ship);
+			break;
+		default:
+			assert(false);
+	}
 }
 
-
-PlayerShip* Game::GetPlayer() const
+void Game::AddEntity(Entity* entity)
 {
-	return player_.ship;
+	entities_.push_front(entity);
 }
-
 
 std::string Game::MakePassword()
 {
 	Password pass;	
 	unsigned char lives, level, shield, icecubes;
 	
-	lives = static_cast<unsigned char>(GetPlayer()->GetHP());
+	lives = static_cast<unsigned char>(PM_.GetShip()->GetHP());
 	level = static_cast<unsigned char>(cur_lvl_);
-	icecubes = static_cast<unsigned char>(GetPlayer()->GetCoolers());
-	shield = static_cast<unsigned char>(GetPlayer()->GetShield());
+	icecubes = static_cast<unsigned char>(PM_.GetShip()->GetCoolers());
+	shield = static_cast<unsigned char>(PM_.GetShip()->GetShield());
 	pass.setLives(lives);	pass.setLevel(level);
 	pass.setCoolers(icecubes); pass.setShield(shield);
 	
@@ -764,13 +771,13 @@ bool Game::UsePassword(std::string & source)
 
 	pass_4_ = pass.getCoolers();
 
-	GetPlayer()->SetHP(static_cast<int>(pass_1_));
-	GetPlayer()->SetShield(static_cast<int>(pass_3_));
-	GetPlayer()->SetCoolers(static_cast<int>(pass_4_));
+	PM_.GetShip()->SetHP(static_cast<int>(pass_1_));
+	PM_.GetShip()->SetShield(static_cast<int>(pass_3_));
+	PM_.GetShip()->SetCoolers(static_cast<int>(pass_4_));
 	
-	panel_.SetShipHP(GetPlayer()->GetHP());
-	panel_.SetShield(GetPlayer()->GetShield());
-	panel_.SetCoolers(GetPlayer()->GetCoolers());
+	panel_.SetShipHP(PM_.GetShip()->GetHP());
+	panel_.SetShield(PM_.GetShip()->GetShield());
+	panel_.SetCoolers(PM_.GetShip()->GetCoolers());
 	
 	if (level_.Set(pass_2_, level_desc_) == Level::SUCCESS) 
 	{

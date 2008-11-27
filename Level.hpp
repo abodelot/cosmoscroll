@@ -1,31 +1,29 @@
 #ifndef LEVEL_HPP
 #define LEVEL_HPP
 
+#include <queue>
+#include <string>
+
 #include "tinyxml/tinyxml.h"
 #include "Entity.hpp"
 
-#include <string>
-#include <queue>
+#define LEVEL_FILE			"levels.xml"
 
 class Game;
-
-
-#define LEVEL_FILE "levels.xml"
-
-
+	
 class Level
 {
 
 public:
 
-enum Error {
-            SUCCESS = 0,
-            FILE,   // Erreur d'e-s
-            UNDEF,  // Niveau non défini
-            PARSE,  // Erreur de parsing
-            END     // Fin de chaînage  
-            };
-
+	enum Error
+	{
+				SUCCESS = 0,
+				FILE,   // Erreur d'e-s
+				UNDEF,  // Niveau non défini
+				PARSE,  // Erreur de parsing
+				END     // Fin de chaînage  
+	};
 
     /*
      * Récupérer l'instance unique
@@ -54,14 +52,13 @@ enum Error {
      */
     Level::Error Set(int Level, std::string& Description);
 
-
     /*
      * Retourne l'entier codant pour le dernier level du fichier
      */
     inline int GetLastID() {
         return levels_.size();
     };
-
+	
 private:
     struct EntitySlot
     {
@@ -83,8 +80,6 @@ private:
     std::queue<EntitySlot> waiting_line_;
     std::vector<TiXmlElement*> levels_;
     TiXmlDocument doc_;
-
 };
 
 #endif // LEVEL_HPP
-

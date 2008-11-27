@@ -1,47 +1,44 @@
 #include "PlayerShip.hpp"
 #include "MediaManager.hpp"
 #include "Window.hpp"
-#include "ParticleSystem.hpp"
-#include "Math.hpp"
-#include "Settings.hpp"
-
-#include <SFML/System.hpp>
 #include <cassert>
 #include <typeinfo>
+#include <SFML/System.hpp>
 
 #ifdef DEBUG
 #include <iostream>
 #endif
 
-#define DEFAULT_SPEED     200
-#define GUN_OFFSET        sf::Vector2f(52, 24)
+#include "Math.hpp"
+#include "ParticleSystem.hpp"
+#include "Settings.hpp"
 
-// taux de regénération du bouclier en boules/secondes
-#define SHIELD_RECOVERY_RATE 0.3
-#define SHIELD_MAX         6
-#define SHIELD_DEFAULT     3
+#define GUN_OFFSET				  sf::Vector2f(52, 24)
 
-#define COOLER_MAX         3
-#define COOLER_DEFAULT     0
+#define DEFAULT_SPEED			200
 
-#define TIMED_BONUS_DURATION 10
+#define COOLER_DEFAULT			  0
+#define COOLER_MAX				  3
 
-#define HEAT_MAX	 100
-#define COLDING_RATE 13
+#define HEAT_MAX	 			100
+#define HEAT_RECOVERY_RATE		 13
 
-#define JOY_ID 0
+#define HP_DEFAULT				  3
+#define HP_MAX					  5
 
-#define HP_DEFAULT   3
-#define HP_MAX	   5
+#define SHIELD_DEFAULT			  3
+#define SHIELD_MAX				  6
+#define SHIELD_RECOVERY_RATE	  0.3 //boules /sec.
+
+#define TIMED_BONUS_DURATION	 10
 
 
 PlayerShip::PlayerShip(const sf::Vector2f& offset) :
 	Entity(GET_IMG("spaceship"), offset),
+	controls_(AC::GetInstance()),
 	panel_(ControlPanel::GetInstance()),
 	laserbeam_(Weapon::LASERBEAM, this),
-	hellfire_(Weapon::HELLFIRE, this),
-	//settings_(Settings::GetInstance())
-	controls_(AC::GetInstance())
+	hellfire_(Weapon::HELLFIRE, this)
 {
 #ifdef DEBUG
 	puts("PlayerShip()");
@@ -76,22 +73,9 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset) :
 		bonus_[i] = 0;
 	}
 	
-	// init bindings config
-	/*const Settings& settings = Settings::GetInstance();
-	binds_.up = settings.GetKey(Settings::UP);
-	binds_.down = settings.GetKey(Settings::DOWN);
-	binds_.left = settings.GetKey(Settings::LEFT);
-	binds_.right = settings.GetKey(Settings::RIGHT);
-	binds_.weapon_a = settings.GetKey(Settings::WEAPON1);
-	binds_.weapon_b = settings.GetKey(Settings::WEAPON2);
-	binds_.bonus_cooler = settings.GetKey(Settings::BONUS_COOLER);
-#ifdef JOYSTICK_ENABLED
-	binds_.Jweapon_a = settings.GetJoyKey(Settings::jWEAPON1);
-	binds_.Jweapon_b = settings.GetJoyKey(Settings::jWEAPON2);
-	binds_.Jbonus_cooler = settings.GetJoyKey(Settings::jBONUS_COOLER);
-	binds_.Jvalid = settings.GetJoyKey(Settings::jVALID);
-	binds_.Jreturn = settings.GetJoyKey(Settings::jRETURN);
-#endif*/
+#ifdef DEBUG
+	puts("\t OK");
+#endif
 }
 
 
@@ -193,24 +177,6 @@ void PlayerShip::Move(float frametime)
 	{
 		x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
 	}
-	/*
-#ifdef JOYSTICK_ENABLED
-float pos;
-pos = input_.GetJoystickAxis(1, sf::Joy::AxisY) + settings_.GetCalibration()->y;
-
-if (pos > 0)
-	y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
-else if (pos < 0 )
-	y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
-
-pos = input_.GetJoystickAxis(1, sf::Joy::AxisX) + settings_.GetCalibration()->x;
-if (pos > 0)
-	x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
-else if (pos < 0)
-	x = (x - dist < 0) ? 0 : x - dist;
-	
-#endif
-	*/
 	sprite_.SetPosition(x, y);
 	
 	// regénération bouclier
@@ -233,7 +199,7 @@ else if (pos < 0)
 	// refroidissement
 	if (heat_ > 0.f)
 	{
-		heat_ -= COLDING_RATE * frametime;
+		heat_ -= HEAT_RECOVERY_RATE * frametime;
 		if (heat_ <= 0.f)
 		{
 			heat_ = 0.f;

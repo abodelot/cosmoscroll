@@ -1,12 +1,12 @@
 #include <iostream>
 
-#include "Level.hpp"
-#include "Misc.hpp"
 #include "Asteroid.hpp"
 #include "Ennemy.hpp"
 #include "EvilBoss.hpp"
 #include "Game.hpp"
-
+#include "Level.hpp"
+#include "Misc.hpp"
+#include "PlayerManager.hpp"
 
 Level::Level()
 {
@@ -64,7 +64,7 @@ Level::Error Level::Set(int level, std::string& description)
 Level::Error Level::ParseLevel(TiXmlElement* elem)
 {
     elem = elem->FirstChild()->ToElement()->NextSiblingElement()->FirstChildElement();    
-    Entity* player = Game::GetInstance().GetPlayer();
+    Entity* player = PM::GetInstance().GetShip();
     
     if(elem == NULL)
     {

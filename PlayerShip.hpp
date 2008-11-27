@@ -4,19 +4,13 @@
 #ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
 #endif
+#include <SFML/System.hpp>
 
-#ifndef JOYSTICK_ENABLED
-#define JOYSTICK_ENABLED
-#endif
-
+#include "AbstractController.hpp"
+#include "Bonus.hpp"
+#include "ControlPanel.hpp"
 #include "Entity.hpp"
 #include "Weapon.hpp"
-#include "ControlPanel.hpp"
-#include "Bonus.hpp"
-//#include "Settings.hpp"
-#include "AbstractController.hpp"
-
-#include <SFML/System.hpp>
 
 /*
  * Le vaisseau aux couleurs de starsky et hutch
@@ -24,6 +18,7 @@
 class PlayerShip: public Entity
 {
 public:
+
 	PlayerShip(const sf::Vector2f& offset);
 	
 	~PlayerShip();
@@ -61,60 +56,32 @@ public:
 	{
 		coolers_ = c;
 	}
-	
+
 private:
-	/*struct Config
-	{
-		sf::Key::Code up;
-		sf::Key::Code down;
-		sf::Key::Code left;
-		sf::Key::Code right;
-		sf::Key::Code weapon_a;
-		sf::Key::Code weapon_b;
-		sf::Key::Code bonus_cooler;
 
-
-#ifdef JOYSTICK_ENABLED	
-		unsigned int Jbonus_cooler;
-		unsigned int Jweapon_a;
-		unsigned int Jweapon_b;
-		unsigned int Jvalid;
-		unsigned int Jreturn;
-#endif
-	};
-	*/
-
-	
 	enum TimedBonus
 	{
 		T_TRISHOT, T_SPEED, TIMED_BONUS_COUNT
 	};
-	
-	void HandleBonus(const Bonus& bonus);
-	
-	void DisableTimedBonus(TimedBonus tbonus);
-	
-	// timers des bonus
-	float bonus_[TIMED_BONUS_COUNT];
-	
-	ControlPanel& panel_;
 
-	//Config binds_;
+	void HandleBonus(const Bonus& bonus);
+
+	void DisableTimedBonus(TimedBonus tbonus);
+
+	float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
+
 	bool overheated_;
-	float heat_;
-	int coolers_;
-	int shield_;
-	float shield_timer_;
-	int speed_;
+	float heat_, shield_timer_;
+	int coolers_, shield_, speed_;
+
 #ifndef NO_AUDIO
 	sf::Sound shield_sfx_;
 #endif
-	Weapon laserbeam_;
-	Weapon hellfire_;
-	
-	//Settings settings_;
+
 	AbstractController& controls_;
+	ControlPanel& panel_;
+	Weapon laserbeam_, hellfire_;
+
 };
 
 #endif /* guard PLAYERSHIP_HPP */
-
