@@ -1,8 +1,6 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 
-#include "AbstractController.hpp"
-
 #include <vector>
 #include <string>
 #include <SFML/Graphics.hpp>
@@ -10,6 +8,9 @@
 #ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
 #endif
+
+#include "AbstractController.hpp"
+
 
 /*
  * Permet de sélectionner une action

@@ -32,12 +32,12 @@
 		std::string encoded;
         unsigned char data[18];
         
-		static const int COOLER_COUNT_BYTE = 8;
-		static const int SHIELD_COUNT_BYTE = 9;
-        static const int LIVES_COUNT_BYTE = 10;
-		static const int LEVEL_COUNT_BYTE = 11;
-        static const int SHIFT_BYTE = 16;
-        static const int CHECKSUM_BYTE = 17;
+		static const int COOLER_COUNT_BYTE = 8;	// L'octet ou est codé COOLERS'
+		static const int SHIELD_COUNT_BYTE = 9; // L'octet ou est codé SHIELDS'
+        static const int LIVES_COUNT_BYTE = 10; // L'octet ou est codé LIVES'
+		static const int LEVEL_COUNT_BYTE = 11; // L'octet ou est codé LEVEL'
+        static const int SHIFT_BYTE = 16;		// L'octet de décalage'
+        static const int CHECKSUM_BYTE = 17;	// L'octet de checksum'
         static const unsigned char SPACE_VALUE = 0xFF;
 
         /**
@@ -66,78 +66,35 @@
     public:
         static const std::string ALPHABET;
     
-        /**
-         * Creates a new blank password.
-         */
+
         Password();
         
-        /**
-         * Creates a password from a  password.
-         *
-         * @param password The password.
-         * @param fixChecksum true if the checksum should be fixed to force a
-         *                    valid password; false to accept only valid
-         *                    passwords.
-         *
-         */
-        Password(const std::string &password, bool fixChecksum = false);
+
+        Password(const std::string& password, bool fixChecksum = false);
         
-        /**
-         * Gets a bit from the raw password data.
-         *
-         * @param bit The bit to get (1-128).
-         *
-         * @return true if the bit is set; false otherwise.
-         */
+
         bool getBit(int bit) const;
         
-        /**
-         * Sets a bit in the raw password data.
-         *
-         * @param bit the bit to set (1-128).
-         * @param value true to set the bit; false to clear it.
-         */
         void setBit(int bit, bool value = true);
         
-        /**
-         * Gets the encoded password encapsulated by this Password.
-         *
-         * @return The password.
-         */
         const std::string &getEncoded() const;
         
- 
+        //		<---- GETTERS ---->
         unsigned char getLives() const;
-		
 		unsigned char getLevel() const;
-		
         unsigned char getShield() const;
-		
 		unsigned char getCoolers() const;
-        
-        /**
-
-         * Gets the shift byte used by this Password.
-         *
-         * @return The shift byte.
-         */
         unsigned char getShift() const;
         
-        /**
-         * Sets the shift byte used by this Password.
-         *
-         * @param shift The shift byte.
-         */
+        //		<---- SETTERS ---->
         void setShift(unsigned char shift);
-		
 		void setLives(unsigned char lives);
-		
 		void setLevel(unsigned char level);
-		
 		void setCoolers(unsigned char coolers);
-		
 		void setShield(unsigned char shield);
     };
+    
+    // Methodes inline d'accès rapide
     
     inline const std::string& Password::getEncoded() const { return encoded; }
     inline unsigned char Password::getLives() const

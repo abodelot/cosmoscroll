@@ -13,6 +13,11 @@ AbstractController& AbstractController::GetInstance()
 }
 
 
+void AbstractController::SetControls(int c)
+{
+	cur_ctrls_ = c;
+}
+
 bool AbstractController::GetAction(Action& action)
 {
 	static sf::RenderWindow& app_ = Game::GetInstance().GetApp();
@@ -26,7 +31,7 @@ bool AbstractController::GetAction(Action& action)
 			action = EXIT_APP;
 		}
 		// KEY PRESSED
-		else if (event.Type == sf::Event::KeyPressed)
+		else if ( (cur_ctrls_ & KEYBOARD) && event.Type == sf::Event::KeyPressed)
 		{
 			for (int i = 0; i < COUNT_ACTION; ++i)
 			{
@@ -37,7 +42,7 @@ bool AbstractController::GetAction(Action& action)
 			}
 		}
 		// JOYBUTTON PRESSED
-		else if (event.Type == sf::Event::JoyButtonPressed)
+		else if ( (cur_ctrls_ & JOY_0 || cur_ctrls_ & JOY_1) && event.Type == sf::Event::JoyButtonPressed)
 		{
 			for (JoyBindMap::const_iterator it = joystick_binds_.begin();
 				it != joystick_binds_.end(); ++it)
@@ -84,11 +89,12 @@ bool AbstractController::HasInput(Action action)
 {
 	static const sf::Input& input_ = Game::GetInstance().GetInput();
 	assert(action < COUNT_ACTION);
-	if (input_.IsKeyDown(keyboard_binds_[action]))
+	if ((cur_ctrls_ & KEYBOARD) && input_.IsKeyDown(keyboard_binds_[action]))
 	{
 		return true;
 	}
-	if (input_.IsJoystickButtonDown(JOY_ID, joystick_binds_[action]))
+	if ((cur_ctrls_ & JOY_0 || cur_ctrls_ & JOY_1 ) && 
+		input_.IsJoystickButtonDown(JOY_ID, joystick_binds_[action]))
 	{
 		return true;
 	}

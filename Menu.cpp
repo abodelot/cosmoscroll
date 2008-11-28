@@ -1,10 +1,11 @@
+#include <cassert>
+
 #include "Menu.hpp"
 #include "MediaManager.hpp"
 
-#include <cassert>
 
-
-Menu::Menu()
+Menu::Menu() /*:
+	settings_ (Settings::GetInstance())*/
 {
 	// valeurs par défaut
 	textsize_ = 20;
@@ -107,7 +108,6 @@ bool Menu::ItemChosen(AC::Action action, int& id)
 	return false;
 }
 
-
 void Menu::SelectItem(int n)
 {
 	assert(n >= 0 && n < (int) items_.size());
@@ -115,7 +115,6 @@ void Menu::SelectItem(int n)
 	ApplyStyle(items_[n], highlight_look_);
 	selected_ = n;
 }
-
 
 void Menu::Show(const sf::RenderWindow& app) const
 {

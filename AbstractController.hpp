@@ -16,23 +16,22 @@ public:
 		USE_HACK, USE_COOLER, EXIT_APP,
 		COUNT_ACTION, NONE
 	};
+
+	enum Control
+	{
+		KEYBOARD = 1 << 0, JOY_0 = 1 << 1, JOY_1 = 1 << 2
+	};
 	
 	bool GetAction(Action& action);
 	bool HasInput(Action action);
-
-
-/*	void SetKeyboardAction(Action action, sf::Key::Code code);
-
-	void SetKeyboardMove(Movement movement, sf::Key::Code code);
-
-	void SetJoystickAction(Action action, sf::JoystickButton::Button button);
-
-	void SetJoystickMove(Movement movement, sf::Joy::Axis axis);*/
+	void SetControls(int c);
 
 private:
 	sf::Key::Code keyboard_binds_[COUNT_ACTION];
 	typedef std::map<Action, unsigned int> JoyBindMap;
 	JoyBindMap joystick_binds_;
+
+	int cur_ctrls_;	// Le mode de controle courant.
 
 	AbstractController();
 	AbstractController(const AbstractController& other);

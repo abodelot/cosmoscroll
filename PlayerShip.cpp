@@ -116,20 +116,12 @@ void PlayerShip::Action()
 	{
 		float h = 0.0f;
 		sf::Vector2f offset = sprite_.GetPosition() + GUN_OFFSET;
-/*#ifdef JOYSTICK_ENABLED
-		if ((input_.IsJoystickButtonDown(1, binds_.Jweapon_a)) || (input_.IsKeyDown(binds_.weapon_a)) )
-#else
-		if (input_.IsKeyDown(binds_.weapon_a))
-#endif*/
+
 		if (controls_.HasInput(AC::WEAPON_1))
 		{ 
 			h += laserbeam_.Shoot(offset);
 		}
-/*#ifdef JOYSTICK_ENABLED
-		if ((input_.IsJoystickButtonDown(1, binds_.Jweapon_b)) || (input_.IsKeyDown(binds_.weapon_b)) )
-#else
-		if (input_.IsKeyDown(binds_.weapon_b))
-#endif*/
+
 		if (controls_.HasInput(AC::WEAPON_2))
 		{
 			h += hellfire_.Shoot(offset);

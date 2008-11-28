@@ -1,30 +1,3 @@
-/*
- * Metroid Password Generator
- * Copyright (C) 2005 emuWorks
- * http://games.technoplaza.net/
- *
- * This file is part of Metroid Password Generator.
- *
- * Metroid Password Generator is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * Metroid Password Generator is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Metroid Password Generator; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- */
- 
-// $Id: Password.cc,v 1.11 2007/02/20 19:27:17 technoplaza Exp $
-
-#ifdef HAVE_CONFIG_H
-    #include <config.h>
-#endif
 
 #include <cstring>
 #include <cassert>
@@ -32,9 +5,6 @@
 
 #include "Password.hpp"
 
-
-//const std::string Password::ALPHABET("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-//                                      "abcdefghijklmnopqrstuvwxyz?- ");
 									  
 const std::string Password::ALPHABET("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                       "abcdefghijklmnopqrstuvwxyz?- ");
@@ -46,11 +16,9 @@ Password::Password() {
 
 Password::Password(const std::string &password, bool fixChecksum) {
     if (password.length() != PASSWORD_LENGTH) {
-        std::cerr << "Invalid Password Length\n";
+        std::cerr << "Longueur invalide\n";
     }
-    
     decode(password, fixChecksum);
-    
     // reencode just in case the checksum was fixed
     encode();
 }
@@ -59,7 +27,6 @@ bool Password::getBit(int bit) const {
     assert((bit >= 0) && (bit < PASSWORD_BITS));
     
     int byte = bit / 8;
-    
     return (data[byte] & (1 << (bit % 8)));
 }
 
@@ -68,44 +35,39 @@ void Password::setBit(int bit, bool value) {
     
     int byte = bit / 8;
     
-    if (value) {
+    if (value)
+    {
         data[byte] |= (1 << (bit % 8));
-    } else {
-        data[byte] &= ~(1 << (bit % 8));
     }
-    
+    else
+    {
+        data[byte] &= ~(1 << (bit % 8));
+    }    
     encode();
 }
 
-
-
 void Password::setLives(unsigned char lives) {
-    data[LIVES_COUNT_BYTE] = lives;
-    
+    data[LIVES_COUNT_BYTE] = lives;    
     encode();
 }
 
 void Password::setLevel(unsigned char level) {
     data[LEVEL_COUNT_BYTE] = level;
-    
     encode();
 }
 
 void Password::setShield(unsigned char shield) {
     data[SHIELD_COUNT_BYTE] = shield;
-    
     encode();
 }
 
 void Password::setCoolers(unsigned char coolers) {
     data[COOLER_COUNT_BYTE] = coolers;
-    
     encode();
 }
 
 void Password::setShift(unsigned char shift) {
     data[SHIFT_BYTE] = shift;
-    
     encode();
 }
 

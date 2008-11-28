@@ -1,28 +1,45 @@
 #ifndef PLAYERMANAGER_HPP
 #define PLAYERMANAGER_HPP
 
+#include <cassert>
+#include <map>
+
 #include "PlayerShip.hpp"
 #include "Window.hpp"
-
-#include <map>
-#include <cassert>
-//#include <iostream>
-
 
 class PlayerManager
 {
 public:
-	
+		
+	static PlayerManager& GetInstance();
+
+	int New();	// Création dynamique d'un nouveau player. Renvoie son id.
+	void Delete(int id = 0); // Destruction du player d'id défini.
+	void Clear();
+
+	void Select(int id);
+	int Selected();
+
+	PlayerShip* GetShip();
+	PlayerShip* NewShip(sf::Vector2f& offset);
+	void DelShip();
+
+	void Place();
+	float GetBestTime();
+	int GetControlMode();
+
+	void SetBestTime(float time);
+	void SetControlMode(int mode);
+
+
+private:
+
 	// ne pas mélanger la gestion du joueur avec PlayerShip
 	struct Player
 	{
-		Player()
-		{
-			ship = NULL;
-		}
-		
 		float best_time;
 		PlayerShip* ship;
+		int ctrl_mode;
 		
 		inline void Place()
 		{
@@ -32,25 +49,18 @@ public:
 		}
 	};
 	
-	static PlayerManager& GetInstance();
-
-	void ReallocShip(int id)
-	{
-		players_[id].ship = new PlayerShip(sf::Vector2f());
-		//std::cout << "new player " << id << " allocated at: " << players_[id].ship << std::endl;
-	}
-
-	int New();	// Création dynamique d'un nouveau player. Renvoie son id.
-	void Delete(int id = 0); // Destruction du player d'id défini.
-	Player& Get(int id = 0);
-	PlayerShip* GetShip(int id = 0);
-private:
-	
 	PlayerManager();
 	PlayerManager(const PlayerManager& other);
+	~PlayerManager();
+
+	inline bool InBounds()
+	{
+		return current_ >= 0 && current_ <= last_;
+	}
 
 	std::map<int, Player> players_;
-	int last_;
+	typedef std::map<int, Player>::iterator PlayerIterator;
+	int current_, last_;
 
 };
 

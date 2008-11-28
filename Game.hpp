@@ -65,7 +65,7 @@ private:
 		END_ARCADE,
 		EXIT_APP
 	};
-	
+
 	enum GameMode
 	{
 		STORY, ARCADE, STORY2X
@@ -79,8 +79,24 @@ private:
 	Choice Options();
 	// jouer (arcade ou story)
 	Choice Play();
+
+	Choice PlayArcade();
+	Choice PlayStoryOnePlayer();
+	Choice PlayStoryTwoPlayers();
+
 	// menu en cours de jeu (pause)
 	Choice InGameMenu();
+	
+	/*
+	// partie terminée
+	Choice GameOverArcade();
+	Choice GameOverStory();
+	// fin d'un niveau [Non-fin du jeu]
+	Choice Intertitre();
+	// lancement niveau suivant
+	Choice Continue();
+	*/
+	
 	// partie terminée (succès comme défaite)
 	Choice EndPlay();
 	// sélection d'un niveau
@@ -91,11 +107,13 @@ private:
 	Choice EndArcade();
 	
 	bool MoreBadGuys();
-	
+	bool MoreBadGuysStory();
+	bool MoreBadGuysArcade();
 	/*
 	 * Création du vaisseau du joueur
 	 */
 	void Respawn();
+	void RespawnTwo();
 	
 	/*
 	 * Suppression de toutes les unités en jeu
@@ -110,14 +128,12 @@ private:
 	
 	sf::RenderWindow app_;
 
-	std::vector<PM::Player> players_;
+
 
 	float timer_;
 
-
 	GameMode mode_;
-	int current_level_; // indice du niveau courant
-	int player_1_, player_2_;
+	int current_level_, player_1_, player_2_;
 	
 	// toutes les unités sont allouées dynamiquement
 	std::list<Entity*> entities_;
