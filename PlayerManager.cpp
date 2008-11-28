@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "PlayerManager.hpp"
 
 PlayerManager& PlayerManager::GetInstance()
@@ -11,10 +9,9 @@ PlayerManager& PlayerManager::GetInstance()
 int PlayerManager::New()
 {
 	// HACK: Virer le offset obligatoire à la création?
-	static sf::Vector2f offset;
-	offset.x = offset.y = 0.f;
+	static sf::Vector2f offset(0.f, 0.f);
 	Player player;
-	players_[last_ ++] = player;
+	players_[++last_] = player;
 	players_[last_].best_time = 0;
 	players_[last_].ship = new PlayerShip(offset);
 
@@ -34,8 +31,12 @@ PM::Player& PlayerManager::Get(int id)
 
 PlayerShip* PlayerManager::GetShip(int id)
 {
+	PlayerShip* ship = players_[id].ship;
+	assert(ship != NULL);
+	//std::cout << "return player ship: " << ship << std::endl;
 	return players_[id].ship;
 }
+
 
 PlayerManager::PlayerManager()
 {

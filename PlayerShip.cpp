@@ -72,10 +72,6 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset) :
 	{
 		bonus_[i] = 0;
 	}
-	
-#ifdef DEBUG
-	puts("\t OK");
-#endif
 }
 
 

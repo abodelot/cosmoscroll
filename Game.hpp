@@ -9,7 +9,7 @@
 #include "BulletManager.hpp"
 #include "ControlPanel.hpp"
 #include "Entity.hpp"
-#include "Level.hpp"
+#include "LevelManager.hpp"
 #include "Music.hpp"
 #include "ParticleSystem.hpp"
 #include "Password.hpp"
@@ -52,10 +52,20 @@ private:
 	
 	enum Choice
 	{
-		INTRO, OPTIONS, IN_GAME_MENU, MAIN_MENU, ARCADE_MODE, STORY_MODE, DOUBLE_STORY_MODE, 
-		GAME_OVER, EXIT_APP, INTERTITRE, CONTINUE
+		INTRO,
+		MAIN_MENU,
+		OPTIONS,
+		ARCADE_MODE,
+		STORY_MODE,
+		DOUBLE_STORY_MODE,
+		IN_GAME_MENU,
+		END_PLAY,
+		SELECT_LEVEL,
+		LEVEL_CAPTION,
+		END_ARCADE,
+		EXIT_APP
 	};
-
+	
 	enum GameMode
 	{
 		STORY, ARCADE, STORY2X
@@ -71,13 +81,15 @@ private:
 	Choice Play();
 	// menu en cours de jeu (pause)
 	Choice InGameMenu();
-	// partie terminée
-	Choice GameOver();
-	// fin d'un niveau [Non-fin du jeu]
-	Choice Intertitre();
-	// lancement niveau suivant
-	Choice Continue();
-
+	// partie terminée (succès comme défaite)
+	Choice EndPlay();
+	// sélection d'un niveau
+	Choice SelectLevel();
+	// Introduction d'un niveau
+	Choice LevelCaption();
+	// résultat d'une partie en mode arcade
+	Choice EndArcade();
+	
 	bool MoreBadGuys();
 	
 	/*
@@ -102,9 +114,9 @@ private:
 
 	float timer_;
 
-	std::string level_desc_; // Description du niveau courant
+
 	GameMode mode_;
-	unsigned short cur_lvl_;
+	int current_level_; // indice du niveau courant
 	int player_1_, player_2_;
 	
 	// toutes les unités sont allouées dynamiquement
@@ -114,7 +126,7 @@ private:
 	AbstractController& controls_;
 	BulletManager& bullets_;
 	ControlPanel& panel_;
-	Level& level_;
+	LevelManager& levels_;
 	ParticleSystem& particles_;
 	PlayerManager& PM_;
 	Settings& settings_;

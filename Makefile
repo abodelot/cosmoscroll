@@ -5,22 +5,20 @@ TINYXML_OBJ=$(TINYXML_DIR)/tinyxml.o $(TINYXML_DIR)/tinyxmlerror.o $(TINYXML_DIR
 CFLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
 LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -ldumb
 EXEC=cosmoscroll
-
-# debug / release mode
-DEBUG=yes
-JOY_ENABLED=yes
-
-
 SRC= $(wildcard *.cpp)
 OBJ= $(SRC:.cpp=.o)
 
 
+# debug/release mode
+DEBUG=yes
 ifeq ($(DEBUG), yes)
 	CFLAGS += -g -DDEBUG
 else
 	CFLAGS += -O2
 endif
 
+# enable/disable joystick
+JOY_ENABLED=yes
 ifeq ($(JOY_ENABLED), yes)
 	CFLAGS += -DJOY_ENABLED
 endif
@@ -30,7 +28,6 @@ NO_AUDIO=no
 ifeq ($(NO_AUDIO), yes)
 	CFLAGS += -DNO_AUDIO
 endif
-
 
 # svn revision
 SVNDEF= -DSVN_REV="\"$(shell svnversion -n .)\""
