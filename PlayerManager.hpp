@@ -31,7 +31,10 @@ public:
 	void SetBestTime(float time);
 	void SetControlMode(int mode);
 
-
+	inline int GetLastID()
+	{
+		return last_;	
+	};
 private:
 
 	// ne pas mélanger la gestion du joueur avec PlayerShip

@@ -15,22 +15,22 @@
 
 #define GUN_OFFSET				  sf::Vector2f(52, 24)
 
-#define DEFAULT_SPEED			200
+#define DEFAULT_SPEED				200
 
-#define COOLER_DEFAULT			  0
+#define COOLER_DEFAULT				  0
 #define COOLER_MAX				  3
 
 #define HEAT_MAX	 			100
-#define HEAT_RECOVERY_RATE		 13
+#define HEAT_RECOVERY_RATE			 13
 
 #define HP_DEFAULT				  3
 #define HP_MAX					  5
 
-#define SHIELD_DEFAULT			  3
+#define SHIELD_DEFAULT				  3
 #define SHIELD_MAX				  6
-#define SHIELD_RECOVERY_RATE	  0.3 //boules /sec.
+#define SHIELD_RECOVERY_RATE			  0.3 //boules /sec.
 
-#define TIMED_BONUS_DURATION	 10
+#define TIMED_BONUS_DURATION			 10
 
 
 PlayerShip::PlayerShip(const sf::Vector2f& offset) :
@@ -72,6 +72,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset) :
 	{
 		bonus_[i] = 0;
 	}
+
+	my_controls_ = -1;
 }
 
 
@@ -111,7 +113,7 @@ void PlayerShip::HandleAction(AC::Action action)
 
 void PlayerShip::Action()
 {
-
+	controls_.SetControls(my_controls_);
 	if (!overheated_)
 	{
 		float h = 0.0f;
@@ -148,7 +150,7 @@ void PlayerShip::Move(float frametime)
 	float y = offset.y;
 	
 	float dist = frametime * speed_;
-	
+	controls_.SetControls(my_controls_);
 	if (controls_.HasInput(AC::MOVE_UP))
 	{
 		y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
@@ -330,3 +332,4 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 	}
 	bonus_[tbonus] = 0;
 }
+

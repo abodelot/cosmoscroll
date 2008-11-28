@@ -12,6 +12,7 @@
 #include "Entity.hpp"
 #include "Weapon.hpp"
 
+
 /*
  * Le vaisseau aux couleurs de starsky et hutch
  */
@@ -57,6 +58,10 @@ public:
 		coolers_ = c;
 	}
 
+	inline void SetControls(int id)
+	{
+		my_controls_ = id;
+	}
 private:
 
 	enum TimedBonus
@@ -72,7 +77,7 @@ private:
 
 	bool overheated_;
 	float heat_, shield_timer_;
-	int coolers_, shield_, speed_;
+	int coolers_, shield_, speed_, my_controls_;
 
 #ifndef NO_AUDIO
 	sf::Sound shield_sfx_;

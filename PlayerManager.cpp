@@ -100,6 +100,7 @@ void PlayerManager::SetControlMode(int mode)
 	assert (InBounds());
 
 	players_[current_].ctrl_mode = mode;
+	players_[current_].ship->SetControls(mode);
 }
 
 PlayerManager::PlayerManager()
