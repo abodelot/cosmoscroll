@@ -4,7 +4,7 @@ CosmoScroll TODO List
 * Jeu :
 	- Ajouter groupes de formation
 	- Ajouter effet graphique sur bonus speed (Particule Smoke)
-	- Implémenter une navigation, réassignable, de controles par joystick
+	- Implémenter une navigation, réassignable, de controles par joystick [WIP]
 	- Implémenter un système de foncteurs de trajectoire et revoir les déplacements des entités
 	- Améliorer le système de Passwords
 	- Plus d'unités
@@ -15,7 +15,7 @@ CosmoScroll TODO List
 
 * Menus :
 	- Afficher meilleur temps en arcade
-	- Afficher niveaux débloqués / bloqués en aventure
+	- Afficher niveaux débloqués / bloqués en aventure [WIP]
 	- Paramétrer touches clavier
 	- Paramétrer plein-écran / fenêtré
 

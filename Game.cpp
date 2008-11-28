@@ -446,7 +446,7 @@ Game::Choice Game::InGameMenu()
 // la partie est finie
 Game::Choice Game::EndPlay()
 {
-	const float DURATION = 4;
+	const float DURATION = 5;
 	float timer = 0;
 	Choice what;
 	sf::String info;
@@ -467,8 +467,11 @@ Game::Choice Game::EndPlay()
 	}
 	else
 	{
-		// TODO: fin de jeu plus "épique"
-		info.SetText("Jeu terminé");
+		std::string epic_win = str_sprintf("Felicitations :-D\n\n"
+			"Vous avez fini les %d niveaux du jeu.\n"
+			"Vous etes vraiment doue(e) :D", current_level_);
+		info.SetText(epic_win);
+		info.SetSize(30);
 		what = MAIN_MENU;
 	}
 	sf::FloatRect rect = info.GetRect();
