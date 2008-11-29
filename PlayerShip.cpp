@@ -1,40 +1,40 @@
-#include "PlayerShip.hpp"
-#include "MediaManager.hpp"
-#include "Window.hpp"
 #include <cassert>
 #include <typeinfo>
 #include <SFML/System.hpp>
+
+#include "PlayerShip.hpp"
+#include "MediaManager.hpp"
+#include "Window.hpp"
+#include "Math.hpp"
+#include "ParticleSystem.hpp"
+#include "Settings.hpp"
 
 #ifdef DEBUG
 #include <iostream>
 #endif
 
-#include "Math.hpp"
-#include "ParticleSystem.hpp"
-#include "Settings.hpp"
+#define GUN_OFFSET              sf::Vector2f(52, 24)
 
-#define GUN_OFFSET				  sf::Vector2f(52, 24)
+#define DEFAULT_SPEED           200
 
-#define DEFAULT_SPEED				200
+#define COOLER_DEFAULT          0
+#define COOLER_MAX              3
 
-#define COOLER_DEFAULT				  0
-#define COOLER_MAX				  3
+#define HEAT_MAX                100
+#define HEAT_RECOVERY_RATE      13
 
-#define HEAT_MAX	 			100
-#define HEAT_RECOVERY_RATE			 13
+#define HP_DEFAULT              3
+#define HP_MAX                  5
 
-#define HP_DEFAULT				  3
-#define HP_MAX					  5
+#define SHIELD_DEFAULT          3
+#define SHIELD_MAX              6
+#define SHIELD_RECOVERY_RATE    0.3 //boules /sec.
 
-#define SHIELD_DEFAULT				  3
-#define SHIELD_MAX				  6
-#define SHIELD_RECOVERY_RATE			  0.3 //boules /sec.
-
-#define TIMED_BONUS_DURATION			 10
+#define TIMED_BONUS_DURATION    10
 
 
-PlayerShip::PlayerShip(const sf::Vector2f& offset) :
-	Entity(GET_IMG("spaceship"), offset),
+PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
+	Entity(GET_IMG(image), offset),
 	controls_(AC::GetInstance()),
 	panel_(ControlPanel::GetInstance()),
 	laserbeam_(Weapon::LASERBEAM, this),

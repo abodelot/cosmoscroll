@@ -29,5 +29,6 @@ fiery.png
 impact.png
 score-board.png
 shield.png
-spaceship.png
+spaceship-red.png
+spaceship-green.png
 star.png

@@ -19,8 +19,7 @@
 class PlayerShip: public Entity
 {
 public:
-
-	PlayerShip(const sf::Vector2f& offset);
+	PlayerShip(const sf::Vector2f& offset, const char* image="spaceship-red");
 	
 	~PlayerShip();
 	

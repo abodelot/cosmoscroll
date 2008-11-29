@@ -2,10 +2,12 @@
 #include <typeinfo>
 #include <SFML/System.hpp>
 
+#include "Game.hpp"
+
 #include "Asteroid.hpp"
 #include "Ennemy.hpp"
 #include "EvilBoss.hpp"
-#include "Game.hpp"
+
 #include "LevelManager.hpp"
 #include "MediaManager.hpp"
 #include "Menu.hpp"
@@ -23,6 +25,7 @@ Game& Game::GetInstance()
 	static Game self;
 	return self;
 }
+
 
 Game::Game() :
 	controls_	(AbstractController::GetInstance()),
@@ -52,12 +55,14 @@ Game::Game() :
 	controls_.SetControls(AC::KEYBOARD);
 }
 
+
 Game::~Game()
 {
 	RemoveEntities();
 	app_.EnableKeyRepeat(true); // bug SFML 1.3 sous linux : il faut réactiver à la main le keyrepeat
 	app_.Close();
 }
+
 
 void Game::Run()
 {
@@ -152,7 +157,7 @@ Game::Choice Game::Intro()
 		sfml.SetPosition(WIN_WIDTH - rect.GetWidth() - PADDING,
 			WIN_HEIGHT - rect.GetHeight() - PADDING);	
 	
-	sf::Sprite ship(GET_IMG("spaceship"));
+	sf::Sprite ship(GET_IMG("spaceship-red"));
 		ship.SetPosition(-20, 100);
 
 	while (elapsed < DURATION)
@@ -233,8 +238,6 @@ Game::Choice Game::MainMenu()
 		menu.Show(app_);
 		app_.Display();
 	}
-
-
 
 	// si on lance une nouvelle partie, on nettoie les restes des éventuelles
 	// parties précédentes et l'on respawn un joueur neuf
@@ -936,6 +939,7 @@ void Game::RespawnTwo()
 
 }
 
+
 void Game::Respawn()
 {
 #ifdef DEBUG
@@ -962,10 +966,12 @@ void Game::Respawn()
 
 }
 
+
 void Game::AddEntity(Entity* entity)
 {
 	entities_.push_front(entity);
 }
+
 
 std::string Game::MakePassword()
 {
