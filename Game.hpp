@@ -146,8 +146,9 @@ private:
 	ParticleSystem& particles_;
 	PlayerManager& PM_;
 	Settings& settings_;
-	
+#ifndef NO_AUDIO
 	Music* music_;
+#endif
 };
 	
 #endif /* guard GAME_HPP */

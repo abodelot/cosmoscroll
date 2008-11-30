@@ -1,4 +1,4 @@
-#ifndef NO_MUSIC
+#ifndef NO_AUDIO
 
 #include "Music.hpp"
 #include "MediaManager.hpp"
@@ -39,4 +39,4 @@ bool Music::OnGetData(Chunk& data)
 	return true;
 }
 
-#endif /* NO_MUSIC */
+#endif /* NO_AUDIO */

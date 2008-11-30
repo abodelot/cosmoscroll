@@ -1,7 +1,7 @@
 #ifndef MUSIC_HPP
 #define MUSIC_HPP
 
-#ifndef NO_MUSIC
+#ifndef NO_AUDIO
 
 #include <dumb.h>
 #include <SFML/System.hpp>
@@ -12,6 +12,7 @@
 #define DELTA 65536.0f / SAMPLING_RATE
 #define BUFFER_LENGTH 1	// Fixme: Magique?
 #define BUFFER_SIZE SAMPLING_RATE / BUFFER_LENGTH
+
 
 class Music : public sf::SoundStream
 {
@@ -30,6 +31,7 @@ private:
 	DUH_SIGRENDERER* player_;
 };
 
-#endif /* NO_MUSIC */
+#endif /* NO_AUDIO */
+
 #endif /* guard MUSIC_HPP */
 

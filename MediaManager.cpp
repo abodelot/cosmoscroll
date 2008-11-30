@@ -1,7 +1,7 @@
-#include "MediaManager.hpp"
-
 #include <fstream>
 #include <iostream>
+
+#include "MediaManager.hpp"
 
 #define IMG_LIST "images/images.txt"
 #define IMG_PATH "images/"
@@ -36,14 +36,11 @@ static void load_or_die(sf::SoundBuffer& buffer, const char* filename)
 }
 
 
-#ifndef NO_MUSIC
 // charger un buffer lié a une instance de la lib dumb
 static void load_or_die(std::string& music_name, const char* filename)
 {
 	music_name = filename;
 }
-#endif
-
 	
 #endif
 
@@ -116,7 +113,7 @@ const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
     return it->second;
 }
 
-#ifndef NO_MUSIC
+
 Music* MediaManager::GetMusic(const char* key) const
 {
     std::map<std::string, std::string>::const_iterator it;
@@ -133,8 +130,6 @@ Music* MediaManager::GetMusic(const char* key) const
 	
     return mus;
 }
-#endif
-
 #endif
 
 const sf::Font& MediaManager::GetFont() const

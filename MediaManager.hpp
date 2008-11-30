@@ -2,12 +2,12 @@
 #define H_RESSOURCE_MANAGER
 
 #include <SFML/Graphics.hpp>
+
 #ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
-#ifndef NO_MUSIC
 #include "Music.hpp"
 #endif
-#endif
+
 #include <map>
 #include <string>
 
@@ -38,16 +38,12 @@ public:
      */
     const sf::SoundBuffer& GetSoundBuf(const char* key) const;
 
-#ifndef NO_MUSIC
     /*
      * Récupérer une musique
      * @param[in] key: identifiant de la musique
      * @return pointeur sur la musique
      */
 	Music* GetMusic(const char* key) const;
-	
-#endif
-	
 #endif
     
     /*
@@ -69,11 +65,7 @@ private:
     std::map<std::string, sf::Image> images_;
 #ifndef NO_AUDIO
     std::map<std::string, sf::SoundBuffer> sounds_;
-
-#ifndef NO_MUSIC
 	std::map<std::string, std::string> musics_;
-#endif
-	
 #endif
     sf::Font font_;
 };
@@ -92,13 +84,10 @@ inline const sf::SoundBuffer& GET_SOUNDBUF(const char* key)
     return MediaManager::GetInstance().GetSoundBuf(key);
 }
 
-#ifndef NO_MUSIC
 inline Music* GET_MUSIC(const char* key)
 {
     return MediaManager::GetInstance().GetMusic(key);
 }
-#endif
-
 #endif
 
 inline const sf::Font& GET_FONT()

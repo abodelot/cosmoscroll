@@ -4,8 +4,7 @@
 #include "MediaManager.hpp"
 
 
-Menu::Menu() /*:
-	settings_ (Settings::GetInstance())*/
+Menu::Menu()
 {
 	// valeurs par défaut
 	textsize_ = 20;

@@ -24,9 +24,7 @@ public:
 	~PlayerShip();
 	
 	void HandleAction(AC::Action action);
-/*	void HandleKey(const sf::Event::KeyEvent& key);
-	void HandleJoyButton(const sf::Event::JoyButtonEvent& event);*/
-	// phase de tir
+	
 	void Action();
 	
 	void Collide(Entity& ent);
@@ -67,17 +65,37 @@ private:
 	{
 		T_TRISHOT, T_SPEED, TIMED_BONUS_COUNT
 	};
-
+	
+	/**
+	 * Gérer un bonus attrapé
+	 */
 	void HandleBonus(const Bonus& bonus);
-
+	
+	/**
+	 * Désactiver un bonus à effet temporaire
+	 */
 	void DisableTimedBonus(TimedBonus tbonus);
-
+	
+	/**
+	 * Activer les effets du Code Konami
+	 */
+	void KonamiCodeOn();
+	
+	enum
+	{
+		KONAMI_CODE_LENGTH = 10
+	};
+	
+	// la séquence du Code Konami
+	AC::Action konami_code_[KONAMI_CODE_LENGTH]; 
+	int current_konami_event_;
+	
 	float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
 
 	bool overheated_;
 	float heat_, shield_timer_;
 	int coolers_, shield_, speed_, my_controls_;
-
+	
 #ifndef NO_AUDIO
 	sf::Sound shield_sfx_;
 #endif
@@ -85,7 +103,6 @@ private:
 	AbstractController& controls_;
 	ControlPanel& panel_;
 	Weapon laserbeam_, hellfire_;
-
 };
 
 #endif /* guard PLAYERSHIP_HPP */

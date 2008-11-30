@@ -70,8 +70,10 @@ void Game::Run()
 	// première scène = Intro
 	Choice what = Intro();
 #ifndef NO_AUDIO
+#ifndef NO_MUSIC
 	music_ = GET_MUSIC("space");
 	music_->Play();
+#endif
 #endif
 	do
 	{
@@ -110,10 +112,12 @@ void Game::Run()
 				break;
 		}
 	} while (what != EXIT_APP);
-#ifndef NO_AUDIO // si what == EXIT_APP
+#ifndef NO_AUDIO
+#ifndef NO_MUSIC
 	music_->Stop();
 	delete music_;
 	music_ = NULL;
+#endif
 #endif
 }
 
@@ -558,70 +562,6 @@ Game::Choice Game::EndArcade()
 	return static_cast<Choice>(choice);
 }
 
-/*
-Game::Choice Game::Intertitre()
-{
-#ifdef DEBUG
-	puts("[ Game::Intertitre ]");
-#endif
-	sf::String title;
-	sf::String subtitle1;
-	sf::String subtitle2;
-	PM_.Select(player_1_);
-	int min = (int) PM_.GetBestTime() / 60;
-	int sec = (int) PM_.GetBestTime() % 60;
-	subtitle1.SetText(str_sprintf("Termine en %d min et %d sec",
-			min, sec));
-	subtitle2.SetText(str_sprintf("Pass: %s", MakePassword().c_str()));
-	
-	title.SetText(str_sprintf("Fin du niveau %d", cur_lvl_));
-	
-	title.SetFont(GET_FONT());
-	title.SetColor(sf::Color::White);
-	title.SetPosition(42, 42);
-	subtitle1.SetFont(GET_FONT());
-	subtitle1.SetColor(sf::Color::White);
-	subtitle1.SetPosition(32, 72);
-	subtitle2.SetFont(GET_FONT());
-	subtitle2.SetColor(sf::Color::White);
-	subtitle2.SetPosition(32, 92);
-	
-	Menu menu;
-	menu.SetOffset(sf::Vector2f(42, 200));
-	menu.AddItem("Continuer", CONTINUE);	
-	// menu.AddItem("Réessayer", RETRY);
-
-	bool running = true;
-	int choice;
-	
-	AC::Action action;
-	while (running)
-	{
-		while (controls_.GetAction(action))
-		{
-			if (action == AC::EXIT_APP)
-			{
-				running = false;
-			}
-			else if (menu.ItemChosen(action, choice))
-			{
-				running = false;
-			}
-			else if (action == AC::USE_HACK)
-			{
-				//HACK
-				Passwd_HACK();
-			}
-		}
-		app_.Draw(title);
-		app_.Draw(subtitle1);
-		app_.Draw(subtitle2);
-		menu.Show(app_);
-		app_.Display();
-	}
-	return static_cast<Choice>(choice);
-}
-*/
 
 // choix des niveaux
 Game::Choice Game::SelectLevel()

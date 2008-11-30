@@ -62,7 +62,7 @@ bool AbstractController::GetAction(Action& action)
 				{
 					action = MOVE_RIGHT;
 				}
-				else if (event.JoyMove.Position < - JOY_DEADZONE)
+				else if (event.JoyMove.Position < -JOY_DEADZONE)
 				{
 					action = MOVE_LEFT;
 				}
@@ -73,7 +73,7 @@ bool AbstractController::GetAction(Action& action)
 				{
 					action = MOVE_DOWN;
 				}
-				else if (event.JoyMove.Position < - JOY_DEADZONE)
+				else if (event.JoyMove.Position < -JOY_DEADZONE)
 				{
 					action = MOVE_UP;
 				}				
@@ -134,7 +134,6 @@ AbstractController::AbstractController()
 	keyboard_binds_[MOVE_RIGHT] = sf::Key::Right;
 	keyboard_binds_[WEAPON_1] = sf::Key::Space;
 	keyboard_binds_[WEAPON_2] = sf::Key::A;
-	keyboard_binds_[USE_HACK] = sf::Key::H;
 	keyboard_binds_[USE_COOLER] = sf::Key::LControl;
 	keyboard_binds_[EXIT_APP] = sf::Key::Escape;
 	// joystick

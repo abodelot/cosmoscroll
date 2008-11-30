@@ -29,6 +29,12 @@ ifeq ($(NO_AUDIO), yes)
 	CFLAGS += -DNO_AUDIO
 endif
 
+#disanble music
+NO_MUSIC=no
+ifeq ($(NO_MUSIC), yes)
+	CFLAGS += -DNO_MUSIC
+endif
+
 # svn revision
 SVNDEF= -DSVN_REV="\"$(shell svnversion -n .)\""
 CFLAGS += $(SVNDEF)

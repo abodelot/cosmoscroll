@@ -70,10 +70,24 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	// init timed bonus
 	for (int i = 0; i < TIMED_BONUS_COUNT; ++i)
 	{
-		bonus_[i] = 0;
+		bonus_[i] = 0.f;
 	}
-
+	
+	// init Konami Code
+	konami_code_[0] = AC::MOVE_UP;
+	konami_code_[1] = AC::MOVE_UP;
+	konami_code_[2] = AC::MOVE_DOWN;
+	konami_code_[3] = AC::MOVE_DOWN;
+	konami_code_[4] = AC::MOVE_LEFT;
+	konami_code_[5] = AC::MOVE_RIGHT;
+	konami_code_[6] = AC::MOVE_LEFT;
+	konami_code_[7] = AC::MOVE_RIGHT;
+	konami_code_[8] = AC::WEAPON_2;
+	konami_code_[9] = AC::WEAPON_1;
+	current_konami_event_ = 0;
+	
 	my_controls_ = -1;
+	
 }
 
 
@@ -87,6 +101,11 @@ PlayerShip::~PlayerShip()
 
 void PlayerShip::HandleAction(AC::Action action)
 {
+	if (action == AC::NONE)
+	{
+		return;
+	}
+	
 	if (action == AC::USE_COOLER)
 	{
 		if (coolers_ > 0)
@@ -98,16 +117,24 @@ void PlayerShip::HandleAction(AC::Action action)
 			panel_.SetInfo("");
 		}
 	}
-#ifdef DEBUG
-	if (action == AC::USE_HACK)
+	// handle konami code
+	if (action == konami_code_[current_konami_event_])
 	{
-		hp_ = 30;
-		panel_.SetShipHP(hp_);
-		shield_ = 30;
-		panel_.SetShield(shield_);
-		ParticleSystem::GetInstance().AddMessage(sprite_.GetPosition(), L"Secret Haxxx Of The Doom");
-	}
+		++current_konami_event_;
+#ifdef DEBUG
+		printf("konami code %d on\n", current_konami_event_);
 #endif
+		if (current_konami_event_ == KONAMI_CODE_LENGTH)
+		{
+			current_konami_event_ = 0;
+			KonamiCodeOn();
+		}
+	}
+	else
+	{
+		current_konami_event_ = 0;
+	}
+
 }
 
 
@@ -331,5 +358,26 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 			assert(0);
 	}
 	bonus_[tbonus] = 0;
+}
+
+
+void PlayerShip::KonamiCodeOn()
+{
+	ParticleSystem& particles = ParticleSystem::GetInstance();
+	overheated_ = false;
+	panel_.SetInfo("");
+	heat_ = 0.f;
+	panel_.SetHeat(heat_);	
+	coolers_ = 42;
+	panel_.SetCoolers(42);
+	hp_ = 42;
+	panel_.SetShipHP(hp_);
+	shield_ = 42;
+	panel_.SetShield(shield_);
+	particles.RemoveShield(&sprite_);
+	particles.AddShield(shield_, &sprite_);
+	hellfire_.SetTriple(true);
+	laserbeam_.SetTriple(true);
+	particles.AddMessage(sprite_.GetPosition(), L"Have you mooed today?");
 }
 
