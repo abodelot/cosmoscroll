@@ -78,6 +78,7 @@ void Game::Run()
 #ifndef NO_AUDIO
 #ifndef NO_MUSIC
 	music_ = GET_MUSIC("space");
+	music_->SetVolume(30);
 	music_->Play();
 #endif
 #endif
@@ -138,7 +139,7 @@ Game::Choice Game::Intro()
 #endif
 	AC::Action action;
 	controls_.SetControls(AC::ALL);
-
+	//controls_.SetControls(AC::KEYBOARD);
 	Choice what = MAIN_MENU;
 	const int DURATION = 5, PADDING = 10;
 	float time, elapsed = 0;
@@ -223,18 +224,20 @@ Game::Choice Game::MainMenu()
 	controls_.SetControls(AC::ALL);
 	
 	sf::String title(str_sprintf("CosmoScroll - r%s", SVN_REV));
-		title.SetFont(GET_FONT());
-		title.SetSize(40);
-		title.SetY(42);
-		title.SetX((WIN_WIDTH - title.GetRect().GetWidth()) / 2);
+	title.SetFont(GET_FONT());
+	title.SetSize(40);
+	title.SetY(42);
+	title.SetX((WIN_WIDTH - title.GetRect().GetWidth()) / 2);
 	
 	Menu menu;
-		menu.SetOffset(sf::Vector2f(60, 120));
-		menu.AddItem("Aventure solo", STORY_MODE);
-		menu.AddItem("Aventure duo", DOUBLE_STORY_MODE);
-		menu.AddItem("Arcade", ARCADE_MODE);
-		menu.AddItem("Pong", PONG_MODE);
-		menu.AddItem("Quitter", EXIT_APP);
+	menu.SetOffset(sf::Vector2f(60, 120));
+	menu.AddItem("Mode Histoire solo", STORY_MODE);
+	menu.AddItem("Mode Histoire duo", DOUBLE_STORY_MODE);
+	menu.AddItem("Mode Arcade", ARCADE_MODE);
+	menu.AddItem("Pong", PONG_MODE);
+	//menu.AddItem("Options"); -> choix musique, choix bindings
+	//menu.AddItem("À Propos"); -> auteurs, versions, cass-dédi :)
+	menu.AddItem("Quitter", EXIT_APP);
 
 	while (running)
 	{
@@ -260,7 +263,7 @@ Game::Choice Game::MainMenu()
 		choice == DOUBLE_STORY_MODE)
 	{
 		// clean up
-		//RemoveEntities();	// SUPPRESSED IN R 64 !?
+		RemoveEntities();	// SUPPRESSED IN R 64 !?
 		particles_.Clear();
 		bullets_.Clear();
 		
@@ -282,8 +285,7 @@ Game::Choice Game::MainMenu()
 			mode_ = (choice == DOUBLE_STORY_MODE)? STORY2X : STORY;
 			choice = SELECT_LEVEL;
 		}
-		// Respawn();
-
+		// Respawn();  <-RESTORED IN R64?!
 	}
 	return static_cast<Choice>(choice);
 }
@@ -311,7 +313,7 @@ Game::Choice Game::InGameMenu()
 	
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(220, 200));
-	Choice resume = mode_ == ARCADE ? ARCADE_MODE : mode_ == STORY ? STORY_MODE : mode_==STORY2X ? DOUBLE_STORY_MODE : PONG_MODE;
+	Choice resume = mode_ == ARCADE ? ARCADE_MODE : mode_ == STORY ? STORY_MODE : DOUBLE_STORY_MODE;
 	menu.AddItem("Reprendre la partie", resume);
 	menu.AddItem("Revenir au menu principal", MAIN_MENU);
 	//menu.AddItem("Options", OPTIONS);
@@ -366,6 +368,12 @@ Game::Choice Game::InGameMenu()
 // la partie est finie
 Game::Choice Game::EndPlay()
 {
+#ifdef DEBUG
+	puts("[ Game::EndPlay ]");
+#endif
+#ifndef NO_AUDIO
+	sf::Sound sound;
+#endif
 	const float DURATION = 5;
 	float timer = 0;
 	Choice what;
@@ -374,42 +382,43 @@ Game::Choice Game::EndPlay()
 	info.SetColor(sf::Color::White);
 	info.SetFont(GET_FONT());
 	// perdu ou gagné ?
-	info.SetText("Game  Over");
-	if (GetMode() == ARCADE || GetMode() == PONG)
-	{	
-		what = END_ARCADE;
+	if (entities_.size() > 1 ||
+		(GetMode() == STORY2X && entities_.size() > 2)) // si perdu
+	{
+#ifndef NO_AUDIO
+		sound.SetBuffer(GET_SOUNDBUF("game-over"));
+#endif
+		info.SetText("Game  Over");
+		what = mode_ == ARCADE ? END_ARCADE : MAIN_MENU;
+	}
+	else if (current_level_ < levels_.GetLast())
+	{
+#ifndef NO_AUDIO
+		sound.SetBuffer(GET_SOUNDBUF("end-level"));
+#endif
+		info.SetText(str_sprintf("Niveau %d termine", current_level_));
+		++current_level_;
+		if (current_level_ > last_level_reached_)
+		{
+			last_level_reached_ = current_level_;
+#ifdef DEBUG
+			printf("nouveau niveau atteint : %d\n", last_level_reached_);
+#endif
+		}
+		what = SELECT_LEVEL;
 	}
 	else
 	{
-		what = SELECT_LEVEL;
-		if ((GetMode()== STORY && entities_.size() > 1) ||
-			(GetMode()== STORY2X && entities_.size() > 2)) // si perdu
-		{
-			info.SetText("Game  Over");
-		}
-		else if (current_level_ < levels_.GetLast())
-		{
-			info.SetText(str_sprintf("Niveau %d termine", current_level_));
-			++current_level_;
-			if (current_level_ > last_level_reached_)
-			{
-				last_level_reached_ = current_level_;
-#ifdef DEBUG
-				printf("nouveau niveau atteint : %d\n", last_level_reached_);
+#ifndef NO_AUDIO
+		sound.SetBuffer(GET_SOUNDBUF("end-level"));
 #endif
-			}
-		}
-		else
-		{
-			std::string epic_win = str_sprintf("Felicitations :-D\n\n"
-				"Vous avez fini les %d niveaux du jeu.\n"
-				"Vous etes vraiment doue(e) :D", current_level_);
-			info.SetText(epic_win);
-			info.SetSize(30);
-			what = MAIN_MENU;
-		}
+		std::string epic_win = str_sprintf("Felicitations :-D\n\n"
+			"Vous avez fini les %d niveaux du jeu.\n"
+			"Vous etes vraiment doue(e) :D", current_level_);
+		info.SetText(epic_win);
+		info.SetSize(30);
+		what = MAIN_MENU;
 	}
-	
 	sf::FloatRect rect = info.GetRect();
 	info.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
 		(WIN_HEIGHT - rect.GetHeight()) / 2);
@@ -417,7 +426,9 @@ Game::Choice Game::EndPlay()
 	
 	AC::Action action;
 	controls_.SetControls(AC::ALL);
-	
+#ifndef NO_AUDIO
+	sound.Play();
+#endif	
 	while (running)
 	{
 		while (controls_.GetAction(action))
@@ -709,7 +720,6 @@ bool Game::MoreBadGuys()
 
 void Game::RemoveEntities()
 {
-	std::cerr << "RemoveEntities\n";
 	std::list<Entity*>::iterator it;
 	for (it = entities_.begin(); it != entities_.end(); ++it)
 	{
@@ -735,8 +745,6 @@ void Game::Respawn()
 #endif
 	sf::Vector2f offset;
 	offset.y = WIN_HEIGHT / 2.0;
-
-	RemoveEntities();
 
 	//	JOUEUR UN
 	offset.x = 0.f;
@@ -775,10 +783,6 @@ void Game::Respawn()
 	
 		PM_.SetControlMode(AC::JOY_0 | AC::JOY_1);
 		AddEntity(PM_.GetShip());
-	}
-	else
-	{
-		PM_.SetControlMode(AC::ALL);
 	}
 
 }
@@ -1126,7 +1130,6 @@ Game::Choice Game::PlayPong()
 	puts("[ Game::PlayPong ]");
 #endif
 
-	
 	AC::Action action;
 	bool running = true;
 	static int lives_1 = 3;
@@ -1198,7 +1201,7 @@ Game::Choice Game::PlayPong()
 			{
 			std::cout << "lives 1:" << lives_1 << " lives 2:" << lives_2 << "\n";
 				// Ne devrait jamais arriver en arcade
-				what = END_PLAY;
+				what = END_ARCADE;
 			}
 		}
 
@@ -1283,8 +1286,6 @@ Game::Choice Game::PlayPong()
 			(**it).Show(app_);
 		}
 		
-
-		
 		bullets_.Show(app_);
 		panel_.Show(app_);
 		app_.Draw(p1_infos);
@@ -1295,6 +1296,7 @@ Game::Choice Game::PlayPong()
 	PM_.SetBestTime(timer_);
 	return what;
 }
+
 
 void Game::Hit(int player_id)
 {

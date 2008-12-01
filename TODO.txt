@@ -1,25 +1,43 @@
 CosmoScroll TODO List
 =====================
 
-* Jeu :
-	- Ajouter groupes de formation
-	- Ajouter effet graphique sur bonus speed (Particule Smoke)
-	- Implémenter une navigation, réassignable, de controles par joystick [WIP]
-	- Implémenter un système de foncteurs de trajectoire et revoir les déplacements des entités
-	- Améliorer le système de Passwords
-	- Plus d'unités
+Milestone 0.1
+-------------
 
-* Settings :
+* Jeu :
+	- Ajouter effet graphique sur bonus speed (Particule Smoke)
+	- Implémenter une navigation, ré-assignables, de contrôles par joystick [WIP]
+	- Un menu Options, pouvoir y choisir la musique et les bindings
+	- Une menu À Propos
+	
+* Interface :
+	- Afficher le meilleur temps dans le ControlPanel en mode Arcade
+	- Afficher le niveau courant dans le ControlPanel en mode Histoire
+	- Menus du jeu plus jolis
+	
+* Configuration :
+	- Sauvegarder les bindings clavier/joystick
 	- Sauvegarder la progression des niveaux en aventure
 	- Sauvegarder le meilleur temps en arcade
-
-* Menus :
-	- Afficher meilleur temps en arcade
-	- Afficher niveaux débloqués / bloqués en aventure [WIP]
-	- Paramétrer touches clavier
-	- Paramétrer plein-écran / fenêtré
+	- Sauvegarder le choix de la musique
+	- Sauvegarder plein-écran / fenêtré
 
 * Niveaux :
-	- Gérer les Parallaxes (plus de décors)
 	- Un EvilBoss qui dure plus longtemps
+	- Continuer à ajuster les niveaux (durée de vie et difficulté progressive)
 
+
+Milestone post 0.1
+------------------
+
+* Plus d'unités
+* Plus d'armes
+
+* Gérer les parallaxes (plus de décors dans les niveaux)
+* Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
+
+* Ajouter groupes de formation
+* Implémenter un système de pattern d'IA (définition des trajectoire et des tirs)
+* Conserver le système de passwords ?
+* Mode deux joueurs / Jeu de Pong
+* Gestionnaire de buffers audio

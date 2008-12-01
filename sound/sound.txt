@@ -1,7 +1,11 @@
 blaster-shot-1.wav
 blaster-shot-2.wav
-boom.wav
-warp.wav
-menu-select.wav
 bonus.wav
+boom.wav
+end-level.wav
+game-over.wav
+menu-non-activable.wav
+menu-select.wav
+menu-valid.wav
 title.wav
+warp.wav

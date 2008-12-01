@@ -18,7 +18,9 @@ Menu::Menu()
 	// pas encore d'éléments, donc pas de sélection
 	selected_ = -1;
 #ifndef NO_AUDIO	
-	sound_.SetBuffer(GET_SOUNDBUF("menu-select"));
+	buffers_[SELECT] = &GET_SOUNDBUF("menu-select");
+	buffers_[VALID] = &GET_SOUNDBUF("menu-valid");
+	buffers_[NON_ACTIVABLE] = &GET_SOUNDBUF("menu-non-activable");
 #endif
 }
 
@@ -28,7 +30,7 @@ void Menu::SetNormalLook(unsigned long style, const sf::Color& color)
 	normal_look_.style = style;
 	normal_look_.color = color;
 }
-	
+
 
 void Menu::SetHighlightLook(unsigned long style, const sf::Color& color)
 {
@@ -89,7 +91,7 @@ bool Menu::ItemChosen(AC::Action action, int& id)
 			selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
 			ApplyStyle(items_[selected_], highlight_look_);
 #ifndef NO_AUDIO
-			sound_.Play();
+			PlaySound(SELECT);
 #endif
 			break;
 		case AC::MOVE_DOWN:
@@ -97,15 +99,22 @@ bool Menu::ItemChosen(AC::Action action, int& id)
 			selected_ = (selected_ + 1) % items_.size();
 			ApplyStyle(items_[selected_], highlight_look_);
 #ifndef NO_AUDIO
-			sound_.Play();
+			PlaySound(SELECT);
 #endif
 			break;
 		case AC::VALID:
 			if (items_[selected_].activable)
 			{
 				id = items_[selected_].id;
+#ifndef NO_AUDIO
+				PlaySound(VALID);
+#endif
 				return true;
 			}
+#ifndef NO_AUDIO
+			PlaySound(NON_ACTIVABLE);
+#endif
+			break;
 		default:
 			break;
 	}
@@ -144,3 +153,14 @@ void Menu::ApplyStyle(MenuItem& item, const ItemLook& look)
 	item.label.SetColor(look.color);
 	item.label.SetStyle(look.style);
 }
+
+
+#ifndef NO_AUDIO
+void Menu::PlaySound(SoundFx fx)
+{
+	static sf::Sound sound;
+	assert(fx < COUNT_SOUNDFX);
+	sound.SetBuffer(*buffers_[fx]);
+	sound.Play();
+}
+#endif

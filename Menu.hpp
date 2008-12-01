@@ -117,8 +117,16 @@ private:
 	ItemLook normal_look_;
 	ItemLook unactive_look_;
 #ifndef NO_AUDIO
-	sf::Sound sound_;
+	enum SoundFx
+	{
+		SELECT, VALID, NON_ACTIVABLE, COUNT_SOUNDFX
+	};
+	
+	void PlaySound(SoundFx sound);
+	
+	const sf::SoundBuffer* buffers_[COUNT_SOUNDFX];
 #endif
+
 };
 
 #endif /* guard MENU_HPP */
