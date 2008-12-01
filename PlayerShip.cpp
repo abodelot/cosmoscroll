@@ -180,19 +180,47 @@ void PlayerShip::Move(float frametime)
 	controls_.SetControls(my_controls_);
 	if (controls_.HasInput(AC::MOVE_UP))
 	{
-		y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
+		if (false) //if(use_limits_)
+		{
+			;//y = (y + WIDTH + dist > y_limits_.x) ? y_limits_.x : y + dist;
+		}
+		else
+		{
+			y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
+		}
 	}
 	if (controls_.HasInput(AC::MOVE_DOWN))
 	{
-		y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
+		if (false) //if (use_limits_)
+		{
+			;//y = (y + WIDTH + dist > y_limits_.y) ? y_limits_.y : y + dist;
+		}
+		else
+		{
+			y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
+		}
 	}
 	if (controls_.HasInput(AC::MOVE_LEFT))
 	{
-		x = (x - dist < 0) ? 0 : x - dist;
+		if (false) //if (use_limits_)
+		{
+			;//x = (x + WIDTH + dist > x_limits_.x) ? x_limits_.x : x + dist;
+		}
+		else
+		{
+			x = (x - dist < 0) ? 0 : x - dist;
+		}
 	}
 	if (controls_.HasInput(AC::MOVE_RIGHT))
 	{
-		x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
+		if (false) //if (use_limits_)
+		{
+			;//x = (x + WIDTH + dist > x_limits_.y) ? x_limits_.y : x + dist;
+		}
+		else
+		{
+			x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
+		}
 	}
 	sprite_.SetPosition(x, y);
 	
@@ -283,7 +311,7 @@ void PlayerShip::Collide(Entity& ent)
 	{
 		HandleBonus(*bonus);
 	}
-	else
+	else if (typeid(ent) != typeid(PlayerShip))
 	{
 		Hit(1);
 	}

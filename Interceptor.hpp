@@ -11,7 +11,6 @@ public:
     void Action();
     void Move(float frametime);
 private:
-    bool left_;
     Weapon weapon_;
 };
 

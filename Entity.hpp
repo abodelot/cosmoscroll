@@ -74,6 +74,17 @@ public:
 		hp_ = val;
 	}
 	
+	virtual inline bool IsFlipped()
+	{
+		return flipped_;
+	}
+	
+	virtual inline void Flip(bool it)
+	{
+		sprite_.FlipX(it);
+		flipped_ = it;
+	}
+	
 	/*
 	 * Obtenir la position du vaisseau
 	 */
@@ -92,10 +103,20 @@ public:
 	 */
 	virtual sf::FloatRect GetRect() const;
 
+	/*
+	void UseLimits(bool);
+	bool UsesLimits();
+	void SetLimits(sf::Vector2f&, sf::Vector2f&);
+	*/
 
 protected:
 	sf::Sprite sprite_;
 	int hp_;
+	bool flipped_;
+	
+	bool use_limits_;
+	//sf::Vector2f x_limits_, y_limits_;
+	
 };
 
 #endif /* guard ENTITY_HPP */

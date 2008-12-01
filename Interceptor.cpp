@@ -11,7 +11,7 @@ Interceptor::Interceptor(const sf::Vector2f& offset, Entity* target) :
     Ennemy(offset, GET_IMG("ennemy-A"), 8, target),
     weapon_(Weapon::PLASMACANNON, this)
 {
-    left_ = true;
+
 }
 
 
@@ -23,7 +23,7 @@ void Interceptor::Move(float frametime)
     sf::Vector2f player_pos = target_->GetPosition();
     sf::Vector2f my_pos = sprite_.GetPosition();
     
-    bool left = true;
+    bool flipped = false;
     if (my_pos.x > player_pos.x)
     {
     	vx = -velocity;
@@ -31,7 +31,7 @@ void Interceptor::Move(float frametime)
     else if (my_pos.x < player_pos.x)
     {
     	vx = velocity;
-    	left = false;
+    	flipped = true;
     }
 	
 	if (my_pos.y > player_pos.y)
@@ -39,10 +39,9 @@ void Interceptor::Move(float frametime)
 	else if (my_pos.y < player_pos.y)
 	    vy = velocity;
 	    
-	if (left != left_)
+	if (flipped != flipped_)
 	{
-	    sprite_.FlipX(!left);
-	    left_ = left;
+	    Flip(flipped);
 	}
 
     sprite_.Move(vx, vy);
@@ -53,7 +52,7 @@ void Interceptor::Move(float frametime)
 void Interceptor::Action()
 {
     float radians = ANGLE(target_->GetPosition(), sprite_.GetPosition());
-    if (!left_)
+    if (flipped_)
     {
         weapon_.Shoot(sprite_.GetPosition() + GUN_OFFSET_INVERT, radians);
     }

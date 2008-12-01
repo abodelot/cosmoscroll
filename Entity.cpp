@@ -10,6 +10,19 @@ Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp)
 	sprite_.SetImage(img);
 	sprite_.SetPosition(offset);
 	hp_ = hp;
+	flipped_ = false;
+	/*
+	
+		Le but: Limiter les positions des mouvements des entités
+
+	use_limits_ = false;
+	x_limits_.x = 0.f;
+	x_limits_.y = 0.f;
+	y_limits_.x = 0.f;
+	y_limits_.y = 0.f;
+	*/
+
+	
 }
 
 
@@ -63,4 +76,22 @@ sf::FloatRect Entity::GetRect() const
 	rect.Bottom = rect.Top + sprite_.GetSize().y;
 	return rect;
 }
+
+/*
+void Entity::UseLimits(bool it)
+{
+	use_limits_ = it;
+}
+
+bool Entity::UsesLimits()
+{
+	return use_limits_;
+}
+
+void Entity::SetLimits(sf::Vector2f& x, sf::Vector2f& y)
+{
+	x_limits_ = x;
+	y_limits_ = y;
+}
+*/
 

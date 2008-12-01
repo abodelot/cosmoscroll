@@ -59,6 +59,13 @@ public:
 	{
 		my_controls_ = id;
 	}
+	
+	inline void NoShot()
+	{
+		overheated_ = true;
+	}
+
+	
 private:
 
 	enum TimedBonus
@@ -103,6 +110,8 @@ private:
 	AbstractController& controls_;
 	ControlPanel& panel_;
 	Weapon laserbeam_, hellfire_;
+	
+
 };
 
 #endif /* guard PLAYERSHIP_HPP */

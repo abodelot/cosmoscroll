@@ -58,6 +58,7 @@ private:
 		ARCADE_MODE,
 		STORY_MODE,
 		DOUBLE_STORY_MODE,
+		PONG_MODE,
 		IN_GAME_MENU,
 		END_PLAY,
 		SELECT_LEVEL,
@@ -68,7 +69,7 @@ private:
 
 	enum GameMode
 	{
-		STORY, ARCADE, STORY2X
+		STORY, ARCADE, STORY2X, PONG
 	};
 	
 	// scène d'intro
@@ -78,10 +79,12 @@ private:
 	// les options de configurations
 	Choice Options();
 	// jouer (arcade ou story)
-	Choice Play();
+	//Choice Play();
 
 	Choice PlayArcade();
 	Choice PlayStory();
+	
+	Choice PlayPong();
 
 
 	// menu en cours de jeu (pause)
