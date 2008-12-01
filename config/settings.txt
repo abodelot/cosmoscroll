@@ -1,5 +1,0 @@
-## this is cosmoscroll config file.
-
-
-# les espaces n'ont pas d'importance :)
-	fullscreen	= false

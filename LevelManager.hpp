@@ -1,11 +1,11 @@
 #ifndef LEVELMANAGER_HPP
 #define LEVELMANAGER_HPP
 
-#include "tinyxml/tinyxml.h"
-#include "Entity.hpp"
-
 #include <queue>
 #include <string>
+
+#include "tinyxml/tinyxml.h"
+#include "Entity.hpp"
 
 /*
  * Parse le fichier des niveaux et instancie les unités

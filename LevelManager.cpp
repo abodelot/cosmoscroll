@@ -1,3 +1,6 @@
+#include <iostream>
+#include <cassert>
+
 #include "LevelManager.hpp"
 
 #include "Asteroid.hpp"
@@ -7,10 +10,7 @@
 #include "Misc.hpp"
 #include "PlayerManager.hpp"
 
-#include <iostream>
-#include <cassert>
-
-#define LEVEL_FILE "levels.xml"
+#define LEVEL_FILE "levels/levels.xml"
 
 
 LevelManager& LevelManager::GetInstance()

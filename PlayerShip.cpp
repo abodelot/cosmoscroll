@@ -7,7 +7,6 @@
 #include "Window.hpp"
 #include "Math.hpp"
 #include "ParticleSystem.hpp"
-#include "Settings.hpp"
 
 #ifdef DEBUG
 #include <iostream>
@@ -89,7 +88,6 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	my_controls_ = -1;
 		
 	use_limits_ = true;
-	
 }
 
 

@@ -14,7 +14,6 @@
 #include "ParticleSystem.hpp"
 #include "Password.hpp"
 #include "PlayerManager.hpp"
-#include "Settings.hpp"
 
 
 /*
@@ -148,7 +147,7 @@ private:
 		mode_ = mode;
 	}
 	int current_level_, player_1_, player_2_;
-	
+	int last_level_reached_;
 	// toutes les unités sont allouées dynamiquement
 	std::list<Entity*> entities_;
 	
@@ -159,7 +158,6 @@ private:
 	LevelManager& levels_;
 	ParticleSystem& particles_;
 	PlayerManager& PM_;
-	Settings& settings_;
 #ifndef NO_AUDIO
 	Music* music_;
 #endif

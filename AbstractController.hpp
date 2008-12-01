@@ -35,7 +35,6 @@ private:
 
 	AbstractController();
 	AbstractController(const AbstractController& other);
-	//Settings& settings_;
 };
 
 typedef AbstractController AC;

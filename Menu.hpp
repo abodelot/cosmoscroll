@@ -56,8 +56,9 @@ public:
 	 * Ajout d'un élément dans le menu
 	 * @param[in] label: texte de l'élément
 	 * @param[in] id: identifiant de l'action associée
+	 * @param[in] activable: détermine si l'item peut être activé
 	 */
-	void AddItem(const std::string label, int id);
+	void AddItem(const std::string label, int id, bool activable=true);
 	
 	/*
 	 * Détermine si un évènement a validé une action
@@ -87,6 +88,7 @@ private:
 	{
 		sf::String label;
 		int id;
+		bool activable;
 	};
 	
 	/*
@@ -104,6 +106,7 @@ private:
 	 * @param[in] look: apparence à appliquer
 	 */
 	static void ApplyStyle(MenuItem& item, const ItemLook& look);
+	void ResetStyle(MenuItem& item);
 	
 	std::vector<MenuItem> items_;
 	sf::Vector2f offset_;
@@ -112,6 +115,7 @@ private:
 	int linespace_; // interligne en pixels
 	ItemLook highlight_look_;
 	ItemLook normal_look_;
+	ItemLook unactive_look_;
 #ifndef NO_AUDIO
 	sf::Sound sound_;
 #endif

@@ -13,9 +13,9 @@
 #include "MediaManager.hpp"
 #include "Menu.hpp"
 #include "Misc.hpp"
-#include "Settings.hpp"
+//#include "ConfigParser.hpp"
 
-#define CONFIG_FILE "config/settings.txt"
+#define CONFIG_FILE "config/config.txt"
 
 #define UNDEF -1	// On initialise player_1_ et player_2_ à ça à la création.
 
@@ -36,13 +36,17 @@ Game::Game() :
 	panel_		(ControlPanel::GetInstance()),
 	levels_		(LevelManager::GetInstance()),
 	particles_	(ParticleSystem::GetInstance()),
-	PM_			(PlayerManager::GetInstance()),
-	settings_	(Settings::GetInstance())
+	PM_			(PlayerManager::GetInstance())
 {
-	Settings& settings = Settings::GetInstance();
-	settings.Load(CONFIG_FILE);
-
-	if (!settings.Fullscreen())
+	/*config_.LoadFile(CONFIG_FILE);
+	config_.SeekSection("Settings");
+	std::string value;
+	if (config_.ReadItem("last_level_reached_"))
+	{
+		;
+	}*/
+	last_level_reached_ = 1;
+	if (true)
 	{
 		app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE);
 	}
@@ -372,13 +376,20 @@ Game::Choice Game::EndPlay()
 	if ((GetMode()== STORY && entities_.size() > 1) ||
 		(GetMode()== STORY2X && entities_.size() > 2)) // si perdu
 	{
-		info.SetText("GameOver");
+		info.SetText("Game  Over");
 		what = mode_ == ARCADE ? END_ARCADE : MAIN_MENU;
 	}
 	else if (current_level_ < levels_.GetLast())
 	{
 		info.SetText(str_sprintf("Niveau %d termine", current_level_));
 		++current_level_;
+		if (current_level_ > last_level_reached_)
+		{
+			last_level_reached_ = current_level_;
+#ifdef DEBUG
+			printf("nouveau niveau atteint : %d\n", last_level_reached_);
+#endif
+		}
 		what = SELECT_LEVEL;
 	}
 	else
@@ -531,7 +542,8 @@ Game::Choice Game::SelectLevel()
 	int last = levels_.GetLast();
 	for (int i = 0; i < last; ++i)
 	{
-		menu.AddItem(str_sprintf("Niveau %d", i + 1), i);
+		bool activable = i < last_level_reached_;
+		menu.AddItem(str_sprintf("Niveau %d", i + 1), i, activable);
 	}
 	menu.AddItem("Retour au menu principal", last);
 	menu.SelectItem(current_level_ - 1);

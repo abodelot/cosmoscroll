@@ -13,7 +13,8 @@ Menu::Menu()
 	normal_look_.color = sf::Color::White;
 	highlight_look_.style = sf::String::Underlined;
 	highlight_look_.color = sf::Color::Green;
-	
+	unactive_look_.style = sf::String::Regular;
+	unactive_look_.color = sf::Color(0x50, 0x50, 0x50);
 	// pas encore d'éléments, donc pas de sélection
 	selected_ = -1;
 #ifndef NO_AUDIO	
@@ -54,12 +55,13 @@ void Menu::SetLineSpace(int linespace)
 }
 
 
-void Menu::AddItem(const std::string label, int id)
+void Menu::AddItem(const std::string label, int id, bool activable)
 {
 	MenuItem item;
 	item.label.SetText(label);
 	item.label.SetFont(GET_FONT());
 	item.id = id;
+	item.activable = activable;
 	
 	// si on a ajouté le premier élément
 	if (selected_ == -1)
@@ -72,7 +74,7 @@ void Menu::AddItem(const std::string label, int id)
 	{
 		sf::FloatRect rect = items_.back().label.GetRect();
 		item.label.SetPosition(rect.Left, rect.Bottom + linespace_);
-		ApplyStyle(item, normal_look_);
+		ApplyStyle(item, activable ? normal_look_ : unactive_look_);
 	}
 	items_.push_back(item);
 }
@@ -83,7 +85,7 @@ bool Menu::ItemChosen(AC::Action action, int& id)
 	switch (action)
 	{
 		case AC::MOVE_UP:
-			ApplyStyle(items_[selected_], normal_look_);
+			ResetStyle(items_[selected_]);
 			selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
 			ApplyStyle(items_[selected_], highlight_look_);
 #ifndef NO_AUDIO
@@ -91,7 +93,7 @@ bool Menu::ItemChosen(AC::Action action, int& id)
 #endif
 			break;
 		case AC::MOVE_DOWN:
-			ApplyStyle(items_[selected_], normal_look_);
+			ResetStyle(items_[selected_]);
 			selected_ = (selected_ + 1) % items_.size();
 			ApplyStyle(items_[selected_], highlight_look_);
 #ifndef NO_AUDIO
@@ -99,21 +101,27 @@ bool Menu::ItemChosen(AC::Action action, int& id)
 #endif
 			break;
 		case AC::VALID:
-			id = items_[selected_].id;
-			return true;
+			if (items_[selected_].activable)
+			{
+				id = items_[selected_].id;
+				return true;
+			}
 		default:
 			break;
 	}
 	return false;
 }
 
+
 void Menu::SelectItem(int n)
 {
 	assert(n >= 0 && n < (int) items_.size());
-	ApplyStyle(items_[selected_], normal_look_);
+	bool activable = items_[selected_].activable;
+	ApplyStyle(items_[selected_], activable ? normal_look_ : unactive_look_);
 	ApplyStyle(items_[n], highlight_look_);
 	selected_ = n;
 }
+
 
 void Menu::Show(const sf::RenderWindow& app) const
 {
@@ -125,9 +133,14 @@ void Menu::Show(const sf::RenderWindow& app) const
 }
 
 
+void Menu::ResetStyle(MenuItem& item)
+{
+	ApplyStyle(item, item.activable ? normal_look_ : unactive_look_);
+}
+
+
 void Menu::ApplyStyle(MenuItem& item, const ItemLook& look)
 {
 	item.label.SetColor(look.color);
 	item.label.SetStyle(look.style);
 }
-

@@ -6,6 +6,7 @@
 #define JOY_ID			 0
 #define JOY_DEADZONE	50.f
 
+
 AbstractController& AbstractController::GetInstance()
 {
     static AbstractController self;
@@ -17,6 +18,7 @@ void AbstractController::SetControls(int c)
 {
 	cur_ctrls_ = c;
 }
+
 
 bool AbstractController::GetAction(Action& action)
 {
@@ -38,6 +40,7 @@ bool AbstractController::GetAction(Action& action)
 				if (event.Key.Code == keyboard_binds_[i])
 				{
 					action = (Action) i;
+					break;
 				}
 			}
 		}
@@ -50,6 +53,7 @@ bool AbstractController::GetAction(Action& action)
 				if (it->second == event.JoyButton.Button)
 				{
 					action = it->first;
+					break;
 				}
 			}
 		}
@@ -119,14 +123,57 @@ bool AbstractController::HasInput(Action action)
 	return false;
 }
 
+/*
+void AbstractController::SetConfig(ConfigParser& config)
+{
+	std::string value;
+	config.SeekSection("Keyboard");
+	if (config.ReadItem("pause", value))
+		keyboard_binds_[PAUSE] = (sf::Key::Code) str_to_int(value);
+	if (config.ReadItem("valid", value))
+		keyboard_binds_[VALID] = (sf::Key::Code) str_to_int(value);
+	if (config.ReadItem("move_up", value))
+		keyboard_binds_[MOVE_UP] = (sf::Key::Code) str_to_int(value);
+	if (config.ReadItem("move_down", value))
+		keyboard_binds_[MOVE_DOWN] = (sf::Key::Code) str_to_int(value);
+	if (config.ReadItem("move_left", value))
+		keyboard_binds_[MOVE_LEFT] = (sf::Key::Code) str_to_int(value);
+	if (config.ReadItem("move_right", value))
+		keyboard_binds_[MOVE_RIGHT] = (sf::Key::Code) str_to_int(value);
+	if (config.ReadItem("weapon_1", value))
+		keyboard_binds_[WEAPON_1] = (sf::Key::Code) str_to_int(value);
+	if (config.ReadItem("weapon_2", value))
+		keyboard_binds_[WEAPON_2] = (sf::Key::Code) str_to_int(value);
+	if (config.ReadItem("use_cooler", value))
+		keyboard_binds_[USE_COOLER] = (sf::Key::Code) str_to_int(value);
+}
+
+
+void AbstractController::SaveConfig(ConfigParser& config) const
+{
+	config.SeekSection("Keyboard");
+	config.UpdateItem("pause", keyboard_binds_[PAUSE]);
+	config.UpdateItem("valid", keyboard_binds_[VALID]);
+	config.UpdateItem("move_up", keyboard_binds_[MOVE_UP]);
+	config.UpdateItem("move_down", keyboard_binds_[MOVE_DOWN]);
+	config.UpdateItem("move_left", keyboard_binds_[MOVE_LEFT]);
+	config.UpdateItem("move_right", keyboard_binds_[MOVE_RIGHT]);
+	config.UpdateItem("weapon_1", keyboard_binds_[WEAPON_1]);
+	config.UpdateItem("weapon_2", keyboard_binds_[WEAPON_2]);
+	config.UpdateItem("use_cooler", keyboard_binds_[USE_COOLER]);
+	
+	config.SeekSection("Joystick");
+	config.UpdateItem("pause", joystick_binds_[PAUSE]);
+	config.UpdateItem("valid", joystick_binds_[VALID]);
+	config.UpdateItem("weapon_1", joystick_binds_[WEAPON_1]);
+	config.UpdateItem("weapon_2", joystick_binds_[WEAPON_2]);
+	config.UpdateItem("use_cooler", joystick_binds_[USE_COOLER]);
+}
+*/
 
 AbstractController::AbstractController()
 {
-	// temporaire : on code en dur toutes les touches ! (les réassignables comme les fixes)
-	// (on court-circuite Settings)
 	// TODO: différencier les touches réassignables de celles qui ne le sont pas
-	puts("start AC init");
-		
 	// clavier
 	keyboard_binds_[PAUSE] = sf::Key::P;
 	keyboard_binds_[VALID] = sf::Key::Return;
@@ -140,10 +187,10 @@ AbstractController::AbstractController()
 	keyboard_binds_[EXIT_APP] = sf::Key::Escape;
 	// joystick
 	joystick_binds_[PAUSE] = 1;
-	joystick_binds_[VALID] = 5;
-	joystick_binds_[WEAPON_1] = 2;
-	joystick_binds_[WEAPON_2] = 3;
-	joystick_binds_[USE_COOLER] = 4;
+	joystick_binds_[VALID] = 0;
+	joystick_binds_[WEAPON_1] = 6;
+	joystick_binds_[WEAPON_2] = 7;
+	joystick_binds_[USE_COOLER] = 2;
 	
-	puts("end AC init");
+	puts("AC initialisé");
 }
