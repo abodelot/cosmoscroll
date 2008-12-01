@@ -1,5 +1,5 @@
 #include <cassert>
-#include <iostream>
+
 
 #include "PlayerManager.hpp"
 
@@ -13,7 +13,6 @@ int PlayerManager::New()
 {
 	static sf::Vector2f offset(0.f, 0.f);
 	Player player;
-	std::cerr << "PM::NEW()\n";
 	player.best_time = 0.f;
 	player.ship = NULL;
 	players_[++ last_] = player;
@@ -65,12 +64,10 @@ PlayerShip* PlayerManager::GetShip()
 
 PlayerShip* PlayerManager::NewShip(sf::Vector2f& offset, const char* image)
 {
-std::cerr << "PM::NEWSHIP()\n";
 	assert (InBounds());
 	if (players_[current_].ship)
 		DelShip();
 	players_[current_].ship = new PlayerShip(offset, image);
-	std::cerr << "Ds NewShip, playership = " << players_[current_].ship << "\n";
 	return players_[current_].ship;
 }
 

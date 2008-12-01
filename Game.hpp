@@ -44,7 +44,10 @@ public:
 	 * Ajout d'une nouvelle unité dans le jeu
 	 */
 	void AddEntity(Entity* entity);
+	
+	void Hit(int player_id);
 
+	
 	
 private:
 	Game();

@@ -87,6 +87,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	current_konami_event_ = 0;
 	
 	my_controls_ = -1;
+		
+	use_limits_ = true;
 	
 }
 
@@ -180,9 +182,9 @@ void PlayerShip::Move(float frametime)
 	controls_.SetControls(my_controls_);
 	if (controls_.HasInput(AC::MOVE_UP))
 	{
-		if (false) //if(use_limits_)
+		if (use_limits_)
 		{
-			;//y = (y + WIDTH + dist > y_limits_.x) ? y_limits_.x : y + dist;
+			y = (y - dist < y_limits_.x) ? y_limits_.x : y - dist;
 		}
 		else
 		{
@@ -191,9 +193,9 @@ void PlayerShip::Move(float frametime)
 	}
 	if (controls_.HasInput(AC::MOVE_DOWN))
 	{
-		if (false) //if (use_limits_)
+		if (use_limits_)
 		{
-			;//y = (y + WIDTH + dist > y_limits_.y) ? y_limits_.y : y + dist;
+			y = (y + dist > y_limits_.y - HEIGHT) ? y_limits_.y - HEIGHT : y + dist;
 		}
 		else
 		{
@@ -202,9 +204,9 @@ void PlayerShip::Move(float frametime)
 	}
 	if (controls_.HasInput(AC::MOVE_LEFT))
 	{
-		if (false) //if (use_limits_)
+		if (use_limits_)
 		{
-			;//x = (x + WIDTH + dist > x_limits_.x) ? x_limits_.x : x + dist;
+			x = (x - dist < x_limits_.x) ? x_limits_.x : x - dist;
 		}
 		else
 		{
@@ -213,9 +215,9 @@ void PlayerShip::Move(float frametime)
 	}
 	if (controls_.HasInput(AC::MOVE_RIGHT))
 	{
-		if (false) //if (use_limits_)
+		if (use_limits_)
 		{
-			;//x = (x + WIDTH + dist > x_limits_.y) ? x_limits_.y : x + dist;
+			x = (x + dist > x_limits_.y - WIDTH) ? x_limits_.y - WIDTH : x + dist;
 		}
 		else
 		{

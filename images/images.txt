@@ -32,3 +32,4 @@ shield.png
 spaceship-red.png
 spaceship-green.png
 star.png
+tennis_ball.png

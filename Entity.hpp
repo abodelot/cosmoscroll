@@ -29,6 +29,10 @@ public:
 	virtual void Hit(int damage);
 	
 	/*
+	 * Retourner le nombre de PV restants
+	 */
+	virtual int HP();
+	/*
 	 * Déplacer l'entité
 	 * @param[in] frametime: temps de la frame actuelle
 	 */
@@ -103,11 +107,23 @@ public:
 	 */
 	virtual sf::FloatRect GetRect() const;
 
-	/*
-	void UseLimits(bool);
-	bool UsesLimits();
-	void SetLimits(sf::Vector2f&, sf::Vector2f&);
-	*/
+	
+	virtual inline void UseLimits(bool it)
+	{
+		use_limits_ = it;
+	}
+
+	virtual inline bool UsesLimits()
+	{
+		return use_limits_;
+	}
+
+	virtual inline void SetLimits(sf::Vector2f& x, sf::Vector2f& y)
+	{
+		x_limits_ = x;
+		y_limits_ = y;
+	}
+	
 
 protected:
 	sf::Sprite sprite_;
@@ -115,7 +131,7 @@ protected:
 	bool flipped_;
 	
 	bool use_limits_;
-	//sf::Vector2f x_limits_, y_limits_;
+	sf::Vector2f x_limits_, y_limits_;
 	
 };
 

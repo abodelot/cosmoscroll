@@ -5,6 +5,7 @@
 #include "Game.hpp"
 
 #include "Asteroid.hpp"
+#include "Ball.hpp"
 #include "Ennemy.hpp"
 #include "EvilBoss.hpp"
 
@@ -445,13 +446,38 @@ Game::Choice Game::EndArcade()
 	puts("[ Game::EndArcade ]");
 #endif
 	sf::String title;
-	assert(mode_ == ARCADE);
 
-	int min = (int) PM_.GetBestTime() / 60;
-	int sec = (int) PM_.GetBestTime() % 60;
-	title.SetText(str_sprintf("Vous avez tenu seulement %d min et %d sec",
-		min, sec));
-	
+	if (mode_ == ARCADE)
+	{
+		int min = (int) PM_.GetBestTime() / 60;
+		int sec = (int) PM_.GetBestTime() % 60;
+		title.SetText(str_sprintf("Vous avez tenu seulement %d min et %d sec",
+			min, sec));
+	}
+	else // mode_ == PONG
+	{
+		int winner;
+		PM_.Select(player_1_);
+		winner = PM_.GetShip()->HP();
+		PM_.Select(player_2_);
+		 
+		if (PM_.GetShip()->HP() > winner)
+		{
+			winner = -2;
+		}
+		 
+		if (winner == -2)
+		{
+			winner = 2;
+		}
+		else
+		{
+			winner = 1;
+			PM_.Select(player_1_); 
+		}
+		title.SetText(str_sprintf("Le joueur %i gagne\n Il a encore %i vies.\n",
+			winner, PM_.GetShip()->HP()));
+	}
 	title.SetFont(GET_FONT());
 	title.SetColor(sf::Color::White);
 	title.SetPosition(42, 42);
@@ -672,7 +698,7 @@ void Game::RemoveEntities()
 #ifdef DEBUG
 		else
 		{
-		std::cout << "Removed player @ " << *it << std::endl;
+		std::cout << "Must remove player @ " << *it << std::endl;
 		}
 #endif
 	}
@@ -683,7 +709,7 @@ void Game::RemoveEntities()
 void Game::Respawn()
 {
 #ifdef DEBUG
-	puts("\tGame::Respawn()");
+	puts("[ Game::Respawn ]");
 #endif
 	sf::Vector2f offset;
 	offset.y = WIN_HEIGHT / 2.0;
@@ -1065,6 +1091,7 @@ Game::Choice Game::PlayStory()
 	return what;
 }
 
+
 Game::Choice Game::PlayPong()
 {
 #ifdef DEBUG
@@ -1076,27 +1103,40 @@ Game::Choice Game::PlayPong()
 	bool running = true;
 	static int lives_1 = 3;
 	static int lives_2 = 3;
-	static sf::Vector2f p1x(0.f, 30.f);
-	static sf::Vector2f p1y(0.f, 50.f);
-	static sf::Vector2f p2x(0.f, 50.f);
-	static sf::Vector2f p2y(WIN_WIDTH - 30.f, WIN_WIDTH);
+	
+	
+	static sf::Vector2f p1x(0.f, WIN_WIDTH / 6);
+	static sf::Vector2f p1y(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
+	static sf::Vector2f p2x(5 * WIN_WIDTH /6, WIN_WIDTH);
+	static sf::Vector2f p2y(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
+
+	sf::String p1_infos;
+	sf::String p2_infos;
+	p1_infos.SetPosition(12, CONTROL_PANEL_HEIGHT + 30.0);
+	p1_infos.SetSize(30.0);
+	p2_infos.SetPosition(WIN_WIDTH - 56, CONTROL_PANEL_HEIGHT + 30.0);
+	p2_infos.SetSize(30.0);
+
 	Respawn();
 		
 	PM_.Select(player_2_);
 	PM_.GetShip()->Flip(true);
-	//PM_.GetShip()->SetLimits(p2x, p2y);
-	//PM_.GetShip()->UseLimits(true);
+	PM_.GetShip()->SetLimits(p2x, p2y);
+	PM_.GetShip()->UseLimits(true);
 	
-	
+	entities_.push_front(new Ball());
 	
 	Choice what = EXIT_APP;
 
 	
 	PM_.Select(player_1_);
-	//PM_.GetShip()->SetLimits(p1x, p1y);
-	//PM_.GetShip()->UseLimits(true);
+	PM_.GetShip()->SetLimits(p1x, p1y);
+	PM_.GetShip()->UseLimits(true);
 	while (running)
-	{			
+	{
+		lives_1 = PM_.GetShip()->HP();
+		PM_.Select(player_2_);
+		lives_2 = PM_.GetShip()->HP();
 		while (controls_.GetAction(action))
 		{
 			if (action == AC::EXIT_APP)
@@ -1125,11 +1165,12 @@ Game::Choice Game::PlayPong()
 			PM_.GetShip()->NoShot();
 			PM_.Select(player_2_);
 			PM_.GetShip()->NoShot();
-			running = (lives_1 || lives_2);
+			running = (lives_1 > 0 || lives_2 > 0);
 			if (!running)
 			{
+			std::cout << "lives 1:" << lives_1 << " lives 2:" << lives_2 << "\n";
 				// Ne devrait jamais arriver en arcade
-				what = END_PLAY;
+				what = END_ARCADE;
 			}
 		}
 
@@ -1149,23 +1190,41 @@ Game::Choice Game::PlayPong()
 		{
 			if ((**it).IsDead())
 			{
+				std::cerr << "IsDead";
+				if (typeid (**it) == typeid(PlayerShip))
+				{
+					std::cerr << " est PLAYERSHIP\n";
+				}
+				else
+				{
+				std::cerr << " est la BALLE\n";
+
 				bullets_.CleanSenders(*it);
 				delete *it;
 				it = entities_.erase(it);
+				}
 			}
 			else
 			{
 				(**it).Move(time);
 				// collision Joueur <-> autres unités
-				if (PM_.GetShip() != *it &&
+				
+				PM_.Select(player_1_);
+				if (*it != PM_.GetShip() && 
 					PM_.GetShip()->GetRect().Intersects((**it).GetRect()))
 				{
-					// collision sur les deux éléments
-					PM_.GetShip()->Collide(**it);
+						(**it).Collide(*PM_.GetShip());
+				}
+
+					PM_.Select(player_2_);
+
+				if (*it != PM_.GetShip() && 
+					PM_.GetShip()->GetRect().Intersects((**it).GetRect()))
+				{
 					(**it).Collide(*PM_.GetShip());
 				}
-				++it;
 			}
+			++it;
 		}
 		
 		bullets_.Update(time);
@@ -1173,17 +1232,56 @@ Game::Choice Game::PlayPong()
 		
 		particles_.Update(time);
 		
+		// Update textes
+	
+		static std::stringstream sst;
+
+		PM_.Select(player_1_);
+		sst.str("");
+		sst << PM_.GetShip()->HP();
+
+		p1_infos.SetText(sst.str());
+		
+		PM_.Select(player_2_);
+		sst.str("");
+		sst << PM_.GetShip()->HP();
+				
+		p2_infos.SetText(sst.str());
+	
 		// rendering
 		particles_.Show(app_);
 		for (it = entities_.begin(); it != entities_.end(); ++it)
 		{
 			(**it).Show(app_);
 		}
+		
+
+		
 		bullets_.Show(app_);
 		panel_.Show(app_);
+		app_.Draw(p1_infos);
+		app_.Draw(p2_infos);
 		app_.Display();
 	}
 	
 	PM_.SetBestTime(timer_);
 	return what;
 }
+
+void Game::Hit(int player_id)
+{
+	if (player_id == 1)
+	{
+		std::cerr << "Hittage player_1_\n";
+		player_id = player_1_;
+	}
+	else if (player_id == 2)
+	{
+		std::cerr << "Hittage player_2_\n";
+		player_id = player_2_;
+	}
+	PM_.Select(player_id);
+	PM_.GetShip()->Entity::Hit(1);	
+}
+
+
