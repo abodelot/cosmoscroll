@@ -93,26 +93,28 @@ bool AbstractController::HasInput(Action action)
 	{
 		return true;
 	}
-	if ((cur_ctrls_ & JOY_0 || cur_ctrls_ & JOY_1 ) && 
-		input_.IsJoystickButtonDown(JOY_ID, joystick_binds_[action]))
+	if (cur_ctrls_ & JOY_0 || cur_ctrls_ & JOY_1 ) 
 	{
-		return true;
-	}
-	if (action == MOVE_UP)
-	{
-		return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisY) < -JOY_DEADZONE;
-	}
-	if (action == MOVE_DOWN)
-	{
-		return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisY) > JOY_DEADZONE;
-	}
-	if (action == MOVE_LEFT)
-	{
-		return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisX) < -JOY_DEADZONE;
-	}
-	if (action == MOVE_RIGHT)
-	{
-		return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisX) > JOY_DEADZONE;
+		if (input_.IsJoystickButtonDown(JOY_ID, joystick_binds_[action]))
+		{
+			return true;
+		}
+		if (action == MOVE_UP)
+		{
+			return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisY) < -JOY_DEADZONE;
+		}
+		if (action == MOVE_DOWN)
+		{
+			return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisY) > JOY_DEADZONE;
+		}
+		if (action == MOVE_LEFT)
+		{
+			return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisX) < -JOY_DEADZONE;
+		}
+		if (action == MOVE_RIGHT)
+		{
+			return input_.GetJoystickAxis(JOY_ID, sf::Joy::AxisX) > JOY_DEADZONE;
+		}
 	}
 	return false;
 }
