@@ -11,14 +11,14 @@ PlayerManager& PlayerManager::GetInstance()
 
 int PlayerManager::New()
 {
-	++ last_;
-	std::cerr << "PlayerManager::New() " << last_ << std::endl;
-	// HACK: Virer le offset obligatoire à la création?
+	static sf::Vector2f offset(0.f, 0.f);
 	Player player;
+	std::cerr << "PM::NEW()\n";
 	player.best_time = 0.f;
 	player.ship = NULL;
-	players_[last_] = player;
+	players_[++ last_] = player;
 	current_ = last_;
+	players_[current_].ship = NewShip(offset);
 	return last_;
 }
 
@@ -41,11 +41,11 @@ void PlayerManager::Delete(int id)
 	players_.erase(id);
 }
 
-void PlayerManager::Place()
+void PlayerManager::Place(sf::Vector2f& offset)
 {
 	assert (InBounds());
 	
-	players_[current_].Place();
+	players_[current_].Place(offset);
 }
 
 float PlayerManager::GetBestTime()
@@ -59,16 +59,17 @@ PlayerShip* PlayerManager::GetShip()
 {
 	//std::cerr << "GetShip: " << current_ << ", vaut " << players_[current_].ship << "\n";
 	assert (InBounds());
-	//assert (players_[current_].ship != NULL);
+	assert (players_[current_].ship != NULL);
 	return players_[current_].ship;
 }
 
-PlayerShip* PlayerManager::NewShip(sf::Vector2f& offset)
+PlayerShip* PlayerManager::NewShip(sf::Vector2f& offset, const char* image)
 {
+std::cerr << "PM::NEWSHIP()\n";
 	assert (InBounds());
 	if (players_[current_].ship)
 		DelShip();
-	players_[current_].ship = new PlayerShip(offset);
+	players_[current_].ship = new PlayerShip(offset, image);
 	std::cerr << "Ds NewShip, playership = " << players_[current_].ship << "\n";
 	return players_[current_].ship;
 }

@@ -19,7 +19,7 @@ public:
 
 	enum Control
 	{
-		KEYBOARD = 1 << 0, JOY_0 = 1 << 1, JOY_1 = 1 << 2
+		KEYBOARD = 1 << 0, JOY_0 = 1 << 1, JOY_1 = 1 << 2, ALL = (1 << 0) | (1 << 1) | (1 << 2)
 	};
 	
 	bool GetAction(Action& action);

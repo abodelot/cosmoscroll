@@ -21,10 +21,10 @@ public:
 	int Selected();
 
 	PlayerShip* GetShip();
-	PlayerShip* NewShip(sf::Vector2f& offset);
-	void DelShip();
+	PlayerShip* NewShip(sf::Vector2f& offset, const char* image="spaceship-red");
 
-	void Place();
+
+	void Place(sf::Vector2f& offset);
 	float GetBestTime();
 	int GetControlMode();
 
@@ -44,10 +44,10 @@ private:
 		PlayerShip* ship;
 		int ctrl_mode;
 		
-		inline void Place()
+		inline void Place(sf::Vector2f& offset)
 		{
 			assert(ship != NULL);
-			static const sf::Vector2f offset (0, WIN_HEIGHT / 2.0);
+			//static const sf::Vector2f offset (0, WIN_HEIGHT / 2.0);
 			ship->SetPosition(offset);
 		}
 	};
@@ -56,8 +56,11 @@ private:
 	PlayerManager(const PlayerManager& other);
 	~PlayerManager();
 
+	void DelShip();
+//#include <iostream>
 	inline bool InBounds()
 	{
+		//std::cerr << "cur:" << current_ << ", lst:" << last_ << std::endl;
 		return current_ >= 0 && current_ <= last_;
 	}
 

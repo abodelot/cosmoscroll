@@ -4,7 +4,7 @@
 #include "Game.hpp"
 
 #define JOY_ID			 0
-#define JOY_DEADZONE	15.f
+#define JOY_DEADZONE	50.f
 
 AbstractController& AbstractController::GetInstance()
 {

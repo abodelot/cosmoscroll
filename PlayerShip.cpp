@@ -121,9 +121,9 @@ void PlayerShip::HandleAction(AC::Action action)
 	if (action == konami_code_[current_konami_event_])
 	{
 		++current_konami_event_;
-#ifdef DEBUG
-		printf("konami code %d on\n", current_konami_event_);
-#endif
+//#ifdef DEBUG
+//		printf("konami code %d on\n", current_konami_event_);
+//#endif
 		if (current_konami_event_ == KONAMI_CODE_LENGTH)
 		{
 			current_konami_event_ = 0;

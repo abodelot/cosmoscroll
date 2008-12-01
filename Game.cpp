@@ -16,6 +16,8 @@
 
 #define CONFIG_FILE "config/settings.txt"
 
+#define UNDEF -1	// On initialise player_1_ et player_2_ à ça à la création.
+
 #ifndef SVN_REV
 #define SVN_REV "???"
 #endif
@@ -52,7 +54,6 @@ Game::Game() :
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
 	player_1_ = player_2_ = -1;
-	controls_.SetControls(AC::KEYBOARD);
 }
 
 
@@ -85,14 +86,12 @@ void Game::Run()
 			case MAIN_MENU:
 				what = MainMenu();
 				break;
+			case STORY_MODE:
 			case DOUBLE_STORY_MODE:
-				what = PlayStoryTwoPlayers();
+				what = PlayStory();
 				break;
 			case ARCADE_MODE:
 				what = PlayArcade();
-				break;
-			case STORY_MODE:
-				what = PlayStoryOnePlayer();
 				break;
 			case IN_GAME_MENU:
 				what = InGameMenu();
@@ -130,6 +129,8 @@ Game::Choice Game::Intro()
 	puts("[ Game::Intro ]");
 #endif
 	AC::Action action;
+	controls_.SetControls(AC::ALL);
+	//controls_.SetControls(AC::KEYBOARD);
 	Choice what = MAIN_MENU;
 	const int DURATION = 5, PADDING = 10;
 	float time, elapsed = 0;
@@ -211,7 +212,8 @@ Game::Choice Game::MainMenu()
 	int choice = EXIT_APP;
 	
 	AC::Action action;
-
+	controls_.SetControls(AC::ALL);
+	
 	sf::String title(str_sprintf("CosmoScroll - r%s", SVN_REV));
 		title.SetFont(GET_FONT());
 		title.SetSize(40);
@@ -295,7 +297,10 @@ Game::Choice Game::InGameMenu()
 #ifdef DEBUG
 	puts("[ Game::InGameMenu ]");
 #endif
+
 	AC::Action action;
+	controls_.SetControls(AC::ALL);
+
 	sf::String title("P A U S E");
 	title.SetPosition(180, 160);
 	title.SetSize(30.0);
@@ -473,7 +478,10 @@ Game::Choice Game::EndPlay()
 	info.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
 		(WIN_HEIGHT - rect.GetHeight()) / 2);
 	bool running = true;
+	
 	AC::Action action;
+	controls_.SetControls(AC::ALL);
+	
 	while (running)
 	{
 		while (controls_.GetAction(action))
@@ -542,6 +550,8 @@ Game::Choice Game::EndArcade()
 	int choice = EXIT_APP;
 	
 	AC::Action action;
+	controls_.SetControls(AC::ALL);
+	
 	while (running)
 	{
 		while (controls_.GetAction(action))
@@ -571,7 +581,10 @@ Game::Choice Game::SelectLevel()
 #endif
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(42, 42));
+	
 	AC::Action action;
+	controls_.SetControls(AC::ALL);
+	
 	bool running = true;
 	Choice choice = EXIT_APP;
 	int last = levels_.GetLast();
@@ -608,17 +621,8 @@ Game::Choice Game::SelectLevel()
 				{
 					current_level_ = level + 1;
 					
-					if (mode_ == STORY)
-					{
-						std::cerr << "Mode Story Un Player\n";
-						Respawn();	
-					}
-					if (mode_ == STORY2X)
-					{
-						std::cerr << "Mode Story DEUX Player\n";
-						RespawnTwo();
-					}
-					
+					Respawn();	
+
 					levels_.Set(current_level_);
 					choice = LEVEL_CAPTION;
 				}
@@ -637,7 +641,10 @@ Game::Choice Game::LevelCaption()
 #ifdef DEBUG
 	puts("[ Game::LevelCaption ]");
 #endif
+
 	AC::Action action;
+	controls_.SetControls(AC::ALL);
+
 	bool running = true;
 	Choice what;
 	
@@ -770,57 +777,59 @@ Game::Choice Game::Continue()
 
 // retourne true s'il y a encore des ennemis à envoyer plus tard
 // sinon false (niveau fini, bravo :D)
-bool Game::MoreBadGuysArcade()
+bool Game::MoreBadGuys()
 {
-	PM_.Select(player_1_);
-	std::cerr << "Ds MoreBadGuysArcade, playership = " << PM_.GetShip() << "\n";
-	// un ennemi en plus toutes les 10s + 5
-	unsigned int max_bad_guys = static_cast<unsigned int>(timer_ / 10 + 5);
-	if (entities_.size() < max_bad_guys)
+	PM_.Select(player_1_); // FIXME: On fait quoi en 2 joueurs?
+	if (GetMode() == ARCADE)
 	{
-		// ajout d'une ennemi au hasard
-		// <hack>
-		sf::Vector2f offset;
-		offset.x = WIN_WIDTH;
-		offset.y = sf::Randomizer::Random(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
-		int random = sf::Randomizer::Random(0, 10);
-		if (random > 6)
+		
+		// un ennemi en plus toutes les 10s + 5
+		unsigned int max_bad_guys = static_cast<unsigned int>(timer_ / 10 + 5);
+		if (entities_.size() < max_bad_guys)
 		{
-			AddEntity(Ennemy::Make(Ennemy::INTERCEPTOR, offset, PM_.GetShip()));
+			// ajout d'une ennemi au hasard
+			// <hack>
+			sf::Vector2f offset;
+			offset.x = WIN_WIDTH;
+			offset.y = sf::Randomizer::Random(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
+			int random = sf::Randomizer::Random(0, 10);
+			if (random > 6)
+			{
+				AddEntity(Ennemy::Make(Ennemy::INTERCEPTOR, offset, PM_.GetShip()));
+			}
+			else if (random > 4)
+			{
+				AddEntity(Ennemy::Make(Ennemy::BLORB, offset, PM_.GetShip()));
+			}
+			else if (random > 2)
+			{
+				AddEntity(Ennemy::Make(Ennemy::DRONE, offset, PM_.GetShip()));
+			}
+			else
+			{
+				AddEntity(new Asteroid(offset, Asteroid::BIG));
+			};
+			// </hack>
 		}
-		else if (random > 4)
-		{
-			AddEntity(Ennemy::Make(Ennemy::BLORB, offset, PM_.GetShip()));
-		}
-		else if (random > 2)
-		{
-			AddEntity(Ennemy::Make(Ennemy::DRONE, offset, PM_.GetShip()));
-		}
-		else
-		{
-			AddEntity(new Asteroid(offset, Asteroid::BIG));
-		};
-		// </hack>
+		// endless badguys! arcade mode will kill you til you die from it.
+		return true;
 	}
-	// endless badguys! arcade mode will kill you til you die from it.
-	return true;
+	else
+	{
+		LevelManager& level = LevelManager::GetInstance();
+		Entity* p = level.GiveNext(timer_);
+		while (p != NULL)
+		{
+			AddEntity(p);
+			p = level.GiveNext(timer_);
+		}
+	
+		// si le niveau n'est pas fini, alors il y a encore des ennemis
+		return level.RemainingEntities() > 0;
+	}
 }
 
-// retourne true s'il y a encore des ennemis à envoyer plus tard
-// sinon false (niveau fini, bravo :D)
-bool Game::MoreBadGuysStory()
-{
-	LevelManager& level = LevelManager::GetInstance();
-	Entity* p = level.GiveNext(timer_);
-	while (p != NULL)
-	{
-		AddEntity(p);
-		p = level.GiveNext(timer_);
-	}
-	
-	// si le niveau n'est pas fini, alors il y a encore des ennemis
-	return level.RemainingEntities() > 0;
-}
+
 
 void Game::RemoveEntities()
 {
@@ -831,52 +840,14 @@ void Game::RemoveEntities()
         {
             delete *it;
         }
+#ifdef DEBUG
+		else
+		{
+		std::cout << "Removed player @ " << *it << std::endl;
+		}
+#endif
 	}
 	entities_.clear();
-}
-
-
-void Game::RespawnTwo()
-{
-#ifdef DEBUG
-	puts("\tGame::RespawnTwo()");
-#endif
-	sf::Vector2f offset;
-	offset.y = WIN_HEIGHT / 2.0;
-	PlayerShip* ship = NULL;
-
-		std::cerr << "Story deux player\n";
-		offset.x = WIN_HEIGHT;
-		if (player_2_ == -1)
-		{
-			player_2_ = PM_.New();
-			std::cerr << "On select le player " << player_2_ << std::endl;
-		}
-		PM_.Select(player_2_);
-		ship = PM_.GetShip();
-		if (ship)
-			PM_.DelShip();
-			
-		ship = PM_.NewShip(offset);
-		std::cerr << "ship vaut " << ship << "\n";
-		PM_.SetControlMode(AC::KEYBOARD);
-		AddEntity(ship);
-		offset.x = 0;
-		if (player_1_ == -1)
-		{
-			player_1_ = PM_.New();
-			std::cerr << "On select le player " << player_1_ << std::endl;
-		}
-		PM_.Select(player_1_);
-		ship = PM_.GetShip();
-		if (ship)
-			PM_.DelShip();
-			
-		ship = PM_.NewShip(offset);
-		PM_.SetControlMode(AC::JOY_0 | AC::JOY_1);
-		std::cerr << "ship vaut " << ship << "\n";
-		AddEntity(ship);
-
 }
 
 
@@ -887,24 +858,50 @@ void Game::Respawn()
 #endif
 	sf::Vector2f offset;
 	offset.y = WIN_HEIGHT / 2.0;
-	PlayerShip* ship = NULL;
+
+	//	JOUEUR UN
+	offset.x = 0.f;
 	
-	offset.x = 0;
-	if (player_1_ == -1)
+	if (player_1_ == UNDEF)
 	{
 		player_1_ = PM_.New();
-		std::cerr << "On select le player " << player_1_ << std::endl;
+		PM_.Select(player_1_);
+		PM_.Place(offset);
 	}
-	PM_.Select(player_1_);
-	ship = PM_.GetShip();
-	if (ship)
-		PM_.DelShip();
+	else
+	{
+		PM_.Select(player_1_);	
+		PM_.NewShip(offset);
+	}
+
+	PM_.SetControlMode(AC::KEYBOARD);
+	AddEntity(PM_.GetShip());
+	
+
+	if (GetMode() == STORY2X)
+	{
+		// JOUEUR DEUX	
+		offset.x = WIN_HEIGHT;
 		
-	ship = PM_.NewShip(offset);
-	std::cerr << "ship vaut " << ship << "\n";
-	AddEntity(ship);
+		if (player_2_ == UNDEF)
+		{
+			player_2_ = PM_.New();
+			PM_.Select(player_2_);
+
+		}
+
+		PM_.Select(player_2_);
+		PM_.NewShip(offset, "spaceship-green");
+
+	
+		PM_.SetControlMode(AC::JOY_0 | AC::JOY_1);
+		AddEntity(PM_.GetShip());
+	}
 
 }
+
+
+
 
 
 void Game::AddEntity(Entity* entity)
@@ -932,8 +929,6 @@ std::string Game::MakePassword()
 	return res;
 }
 
-// AAAAAAAAAAADAwICAAAAAAAK <- L2
-// AAAAAAAAAAACBAIDAAAAAAAL <- L3
 
 bool Game::UsePassword(std::string & source)
 {
@@ -994,6 +989,8 @@ Game::Choice Game::PlayArcade()
 	AC::Action action;
 	bool running = true;
 	Choice what = EXIT_APP;
+
+	Respawn();
 	
 	PM_.Select(player_1_);
 	while (running)
@@ -1017,7 +1014,7 @@ Game::Choice Game::PlayArcade()
 	
 		if (running)
 		{
-			running = MoreBadGuysArcade();
+			running = MoreBadGuys();
 			if (!running)
 			{
 				// Ne devrait jamais arriver en arcade
@@ -1090,15 +1087,15 @@ Game::Choice Game::PlayArcade()
 }
 
 
-Game::Choice Game::PlayStoryOnePlayer()
+Game::Choice Game::PlayStory()
 {
 #ifdef DEBUG
-	puts("[ Game::PlayStoryOnePlayer ]");
+	puts("[ Game::PlayStory ]");
 #endif
 	
 	PM_.Select(player_1_);
 	AC::Action action;
-	bool running = true;
+	bool dead, running = true;
 	Choice what = EXIT_APP;
 	
 	while (running)
@@ -1116,13 +1113,22 @@ Game::Choice Game::PlayStoryOnePlayer()
 			}
 			else
 			{
+				if (GetMode() == STORY2X)
+				{
+					PM_.Select(player_1_);
+					controls_.SetControls(PM_.GetControlMode());
+					PM_.GetShip()->HandleAction(action);
+					PM_.Select(player_2_);
+					controls_.SetControls(PM_.GetControlMode());
+				}
 				PM_.GetShip()->HandleAction(action);
 			}
 		}
 	
 		if (running)
 		{
-			running = MoreBadGuysStory() || entities_.size() > 1;
+			running = MoreBadGuys() || entities_.size() >
+				(GetMode() == STORY2X)? 2 : 1;
 			if (!running)
 			{
 				// il n'y a plus d'ennemis en liste d'attente, et plus
@@ -1144,31 +1150,62 @@ Game::Choice Game::PlayStoryOnePlayer()
 		timer_ += time;
 		panel_.SetTimer(timer_);
 		
+		dead &= false;
+		
 		for (it = entities_.begin(); it != entities_.end();)
 		{
 			if ((**it).IsDead())
 			{
+				if (GetMode()== STORY2X)
+				{
+					PM_.Select(player_1_);
+		
+					if (PM_.GetShip() == *it)
+					{
+							dead = true;
+					}
+					else
+					{
+						PM_.Select(player_2_);
+					}
+				}
 				if (PM_.GetShip() == *it)
+					dead = true;
+
+				if (dead)
 				{
 					running = false;
 					what = END_PLAY;
-#ifdef DEBUG
+	#ifdef DEBUG
 					puts("\nplayer killed");
-#endif
+	#endif
 					break;
 				}
 				bullets_.CleanSenders(*it);
 				delete *it;
 				it = entities_.erase(it);
-			}
+			}	
 			else
 			{
 				(**it).Move(time);
 				// collision Joueur <-> autres unités
-				if (PM_.GetShip() != *it &&
+				if (GetMode() == STORY2X)
+				{
+					PM_.Select(player_1_);
+					if (*it != PM_.GetShip() && 
+						PM_.GetShip()->GetRect().Intersects((**it).GetRect()))
+					{
+							PM_.GetShip()->Collide(**it);
+							(**it).Collide(*PM_.GetShip());
+					}
+					else
+					{ 
+						PM_.Select(player_2_);
+					}
+				}
+				if (*it != PM_.GetShip() && 
 					PM_.GetShip()->GetRect().Intersects((**it).GetRect()))
 				{
-					// collision sur les deux éléments
 					PM_.GetShip()->Collide(**it);
 					(**it).Collide(*PM_.GetShip());
 				}
@@ -1196,143 +1233,4 @@ Game::Choice Game::PlayStoryOnePlayer()
 	return what;
 }
 
-
-Game::Choice Game::PlayStoryTwoPlayers()
-{
-#ifdef DEBUG
-	puts("[ Game::PlayStoryTwoPlayers ]");
-#endif
-
-	RespawnTwo();
-	
-	AC::Action action;
-	bool running = true;
-	Choice what = EXIT_APP;
-	
-	while (running)
-	{
-		while (controls_.GetAction(action))
-		{
-			if (action == AC::EXIT_APP)
-			{
-				running = false;
-			}
-			else if (action == AC::PAUSE)
-			{
-				running = false;
-				what = IN_GAME_MENU;
-			}
-			else
-			{
-				PM_.Select(player_1_);
-				controls_.SetControls(PM_.GetControlMode());
-				// controls_.Filter(PM_.GetControlMode());
-				PM_.GetShip()->HandleAction(action);
-				PM_.Select(player_2_);
-				controls_.SetControls(PM_.GetControlMode());
-				//controls_.Filter(PM_.GetControlMode());
-				PM_.GetShip()->HandleAction(action);
-			}
-		}
-	
-		if (running)
-		{
-			running = MoreBadGuysStory() || entities_.size() > 1;
-			if (!running)
-			{
-				// il n'y a plus d'ennemis en liste d'attente, et plus
-				// d'ennemis dans le vecteur = Victoire
-				// GameOver si plus de niveau
-				what = END_PLAY;
-			}
-		}
-
-		std::list<Entity*>::iterator it;
-		// action
-		for (it = entities_.begin(); it != entities_.end(); ++it)
-		{
-			(**it).Action();
-		}
-		
-		// moving
-		float time = app_.GetFrameTime();
-		timer_ += time;
-		panel_.SetTimer(timer_);
-		bool dead = false;
-		for (it = entities_.begin(); it != entities_.end();)
-		{
-			if ((**it).IsDead())
-				{
-				PM_.Select(player_1_);
-			
-				if (PM_.GetShip() == *it)
-				{
-						dead = true;
-				}
-				else
-				{
-					PM_.Select(player_2_);
-					if (PM_.GetShip() == *it)
-						dead = true;
-				}
-
-
-				if (dead)
-				{
-					running = false;
-					what = END_PLAY;
-	#ifdef DEBUG
-					puts("\nplayer killed");
-	#endif
-					break;
-				}
-				bullets_.CleanSenders(*it);
-				delete *it;
-				it = entities_.erase(it);
-			}
-			else
-			{
-				(**it).Move(time);
-				// collision Joueur <-> autres unités
-				PM_.Select(player_1_);
-				if (*it != PM_.GetShip() && 
-					PM_.GetShip()->GetRect().Intersects((**it).GetRect()))
-				{
-
-						PM_.GetShip()->Collide(**it);
-						(**it).Collide(*PM_.GetShip());
-				}
-				else
-				{ 
-					PM_.Select(player_2_);
-					if (*it != PM_.GetShip() && 
-						PM_.GetShip()->GetRect().Intersects((**it).GetRect()))
-					{
-						PM_.GetShip()->Collide(**it);
-						(**it).Collide(*PM_.GetShip());
-					}
-				}
-				++it;
-			}
-		}
-		
-		bullets_.Update(time);
-		bullets_.Collide(entities_); // fusion avec Update ?
-		
-		particles_.Update(time);
-		
-		// rendering
-		particles_.Show(app_);
-		for (it = entities_.begin(); it != entities_.end(); ++it)
-		{
-			(**it).Show(app_);
-		}
-		bullets_.Show(app_);
-		panel_.Show(app_);
-		app_.Display();
-	}
-	
-	PM_.SetBestTime(timer_);
-	return what;
-}
 

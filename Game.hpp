@@ -81,8 +81,8 @@ private:
 	Choice Play();
 
 	Choice PlayArcade();
-	Choice PlayStoryOnePlayer();
-	Choice PlayStoryTwoPlayers();
+	Choice PlayStory();
+
 
 	// menu en cours de jeu (pause)
 	Choice InGameMenu();
@@ -107,13 +107,11 @@ private:
 	Choice EndArcade();
 	
 	bool MoreBadGuys();
-	bool MoreBadGuysStory();
-	bool MoreBadGuysArcade();
+
 	/*
 	 * Création du vaisseau du joueur
 	 */
 	void Respawn();
-	void RespawnTwo();
 	
 	/*
 	 * Suppression de toutes les unités en jeu
@@ -133,6 +131,16 @@ private:
 	float timer_;
 
 	GameMode mode_;
+	
+	inline GameMode& GetMode()
+	{
+		return mode_;
+	}
+	
+	inline void SetMode(GameMode mode)
+	{
+		mode_ = mode;
+	}
 	int current_level_, player_1_, player_2_;
 	
 	// toutes les unités sont allouées dynamiquement
