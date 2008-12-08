@@ -57,6 +57,30 @@ void Menu::SetLineSpace(int linespace)
 }
 
 
+void Menu::AddItem(const std::wstring label, int id, bool activable)
+{
+	MenuItem item;
+	item.label.SetText(label);
+	item.label.SetFont(GET_FONT());
+	item.id = id;
+	item.activable = activable;
+	
+	// si on a ajouté le premier élément
+	if (selected_ == -1)
+	{
+		selected_ = 0;
+		item.label.SetPosition(offset_);
+		ApplyStyle(item, highlight_look_);
+	}
+	else
+	{
+		sf::FloatRect rect = items_.back().label.GetRect();
+		item.label.SetPosition(rect.Left, rect.Bottom + linespace_);
+		ApplyStyle(item, activable ? normal_look_ : unactive_look_);
+	}
+	items_.push_back(item);
+}
+
 void Menu::AddItem(const std::string label, int id, bool activable)
 {
 	MenuItem item;

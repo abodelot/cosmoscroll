@@ -58,8 +58,8 @@ public:
 	 * @param[in] id: identifiant de l'action associée
 	 * @param[in] activable: détermine si l'item peut être activé
 	 */
+	void AddItem(const std::wstring label, int id, bool activable=true);
 	void AddItem(const std::string label, int id, bool activable=true);
-	
 	/*
 	 * Détermine si un évènement a validé une action
 	 * @param[in] key: évènement à gérer

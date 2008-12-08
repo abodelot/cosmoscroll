@@ -12,7 +12,8 @@
  */
 std::string str_sprintf(const char format[], ...);
 
-std::wstring wstr_sprintf(const char format[], ...);
+std::wstring str_sprintf(const wchar_t format[], ...);
+
 /*
  * Remplacer un motif par un autre
  * @param[in|out] target: chaîne cible

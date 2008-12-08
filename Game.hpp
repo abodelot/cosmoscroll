@@ -62,6 +62,7 @@ private:
 		OPTIONS,
 		PLAY,
 		IN_GAME_MENU,
+		ABOUT,
 		END_PLAY,
 		SELECT_LEVEL,
 		LEVEL_CAPTION,
@@ -95,6 +96,8 @@ private:
 	Scene LevelCaption();
 	// résultat d'une partie en mode arcade
 	Scene ArcadeResult();
+	// About
+	Scene About();
 	
 	
 	/* Gestion de la boucle de jeu */

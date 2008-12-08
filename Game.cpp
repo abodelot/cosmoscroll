@@ -18,6 +18,8 @@
 
 #define CONFIG_FILE "config/config.txt"
 
+
+
 #ifndef SVN_REV
 #define SVN_REV "???"
 #endif
@@ -109,6 +111,9 @@ void Game::Run()
 				break;
 			case IN_GAME_MENU:
 				what = InGameMenu();
+				break;
+			case ABOUT:
+				what = About();
 				break;
 			case END_PLAY:
 				what = EndPlay();
@@ -206,7 +211,7 @@ Game::Scene Game::Intro()
 		ship.Move(180 * time, 25 * time);
 		title.Scale(0.99, 0.99); // FIXME: dépendant des FPS
 		title.SetColor(sf::Color(255, 255, 255,
-			(sf::Uint8) 255 * elapsed / DURATION));
+			(sf::Uint8) (255 * elapsed / DURATION)));
 		
 		app_.Draw(background);	app_.Draw(sfml);
 		app_.Draw(title);		app_.Draw(ship);
@@ -232,9 +237,10 @@ Game::Scene Game::MainMenu()
 	menu.AddItem("Mode Histoire solo", 0);
 	menu.AddItem("Mode Histoire duo", 1);
 	menu.AddItem("Mode Arcade", 2);
+	menu.AddItem("À propos", 4);
 	//menu.AddItem("Pong", PONG_MODE);
 	//menu.AddItem("Options", 3); -> choix musique, choix bindings
-	//menu.AddItem("À Propos", 4); -> auteurs, versions, cass-dédi :)
+
 	menu.AddItem("Quitter", 5);
 
 	bool running = true;
@@ -279,10 +285,10 @@ Game::Scene Game::MainMenu()
 			p_ForwardAction_ = &Game::ForwardAction1P;
 			p_StopPlay_ = &Game::ArcadeMoreBadGuys;
 			break;
-		/*case 3: // not implemented yet
+		case 4: 
 			next = ABOUT;
 			break;
-		case 4:
+		/*case 3:// not implemented yet
 			next = OPTIONS;
 			break;*/
 		case 5:
@@ -664,7 +670,7 @@ Game::Scene Game::EndPlay()
 		// seules les particules sont mises à jour
 		particles_.Update(frametime);
 		info.SetColor(sf::Color(255, 255, 255,
-			(sf::Uint8)255 - 255 * timer / DURATION));
+			(sf::Uint8)(255 - 255 * timer / DURATION)));
 		
 		// rendering
 		bullets_.Show(app_);
@@ -1090,22 +1096,52 @@ Game::Choice Game::PlayPong()
 	
 	PM_.SetBestTime(timer_);
 	return what;
-}
+}*/
 
 
-void Game::Hit(int player_id)
+Game::Scene Game::About()
 {
-	if (player_id == 1)
+
+	bool running = true;
+	int choice = MAIN_MENU;
+	AC::Action action;
+	Menu menu;
+	sf::String title, credits;
+
+	title.SetFont(GET_FONT());
+	title.SetColor(sf::Color::White);
+	title.SetPosition(42, 42);
+	title.SetSize(42);
+	title.SetText("About CosmoscrolL");
+
+	credits.SetFont(GET_FONT());
+	credits.SetColor(sf::Color::White);
+	credits.SetPosition(58, 96);
+	credits.SetSize(22);
+	credits.SetText(ABOUT_TEXT);
+
+	menu.SetOffset(sf::Vector2f(42, 320));
+	menu.AddItem(L"Retour", MAIN_MENU);	
+	
+
+	while (running)
 	{
-		std::cerr << "Hittage player_1_\n";
-		player_id = player_1_;
+		while (controls_.GetAction(action))
+		{
+			if (action == AC::EXIT_APP)
+			{
+				running = false;
+			}
+			else if (menu.ItemChosen(action, choice))
+			{
+				running = false;
+			}
+		}
+		app_.Draw(title);
+		app_.Draw(credits);
+		menu.Show(app_);
+		app_.Display();
 	}
-	else if (player_id == 2)
-	{
-		std::cerr << "Hittage player_2_\n";
-		player_id = player_2_;
-	}
-	PM_.Select(player_id);
-	PM_.GetShip()->Entity::Hit(1);	
+	return static_cast<Scene>(choice);
 }
-*/
+

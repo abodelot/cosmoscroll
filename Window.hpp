@@ -12,6 +12,8 @@
 
 #include <SFML/Graphics/Rect.hpp>
 
+#define ABOUT_TEXT "BLAH BLAH ABOUT TEXT HERE\n -\n\n changer de header"
+
 
 inline bool outside_universe(const sf::FloatRect& rect)
 {

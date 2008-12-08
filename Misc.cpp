@@ -2,6 +2,9 @@
 
 #include <sstream>
 
+#ifdef __MINGW32__
+#define vswprintf _vsnwprintf
+#endif
 
 std::string str_sprintf(const char format[], ...)
 {
@@ -20,6 +23,53 @@ std::string str_sprintf(const char format[], ...)
     return str;
 }
 
+/*
+std::wstring str_sprintf(const wchar_t format[], ...)
+{
+    va_list args;
+    va_start(args, format);
+    
+    int length = _vsnwprintf(NULL, 0, format, args);
+		
+    wchar_t* p = new wchar_t [length + 1];
+    va_end(args);
+    va_start(args, format);
+    vswprintf(p, format, args);
+    va_end(args);    
+    
+    std::wstring str(p);
+    delete [] p;
+    return str;
+}
+*/
+
+std::wstring str_sprintf(const wchar_t format[], ...)
+{
+	int length = -1;
+	wchar_t* buffer = NULL;
+	va_list args;
+    va_start(args, format);
+	for (int buffer_size = 32; length == -1; buffer_size *= 2)
+	{
+		buffer = new wchar_t [buffer_size];
+		length = vswprintf(buffer, buffer_size, format, args);
+		if (length == -1)
+		{
+			delete [] buffer;
+			puts("vswprintf returned -1, allocate new buffer");
+		}
+	}
+    va_end(args);
+    va_start(args, format);
+    vswprintf(buffer, length - 1, format, args);
+    va_end(args);
+    
+    std::wstring str(buffer);
+    delete [] buffer;
+    return str;
+}
+
+/*
 std::wstring wstr_sprintf(const char format[], ...)
 {
     va_list args;
@@ -44,7 +94,7 @@ std::wstring wstr_sprintf(const char format[], ...)
 	delete [] w;
     return str;
 }
-
+*/
 
 int find_replace(std::string& target, const std::string& look_for,
 	const std::string& replace_by)

@@ -390,7 +390,7 @@ void PlayerShip::KonamiCodeOn()
 	overheated_ = false;
 	panel_.SetInfo("");
 	heat_ = 0.f;
-	panel_.SetHeat(heat_);	
+	panel_.SetHeat((int) heat_);	
 	coolers_ = 42;
 	panel_.SetCoolers(42);
 	hp_ = 42;
