@@ -3,41 +3,54 @@
 
 #include <map>
 #include <SFML/Graphics.hpp>
+
+
 class AbstractController
 {
 public:
 	static AbstractController& GetInstance();
 	
-	// tous les évènements gérés par le jeu
+	// tous les types d'évènements gérés par le jeu
 	enum Action
 	{
-		PAUSE, VALID,
-		MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, WEAPON_1, WEAPON_2,
-		USE_COOLER, EXIT_APP,
+		EXIT_APP, PAUSE, VALID,
+		MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, 
+		WEAPON_1, WEAPON_2, USE_COOLER,
 		COUNT_ACTION, NONE
 	};
-
-	enum Control
+	
+	enum Device
 	{
-		KEYBOARD = 1 << 1, JOY_0 = 1 << 2, JOY_1 = 1 << 3, ALL = (1 << 3) | (1 << 1) | (1 << 2)
+		KEYBOARD = 1 << 1,
+		JOYSTICK = 1 << 2,
+		ALL      = KEYBOARD | JOYSTICK
 	};
 	
-	bool GetAction(Action& action);
-	bool HasInput(Action action);
-	void SetControls(int c);
-
+	//void SetControls(int controls);
+	
+	/**
+	 * @param[out] action: évènement à récupérer
+	 */
+	bool GetAction(Action& action, Device* device = NULL);
+	
+	/**
+	 * @param[in] action: évènement à tester
+	 * @param[in] device: flag
+	 */
+	bool HasInput(Action action, int device = ALL);
+	
 private:
+	AbstractController();
+	AbstractController(const AbstractController& other);
+	
 	sf::Key::Code keyboard_binds_[COUNT_ACTION];
+	
 	typedef std::map<Action, unsigned int> JoyBindMap;
 	JoyBindMap joystick_binds_;
 
-	int cur_ctrls_;	// Le mode de controle courant.
-
-	AbstractController();
-	AbstractController(const AbstractController& other);
+	//int cur_ctrls_;	// Le mode de controle courant
 };
 
-typedef AbstractController AC;
+typedef AbstractController AC; // lazy typedef
 
 #endif /* guard ABSTRACTCONTROLLER_HPP */
-

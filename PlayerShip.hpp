@@ -19,7 +19,7 @@
 class PlayerShip: public Entity
 {
 public:
-	PlayerShip(const sf::Vector2f& offset, const char* image="spaceship-red");
+	PlayerShip(const sf::Vector2f& offset, const char* image);
 	
 	~PlayerShip();
 	
@@ -28,6 +28,7 @@ public:
 	void Action();
 	
 	void Collide(Entity& ent);
+	
 	/*
 	 * Déplacer le vaisseau
 	 */
@@ -35,39 +36,23 @@ public:
 	
 	void Hit(int damage);
 	
-	inline int GetShield() const
+	inline void SetControls(int controls)
 	{
-		return shield_;
+		controls_ = controls;
 	}
 	
-	inline int GetCoolers() const
+	inline int GetControls() const
 	{
-		return coolers_;
+		return controls_;
 	}
 	
-	inline void SetShield(int s)
-	{
-		shield_ = s;
-	}
-	
-	inline void SetCoolers(int c)
-	{
-		coolers_ = c;
-	}
-
-	inline void SetControls(int id)
-	{
-		my_controls_ = id;
-	}
-	
+	/*
 	inline void NoShot()
 	{
 		overheated_ = true;
 	}
-
-	
+	*/
 private:
-
 	enum TimedBonus
 	{
 		T_TRISHOT, T_SPEED, TIMED_BONUS_COUNT
@@ -98,20 +83,17 @@ private:
 	int current_konami_event_;
 	
 	float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
-
 	bool overheated_;
 	float heat_, shield_timer_;
-	int coolers_, shield_, speed_, my_controls_;
+	int coolers_, shield_, speed_;
 	
+	int controls_;
 #ifndef NO_AUDIO
 	sf::Sound shield_sfx_;
 #endif
-
-	AbstractController& controls_;
+	AbstractController& controller_;
 	ControlPanel& panel_;
 	Weapon laserbeam_, hellfire_;
-	
-
 };
 
 #endif /* guard PLAYERSHIP_HPP */

@@ -8,7 +8,6 @@
 #include "EvilBoss.hpp"
 #include "Game.hpp"
 #include "Misc.hpp"
-#include "PlayerManager.hpp"
 
 #define LEVEL_FILE "levels/levels.xml"
 
@@ -78,7 +77,7 @@ const char* LevelManager::GetDescription(int level) const
 LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 {
 	elem = elem->FirstChild()->ToElement()->NextSiblingElement()->FirstChildElement();
-	Entity* player = PM::GetInstance().GetShip();
+	Entity* player = Game::GetInstance().GetShip();
 	
 	if (elem == NULL)
 	{

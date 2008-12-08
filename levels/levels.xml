@@ -129,7 +129,7 @@
 			<item name="Drone" x="640" y="200" t="0.8" />
 		</decl>
 	</level>
-	<level desc="Il n'y a pas de princesse dans ce niveau">
+	<level desc="For Great Justice">
 		<defs>
 		</defs>
 		<decl>

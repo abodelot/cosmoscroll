@@ -12,9 +12,7 @@
 #include "LevelManager.hpp"
 #include "Music.hpp"
 #include "ParticleSystem.hpp"
-#include "Password.hpp"
-#include "PlayerManager.hpp"
-
+#include "PlayerShip.hpp"
 
 /*
  * Gestion du déroulement du jeu
@@ -38,7 +36,12 @@ public:
 	{
 		return app_.GetInput();
 	}
-
+	
+	inline Entity* GetShip() const
+	{
+		return player1_; // FIXME: toujours player 1
+	}
+	
 	/*
 	 * Ajout d'une nouvelle unité dans le jeu
 	 */
@@ -52,104 +55,86 @@ private:
 	Game();
 	~Game();
 	
-	enum Choice
+	enum Scene
 	{
 		INTRO,
 		MAIN_MENU,
 		OPTIONS,
-		ARCADE_MODE,
-		STORY_MODE,
-		DOUBLE_STORY_MODE,
-		PONG_MODE,
+		PLAY,
 		IN_GAME_MENU,
 		END_PLAY,
 		SELECT_LEVEL,
 		LEVEL_CAPTION,
-		END_ARCADE,
+		ARCADE_RESULT,
 		EXIT_APP
 	};
 
 	enum GameMode
 	{
-		STORY, ARCADE, STORY2X, PONG
+		STORY, STORY2X, ARCADE, PONG
 	};
 	
+	
+	/* Gestion des scènes */
+	
 	// scène d'intro
-	Choice Intro();
+	Scene Intro();
 	// menu principal
-	Choice MainMenu();
+	Scene MainMenu();
 	// les options de configurations
-	Choice Options();
-	// jouer (arcade ou story)
-	//Choice Play();
-
-	Choice PlayArcade();
-	Choice PlayStory();
-	
-	Choice PlayPong();
-
-
+	Scene Options();
+	// jouer
+	Scene Play();
 	// menu en cours de jeu (pause)
-	Choice InGameMenu();
-	
-	/*
-	// partie terminée
-	Choice GameOverArcade();
-	Choice GameOverStory();
-	// fin d'un niveau [Non-fin du jeu]
-	Choice Intertitre();
-	// lancement niveau suivant
-	Choice Continue();
-	*/
-	
-	// partie terminée (succès comme défaite)
-	Choice EndPlay();
+	Scene InGameMenu();
+	// fin de partie
+	Scene EndPlay();
 	// sélection d'un niveau
-	Choice SelectLevel();
+	Scene SelectLevel();
 	// Introduction d'un niveau
-	Choice LevelCaption();
+	Scene LevelCaption();
 	// résultat d'une partie en mode arcade
-	Choice EndArcade();
+	Scene ArcadeResult();
 	
-	bool MoreBadGuys();
-
-	/*
-	 * Création du vaisseau du joueur
-	 */
-	void Respawn();
+	
+	/* Gestion de la boucle de jeu */
+	
+	// initialiser le jeu avant de lancer une partie
+	// (nettoyage des parties précédentes, allocation des joueurs)
+	void Init();
 	
 	/*
 	 * Suppression de toutes les unités en jeu
 	 */
 	void RemoveEntities();
 	
-	std::string MakePassword();
-	
-	bool UsePassword(std::string& source);
-	
-	bool Passwd_HACK();
 	
 	sf::RenderWindow app_;
 
-
-
 	float timer_;
-
 	GameMode mode_;
 	
-	inline GameMode& GetMode()
-	{
-		return mode_;
-	}
-	
-	inline void SetMode(GameMode mode)
-	{
-		mode_ = mode;
-	}
-	int current_level_, player_1_, player_2_;
+	int current_level_;
 	int last_level_reached_;
+	float best_arcade_time_;
+	
+	PlayerShip *player1_, *player2_;
 	// toutes les unités sont allouées dynamiquement
 	std::list<Entity*> entities_;
+	
+	/* pointeurs de méthodes pour la boucle de jeu */
+	
+	// transmettre les actions de la boucle d'évènements aux joueurs
+	void (Game::*p_ForwardAction_)(AC::Action action, AC::Device device);
+	
+	void ForwardAction1P(AC::Action action, AC::Device device);
+	void ForwardAction2P(AC::Action action, AC::Device device);
+	
+	// condition pour stopper la boucle de jeu
+	bool (Game::*p_StopPlay_)();
+
+	bool ArcadeMoreBadGuys();
+	bool StoryMoreBadBuys();
 	
 	// Singletons
 	AbstractController& controls_;
@@ -157,7 +142,6 @@ private:
 	ControlPanel& panel_;
 	LevelManager& levels_;
 	ParticleSystem& particles_;
-	PlayerManager& PM_;
 #ifndef NO_AUDIO
 	Music* music_;
 #endif

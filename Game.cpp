@@ -13,15 +13,15 @@
 #include "MediaManager.hpp"
 #include "Menu.hpp"
 #include "Misc.hpp"
+#include "Window.hpp"
 //#include "ConfigParser.hpp"
 
 #define CONFIG_FILE "config/config.txt"
 
-#define UNDEF -1	// On initialise player_1_ et player_2_ à ça à la création.
-
 #ifndef SVN_REV
 #define SVN_REV "???"
 #endif
+
 
 Game& Game::GetInstance()
 {
@@ -35,17 +35,30 @@ Game::Game() :
 	bullets_	(BulletManager::GetInstance()),
 	panel_		(ControlPanel::GetInstance()),
 	levels_		(LevelManager::GetInstance()),
-	particles_	(ParticleSystem::GetInstance()),
-	PM_			(PlayerManager::GetInstance())
+	particles_	(ParticleSystem::GetInstance())
 {
-	/*config_.LoadFile(CONFIG_FILE);
+	/*
+	config_.LoadFile(CONFIG_FILE);
 	config_.SeekSection("Settings");
 	std::string value;
-	if (config_.ReadItem("last_level_reached_"))
+	if (config_.ReadItem("last_level_reached", value))
+	{
+		;
+	}
+	bool fullscreen;
+	if (config_.ReadItem("fullscreen", fullscreen))
 	{
 		;
 	}*/
 	last_level_reached_ = 1;
+	current_level_ = 1;
+	best_arcade_time_ = 0;
+	
+	p_ForwardAction_ = NULL;
+	p_StopPlay_ = NULL;
+	
+	player1_ = player2_ = NULL;
+	
 	if (true)
 	{
 		app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE);
@@ -58,7 +71,6 @@ Game::Game() :
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
-	player_1_ = player_2_ = -1;
 }
 
 
@@ -74,7 +86,7 @@ void Game::Run()
 {
 	puts("running...");
 	// première scène = Intro
-	Choice what = Intro();
+	Scene what = Intro();
 #ifndef NO_AUDIO
 #ifndef NO_MUSIC
 	music_ = GET_MUSIC("space");
@@ -92,15 +104,8 @@ void Game::Run()
 			case MAIN_MENU:
 				what = MainMenu();
 				break;
-			case STORY_MODE:
-			case DOUBLE_STORY_MODE:
-				what = PlayStory();
-				break;
-			case ARCADE_MODE:
-				what = PlayArcade();
-				break;
-			case PONG_MODE:
-				what = PlayPong();
+			case PLAY:
+				what = Play();
 				break;
 			case IN_GAME_MENU:
 				what = InGameMenu();
@@ -114,8 +119,8 @@ void Game::Run()
 			case LEVEL_CAPTION:
 				what = LevelCaption();
 				break;
-			case END_ARCADE:
-				what = EndArcade();
+			case ARCADE_RESULT:
+				what = ArcadeResult();
 			default:
 				break;
 		}
@@ -132,15 +137,14 @@ void Game::Run()
 // les méthodes-écrans
 
 // une (superbe) intro au lancement
-Game::Choice Game::Intro()
+Game::Scene Game::Intro()
 {
 #ifdef DEBUG
 	puts("[ Game::Intro ]");
 #endif
 	AC::Action action;
-	controls_.SetControls(AC::ALL);
 	
-	Choice what = MAIN_MENU;
+	Scene what = MAIN_MENU;
 	const int DURATION = 5, PADDING = 10;
 	float time, elapsed = 0;
 #ifdef DEBUG
@@ -155,25 +159,25 @@ Game::Choice Game::Intro()
 		background.SetImage(GET_IMG("background"));
 	
 	sf::String title;
-		title.SetText("CosmoScroll");
-		title.SetFont(GET_FONT());
-		title.SetSize(1000);
-		title.SetColor(sf::Color::White);
-		title.SetPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
-		rect = title.GetRect();
-		title.SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
+	title.SetText("CosmoScroll");
+	title.SetFont(GET_FONT());
+	title.SetSize(1000);
+	title.SetColor(sf::Color::White);
+	title.SetPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
+	rect = title.GetRect();
+	title.SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
 	
 	sf::String sfml;
-		sfml.SetText("Powered by SFML");
-		sfml.SetSize(16);
-		sfml.SetColor(sf::Color::White);
-		rect = sfml.GetRect();
-		sfml.SetPosition(WIN_WIDTH - rect.GetWidth() - PADDING,
-			WIN_HEIGHT - rect.GetHeight() - PADDING);	
+	sfml.SetText("Powered by SFML");
+	sfml.SetSize(16);
+	sfml.SetColor(sf::Color::White);
+	rect = sfml.GetRect();
+	sfml.SetPosition(WIN_WIDTH - rect.GetWidth() - PADDING,
+		WIN_HEIGHT - rect.GetHeight() - PADDING);	
 	
 	sf::Sprite ship(GET_IMG("spaceship-red"));
 		ship.SetPosition(-20, 100);
-
+	
 	while (elapsed < DURATION)
 	{
 		while (controls_.GetAction(action)) 
@@ -199,10 +203,10 @@ Game::Choice Game::Intro()
 		}
 #endif
 #endif
-		ship.Move(180 * time, 25 * time);	// FIXME: déplacement magique !
-		title.Scale(0.99, 0.99);			// FIXME: dépendant des FPS
+		ship.Move(180 * time, 25 * time);
+		title.Scale(0.99, 0.99); // FIXME: dépendant des FPS
 		title.SetColor(sf::Color(255, 255, 255,
-			static_cast<sf::Uint8>(255 * elapsed / DURATION)));
+			(sf::Uint8) 255 * elapsed / DURATION));
 		
 		app_.Draw(background);	app_.Draw(sfml);
 		app_.Draw(title);		app_.Draw(ship);
@@ -212,17 +216,11 @@ Game::Choice Game::Intro()
 }
 
 
-Game::Choice Game::MainMenu()
+Game::Scene Game::MainMenu()
 {
 #ifdef DEBUG
 	puts("[ Game::MainMenu ]");
 #endif
-	bool running = true;
-	int choice = EXIT_APP;
-	
-	AC::Action action;
-	controls_.SetControls(AC::ALL);
-	
 	sf::String title(str_sprintf("CosmoScroll - r%s", SVN_REV));
 	title.SetFont(GET_FONT());
 	title.SetSize(40);
@@ -231,14 +229,18 @@ Game::Choice Game::MainMenu()
 	
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(60, 120));
-	menu.AddItem("Mode Histoire solo", STORY_MODE);
-	menu.AddItem("Mode Histoire duo", DOUBLE_STORY_MODE);
-	menu.AddItem("Mode Arcade", ARCADE_MODE);
-	menu.AddItem("Pong", PONG_MODE);
-	//menu.AddItem("Options"); -> choix musique, choix bindings
-	//menu.AddItem("À Propos"); -> auteurs, versions, cass-dédi :)
-	menu.AddItem("Quitter", EXIT_APP);
+	menu.AddItem("Mode Histoire solo", 0);
+	menu.AddItem("Mode Histoire duo", 1);
+	menu.AddItem("Mode Arcade", 2);
+	//menu.AddItem("Pong", PONG_MODE);
+	//menu.AddItem("Options", 3); -> choix musique, choix bindings
+	//menu.AddItem("À Propos", 4); -> auteurs, versions, cass-dédi :)
+	menu.AddItem("Quitter", 5);
 
+	bool running = true;
+	int choice = -1;
+	Scene next;
+	AC::Action action;
 	while (running)
 	{
 		while (controls_.GetAction(action))
@@ -246,6 +248,7 @@ Game::Choice Game::MainMenu()
 			if (action == AC::EXIT_APP)
 			{
 				running = false;
+				next = EXIT_APP;
 			}
 			else if (menu.ItemChosen(action, choice))
 			{
@@ -259,53 +262,263 @@ Game::Choice Game::MainMenu()
 
 	// si on lance une nouvelle partie, on nettoie les restes des éventuelles
 	// parties précédentes et l'on respawn un joueur neuf
-	if (choice == ARCADE_MODE || choice == PONG_MODE || choice == STORY_MODE ||
-		choice == DOUBLE_STORY_MODE)
+	switch (choice)
 	{
-		// clean up
-		//RemoveEntities();	// SUPPRESSED IN R 64 !?
-		particles_.Clear();
-		bullets_.Clear();
-		
-		// init
-		timer_ = 0.0f;
-		particles_.AddStars();
-
-		if (choice == ARCADE_MODE)
-		{
+		case 0:
+			mode_ = STORY;
+			next = SELECT_LEVEL;
+			break;
+		case 1:
+			mode_ = STORY2X;
+			next = SELECT_LEVEL;
+			break;
+		case 2:
 			mode_ = ARCADE;
-		}
-		else if (choice == PONG_MODE)
-		{
-			mode_ = PONG;
-		}
-		else
-		{
-			current_level_ = 1;
-			mode_ = (choice == DOUBLE_STORY_MODE)? STORY2X : STORY;
-			choice = SELECT_LEVEL;
-		}
-		// Respawn();
+			next = PLAY;
+			Init();
+			p_ForwardAction_ = &Game::ForwardAction1P;
+			p_StopPlay_ = &Game::ArcadeMoreBadGuys;
+			break;
+		/*case 3: // not implemented yet
+			next = ABOUT;
+			break;
+		case 4:
+			next = OPTIONS;
+			break;*/
+		case 5:
+			next = EXIT_APP;
+			break;
+		default:
+			assert(choice == -1);
+			break;
 	}
-	return static_cast<Choice>(choice);
+	return next;
 }
 
-Game::Choice Game::Options()
+
+Game::Scene Game::Options()
 {
-	puts("-> Game::Options\nnot implemented yet (quit)");
-	return EXIT_APP;
+	puts("[ Game::Options ]");
+#ifdef DEBUG
+	puts("not implemented yet");
+#endif
+	return MAIN_MENU;
 }
+
+// choix des niveaux
+Game::Scene Game::SelectLevel()
+{
+#ifdef DEBUG
+	puts("[ Game::SelectLevel ]");
+#endif
+	p_StopPlay_ = &Game::StoryMoreBadBuys;
+
+	p_ForwardAction_ = mode_ == STORY2X ?
+		&Game::ForwardAction2P : &Game::ForwardAction1P;
+	
+	Menu menu;
+	menu.SetOffset(sf::Vector2f(42, 42));
+	
+	AC::Action action;
+	
+	bool running = true;
+	Scene next = EXIT_APP;
+	int last = levels_.GetLast();
+	for (int i = 0; i < last; ++i)
+	{
+		bool activable = i < last_level_reached_;
+		menu.AddItem(str_sprintf("Niveau %d", i + 1), i, activable);
+	}
+	menu.AddItem("Retour au menu principal", last);
+	menu.SelectItem(current_level_ - 1);
+	
+	int level;
+	while (running)
+	{
+		while (controls_.GetAction(action))
+		{
+			if (action == AC::EXIT_APP)
+			{
+				running = false;
+			}
+			else if (menu.ItemChosen(action, level))
+			{
+				running = false;
+				if (level == last)
+				{
+					next = MAIN_MENU;
+				}
+				else
+				{
+					current_level_ = level + 1;
+					
+					Init();	
+					levels_.Set(current_level_);
+					next = LEVEL_CAPTION;
+				}
+			}
+		}
+		
+		menu.Show(app_);
+		app_.Display();
+	}
+	return next;
+}
+
+
+Game::Scene Game::LevelCaption()
+{
+#ifdef DEBUG
+	puts("[ Game::LevelCaption ]");
+#endif
+
+	AC::Action action;
+	bool running = true;
+	Scene what;
+	
+	std::string content = str_sprintf("Niveau %d\n\n%s", current_level_,
+		levels_.GetDescription(current_level_));
+	find_replace(content, "\\n", "\n");
+	
+	sf::String description(content);
+	description.SetColor(sf::Color::White);
+	description.SetFont(GET_FONT());
+	description.SetSize(30); // FIXME: magique
+	sf::FloatRect rect = description.GetRect();
+	description.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
+		(WIN_HEIGHT - rect.GetHeight()) / 2);
+	
+	while (running)
+	{
+		while (controls_.GetAction(action))
+		{
+			if (action == AC::EXIT_APP)
+			{
+				running = false;
+				puts("LevelCaption: EXIT_APP");
+				what = EXIT_APP;
+			}
+			else if (action == AC::VALID)
+			{
+				running = false;
+				puts("LevelCaption: PLAY");
+				what = PLAY;
+			}
+		}
+		
+		app_.Draw(description);
+		app_.Display();
+	}
+	return what;
+}
+
+
+// la boucle de jeu
+Game::Scene Game::Play()
+{
+#ifdef DEBUG
+	puts("[ Game::Play ]");
+#endif
+	timer_ = 0.f;
+	AC::Action action;
+	AC::Device device;
+	bool running = true;
+	Scene next = EXIT_APP;
+	std::list<Entity*>::iterator it;
+	
+	while (running)
+	{
+		while (controls_.GetAction(action, &device))
+		{
+			if (action == AC::EXIT_APP)
+			{
+				running = false;
+			}
+			else if (action == AC::PAUSE)
+			{
+				running = false;
+				next = IN_GAME_MENU;
+			}
+			else
+			{
+				(this->*p_ForwardAction_)(action, device);
+			}
+		}
+		
+		if (running && (this->*p_StopPlay_)())
+		{
+			running = false;
+			next = END_PLAY;
+		}
+		
+		// action
+		for (it = entities_.begin(); it != entities_.end(); ++it)
+		{
+			(**it).Action();
+		}
+		
+		// moving
+		float frametime = app_.GetFrameTime();
+		timer_ += frametime;
+		panel_.SetTimer(timer_);
+		Entity* ship = player1_; // FIXME toujours player1_
+		sf::FloatRect player_rect = ship->GetRect();
+		for (it = entities_.begin(); it != entities_.end();)
+		{
+			if ((**it).IsDead())
+			{
+				if (ship == *it)
+				{
+					running = false;
+					next = END_PLAY;
+					break;
+				}
+				bullets_.CleanSenders(*it);
+				delete *it;
+				it = entities_.erase(it);
+			}
+			else
+			{
+				(**it).Move(frametime);
+				// collision Joueur <-> autres unités
+				if (ship != *it && player_rect.Intersects((**it).GetRect()))
+				{
+					// collision sur les deux éléments;
+					ship->Collide(**it);
+					(**it).Collide(*ship);
+					particles_.AddImpact((**it).GetPosition(), 10);
+				}
+				++it;
+			}
+		}
+		
+		bullets_.Update(frametime);
+		bullets_.Collide(entities_);
+		particles_.Update(frametime);
+		
+		// rendering
+		particles_.Show(app_);
+		for (it = entities_.begin(); it != entities_.end(); ++it)
+		{
+			(**it).Show(app_);
+		}
+		bullets_.Show(app_);
+		panel_.Show(app_);
+		app_.Display();
+	}
+	return next;
+}
+
+
 
 
 // pause avec un menu
-Game::Choice Game::InGameMenu()
+Game::Scene Game::InGameMenu()
 {
 #ifdef DEBUG
 	puts("[ Game::InGameMenu ]");
 #endif
-
 	AC::Action action;
-	controls_.SetControls(AC::ALL);
 
 	sf::String title("P A U S E");
 	title.SetPosition(180, 160);
@@ -313,8 +526,7 @@ Game::Choice Game::InGameMenu()
 	
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(220, 200));
-	Choice resume = mode_ == ARCADE ? ARCADE_MODE : mode_ == STORY ? STORY_MODE : mode_==STORY2X ? DOUBLE_STORY_MODE : PONG_MODE;
-	menu.AddItem("Reprendre la partie", resume);
+	menu.AddItem("Reprendre la partie", PLAY);
 	menu.AddItem("Revenir au menu principal", MAIN_MENU);
 	//menu.AddItem("Options", OPTIONS);
 	menu.AddItem("Quitter le jeu", EXIT_APP);
@@ -332,7 +544,7 @@ Game::Choice Game::InGameMenu()
 			}
 			else if (action == AC::PAUSE)
 			{
-				what = resume;
+				what = PLAY;
 				paused = false;
 			}
 			else if (menu.ItemChosen(action, what))
@@ -359,14 +571,13 @@ Game::Choice Game::InGameMenu()
 		app_.Display();
 	}
 
-	return static_cast<Choice>(what);
+	return static_cast<Scene>(what);
 
 }
 
 
-
 // la partie est finie
-Game::Choice Game::EndPlay()
+Game::Scene Game::EndPlay()
 {
 #ifdef DEBUG
 	puts("[ Game::EndPlay ]");
@@ -376,23 +587,23 @@ Game::Choice Game::EndPlay()
 #endif
 	const float DURATION = 5;
 	float timer = 0;
-	Choice what;
+	Scene what;
 	sf::String info;
 	info.SetSize(70);
 	info.SetColor(sf::Color::White);
 	info.SetFont(GET_FONT());
 	
-	// perdu ou gagné ?
-	if (entities_.size() > 1 ||
-		(GetMode() == STORY2X && entities_.size() > 2)) // si perdu
+	// si perdu
+	if ((entities_.size() > 1 && mode_ != STORY2X) ||
+		(entities_.size() > 2 && mode_ == STORY2X))
 	{
 #ifndef NO_AUDIO
 		sound.SetBuffer(GET_SOUNDBUF("game-over"));
 #endif
 		info.SetText("Game  Over");
-		what = mode_ == ARCADE ? END_ARCADE : MAIN_MENU;
+		what = mode_ == ARCADE ? ARCADE_RESULT : MAIN_MENU;
 	}
-	else if (current_level_ < levels_.GetLast())
+	else if (current_level_ < levels_.GetLast()) // on ne peut pas gagner en arcade
 	{
 #ifndef NO_AUDIO
 		sound.SetBuffer(GET_SOUNDBUF("end-level"));
@@ -408,7 +619,7 @@ Game::Choice Game::EndPlay()
 		}
 		what = SELECT_LEVEL;
 	}
-	else
+	else // si dernier niveau du jeu
 	{
 #ifndef NO_AUDIO
 		sound.SetBuffer(GET_SOUNDBUF("end-level"));
@@ -420,13 +631,13 @@ Game::Choice Game::EndPlay()
 		info.SetSize(30);
 		what = MAIN_MENU;
 	}
+	
 	sf::FloatRect rect = info.GetRect();
 	info.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
 		(WIN_HEIGHT - rect.GetHeight()) / 2);
 	bool running = true;
 	
 	AC::Action action;
-	controls_.SetControls(AC::ALL);
 #ifndef NO_AUDIO
 	sound.Play();
 #endif	
@@ -472,58 +683,41 @@ Game::Choice Game::EndPlay()
 
 
 // bilan fin de partie en aracde
-Game::Choice Game::EndArcade()
+Game::Scene Game::ArcadeResult()
 {
 #ifdef DEBUG
-	puts("[ Game::EndArcade ]");
+	puts("[ Game::ArcadeResult ]");
 #endif
+	assert(mode_ = ARCADE);
+	
 	sf::String title;
-
-	if (mode_ == ARCADE)
+	std::string content;
+	int min = (int) timer_ / 60;
+	int sec = (int) timer_ % 60;
+	if (timer_ > best_arcade_time_)
 	{
-		int min = (int) PM_.GetBestTime() / 60;
-		int sec = (int) PM_.GetBestTime() % 60;
-		title.SetText(str_sprintf("Vous avez tenu seulement %d min et %d sec",
-			min, sec));
+		best_arcade_time_ = timer_;
+		content = str_sprintf("Nouveau record ! %d min et %d sec !", min, sec);
 	}
-	else // mode_ == PONG
+	else
 	{
-		int winner;
-		PM_.Select(player_1_);
-		winner = PM_.GetShip()->HP();
-		PM_.Select(player_2_);
-		 
-		if (PM_.GetShip()->HP() > winner)
-		{
-			winner = -2;
-		}
-		 
-		if (winner == -2)
-		{
-			winner = 2;
-		}
-		else
-		{
-			winner = 1;
-			PM_.Select(player_1_); 
-		}
-		title.SetText(str_sprintf("Le joueur %i gagne\n Il a encore %i vies.\n",
-			winner, PM_.GetShip()->HP()));
+		content = str_sprintf("Vous avez tenu seulement %d min et %d sec",
+			min, sec);
 	}
+	title.SetText(content);
 	title.SetFont(GET_FONT());
 	title.SetColor(sf::Color::White);
 	title.SetPosition(42, 42);
 	
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(42, 100));
-	menu.AddItem("Menu principal", MAIN_MENU);	
+	menu.AddItem("Menu principal", MAIN_MENU);
 	menu.AddItem("Quitter", EXIT_APP);
 	
 	bool running = true;
 	int choice = EXIT_APP;
 	
 	AC::Action action;
-	controls_.SetControls(AC::ALL);
 	
 	while (running)
 	{
@@ -542,179 +736,7 @@ Game::Choice Game::EndArcade()
 		menu.Show(app_);
 		app_.Display();
 	}
-	return static_cast<Choice>(choice);
-}
-
-
-// choix des niveaux
-Game::Choice Game::SelectLevel()
-{
-#ifdef DEBUG
-	puts("[ Game::SelectLevel ]");
-#endif
-	Menu menu;
-	menu.SetOffset(sf::Vector2f(42, 42));
-	
-	AC::Action action;
-	controls_.SetControls(AC::ALL);
-	
-	bool running = true;
-	Choice choice = EXIT_APP;
-	int last = levels_.GetLast();
-	for (int i = 0; i < last; ++i)
-	{
-		bool activable = i < last_level_reached_;
-		menu.AddItem(str_sprintf("Niveau %d", i + 1), i, activable);
-	}
-	menu.AddItem("Retour au menu principal", last);
-	menu.SelectItem(current_level_ - 1);
-
-	// hacky re-init
-	timer_ = 0.0f;
-	bullets_.Clear();
-	particles_.Clear();
-	particles_.AddStars();
-	
-	int level;
-	while (running)
-	{
-		while (controls_.GetAction(action))
-		{
-			if (action == AC::EXIT_APP)
-			{
-				running = false;
-			}
-			else if (menu.ItemChosen(action, level))
-			{
-				running = false;
-				if (level == last)
-				{
-					choice = MAIN_MENU;
-				}
-				else
-				{
-					current_level_ = level + 1;
-					
-					Respawn();	
-
-					levels_.Set(current_level_);
-					choice = LEVEL_CAPTION;
-				}
-			}
-		}
-		
-		menu.Show(app_);
-		app_.Display();
-	}
-	return choice;
-}
-
-
-Game::Choice Game::LevelCaption()
-{
-#ifdef DEBUG
-	puts("[ Game::LevelCaption ]");
-#endif
-
-	AC::Action action;
-	controls_.SetControls(AC::ALL);
-
-	bool running = true;
-	Choice what;
-	
-	std::string content = str_sprintf("Niveau %d\n\n%s", current_level_,
-		levels_.GetDescription(current_level_));
-	find_replace(content, "\\n", "\n");
-	sf::String description(content);
-	description.SetColor(sf::Color::White);
-	description.SetFont(GET_FONT());
-	description.SetSize(30); // FIXME: magique
-	sf::FloatRect rect = description.GetRect();
-	description.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
-		(WIN_HEIGHT - rect.GetHeight()) / 2);
-	
-	// hacky re-init
-	timer_ = 0.0f;
-	bullets_.Clear();
-	particles_.Clear();
-	particles_.AddStars();
-	
-	while (running)
-	{
-		while (controls_.GetAction(action))
-		{
-			if (action == AC::EXIT_APP)
-			{
-				running = false;
-				what = EXIT_APP;
-			}
-			else if (action == AC::VALID)
-			{
-				running = false;
-				what = STORY_MODE;
-			}
-		}
-		
-		
-		app_.Draw(description);
-		app_.Display();
-	}
-	return what;
-}
-
-
-// retourne true s'il y a encore des ennemis à envoyer plus tard
-// sinon false (niveau fini, bravo :D)
-bool Game::MoreBadGuys()
-{
-	PM_.Select(player_1_); // FIXME: On fait quoi en 2 joueurs?
-	if (GetMode() == ARCADE)
-	{
-		
-		// un ennemi en plus toutes les 10s + 5
-		unsigned int max_bad_guys = static_cast<unsigned int>(timer_ / 10 + 5);
-		if (entities_.size() < max_bad_guys)
-		{
-			// ajout d'une ennemi au hasard
-			// <hack>
-			sf::Vector2f offset;
-			offset.x = WIN_WIDTH;
-			offset.y = sf::Randomizer::Random(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
-			int random = sf::Randomizer::Random(0, 10);
-			if (random > 6)
-			{
-				AddEntity(Ennemy::Make(Ennemy::INTERCEPTOR, offset, PM_.GetShip()));
-			}
-			else if (random > 4)
-			{
-				AddEntity(Ennemy::Make(Ennemy::BLORB, offset, PM_.GetShip()));
-			}
-			else if (random > 2)
-			{
-				AddEntity(Ennemy::Make(Ennemy::DRONE, offset, PM_.GetShip()));
-			}
-			else
-			{
-				AddEntity(new Asteroid(offset, Asteroid::BIG));
-			};
-			// </hack>
-		}
-		// endless badguys! arcade mode will kill you til you die from it.
-		return true;
-	}
-	else
-	{
-		LevelManager& level = LevelManager::GetInstance();
-		Entity* p = level.GiveNext(timer_);
-		while (p != NULL)
-		{
-			AddEntity(p);
-			p = level.GiveNext(timer_);
-		}
-	
-		// si le niveau n'est pas fini, alors il y a encore des ennemis
-		return level.RemainingEntities() > 0;
-	}
+	return static_cast<Scene>(choice);
 }
 
 
@@ -725,77 +747,10 @@ void Game::RemoveEntities()
 	std::list<Entity*>::iterator it;
 	for (it = entities_.begin(); it != entities_.end(); ++it)
 	{
-        if (typeid(**it) != typeid(PlayerShip))
-        {
-            delete *it;
-        }
-#ifdef DEBUG
-		else
-		{
-		std::cout << "Must remove player @ " << *it << std::endl;
-		}
-#endif
+		delete *it;
 	}
 	entities_.clear();
 }
-
-
-void Game::Respawn()
-{
-#ifdef DEBUG
-	puts("[ Game::Respawn ]");
-#endif
-	sf::Vector2f offset;
-	offset.y = WIN_HEIGHT / 2.0;
-
-	RemoveEntities();
-	//	JOUEUR UN
-	offset.x = 0.f;
-	
-	if (player_1_ == UNDEF)
-	{
-		player_1_ = PM_.New();
-		PM_.Select(player_1_);
-		PM_.Place(offset);
-	}
-	else
-	{
-		PM_.Select(player_1_);	
-		PM_.NewShip(offset);
-	}
-
-	PM_.SetControlMode(AC::KEYBOARD);
-	AddEntity(PM_.GetShip());
-	
-
-	if (GetMode() == STORY2X || GetMode() == PONG)
-	{
-		// JOUEUR DEUX	
-		offset.x = WIN_HEIGHT;
-		
-		if (player_2_ == UNDEF)
-		{
-			player_2_ = PM_.New();
-			PM_.Select(player_2_);
-
-		}
-
-		PM_.Select(player_2_);
-		PM_.NewShip(offset, "spaceship-green");
-
-	
-		PM_.SetControlMode(AC::JOY_0 | AC::JOY_1);
-		AddEntity(PM_.GetShip());
-	}
-	else
-	{
-		PM_.SetControlMode(AC::ALL);
-	}
-
-}
-
-
-
 
 
 void Game::AddEntity(Entity* entity)
@@ -804,6 +759,111 @@ void Game::AddEntity(Entity* entity)
 }
 
 
+void Game::Init()
+{
+	RemoveEntities();
+	
+	assert(entities_.empty());
+	sf::Vector2f offset;
+	offset.x = 0;
+	player1_ = new PlayerShip(sf::Vector2f(), "spaceship-red");
+	AddEntity(player1_);
+	
+	if (mode_ == STORY2X)
+	{
+		player2_ = new PlayerShip(sf::Vector2f(), "spaceship-green");
+		AddEntity(player2_);
+		
+		player1_->SetControls(AC::KEYBOARD);
+		player2_->SetControls(AC::JOYSTICK);
+		offset.y = WIN_HEIGHT * 2 / 3;
+		player2_->SetPosition(offset);
+		offset.y = WIN_HEIGHT / 3;
+	}
+	else
+	{
+		offset.y = WIN_HEIGHT / 2;
+	}
+	player1_->SetPosition(offset);
+	
+	bullets_.Clear();
+	particles_.Clear();
+	particles_.AddStars();
+}
+
+
+/* behaviors */
+
+void Game::ForwardAction1P(AC::Action action, AC::Device device)
+{
+	(void) device;
+	player1_->HandleAction(action);	
+}
+
+
+void Game::ForwardAction2P(AC::Action action, AC::Device device)
+{
+	if (!player1_->IsDead() && device == player1_->GetControls())
+	{
+		player1_->HandleAction(action);
+	}
+	else if (!player2_->IsDead() && device == player2_->GetControls())
+	{
+		player2_->HandleAction(action);
+	}
+}
+
+
+bool Game::ArcadeMoreBadGuys()
+{
+	if (entities_.size() < (size_t) timer_ / 10 + 5)
+	{
+		// ajout d'une ennemi au hasard
+		// <hack>
+		Entity* ship = player1_; // toujours le joueur 1 ... :/
+		sf::Vector2f offset;
+		offset.x = WIN_WIDTH;
+		offset.y = sf::Randomizer::Random(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
+		int random = sf::Randomizer::Random(0, 10);
+		if (random > 6)
+		{
+			AddEntity(Ennemy::Make(Ennemy::INTERCEPTOR, offset, ship));
+		}
+		else if (random > 4)
+		{
+			AddEntity(Ennemy::Make(Ennemy::BLORB, offset, ship));
+		}
+		else if (random > 2)
+		{
+			AddEntity(Ennemy::Make(Ennemy::DRONE, offset, ship));
+		}
+		else
+		{
+			AddEntity(new Asteroid(offset, Asteroid::BIG));
+		}
+		// </hack>
+	}
+	return false;
+}
+
+
+bool Game::StoryMoreBadBuys()
+{
+	Entity* p = levels_.GiveNext(timer_);
+	while (p != NULL)
+	{
+		AddEntity(p);
+		p = levels_.GiveNext(timer_);
+	}
+	
+	// le niveau n'est pas fini tant qu'il reste des ennemis, soit en file
+	// d'attente, soit dans le conteur entities_
+	return (levels_.RemainingEntities() == 0)
+		&& (entities_.size() == (mode_ == STORY2X ? 2 : 1));
+}
+
+
+/*
 std::string Game::MakePassword()
 {
 	Password pass;	
@@ -856,278 +916,6 @@ bool Game::UsePassword(std::string & source)
 		ok = false;
 	}
 	return ok;
-}
-
-// Oh un joli hack bien rédigé :D
-bool Game::Passwd_HACK() {
-	bool ok = false; std::string src;	
-	std::cout << "Entrez pass, ou X pour passer\n";
-	std::cin >> src;
-	if (!(src[0] - 88) || !(src[0] - 120)){
-		std::cout << "Pas de pass entre\n";
-		ok ^= 1; } else {
-		if (UsePassword(src)) {
-			std::cout << "Okay\n"; ok ^=1;
-		} else std::cout << "Erreur ! \n";
-	} return ok;
-}
-
-
-Game::Choice Game::PlayArcade()
-{
-#ifdef DEBUG
-	puts("[ Game::PlayArcade ]");
-#endif
-
-	
-	AC::Action action;
-	bool running = true;
-	Choice what = EXIT_APP;
-
-	Respawn();
-	
-	PM_.Select(player_1_);
-	while (running)
-	{
-		while (controls_.GetAction(action))
-		{
-			if (action == AC::EXIT_APP)
-			{
-				running = false;
-			}
-			else if (action == AC::PAUSE)
-			{
-				running = false;
-				what = IN_GAME_MENU;
-			}
-			else
-			{
-				PM_.GetShip()->HandleAction(action);
-			}
-		}
-	
-		if (running)
-		{
-			running = MoreBadGuys();
-			if (!running)
-			{
-				// Ne devrait jamais arriver en arcade
-				assert(false);
-			}
-		}
-
-		std::list<Entity*>::iterator it;
-		// action
-		for (it = entities_.begin(); it != entities_.end(); ++it)
-		{
-			(**it).Action();
-		}
-		
-		// moving
-		float time = app_.GetFrameTime();
-		timer_ += time;
-		panel_.SetTimer(timer_);
-		
-		for (it = entities_.begin(); it != entities_.end();)
-		{
-			if ((**it).IsDead())
-			{
-				if (PM_.GetShip() == *it )
-				{
-					running = false;
-					what = END_PLAY;
-#ifdef DEBUG
-					puts("\nplayer killed");
-#endif
-					break;
-				}
-				bullets_.CleanSenders(*it);
-				delete *it;
-				it = entities_.erase(it);
-			}
-			else
-			{
-				(**it).Move(time);
-				// collision Joueur <-> autres unités
-				if (PM_.GetShip() != *it &&
-					PM_.GetShip()->GetRect().Intersects((**it).GetRect()))
-				{
-						// collision sur les deux éléments
-						PM_.GetShip()->Collide(**it);
-						(**it).Collide(*PM_.GetShip());
-				}
-				++it;
-			}
-		}
-		
-		bullets_.Update(time);
-		bullets_.Collide(entities_); // fusion avec Update ?
-		
-		particles_.Update(time);
-		
-		// rendering
-		particles_.Show(app_);
-		for (it = entities_.begin(); it != entities_.end(); ++it)
-		{
-			(**it).Show(app_);
-		}
-		bullets_.Show(app_);
-		panel_.Show(app_);
-		app_.Display();
-	}
-	
-	PM_.SetBestTime(timer_);
-	return what;
-}
-
-
-Game::Choice Game::PlayStory()
-{
-#ifdef DEBUG
-	puts("[ Game::PlayStory ]");
-#endif
-	
-	PM_.Select(player_1_);
-	AC::Action action;
-	bool dead, running = true;
-	Choice what = EXIT_APP;
-	
-	while (running)
-	{
-		while (controls_.GetAction(action))
-		{
-			if (action == AC::EXIT_APP)
-			{
-				running = false;
-			}
-			else if (action == AC::PAUSE)
-			{
-				running = false;
-				what = IN_GAME_MENU;
-			}
-			else
-			{
-				if (GetMode() == STORY2X)
-				{
-					PM_.Select(player_1_);
-					controls_.SetControls(PM_.GetControlMode());
-					PM_.GetShip()->HandleAction(action);
-					PM_.Select(player_2_);
-					controls_.SetControls(PM_.GetControlMode());
-				}
-				PM_.GetShip()->HandleAction(action);
-			}
-		}
-	
-		if (running)
-		{
-			running = MoreBadGuys() || 
-				(GetMode() == STORY2X && entities_.size() > 2) ||
-				(GetMode() == STORY && entities_.size() > 1);
-
-
-			if (!running)
-			{
-				// il n'y a plus d'ennemis en liste d'attente, et plus
-				// d'ennemis dans le vecteur = Victoire
-				// GameOver si plus de niveau
-				what = END_PLAY;
-			}
-		}
-
-		std::list<Entity*>::iterator it;
-		// action
-		for (it = entities_.begin(); it != entities_.end(); ++it)
-		{
-			(**it).Action();
-		}
-		
-		// moving
-		float time = app_.GetFrameTime();
-		timer_ += time;
-		panel_.SetTimer(timer_);
-		
-		dead &= false;
-		
-		for (it = entities_.begin(); it != entities_.end();)
-		{
-			if ((**it).IsDead())
-			{
-				if (GetMode()== STORY2X)
-				{
-					PM_.Select(player_1_);
-		
-					if (PM_.GetShip() == *it)
-					{
-							dead = true;
-					}
-					else
-					{
-						PM_.Select(player_2_);
-					}
-				}
-				if (PM_.GetShip() == *it)
-					dead = true;
-
-				if (dead)
-				{
-					running = false;
-					what = END_PLAY;
-	#ifdef DEBUG
-					puts("\nplayer killed");
-	#endif
-					break;
-				}
-				bullets_.CleanSenders(*it);
-				delete *it;
-				it = entities_.erase(it);
-			}	
-			else
-			{
-				(**it).Move(time);
-				// collision Joueur <-> autres unités
-				if (GetMode() == STORY2X)
-				{
-					PM_.Select(player_1_);
-					if (*it != PM_.GetShip() && 
-						PM_.GetShip()->GetRect().Intersects((**it).GetRect()))
-					{
-							PM_.GetShip()->Collide(**it);
-							(**it).Collide(*PM_.GetShip());
-					}
-					else
-					{ 
-						PM_.Select(player_2_);
-					}
-				}
-				if (*it != PM_.GetShip() && 
-					PM_.GetShip()->GetRect().Intersects((**it).GetRect()))
-				{
-					PM_.GetShip()->Collide(**it);
-					(**it).Collide(*PM_.GetShip());
-				}
-				++it;
-			}
-		}
-		
-		bullets_.Update(time);
-		bullets_.Collide(entities_); // fusion avec Update ?
-		
-		particles_.Update(time);
-		
-		// rendering
-		particles_.Show(app_);
-		for (it = entities_.begin(); it != entities_.end(); ++it)
-		{
-			(**it).Show(app_);
-		}
-		bullets_.Show(app_);
-		panel_.Show(app_);
-		app_.Display();
-	}
-	
-	PM_.SetBestTime(timer_);
-	return what;
 }
 
 
@@ -1320,5 +1108,4 @@ void Game::Hit(int player_id)
 	PM_.Select(player_id);
 	PM_.GetShip()->Entity::Hit(1);	
 }
-
-
+*/

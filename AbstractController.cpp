@@ -14,38 +14,41 @@ AbstractController& AbstractController::GetInstance()
 }
 
 
-void AbstractController::SetControls(int c)
+/*void AbstractController::SetControls(int controls)
 {
-	cur_ctrls_ = c;
-}
+	cur_ctrls_ = controls;
+}*/
 
 
-bool AbstractController::GetAction(Action& action)
+bool AbstractController::GetAction(Action& action, Device* device)
 {
 	static sf::RenderWindow& app_ = Game::GetInstance().GetApp();
 	sf::Event event;
+	Device _device;
 	if (app_.GetEvent(event))
 	{
 		action = NONE;
+		_device = ALL;
 		// CLOSE
 		if (event.Type == sf::Event::Closed)
 		{
 			action = EXIT_APP;
 		}
 		// KEY PRESSED
-		else if ( (cur_ctrls_ & KEYBOARD) && event.Type == sf::Event::KeyPressed)
+		else if (event.Type == sf::Event::KeyPressed)
 		{
 			for (int i = 0; i < COUNT_ACTION; ++i)
 			{
 				if (event.Key.Code == keyboard_binds_[i])
 				{
 					action = (Action) i;
+					_device = KEYBOARD;
 					break;
 				}
 			}
 		}
 		// JOYBUTTON PRESSED
-		else if ( (cur_ctrls_ & JOY_0 || cur_ctrls_ & JOY_1) && event.Type == sf::Event::JoyButtonPressed)
+		else if (event.Type == sf::Event::JoyButtonPressed)
 		{
 			for (JoyBindMap::const_iterator it = joystick_binds_.begin();
 				it != joystick_binds_.end(); ++it)
@@ -53,6 +56,7 @@ bool AbstractController::GetAction(Action& action)
 				if (it->second == event.JoyButton.Button)
 				{
 					action = it->first;
+					_device = JOYSTICK;
 					break;
 				}
 			}
@@ -65,10 +69,12 @@ bool AbstractController::GetAction(Action& action)
 				if (event.JoyMove.Position > JOY_DEADZONE)
 				{
 					action = MOVE_RIGHT;
+					_device = JOYSTICK;
 				}
 				else if (event.JoyMove.Position < -JOY_DEADZONE)
 				{
 					action = MOVE_LEFT;
+					_device = JOYSTICK;
 				}
 			}
 			else if (event.JoyMove.Axis == sf::Joy::AxisY)
@@ -76,12 +82,18 @@ bool AbstractController::GetAction(Action& action)
 				if (event.JoyMove.Position > JOY_DEADZONE)
 				{
 					action = MOVE_DOWN;
+					_device = JOYSTICK;
 				}
 				else if (event.JoyMove.Position < -JOY_DEADZONE)
 				{
 					action = MOVE_UP;
+					_device = JOYSTICK;
 				}				
 			}
+		}
+		if (device != NULL)
+		{
+			*device = _device;
 		}
 		return true;
 	}
@@ -89,15 +101,15 @@ bool AbstractController::GetAction(Action& action)
 }
 
 
-bool AbstractController::HasInput(Action action)
+bool AbstractController::HasInput(Action action, int device)
 {
 	static const sf::Input& input_ = Game::GetInstance().GetInput();
 	assert(action < COUNT_ACTION);
-	if ((cur_ctrls_ & KEYBOARD) && input_.IsKeyDown(keyboard_binds_[action]))
+	if ((device & KEYBOARD) && input_.IsKeyDown(keyboard_binds_[action]))
 	{
 		return true;
 	}
-	if (cur_ctrls_ & JOY_0 || cur_ctrls_ & JOY_1 ) 
+	if (device & JOYSTICK) 
 	{
 		if (input_.IsJoystickButtonDown(JOY_ID, joystick_binds_[action]))
 		{

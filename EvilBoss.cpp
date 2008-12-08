@@ -30,7 +30,6 @@ EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
 
 void EvilBoss::Move(float frametime)
 {
-	frametime_ = frametime;
 	bool left = true;
 	static bool direction_ = false;
 	static float mover_ = 10.0;

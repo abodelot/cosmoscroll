@@ -34,7 +34,7 @@
 
 PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	Entity(GET_IMG(image), offset),
-	controls_(AC::GetInstance()),
+	controller_(AC::GetInstance()),
 	panel_(ControlPanel::GetInstance()),
 	laserbeam_(Weapon::LASERBEAM, this),
 	hellfire_(Weapon::HELLFIRE, this)
@@ -85,8 +85,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	konami_code_[9] = AC::WEAPON_1;
 	current_konami_event_ = 0;
 	
-	my_controls_ = -1;
-		
+	controls_ = AC::ALL;
 	use_limits_ = true;
 }
 
@@ -121,9 +120,6 @@ void PlayerShip::HandleAction(AC::Action action)
 	if (action == konami_code_[current_konami_event_])
 	{
 		++current_konami_event_;
-//#ifdef DEBUG
-//		printf("konami code %d on\n", current_konami_event_);
-//#endif
 		if (current_konami_event_ == KONAMI_CODE_LENGTH)
 		{
 			current_konami_event_ = 0;
@@ -140,22 +136,19 @@ void PlayerShip::HandleAction(AC::Action action)
 
 void PlayerShip::Action()
 {
-	controls_.SetControls(my_controls_);
 	if (!overheated_)
 	{
 		float h = 0.0f;
 		sf::Vector2f offset = sprite_.GetPosition() + GUN_OFFSET;
-
-		if (controls_.HasInput(AC::WEAPON_1))
+		
+		if (controller_.HasInput(AC::WEAPON_1, controls_))
 		{ 
 			h += laserbeam_.Shoot(offset);
 		}
-
-		if (controls_.HasInput(AC::WEAPON_2))
+		if (controller_.HasInput(AC::WEAPON_2, controls_))
 		{
 			h += hellfire_.Shoot(offset);
 		}
-
 		
 		heat_ += h;
 		if (heat_ >= HEAT_MAX)
@@ -177,8 +170,7 @@ void PlayerShip::Move(float frametime)
 	float y = offset.y;
 	
 	float dist = frametime * speed_;
-	controls_.SetControls(my_controls_);
-	if (controls_.HasInput(AC::MOVE_UP))
+	if (controller_.HasInput(AC::MOVE_UP, controls_))
 	{
 		if (use_limits_)
 		{
@@ -189,7 +181,7 @@ void PlayerShip::Move(float frametime)
 			y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
 		}
 	}
-	if (controls_.HasInput(AC::MOVE_DOWN))
+	if (controller_.HasInput(AC::MOVE_DOWN, controls_))
 	{
 		if (use_limits_)
 		{
@@ -200,7 +192,7 @@ void PlayerShip::Move(float frametime)
 			y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
 		}
 	}
-	if (controls_.HasInput(AC::MOVE_LEFT))
+	if (controller_.HasInput(AC::MOVE_LEFT, controls_))
 	{
 		if (use_limits_)
 		{
@@ -211,7 +203,7 @@ void PlayerShip::Move(float frametime)
 			x = (x - dist < 0) ? 0 : x - dist;
 		}
 	}
-	if (controls_.HasInput(AC::MOVE_RIGHT))
+	if (controller_.HasInput(AC::MOVE_RIGHT, controls_))
 	{
 		if (use_limits_)
 		{
@@ -255,7 +247,6 @@ void PlayerShip::Move(float frametime)
 			}
 		}
 	}
-
 	panel_.SetHeat(static_cast<int>(heat_));
 	
 	// timer bonus
@@ -300,6 +291,10 @@ void PlayerShip::Hit(int damage)
 	{
 		Entity::Hit(damage);
 		panel_.SetShipHP(hp_);
+		if (IsDead())
+		{
+			p.AddExplosion(sprite_.GetPosition());
+		}
 	}
 }
 
@@ -311,7 +306,7 @@ void PlayerShip::Collide(Entity& ent)
 	{
 		HandleBonus(*bonus);
 	}
-	else if (typeid(ent) != typeid(PlayerShip))
+	else
 	{
 		Hit(1);
 	}
@@ -364,8 +359,8 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 		default:
 			break;
 	}
-	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(), bonus.WhatItIs());
-
+	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(),
+		bonus.WhatItIs());
 }
 
 

@@ -20,11 +20,10 @@
 	const sf::Vector2f Ball::ball_offset_ (WIN_HEIGHT / 2,  WIN_WIDTH / 2 );
 
 
-	
+	/*
 Ball::Ball() :
     Entity(GET_IMG("tennis_ball"), ball_offset_, 42)
 {
-	sf::Randomizer::SetSeed((int) time(NULL));
 	use_limits_ = true;
 	Spawn();
 }
@@ -77,6 +76,6 @@ void Ball::Collide(Entity& ent)
 {
 	sf::Vector2f ship_pos = ent.GetPosition();
 }
-
+*/
 
 

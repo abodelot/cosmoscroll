@@ -9,6 +9,7 @@ Milestone 0.1
 	- Implémenter une navigation, ré-assignables, de contrôles par joystick [WIP]
 	- Un menu Options, pouvoir y choisir la musique et les bindings
 	- Une menu À Propos
+	- Optimiser cos/sin avec une table pré-calculée
 	
 * Interface :
 	- Afficher le meilleur temps dans le ControlPanel en mode Arcade

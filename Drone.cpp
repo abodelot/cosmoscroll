@@ -17,6 +17,7 @@ void Drone::Move(float frametime)
 {
     sprite_.Move(-SPEED * frametime, 0);
     KillIfOut();
+    weapon_.Update(frametime);
 }
 
 
@@ -30,4 +31,3 @@ void Drone::Action()
         weapon_.Shoot(sprite_.GetPosition() + GUN_OFFSET, -PI);
     }
 }
-

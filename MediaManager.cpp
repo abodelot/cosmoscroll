@@ -36,7 +36,7 @@ static void load_or_die(sf::SoundBuffer& buffer, const char* filename)
 }
 
 
-// charger un buffer lié a une instance de la lib dumb
+// charger un buffer liÃ© a une instance de la lib dumb
 static void load_or_die(std::string& music_name, const char* filename)
 {
 	music_name = filename;

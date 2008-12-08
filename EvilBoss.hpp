@@ -6,7 +6,7 @@
 #include "Ennemy.hpp"
 
 /*
- * Il est très méchant, et il en veut!
+ * Il est trÃ¨s mÃ©chant, et il en veut!
  */
 class EvilBoss: public Ennemy
 {
@@ -28,7 +28,6 @@ private:
 	Weapon eye_right_;
 	Weapon canon_;
 	Game& game_;
-	float frametime_;	//frametime du dernier Move. Utilisié par Action
 };
 
 #endif /* guard EVILBOSS_HPP */
