@@ -3,7 +3,7 @@ LD=ld
 TINYXML_DIR=tinyxml
 TINYXML_OBJ=$(TINYXML_DIR)/tinyxml.o $(TINYXML_DIR)/tinyxmlerror.o $(TINYXML_DIR)/tinyxmlparser.o
 
-CFLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi -DSFML_DYNAMIC
+CFLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
 LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -ldumb
 EXEC=cosmoscroll
 SRC= $(wildcard *.cpp)

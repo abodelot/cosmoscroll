@@ -4,18 +4,40 @@
 #include <SFML/System/Vector2.hpp>
 #include <cmath>
 
-#define PI 3.14159f
+#define PI 3.14159265f
 
-namespace math
+inline float quick_bound(float x)
 {
+	if (x < - PI)
+		x += 2 * PI;
+	else if (x > PI)
+		x -= 2 * PI;
 
-void init();
-
-float sin(float radians);
-
-float cos(float radians);
-
+	return x;
 }
+
+
+inline float quick_sin(float x)
+{
+	x = quick_bound(x);
+	float Sin = 1.27323954 * x;
+	if (x < 0)
+		Sin += .405284735 * x * x;
+	else
+		Sin -= .405284735 * x * x;
+	
+	x = (Sin * Sin);
+	if (Sin >= 0) x = -x;
+	
+	return Sin + .255 * (x - Sin);
+}
+
+
+inline float quick_cos(float x)
+{
+	return quick_sin(x + PI / 2);
+}
+
 
 inline float DEG_TO_RAD(float degres)
 {
@@ -31,8 +53,8 @@ inline float RAD_TO_DEG(float radians)
 
 inline void TRANSLATE(sf::Vector2f& offset, float angle, float distance)
 {
-    offset.x = offset.x + distance * math::cos(angle);
-    offset.y = offset.y - distance * math::sin(angle);
+    offset.x = offset.x + distance * quick_cos(angle);
+    offset.y = offset.y - distance * quick_sin(angle);
 }
 
 

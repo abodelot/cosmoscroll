@@ -40,7 +40,6 @@ Game::Game() :
 	levels_		(LevelManager::GetInstance()),
 	particles_	(ParticleSystem::GetInstance())
 {
-	math::init();
 	/*
 	config_.LoadFile(CONFIG_FILE);
 	config_.SeekSection("Settings");
