@@ -15,6 +15,7 @@
 #define GUN_OFFSET              sf::Vector2f(52, 24)
 
 #define DEFAULT_SPEED           200
+#define HIGH_SPEED              320
 
 #define COOLER_DEFAULT          0
 #define COOLER_MAX              3
@@ -333,7 +334,7 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 		case Bonus::SPEED:
 			if (bonus_[T_SPEED] == 0)
 			{
-				speed_ *= 2;
+				speed_ = HIGH_SPEED;
 				puts("bonus speed activé");
 			}
 			else

@@ -1,10 +1,21 @@
-#ifndef H_MATH
-#define H_MATH
+#ifndef MATH_HPP
+#define MATH_HPP
 
+#include <SFML/System/Vector2.hpp>
 #include <cmath>
 
 #define PI 3.14159f
 
+namespace math
+{
+
+void init();
+
+float sin(float radians);
+
+float cos(float radians);
+
+}
 
 inline float DEG_TO_RAD(float degres)
 {
@@ -20,8 +31,8 @@ inline float RAD_TO_DEG(float radians)
 
 inline void TRANSLATE(sf::Vector2f& offset, float angle, float distance)
 {
-    offset.x = offset.x + distance * std::cos(angle);
-    offset.y = offset.y - distance * std::sin(angle);
+    offset.x = offset.x + distance * math::cos(angle);
+    offset.y = offset.y - distance * math::sin(angle);
 }
 
 
@@ -56,5 +67,4 @@ inline float ANGLE(const sf::Vector2f& p1, const sf::Vector2f& p2)
     return radians;
 }
 
-#endif /* guard H_MATH */
-
+#endif /* guard MATH_HPP */

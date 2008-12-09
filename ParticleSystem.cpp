@@ -160,7 +160,7 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 {
 	timer_ += frametime;
 	int speed = static_cast<int> ((lifetime_ - timer_) * FIERY_VELOCITY * frametime);
-	sprite_.Move(speed * std::cos(angle_), -speed * std::sin(angle_));
+	sprite_.Move(speed * math::cos(angle_), -speed * math::sin(angle_));
 	// transparence
 	sprite_.SetColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(255 - 255 * timer_ / lifetime_)));
 	return timer_ >= lifetime_;
@@ -244,8 +244,8 @@ bool ParticleSystem::LinkedParticle::OnUpdate(float frametime)
 	angle_ += (2 * PI * frametime); // rotation de 2 * PI par seconde
 	offset.x += handle_->GetSize().x / 2;
 	offset.y += handle_->GetSize().y / 2;
-	offset.x = offset.x + SHIELD_RADIUS * std::cos(angle_);
-	offset.y = offset.y - SHIELD_RADIUS * std::sin(angle_);
+	offset.x = offset.x + SHIELD_RADIUS * math::cos(angle_);
+	offset.y = offset.y - SHIELD_RADIUS * math::sin(angle_);
 	sprite_.SetPosition(offset);
 	sprite_.SetRotation(RAD_TO_DEG(angle_ + (0.5 * PI)));
 	return false;

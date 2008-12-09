@@ -13,6 +13,7 @@
 #include "MediaManager.hpp"
 #include "Menu.hpp"
 #include "Misc.hpp"
+#include "Math.hpp"
 #include "Window.hpp"
 //#include "ConfigParser.hpp"
 
@@ -39,6 +40,7 @@ Game::Game() :
 	levels_		(LevelManager::GetInstance()),
 	particles_	(ParticleSystem::GetInstance())
 {
+	math::init();
 	/*
 	config_.LoadFile(CONFIG_FILE);
 	config_.SeekSection("Settings");
@@ -226,7 +228,7 @@ Game::Scene Game::MainMenu()
 #ifdef DEBUG
 	puts("[ Game::MainMenu ]");
 #endif
-	sf::String title(str_sprintf("CosmoScroll - r%s", SVN_REV));
+	sf::String title("CosmoScroll");
 	title.SetFont(GET_FONT());
 	title.SetSize(40);
 	title.SetY(42);
@@ -237,10 +239,9 @@ Game::Scene Game::MainMenu()
 	menu.AddItem("Mode Histoire solo", 0);
 	menu.AddItem("Mode Histoire duo", 1);
 	menu.AddItem("Mode Arcade", 2);
+	//menu.AddItem("Options", 3); -> choix musique, choix bindings
 	menu.AddItem(L"À propos", 4);
 	//menu.AddItem("Pong", PONG_MODE);
-	//menu.AddItem("Options", 3); -> choix musique, choix bindings
-
 	menu.AddItem("Quitter", 5);
 
 	bool running = true;
@@ -282,17 +283,19 @@ Game::Scene Game::MainMenu()
 		case 2:
 			mode_ = ARCADE;
 			next = PLAY;
-			panel_.SetGameInfo(str_sprintf("Record: %.2f", best_arcade_time_).c_str());
+			panel_.SetGameInfo(str_sprintf("Record : %02d:%02d",
+				(int) best_arcade_time_ / 60,
+				(int) best_arcade_time_ % 60).c_str());
 			Init();
 			p_ForwardAction_ = &Game::ForwardAction1P;
 			p_StopPlay_ = &Game::ArcadeMoreBadGuys;
 			break;
-		case 4: 
-			next = ABOUT;
-			break;
 		/*case 3:// not implemented yet
 			next = OPTIONS;
 			break;*/
+		case 4: 
+			next = ABOUT;
+			break;
 		case 5:
 			next = EXIT_APP;
 			break;
@@ -609,7 +612,7 @@ Game::Scene Game::EndPlay()
 #ifndef NO_AUDIO
 		sound.SetBuffer(GET_SOUNDBUF("game-over"));
 #endif
-		info.SetText("Game  Over");
+		info.SetText("Game Over");
 		what = mode_ == ARCADE ? ARCADE_RESULT : MAIN_MENU;
 	}
 	else if (current_level_ < levels_.GetLast()) // on ne peut pas gagner en arcade
@@ -617,7 +620,7 @@ Game::Scene Game::EndPlay()
 #ifndef NO_AUDIO
 		sound.SetBuffer(GET_SOUNDBUF("end-level"));
 #endif
-		info.SetText(str_sprintf("Niveau %d termine", current_level_));
+		info.SetText(str_sprintf(L"Niveau %d terminé", current_level_));
 		++current_level_;
 		if (current_level_ > last_level_reached_)
 		{
@@ -1114,8 +1117,8 @@ Game::Scene Game::About()
 	title.SetFont(GET_FONT());
 	title.SetColor(sf::Color::White);
 	title.SetPosition(42, 42);
-	title.SetSize(42);
-	title.SetText("About CosmoscrolL");
+	title.SetSize(30);
+	title.SetText(str_sprintf(L"À propos de CosmoScroll rev%s", SVN_REV));
 
 	credits.SetFont(GET_FONT());
 	credits.SetColor(sf::Color::White);

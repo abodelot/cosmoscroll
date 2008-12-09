@@ -19,7 +19,7 @@ void BulletManager::Update(float frametime)
     for (it = bullets_.begin(); it != bullets_.end(); ++it)
     {
         float dist = it->speed * frametime;    
-        it->sprite.Move(dist * std::cos(it->angle), -dist * std::sin(it->angle));
+        it->sprite.Move(dist * math::cos(it->angle), -dist * math::sin(it->angle));
     }
 }
 

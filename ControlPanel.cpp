@@ -120,7 +120,7 @@ ControlPanel::ControlPanel()
     info_.SetSize(14);
     info_.SetColor(sf::Color(255, 128, 0));
 
-    game_info_.SetPosition(550, 30);
+    game_info_.SetPosition(520, 20);
     game_info_.SetSize(14);
     game_info_.SetColor(sf::Color(255, 128, 0));
 	

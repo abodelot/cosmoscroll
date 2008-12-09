@@ -23,25 +23,6 @@ std::string str_sprintf(const char format[], ...)
     return str;
 }
 
-/*
-std::wstring str_sprintf(const wchar_t format[], ...)
-{
-    va_list args;
-    va_start(args, format);
-    
-    int length = _vsnwprintf(NULL, 0, format, args);
-		
-    wchar_t* p = new wchar_t [length + 1];
-    va_end(args);
-    va_start(args, format);
-    vswprintf(p, format, args);
-    va_end(args);    
-    
-    std::wstring str(p);
-    delete [] p;
-    return str;
-}
-*/
 
 std::wstring str_sprintf(const wchar_t format[], ...)
 {
@@ -69,32 +50,6 @@ std::wstring str_sprintf(const wchar_t format[], ...)
     return str;
 }
 
-/*
-std::wstring wstr_sprintf(const char format[], ...)
-{
-    va_list args;
-    va_start(args, format);
-    
-    int length = vsnprintf(NULL, 0, format, args);
-    char* p = new char [length + 1];
-    va_end(args);
-    va_start(args, format);
-    vsprintf(p, format, args);
-    va_end(args);    
-    
-	wchar_t* w = new wchar_t [length + 1];
-	
-	for (unsigned short register i = 0; i < length + 1; ++i)
-	{
-		w[i] = btowc(p[i]);
-	}
-	
-    std::wstring str(w);
-    delete [] p;
-	delete [] w;
-    return str;
-}
-*/
 
 int find_replace(std::string& target, const std::string& look_for,
 	const std::string& replace_by)
