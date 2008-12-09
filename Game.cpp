@@ -237,7 +237,7 @@ Game::Scene Game::MainMenu()
 	menu.AddItem("Mode Histoire solo", 0);
 	menu.AddItem("Mode Histoire duo", 1);
 	menu.AddItem("Mode Arcade", 2);
-	menu.AddItem("À propos", 4);
+	menu.AddItem(L"À propos", 4);
 	//menu.AddItem("Pong", PONG_MODE);
 	//menu.AddItem("Options", 3); -> choix musique, choix bindings
 
@@ -273,6 +273,7 @@ Game::Scene Game::MainMenu()
 		case 0:
 			mode_ = STORY;
 			next = SELECT_LEVEL;
+
 			break;
 		case 1:
 			mode_ = STORY2X;
@@ -281,6 +282,7 @@ Game::Scene Game::MainMenu()
 		case 2:
 			mode_ = ARCADE;
 			next = PLAY;
+			panel_.SetGameInfo(str_sprintf("Record: %.2f", best_arcade_time_).c_str());
 			Init();
 			p_ForwardAction_ = &Game::ForwardAction1P;
 			p_StopPlay_ = &Game::ArcadeMoreBadGuys;
@@ -360,6 +362,7 @@ Game::Scene Game::SelectLevel()
 					
 					Init();	
 					levels_.Set(current_level_);
+					panel_.SetGameInfo(str_sprintf("Niveau %i", current_level_).c_str());
 					next = LEVEL_CAPTION;
 				}
 			}

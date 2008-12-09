@@ -10,7 +10,11 @@ class ControlPanel
 public:
     static ControlPanel& GetInstance();
 
-    void SetShipHP(int value);
+	void SetGameInfo(const wchar_t* text);
+	
+	void SetGameInfo(const char* text);
+    
+	void SetShipHP(int value);
 
     void SetMaxShipHP(int max);
 
@@ -22,7 +26,8 @@ public:
 
     void SetMaxHeat(int max);
 
-
+	void SetInfo(const wchar_t* text);
+	
     void SetInfo(const char* text);
     
     void SetTimer(float seconds);
@@ -56,6 +61,7 @@ private:
     ProgressBar pbars_[PBAR_COUNT];
     sf::String timer_;
     sf::String info_;
+	sf::String game_info_;
     sf::String coolers_;
     sf::Sprite panel_;
     sf::Font font_;

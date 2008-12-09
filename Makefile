@@ -1,13 +1,21 @@
 CC=g++
+LD=ld
 TINYXML_DIR=tinyxml
 TINYXML_OBJ=$(TINYXML_DIR)/tinyxml.o $(TINYXML_DIR)/tinyxmlerror.o $(TINYXML_DIR)/tinyxmlparser.o
 
-CFLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
+CFLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi -DSFML_DYNAMIC
 LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -ldumb
 EXEC=cosmoscroll
 SRC= $(wildcard *.cpp)
 OBJ= $(SRC:.cpp=.o)
 
+# static/dynamic linking
+LINK=dynamic
+ifeq ($(LINK), dynamic)
+	CFLAGS += -DSFML_DYNAMIC
+else
+	
+endif
 
 # debug/release mode
 DEBUG=yes
@@ -24,7 +32,7 @@ ifeq ($(JOY_ENABLED), yes)
 endif
 
 # disable audio
-NO_AUDIO=no
+NO_AUDIO=yes
 ifeq ($(NO_AUDIO), yes)
 	CFLAGS += -DNO_AUDIO
 endif

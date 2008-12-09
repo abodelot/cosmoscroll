@@ -10,6 +10,17 @@ ControlPanel& ControlPanel::GetInstance()
 }
 
 
+
+void ControlPanel::SetGameInfo(const wchar_t* text)
+{
+	game_info_.SetText(text);
+}
+
+void ControlPanel::SetGameInfo(const char* text)
+{
+	game_info_.SetText(text);
+}
+
 void ControlPanel::SetShipHP(int value)
 {
     pbars_[HP].SetPercent(value);
@@ -46,6 +57,12 @@ void ControlPanel::SetMaxHeat(int max)
 }
 
 
+void ControlPanel::SetInfo(const wchar_t* text)
+{
+	info_.SetText(text);
+}
+
+
 void ControlPanel::SetInfo(const char* text)
 {
     info_.SetText(text);
@@ -74,6 +91,7 @@ void ControlPanel::Show(sf::RenderWindow& app) const
         app.Draw(pbars_[i].background);
         app.Draw(pbars_[i].bar);
     }
+	app.Draw(game_info_);
     app.Draw(info_);
     app.Draw(timer_);
     app.Draw(coolers_);
@@ -100,8 +118,12 @@ ControlPanel::ControlPanel()
     
     info_.SetPosition(400, 16);
     info_.SetSize(14);
-    info_.SetColor(sf::Color(255, 128 ,0));
-    
+    info_.SetColor(sf::Color(255, 128, 0));
+
+    game_info_.SetPosition(550, 30);
+    game_info_.SetSize(14);
+    game_info_.SetColor(sf::Color(255, 128, 0));
+	
     coolers_.SetPosition(400, 30);
     coolers_.SetSize(14);
     coolers_.SetColor(sf::Color::White);
