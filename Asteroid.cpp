@@ -48,8 +48,8 @@ TODO
     speed_ *= 0.99;
     float framespeed = frametime * speed_;
     sf::Vector2f offset = sprite_.GetPosition();
-    offset.x = offset.x + framespeed * quick_cos(angle_);
-    offset.y = offset.y - framespeed * quick_sin(angle_);
+    offset.x = offset.x + framespeed * math::cos(angle_);
+    offset.y = offset.y - framespeed * math::sin(angle_);
     sprite_.SetPosition(offset);
     KillIfOut();
 }
@@ -84,4 +84,3 @@ void Asteroid::Hit(int damage)
         }
     }
 }
-

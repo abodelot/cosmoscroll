@@ -9,12 +9,11 @@ Milestone 0.1
 	- Implémenter une navigation, ré-assignables, de contrôles par joystick [WIP]
 	- Un menu Options, pouvoir y choisir la musique et les bindings
 	- Une menu À Propos [WIP]
-	- Optimiser cos/sin avec une table pré-calculée
+	- Optimiser cos/sin avec une table pré-calculée [WIP]
 	
 * Interface :
-	- Afficher le meilleur temps dans le ControlPanel en mode Arcade [Done]
-	- Afficher le niveau courant dans le ControlPanel en mode Histoire [Done]
-	- Menus du jeu plus jolis
+	- ControlPanel plus joli [WIP]
+	- Menus du jeu plus jolis [WIP]
 	
 * Configuration :
 	- Sauvegarder les bindings clavier/joystick

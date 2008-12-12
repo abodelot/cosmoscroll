@@ -19,7 +19,7 @@ void BulletManager::Update(float frametime)
     for (it = bullets_.begin(); it != bullets_.end(); ++it)
     {
         float dist = it->speed * frametime;    
-        it->sprite.Move(dist * quick_cos(it->angle), -dist * quick_sin(it->angle));
+        it->sprite.Move(dist * math::cos(it->angle), -dist * math::sin(it->angle));
     }
 }
 
@@ -84,7 +84,7 @@ void BulletManager::Collide(std::list<Entity*>& entities)
         for (it_e = entities.begin(); it_e != entities.end(); ++it_e)
         {
 			// La collision se fait entre le bullet et l'entité qui possède l'arme qui l'a tirée
-			if (((*it_b).owner) && ((*it_b).owner == (*it_e)))
+			if ((*it_b).owner != NULL && (*it_b).owner == (*it_e))
 			{
 				continue;
 			}
@@ -153,4 +153,3 @@ void BulletManager::CleanSenders(Entity* target)
 		}
 	}
 }
-

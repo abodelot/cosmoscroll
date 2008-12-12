@@ -19,8 +19,6 @@
 
 #define CONFIG_FILE "config/config.txt"
 
-
-
 #ifndef SVN_REV
 #define SVN_REV "???"
 #endif
@@ -229,12 +227,13 @@ Game::Scene Game::MainMenu()
 #endif
 	sf::String title("CosmoScroll");
 	title.SetFont(GET_FONT());
-	title.SetSize(40);
+	title.SetSize(60);
 	title.SetY(42);
 	title.SetX((WIN_WIDTH - title.GetRect().GetWidth()) / 2);
 	
+	sf::Sprite back(GET_IMG("main-screen"));
 	Menu menu;
-	menu.SetOffset(sf::Vector2f(60, 120));
+	menu.SetOffset(sf::Vector2f(80, 130));
 	menu.AddItem("Mode Histoire solo", 0);
 	menu.AddItem("Mode Histoire duo", 1);
 	menu.AddItem("Mode Arcade", 2);
@@ -261,6 +260,7 @@ Game::Scene Game::MainMenu()
 				running = false;
 			}
 		}
+		app_.Draw(back);
 		app_.Draw(title);
 		menu.Show(app_);
 		app_.Display();
@@ -326,8 +326,9 @@ Game::Scene Game::SelectLevel()
 	p_ForwardAction_ = mode_ == STORY2X ?
 		&Game::ForwardAction2P : &Game::ForwardAction1P;
 	
+	sf::Sprite back(GET_IMG("main-screen"));
 	Menu menu;
-	menu.SetOffset(sf::Vector2f(42, 42));
+	menu.SetOffset(sf::Vector2f(80, 130));
 	
 	AC::Action action;
 	
@@ -369,7 +370,7 @@ Game::Scene Game::SelectLevel()
 				}
 			}
 		}
-		
+		app_.Draw(back);
 		menu.Show(app_);
 		app_.Display();
 	}
@@ -386,7 +387,7 @@ Game::Scene Game::LevelCaption()
 	AC::Action action;
 	bool running = true;
 	Scene what;
-	
+	sf::Sprite back(GET_IMG("background"));
 	std::string content = str_sprintf("Niveau %d\n\n%s", current_level_,
 		levels_.GetDescription(current_level_));
 	find_replace(content, "\\n", "\n");
@@ -416,7 +417,7 @@ Game::Scene Game::LevelCaption()
 				what = PLAY;
 			}
 		}
-		
+		app_.Draw(back);
 		app_.Draw(description);
 		app_.Display();
 	}
@@ -521,6 +522,44 @@ Game::Scene Game::Play()
 }
 
 
+Game::Scene Game::About()
+{
+
+	bool running = true;
+	int choice = MAIN_MENU;
+	AC::Action action;
+	Menu menu;
+	sf::String info;
+	info.SetText(COSMOSCROLL_ABOUT);
+	info.SetFont(GET_FONT());
+	info.SetColor(sf::Color::White);
+	info.SetPosition(120, 60);
+	
+	sf::Sprite back(GET_IMG("main-screen"));
+	menu.SetOffset(sf::Vector2f(120, 320));
+	menu.AddItem("Retour", MAIN_MENU);	
+	
+
+	while (running)
+	{
+		while (controls_.GetAction(action))
+		{
+			if (action == AC::EXIT_APP)
+			{
+				running = false;
+			}
+			else if (menu.ItemChosen(action, choice))
+			{
+				running = false;
+			}
+		}
+		app_.Draw(back);
+		app_.Draw(info);
+		menu.Show(app_);
+		app_.Display();
+	}
+	return static_cast<Scene>(choice);
+}
 
 
 // pause avec un menu
@@ -719,6 +758,7 @@ Game::Scene Game::ArcadeResult()
 	title.SetFont(GET_FONT());
 	title.SetColor(sf::Color::White);
 	title.SetPosition(42, 42);
+	sf::Sprite back(GET_IMG("background"));
 	
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(42, 100));
@@ -743,6 +783,7 @@ Game::Scene Game::ArcadeResult()
 				running = false;
 			}
 		}
+		app_.Draw(back);
 		app_.Draw(title);
 		menu.Show(app_);
 		app_.Display();
@@ -1103,50 +1144,4 @@ Game::Choice Game::PlayPong()
 	return what;
 }*/
 
-
-Game::Scene Game::About()
-{
-
-	bool running = true;
-	int choice = MAIN_MENU;
-	AC::Action action;
-	Menu menu;
-	sf::String title, credits;
-
-	title.SetFont(GET_FONT());
-	title.SetColor(sf::Color::White);
-	title.SetPosition(42, 42);
-	title.SetSize(30);
-	title.SetText(str_sprintf(L"À propos de CosmoScroll rev%s", SVN_REV));
-
-	credits.SetFont(GET_FONT());
-	credits.SetColor(sf::Color::White);
-	credits.SetPosition(58, 96);
-	credits.SetSize(22);
-	credits.SetText(ABOUT_TEXT);
-
-	menu.SetOffset(sf::Vector2f(42, 320));
-	menu.AddItem(L"Retour", MAIN_MENU);	
-	
-
-	while (running)
-	{
-		while (controls_.GetAction(action))
-		{
-			if (action == AC::EXIT_APP)
-			{
-				running = false;
-			}
-			else if (menu.ItemChosen(action, choice))
-			{
-				running = false;
-			}
-		}
-		app_.Draw(title);
-		app_.Draw(credits);
-		menu.Show(app_);
-		app_.Display();
-	}
-	return static_cast<Scene>(choice);
-}
 

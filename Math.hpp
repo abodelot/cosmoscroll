@@ -6,6 +6,9 @@
 
 #define PI 3.14159265f
 
+namespace math
+{
+/*
 inline float quick_bound(float x)
 {
 	if (x < - PI)
@@ -15,11 +18,11 @@ inline float quick_bound(float x)
 
 	return x;
 }
+*/
 
-
-inline float quick_sin(float x)
+inline float sin(float x)
 {
-	x = quick_bound(x);
+	/*x = quick_bound(x);
 	float Sin = 1.27323954 * x;
 	if (x < 0)
 		Sin += .405284735 * x * x;
@@ -29,15 +32,18 @@ inline float quick_sin(float x)
 	x = (Sin * Sin);
 	if (Sin >= 0) x = -x;
 	
-	return Sin + .255 * (x - Sin);
+	return Sin + .255 * (x - Sin);*/
+	return std::sin(x);
 }
 
 
-inline float quick_cos(float x)
+inline float cos(float x)
 {
-	return quick_sin(x + PI / 2);
+	//return quick_sin(x + PI / 2);
+	return std::cos(x);
 }
 
+}
 
 inline float DEG_TO_RAD(float degres)
 {
@@ -53,8 +59,8 @@ inline float RAD_TO_DEG(float radians)
 
 inline void TRANSLATE(sf::Vector2f& offset, float angle, float distance)
 {
-    offset.x = offset.x + distance * quick_cos(angle);
-    offset.y = offset.y - distance * quick_sin(angle);
+    offset.x = offset.x + distance * math::cos(angle);
+    offset.y = offset.y - distance * math::sin(angle);
 }
 
 

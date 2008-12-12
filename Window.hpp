@@ -8,11 +8,18 @@
 #define WIN_FPS     60
 #define WIN_TITLE   "CosmoScroll"
 
+#define COSMOSCROLL_VERSION "devel" // "0.1"
+#define COSMOSCROLL_ABOUT str_sprintf(\
+		L"À propos de CosmoScroll\n\n" \
+		"Version : %s (svn%s)\n" \
+		"Auteurs :\n" \
+		"\tAlexandre Bodelot\n" \
+		"\tArnaud Wolff\n" \
+		"\nLicence : GPL", COSMOSCROLL_VERSION, SVN_REV)
+
 #include "ControlPanel.hpp"
 
 #include <SFML/Graphics/Rect.hpp>
-
-#define ABOUT_TEXT "BLAH BLAH ABOUT TEXT HERE\n -\n\n changer de header"
 
 
 inline bool outside_universe(const sf::FloatRect& rect)
@@ -23,4 +30,3 @@ inline bool outside_universe(const sf::FloatRect& rect)
 }
 
 #endif /* guard WINDOW_HPP */
-
