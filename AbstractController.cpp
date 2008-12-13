@@ -14,12 +14,6 @@ AbstractController& AbstractController::GetInstance()
 }
 
 
-/*void AbstractController::SetControls(int controls)
-{
-	cur_ctrls_ = controls;
-}*/
-
-
 bool AbstractController::GetAction(Action& action, Device* device)
 {
 	static sf::RenderWindow& app_ = Game::GetInstance().GetApp();
@@ -135,57 +129,53 @@ bool AbstractController::HasInput(Action action, int device)
 	return false;
 }
 
-/*
-void AbstractController::SetConfig(ConfigParser& config)
+
+void AbstractController::LoadConfig(ConfigParser& config)
 {
-	std::string value;
 	config.SeekSection("Keyboard");
-	if (config.ReadItem("pause", value))
-		keyboard_binds_[PAUSE] = (sf::Key::Code) str_to_int(value);
-	if (config.ReadItem("valid", value))
-		keyboard_binds_[VALID] = (sf::Key::Code) str_to_int(value);
-	if (config.ReadItem("move_up", value))
-		keyboard_binds_[MOVE_UP] = (sf::Key::Code) str_to_int(value);
-	if (config.ReadItem("move_down", value))
-		keyboard_binds_[MOVE_DOWN] = (sf::Key::Code) str_to_int(value);
-	if (config.ReadItem("move_left", value))
-		keyboard_binds_[MOVE_LEFT] = (sf::Key::Code) str_to_int(value);
-	if (config.ReadItem("move_right", value))
-		keyboard_binds_[MOVE_RIGHT] = (sf::Key::Code) str_to_int(value);
-	if (config.ReadItem("weapon_1", value))
-		keyboard_binds_[WEAPON_1] = (sf::Key::Code) str_to_int(value);
-	if (config.ReadItem("weapon_2", value))
-		keyboard_binds_[WEAPON_2] = (sf::Key::Code) str_to_int(value);
-	if (config.ReadItem("use_cooler", value))
-		keyboard_binds_[USE_COOLER] = (sf::Key::Code) str_to_int(value);
+	config.ReadItem("pause", keyboard_binds_[PAUSE]);
+	config.ReadItem("valid", keyboard_binds_[VALID]);
+	config.ReadItem("move_up", keyboard_binds_[MOVE_UP]);
+	config.ReadItem("move_down", keyboard_binds_[MOVE_DOWN]);
+	config.ReadItem("move_left", keyboard_binds_[MOVE_LEFT]);
+	config.ReadItem("move_right", keyboard_binds_[MOVE_RIGHT]);
+	config.ReadItem("weapon_1", keyboard_binds_[WEAPON_1]);
+	config.ReadItem("weapon_2", keyboard_binds_[WEAPON_2]);
+	config.ReadItem("use_cooler", keyboard_binds_[USE_COOLER]);
+
+	config.SeekSection("Joystick");
+	config.ReadItem("pause", joystick_binds_[PAUSE]);
+	config.ReadItem("valid", joystick_binds_[VALID]);
+	config.ReadItem("weapon_1", joystick_binds_[WEAPON_1]);
+	config.ReadItem("weapon_2", joystick_binds_[WEAPON_2]);
+	config.ReadItem("use_cooler", joystick_binds_[USE_COOLER]);
 }
 
 
 void AbstractController::SaveConfig(ConfigParser& config) const
 {
 	config.SeekSection("Keyboard");
-	config.UpdateItem("pause", keyboard_binds_[PAUSE]);
-	config.UpdateItem("valid", keyboard_binds_[VALID]);
-	config.UpdateItem("move_up", keyboard_binds_[MOVE_UP]);
-	config.UpdateItem("move_down", keyboard_binds_[MOVE_DOWN]);
-	config.UpdateItem("move_left", keyboard_binds_[MOVE_LEFT]);
-	config.UpdateItem("move_right", keyboard_binds_[MOVE_RIGHT]);
-	config.UpdateItem("weapon_1", keyboard_binds_[WEAPON_1]);
-	config.UpdateItem("weapon_2", keyboard_binds_[WEAPON_2]);
-	config.UpdateItem("use_cooler", keyboard_binds_[USE_COOLER]);
+	config.WriteItem("pause", keyboard_binds_[PAUSE]);
+	config.WriteItem("valid", keyboard_binds_[VALID]);
+	config.WriteItem("move_up", keyboard_binds_[MOVE_UP]);
+	config.WriteItem("move_down", keyboard_binds_[MOVE_DOWN]);
+	config.WriteItem("move_left", keyboard_binds_[MOVE_LEFT]);
+	config.WriteItem("move_right", keyboard_binds_[MOVE_RIGHT]);
+	config.WriteItem("weapon_1", keyboard_binds_[WEAPON_1]);
+	config.WriteItem("weapon_2", keyboard_binds_[WEAPON_2]);
+	config.WriteItem("use_cooler", keyboard_binds_[USE_COOLER]);
 	
 	config.SeekSection("Joystick");
-	config.UpdateItem("pause", joystick_binds_[PAUSE]);
-	config.UpdateItem("valid", joystick_binds_[VALID]);
-	config.UpdateItem("weapon_1", joystick_binds_[WEAPON_1]);
-	config.UpdateItem("weapon_2", joystick_binds_[WEAPON_2]);
-	config.UpdateItem("use_cooler", joystick_binds_[USE_COOLER]);
+	config.WriteItem("pause", joystick_binds_[PAUSE]);
+	config.WriteItem("valid", joystick_binds_[VALID]);
+	config.WriteItem("weapon_1", joystick_binds_[WEAPON_1]);
+	config.WriteItem("weapon_2", joystick_binds_[WEAPON_2]);
+	config.WriteItem("use_cooler", joystick_binds_[USE_COOLER]);
 }
-*/
+
 
 AbstractController::AbstractController()
 {
-	// TODO: différencier les touches réassignables de celles qui ne le sont pas
 	// clavier
 	keyboard_binds_[PAUSE] = sf::Key::P;
 	keyboard_binds_[VALID] = sf::Key::Return;
@@ -206,3 +196,13 @@ AbstractController::AbstractController()
 	
 	puts("AC initialisé");
 }
+
+
+std::istream& operator>>(std::istream& in, sf::Key::Code& code)
+{
+	int i;
+	in >> i;
+	code = static_cast<sf::Key::Code>(i);
+	return in;
+}
+

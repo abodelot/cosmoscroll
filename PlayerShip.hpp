@@ -1,5 +1,5 @@
 #ifndef PLAYERSHIP_HPP
-#define PLAYER_SHIP_HPP
+#define PLAYERSHIP_HPP
 
 #ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
@@ -97,3 +97,4 @@ private:
 };
 
 #endif /* guard PLAYERSHIP_HPP */
+

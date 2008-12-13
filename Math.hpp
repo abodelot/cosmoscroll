@@ -96,3 +96,4 @@ inline float ANGLE(const sf::Vector2f& p1, const sf::Vector2f& p2)
 }
 
 #endif /* guard MATH_HPP */
+

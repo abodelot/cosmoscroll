@@ -1,5 +1,5 @@
-#ifndef H_BULLET_MANAGER
-#define H_BULLET_MANAGER
+#ifndef BULLETMANAGER_HPP
+#define BULLETMANAGER_HPP
 
 #include "Entity.hpp"
 #include "Weapon.hpp"
@@ -72,5 +72,5 @@ private:
     std::list<Bullet> bullets_;
 };
 
-#endif /* guard H_BULLET_MANAGER */
+#endif /* guard BULLETMANAGER_HPP */
 

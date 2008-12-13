@@ -30,26 +30,15 @@ int find_replace(std::string& target, const std::string& look_for,
  */
 void trim(std::string& str);
 
-/*
- * Conversion d'une chaîne en int
+/**
+ * Extraire une sous-chaîne (tronquée) d'une chaîne
+ * @param[in] str: chaîne cible
+ * @param[in] from: indice du début de l'extraction
+ * @param[in] to: indice de la fin de l'extraction
+ * @return chaîne extraite
+ * @pre from < to
  */
-int str_to_int(const std::string& str);
-
-/*
- * Conversion d'une chaîne en bool
- */
-bool str_to_bool(const std::string& str);
-
-/*
- * Conversion d'une chaîne en float
- */
-float str_to_float(const std::string& str);
-
-/*
- * Conversion d'une chaîne en char
- */
-char str_to_char(const std::string& str);
-
+std::string extract(const std::string& str, int from, int to);
 
 #endif /* guard MISC_HPP */
 

@@ -15,7 +15,7 @@
 #include "Misc.hpp"
 #include "Math.hpp"
 #include "Window.hpp"
-//#include "ConfigParser.hpp"
+#include "ConfigParser.hpp"
 
 #define CONFIG_FILE "config/config.txt"
 
@@ -38,29 +38,28 @@ Game::Game() :
 	levels_		(LevelManager::GetInstance()),
 	particles_	(ParticleSystem::GetInstance())
 {
-	/*
-	config_.LoadFile(CONFIG_FILE);
-	config_.SeekSection("Settings");
-	std::string value;
-	if (config_.ReadItem("last_level_reached", value))
-	{
-		;
-	}
-	bool fullscreen;
-	if (config_.ReadItem("fullscreen", fullscreen))
-	{
-		;
-	}*/
+	// loading config
+	ConfigParser config;
+	bool fullscreen = false;
 	last_level_reached_ = 1;
 	current_level_ = 1;
 	best_arcade_time_ = 0;
+	if (config.LoadFromFile(CONFIG_FILE))
+	{
+		config.SeekSection("Settings");
+		config.ReadItem("last_level_reached", last_level_reached_);
+		config.ReadItem("current_level", current_level_);
+		config.ReadItem("best_arcade_time", best_arcade_time_);
+		config.ReadItem("fullscreen", fullscreen);
+		
+		controls_.LoadConfig(config);
+	}
 	
 	p_ForwardAction_ = NULL;
 	p_StopPlay_ = NULL;
-	
 	player1_ = player2_ = NULL;
 	
-	if (true)
+	if (!fullscreen)
 	{
 		app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE);
 	}
@@ -80,6 +79,16 @@ Game::~Game()
 	RemoveEntities();
 	app_.EnableKeyRepeat(true); // bug SFML 1.3 sous linux : il faut réactiver à la main le keyrepeat
 	app_.Close();
+	
+	// writing configuration
+	ConfigParser config;
+	config.SeekSection("Settings");
+	config.WriteItem("last_level_reached", last_level_reached_);
+	config.WriteItem("current_level", current_level_);
+	config.WriteItem("best_arcade_time", best_arcade_time_);
+	
+	controls_.SaveConfig(config);
+	config.SaveToFile(CONFIG_FILE);
 }
 
 
@@ -570,12 +579,13 @@ Game::Scene Game::InGameMenu()
 #endif
 	AC::Action action;
 
-	sf::String title("P A U S E");
-	title.SetPosition(180, 160);
-	title.SetSize(30.0);
+	sf::String title("PAUSE");
+	title.SetPosition(200, 130);
+	title.SetSize(60);
+	title.SetFont(GET_FONT());
 	
 	Menu menu;
-	menu.SetOffset(sf::Vector2f(220, 200));
+	menu.SetOffset(sf::Vector2f(200, 210));
 	menu.AddItem("Reprendre la partie", PLAY);
 	menu.AddItem("Revenir au menu principal", MAIN_MENU);
 	//menu.AddItem("Options", OPTIONS);

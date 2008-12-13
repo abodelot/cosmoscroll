@@ -3,6 +3,9 @@
 
 #include <map>
 #include <SFML/Graphics.hpp>
+#include <iostream>
+
+#include "ConfigParser.hpp"
 
 
 class AbstractController
@@ -26,8 +29,6 @@ public:
 		ALL      = KEYBOARD | JOYSTICK
 	};
 	
-	//void SetControls(int controls);
-	
 	/**
 	 * @param[out] action: évènement à récupérer
 	 */
@@ -39,6 +40,16 @@ public:
 	 */
 	bool HasInput(Action action, int device = ALL);
 	
+	/**
+	 * Charger les bindings depuis un fichier de configuration
+	 */
+	void LoadConfig(ConfigParser& config);
+	
+	/**
+	 * Sauvegarder les bindings dans un fichier de configuration
+	 */
+	void SaveConfig(ConfigParser& config) const;
+	
 private:
 	AbstractController();
 	AbstractController(const AbstractController& other);
@@ -46,11 +57,15 @@ private:
 	sf::Key::Code keyboard_binds_[COUNT_ACTION];
 	
 	typedef std::map<Action, unsigned int> JoyBindMap;
-	JoyBindMap joystick_binds_;
+	mutable JoyBindMap joystick_binds_;
 
-	//int cur_ctrls_;	// Le mode de controle courant
 };
 
 typedef AbstractController AC; // lazy typedef
 
+
+std::istream& operator>>(std::istream& in, sf::Key::Code& code);
+
+
 #endif /* guard ABSTRACTCONTROLLER_HPP */
+

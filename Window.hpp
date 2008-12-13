@@ -30,3 +30,4 @@ inline bool outside_universe(const sf::FloatRect& rect)
 }
 
 #endif /* guard WINDOW_HPP */
+

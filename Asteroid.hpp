@@ -1,5 +1,5 @@
-#ifndef H_ASTEROID
-#define H_ASTEROID
+#ifndef ASTEROID_HPP
+#define ASTEROID_HPP
 
 #include "Entity.hpp"
 
@@ -31,5 +31,5 @@ private:
     float speed_;
 };
 
-#endif /* guard H_ASTEROID */
+#endif /* guard ASTEROID_HPP */
 

@@ -1,5 +1,5 @@
-#ifndef H_WEAPON
-#define H_WEAPON
+#ifndef WEAPON_HPP
+#define WEAPON_HPP
 
 #include "Entity.hpp"
 
@@ -39,5 +39,5 @@ private:
 	Entity* owner_;
 };
 
-#endif /* guard H_WEAPON */
+#endif /* guard WEAPON_HPP */
 

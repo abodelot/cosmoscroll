@@ -6,7 +6,6 @@ Milestone 0.1
 
 * Jeu :
 	- Ajouter effet graphique sur bonus speed (Particule Smoke)
-	- Implémenter une navigation, ré-assignables, de contrôles par joystick [WIP]
 	- Un menu Options, pouvoir y choisir la musique et les bindings
 	- Une menu À Propos [WIP]
 	- Optimiser cos/sin avec une table pré-calculée [WIP]
@@ -16,15 +15,14 @@ Milestone 0.1
 	- Menus du jeu plus jolis [WIP]
 	
 * Configuration :
-	- Sauvegarder les bindings clavier/joystick
-	- Sauvegarder la progression des niveaux en aventure
-	- Sauvegarder le meilleur temps en arcade
 	- Sauvegarder le choix de la musique
-	- Sauvegarder plein-écran / fenêtré
+	- Sauvegarder plein-écran / fenêtré [WIP]
 
 * Niveaux :
-	- Un EvilBoss qui dure plus longtemps
 	- Continuer à ajuster les niveaux (durée de vie et difficulté progressive)
+
+* Sons :
+	- Retoucher le son d'intro (effet métallique/space-shooter like...)
 
 
 Milestone post 0.1
