@@ -134,7 +134,7 @@ void AbstractController::LoadConfig(ConfigParser& config)
 {
 	config.SeekSection("Keyboard");
 	config.ReadItem("pause", keyboard_binds_[PAUSE]);
-	config.ReadItem("valid", keyboard_binds_[VALID]);
+	//config.ReadItem("valid", keyboard_binds_[VALID]);
 	config.ReadItem("move_up", keyboard_binds_[MOVE_UP]);
 	config.ReadItem("move_down", keyboard_binds_[MOVE_DOWN]);
 	config.ReadItem("move_left", keyboard_binds_[MOVE_LEFT]);
@@ -156,7 +156,7 @@ void AbstractController::SaveConfig(ConfigParser& config) const
 {
 	config.SeekSection("Keyboard");
 	config.WriteItem("pause", keyboard_binds_[PAUSE]);
-	config.WriteItem("valid", keyboard_binds_[VALID]);
+	//config.WriteItem("valid", keyboard_binds_[VALID]);
 	config.WriteItem("move_up", keyboard_binds_[MOVE_UP]);
 	config.WriteItem("move_down", keyboard_binds_[MOVE_DOWN]);
 	config.WriteItem("move_left", keyboard_binds_[MOVE_LEFT]);
@@ -173,6 +173,35 @@ void AbstractController::SaveConfig(ConfigParser& config) const
 	config.WriteItem("use_cooler", joystick_binds_[USE_COOLER]);
 }
 
+
+unsigned int AbstractController::GetBinding(Action action, Device device) const
+{
+	switch (device)
+	{
+		case KEYBOARD:
+			return keyboard_binds_[action];
+		case JOYSTICK:
+			return joystick_binds_[action];
+		default:
+			assert(0);
+	}
+}	
+
+void AbstractController::SetBinding(Action action, Device device, unsigned int binding)
+{
+	switch (device)
+	{
+		case KEYBOARD:
+			keyboard_binds_[action] = (sf::Key::Code) binding;
+			break;
+		case JOYSTICK:
+			joystick_binds_[action] = binding;
+			break;
+		default:
+			assert(0);
+	}
+}
+	
 
 AbstractController::AbstractController()
 {

@@ -146,7 +146,6 @@ MediaManager::MediaManager()
         std::cerr << "can't open image list: " << IMG_LIST << std::endl;
         exit(EXIT_FAILURE);
     }
-
 #ifndef NO_AUDIO
     // chargement des buffers audio
     if (!load_from_list(SOUND_LIST, sounds_))
@@ -155,15 +154,12 @@ MediaManager::MediaManager()
         exit(EXIT_FAILURE);
     }
 
-#ifndef NO_MUSIC
-// chargement des musiques
-if (!load_from_list(MUSIC_LIST, musics_))
-{
-	std::cerr << "can't open music list: " << MUSIC_LIST << std::endl;
-	exit(EXIT_FAILURE);
-}
-#endif
-
+	// chargement des musiques
+	if (!load_from_list(MUSIC_LIST, musics_))
+	{
+		std::cerr << "can't open music list: " << MUSIC_LIST << std::endl;
+		exit(EXIT_FAILURE);
+	}
 #endif
     // chargement des fontes
     if (!font_.LoadFromFile("font/hemi-head.ttf", 60))

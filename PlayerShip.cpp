@@ -117,7 +117,7 @@ void PlayerShip::HandleAction(AC::Action action)
 			panel_.SetInfo("");
 		}
 	}
-	// handle konami code
+	// konami code
 	if (action == konami_code_[current_konami_event_])
 	{
 		++current_konami_event_;
@@ -144,11 +144,11 @@ void PlayerShip::Action()
 		
 		if (controller_.HasInput(AC::WEAPON_1, controls_))
 		{ 
-			h += laserbeam_.Shoot(offset);
+			h += hellfire_.Shoot(offset);
 		}
 		if (controller_.HasInput(AC::WEAPON_2, controls_))
 		{
-			h += hellfire_.Shoot(offset);
+			h += laserbeam_.Shoot(offset);
 		}
 		
 		heat_ += h;
@@ -173,47 +173,47 @@ void PlayerShip::Move(float frametime)
 	float dist = frametime * speed_;
 	if (controller_.HasInput(AC::MOVE_UP, controls_))
 	{
-		if (use_limits_)
+		/*if (use_limits_)
 		{
 			y = (y - dist < y_limits_.x) ? y_limits_.x : y - dist;
 		}
 		else
-		{
+		{*/
 			y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
-		}
+		/*}*/
 	}
 	if (controller_.HasInput(AC::MOVE_DOWN, controls_))
 	{
-		if (use_limits_)
+		/*if (use_limits_)
 		{
 			y = (y + dist > y_limits_.y - HEIGHT) ? y_limits_.y - HEIGHT : y + dist;
 		}
 		else
-		{
+		{*/
 			y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
-		}
+		/*}*/
 	}
 	if (controller_.HasInput(AC::MOVE_LEFT, controls_))
 	{
-		if (use_limits_)
+		/*if (use_limits_)
 		{
 			x = (x - dist < x_limits_.x) ? x_limits_.x : x - dist;
 		}
 		else
-		{
+		{*/
 			x = (x - dist < 0) ? 0 : x - dist;
-		}
+		/*}*/
 	}
 	if (controller_.HasInput(AC::MOVE_RIGHT, controls_))
 	{
-		if (use_limits_)
+		/*if (use_limits_)
 		{
 			x = (x + dist > x_limits_.y - WIDTH) ? x_limits_.y - WIDTH : x + dist;
 		}
 		else
-		{
+		{*/
 			x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
-		}
+		/*}*/
 	}
 	sprite_.SetPosition(x, y);
 	

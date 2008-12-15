@@ -13,6 +13,15 @@ h2
 {
 	text-decoration: underline;
 }
+td
+{
+	border: 1px solid black;
+	padding: 0.3em;
+}
+table
+{
+	border-collapse: collapse;
+}
 		</style>
 	</head>
 	
@@ -24,7 +33,8 @@ h2
 Version : x.y<br />
 Date de sortie : JJ/MM/AAAA </br>
 Site web : <a href="http://cosmoscroll.googlecode.com">cosmoscroll.googlecode.com</a><br />
-Licence : GPL
+Licence : GPL (voir le fichier <a href="./COPYING">COPYING</a>)<br />
+Auteurs : voir le fichier <a href="./AUTHORS">AUTHORS</a>
 </p>
 
 <h2>Avertissement</h2>
@@ -43,15 +53,36 @@ Si vous en trouvez un, merci de le rapporter à cette <a href="http://code.googl
 </ul>
 <h3>Commandes clavier</h3>
 <ul>
-	<li>Flèches directionnelles (haut, bas, gauche, droite) : Déplacer le vaisseau</li>
-	<li>Espace : Utiliser arme 1</li>
-	<li>A : Utiliser arme 2</li>
-	<li>Control (gauche) : Utiliser bonus Glaçon</li>
-	<li>P : Mettre en pause/Reprendre la partie</li>
-	<li>Échap : Quitter immédiatement</li>
-	<li>Entrée : Valider (dans les menus)</li>
+	<table>
+		<tr>
+			<td>Déplacer le vaisseau<br />Naviguer dans les menus</td>
+			<td>Flèches directionnelles (haut, bas, gauche, droite)</td>
+		</tr>
+		<tr>
+			<td>Valider un choix dans les menus</td>
+			<td>Entrée</td>
+		<tr>
+			<td>Utiliser arme 1</td>
+			<td>Espace</td>
+		</tr>
+			<td>Utiliser arme 2</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td>Utiliser bonus Glaçon</td>
+			<td>Control (Gauche)</td>
+		</tr>
+		<tr>
+			<td>Mettre en pause/Reprendre la partie</td>
+			<td>P</td>
+		<tr>
+			<td>Quitter immédiatement le jeu</td>
+			<td>Échap</td>
+		</tr>
+	</table>
 </ul>
-<p>Le jeu peut également être controllé avec un joystick ou une manette de jeu.</p>
+<p>Le jeu peut également être contrôlé avec un joystick ou une manette de jeu.</p>
+<p>Les touches du clavier et les boutons du contrôleur peuvent être redéfinis dans les options</p>
 
 <h3>Bonus</h3>
 <ul>
@@ -67,7 +98,7 @@ Si vous en trouvez un, merci de le rapporter à cette <a href="http://code.googl
 <h2>Comment retrouver la configuration d'origine</h2>
 <p>
 	Si vous vous voulez retrouver les paramètres par défaut de l'application, effacez
-	le fichier <code>config/config.txt</code>, un nouveau sera créé automatiquement.<br />
+	le fichier <code>config/config.txt</code>, un nouveau fichier sera créé automatiquement.<br />
 	(Attention, votre ancienne configuration sera perdue)
 </p>
 

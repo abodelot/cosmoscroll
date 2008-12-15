@@ -1,5 +1,5 @@
-#ifndef H_RESSOURCE_MANAGER
-#define H_RESSOURCE_MANAGER
+#ifndef MEDIAMANAGER_HPP
+#define MEDIAMANAGER_HPP
 
 #include <SFML/Graphics.hpp>
 
@@ -95,5 +95,5 @@ inline const sf::Font& GET_FONT()
     return MediaManager::GetInstance().GetFont();
 }
 
-#endif /* guard H_RESSOURCE_MANAGER */
+#endif /* guard MEDIAMANAGER_HPP */
 

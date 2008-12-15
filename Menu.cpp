@@ -166,6 +166,13 @@ void Menu::Show(const sf::RenderWindow& app) const
 }
 
 
+void Menu::Clear()
+{
+	items_.clear();
+	selected_ = -1;
+}
+
+
 void Menu::ResetStyle(MenuItem& item)
 {
 	ApplyStyle(item, item.activable ? normal_look_ : unactive_look_);

@@ -30,7 +30,9 @@ public:
 	};
 	
 	/**
+	 * Dépiler les évènements
 	 * @param[out] action: évènement à récupérer
+	 * @return true si la pile d'évènement est vide, sinon false
 	 */
 	bool GetAction(Action& action, Device* device = NULL);
 	
@@ -42,13 +44,25 @@ public:
 	
 	/**
 	 * Charger les bindings depuis un fichier de configuration
+	 * @param[in] config: configuration contenant les bindings
 	 */
 	void LoadConfig(ConfigParser& config);
 	
 	/**
 	 * Sauvegarder les bindings dans un fichier de configuration
+	 * @param[out] config: configuration où écrire les bindings
 	 */
 	void SaveConfig(ConfigParser& config) const;
+	
+	/**
+	 * Récupérer le code SFML d'un binding
+	 */
+	unsigned int GetBinding(Action action, Device device) const;
+	
+	/**
+	 * Spécifier un code SFML pour un binding
+	 */
+	void SetBinding(Action action, Device device, unsigned int binding);
 	
 private:
 	AbstractController();

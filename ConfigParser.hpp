@@ -18,14 +18,14 @@ public:
 	ConfigParser();
 	
 	/**
-	 * Ouvrir un document de configuration
+	 * Ouvrir un fichier de configuration
 	 * @param[in] filename: nom du fichier à ouvrir
 	 * @return true si le fichier a été chargé, sinon false
 	 */
 	bool LoadFromFile(const char* filename);
 
 	/**
-	 * Sauvegarder le document dans un fichier
+	 * Sauvegarder la configuration dans un fichier
 	 * @param[in] filename: nom du fichier à écrire
 	 * @return true si le document a été écrit, sinon false
 	 */
@@ -33,7 +33,7 @@ public:
 	
 	/**
 	 * Placer le curseur interne sur une section
-	 * Si une section n'existe pas, elle sera créée
+	 * Si la section n'existe pas, elle sera créée
 	 * @param[in] section: nom de la section
 	 */
 	void SeekSection(const char* section);

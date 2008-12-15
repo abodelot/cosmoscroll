@@ -1,258 +1,239 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <levels count="1" name= "CosmoScroll Test Levels">
 	<level desc="Alors que vous vous baladez\ndans le vide interstellaire...\nOn vous attaque !!!">
-		<defs>		
-		</defs>
-		<decl>
-			<item name="Blorb" x="640" y="250" t="2.2" />
-			<item name="Blorb" x="640" y="300" t="1.0" />
-			<item name="Blorb" x="640" y="200" t="0.0" />
-			<item name="Blorb" x="640" y="350" t="1.0" />
-			<item name="Blorb" x="640" y="150" t="0.0" />
+		<item name="Blorb" x="640" y="250" t="2.2" />
+		<item name="Blorb" x="640" y="300" t="1.0" />
+		<item name="Blorb" x="640" y="200" t="0.0" />
+		<item name="Blorb" x="640" y="350" t="1.0" />
+		<item name="Blorb" x="640" y="150" t="0.0" />
+
+		<item name="Drone" x="640" y="270" t="5.0" />
+		<item name="Drone" x="640" y="340" t="2.0" />
+		<item name="Drone" x="640" y="300" t="2.0" />
+		<item name="Drone" x="640" y="110" t="2.0" />
+		<item name="Drone" x="640" y="270" t="2.0" />
+		<item name="Drone" x="640" y="170" t="2.0" />
+
+		<item name="Asteroid" x="640" y="100" t="4.0" />
+		<item name="Asteroid" x="640" y="300" t="0.0" />
+		<item name="Asteroid" x="640" y="200" t="2.0" />
+		<item name="Asteroid" x="640" y="400" t="0.0" />
 	
-			<item name="Drone" x="640" y="270" t="5.0" />
-			<item name="Drone" x="640" y="340" t="2.0" />
-			<item name="Drone" x="640" y="300" t="2.0" />
-			<item name="Drone" x="640" y="110" t="2.0" />
-			<item name="Drone" x="640" y="270" t="2.0" />
-			<item name="Drone" x="640" y="170" t="2.0" />
-	
-			<item name="Asteroid" x="640" y="100" t="4.0" />
-			<item name="Asteroid" x="640" y="300" t="0.0" />
-			<item name="Asteroid" x="640" y="200" t="2.0" />
-			<item name="Asteroid" x="640" y="400" t="0.0" />
-			
-			<item name="Blorb" x="640" y="350" t="2.0" />
-			<item name="Blorb" x="640" y="150" t="0.0" />
-			<item name="Blorb" x="640" y="300" t="1.0" />
-			<item name="Blorb" x="640" y="200" t="0.0" />
-			<item name="Blorb" x="640" y="250" t="1.0" />
-			<item name="Blorb" x="640" y="300" t="1.0" />
-			<item name="Blorb" x="640" y="200" t="0.0" />
-			<item name="Blorb" x="640" y="350" t="1.0" />
-			<item name="Blorb" x="640" y="150" t="0.0" />
-		</decl>
+		<item name="Blorb" x="640" y="350" t="2.0" />
+		<item name="Blorb" x="640" y="150" t="0.0" />
+		<item name="Blorb" x="640" y="300" t="1.0" />
+		<item name="Blorb" x="640" y="200" t="0.0" />
+		<item name="Blorb" x="640" y="250" t="1.0" />
+		<item name="Blorb" x="640" y="300" t="1.0" />
+		<item name="Blorb" x="640" y="200" t="0.0" />
+		<item name="Blorb" x="640" y="350" t="1.0" />
+		<item name="Blorb" x="640" y="150" t="0.0" />
 	</level>
 	<level desc="Vous continuez votre ballade\ndans le vide interstellaire\nHeh !!!">
-		<defs>
-		</defs>
-		<decl>
-			<!-- interceptors -->
-			<item name="Drone" x="640" y="400" t="4.0" />
-			<item name="Interceptor" x="640" y="140" t="1.2" />
-			<item name="Drone" x="640" y="180" t="1.2" />
-			<item name="Interceptor" x="640" y="220" t="1.2" />
-			<item name="Interceptor" x="640" y="260" t="1.2" />
-			<item name="Drone" x="640" y="300" t="1.2" />
-			<item name="Interceptor" x="640" y="400" t="1.2" />
-			<item name="Interceptor" x="640" y="240" t="1.2" />
-			<item name="Drone" x="640" y="180" t="1.2" />
-			<item name="Interceptor" x="640" y="100" t="0.0" />
-			<item name="Interceptor" x="640" y="180" t="1.0" />
-			<item name="Interceptor" x="640" y="140" t="1.0" />
-			<item name="Interceptor" x="640" y="260" t="0.0" />
-			
-			<item name="Blorb" x="640" y="070" t="4.0" />
-			<item name="Blorb" x="640" y="100" t="0.0" />
-			<item name="Blorb" x="640" y="130" t="0.0" />
-			<item name="Blorb" x="640" y="160" t="0.0" />
+		<!-- interceptors -->
+		<item name="Drone" x="640" y="400" t="4.0" />
+		<item name="Interceptor" x="640" y="140" t="1.2" />
+		<item name="Drone" x="640" y="180" t="1.2" />
+		<item name="Interceptor" x="640" y="220" t="1.2" />
+		<item name="Interceptor" x="640" y="260" t="1.2" />
+		<item name="Drone" x="640" y="300" t="1.2" />
+		<item name="Interceptor" x="640" y="400" t="1.2" />
+		<item name="Interceptor" x="640" y="240" t="1.2" />
+		<item name="Drone" x="640" y="180" t="1.2" />
+		<item name="Interceptor" x="640" y="100" t="0.0" />
+		<item name="Interceptor" x="640" y="180" t="1.0" />
+		<item name="Interceptor" x="640" y="140" t="1.0" />
+		<item name="Interceptor" x="640" y="260" t="0.0" />
+		
+		<item name="Blorb" x="640" y="070" t="4.0" />
+		<item name="Blorb" x="640" y="100" t="0.0" />
+		<item name="Blorb" x="640" y="130" t="0.0" />
+		<item name="Blorb" x="640" y="160" t="0.0" />
 
-			<item name="Blorb" x="640" y="070" t="1.0" />
-			<item name="Blorb" x="640" y="100" t="0.0" />
-			<item name="Blorb" x="640" y="130" t="0.0" />
-			<item name="Blorb" x="640" y="160" t="0.0" />
-			
-			<item name="Blorb" x="640" y="300" t="1.0" />
-			<item name="Blorb" x="640" y="330" t="0.0" />
-			<item name="Blorb" x="640" y="360" t="0.0" />
-			<item name="Blorb" x="640" y="390" t="0.0" />
-			
-			<item name="Blorb" x="640" y="300" t="1.0" />
-			<item name="Blorb" x="640" y="330" t="0.0" />
-			<item name="Blorb" x="640" y="360" t="0.0" />
-			<item name="Blorb" x="640" y="390" t="0.0" />
+		<item name="Blorb" x="640" y="070" t="1.0" />
+		<item name="Blorb" x="640" y="100" t="0.0" />
+		<item name="Blorb" x="640" y="130" t="0.0" />
+		<item name="Blorb" x="640" y="160" t="0.0" />
+		
+		<item name="Blorb" x="640" y="300" t="1.0" />
+		<item name="Blorb" x="640" y="330" t="0.0" />
+		<item name="Blorb" x="640" y="360" t="0.0" />
+		<item name="Blorb" x="640" y="390" t="0.0" />
+		
+		<item name="Blorb" x="640" y="300" t="1.0" />
+		<item name="Blorb" x="640" y="330" t="0.0" />
+		<item name="Blorb" x="640" y="360" t="0.0" />
+		<item name="Blorb" x="640" y="390" t="0.0" />
 
-			<item name="Blorb" x="640" y="070" t="1.0" />
-			<item name="Blorb" x="640" y="100" t="0.0" />
-			<item name="Blorb" x="640" y="130" t="0.0" />
-			<item name="Blorb" x="640" y="160" t="0.0" />
-			
-			<item name="Blorb" x="640" y="070" t="1.0" />
-			<item name="Blorb" x="640" y="100" t="0.0" />
-			<item name="Blorb" x="640" y="130" t="0.0" />
-			<item name="Blorb" x="640" y="160" t="0.0" />
-						
-			<item name="Interceptor" x="640" y="340" t="5.2" />
-			<item name="Interceptor" x="640" y="140" t="1.2" />
-			<item name="Interceptor" x="640" y="300" t="1.2" />
-			<item name="Interceptor" x="640" y="220" t="1.2" />
-			<item name="Blorb" x="640" y="340" t="1.2" />
-			<item name="Interceptor" x="640" y="220" t="1.2" />
-			<item name="Interceptor" x="640" y="280" t="1.2" />
-			<item name="Drone" x="640" y="300" t="1.2" />
-			<item name="Interceptor" x="640" y="340" t="1.2" />
-			<item name="Interceptor" x="640" y="140" t="1.2" />
-			<item name="Drone" x="640" y="180" t="1.2" />
-			<item name="Interceptor" x="640" y="200" t="1.2" />
-			<item name="Interceptor" x="640" y="280" t="1.2" />
-			<item name="Drone" x="640" y="300" t="1.2" />
-			<item name="Interceptor" x="640" y="340" t="1.2" />
-			<!-- astéroïdes -->
-			<item name="Asteroid" x="640" y="100" t="4.0" />
-			<item name="Asteroid" x="640" y="400" t="0.0" />
-			<item name="Asteroid" x="640" y="200" t="0.0" />
-			<item name="Asteroid" x="640" y="300" t="2.0" />
-			<item name="Asteroid" x="640" y="400" t="0.0" />
-			
-			<item name="Blorb" x="640" y="250" t="0.0" />
-			<item name="Blorb" x="640" y="300" t="1.0" />
-			<item name="Blorb" x="640" y="200" t="0.0" />
-			<item name="Blorb" x="640" y="350" t="1.0" />
-			<item name="Blorb" x="640" y="150" t="0.0" />
-			
-			<!-- ligne de Drone -->
-			<item name="Drone" x="640" y="270" t="4.0" />
-			<item name="Drone" x="640" y="270" t="2.0" />
-			<item name="Drone" x="640" y="270" t="2.0" />
-			<item name="Drone" x="640" y="270" t="2.0" />
-			<item name="Drone" x="640" y="270" t="2.0" />
-			<item name="Drone" x="640" y="270" t="2.0" /> 
-		</decl>
+		<item name="Blorb" x="640" y="070" t="1.0" />
+		<item name="Blorb" x="640" y="100" t="0.0" />
+		<item name="Blorb" x="640" y="130" t="0.0" />
+		<item name="Blorb" x="640" y="160" t="0.0" />
+		
+		<item name="Blorb" x="640" y="070" t="1.0" />
+		<item name="Blorb" x="640" y="100" t="0.0" />
+		<item name="Blorb" x="640" y="130" t="0.0" />
+		<item name="Blorb" x="640" y="160" t="0.0" />
+					
+		<item name="Interceptor" x="640" y="340" t="5.2" />
+		<item name="Interceptor" x="640" y="140" t="1.2" />
+		<item name="Interceptor" x="640" y="300" t="1.2" />
+		<item name="Interceptor" x="640" y="220" t="1.2" />
+		<item name="Blorb" x="640" y="340" t="1.2" />
+		<item name="Interceptor" x="640" y="220" t="1.2" />
+		<item name="Interceptor" x="640" y="280" t="1.2" />
+		<item name="Drone" x="640" y="300" t="1.2" />
+		<item name="Interceptor" x="640" y="340" t="1.2" />
+		<item name="Interceptor" x="640" y="140" t="1.2" />
+		<item name="Drone" x="640" y="180" t="1.2" />
+		<item name="Interceptor" x="640" y="200" t="1.2" />
+		<item name="Interceptor" x="640" y="280" t="1.2" />
+		<item name="Drone" x="640" y="300" t="1.2" />
+		<item name="Interceptor" x="640" y="340" t="1.2" />
+		<!-- astéroïdes -->
+		<item name="Asteroid" x="640" y="100" t="4.0" />
+		<item name="Asteroid" x="640" y="400" t="0.0" />
+		<item name="Asteroid" x="640" y="200" t="0.0" />
+		<item name="Asteroid" x="640" y="300" t="2.0" />
+		<item name="Asteroid" x="640" y="400" t="0.0" />
+		
+		<item name="Blorb" x="640" y="250" t="0.0" />
+		<item name="Blorb" x="640" y="300" t="1.0" />
+		<item name="Blorb" x="640" y="200" t="0.0" />
+		<item name="Blorb" x="640" y="350" t="1.0" />
+		<item name="Blorb" x="640" y="150" t="0.0" />
+		
+		<!-- ligne de Drone -->
+		<item name="Drone" x="640" y="270" t="4.0" />
+		<item name="Drone" x="640" y="270" t="2.0" />
+		<item name="Drone" x="640" y="270" t="2.0" />
+		<item name="Drone" x="640" y="270" t="2.0" />
+		<item name="Drone" x="640" y="270" t="2.0" />
+		<item name="Drone" x="640" y="270" t="2.0" /> 
 	</level>
 	<level desc="Vers l'infini ...\n       ... et au dela !!!">
-		<defs>
-		</defs>
-		<decl>
-			<item name="Asteroid" x="640" y="200" t="4.0" />
-			<item name="Asteroid" x="640" y="400" t="0.0" />
-			<item name="Asteroid" x="640" y="300" t="1.0" />
-			<item name="Asteroid" x="640" y="150" t="0.5" />
-			<item name="Asteroid" x="640" y="350" t="0.5" />
-			<item name="Asteroid" x="640" y="450" t="0.5" />
-			<item name="Asteroid" x="640" y="100" t="0.5" />
-			<item name="Asteroid" x="640" y="175" t="0.5" />
-			<item name="Asteroid" x="640" y="342" t="0.5" />
-			
-			<item name="Interceptor" x="640" y="250" t="0.0" />
-			<item name="Interceptor" x="640" y="300" t="1.0" />
-			<item name="Interceptor" x="640" y="200" t="0.0" />
-			<item name="Interceptor" x="640" y="350" t="1.0" />
-			<item name="Interceptor" x="640" y="150" t="0.0" />
-			
-			<item name="Interceptor" x="640" y="250" t="3.0" />
-			<item name="Interceptor" x="640" y="300" t="1.0" />
-			<item name="Interceptor" x="640" y="200" t="0.0" />
-			<item name="Interceptor" x="640" y="350" t="1.0" />
-			<item name="Interceptor" x="640" y="150" t="0.0" />
-			
-			<item name="Asteroid" x="640" y="150" t="2.0" />
-			<item name="Asteroid" x="640" y="220" t="0.5" />
-			<item name="Asteroid" x="640" y="410" t="0.5" />
-			<item name="Asteroid" x="640" y="317" t="0.5" />
-			<item name="Drone" x="640" y="200" t="4.0" />
-			<item name="Drone" x="640" y="230" t="0.8" />
-			<item name="Drone" x="640" y="260" t="0.8" />
-			<item name="Drone" x="640" y="290" t="0.8" />
-			<item name="Drone" x="640" y="260" t="0.8" />
-			<item name="Drone" x="640" y="230" t="0.8" /> 
-			<item name="Drone" x="640" y="200" t="0.8" />
-			<item name="Drone" x="640" y="230" t="0.8" />
-			<item name="Drone" x="640" y="260" t="0.8" />
-			<item name="Drone" x="640" y="290" t="0.8" />
-			<item name="Drone" x="640" y="260" t="0.8" />
-			<item name="Drone" x="640" y="230" t="0.8" />
-			<item name="Drone" x="640" y="200" t="0.8" />
-		</decl>
+		<item name="Asteroid" x="640" y="200" t="4.0" />
+		<item name="Asteroid" x="640" y="400" t="0.0" />
+		<item name="Asteroid" x="640" y="300" t="1.0" />
+		<item name="Asteroid" x="640" y="150" t="0.5" />
+		<item name="Asteroid" x="640" y="350" t="0.5" />
+		<item name="Asteroid" x="640" y="450" t="0.5" />
+		<item name="Asteroid" x="640" y="100" t="0.5" />
+		<item name="Asteroid" x="640" y="175" t="0.5" />
+		<item name="Asteroid" x="640" y="342" t="0.5" />
+		
+		<item name="Interceptor" x="640" y="250" t="0.0" />
+		<item name="Interceptor" x="640" y="300" t="1.0" />
+		<item name="Interceptor" x="640" y="200" t="0.0" />
+		<item name="Interceptor" x="640" y="350" t="1.0" />
+		<item name="Interceptor" x="640" y="150" t="0.0" />
+		
+		<item name="Interceptor" x="640" y="250" t="3.0" />
+		<item name="Interceptor" x="640" y="300" t="1.0" />
+		<item name="Interceptor" x="640" y="200" t="0.0" />
+		<item name="Interceptor" x="640" y="350" t="1.0" />
+		<item name="Interceptor" x="640" y="150" t="0.0" />
+		
+		<item name="Asteroid" x="640" y="150" t="2.0" />
+		<item name="Asteroid" x="640" y="220" t="0.5" />
+		<item name="Asteroid" x="640" y="410" t="0.5" />
+		<item name="Asteroid" x="640" y="317" t="0.5" />
+		<item name="Drone" x="640" y="200" t="4.0" />
+		<item name="Drone" x="640" y="230" t="0.8" />
+		<item name="Drone" x="640" y="260" t="0.8" />
+		<item name="Drone" x="640" y="290" t="0.8" />
+		<item name="Drone" x="640" y="260" t="0.8" />
+		<item name="Drone" x="640" y="230" t="0.8" /> 
+		<item name="Drone" x="640" y="200" t="0.8" />
+		<item name="Drone" x="640" y="230" t="0.8" />
+		<item name="Drone" x="640" y="260" t="0.8" />
+		<item name="Drone" x="640" y="290" t="0.8" />
+		<item name="Drone" x="640" y="260" t="0.8" />
+		<item name="Drone" x="640" y="230" t="0.8" />
+		<item name="Drone" x="640" y="200" t="0.8" />
+		<item name="Interceptor" x="640" y="300" t="1.0" />
 	</level>
 	<level desc="For Great Justice !">
-		<defs>
-		</defs>
-		<decl>
-			<item name="Asteroid" x="640" y="150" t="2.0" />
-			<item name="Asteroid" x="640" y="220" t="0.5" />
-			<item name="Asteroid" x="640" y="410" t="0.5" />
-			<item name="Asteroid" x="640" y="317" t="0.5" />
-			<item name="Drone" x="640" y="240" t="1.2" />
-			
-			<item name="Drone" x="640" y="210" t="1.2" />
-			<item name="Drone" x="640" y="240" t="0.0" />
-			<item name="Drone" x="640" y="270" t="0.0" />
-			
-			<item name="Drone" x="640" y="180" t="1.2" />
-			<item name="Drone" x="640" y="210" t="0.0" />
-			<item name="Drone" x="640" y="240" t="0.0" />
-			<item name="Drone" x="640" y="270" t="0.0" />
-			<item name="Drone" x="640" y="300" t="0.0" />
-			
-			<item name="Drone" x="640" y="150" t="1.2" />
-			<item name="Drone" x="640" y="180" t="0.0" />
-			<item name="Drone" x="640" y="210" t="0.0" />
-			<item name="Drone" x="640" y="240" t="0.0" />
-			<item name="Drone" x="640" y="270" t="0.0" />
-			<item name="Drone" x="640" y="300" t="0.0" />
-			<item name="Drone" x="640" y="330" t="0.0" />
-			
-			<item name="Blorb" x="640" y="150" t="3.0" />
-			<item name="Blorb" x="640" y="350" t="0.0" />
-			<item name="Interceptor" x="640" y="150" t="1.0" />
-			<item name="Interceptor" x="640" y="350" t="0.0" />
-			
-			<item name="Drone" x="640" y="240" t="3.8" />
-			
-			<item name="Drone" x="640" y="210" t="0.8" />
-			<item name="Drone" x="640" y="240" t="0.0" />
-			<item name="Drone" x="640" y="270" t="0.0" />
-			
-			<item name="Drone" x="640" y="180" t="0.8" /> 
-			<item name="Drone" x="640" y="210" t="0.0" />
-			<item name="Drone" x="640" y="240" t="0.0" />
-			<item name="Drone" x="640" y="270" t="0.0" />
-			<item name="Drone" x="640" y="300" t="0.0" />
-			
-			<item name="Drone" x="640" y="150" t="0.8" /> 
-			<item name="Drone" x="640" y="180" t="0.0" />
-			<item name="Drone" x="640" y="210" t="0.0" />
-			<item name="Drone" x="640" y="240" t="0.0" />
-			<item name="Drone" x="640" y="270" t="0.0" />
-			<item name="Drone" x="640" y="300" t="0.0" />
-			<item name="Drone" x="640" y="330" t="0.0" />
-			
-			<item name="Drone" x="640" y="120" t="0.8" />
-			<item name="Drone" x="640" y="150" t="0.0" />
-			<item name="Drone" x="640" y="180" t="0.0" />
-			<item name="Drone" x="640" y="210" t="0.0" />
-			<item name="Drone" x="640" y="240" t="0.0" />
-			<item name="Drone" x="640" y="270" t="0.0" />
-			<item name="Drone" x="640" y="300" t="0.0" />
-			<item name="Drone" x="640" y="330" t="0.0" />
-			<item name="Drone" x="640" y="360" t="0.0" />
-			
-			<item name="Drone" x="640" y="90" t="0.8" />
-			<item name="Drone" x="640" y="120" t="0.0" />
-			<item name="Drone" x="640" y="150" t="0.0" />
-			<item name="Drone" x="640" y="180" t="0.0" />
-			<item name="Drone" x="640" y="210" t="0.0" />
-			<item name="Drone" x="640" y="240" t="0.0" />
-			<item name="Drone" x="640" y="270" t="0.0" />
-			<item name="Drone" x="640" y="300" t="0.0" />
-			<item name="Drone" x="640" y="330" t="0.0" />
-			<item name="Drone" x="640" y="360" t="0.0" />
-			<item name="Drone" x="640" y="390" t="0.0" />
-		</decl>
+		<item name="Asteroid" x="640" y="150" t="2.0" />
+		<item name="Asteroid" x="640" y="220" t="0.5" />
+		<item name="Asteroid" x="640" y="410" t="0.5" />
+		<item name="Asteroid" x="640" y="317" t="0.5" />
+		<item name="Drone" x="640" y="240" t="1.2" />
+		
+		<item name="Drone" x="640" y="210" t="1.2" />
+		<item name="Drone" x="640" y="240" t="0.0" />
+		<item name="Drone" x="640" y="270" t="0.0" />
+		
+		<item name="Drone" x="640" y="180" t="1.2" />
+		<item name="Drone" x="640" y="210" t="0.0" />
+		<item name="Drone" x="640" y="240" t="0.0" />
+		<item name="Drone" x="640" y="270" t="0.0" />
+		<item name="Drone" x="640" y="300" t="0.0" />
+		
+		<item name="Drone" x="640" y="150" t="1.2" />
+		<item name="Drone" x="640" y="180" t="0.0" />
+		<item name="Drone" x="640" y="210" t="0.0" />
+		<item name="Drone" x="640" y="240" t="0.0" />
+		<item name="Drone" x="640" y="270" t="0.0" />
+		<item name="Drone" x="640" y="300" t="0.0" />
+		<item name="Drone" x="640" y="330" t="0.0" />
+		
+		<item name="Blorb" x="640" y="150" t="3.0" />
+		<item name="Blorb" x="640" y="350" t="0.0" />
+		<item name="Interceptor" x="640" y="150" t="1.0" />
+		<item name="Interceptor" x="640" y="350" t="0.0" />
+		
+		<item name="Drone" x="640" y="240" t="3.8" />
+		
+		<item name="Drone" x="640" y="210" t="0.8" />
+		<item name="Drone" x="640" y="240" t="0.0" />
+		<item name="Drone" x="640" y="270" t="0.0" />
+		
+		<item name="Drone" x="640" y="180" t="0.8" /> 
+		<item name="Drone" x="640" y="210" t="0.0" />
+		<item name="Drone" x="640" y="240" t="0.0" />
+		<item name="Drone" x="640" y="270" t="0.0" />
+		<item name="Drone" x="640" y="300" t="0.0" />
+		
+		<item name="Drone" x="640" y="150" t="0.8" /> 
+		<item name="Drone" x="640" y="180" t="0.0" />
+		<item name="Drone" x="640" y="210" t="0.0" />
+		<item name="Drone" x="640" y="240" t="0.0" />
+		<item name="Drone" x="640" y="270" t="0.0" />
+		<item name="Drone" x="640" y="300" t="0.0" />
+		<item name="Drone" x="640" y="330" t="0.0" />
+		
+		<item name="Drone" x="640" y="120" t="0.8" />
+		<item name="Drone" x="640" y="150" t="0.0" />
+		<item name="Drone" x="640" y="180" t="0.0" />
+		<item name="Drone" x="640" y="210" t="0.0" />
+		<item name="Drone" x="640" y="240" t="0.0" />
+		<item name="Drone" x="640" y="270" t="0.0" />
+		<item name="Drone" x="640" y="300" t="0.0" />
+		<item name="Drone" x="640" y="330" t="0.0" />
+		<item name="Drone" x="640" y="360" t="0.0" />
+		
+		<item name="Drone" x="640" y="90" t="0.8" />
+		<item name="Drone" x="640" y="120" t="0.0" />
+		<item name="Drone" x="640" y="150" t="0.0" />
+		<item name="Drone" x="640" y="180" t="0.0" />
+		<item name="Drone" x="640" y="210" t="0.0" />
+		<item name="Drone" x="640" y="240" t="0.0" />
+		<item name="Drone" x="640" y="270" t="0.0" />
+		<item name="Drone" x="640" y="300" t="0.0" />
+		<item name="Drone" x="640" y="330" t="0.0" />
+		<item name="Drone" x="640" y="360" t="0.0" />
+		<item name="Drone" x="640" y="390" t="0.0" />
 	</level>
 	<level desc="C'est la confrontation\navec le boss final\nOuille !!!">
-		<defs>
-		</defs>
-		<decl>
-			<item name="Interceptor" x="640" y="270" t="4.0" />
-			<item name="Drone" x="640" y="170" t="2.0" />
-			<item name="Interceptor" x="640" y="370" t="2.0" />
-			<item name="Drone" x="640" y="270" t="2.0" />
-			<item name="Interceptor" x="640" y="300" t="0.0" />
-			<item name="Drone" x="640" y="170" t="2.0" />
-			<item name="Interceptor" x="640" y="370" t="2.0" />
-			<item name="EvilBoss" x="360" y="170" t = "5.0" />
-		</decl>
+		<item name="Interceptor" x="640" y="270" t="4.0" />
+		<item name="Drone" x="640" y="170" t="2.0" />
+		<item name="Interceptor" x="640" y="370" t="2.0" />
+		<item name="Drone" x="640" y="270" t="2.0" />
+		<item name="Interceptor" x="640" y="300" t="0.0" />
+		<item name="Drone" x="640" y="170" t="2.0" />
+		<item name="Interceptor" x="640" y="370" t="2.0" />
+		<item name="EvilBoss" x="360" y="170" t = "5.0" />
 	</level>
 </levels>
 

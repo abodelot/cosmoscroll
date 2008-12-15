@@ -39,7 +39,9 @@ std::wstring str_sprintf(const wchar_t format[], ...)
 		if (length == -1)
 		{
 			delete [] buffer;
+#ifdef DEBUG
 			puts("vswprintf returned -1, allocate new buffer");
+#endif
 		}
 	}
     va_end(args);

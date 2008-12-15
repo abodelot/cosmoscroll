@@ -76,7 +76,7 @@ const char* LevelManager::GetDescription(int level) const
 
 LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 {
-	elem = elem->FirstChild()->ToElement()->NextSiblingElement()->FirstChildElement();
+	elem = elem->FirstChildElement();
 	Entity* player = Game::GetInstance().GetShip();
 	
 	if (elem == NULL)

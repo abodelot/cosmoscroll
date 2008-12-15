@@ -122,7 +122,7 @@ ControlPanel::ControlPanel()
 
     game_info_.SetPosition(520, 20);
     game_info_.SetSize(14);
-    game_info_.SetColor(sf::Color(255, 128, 0));
+    game_info_.SetColor(sf::Color::White);
 	
     coolers_.SetPosition(400, 30);
     coolers_.SetSize(14);

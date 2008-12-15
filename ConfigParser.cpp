@@ -3,13 +3,13 @@
 #include "ConfigParser.hpp"
 #include "Misc.hpp"
 
-#define OPEN_TOKEN     '{'
-#define CLOSE_TOKEN    '}'
-#define PROP_SEPARATOR ':'
-#define PROP_END       ';'
-#define COMMENT        '#'
+#define OPEN_TOKEN      '{'
+#define CLOSE_TOKEN     '}'
+#define PROP_SEPARATOR  ':'
+#define PROP_END        ';'
+#define COMMENT         '#'
 
-#define INDENT         '\t'
+#define INDENT          '\t'
 
 
 ConfigParser::ConfigParser()
@@ -61,11 +61,11 @@ bool ConfigParser::SaveToFile(const char* filename) const
 			}
 			file << CLOSE_TOKEN << "\n\n";
 		}
-        file.close();
-        return true;
-    }
-    std::cerr << "config not saved: couldn't write " << filename << std::endl;
-    return false;
+		file.close();
+		return true;
+	}
+	std::cerr << "config not saved: couldn't write " << filename << std::endl;
+	return false;
 }
 
 
@@ -77,48 +77,48 @@ void ConfigParser::SeekSection(const char* section)
 
 void ConfigParser::Parse(const std::string& content)
 {   
-    bool inside_section = false;
-    
-    const int length = content.size();
-    size_t token;
-    for (int i = 0; i < length; ++i)
-    {
-        if (!inside_section)
-        {
-        	// recherche du token de début de section
-            token = content.find(OPEN_TOKEN, i);
-            if (token != std::string::npos)
-            {
-                std::string section_name = extract(content, i, token);
-                
-                printf("parsing section: %s\n", section_name.c_str());
+	bool inside_section = false;
+	
+	const int length = content.size();
+	size_t token;
+	for (int i = 0; i < length; ++i)
+	{
+		if (!inside_section)
+		{
+			// recherche du token de début de section
+			token = content.find(OPEN_TOKEN, i);
+			if (token != std::string::npos)
+			{
+				std::string section_name = extract(content, i, token);
+				
+				//printf("parsing section: %s\n", section_name.c_str());
 				cursor_ = &sections_[section_name];
-                inside_section = true;
-                i = token;
-            }
-            else
-            {
-                i = length;
-                puts("EOF");
-            }
-        }
-        else // sinon, on est à l'intérieur de la section
-        {
-            token = content.find(CLOSE_TOKEN, i);
-            if (token != std::string::npos)
-            {
-                ParseProperties(extract(content, i, token), *cursor_);
-                i = token;
-            }
-            else
-            {
-                std::cerr << "closing bracket '}' missing" << std::endl;
-                i = length;
-            }
-            // fin des propriétés, on sort de l'item
-            inside_section = false;
-        }
-    }
+				inside_section = true;
+				i = token;
+			}
+			else
+			{
+				i = length;
+				puts("EOF");
+			}
+		}
+		else // sinon, on est à l'intérieur de la section
+		{
+			token = content.find(CLOSE_TOKEN, i);
+			if (token != std::string::npos)
+			{
+				ParseProperties(extract(content, i, token), *cursor_);
+				i = token;
+			}
+			else
+			{
+				std::cerr << "closing bracket '}' missing" << std::endl;
+				i = length;
+			}
+			// fin des propriétés, on sort de l'item
+			inside_section = false;
+		}
+	}
 }
 
 
@@ -135,39 +135,39 @@ void ConfigParser::ParseProperties(const std::string& content, Properties& props
 	std::string current_prop;
 	
 	for (int i = 0; i < length; ++i)
-    {
-        if (status == SEARCH_SEPARATOR)
-        {
-            token = content.find(PROP_SEPARATOR, i);
-            if (token != std::string::npos)
-            {
-                current_prop = extract(content, i, token);
-				printf("add prop : %s\n", current_prop.c_str());
-                status = SEARCH_END_PROP;
-                i = token;
-            }
-            else
-            {
-                i = length;
-            }
-        }
-        else if (status == SEARCH_END_PROP)
-        {
-            token = content.find(PROP_END, i);
-            if (token != std::string::npos)
-            {
-                std::string prop_value = extract(content, i, token);
-                // nouvelle paire clef: valeur enregistrée
-                props[current_prop] = prop_value;
-                
-                status = SEARCH_SEPARATOR;
-                i = token;
-            }
-            else
-            {
-                i = length;
-            }
-        }
-    }
+	{
+		if (status == SEARCH_SEPARATOR)
+		{
+			token = content.find(PROP_SEPARATOR, i);
+			if (token != std::string::npos)
+			{
+				current_prop = extract(content, i, token);
+				//printf("add prop : %s\n", current_prop.c_str());
+				status = SEARCH_END_PROP;
+				i = token;
+			}
+			else
+			{
+				i = length;
+			}
+		}
+		else if (status == SEARCH_END_PROP)
+		{
+			token = content.find(PROP_END, i);
+			if (token != std::string::npos)
+			{
+				std::string prop_value = extract(content, i, token);
+				// nouvelle paire clef: valeur enregistrée
+				props[current_prop] = prop_value;
+				
+				status = SEARCH_SEPARATOR;
+				i = token;
+			}
+			else
+			{
+				i = length;
+			}
+		}
+	}
 }
 

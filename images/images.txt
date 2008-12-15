@@ -2,7 +2,6 @@ ammo_devil.png
 ammo_hellfire.png
 ammo_laserbeam.png
 ammo_plasma.png
-ammo_wasp.png
 asteroid-big-1.png
 asteroid-big-2.png
 asteroid-big-3.png
@@ -33,4 +32,3 @@ shield.png
 spaceship-red.png
 spaceship-green.png
 star.png
-tennis_ball.png

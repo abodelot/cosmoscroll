@@ -106,11 +106,21 @@ private:
 	// (nettoyage des parties précédentes, allocation des joueurs)
 	void Init();
 	
-	/*
+	/**
 	 * Suppression de toutes les unités en jeu
 	 */
 	void RemoveEntities();
 	
+	/**
+	 * Allouer et jouer une musique
+	 * @param[in] music_name: identifiant de la musique
+	 */
+	void LoadMusic(const char* music_name);
+	
+	/**
+	 * Désallouer et stopper la musique en cours
+	 */
+	void StopMusic();
 	
 	sf::RenderWindow app_;
 
@@ -120,6 +130,7 @@ private:
 	int current_level_;
 	int last_level_reached_;
 	float best_arcade_time_;
+	std::string music_name_;
 	
 	PlayerShip *player1_, *player2_;
 	// toutes les unités sont allouées dynamiquement

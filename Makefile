@@ -13,8 +13,6 @@ OBJ= $(SRC:.cpp=.o)
 LINK=dynamic
 ifeq ($(LINK), dynamic)
 	CFLAGS += -DSFML_DYNAMIC
-else
-	
 endif
 
 # debug/release mode
@@ -25,22 +23,10 @@ else
 	CFLAGS += -O2
 endif
 
-# enable/disable joystick
-JOY_ENABLED=yes
-ifeq ($(JOY_ENABLED), yes)
-	CFLAGS += -DJOY_ENABLED
-endif
-
 # disable audio
-NO_AUDIO=yes
+NO_AUDIO=no
 ifeq ($(NO_AUDIO), yes)
 	CFLAGS += -DNO_AUDIO
-endif
-
-#disanble music
-NO_MUSIC=no
-ifeq ($(NO_MUSIC), yes)
-	CFLAGS += -DNO_MUSIC
 endif
 
 # svn revision

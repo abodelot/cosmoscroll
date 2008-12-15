@@ -5,21 +5,20 @@ Milestone 0.1
 -------------
 
 * Jeu :
-	- Ajouter effet graphique sur bonus speed (Particule Smoke)
-	- Un menu Options, pouvoir y choisir la musique et les bindings
-	- Une menu À Propos [WIP]
+	- Une menu À Propos [Done ?]
 	- Optimiser cos/sin avec une table pré-calculée [WIP]
 	
 * Interface :
 	- ControlPanel plus joli [WIP]
-	- Menus du jeu plus jolis [WIP]
 	
 * Configuration :
-	- Sauvegarder le choix de la musique
 	- Sauvegarder plein-écran / fenêtré [WIP]
-
+	flemme de faire un menu pour ça + problème de fullscreen sur ma debian (non lié à la SFML)
+	... => post 0.1 ?
+	
 * Niveaux :
 	- Continuer à ajuster les niveaux (durée de vie et difficulté progressive)
+	[Done ?]
 
 * Sons :
 	- Retoucher le son d'intro (effet métallique/space-shooter like...)
@@ -39,3 +38,5 @@ Milestone post 0.1
 * Conserver le système de passwords ?
 * Mode deux joueurs / Jeu de Pong
 * Gestionnaire de buffers audio
+
+- Ajouter effet graphique sur bonus speed (Particule Smoke)

@@ -20,39 +20,39 @@ class Menu
 public:
 	Menu();
 	
-	/*
+	/**
 	 * Apparence normale des éléments
 	 * @param[in] style: flag sf::String::Style
 	 * @param[in] color: couleur
 	 */
 	void SetNormalLook(unsigned long style, const sf::Color& color);
 	
-	/*
+	/**
 	 * Apparence de l'élément pré-sélectionné
 	 * @param[in] style: flag sf::String::Style
 	 * @param[in] color: couleur
 	 */
 	void SetHighlightLook(unsigned long style, const sf::Color& color);
 	
-	/*
+	/**
 	 * Taille du texte des éléments
 	 * @param[in] size: text size
 	 */
 	void SetTextSize(int size);
 	
-	/*
+	/**
 	 * Fixer l'orignie haut-gauche du menu
 	 * @param[in] offset: position
 	 */
 	void SetOffset(const sf::Vector2f& offset);
 	
-	/*
+	/**
 	 * Fixer l'intergline entre les éléments
 	 * @param[in] linespace: interligne en pixels
 	 */
 	void SetLineSpace(int linespace);
 	
-	/*
+	/**
 	 * Ajout d'un élément dans le menu
 	 * @param[in] label: texte de l'élément
 	 * @param[in] id: identifiant de l'action associée
@@ -60,7 +60,8 @@ public:
 	 */
 	void AddItem(const std::wstring label, int id, bool activable=true);
 	void AddItem(const std::string label, int id, bool activable=true);
-	/*
+	
+	/**
 	 * Détermine si un évènement a validé une action
 	 * @param[in] key: évènement à gérer
 	 * @param[out] id: identifiant de l'action validée
@@ -68,17 +69,22 @@ public:
 	 */
 	bool ItemChosen(AC::Action action, int& id);
 	
-	/*
+	/**
 	 * Présélectionne un item du menu
 	 * @param[in] n: indice de l'item
 	 */
 	void SelectItem(int n);
 	
-	/*
+	/**
 	 * Afficher les éléments du menu
 	 * @param[in] app: fenêtre de rendu
 	 */
 	void Show(const sf::RenderWindow& app) const;
+	
+	/**
+	 * Supprimer tous les éléments du menu
+	 */
+	void Clear();
 	
 private:
 	/*

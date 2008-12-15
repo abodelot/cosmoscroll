@@ -23,6 +23,8 @@
 #define SVN_REV "???"
 #endif
 
+#define MARGIN_X 120
+
 
 Game& Game::GetInstance()
 {
@@ -44,6 +46,9 @@ Game::Game() :
 	last_level_reached_ = 1;
 	current_level_ = 1;
 	best_arcade_time_ = 0;
+	music_ = NULL;
+	music_name_ = "space";
+	
 	if (config.LoadFromFile(CONFIG_FILE))
 	{
 		config.SeekSection("Settings");
@@ -51,7 +56,7 @@ Game::Game() :
 		config.ReadItem("current_level", current_level_);
 		config.ReadItem("best_arcade_time", best_arcade_time_);
 		config.ReadItem("fullscreen", fullscreen);
-		
+		config.ReadItem("music", music_name_);
 		controls_.LoadConfig(config);
 	}
 	
@@ -86,6 +91,7 @@ Game::~Game()
 	config.WriteItem("last_level_reached", last_level_reached_);
 	config.WriteItem("current_level", current_level_);
 	config.WriteItem("best_arcade_time", best_arcade_time_);
+	config.WriteItem("music", music_name_);
 	
 	controls_.SaveConfig(config);
 	config.SaveToFile(CONFIG_FILE);
@@ -97,13 +103,6 @@ void Game::Run()
 	puts("running...");
 	// première scène = Intro
 	Scene what = Intro();
-#ifndef NO_AUDIO
-#ifndef NO_MUSIC
-	music_ = GET_MUSIC("space");
-	music_->SetVolume(30);
-	music_->Play();
-#endif
-#endif
 	do
 	{
 		switch (what)
@@ -119,6 +118,9 @@ void Game::Run()
 				break;
 			case IN_GAME_MENU:
 				what = InGameMenu();
+				break;
+			case OPTIONS:
+				what = Options();
 				break;
 			case ABOUT:
 				what = About();
@@ -139,11 +141,7 @@ void Game::Run()
 		}
 	} while (what != EXIT_APP);
 #ifndef NO_AUDIO
-#ifndef NO_MUSIC
-	music_->Stop();
-	delete music_;
-	music_ = NULL;
-#endif
+	StopMusic();
 #endif
 }
 
@@ -160,11 +158,9 @@ Game::Scene Game::Intro()
 	Scene what = MAIN_MENU;
 	const int DURATION = 5, PADDING = 10;
 	float time, elapsed = 0;
-#ifdef DEBUG
 #ifndef NO_AUDIO
 	bool played = false;
 	sf::Sound intro_sound(GET_SOUNDBUF("title"));
-#endif
 #endif
 	sf::FloatRect rect;
 	
@@ -207,14 +203,12 @@ Game::Scene Game::Intro()
 		}
 		time = app_.GetFrameTime();
 		elapsed += time;
-#ifdef DEBUG
 #ifndef NO_AUDIO
 		if (static_cast<int>(elapsed) == 1 && !played)
 		{
 			played = true;
 			intro_sound.Play();
 		}
-#endif
 #endif
 		ship.Move(180 * time, 25 * time);
 		title.Scale(0.99, 0.99); // FIXME: dépendant des FPS
@@ -225,6 +219,12 @@ Game::Scene Game::Intro()
 		app_.Draw(title);		app_.Draw(ship);
 		app_.Display();
 	}
+#ifndef NO_AUDIO
+	if (music_name_ != "NULL")
+	{
+		LoadMusic(music_name_.c_str());
+	}
+#endif
 	return what;
 }
 
@@ -242,11 +242,11 @@ Game::Scene Game::MainMenu()
 	
 	sf::Sprite back(GET_IMG("main-screen"));
 	Menu menu;
-	menu.SetOffset(sf::Vector2f(80, 130));
+	menu.SetOffset(sf::Vector2f(MARGIN_X, 130));
 	menu.AddItem("Mode Histoire solo", 0);
 	menu.AddItem("Mode Histoire duo", 1);
 	menu.AddItem("Mode Arcade", 2);
-	//menu.AddItem("Options", 3); -> choix musique, choix bindings
+	menu.AddItem("Options", 3);
 	menu.AddItem(L"À propos", 4);
 	//menu.AddItem("Pong", PONG_MODE);
 	menu.AddItem("Quitter", 5);
@@ -295,12 +295,13 @@ Game::Scene Game::MainMenu()
 				(int) best_arcade_time_ / 60,
 				(int) best_arcade_time_ % 60).c_str());
 			Init();
+			timer_ = 0.f;
 			p_ForwardAction_ = &Game::ForwardAction1P;
 			p_StopPlay_ = &Game::ArcadeMoreBadGuys;
 			break;
-		/*case 3:// not implemented yet
+		case 3:
 			next = OPTIONS;
-			break;*/
+			break;
 		case 4: 
 			next = ABOUT;
 			break;
@@ -315,15 +316,6 @@ Game::Scene Game::MainMenu()
 }
 
 
-Game::Scene Game::Options()
-{
-	puts("[ Game::Options ]");
-#ifdef DEBUG
-	puts("not implemented yet");
-#endif
-	return MAIN_MENU;
-}
-
 // choix des niveaux
 Game::Scene Game::SelectLevel()
 {
@@ -334,10 +326,11 @@ Game::Scene Game::SelectLevel()
 
 	p_ForwardAction_ = mode_ == STORY2X ?
 		&Game::ForwardAction2P : &Game::ForwardAction1P;
+	timer_ = 0.f;
 	
 	sf::Sprite back(GET_IMG("main-screen"));
 	Menu menu;
-	menu.SetOffset(sf::Vector2f(80, 130));
+	menu.SetOffset(sf::Vector2f(MARGIN_X, 130));
 	
 	AC::Action action;
 	
@@ -392,7 +385,6 @@ Game::Scene Game::LevelCaption()
 #ifdef DEBUG
 	puts("[ Game::LevelCaption ]");
 #endif
-
 	AC::Action action;
 	bool running = true;
 	Scene what;
@@ -440,7 +432,6 @@ Game::Scene Game::Play()
 #ifdef DEBUG
 	puts("[ Game::Play ]");
 #endif
-	timer_ = 0.f;
 	AC::Action action;
 	AC::Device device;
 	bool running = true;
@@ -542,10 +533,10 @@ Game::Scene Game::About()
 	info.SetText(COSMOSCROLL_ABOUT);
 	info.SetFont(GET_FONT());
 	info.SetColor(sf::Color::White);
-	info.SetPosition(120, 60);
+	info.SetPosition(MARGIN_X, 60);
 	
 	sf::Sprite back(GET_IMG("main-screen"));
-	menu.SetOffset(sf::Vector2f(120, 320));
+	menu.SetOffset(sf::Vector2f(MARGIN_X, 320));
 	menu.AddItem("Retour", MAIN_MENU);	
 	
 
@@ -588,7 +579,6 @@ Game::Scene Game::InGameMenu()
 	menu.SetOffset(sf::Vector2f(200, 210));
 	menu.AddItem("Reprendre la partie", PLAY);
 	menu.AddItem("Revenir au menu principal", MAIN_MENU);
-	//menu.AddItem("Options", OPTIONS);
 	menu.AddItem("Quitter le jeu", EXIT_APP);
 	
 	bool paused = true;
@@ -684,9 +674,9 @@ Game::Scene Game::EndPlay()
 #ifndef NO_AUDIO
 		sound.SetBuffer(GET_SOUNDBUF("end-level"));
 #endif
-		std::string epic_win = str_sprintf("Felicitations :-D\n\n"
+		std::wstring epic_win = str_sprintf(L"Félicitations :-D\n\n"
 			"Vous avez fini les %d niveaux du jeu.\n"
-			"Vous etes vraiment doue(e) :D", current_level_);
+			"Vous êtes vraiment doué(e) :D", current_level_);
 		info.SetText(epic_win);
 		info.SetSize(30);
 		what = MAIN_MENU;
@@ -771,7 +761,7 @@ Game::Scene Game::ArcadeResult()
 	sf::Sprite back(GET_IMG("background"));
 	
 	Menu menu;
-	menu.SetOffset(sf::Vector2f(42, 100));
+	menu.SetOffset(sf::Vector2f(MARGIN_X, 100));
 	menu.AddItem("Menu principal", MAIN_MENU);
 	menu.AddItem("Quitter", EXIT_APP);
 	
@@ -878,7 +868,7 @@ void Game::ForwardAction2P(AC::Action action, AC::Device device)
 
 bool Game::ArcadeMoreBadGuys()
 {
-	if (entities_.size() < (size_t) timer_ / 10 + 5)
+	if (entities_.size() < (size_t) timer_ / 10 + 4)
 	{
 		// ajout d'une ennemi au hasard
 		// <hack>
@@ -925,62 +915,310 @@ bool Game::StoryMoreBadBuys()
 }
 
 
-/*
-std::string Game::MakePassword()
+void Game::LoadMusic(const char* music_name)
 {
-	Password pass;	
-	unsigned char lives, level, shield, icecubes;
+	StopMusic();
+	music_ = GET_MUSIC(music_name);
+	music_->SetVolume(30);
+	music_->Play();
+	music_name_ = music_name;
+}
+
+
+void Game::StopMusic()
+{
+	if (music_ != NULL)
+	{
+		music_->Stop();
+		delete music_;
+		music_ = NULL;
+	}
+}
+
+// Menu des options
+
+enum OptionMenu
+{
+	OPT_MAIN, OPT_MUSIC, OPT_JOYSTICK, OPT_KEYBOARD
+};
+
+
+void load_menu(OptionMenu what, Menu& menu, sf::String& title)
+{
+	menu.Clear();
+	AC& controls = AC::GetInstance();
+	switch (what)
+	{
+		case OPT_MAIN:
+			title.SetText("Options");
+			menu.AddItem("Configuration clavier", 1);
+			menu.AddItem("Configuration joystick", 2);
+			menu.AddItem("Musique", 3);
+			break;
+		case OPT_MUSIC:
+			title.SetText("Musique");
+			menu.AddItem("Space", 1);
+			menu.AddItem("Aurora", 2);
+			menu.AddItem("Pas de musique", 3);
+			break;
+		case OPT_KEYBOARD:
+			title.SetText("Clavier");
+			menu.AddItem(str_sprintf("Haut : %u",
+				controls.GetBinding(AC::MOVE_UP, AC::KEYBOARD)), 1);
+			menu.AddItem(str_sprintf("Bas : %u",
+				controls.GetBinding(AC::MOVE_DOWN, AC::KEYBOARD)), 2);
+			menu.AddItem(str_sprintf("Gauche : %u",
+				controls.GetBinding(AC::MOVE_LEFT, AC::KEYBOARD)), 3);
+			menu.AddItem(str_sprintf("Droite : %u",
+				controls.GetBinding(AC::MOVE_RIGHT, AC::KEYBOARD)), 4);
+			menu.AddItem(str_sprintf("Arme 1 : %u",
+				controls.GetBinding(AC::WEAPON_1, AC::KEYBOARD)), 5);
+			menu.AddItem(str_sprintf("Arme 2 : %u",
+				controls.GetBinding(AC::WEAPON_2, AC::KEYBOARD)), 6);
+			menu.AddItem(str_sprintf(L"Utiliser bonus Glaçon : %u",
+				controls.GetBinding(AC::USE_COOLER, AC::KEYBOARD)), 7);
+			menu.AddItem(str_sprintf("Pause : %u",
+				controls.GetBinding(AC::PAUSE, AC::KEYBOARD)), 8);
+			break;
+		case OPT_JOYSTICK:
+			title.SetText("Joystick");
+			menu.AddItem(str_sprintf("Arme 1 : %u",
+				controls.GetBinding(AC::WEAPON_1, AC::JOYSTICK)), 1);
+			menu.AddItem(str_sprintf("Arme 2 : %u",
+				controls.GetBinding(AC::WEAPON_2, AC::JOYSTICK)), 2);
+			menu.AddItem(str_sprintf(L"Utiliser bonus Glaçon : %u",
+				controls.GetBinding(AC::USE_COOLER, AC::JOYSTICK)), 3);
+			menu.AddItem(str_sprintf("Pause : %u",
+				controls.GetBinding(AC::PAUSE, AC::JOYSTICK)), 4);
+			menu.AddItem(str_sprintf("Valider : %u",
+				controls.GetBinding(AC::VALID, AC::JOYSTICK)), 5);
+			break;
+	}
+	menu.AddItem("Retour", 0);
+}
+
+
+bool get_input(AC::Device device, unsigned int& sfml_code)
+{
+	sf::String prompt;
+	if (device == AC::KEYBOARD)
+	{
+		prompt.SetText(L"Appuyez sur une touche\n(Échap pour annuler)");
+	}
+	else if (device == AC::JOYSTICK)
+	{
+		prompt.SetText(L"Appuyez sur un bouton du contrôleur\n(Échap pour annuler)");
+	}
+	prompt.SetColor(sf::Color::White);
+	sf::FloatRect rect = prompt.GetRect();
+	prompt.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
+		(WIN_HEIGHT - rect.GetHeight()) / 2);
 	
-	lives = static_cast<unsigned char>(PM_.GetShip()->GetHP());
-	level = static_cast<unsigned char>(current_level_);
-	icecubes = static_cast<unsigned char>(PM_.GetShip()->GetCoolers());
-	shield = static_cast<unsigned char>(PM_.GetShip()->GetShield());
-	pass.setLives(lives);	pass.setLevel(level);
-	pass.setCoolers(icecubes); pass.setShield(shield);
-	
-	std::string res = pass.getEncoded(); 
+	sf::Event event;
+	bool running = true;
+	bool valid = true;
+	sf::RenderWindow& app = Game::GetInstance().GetApp();
+	while (running)
+	{
+		while (app.GetEvent(event))
+		{
+			if (event.Type == sf::Event::KeyPressed)
+			{
+				if (event.Key.Code == sf::Key::Escape)
+				{
+					running = false;
+					valid = false;
+				}
+				else if (device == AC::KEYBOARD)
+				{
+					running = false;
+					sfml_code = event.Key.Code;
+				}
+			}
+			else if (event.Type == sf::Event::JoyButtonPressed
+				&& device == AC::JOYSTICK)
+			{
+				running = false;
+				sfml_code = event.JoyButton.Button;
+			}
+		}
+		app.Draw(prompt);
+		app.Display();
+	}
+	return valid;
+}
+
+
+Game::Scene Game::Options()
+{
 #ifdef DEBUG
-	std::cerr << "\t PASS: " << res << "\n";
+	puts("[ Game::Options ]");
 #endif
-	return res;
+	
+	OptionMenu current_menu = OPT_MAIN;
+	Menu menu;
+	menu.SetOffset(sf::Vector2f(MARGIN_X, 100));
+	sf::String title;
+	load_menu(current_menu, menu, title);
+	title.SetFont(GET_FONT());
+	title.SetColor(sf::Color::White);
+	title.SetSize(40);
+	title.SetY(40);
+	title.SetX((WIN_WIDTH - title.GetRect().GetWidth()) / 2);
+	
+	sf::Sprite back(GET_IMG("main-screen"));
+	bool running = true;
+	AC::Action action;
+	int id;
+	Scene next;
+	while (running)
+	{
+		while (controls_.GetAction(action))
+		{
+			if (action == AC::EXIT_APP)
+			{
+				running = false;
+				next = EXIT_APP;
+			}
+			else if (menu.ItemChosen(action, id))
+			{
+				if (id == 0)
+				{
+					if (current_menu == OPT_MAIN)
+					{
+						running = false;
+						next = MAIN_MENU;
+					}
+					else
+					{
+						// reloading OPT_MAIN menu
+						current_menu = OPT_MAIN;
+						load_menu(current_menu, menu, title);
+					}
+				}
+				else
+				{
+					unsigned int sfml_code;
+					AC::Action action_bind;
+					switch (current_menu)
+					{
+						// comportement de l'id en fonction du menu courant
+						case OPT_MAIN:
+							// on va dans un sous menu
+							switch (id)
+							{
+								case 1:
+									current_menu = OPT_KEYBOARD;
+									break;
+								case 2:
+									current_menu = OPT_JOYSTICK;
+									break;
+								case 3:
+									current_menu = OPT_MUSIC;
+									break;
+								default:
+									assert(0);
+							}
+							load_menu(current_menu, menu, title);
+							break;
+						case OPT_KEYBOARD:
+							// on récupère le nouveau binding clavier
+							if (!get_input(AC::KEYBOARD, sfml_code))
+							{
+								break;
+							}
+							switch (id)
+							{
+								case 1:
+									action_bind = AC::MOVE_UP;
+									break;
+								case 2:
+									action_bind = AC::MOVE_DOWN;
+									break;
+								case 3:
+									action_bind = AC::MOVE_LEFT;
+									break;
+								case 4:
+									action_bind = AC::MOVE_RIGHT;
+									break;
+								case 5:
+									action_bind = AC::WEAPON_1;
+									break;
+								case 6:
+									action_bind = AC::WEAPON_2;
+									break;
+								case 7:
+									action_bind = AC::USE_COOLER;
+									break;
+								case 8:
+									action_bind = AC::PAUSE;
+									break;
+								default:
+									assert(0);
+							}
+							controls_.SetBinding(action_bind, AC::KEYBOARD, sfml_code);
+							load_menu(OPT_KEYBOARD, menu, title);
+							break;
+						case OPT_JOYSTICK:
+							// on récupère le nouveau binding joystick
+							if (!get_input(AC::JOYSTICK, sfml_code))
+							{
+								break;
+							}
+							switch (id)
+							{
+								case 1:
+									action_bind = AC::WEAPON_1;
+									break;
+								case 2:
+									action_bind = AC::WEAPON_2;
+									break;
+								case 3:
+									action_bind = AC::USE_COOLER;
+									break;
+								case 4:
+									action_bind = AC::PAUSE;
+									break;
+								case 5:
+									action_bind = AC::VALID;
+									break;
+								default:
+									assert(0);
+							}
+							controls_.SetBinding(action_bind, AC::JOYSTICK, sfml_code);
+							load_menu(OPT_JOYSTICK, menu, title);
+							break;
+						case OPT_MUSIC:
+							// on change la musique
+							switch (id)
+							{
+								case 1:
+									LoadMusic("space");
+									break;
+								case 2:
+									LoadMusic("aurora");
+									break;
+								case 3:
+									StopMusic();
+									music_name_ = "NULL";
+									break;
+								default:
+									assert(0);
+							}
+							break;
+					}
+				}
+			}
+		}
+		app_.Draw(back);
+		app_.Draw(title);
+		menu.Show(app_);
+		app_.Display();
+	}
+	return next;
 }
 
-
-bool Game::UsePassword(std::string & source)
-{
-	bool ok = false;
-	unsigned char pass_1_, pass_2_, pass_3_, pass_4_;
-
-	Password pass(dynamic_cast<const std::string &>(source));
-	
-	pass_1_ = pass.getLives();
-	
-	pass_2_ = pass.getLevel();
-	
-	pass_3_ = pass.getShield();
-
-	pass_4_ = pass.getCoolers();
-
-	PM_.GetShip()->SetHP(static_cast<int>(pass_1_));
-	PM_.GetShip()->SetShield(static_cast<int>(pass_3_));
-	PM_.GetShip()->SetCoolers(static_cast<int>(pass_4_));
-	
-	panel_.SetShipHP(PM_.GetShip()->GetHP());
-	panel_.SetShield(PM_.GetShip()->GetShield());
-	panel_.SetCoolers(PM_.GetShip()->GetCoolers());
-	
-	if (levels_.Set(pass_2_) == LevelManager::SUCCESS) 
-	{
-		current_level_ = static_cast<int>(pass_2_);
-	}
-	else
-	{
-		ok = false;
-	}
-	return ok;
-}
-
-
+/*
 Game::Choice Game::PlayPong()
 {
 #ifdef DEBUG
@@ -1153,5 +1391,4 @@ Game::Choice Game::PlayPong()
 	PM_.SetBestTime(timer_);
 	return what;
 }*/
-
 
