@@ -14,7 +14,7 @@
 #include "ParticleSystem.hpp"
 #include "PlayerShip.hpp"
 
-/*
+/**
  * Gestion du déroulement du jeu
  */
 class Game
@@ -22,7 +22,7 @@ class Game
 public:
 	static Game& GetInstance();
 
-	/*
+	/**
 	 * Lancer une partie de CosmoScroll
 	 */
 	void Run();
@@ -42,7 +42,7 @@ public:
 		return player1_; // FIXME: toujours player 1
 	}
 	
-	/*
+	/**
 	 * Ajout d'une nouvelle unité dans le jeu
 	 */
 	void AddEntity(Entity* entity);

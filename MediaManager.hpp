@@ -11,19 +11,19 @@
 #include <map>
 #include <string>
 
-/*
+/**
  * Classe singleton pour gérer les ressources (images, font)
  */
 class MediaManager
 {
 public:
-    /*
+    /**
      * Récupérer l'instance unique
      * @return référence sur le gestionnaire de ressources
      */
     static MediaManager& GetInstance();
     
-    /*
+    /**
      * Récupérer une image
      * @param[in] key: identifiant de l'image
      * @return référence sur l'image
@@ -31,14 +31,14 @@ public:
     const sf::Image& GetImage(const char* key) const;
 
 #ifndef NO_AUDIO    
-    /*
+    /**
      * Récupérer un buffer audio
      * @param[in] key: identifiant du buffer
      * @return référence sur le buffer
      */
     const sf::SoundBuffer& GetSoundBuf(const char* key) const;
 
-    /*
+    /**
      * Récupérer une musique
      * @param[in] key: identifiant de la musique
      * @return pointeur sur la musique
@@ -46,7 +46,7 @@ public:
 	Music* GetMusic(const char* key) const;
 #endif
     
-    /*
+    /**
      * Récupérer la police de caractères
      * @param[in] size: taille énuméree
      * @return référence sur la police
@@ -54,7 +54,7 @@ public:
     const sf::Font& GetFont() const;
     
 private:
-    /*
+    /**
      * Initialisation (chargement des images)
      */
     MediaManager();

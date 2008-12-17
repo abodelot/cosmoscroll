@@ -190,8 +190,10 @@ void Menu::ApplyStyle(MenuItem& item, const ItemLook& look)
 void Menu::PlaySound(SoundFx fx)
 {
 	static sf::Sound sound;
+	sound.Stop();
 	assert(fx < COUNT_SOUNDFX);
 	sound.SetBuffer(*buffers_[fx]);
 	sound.Play();
 }
 #endif
+

@@ -11,9 +11,8 @@
 
 #include "AbstractController.hpp"
 
-
-/*
- * Permet de sélectionner une action
+/**
+ * Menu navigable pour sélectionner un choix
  */
 class Menu
 {
@@ -87,7 +86,7 @@ public:
 	void Clear();
 	
 private:
-	/*
+	/**
 	 * Un élément du menu
 	 */
 	struct MenuItem
@@ -97,7 +96,7 @@ private:
 		bool activable;
 	};
 	
-	/*
+	/**
 	 * Apparence d'un élément
 	 */
 	struct ItemLook
@@ -106,7 +105,7 @@ private:
 		unsigned long style;
 	};
 	
-	/*
+	/**
 	 * Appliquer une apparence sur un élément
 	 * @param[out] item: élément à modifier
 	 * @param[in] look: apparence à appliquer
@@ -132,7 +131,6 @@ private:
 	
 	const sf::SoundBuffer* buffers_[COUNT_SOUNDFX];
 #endif
-
 };
 
 #endif /* guard MENU_HPP */

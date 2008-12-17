@@ -5,6 +5,9 @@
 
 #include <SFML/Graphics.hpp>
 
+/**
+ * Un astéroïde pouvant se diviser en petits morceaux
+ */
 class Asteroid: public Entity
 {
 public:
@@ -13,7 +16,7 @@ public:
         SMALL, MEDIUM, BIG
     };
     
-    /*
+    /**
      * Création d'un astéroïde
      * @param[in] offset: position
      * @param[in] size: taille

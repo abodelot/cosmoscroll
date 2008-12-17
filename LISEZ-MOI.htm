@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>CosmoScroll</title>
@@ -30,59 +31,61 @@ table
 <h1>CosmoScroll</h1>
 
 <p>
-Version : x.y<br />
-Date de sortie : JJ/MM/AAAA </br>
+Version : 0.1<br />
+Date de sortie : 17/12/2008 <br />
 Site web : <a href="http://cosmoscroll.googlecode.com">cosmoscroll.googlecode.com</a><br />
 Licence : GPL (voir le fichier <a href="./COPYING">COPYING</a>)<br />
 Auteurs : voir le fichier <a href="./AUTHORS">AUTHORS</a>
 </p>
 
-<h2>Avertissement</h2>
+<!--<h2>Avertissement</h2>
 <p class="warning">Ceci est une version de développement, et comporte probablement des bugs.<br />
 Si vous en trouvez un, merci de le rapporter à cette <a href="http://code.google.com/p/cosmoscroll/issues/list">adresse</a> (si le bug n'est pas encore répertorié).
-</p>
+</p>-->
 
 <h2>Comment jouer</h2>
 
 <h3>Modes de jeu</h3>
 <ul>
 	<li>Mode histoire : terminez tous les niveaux jusqu'à l'affrontement avec boss final !</li>
-	<li>Mode arcade : tenez le plus longtemps possible face à des ennemis de plus en plus nombreux</li>
+	<li>Mode arcade : tenez le plus longtemps possible face à des ennemis de plus en plus nombreux.</li>
 </ul>
 
-</ul>
 <h3>Commandes clavier</h3>
-<ul>
-	<table>
-		<tr>
-			<td>Déplacer le vaisseau<br />Naviguer dans les menus</td>
-			<td>Flèches directionnelles (haut, bas, gauche, droite)</td>
-		</tr>
-		<tr>
-			<td>Valider un choix dans les menus</td>
-			<td>Entrée</td>
-		<tr>
-			<td>Utiliser arme 1</td>
-			<td>Espace</td>
-		</tr>
-			<td>Utiliser arme 2</td>
-			<td>A</td>
-		</tr>
-		<tr>
-			<td>Utiliser bonus Glaçon</td>
-			<td>Control (Gauche)</td>
-		</tr>
-		<tr>
-			<td>Mettre en pause/Reprendre la partie</td>
-			<td>P</td>
-		<tr>
-			<td>Quitter immédiatement le jeu</td>
-			<td>Échap</td>
-		</tr>
-	</table>
-</ul>
+
+<table>
+	<tr>
+		<td>Déplacer le vaisseau<br />Naviguer dans les menus</td>
+		<td>Flèches directionnelles (haut, bas, gauche, droite)</td>
+	</tr>
+	<tr>
+		<td>Valider un choix dans les menus</td>
+		<td>Entrée</td>
+	</tr>
+	<tr>
+		<td>Utiliser arme 1</td>
+		<td>Espace</td>
+	</tr>
+	<tr>
+		<td>Utiliser arme 2</td>
+		<td>A</td>
+	</tr>
+	<tr>
+		<td>Utiliser bonus Glaçon</td>
+		<td>Control (Gauche)</td>
+	</tr>
+	<tr>
+		<td>Mettre en pause/Reprendre la partie</td>
+		<td>P</td>
+	</tr>
+	<tr>
+		<td>Quitter immédiatement le jeu</td>
+		<td>Échap</td>
+	</tr>
+</table>
+
 <p>Le jeu peut également être contrôlé avec un joystick ou une manette de jeu.</p>
-<p>Les touches du clavier et les boutons du contrôleur peuvent être redéfinis dans les options</p>
+<p>Les touches du clavier et les boutons du contrôleur peuvent être redéfinis dans les options.</p>
 
 <h3>Bonus</h3>
 <ul>
@@ -105,11 +108,11 @@ Si vous en trouvez un, merci de le rapporter à cette <a href="http://code.googl
 <h2>Comment compiler le jeu depuis les sources</h2>
 <p>
 	Un Makefile UNIX est fourni avec les sources du projet.<br />
-	Cosmoscroll dépend des bibliothèques suivantes :
+	CosmoScroll dépend des bibliothèques suivantes :
 </p>
 <ul>
-	<li>SFML 1.3</li>
-	<li>libdumb</li>
+	<li><a href="http://www.sfml-dev.org/">SFML</a> 1.3</li>
+	<li><a href="http://dumb.sourceforge.net/">libdumb</a></li>
 </ul>
 
 <h2>Crédits</h2>
@@ -119,20 +122,21 @@ Si vous en trouvez un, merci de le rapporter à cette <a href="http://code.googl
 </ul>
 <h3>Sons</h3>
 <ul>
-	<li>boom.wav : chromium</li>
-	<li>warp.wav : supertux</li>
+	<li>boom.ogg : issu de <a href="http://www.reptilelabour.com/software/chromium/">Chromium B.S.U.</a></li>
+	<li>warp.ogg : issu de <a href="http://supertux.lethargik.org/">SuperTux</a></li>
+	<li>title.ogg : réalisé par <a href="http://eien.new.fr/">Tsu</a></li>
 </ul>
 <p>Sons issus de  <a href="http://www.freesound.org/">freesound.org</a> :</p>
 <ul>
-	<li>bonus.wav : 17633__flatfly__pman8.wav</li>
-	<li>menu-non-activable.wav : 8721_charliecrash_CHH.wav</li>
-	<li>menu-select.wav : 50561_broumbroum_sf3_sfx_menu_select.wav</li>
-	<li>end-level.wav : 38728_metamorphmuses_itsjustgreat.wav</li>
-	<li>game-over.wav : 43698_notchfilter_game_over03.wav</li>
+	<li>bonus.ogg : 17633__flatfly__pman8.wav</li>
+	<li>menu-non-activable.ogg : 8721_charliecrash_CHH.wav</li>
+	<li>menu-select.ogg : 50561_broumbroum_sf3_sfx_menu_select.wav</li>
+	<li>end-level.ogg : 38728_metamorphmuses_itsjustgreat.wav</li>
+	<li>game-over.ogg : 43698_notchfilter_game_over03.wav</li>
 </ul>
 <h3>Polices</h3>
 <ul>
-    <li>hemi-head.tff : <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a>
+    <li>hemi-head.tff : <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
 </ul>    
     </body>
 </html>

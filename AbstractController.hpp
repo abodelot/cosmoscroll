@@ -7,7 +7,9 @@
 
 #include "ConfigParser.hpp"
 
-
+/**
+ * Singleton du gestionnaire des périphériques d'entrée
+ */
 class AbstractController
 {
 public:
@@ -32,7 +34,7 @@ public:
 	/**
 	 * Dépiler les évènements
 	 * @param[out] action: évènement à récupérer
-	 * @return true si la pile d'évènement est vide, sinon false
+	 * @return true si la pile d'évènements est vide, sinon false
 	 */
 	bool GetAction(Action& action, Device* device = NULL);
 	

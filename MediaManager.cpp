@@ -126,8 +126,9 @@ Music* MediaManager::GetMusic(const char* key) const
 	
 	std::string path(MUSIC_PATH);
 	Music* mus = new Music((path + it->second).c_str());
-	std::cerr << path << it->second << " made." <<  std::endl;
-	
+#ifdef DEBUG
+	std::cout << path << it->second << " made." <<  std::endl;
+#endif
     return mus;
 }
 #endif

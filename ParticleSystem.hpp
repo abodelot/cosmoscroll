@@ -9,38 +9,37 @@
 #include <SFML/Audio.hpp>
 #endif
 
-/*
- * Moteur de particules pour gérer des effets graphiques
- * (singleton)
+/**
+ * Moteur de particules pour gérer des effets graphiques (singleton)
  */
 class ParticleSystem
 {
 public:
-	/*
+	/**
 	 * Récupérer l'instance unique
 	 */
 	static ParticleSystem& GetInstance();
 	
-	/*
+	/**
 	 * Ajouter une explosion
 	 * @param[in] offset: position de l'explosion
 	 */
 	void AddExplosion(const sf::Vector2f& offset);
 	
-	/*
+	/**
 	 * Ajouter un effet d'impact
 	 * @param[in] offset: position de l'impact
 	 * @param[in] count: nombre d'étincelles
 	 */
 	void AddImpact(const sf::Vector2f& offset, int count);
 
-	/*
+	/**
 	 * Ajouter des étoiles défilantes dans la scène
 	 * @param[in] count: nombre d'étoiles
 	 */
 	void AddStars(int count = 33);
 	
-	/*
+	/**
 	 * Ajouter un message défilant
 	 * @param[in] offset: position
 	 * @param[in] text: contenu du message
@@ -51,17 +50,17 @@ public:
 	
 	void RemoveShield(const sf::Sprite* handle);
 	
-	/*
+	/**
 	 * Mise à jour des particules (déplacement)
 	 */
 	void Update(float frametime);
 	
-	/*
+	/**
 	 * Affichage des particules dans la fenêtre de rendu
 	 */
 	void Show(sf::RenderWindow& app) const;
 	
-	/*
+	/**
 	 * Suppression de toutes les particules
 	 */
 	void Clear();
@@ -72,13 +71,13 @@ private:
 	ParticleSystem& operator=(const ParticleSystem& other);
 	~ParticleSystem();
 	
-	/*
+	/**
 	 * Particule abstraite
 	 */
 	class Particle
 	{
 	public: 
-		/*
+		/**
 		 * Animation de la particule lors de l'update du ParticleSystem
 		 * @return true si la particule est morte, sinon false
 		 */
@@ -86,14 +85,14 @@ private:
 		
 	
 		virtual ~Particle() {};
-		/*
+		/**
 		 * Affichage de la particule
 		 */
 		virtual void Show(sf::RenderWindow& app) const = 0;
 	};
 	
 	
-	/*
+	/**
 	 * Impact d'une explosion
 	 */
 	class Fiery: public Particle
@@ -115,7 +114,7 @@ private:
 	};
 	
 	
-	/*
+	/**
 	 * Étoile défilante
 	 */
 	class Star: public Particle
@@ -135,7 +134,7 @@ private:
 	};
 	
 	
-	/*
+	/**
 	 * Court message défilant
 	 */
 	class TextParticle: public Particle
@@ -155,7 +154,7 @@ private:
 	};
 	
 	
-	/*
+	/**
 	 * Particule liée à un objet externe au ParticleSystem (non autonome)
 	 */
 	class LinkedParticle: public Particle

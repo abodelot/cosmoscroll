@@ -201,7 +201,7 @@ void AbstractController::SetBinding(Action action, Device device, unsigned int b
 			assert(0);
 	}
 }
-	
+
 
 AbstractController::AbstractController()
 {
@@ -222,8 +222,6 @@ AbstractController::AbstractController()
 	joystick_binds_[WEAPON_1] = 6;
 	joystick_binds_[WEAPON_2] = 7;
 	joystick_binds_[USE_COOLER] = 2;
-	
-	puts("AC initialisé");
 }
 
 

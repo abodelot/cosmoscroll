@@ -100,7 +100,6 @@ Game::~Game()
 
 void Game::Run()
 {
-	puts("running...");
 	// première scène = Intro
 	Scene what = Intro();
 	do
@@ -243,8 +242,8 @@ Game::Scene Game::MainMenu()
 	sf::Sprite back(GET_IMG("main-screen"));
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(MARGIN_X, 130));
-	menu.AddItem("Mode Histoire solo", 0);
-	menu.AddItem("Mode Histoire duo", 1);
+	menu.AddItem("Mode Histoire"/*"Mode Histoire solo"*/, 0);
+	//menu.AddItem("Mode Histoire duo", 1);
 	menu.AddItem("Mode Arcade", 2);
 	menu.AddItem("Options", 3);
 	menu.AddItem(L"À propos", 4);
@@ -364,8 +363,7 @@ Game::Scene Game::SelectLevel()
 				else
 				{
 					current_level_ = level + 1;
-					
-					Init();	
+					Init();
 					levels_.Set(current_level_);
 					panel_.SetGameInfo(str_sprintf("Niveau %i", current_level_).c_str());
 					next = LEVEL_CAPTION;
@@ -387,7 +385,7 @@ Game::Scene Game::LevelCaption()
 #endif
 	AC::Action action;
 	bool running = true;
-	Scene what;
+	Scene what = EXIT_APP;
 	sf::Sprite back(GET_IMG("background"));
 	std::string content = str_sprintf("Niveau %d\n\n%s", current_level_,
 		levels_.GetDescription(current_level_));
@@ -408,13 +406,10 @@ Game::Scene Game::LevelCaption()
 			if (action == AC::EXIT_APP)
 			{
 				running = false;
-				puts("LevelCaption: EXIT_APP");
-				what = EXIT_APP;
 			}
 			else if (action == AC::VALID)
 			{
 				running = false;
-				puts("LevelCaption: PLAY");
 				what = PLAY;
 			}
 		}
@@ -757,11 +752,11 @@ Game::Scene Game::ArcadeResult()
 	title.SetText(content);
 	title.SetFont(GET_FONT());
 	title.SetColor(sf::Color::White);
-	title.SetPosition(42, 42);
+	title.SetPosition(42, 100);
 	sf::Sprite back(GET_IMG("background"));
 	
 	Menu menu;
-	menu.SetOffset(sf::Vector2f(MARGIN_X, 100));
+	menu.SetOffset(sf::Vector2f(MARGIN_X, 200));
 	menu.AddItem("Menu principal", MAIN_MENU);
 	menu.AddItem("Quitter", EXIT_APP);
 	
@@ -795,7 +790,6 @@ Game::Scene Game::ArcadeResult()
 
 void Game::RemoveEntities()
 {
-	std::cerr << "RemoveEntities\n";
 	std::list<Entity*>::iterator it;
 	for (it = entities_.begin(); it != entities_.end(); ++it)
 	{
@@ -1070,7 +1064,7 @@ Game::Scene Game::Options()
 	bool running = true;
 	AC::Action action;
 	int id;
-	Scene next;
+	Scene next = EXIT_APP;
 	while (running)
 	{
 		while (controls_.GetAction(action))
@@ -1078,7 +1072,6 @@ Game::Scene Game::Options()
 			if (action == AC::EXIT_APP)
 			{
 				running = false;
-				next = EXIT_APP;
 			}
 			else if (menu.ItemChosen(action, id))
 			{

@@ -228,12 +228,14 @@
 	<level desc="C'est la confrontation\navec le boss final\nOuille !!!">
 		<item name="Interceptor" x="640" y="270" t="4.0" />
 		<item name="Drone" x="640" y="170" t="2.0" />
+		<item name="Interceptor" x="640" y="370" t="0.7" />
+		<item name="Asteroid" x="640" y="120" t="0.0" />
 		<item name="Interceptor" x="640" y="370" t="2.0" />
 		<item name="Drone" x="640" y="270" t="2.0" />
 		<item name="Interceptor" x="640" y="300" t="0.0" />
 		<item name="Drone" x="640" y="170" t="2.0" />
 		<item name="Interceptor" x="640" y="370" t="2.0" />
-		<item name="EvilBoss" x="360" y="170" t = "5.0" />
+		<item name="EvilBoss" x="360" y="170" t = "6.0" />
 	</level>
 </levels>
 

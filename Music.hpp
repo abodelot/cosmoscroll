@@ -7,13 +7,15 @@
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 
-#define SAMPLING_RATE 44100
-#define N_CHANNELS 2
-#define DELTA 65536.0f / SAMPLING_RATE
-#define BUFFER_LENGTH 1	// Fixme: Magique?
-#define BUFFER_SIZE SAMPLING_RATE / BUFFER_LENGTH
+#define SAMPLING_RATE  44100
+#define N_CHANNELS     2
+#define DELTA          65536.0f / SAMPLING_RATE
+#define BUFFER_LENGTH  1	// Fixme: Magique?
+#define BUFFER_SIZE    SAMPLING_RATE / BUFFER_LENGTH
 
-
+/**
+ * Musique chargée avec libdumb (support du format .mod)
+ */
 class Music : public sf::SoundStream
 {
 public:

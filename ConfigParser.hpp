@@ -52,7 +52,9 @@ public:
 		// l'élément est-il dans la section pointée ?
 		if (it == cursor_->end())
 		{
+#ifdef DEBUG
 			std::cerr << item << " not found in current section" << std::endl;
+#endif
 			return false;
 		}
 		std::istringstream iss(it->second);

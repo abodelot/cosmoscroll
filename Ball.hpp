@@ -3,7 +3,7 @@
 
 #include "Ennemy.hpp"
 
-/*
+/**
  * Une balle rebondissante
  */
 class Ball: public Entity
@@ -15,7 +15,6 @@ public:
     
     void Collide(Entity& ent);
 private:
-
 	void Spawn();
 	sf::Vector2f movement_;
 

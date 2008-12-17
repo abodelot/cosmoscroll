@@ -12,9 +12,8 @@
 #include "Entity.hpp"
 #include "Weapon.hpp"
 
-
-/*
- * Le vaisseau aux couleurs de starsky et hutch
+/**
+ * Vaisseau spatial contrôlable par un joueur
  */
 class PlayerShip: public Entity
 {

@@ -1,31 +1,8 @@
 CosmoScroll TODO List
 =====================
 
-Milestone 0.1
+Milestone 0.2
 -------------
-
-* Jeu :
-	- Une menu À Propos [Done ?]
-	- Optimiser cos/sin avec une table pré-calculée [WIP]
-	
-* Interface :
-	- ControlPanel plus joli [WIP]
-	
-* Configuration :
-	- Sauvegarder plein-écran / fenêtré [WIP]
-	flemme de faire un menu pour ça + problème de fullscreen sur ma debian (non lié à la SFML)
-	... => post 0.1 ?
-	
-* Niveaux :
-	- Continuer à ajuster les niveaux (durée de vie et difficulté progressive)
-	[Done ?]
-
-* Sons :
-	- Retoucher le son d'intro (effet métallique/space-shooter like...)
-
-
-Milestone post 0.1
-------------------
 
 * Plus d'unités
 * Plus d'armes
@@ -39,4 +16,9 @@ Milestone post 0.1
 * Mode deux joueurs / Jeu de Pong
 * Gestionnaire de buffers audio
 
-- Ajouter effet graphique sur bonus speed (Particule Smoke)
+* Ajouter effet graphique sur bonus speed (Particule Smoke)
+* Intertionalisation avec GetText
+
+* Optimiser cos/sin avec une table pré-calculée
+* Ajout mode plein-écran / fenêtré dans la configuration
+

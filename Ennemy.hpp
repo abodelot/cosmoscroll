@@ -4,8 +4,8 @@
 #include "Entity.hpp"
 #include "Weapon.hpp"
 
-/*
- * Classe abstraite
+/**
+ * Base de tous les ennemis (classe abstraite)
  */
 class Ennemy: public Entity
 {

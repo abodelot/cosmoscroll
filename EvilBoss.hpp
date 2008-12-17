@@ -5,7 +5,7 @@
 #include "Game.hpp"
 #include "Ennemy.hpp"
 
-/*
+/**
  * Il est très méchant, et il en veut!
  */
 class EvilBoss: public Ennemy

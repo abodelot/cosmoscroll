@@ -2,6 +2,9 @@
 #include "MediaManager.hpp"
 #include "Misc.hpp"
 
+#define LABEL_LENGTH 55
+#define BAR_HEIGHT 15
+
 
 ControlPanel& ControlPanel::GetInstance()
 {
@@ -10,16 +13,17 @@ ControlPanel& ControlPanel::GetInstance()
 }
 
 
-
 void ControlPanel::SetGameInfo(const wchar_t* text)
 {
 	game_info_.SetText(text);
 }
 
+
 void ControlPanel::SetGameInfo(const char* text)
 {
 	game_info_.SetText(text);
 }
+
 
 void ControlPanel::SetShipHP(int value)
 {
@@ -120,8 +124,8 @@ ControlPanel::ControlPanel()
     info_.SetSize(14);
     info_.SetColor(sf::Color(255, 128, 0));
 
-    game_info_.SetPosition(520, 20);
-    game_info_.SetSize(14);
+    game_info_.SetPosition(500, 12);
+    game_info_.SetSize(20);
     game_info_.SetColor(sf::Color::White);
 	
     coolers_.SetPosition(400, 30);
@@ -129,8 +133,6 @@ ControlPanel::ControlPanel()
     coolers_.SetColor(sf::Color::White);
 }
 
-#define LABEL_LENGTH 55
-#define BAR_HEIGHT 15
 
 ControlPanel::ProgressBar::ProgressBar()
 {

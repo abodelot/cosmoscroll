@@ -1,14 +1,16 @@
 #ifndef WEAPON_HPP
 #define WEAPON_HPP
 
-#include "Entity.hpp"
-
 #ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
 #endif
 #include <SFML/System/Vector2.hpp>
 
+#include "Entity.hpp"
 
+/**
+ * Une arme associée à une entité
+ */
 class Weapon
 {
 public:

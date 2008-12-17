@@ -5,8 +5,6 @@
 #include "Window.hpp"
 
 
-
-
 Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp)
 {
 	sprite_.SetImage(img);
@@ -14,18 +12,13 @@ Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp)
 	hp_ = hp;
 	flipped_ = false;
 	
-	
 	//	Le but: Limiter les positions des mouvements des entités
-
-	use_limits_ = false;
+	/*use_limits_ = false;
 	x_limits_.x = 0;
 	x_limits_.y = WIN_WIDTH;
 	
 	y_limits_.x = CONTROL_PANEL_HEIGHT;
-	y_limits_.y = WIN_HEIGHT;
-	
-	
-	
+	y_limits_.y = WIN_HEIGHT;*/
 }
 
 
@@ -45,10 +38,6 @@ void Entity::Hit(int damage)
 	hp_ -= damage;
 }
 
-int Entity::HP()
-{
-	return hp_;
-}
 
 void Entity::Collide(Entity& ent)
 {
@@ -73,9 +62,10 @@ void Entity::KillIfOut()
 	}
 }
 
+
 sf::FloatRect Entity::GetRect() const
 {
-	// Utiliser à la place GetLocalRect avec SFML 1.4
+	// Utiliser GetLocalRect avec SFML 1.4 (?)
 	sf::FloatRect rect;
 	rect.Left = sprite_.GetPosition().x;
 	rect.Top = sprite_.GetPosition().y;
@@ -83,5 +73,4 @@ sf::FloatRect Entity::GetRect() const
 	rect.Bottom = rect.Top + sprite_.GetSize().y;
 	return rect;
 }
-
 

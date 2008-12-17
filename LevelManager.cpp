@@ -81,7 +81,7 @@ LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 	
 	if (elem == NULL)
 	{
-		puts("Impossible d'atteindre le noeud. Dying.");
+		std::cerr << "Impossible d'atteindre le noeud. Dying." << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	

@@ -87,7 +87,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	current_konami_event_ = 0;
 	
 	controls_ = AC::ALL;
-	use_limits_ = true;
+	//use_limits_ = true;
 }
 
 
@@ -372,11 +372,11 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 		case T_TRISHOT:
 			hellfire_.SetTriple(false);
 			laserbeam_.SetTriple(false);
-			puts("bonus triple tir désactivé");
+			//puts("bonus triple tir désactivé");
 			break;
 		case T_SPEED:
 			speed_ = DEFAULT_SPEED;
-			puts("bonus speed désactivé");
+			//puts("bonus speed désactivé");
 			break;
 		default:
 			assert(0);
