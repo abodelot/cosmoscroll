@@ -42,21 +42,21 @@ void EvilBoss::Move(float frametime)
 	}
 	if (direction_)
 	{
-		sprite_.Move(0, -SPEED * frametime);
+		sf::Sprite::Move(0, -SPEED * frametime);
 	}
 	else
 	{
-		sprite_.Move(0, SPEED * frametime);
+		sf::Sprite::Move(0, SPEED * frametime);
 	}
 
-	if (sprite_.GetPosition().x < target_->GetPosition().x)
+	if (GetPosition().x < target_->GetPosition().x)
     {
     	left = false;
     }
 
 	if (left != left_)
 	{
-	    sprite_.FlipX(!left);
+	    FlipX(!left);
 	    left_ = left;
 	}
 	eye_left_.Update(frametime);
@@ -77,7 +77,7 @@ void EvilBoss::Hit(int damage)
 	if (phase_ == EVIL && hp_ < 200)
 	{
 		phase_ = MORE_EVIL;
-		sprite_.SetImage(GET_IMG("evil_boss2"));
+		SetImage(GET_IMG("evil_boss2"));
 		canon_.SetTriple(true);
 	}
 }
@@ -85,12 +85,12 @@ void EvilBoss::Hit(int damage)
 
 void EvilBoss::Action()
 {
-	float radians_L = ANGLE(target_->GetPosition(), sprite_.GetPosition() + L_EYE_OFFSET);
-	float radians_R = ANGLE(target_->GetPosition(), sprite_.GetPosition() + R_EYE_OFFSET);
+	float radians_L = ANGLE(target_->GetPosition(), GetPosition() + L_EYE_OFFSET);
+	float radians_R = ANGLE(target_->GetPosition(), GetPosition() + R_EYE_OFFSET);
 
-	eye_left_.Shoot(sprite_.GetPosition() + L_EYE_OFFSET, radians_L);
-	eye_right_.Shoot(sprite_.GetPosition() + R_EYE_OFFSET, radians_R);
-	sf::Vector2f randV2f, my = sprite_.GetPosition();
+	eye_left_.Shoot(GetPosition() + L_EYE_OFFSET, radians_L);
+	eye_right_.Shoot(GetPosition() + R_EYE_OFFSET, radians_R);
+	sf::Vector2f randV2f, my = GetPosition();
 	randV2f.x = my.x + sf::Randomizer::Random(L_MOUTH_X_OFFSET, R_MOUTH_X_OFFSET);
 	randV2f.y = my.y + MOUTH_Y_OFFSET;
 	canon_.Shoot(randV2f, ANGLE(target_->GetPosition(), randV2f));

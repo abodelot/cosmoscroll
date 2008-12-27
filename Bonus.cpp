@@ -48,7 +48,7 @@ void Bonus::Collide(Entity& ent)
 
 void Bonus::Move(float frametime)
 {
-	sprite_.Move(-BONUS_SPEED * frametime, 0);
+	sf::Sprite::Move(-BONUS_SPEED * frametime, 0);
 	KillIfOut();
 }
 

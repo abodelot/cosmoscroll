@@ -15,7 +15,7 @@ Drone::Drone(const sf::Vector2f& offset, Entity* target) :
 
 void Drone::Move(float frametime)
 {
-    sprite_.Move(-SPEED * frametime, 0);
+    sf::Sprite::Move(-SPEED * frametime, 0);
     KillIfOut();
     weapon_.Update(frametime);
 }
@@ -23,11 +23,12 @@ void Drone::Move(float frametime)
 
 void Drone::Action()
 {
-    float my_y = sprite_.GetPosition().y;
+    float my_y = GetPosition().y;
     float player_y = target_->GetPosition().y;
     // Doit on tirer ?
     if (std::abs(player_y - my_y) < 30)
     {
-        weapon_.Shoot(sprite_.GetPosition() + GUN_OFFSET, -PI);
+        weapon_.Shoot(GetPosition() + GUN_OFFSET, -PI);
     }
 }
+

@@ -37,7 +37,7 @@ Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
 
 void Asteroid::Move(float frametime)
 {
-    sprite_.Move(-50 * frametime, 0); // mouvement latéral
+    sf::Sprite::Move(-50 * frametime, 0); // mouvement latéral
 /*
 TODO
 (00:08:43) Alexandre: manque un ajustement sur le facteur de ralentissement 0.99 appliqué à chaque frame
@@ -47,17 +47,17 @@ TODO
 */
     speed_ *= 0.99;
     float framespeed = frametime * speed_;
-    sf::Vector2f offset = sprite_.GetPosition();
+    sf::Vector2f offset = GetPosition();
     offset.x = offset.x + framespeed * math::cos(angle_);
     offset.y = offset.y - framespeed * math::sin(angle_);
-    sprite_.SetPosition(offset);
+    SetPosition(offset);
     KillIfOut();
 }
 
 
 void Asteroid::Hit(int damage)
 {
-	sf::Vector2f offset = sprite_.GetPosition();
+	sf::Vector2f offset = GetPosition();
 	
     Entity::Hit(damage);
     if (IsDead())
@@ -84,3 +84,4 @@ void Asteroid::Hit(int damage)
         }
     }
 }
+

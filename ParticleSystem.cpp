@@ -28,7 +28,7 @@ void ParticleSystem::AddExplosion(const sf::Vector2f& offset)
 
 void ParticleSystem::AddImpact(const sf::Vector2f& offset, int count)
 {
-	for (int i = 0; i < count; ++i)
+	for (; count > 0; --count)
 	{
 		particles_.push_front(new Fiery(offset, media_.GetImage("impact")));
 	}
@@ -37,7 +37,7 @@ void ParticleSystem::AddImpact(const sf::Vector2f& offset, int count)
 
 void ParticleSystem::AddStars(int count)
 {
-	for (int i = 0; i < count; ++i)
+	for (; count > 0; --count)
 	{
 		particles_.push_front(new Star());
 	}
@@ -169,7 +169,7 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 
 // Star
 #define STAR_MIN_SPEED       30.0f
-#define STAR_MAX_SPEED       3000.0f
+#define STAR_MAX_SPEED       1000.0f
 
 ParticleSystem::Star::Star()
 {
@@ -177,7 +177,7 @@ ParticleSystem::Star::Star()
 	float x = sf::Randomizer::Random(0, WIN_WIDTH);
 	float y = sf::Randomizer::Random(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
 	sprite_.SetPosition(x, y);
-	float scale = sf::Randomizer::Random(0.5f, 1.5f);
+	float scale = sf::Randomizer::Random(0.5f, 2.0f);
 	sprite_.SetScale(scale, scale);
 	speed_ = static_cast<int> (sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED));
 }

@@ -19,10 +19,6 @@
 
 #define CONFIG_FILE "config/config.txt"
 
-#ifndef SVN_REV
-#define SVN_REV "???"
-#endif
-
 #define MARGIN_X 120
 
 
@@ -507,7 +503,7 @@ Game::Scene Game::Play()
 		particles_.Show(app_);
 		for (it = entities_.begin(); it != entities_.end(); ++it)
 		{
-			(**it).Show(app_);
+			app_.Draw(**it);
 		}
 		bullets_.Show(app_);
 		panel_.Show(app_);
@@ -607,7 +603,7 @@ Game::Scene Game::InGameMenu()
 		std::list<Entity*>::iterator it;
 		for (it = entities_.begin(); it != entities_.end(); ++it)
 		{
-			(**it).Show(app_);
+			app_.Draw(**it);
 		}
 		panel_.Show(app_);
 		
@@ -717,7 +713,7 @@ Game::Scene Game::EndPlay()
 		std::list<Entity*>::iterator it;
 		for (it = entities_.begin(); it != entities_.end(); ++it)
 		{
-			(**it).Show(app_);
+			app_.Draw(**it);
 		}
 		panel_.Show(app_);
 		app_.Draw(info);

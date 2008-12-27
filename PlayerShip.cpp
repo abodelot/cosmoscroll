@@ -54,7 +54,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
 #endif
 
-	ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, &sprite_);
+	ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, this);
 	
 	panel_.SetMaxShipHP(HP_MAX);
 	panel_.SetMaxShield(SHIELD_MAX);
@@ -140,7 +140,7 @@ void PlayerShip::Action()
 	if (!overheated_)
 	{
 		float h = 0.0f;
-		sf::Vector2f offset = sprite_.GetPosition() + GUN_OFFSET;
+		sf::Vector2f offset = GetPosition() + GUN_OFFSET;
 		
 		if (controller_.HasInput(AC::WEAPON_1, controls_))
 		{ 
@@ -163,8 +163,8 @@ void PlayerShip::Action()
 
 void PlayerShip::Move(float frametime)
 {
-	static const float WIDTH = sprite_.GetSize().x;
-	static const float HEIGHT = sprite_.GetSize().y;
+	static const float WIDTH = GetSize().x;
+	static const float HEIGHT = GetSize().y;
 	// déplacement
 	const sf::Vector2f& offset = GetPosition();
 	float x = offset.x;
@@ -215,7 +215,7 @@ void PlayerShip::Move(float frametime)
 			x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
 		/*}*/
 	}
-	sprite_.SetPosition(x, y);
+	SetPosition(x, y);
 	
 	// regénération bouclier
 	if (shield_ < SHIELD_MAX)
@@ -226,8 +226,8 @@ void PlayerShip::Move(float frametime)
 			// ajout d'une boule supplémentaire
 			++shield_;
 			ParticleSystem& p = ParticleSystem::GetInstance();
-			p.RemoveShield(&sprite_);
-			p.AddShield(shield_, &sprite_);
+			p.RemoveShield(this);
+			p.AddShield(shield_, this);
 			
 			shield_timer_ = 1 / SHIELD_RECOVERY_RATE;
 			panel_.SetShield(shield_);
@@ -274,10 +274,10 @@ void PlayerShip::Hit(int damage)
 	if (shield_ > 0)
 	{
 		shield_ -= damage;
-		p.RemoveShield(&sprite_);
+		p.RemoveShield(this);
 		if (shield_ > 0)
 		{
-			p.AddShield(shield_, &sprite_);
+			p.AddShield(shield_, this);
 		}
 		else
 		{
@@ -294,7 +294,7 @@ void PlayerShip::Hit(int damage)
 		panel_.SetShipHP(hp_);
 		if (IsDead())
 		{
-			p.AddExplosion(sprite_.GetPosition());
+			p.AddExplosion(GetPosition());
 		}
 	}
 }
@@ -323,11 +323,11 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			{
 				hellfire_.SetTriple(true);
 				laserbeam_.SetTriple(true);
-				puts("bonus triple tir activé");
+				//puts("bonus triple tir activé");
 			}
 			else
 			{
-				puts("bonus triple tir relancé");
+				//puts("bonus triple tir relancé");
 			}
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
 			break;
@@ -335,11 +335,11 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			if (bonus_[T_SPEED] == 0)
 			{
 				speed_ = HIGH_SPEED;
-				puts("bonus speed activé");
+				//puts("bonus speed activé");
 			}
 			else
 			{
-				puts("bonus speed relancé");
+				//puts("bonus speed relancé");
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
 			break;
@@ -398,10 +398,10 @@ void PlayerShip::KonamiCodeOn()
 	panel_.SetShipHP(hp_);
 	shield_ = 42;
 	panel_.SetShield(shield_);
-	particles.RemoveShield(&sprite_);
-	particles.AddShield(shield_, &sprite_);
+	particles.RemoveShield(this);
+	particles.AddShield(shield_, this);
 	hellfire_.SetTriple(true);
 	laserbeam_.SetTriple(true);
-	particles.AddMessage(sprite_.GetPosition(), L"Have you mooed today?");
+	particles.AddMessage(GetPosition(), L"Have you mooed today?");
 }
 

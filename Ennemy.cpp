@@ -34,7 +34,7 @@ void Ennemy::Hit(int damage)
 		{
 			Game::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
 		}
-		ParticleSystem::GetInstance().AddExplosion(sprite_.GetPosition());
+		ParticleSystem::GetInstance().AddExplosion(GetPosition());
 	}
 }
 

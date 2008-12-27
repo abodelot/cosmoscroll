@@ -82,9 +82,8 @@ private:
 		 * @return true si la particule est morte, sinon false
 		 */
 		virtual bool OnUpdate(float frametime) = 0;
-		
-	
 		virtual ~Particle() {};
+		
 		/**
 		 * Affichage de la particule
 		 */

@@ -6,7 +6,7 @@
 /**
  * Base de toute entité du jeu (classe abstraite)
  */
-class Entity
+class Entity: public sf::Sprite
 {
 public:
 	/**
@@ -17,11 +17,6 @@ public:
 	Entity(const sf::Image& img, const sf::Vector2f& offset, int hp=3);
 	
 	virtual ~Entity();
-	
-	/**
-	 * Afficher le vaisseau
-	 */
-	virtual void Show(sf::RenderWindow& app) const;
 	
 	/**
 	 * Encaisser des dommages
@@ -69,21 +64,8 @@ public:
 	
 	virtual inline void Flip(bool it)
 	{
-		sprite_.FlipX(it);
+		FlipX(it);
 		flipped_ = it;
-	}
-	
-	/**
-	 * Obtenir la position du vaisseau
-	 */
-	virtual sf::Vector2f GetPosition() const
-	{
-		return sprite_.GetPosition();
-	}
-
-	inline void SetPosition(const sf::Vector2f& offset)
-	{
-		sprite_.SetPosition(offset);
 	}
 	
 	/**
@@ -109,7 +91,6 @@ public:
 	}*/
 	
 protected:
-	sf::Sprite sprite_;
 	int hp_;
 	bool flipped_;
 	

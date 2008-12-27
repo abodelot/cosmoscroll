@@ -7,8 +7,8 @@
 
 Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp)
 {
-	sprite_.SetImage(img);
-	sprite_.SetPosition(offset);
+	SetImage(img);
+	SetPosition(offset);
 	hp_ = hp;
 	flipped_ = false;
 	
@@ -24,12 +24,6 @@ Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp)
 
 Entity::~Entity()
 {
-}
-
-
-void Entity::Show(sf::RenderWindow& app) const
-{
-	app.Draw(sprite_);
 }
 
 
@@ -56,7 +50,7 @@ void Entity::KillIfOut()
 	{
 		hp_ = 0;
 #ifdef DEBUG_ENTITY
-		sf::Vector2f pos = sprite_.GetPosition();
+		sf::Vector2f pos = GetPosition();
 		printf("(entity is out : x %f, y %f)\n", pos.x, pos.y);
 #endif
 	}
@@ -67,10 +61,10 @@ sf::FloatRect Entity::GetRect() const
 {
 	// Utiliser GetLocalRect avec SFML 1.4 (?)
 	sf::FloatRect rect;
-	rect.Left = sprite_.GetPosition().x;
-	rect.Top = sprite_.GetPosition().y;
-	rect.Right = rect.Left + sprite_.GetSize().x;	
-	rect.Bottom = rect.Top + sprite_.GetSize().y;
+	rect.Left = GetPosition().x;
+	rect.Top = GetPosition().y;
+	rect.Right = rect.Left + GetSize().x;	
+	rect.Bottom = rect.Top + GetSize().y;
 	return rect;
 }
 

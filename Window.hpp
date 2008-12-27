@@ -8,6 +8,10 @@
 #define WIN_FPS     60
 #define WIN_TITLE   "CosmoScroll"
 
+#ifndef SVN_REV
+#define SVN_REV "???"
+#endif
+
 #define COSMOSCROLL_VERSION "0.1"
 #define COSMOSCROLL_ABOUT str_sprintf(\
 		L"À propos de CosmoScroll\n\n" \
