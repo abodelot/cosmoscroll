@@ -953,22 +953,23 @@ void load_menu(OptionMenu what, Menu& menu, sf::String& title)
 			break;
 		case OPT_KEYBOARD:
 			title.SetText("Clavier");
-			menu.AddItem(str_sprintf("Haut : %u",
-				controls.GetBinding(AC::MOVE_UP, AC::KEYBOARD)), 1);
-			menu.AddItem(str_sprintf("Bas : %u",
-				controls.GetBinding(AC::MOVE_DOWN, AC::KEYBOARD)), 2);
-			menu.AddItem(str_sprintf("Gauche : %u",
-				controls.GetBinding(AC::MOVE_LEFT, AC::KEYBOARD)), 3);
-			menu.AddItem(str_sprintf("Droite : %u",
-				controls.GetBinding(AC::MOVE_RIGHT, AC::KEYBOARD)), 4);
-			menu.AddItem(str_sprintf("Arme 1 : %u",
-				controls.GetBinding(AC::WEAPON_1, AC::KEYBOARD)), 5);
-			menu.AddItem(str_sprintf("Arme 2 : %u",
-				controls.GetBinding(AC::WEAPON_2, AC::KEYBOARD)), 6);
-			menu.AddItem(str_sprintf(L"Utiliser bonus Glaçon : %u",
-				controls.GetBinding(AC::USE_COOLER, AC::KEYBOARD)), 7);
-			menu.AddItem(str_sprintf("Pause : %u",
-				controls.GetBinding(AC::PAUSE, AC::KEYBOARD)), 8);
+			menu.SetLineSpace(4);
+			menu.AddItem(str_sprintf("Haut : %s", AC::KeyToString(
+				controls.GetBinding(AC::MOVE_UP, AC::KEYBOARD))), 1);
+			menu.AddItem(str_sprintf("Bas : %s", AC::KeyToString(
+				controls.GetBinding(AC::MOVE_DOWN, AC::KEYBOARD))), 2);
+			menu.AddItem(str_sprintf("Gauche : %s", AC::KeyToString(
+				controls.GetBinding(AC::MOVE_LEFT, AC::KEYBOARD))), 3);
+			menu.AddItem(str_sprintf("Droite : %s", AC::KeyToString(
+				controls.GetBinding(AC::MOVE_RIGHT, AC::KEYBOARD))), 4);
+			menu.AddItem(str_sprintf("Arme 1 : %s", AC::KeyToString(
+				controls.GetBinding(AC::WEAPON_1, AC::KEYBOARD))), 5);
+			menu.AddItem(str_sprintf("Arme 2 : %s", AC::KeyToString(
+				controls.GetBinding(AC::WEAPON_2, AC::KEYBOARD))), 6);
+			menu.AddItem(str_sprintf(L"Utiliser bonus Glaçon : %s", AC::KeyToString(
+				controls.GetBinding(AC::USE_COOLER, AC::KEYBOARD))), 7);
+			menu.AddItem(str_sprintf("Pause : %s", AC::KeyToString(
+				controls.GetBinding(AC::PAUSE, AC::KEYBOARD))), 8);
 			break;
 		case OPT_JOYSTICK:
 			title.SetText("Joystick");

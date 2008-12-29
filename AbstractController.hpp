@@ -66,6 +66,12 @@ public:
 	 */
 	void SetBinding(Action action, Device device, unsigned int binding);
 	
+	/**
+	 * Obtenir la repésentation textuelle d'une touche
+	 * @param[in] key: key code sfml de la touche
+	 */
+	static const char* KeyToString(int key);
+	
 private:
 	AbstractController();
 	AbstractController(const AbstractController& other);
