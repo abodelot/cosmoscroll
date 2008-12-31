@@ -38,7 +38,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	controller_(AC::GetInstance()),
 	panel_(ControlPanel::GetInstance()),
 	laserbeam_(Weapon::LASERBEAM, this),
-	hellfire_(Weapon::HELLFIRE, this)
+	hellfire_(Weapon::HELLFIRE, this),
+	animation_(GET_ANIM("playership"))
 {
 #ifdef DEBUG
 	puts("PlayerShip()");
@@ -88,6 +89,11 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	
 	controls_ = AC::ALL;
 	//use_limits_ = true;
+	
+	// init animation
+	frame_ = 0;
+	frame_timer_ = animation_.GetDelay();
+	SetSubRect(animation_.GetFrame(0));
 }
 
 
@@ -265,6 +271,15 @@ void PlayerShip::Move(float frametime)
 	}
 	laserbeam_.Update(frametime);
 	hellfire_.Update(frametime);
+	
+	// animation
+	frame_timer_ -= frametime;
+	if (frame_timer_ <= 0)
+	{
+		SetSubRect(animation_.GetFrame(frame_));
+		frame_timer_ = animation_.GetDelay();
+		frame_ = (frame_ + 1) % animation_.GetSize();
+	}
 }
 
 

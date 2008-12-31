@@ -11,6 +11,7 @@
 #include "ControlPanel.hpp"
 #include "Entity.hpp"
 #include "Weapon.hpp"
+#include "Animation.hpp"
 
 /**
  * Vaisseau spatial contrôlable par un joueur
@@ -93,6 +94,10 @@ private:
 	AbstractController& controller_;
 	ControlPanel& panel_;
 	Weapon laserbeam_, hellfire_;
+	
+	const Animation& animation_;
+	float frame_timer_;
+	int frame_;
 };
 
 #endif /* guard PLAYERSHIP_HPP */

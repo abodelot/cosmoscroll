@@ -2,7 +2,7 @@
 #define BLORB_HPP
 
 #include "Ennemy.hpp"
-#include "AnimationManager.hpp"
+#include "Animation.hpp"
 
 /*
  * Un ennemy historique :)
@@ -17,7 +17,7 @@ public:
 private:
 	float timer_;
 	int frame_;
-	const AnimationManager::Animation* anim_;
+	const Animation& animation_;
 };
 
 #endif /* guard BLORB_HPP */

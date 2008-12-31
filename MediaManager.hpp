@@ -11,6 +11,9 @@
 #include <map>
 #include <string>
 
+#include "Animation.hpp"
+
+
 /**
  * Classe singleton pour gérer les ressources (images, font)
  */
@@ -18,13 +21,13 @@ class MediaManager
 {
 public:
 	/**
-	 * Récupérer l'instance unique
+	 * Obtenir l'instance unique
 	 * @return référence sur le gestionnaire de ressources
 	 */
 	static MediaManager& GetInstance();
 	
 	/**
-	 * Récupérer une image
+	 * Obtenir une image
 	 * @param[in] key: identifiant de l'image
 	 * @return référence sur l'image
 	 */
@@ -32,14 +35,14 @@ public:
 
 #ifndef NO_AUDIO	
 	/**
-	 * Récupérer un buffer audio
+	 * Obtenir un buffer audio
 	 * @param[in] key: identifiant du buffer
 	 * @return référence sur le buffer
 	 */
 	const sf::SoundBuffer& GetSoundBuf(const char* key) const;
 
 	/**
-	 * Récupérer une musique
+	 * Obtenir une musique
 	 * @param[in] key: identifiant de la musique
 	 * @return pointeur sur la musique
 	 */
@@ -47,11 +50,16 @@ public:
 #endif
 	
 	/**
-	 * Récupérer la police de caractères
-	 * @param[in] size: taille énuméree
+	 * Obtenir la police de caractères
 	 * @return référence sur la police
 	 */
 	const sf::Font& GetFont() const;
+	
+	/**
+	 * Obtenir une animation
+	 * @param[in] key: identifiant de l'animation
+	 */
+	const Animation& GetAnimation(const char* key) const;
 	
 private:
 	/**
@@ -67,6 +75,7 @@ private:
 	std::map<std::string, sf::SoundBuffer> sounds_;
 	std::map<std::string, std::string> musics_;
 #endif
+	std::map<std::string, Animation> animations_;
 	sf::Font font_;
 };
 
@@ -93,6 +102,11 @@ inline Music* GET_MUSIC(const char* key)
 inline const sf::Font& GET_FONT()
 {
 	return MediaManager::GetInstance().GetFont();
+}
+
+inline const Animation& GET_ANIM(const char* key)
+{
+	return MediaManager::GetInstance().GetAnimation(key);
 }
 
 #endif /* guard MEDIAMANAGER_HPP */

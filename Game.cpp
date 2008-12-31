@@ -180,8 +180,8 @@ Game::Scene Game::Intro()
 		WIN_HEIGHT - rect.GetHeight() - PADDING);	
 	
 	sf::Sprite ship(GET_IMG("spaceship-red"));
-		ship.SetPosition(-20, 100);
-	
+	ship.SetPosition(-20, 100);
+	ship.SetSubRect(GET_ANIM("playership").GetFrame(0));
 	while (elapsed < DURATION)
 	{
 		while (controls_.GetAction(action)) 
