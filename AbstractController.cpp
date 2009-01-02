@@ -244,7 +244,7 @@ const char* AbstractController::KeyToString(int code)
 		case Num7: return "Num7";
 		case Num8: return "Num8";
 		case Num9: return "Num9";
-		case Escape: return "Escape";
+		case sf::Key::Escape: return "Escape";	// Un Escape est déja défini dans minGW-> Ambiguité.
 		case LControl: return "LControl";
 		case LShift: return "LShift";
 		case LAlt: return "LAlt";
