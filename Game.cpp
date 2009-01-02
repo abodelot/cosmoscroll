@@ -476,7 +476,6 @@ Game::Scene Game::Play()
 					next = END_PLAY;
 					break;
 				}
-				bullets_.CleanSenders(*it);
 				delete *it;
 				it = entities_.erase(it);
 			}

@@ -45,8 +45,8 @@ public:
 	};
 	
 	/**
-	 * Définit le level courant, affecte à Description le contenu de l'attribut description, 
-	 * s'îl est non vide.
+	 * Définir le niveau courant
+	 * @param[in] level: indice du niveau
 	 */
 	Error Set(int level);
 	

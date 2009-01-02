@@ -8,6 +8,8 @@
 
 #include "Entity.hpp"
 
+class BulletManager;
+
 /**
  * Une arme associée à une entité
  */
@@ -19,7 +21,13 @@ public:
         LASERBEAM, HELLFIRE, PLASMACANNON, DEVILSEYES, WEAPON_COUNT
     };
     
-	Weapon(Type type, Entity* sender = NULL);
+    /**
+     * @param[in] type: type de l'arme
+     * @parma[in] sender: entité qui possède l'arme
+     */
+	Weapon(Type type, Entity* sender);
+    
+    ~Weapon();
     
     float Shoot(const sf::Vector2f& offset, float angle = 0.f);
     
@@ -39,6 +47,7 @@ private:
     
     bool triple_;
 	Entity* owner_;
+	static BulletManager& bullets_;
 };
 
 #endif /* guard WEAPON_HPP */

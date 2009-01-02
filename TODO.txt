@@ -22,3 +22,6 @@ Milestone 0.2
 * Optimiser cos/sin avec une table pré-calculée
 * Ajout mode plein-écran / fenêtré dans la configuration
 
+* Les tirs doivents traverser les bonus
+	- Faire hériter Bullet de Entity et ajout de méthodes OnCollide ?
+

@@ -90,7 +90,7 @@ LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 	float t = 0.0f, last_t = 0.0f;
 	std::string classname;
 #ifdef DEBUG
-	puts("------ begin level parsing ------");
+	printf("parsing level... ");
 #endif
 	while (elem)
 	{
@@ -130,13 +130,10 @@ LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 		}
 		
 		waiting_line_.push(slot);
-#ifdef DEBUG
-		printf("scheduled <%s> at %.2f sec\n", classname.c_str(), last_t);
-#endif
 		elem = elem->NextSiblingElement();
 	}
 #ifdef DEBUG
-	puts("------ end level parsing ------");
+	puts("done.");
 #endif
 	return SUCCESS;
 }
@@ -146,11 +143,11 @@ Entity* LevelManager::GiveNext(float timer)
 {
 	if (!waiting_line_.empty())
 	{
-		EntitySlot next = waiting_line_.front();
-		if (next.spawntime < timer)
+		if (waiting_line_.front().spawntime < timer)
 		{
+			Entity* next = waiting_line_.front().self;
 			waiting_line_.pop();
-			return next.self;
+			return next;
 		}
 	}
 	return NULL;

@@ -11,12 +11,12 @@
 #include "ControlPanel.hpp"
 #include "Entity.hpp"
 #include "Weapon.hpp"
-#include "Animation.hpp"
+#include "Animated.hpp"
 
 /**
  * Vaisseau spatial contrôlable par un joueur
  */
-class PlayerShip: public Entity
+class PlayerShip: public Entity, public Animated
 {
 public:
 	PlayerShip(const sf::Vector2f& offset, const char* image);
@@ -94,10 +94,6 @@ private:
 	AbstractController& controller_;
 	ControlPanel& panel_;
 	Weapon laserbeam_, hellfire_;
-	
-	const Animation& animation_;
-	float frame_timer_;
-	int frame_;
 };
 
 #endif /* guard PLAYERSHIP_HPP */

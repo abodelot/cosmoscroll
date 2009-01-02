@@ -41,7 +41,7 @@ static void load_or_die(std::string& music_name, const char* filename)
 {
 	music_name = filename;
 }
-	
+
 #endif
 
 // charger une liste de ressources depuis un fichier
@@ -181,19 +181,23 @@ MediaManager::MediaManager()
 	}
 	
 	// création des animations
-	
-	// capsule
-	Animation* anim = &animations_["capsule"];
-	anim->SetDelay(0.1f);
-	const int NB_FRAMES = 8;
-	for (int i = 0; i < NB_FRAMES; ++i)
+	BuildAnimation("capsule", 32, 32, 8, 0.1f);
+	BuildAnimation("playership", 64, 40, 2, 0.1f);
+	BuildAnimation("drone", 48, 32, 2, 0.1f);
+}
+
+
+void MediaManager::BuildAnimation(const char* name, int width, int height,
+	int count, float delay, int offset)
+{
+	Animation* p = &animations_[name];
+	for (int i = 0; i < count; ++i)
 	{
-		anim->AddFrame(i * 32, 0, 32, 32);
+		p->AddFrame(i * width, offset, width, height);
 	}
-	// spaceship
-	anim = &animations_["playership"];
-	anim->SetDelay(0.1f);
-	anim->AddFrame(0, 0, 64, 40);
-	anim->AddFrame(64, 0, 64, 40);
+	p->SetDelay(delay);
+#ifdef DEBUG
+	std::cout << "building anim:" << name << std::endl;
+#endif
 }
 

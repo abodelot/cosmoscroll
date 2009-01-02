@@ -70,6 +70,18 @@ private:
 	MediaManager(const MediaManager& other);
 	MediaManager& operator=(const MediaManager& other);
 	
+	/**
+	 * Construire les frames d'une animation
+	 * @param[in] name: nom de l'animation
+	 * @param[in] width: largeur d'une frame
+	 * @param[in] height: hauteur d'une frame
+	 * @param[in] count: nombre de frames
+	 * @param[in] delay: temps d'attente entre chaque frame
+	 * @param[in] offset: décalage y sur le tileset
+	 */
+	void BuildAnimation(const char* name, int width, int height, int count,
+		float delay, int offset=0);
+	
 	std::map<std::string, sf::Image> images_;
 #ifndef NO_AUDIO
 	std::map<std::string, sf::SoundBuffer> sounds_;
