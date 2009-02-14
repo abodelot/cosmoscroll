@@ -78,7 +78,7 @@ public:
 	 * Afficher les éléments du menu
 	 * @param[in] app: fenêtre de rendu
 	 */
-	void Show(const sf::RenderWindow& app) const;
+	void Show(sf::RenderWindow& app) const;
 	
 	/**
 	 * Supprimer tous les éléments du menu

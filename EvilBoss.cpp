@@ -1,27 +1,23 @@
 #include "EvilBoss.hpp"
 #include "MediaManager.hpp"
 #include "Math.hpp"
-#include "Game.hpp"
-
-#include <iostream>
 
 #define SPEED 25
 #define CHILDS 8
 
-#define L_EYE_OFFSET        sf::Vector2f(131,  67)
-#define R_EYE_OFFSET	    sf::Vector2f(233, 70)
+#define L_EYE_OFFSET    sf::Vector2f(131,  67)
+#define R_EYE_OFFSET    sf::Vector2f(233, 70)
 
 #define L_MOUTH_X_OFFSET 85
 #define R_MOUTH_X_OFFSET 201
-#define MOUTH_Y_OFFSET 128
+#define MOUTH_Y_OFFSET   128
 
 
 EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
 	Ennemy(offset, GET_IMG("evil_boss"), 500, target),
 	eye_left_(Weapon::PLASMACANNON, this),
 	eye_right_(Weapon::PLASMACANNON, this),
-	canon_(Weapon::DEVILSEYES, this),
-	game_(Game::GetInstance())
+	canon_(Weapon::DEVILSEYES, this)
 {
 	left_ = true;
 	phase_ = EVIL;
@@ -50,14 +46,14 @@ void EvilBoss::Move(float frametime)
 	}
 
 	if (GetPosition().x < target_->GetPosition().x)
-    {
-    	left = false;
-    }
+	{
+		left = false;
+	}
 
 	if (left != left_)
 	{
-	    FlipX(!left);
-	    left_ = left;
+		FlipX(!left);
+		left_ = left;
 	}
 	eye_left_.Update(frametime);
 	eye_right_.Update(frametime);

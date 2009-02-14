@@ -1,13 +1,12 @@
 CC=g++
-LD=ld
-TINYXML_DIR=tinyxml
-TINYXML_OBJ=$(TINYXML_DIR)/tinyxml.o $(TINYXML_DIR)/tinyxmlerror.o $(TINYXML_DIR)/tinyxmlparser.o
-
 CFLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
 LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -ldumb
 EXEC=cosmoscroll
 SRC= $(wildcard *.cpp)
 OBJ= $(SRC:.cpp=.o)
+
+# tinyxml
+TINYXML_OBJ= tinyxml/tinyxml.o tinyxml/tinyxmlparser.o tinyxml/tinyxmlerror.o
 
 # static/dynamic linking
 LINK=dynamic
@@ -33,20 +32,29 @@ endif
 SVNDEF= -DSVN_REV="\"$(shell svnversion -n .)\""
 CFLAGS += $(SVNDEF)
 
-$(EXEC): $(TINYXML_OBJ) $(OBJ)
-	$(CC) $(TINYXML_OBJ) $(OBJ) -o $(EXEC) $(LDFLAGS)
-
-$(TINYXML_OBJ):
-	@(cd $(TINYXML_DIR) && $(MAKE))
+$(EXEC): $(OBJ) $(TINYXML_OBJ)
+	$(CC) $^ -o $(EXEC) $(LDFLAGS)
 
 %.o: %.cpp
+	$(CC) $< -c $(CFLAGS)
+
+tinyxml/tinyxml.o: tinyxml/tinyxml.cpp
+	$(CC) $< -c -o $@ $(CFLAGS)
+
+tinyxml/tinyxmlparser.o: tinyxml/tinyxmlparser.cpp
+	$(CC) $< -c -o $@ $(CFLAGS)
+
+tinyxml/tinyxmlerror.o: tinyxml/tinyxmlerror.cpp
 	$(CC) $< -c -o $@ $(CFLAGS)
 
 
-.PHONY: clean mrproper
+.PHONY: clean cleanxml mrproper
 
 clean:
 	-rm *.o
+
+cleanxml:
+	-rm tinyxml/*.o
 
 mrproper: clean
 	-rm $(EXEC)

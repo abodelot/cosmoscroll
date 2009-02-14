@@ -78,7 +78,6 @@ Game::Game() :
 Game::~Game()
 {
 	RemoveEntities();
-	app_.EnableKeyRepeat(true); // bug SFML 1.3 sous linux : il faut réactiver à la main le keyrepeat
 	app_.Close();
 	
 	// writing configuration
@@ -507,6 +506,7 @@ Game::Scene Game::Play()
 		bullets_.Show(app_);
 		panel_.Show(app_);
 		app_.Display();
+		app_.Clear();
 	}
 	return next;
 }
@@ -514,7 +514,6 @@ Game::Scene Game::Play()
 
 Game::Scene Game::About()
 {
-
 	bool running = true;
 	int choice = MAIN_MENU;
 	AC::Action action;
@@ -609,6 +608,7 @@ Game::Scene Game::InGameMenu()
 		app_.Draw(title);
 		menu.Show(app_);
 		app_.Display();
+		app_.Clear();
 	}
 
 	return static_cast<Scene>(what);
@@ -717,6 +717,7 @@ Game::Scene Game::EndPlay()
 		panel_.Show(app_);
 		app_.Draw(info);
 		app_.Display();
+		app_.Clear();
 	}
 	return what;
 }
@@ -1203,6 +1204,7 @@ Game::Scene Game::Options()
 		app_.Draw(title);
 		menu.Show(app_);
 		app_.Display();
+		app_.Clear();
 	}
 	return next;
 }

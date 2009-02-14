@@ -156,7 +156,7 @@ void Menu::SelectItem(int n)
 }
 
 
-void Menu::Show(const sf::RenderWindow& app) const
+void Menu::Show(sf::RenderWindow& app) const
 {
 	int length = items_.size();
 	for (int i = 0; i < length; ++i)
