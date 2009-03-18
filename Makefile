@@ -1,18 +1,9 @@
 CC=g++
-CFLAGS=-Wall -Wextra -Wwrite-strings -pedantic -ansi
-LDFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -ldumb
-EXEC=cosmoscroll
-SRC= $(wildcard *.cpp)
+CFLAGS= -Wall -Wextra -Wwrite-strings -ansi -pedantic
+LDFLAGS= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -ldumb
+EXEC=bin/cosmoscroll
+SRC= $(wildcard src/*/*.cpp)
 OBJ= $(SRC:.cpp=.o)
-
-# tinyxml
-TINYXML_OBJ= tinyxml/tinyxml.o tinyxml/tinyxmlparser.o tinyxml/tinyxmlerror.o
-
-# static/dynamic linking
-LINK=dynamic
-ifeq ($(LINK), dynamic)
-	CFLAGS += -DSFML_DYNAMIC
-endif
 
 # debug/release mode
 DEBUG=yes
@@ -20,6 +11,12 @@ ifeq ($(DEBUG), yes)
 	CFLAGS += -g -DDEBUG
 else
 	CFLAGS += -O2
+endif
+
+# static/dynamic linking
+LINK=dynamic
+ifeq ($(LINK), dynamic)
+	CFLAGS += -DSFML_DYNAMIC
 endif
 
 # disable audio
@@ -32,30 +29,21 @@ endif
 SVNDEF= -DSVN_REV="\"$(shell svnversion -n .)\""
 CFLAGS += $(SVNDEF)
 
-$(EXEC): $(OBJ) $(TINYXML_OBJ)
+
+$(EXEC): $(OBJ) 
 	$(CC) $^ -o $(EXEC) $(LDFLAGS)
 
 %.o: %.cpp
-	$(CC) $< -c $(CFLAGS)
-
-tinyxml/tinyxml.o: tinyxml/tinyxml.cpp
 	$(CC) $< -c -o $@ $(CFLAGS)
-
-tinyxml/tinyxmlparser.o: tinyxml/tinyxmlparser.cpp
-	$(CC) $< -c -o $@ $(CFLAGS)
-
-tinyxml/tinyxmlerror.o: tinyxml/tinyxmlerror.cpp
-	$(CC) $< -c -o $@ $(CFLAGS)
-
 
 .PHONY: clean cleanxml mrproper
 
 clean:
-	-rm *.o
+	-rm src/{core,utils,menu,entities}/*.o
 
 cleanxml:
-	-rm tinyxml/*.o
-
+	-rm src/tinyxml/*.o
+	
 mrproper: clean
 	-rm $(EXEC)
 
