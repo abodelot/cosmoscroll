@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<weapons>
+	<weapon id="0" name="Plasma Gun" image="ammo/plasma" sound="NIL" heat_cost="5" fire_rate="3" damage="1" speed="380" />
+	<weapon id="1" name="Laser Beam" image="ammo/laserbeam" sound="NIL" heat_cost="3" fire_rate="24" damage="2" speed="360" />
+	<weapon id="2" name="Hellfire" image="ammo/hellfire" sound="blaster-shot-1" heat_cost="1.7" fire_rate="8" damage="1" speed="480" />
+	<weapon id="3" name="Devil Eyes" image="ammo/devil-eyes" sound="blaster-shot-2" heat_cost="1" fire_rate="0.7" damage="6" speed="400" />
+	<weapon id="4" name="Missile Wasp" image="ammo/wasp" sound="NIL" heat_cost="0" fire_rate="0.2" damage="10" speed="280" />
+</weapons>
+

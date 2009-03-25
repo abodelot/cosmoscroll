@@ -5,6 +5,8 @@
 
 Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp)
 {
+	id_ = -1;
+
 	SetImage(img);
 	SetPosition(offset);
 	hp_ = hp;
@@ -23,20 +25,20 @@ void Entity::Hit(int damage)
 }
 
 
-void Entity::Collide(Entity& ent)
+void Entity::OnCollide(Entity& entity)
 {
 	// TODO: gérer les collisions de façon plus réaliste, l'angle de this
 	// devrait être modifié en fonction de l'angle de ent
 	// -> comment définir GetAngle() pour chaque entité ?
 	// -> trouver la formule physique adéquate pour gérer les rebonds
-	(void) ent;
+	(void) entity;
 	Hit(1);
 }
 
 
 void Entity::KillIfOut()
 {
-	if (outside_universe(GetRect()))
+	if (outside_universe(GetCollideRect()))
 	{
 		hp_ = 0;
 #ifdef DEBUG_ENTITY
@@ -47,13 +49,24 @@ void Entity::KillIfOut()
 }
 
 
-sf::FloatRect Entity::GetRect() const
+sf::FloatRect Entity::GetCollideRect() const
 {
 	sf::FloatRect rect;
 	rect.Left = GetPosition().x;
 	rect.Top = GetPosition().y;
-	rect.Right = rect.Left + GetSize().x;	
+	rect.Right = rect.Left + GetSize().x;
 	rect.Bottom = rect.Top + GetSize().y;
 	return rect;
 }
 
+
+void Entity::SetID(int id)
+{
+	id_ = id;
+}
+
+
+int Entity::GetID() const
+{
+	return id_;
+}

@@ -15,26 +15,29 @@ public:
 	 * @param[in] hp: points de vie
 	 */
 	Entity(const sf::Image& img, const sf::Vector2f& offset, int hp=3);
-	
+
 	virtual ~Entity();
-	
+
 	/**
 	 * Encaisser des dommages
 	 */
 	virtual void Hit(int damage);
-	
+
 	/**
 	 * Déplacer l'entité
 	 * @param[in] frametime: temps de la frame actuelle
 	 */
 	virtual void Move(float frametime) = 0;
-	virtual void Action() {}	
+	virtual void Action() {}
+
+	//virtual void Update(float frametime) = 0;
 
 	/**
-	 * Comportement de l'entité si ent entre en collision avec elle
+	 * Notifier l'entité d'une collision
+	 * @param[in, out] entity: entité entrée en collision
 	 */
-	virtual void Collide(Entity& ent);
-	
+	virtual void OnCollide(Entity& entity);
+
 	/**
 	 * Détermine si l'entité est encore en vie
 	 * @return true si l'entité doit être supprimée
@@ -43,7 +46,7 @@ public:
 	{
 		return hp_ <= 0;
 	}
-	
+
 	/**
 	 * Tuer l'entité
 	 */
@@ -51,31 +54,38 @@ public:
 	{
 		hp_ = 0;
 	}
-	
+
 	/**
 	 * Supprime l'unité si elle est hors de l'univers
 	 */
 	void KillIfOut();
-	
+
 	virtual inline bool IsFlipped()
 	{
 		return flipped_;
 	}
-	
+
 	virtual inline void Flip(bool it)
 	{
 		FlipX(it);
 		flipped_ = it;
 	}
-	
+
 	/**
 	 * Obtenir la surface de collision du vaisseau
 	 */
-	virtual sf::FloatRect GetRect() const;
+	virtual sf::FloatRect GetCollideRect() const;
+
+	void SetID(int id);
+
+	int GetID() const;
 
 protected:
 	int hp_;
 	bool flipped_;
+
+private:
+	int id_;
 };
 
 #endif /* guard ENTITY_HPP */

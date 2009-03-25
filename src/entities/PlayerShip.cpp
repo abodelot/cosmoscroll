@@ -3,6 +3,7 @@
 #include <SFML/System.hpp>
 
 #include "PlayerShip.hpp"
+#include "EntityManager.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../core/Window.hpp"
 #include "../utils/Math.hpp"
@@ -38,9 +39,11 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	Animated(GET_ANIM("playership"), *this),
 	controller_(AC::GetInstance()),
 	panel_(ControlPanel::GetInstance()),
-	laserbeam_(Weapon::LASERBEAM, this),
-	hellfire_(Weapon::HELLFIRE, this)
+	laserbeam_(EntityManager::GetInstance().BuildWeapon(1)),
+	hellfire_(EntityManager::GetInstance().BuildWeapon(2))
 {
+	laserbeam_.SetOwner(this);
+	hellfire_.SetOwner(this);
 #ifdef DEBUG
 	puts("PlayerShip()");
 #endif
@@ -56,24 +59,24 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 #endif
 
 	ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, this);
-	
+
 	panel_.SetMaxShipHP(HP_MAX);
 	panel_.SetMaxShield(SHIELD_MAX);
 	panel_.SetMaxHeat(HEAT_MAX);
-	
+
 	panel_.SetShipHP(hp_);
 	panel_.SetShield(shield_);
 	panel_.SetHeat(static_cast<int>(heat_));
 
 	panel_.SetCoolers(coolers_);
 	panel_.SetInfo("");
-	
+
 	// init timed bonus
 	for (int i = 0; i < TIMED_BONUS_COUNT; ++i)
 	{
 		bonus_[i] = 0.f;
 	}
-	
+
 	// init Konami Code
 	konami_code_[0] = AC::MOVE_UP;
 	konami_code_[1] = AC::MOVE_UP;
@@ -86,7 +89,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	konami_code_[8] = AC::WEAPON_2;
 	konami_code_[9] = AC::WEAPON_1;
 	current_konami_event_ = 0;
-	
+
 	controls_ = AC::ALL;
 	//use_limits_ = true;
 }
@@ -106,7 +109,7 @@ void PlayerShip::HandleAction(AC::Action action)
 	{
 		return;
 	}
-	
+
 	if (action == AC::USE_COOLER)
 	{
 		if (coolers_ > 0)
@@ -142,16 +145,16 @@ void PlayerShip::Action()
 	{
 		float h = 0.0f;
 		sf::Vector2f offset = GetPosition() + GUN_OFFSET;
-		
+
 		if (controller_.HasInput(AC::WEAPON_1, controls_))
-		{ 
+		{
 			h += hellfire_.Shoot(offset);
 		}
 		if (controller_.HasInput(AC::WEAPON_2, controls_))
 		{
 			h += laserbeam_.Shoot(offset);
 		}
-		
+
 		heat_ += h;
 		if (heat_ >= HEAT_MAX)
 		{
@@ -170,7 +173,7 @@ void PlayerShip::Move(float frametime)
 	const sf::Vector2f& offset = GetPosition();
 	float x = offset.x;
 	float y = offset.y;
-	
+
 	float dist = frametime * speed_;
 	if (controller_.HasInput(AC::MOVE_UP, controls_))
 	{
@@ -217,7 +220,7 @@ void PlayerShip::Move(float frametime)
 		/*}*/
 	}
 	SetPosition(x, y);
-	
+
 	// regénération bouclier
 	if (shield_ < SHIELD_MAX)
 	{
@@ -229,12 +232,12 @@ void PlayerShip::Move(float frametime)
 			ParticleSystem& p = ParticleSystem::GetInstance();
 			p.RemoveShield(this);
 			p.AddShield(shield_, this);
-			
+
 			shield_timer_ = 1 / SHIELD_RECOVERY_RATE;
 			panel_.SetShield(shield_);
 		}
 	}
-	
+
 	// refroidissement
 	if (heat_ > 0.f)
 	{
@@ -250,7 +253,7 @@ void PlayerShip::Move(float frametime)
 		}
 	}
 	panel_.SetHeat(static_cast<int>(heat_));
-	
+
 	// timer bonus
 	for (int i = 0; i < TIMED_BONUS_COUNT; ++i)
 	{
@@ -266,7 +269,7 @@ void PlayerShip::Move(float frametime)
 	}
 	laserbeam_.Update(frametime);
 	hellfire_.Update(frametime);
-	
+
 	// animation
 	Animated::Update(frametime, *this);
 }
@@ -304,9 +307,9 @@ void PlayerShip::Hit(int damage)
 }
 
 
-void PlayerShip::Collide(Entity& ent)
+void PlayerShip::OnCollide(Entity& entity)
 {
-	Bonus* bonus = dynamic_cast<Bonus*>(&ent);
+	Bonus* bonus = dynamic_cast<Bonus*>(&entity);
 	if (bonus != NULL)
 	{
 		HandleBonus(*bonus);
@@ -351,7 +354,7 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			if (hp_ < HP_MAX)
 			{
 				++hp_;
-				panel_.SetShipHP(hp_);				
+				panel_.SetShipHP(hp_);
 			}
 			break;
 		case Bonus::COOLER:
@@ -395,7 +398,7 @@ void PlayerShip::KonamiCodeOn()
 	overheated_ = false;
 	panel_.SetInfo("");
 	heat_ = 0.f;
-	panel_.SetHeat((int) heat_);	
+	panel_.SetHeat((int) heat_);
 	coolers_ = 42;
 	panel_.SetCoolers(42);
 	hp_ = 42;

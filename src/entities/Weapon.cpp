@@ -5,42 +5,23 @@
 BulletManager& Weapon::bullets_ = BulletManager::GetInstance();
 
 
-Weapon::Weapon(Type type, Entity* sender)
+Weapon::Weapon(const sf::Image& image, float fire_rate, float heat_cost, int damage, int speed)
 {
-	float shot_per_second;
-	switch (type)
-	{
-		case LASERBEAM:
-			shot_per_second = 8.f;
-			energy_cost_ = 3.f;
-			break;
-		case HELLFIRE:
-			shot_per_second = 24.f;
-			energy_cost_ = 1.7f;
-			break;
-		case PLASMACANNON:
-			shot_per_second = 3.f;
-			energy_cost_ = 5.f;
-			break;
-		case DEVILSEYES:
-			shot_per_second = 0.7f;
-			energy_cost_ = 1.f;
-			break;
-		default:
-			exit(EXIT_FAILURE);
-	}
-	
-	type_ = type;
 	fire_timer_ = 0.f;
-	fire_rate_ = 1 / shot_per_second;
+	fire_rate_ = 1 / fire_rate;
 	triple_ = false;
-	owner_ = sender;
+	owner_ = NULL;
+
+	image_ = &image;
+	heat_cost_ = heat_cost;
+	damage_ = damage;
+	speed_ = speed;
 }
 
 
-Weapon::~Weapon()
+void Weapon::SetOwner(Entity* owner)
 {
-	bullets_.CleanSenders(owner_);
+	owner_ = owner;
 }
 
 
@@ -55,14 +36,15 @@ float Weapon::Shoot(const sf::Vector2f& offset, float angle)
 	// peut-on tirer ?
 	if (fire_timer_ <= 0.f)
 	{
-		bullets_.Add(type_, owner_, offset, angle);
+		int emitter = owner_->GetID();
+		bullets_.Add(emitter, offset, angle, image_, speed_, damage_);
 		if (triple_)
 		{
-			bullets_.Add(type_, owner_, offset, angle - 0.15);
-			bullets_.Add(type_, owner_, offset, angle + 0.15);
+			bullets_.Add(emitter, offset, angle - 0.15, image_, speed_, damage_);
+			bullets_.Add(emitter, offset, angle + 0.15, image_, speed_, damage_);
 		}
 		fire_timer_ = fire_rate_;
-		return energy_cost_;
+		return heat_cost_;
 	}
 	return 0.f;
 }

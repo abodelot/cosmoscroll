@@ -17,46 +17,24 @@ void BulletManager::Update(float frametime)
 	BulletIterator it;
 	for (it = bullets_.begin(); it != bullets_.end(); ++it)
 	{
-		float dist = it->speed * frametime;	
+		float dist = it->speed * frametime;
 		it->sprite.Move(dist * math::cos(it->angle), -dist * math::sin(it->angle));
 	}
 }
 
 
-void BulletManager::Add(Weapon::Type type, Entity* sender, const sf::Vector2f& offset, float angle)
+void BulletManager::Add(int emitter_id, const sf::Vector2f& offset, float angle,
+	const sf::Image* image, int speed, int damage)
 {
 	Bullet bullet;
-	switch (type)
-	{
-		case Weapon::LASERBEAM:
-			bullet.sprite.SetImage(GET_IMG("ammo_laserbeam"));
-			bullet.damage = 2;
-			bullet.speed = 360;
-			break;
-		case Weapon::HELLFIRE:
-			bullet.sprite.SetImage(GET_IMG("ammo_hellfire"));
-			bullet.damage = 1;
-			bullet.speed = 480;
-			break;
-		case Weapon::PLASMACANNON:
-			bullet.sprite.SetImage(GET_IMG("ammo_plasma"));
-			bullet.damage = 1;
-			bullet.speed = 420;
-			break;
-		case Weapon::DEVILSEYES:
-			bullet.sprite.SetImage(GET_IMG("ammo_devil"));
-			bullet.damage = 6;
-			bullet.speed = 400;
-		default:
-			break;
-	}
-#ifndef NO_AUDIO
-	sounds_[type].Play();
-#endif
+
+	bullet.sprite.SetImage(*image);
+	bullet.damage = damage;
+	bullet.speed = speed;
 	bullet.sprite.SetPosition(offset);
 	bullet.sprite.SetRotation(RAD_TO_DEG(angle));
 	bullet.angle = angle;
-	bullet.owner = sender;
+	bullet.emitter_id = emitter_id;
 	bullets_.push_back(bullet);
 }
 
@@ -65,7 +43,7 @@ void BulletManager::Collide(std::list<Entity*>& entities)
 {
 	static sf::FloatRect window_rect(0, 0, WIN_WIDTH, WIN_HEIGHT);
 	static ParticleSystem& particles = ParticleSystem::GetInstance();
-	
+
 	sf::FloatRect beamrect;
 	BulletIterator it_b;
 	// pour chaque beam
@@ -82,17 +60,17 @@ void BulletManager::Collide(std::list<Entity*>& entities)
 		// pour chaque vaisseau
 		for (it_e = entities.begin(); it_e != entities.end(); ++it_e)
 		{
-			// La collision se fait entre le bullet et l'entité qui possède l'arme qui l'a tirée
-			if ((*it_b).owner != NULL && (*it_b).owner == (*it_e))
+			// don't kill the emitter
+			if (it_b->emitter_id == (**it_e).GetID())
 			{
 				continue;
 			}
 			else
 			// si la position du beam est dans la surface du vaisseau
-			if ((*it_e)->GetRect().Intersects(beamrect))
+			if ((**it_e).GetCollideRect().Intersects(beamrect))
 			{
 				dead = true;
-				(*it_e)->Hit(it_b->damage);
+				(**it_e).Hit(it_b->damage);
 				particles.AddImpact(sf::Vector2f(vec_pos.x, vec_pos.y), 10);
 				break;
 			}
@@ -133,24 +111,5 @@ void BulletManager::Clear()
 
 BulletManager::BulletManager()
 {
-#ifndef NO_AUDIO
-	sounds_[Weapon::LASERBEAM].SetBuffer(GET_SOUNDBUF("blaster-shot-1"));
-	sounds_[Weapon::HELLFIRE].SetBuffer(GET_SOUNDBUF("blaster-shot-2"));
-	//sounds_[Weapon::PLASMACANNON]
-#endif
-}
-
-
-void BulletManager::CleanSenders(Entity* target)
-{
-	BulletIterator it;
-	
-	for (it = bullets_.begin(); it != bullets_.end(); ++it)
-	{
-		if (it->owner == target)
-		{
-			it->owner = NULL;
-		}
-	}
 }
 

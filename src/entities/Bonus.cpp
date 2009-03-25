@@ -39,9 +39,9 @@ void Bonus::Hit(int damage)
 }
 
 
-void Bonus::Collide(Entity& ent)
+void Bonus::OnCollide(Entity& entity)
 {
-	(void) ent;
+	(void) entity;
 	Kill(); // mort subite lors d'une collision
 }
 

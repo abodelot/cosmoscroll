@@ -12,12 +12,13 @@ class EvilBoss: public Ennemy
 {
 public:
 	EvilBoss(const sf::Vector2f& offset, Entity* target);
-	
+
 	void Move(float frametime);
-	void Collide(Entity& ent);
+	// inherited
+	void OnCollide(Entity& entity);
 	void Action();
 	void Hit(int damage);
-	
+
 private:
 	enum Phase
 	{

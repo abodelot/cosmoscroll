@@ -1,7 +1,8 @@
-ammo_devil.png
-ammo_hellfire.png
-ammo_laserbeam.png
-ammo_plasma.png
+ammo/devil-eyes.png
+ammo/hellfire.png
+ammo/laserbeam.png
+ammo/plasma.png
+ammo/wasp.png
 asteroid-big-1.png
 asteroid-big-2.png
 asteroid-big-3.png

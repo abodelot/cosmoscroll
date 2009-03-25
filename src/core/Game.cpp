@@ -43,7 +43,7 @@ Game::Game() :
 	best_arcade_time_ = 0;
 	music_ = NULL;
 	music_name_ = "space";
-	
+
 	if (config.LoadFromFile(CONFIG_FILE))
 	{
 		config.SeekSection("Settings");
@@ -54,11 +54,11 @@ Game::Game() :
 		config.ReadItem("music", music_name_);
 		controls_.LoadConfig(config);
 	}
-	
+
 	p_ForwardAction_ = NULL;
 	p_StopPlay_ = NULL;
 	player1_ = player2_ = NULL;
-	
+
 	if (!fullscreen)
 	{
 		app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE);
@@ -78,7 +78,7 @@ Game::~Game()
 {
 	RemoveEntities();
 	app_.Close();
-	
+
 	// writing configuration
 	ConfigParser config;
 	config.SeekSection("Settings");
@@ -86,7 +86,7 @@ Game::~Game()
 	config.WriteItem("current_level", current_level_);
 	config.WriteItem("best_arcade_time", best_arcade_time_);
 	config.WriteItem("music", music_name_);
-	
+
 	controls_.SaveConfig(config);
 	config.SaveToFile(CONFIG_FILE);
 }
@@ -147,7 +147,7 @@ Game::Scene Game::Intro()
 	puts("[ Game::Intro ]");
 #endif
 	AC::Action action;
-	
+
 	Scene what = MAIN_MENU;
 	const int DURATION = 5, PADDING = 10;
 	float time, elapsed = 0;
@@ -156,10 +156,10 @@ Game::Scene Game::Intro()
 	sf::Sound intro_sound(GET_SOUNDBUF("title"));
 #endif
 	sf::FloatRect rect;
-	
+
 	sf::Sprite background;
 		background.SetImage(GET_IMG("background"));
-	
+
 	sf::String title;
 	title.SetText("CosmoScroll");
 	title.SetFont(GET_FONT());
@@ -168,21 +168,21 @@ Game::Scene Game::Intro()
 	title.SetPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	rect = title.GetRect();
 	title.SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
-	
+
 	sf::String sfml;
 	sfml.SetText("Powered by SFML");
 	sfml.SetSize(16);
 	sfml.SetColor(sf::Color::White);
 	rect = sfml.GetRect();
 	sfml.SetPosition(WIN_WIDTH - rect.GetWidth() - PADDING,
-		WIN_HEIGHT - rect.GetHeight() - PADDING);	
-	
+		WIN_HEIGHT - rect.GetHeight() - PADDING);
+
 	sf::Sprite ship(GET_IMG("spaceship-red"));
 	ship.SetPosition(-20, 100);
 	ship.SetSubRect(GET_ANIM("playership").GetFrame(0));
 	while (elapsed < DURATION)
 	{
-		while (controls_.GetAction(action)) 
+		while (controls_.GetAction(action))
 		{
 			if (action == AC::EXIT_APP)
 			{
@@ -207,7 +207,7 @@ Game::Scene Game::Intro()
 		title.Scale(0.99, 0.99); // FIXME: dépendant des FPS
 		title.SetColor(sf::Color(255, 255, 255,
 			(sf::Uint8) (255 * elapsed / DURATION)));
-		
+
 		app_.Draw(background);	app_.Draw(sfml);
 		app_.Draw(title);		app_.Draw(ship);
 		app_.Display();
@@ -232,7 +232,7 @@ Game::Scene Game::MainMenu()
 	title.SetSize(60);
 	title.SetY(42);
 	title.SetX((WIN_WIDTH - title.GetRect().GetWidth()) / 2);
-	
+
 	sf::Sprite back(GET_IMG("main-screen"));
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(MARGIN_X, 130));
@@ -295,7 +295,7 @@ Game::Scene Game::MainMenu()
 		case 3:
 			next = OPTIONS;
 			break;
-		case 4: 
+		case 4:
 			next = ABOUT;
 			break;
 		case 5:
@@ -320,13 +320,13 @@ Game::Scene Game::SelectLevel()
 	p_ForwardAction_ = mode_ == STORY2X ?
 		&Game::ForwardAction2P : &Game::ForwardAction1P;
 	timer_ = 0.f;
-	
+
 	sf::Sprite back(GET_IMG("main-screen"));
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(MARGIN_X, 130));
-	
+
 	AC::Action action;
-	
+
 	bool running = true;
 	Scene next = EXIT_APP;
 	int last = levels_.GetLast();
@@ -337,7 +337,7 @@ Game::Scene Game::SelectLevel()
 	}
 	menu.AddItem("Retour au menu principal", last);
 	menu.SelectItem(current_level_ - 1);
-	
+
 	int level;
 	while (running)
 	{
@@ -384,7 +384,7 @@ Game::Scene Game::LevelCaption()
 	std::string content = str_sprintf("Niveau %d\n\n%s", current_level_,
 		levels_.GetDescription(current_level_));
 	find_replace(content, "\\n", "\n");
-	
+
 	sf::String description(content);
 	description.SetColor(sf::Color::White);
 	description.SetFont(GET_FONT());
@@ -392,7 +392,7 @@ Game::Scene Game::LevelCaption()
 	sf::FloatRect rect = description.GetRect();
 	description.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
 		(WIN_HEIGHT - rect.GetHeight()) / 2);
-	
+
 	while (running)
 	{
 		while (controls_.GetAction(action))
@@ -426,7 +426,7 @@ Game::Scene Game::Play()
 	bool running = true;
 	Scene next = EXIT_APP;
 	std::list<Entity*>::iterator it;
-	
+
 	while (running)
 	{
 		while (controls_.GetAction(action, &device))
@@ -445,25 +445,25 @@ Game::Scene Game::Play()
 				(this->*p_ForwardAction_)(action, device);
 			}
 		}
-		
+
 		if (running && (this->*p_StopPlay_)())
 		{
 			running = false;
 			next = END_PLAY;
 		}
-		
+
 		// action
 		for (it = entities_.begin(); it != entities_.end(); ++it)
 		{
 			(**it).Action();
 		}
-		
+
 		// moving
 		float frametime = app_.GetFrameTime();
 		timer_ += frametime;
 		panel_.SetTimer(timer_);
 		Entity* ship = player1_; // FIXME toujours player1_
-		sf::FloatRect player_rect = ship->GetRect();
+		sf::FloatRect player_rect = ship->GetCollideRect();
 		for (it = entities_.begin(); it != entities_.end();)
 		{
 			if ((**it).IsDead())
@@ -481,21 +481,21 @@ Game::Scene Game::Play()
 			{
 				(**it).Move(frametime);
 				// collision Joueur <-> autres unités
-				if (ship != *it && player_rect.Intersects((**it).GetRect()))
+				if (ship != *it && player_rect.Intersects((**it).GetCollideRect()))
 				{
 					// collision sur les deux éléments;
-					ship->Collide(**it);
-					(**it).Collide(*ship);
+					ship->OnCollide(**it);
+					(**it).OnCollide(*ship);
 					particles_.AddImpact((**it).GetPosition(), 10);
 				}
 				++it;
 			}
 		}
-		
+
 		bullets_.Update(frametime);
 		bullets_.Collide(entities_);
 		particles_.Update(frametime);
-		
+
 		// rendering
 		particles_.Show(app_);
 		for (it = entities_.begin(); it != entities_.end(); ++it)
@@ -522,11 +522,11 @@ Game::Scene Game::About()
 	info.SetFont(GET_FONT());
 	info.SetColor(sf::Color::White);
 	info.SetPosition(MARGIN_X, 60);
-	
+
 	sf::Sprite back(GET_IMG("main-screen"));
 	menu.SetOffset(sf::Vector2f(MARGIN_X, 320));
-	menu.AddItem("Retour", MAIN_MENU);	
-	
+	menu.AddItem("Retour", MAIN_MENU);
+
 
 	while (running)
 	{
@@ -562,13 +562,13 @@ Game::Scene Game::InGameMenu()
 	title.SetPosition(200, 130);
 	title.SetSize(60);
 	title.SetFont(GET_FONT());
-	
+
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(200, 210));
 	menu.AddItem("Reprendre la partie", PLAY);
 	menu.AddItem("Revenir au menu principal", MAIN_MENU);
 	menu.AddItem("Quitter le jeu", EXIT_APP);
-	
+
 	bool paused = true;
 	int what;
 	while (paused)
@@ -590,10 +590,10 @@ Game::Scene Game::InGameMenu()
 				paused = false;
 			}
 		}
-		
+
 		// seules les particules sont mises à jour
 		particles_.Update(app_.GetFrameTime());
-		
+
 		// rendering
 		bullets_.Show(app_);
 		particles_.Show(app_);
@@ -603,7 +603,7 @@ Game::Scene Game::InGameMenu()
 			app_.Draw(**it);
 		}
 		panel_.Show(app_);
-		
+
 		app_.Draw(title);
 		menu.Show(app_);
 		app_.Display();
@@ -631,7 +631,7 @@ Game::Scene Game::EndPlay()
 	info.SetSize(70);
 	info.SetColor(sf::Color::White);
 	info.SetFont(GET_FONT());
-	
+
 	// si perdu
 	if ((entities_.size() > 1 && mode_ != STORY2X) ||
 		(entities_.size() > 2 && mode_ == STORY2X))
@@ -670,16 +670,16 @@ Game::Scene Game::EndPlay()
 		info.SetSize(30);
 		what = MAIN_MENU;
 	}
-	
+
 	sf::FloatRect rect = info.GetRect();
 	info.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
 		(WIN_HEIGHT - rect.GetHeight()) / 2);
 	bool running = true;
-	
+
 	AC::Action action;
 #ifndef NO_AUDIO
 	sound.Play();
-#endif	
+#endif
 	while (running)
 	{
 		while (controls_.GetAction(action))
@@ -704,7 +704,7 @@ Game::Scene Game::EndPlay()
 		particles_.Update(frametime);
 		info.SetColor(sf::Color(255, 255, 255,
 			(sf::Uint8)(255 - 255 * timer / DURATION)));
-		
+
 		// rendering
 		bullets_.Show(app_);
 		particles_.Show(app_);
@@ -729,7 +729,7 @@ Game::Scene Game::ArcadeResult()
 	puts("[ Game::ArcadeResult ]");
 #endif
 	assert(mode_ = ARCADE);
-	
+
 	sf::String title;
 	std::string content;
 	int min = (int) timer_ / 60;
@@ -749,17 +749,17 @@ Game::Scene Game::ArcadeResult()
 	title.SetColor(sf::Color::White);
 	title.SetPosition(42, 100);
 	sf::Sprite back(GET_IMG("background"));
-	
+
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(MARGIN_X, 200));
 	menu.AddItem("Menu principal", MAIN_MENU);
 	menu.AddItem("Quitter", EXIT_APP);
-	
+
 	bool running = true;
 	int choice = EXIT_APP;
-	
+
 	AC::Action action;
-	
+
 	while (running)
 	{
 		while (controls_.GetAction(action))
@@ -796,25 +796,27 @@ void Game::RemoveEntities()
 
 void Game::AddEntity(Entity* entity)
 {
+	entity->SetID(last_id_++);
 	entities_.push_front(entity);
 }
 
 
 void Game::Init()
 {
+	last_id_ = 0;
 	RemoveEntities();
-	
+
 	assert(entities_.empty());
 	sf::Vector2f offset;
 	offset.x = 0;
 	player1_ = new PlayerShip(sf::Vector2f(), "spaceship-red");
 	AddEntity(player1_);
-	
+
 	if (mode_ == STORY2X)
 	{
 		player2_ = new PlayerShip(sf::Vector2f(), "spaceship-green");
 		AddEntity(player2_);
-		
+
 		player1_->SetControls(AC::KEYBOARD);
 		player2_->SetControls(AC::JOYSTICK);
 		offset.y = WIN_HEIGHT * 2 / 3;
@@ -826,7 +828,7 @@ void Game::Init()
 		offset.y = WIN_HEIGHT / 2;
 	}
 	player1_->SetPosition(offset);
-	
+
 	bullets_.Clear();
 	particles_.Clear();
 	particles_.AddStars();
@@ -838,7 +840,7 @@ void Game::Init()
 void Game::ForwardAction1P(AC::Action action, AC::Device device)
 {
 	(void) device;
-	player1_->HandleAction(action);	
+	player1_->HandleAction(action);
 }
 
 
@@ -896,7 +898,7 @@ bool Game::StoryMoreBadBuys()
 		AddEntity(p);
 		p = levels_.GiveNext(timer_);
 	}
-	
+
 	// le niveau n'est pas fini tant qu'il reste des ennemis, soit en file
 	// d'attente, soit dans le conteur entities_
 	return (levels_.RemainingEntities() == 0)
@@ -1003,7 +1005,7 @@ bool get_input(AC::Device device, unsigned int& sfml_code)
 	sf::FloatRect rect = prompt.GetRect();
 	prompt.SetPosition((WIN_WIDTH - rect.GetWidth()) / 2,
 		(WIN_HEIGHT - rect.GetHeight()) / 2);
-	
+
 	sf::Event event;
 	bool running = true;
 	bool valid = true;
@@ -1044,7 +1046,7 @@ Game::Scene Game::Options()
 #ifdef DEBUG
 	puts("[ Game::Options ]");
 #endif
-	
+
 	OptionMenu current_menu = OPT_MAIN;
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(MARGIN_X, 100));
@@ -1055,7 +1057,7 @@ Game::Scene Game::Options()
 	title.SetSize(40);
 	title.SetY(40);
 	title.SetX((WIN_WIDTH - title.GetRect().GetWidth()) / 2);
-	
+
 	sf::Sprite back(GET_IMG("main-screen"));
 	bool running = true;
 	AC::Action action;

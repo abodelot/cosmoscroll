@@ -1,0 +1,70 @@
+CosmoScroll TODO List
+=====================
+
+Milestone 0.2
+
+
+core
+----
+
+Gérer les parallaxes (plus de décors dans les niveaux)
+Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
+
+Sortir la création des menus de Game (définir les menus en XML ?)
+
+Ajout mode plein-écran / fenêtré dans la configuration 
+une seule boucle de jeu, avec des pointeurs de méthode pour spécialiser le comportement
+
+Mode deux joueurs sur la même machine
+
+ControlPanel hérite de sf::Drawable, choix de la position dans la config
+
+SoundSytem : Gestionnaire de buffers audio
+
+ParticleSystem :
+	- pool pour les particules
+	- Ajouter effet graphique sur bonus speed (Particule Smoke)
+
+Intertionalisation avec GetText
+
+
+entities
+--------
+
+Supprimer EvilBoss, Drone, Blorb, Ennemy, Interceptor
+Créer une classe SpaceShip (vaisseau générique)
+Créer EntityManager (hérite de sf::Drawable), pour :
+	- charger les profils XML des SpaceShips et des armes
+	- rôle de factory pour instancier toutes les entités
+	- mettre à jour, gestion des collisions et afficher les entitiés
+	- ID pour les entités, ne plus parcourir toutes les tirs quand une entité est morte (regarder id emitter et non l'adresse de l'emitter)
+
+PlayerShip : compteur de frags / points
+
+Supprimer BulletManager
+Créer Hit (hérite de Entity) et PlayerHit (hérite de Hit)
+Les tirs doivent traverser les bonus
+Ajouter groupes de formation
+Implémenter un système de pattern d'IA (définition des trajectoire et des tirs)
+Changer tous les timers par un appel à un sf::Clock::GetElapsedTime centralisé dans Game
+
+plus de sprites :
+	- nouvelles armes
+	- nouveaux vaisseaux
+
+
+menu
+----
+
+faire une GUI générique
+une sous classe pour chaque menu, à partir d'un module gui ?
+
+
+utils
+-----
+
+Optimiser cos/sin avec une table pré-calculée
+mieux factoriser tous les calculs de déplacements
+MediaManager doit stocker les objets Music directement
+
+

@@ -1,4 +1,5 @@
 #include "Drone.hpp"
+#include "EntityManager.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/Math.hpp"
 
@@ -9,8 +10,9 @@
 Drone::Drone(const sf::Vector2f& offset, Entity* target) :
 	Ennemy(offset, GET_IMG("ennemy-B"), 4, target),
 	Animated(GET_ANIM("drone"), *this),
-	weapon_(Weapon::PLASMACANNON, this)
+	weapon_(EntityManager::GetInstance().BuildWeapon(0))
 {
+	weapon_.SetOwner(this);
 }
 
 

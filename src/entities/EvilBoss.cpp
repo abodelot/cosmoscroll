@@ -1,4 +1,5 @@
 #include "EvilBoss.hpp"
+#include "EntityManager.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/Math.hpp"
 
@@ -15,12 +16,15 @@
 
 EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
 	Ennemy(offset, GET_IMG("evil_boss"), 500, target),
-	eye_left_(Weapon::PLASMACANNON, this),
-	eye_right_(Weapon::PLASMACANNON, this),
-	canon_(Weapon::DEVILSEYES, this)
+	eye_left_(EntityManager::GetInstance().BuildWeapon(3)),
+	eye_right_(EntityManager::GetInstance().BuildWeapon(3)),
+	canon_(EntityManager::GetInstance().BuildWeapon(3))
 {
 	left_ = true;
 	phase_ = EVIL;
+	eye_left_.SetOwner(this);
+	eye_right_.SetOwner(this);
+	canon_.SetOwner(this);
 }
 
 
@@ -61,9 +65,9 @@ void EvilBoss::Move(float frametime)
 }
 
 
-void EvilBoss::Collide(Entity& ent)
+void EvilBoss::OnCollide(Entity& entity)
 {
-	(void) ent;
+	(void) entity;
 }
 
 

@@ -1,4 +1,5 @@
 #include "Interceptor.hpp"
+#include "EntityManager.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/Math.hpp"
 
@@ -9,8 +10,9 @@
 
 Interceptor::Interceptor(const sf::Vector2f& offset, Entity* target) :
     Ennemy(offset, GET_IMG("ennemy-A"), 8, target),
-    weapon_(Weapon::PLASMACANNON, this)
+    weapon_(EntityManager::GetInstance().BuildWeapon(0))
 {
+	weapon_.SetOwner(this);
 }
 
 
@@ -21,7 +23,7 @@ void Interceptor::Move(float frametime)
     float vx = 0;
     sf::Vector2f player_pos = target_->GetPosition();
     sf::Vector2f my_pos = GetPosition();
-    
+
     bool flipped = false;
     if (my_pos.x > player_pos.x)
     {
@@ -32,12 +34,12 @@ void Interceptor::Move(float frametime)
     	vx = velocity;
     	flipped = true;
     }
-	
+
 	if (my_pos.y > player_pos.y)
 	    vy = -velocity;
 	else if (my_pos.y < player_pos.y)
 	    vy = velocity;
-	    
+
 	if (flipped != flipped_)
 	{
 	    Flip(flipped);
