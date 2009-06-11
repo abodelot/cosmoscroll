@@ -3,9 +3,10 @@
 #include <SFML/System.hpp>
 
 #include "Game.hpp"
+#include "SoundSystem.hpp"
 
 #include "../entities/Asteroid.hpp"
-#include "../entities/Ennemy.hpp"
+#include "../entities/SpaceShip.hpp"
 #include "../entities/EvilBoss.hpp"
 
 #include "LevelManager.hpp"
@@ -30,11 +31,12 @@ Game& Game::GetInstance()
 
 Game::Game() :
 	controls_	(AbstractController::GetInstance()),
-	bullets_	(BulletManager::GetInstance()),
 	panel_		(ControlPanel::GetInstance()),
 	levels_		(LevelManager::GetInstance()),
-	particles_	(ParticleSystem::GetInstance())
+	particles_	(ParticleSystem::GetInstance()),
+	entitymanager_(EntityManager::GetInstance())
 {
+	puts("boot sur le flex ...");
 	// loading config
 	ConfigParser config;
 	bool fullscreen = false;
@@ -58,6 +60,7 @@ Game::Game() :
 	p_ForwardAction_ = NULL;
 	p_StopPlay_ = NULL;
 	player1_ = player2_ = NULL;
+	player_dead_ = false;
 
 	if (!fullscreen)
 	{
@@ -76,7 +79,7 @@ Game::Game() :
 
 Game::~Game()
 {
-	RemoveEntities();
+	entitymanager_.Clear();
 	app_.Close();
 
 	// writing configuration
@@ -149,12 +152,10 @@ Game::Scene Game::Intro()
 	AC::Action action;
 
 	Scene what = MAIN_MENU;
-	const int DURATION = 5, PADDING = 10;
+	const int DURATION = 6, PADDING = 10;
 	float time, elapsed = 0;
-#ifndef NO_AUDIO
 	bool played = false;
-	sf::Sound intro_sound(GET_SOUNDBUF("title"));
-#endif
+
 	sf::FloatRect rect;
 
 	sf::Sprite background;
@@ -171,15 +172,15 @@ Game::Scene Game::Intro()
 
 	sf::String sfml;
 	sfml.SetText("Powered by SFML");
-	sfml.SetSize(16);
-	sfml.SetColor(sf::Color::White);
+	sfml.SetFont(GET_FONT());
+	sfml.SetSize(22);
+	sfml.SetColor(sf::Color(0xE0, 0xE0, 0xE0));
 	rect = sfml.GetRect();
 	sfml.SetPosition(WIN_WIDTH - rect.GetWidth() - PADDING,
 		WIN_HEIGHT - rect.GetHeight() - PADDING);
 
-	sf::Sprite ship(GET_IMG("spaceship-red"));
-	ship.SetPosition(-20, 100);
-	ship.SetSubRect(GET_ANIM("playership").GetFrame(0));
+	PlayerShip ship(sf::Vector2f(-20, 100), "spaceship-red");
+
 	while (elapsed < DURATION)
 	{
 		while (controls_.GetAction(action))
@@ -200,16 +201,20 @@ Game::Scene Game::Intro()
 		if (static_cast<int>(elapsed) == 1 && !played)
 		{
 			played = true;
-			intro_sound.Play();
+			SoundSystem::GetInstance().PlaySound("title");
 		}
 #endif
+		ship.Update(time);
 		ship.Move(180 * time, 25 * time);
 		title.Scale(0.99, 0.99); // FIXME: dépendant des FPS
 		title.SetColor(sf::Color(255, 255, 255,
 			(sf::Uint8) (255 * elapsed / DURATION)));
 
-		app_.Draw(background);	app_.Draw(sfml);
-		app_.Draw(title);		app_.Draw(ship);
+		app_.Draw(background);
+		app_.Draw(sfml);
+		app_.Draw(title);
+		app_.Draw(ship);
+
 		app_.Display();
 	}
 #ifndef NO_AUDIO
@@ -241,7 +246,6 @@ Game::Scene Game::MainMenu()
 	menu.AddItem("Mode Arcade", 2);
 	menu.AddItem("Options", 3);
 	menu.AddItem(L"À propos", 4);
-	//menu.AddItem("Pong", PONG_MODE);
 	menu.AddItem("Quitter", 5);
 
 	bool running = true;
@@ -446,68 +450,35 @@ Game::Scene Game::Play()
 			}
 		}
 
-		if (running && (this->*p_StopPlay_)())
+		if ((this->*p_StopPlay_)() || player_dead_)
 		{
 			running = false;
 			next = END_PLAY;
 		}
 
-		// action
-		for (it = entities_.begin(); it != entities_.end(); ++it)
-		{
-			(**it).Action();
-		}
+		app_.Clear();
 
-		// moving
 		float frametime = app_.GetFrameTime();
 		timer_ += frametime;
 		panel_.SetTimer(timer_);
-		Entity* ship = player1_; // FIXME toujours player1_
-		sf::FloatRect player_rect = ship->GetCollideRect();
-		for (it = entities_.begin(); it != entities_.end();)
-		{
-			if ((**it).IsDead())
-			{
-				if (ship == *it)
-				{
-					running = false;
-					next = END_PLAY;
-					break;
-				}
-				delete *it;
-				it = entities_.erase(it);
-			}
-			else
-			{
-				(**it).Move(frametime);
-				// collision Joueur <-> autres unités
-				if (ship != *it && player_rect.Intersects((**it).GetCollideRect()))
-				{
-					// collision sur les deux éléments;
-					ship->OnCollide(**it);
-					(**it).OnCollide(*ship);
-					particles_.AddImpact((**it).GetPosition(), 10);
-				}
-				++it;
-			}
-		}
 
-		bullets_.Update(frametime);
-		bullets_.Collide(entities_);
+		entitymanager_.Update(frametime);
 		particles_.Update(frametime);
 
-		// rendering
+		// RENDER
+		app_.Draw(entitymanager_);
 		particles_.Show(app_);
-		for (it = entities_.begin(); it != entities_.end(); ++it)
-		{
-			app_.Draw(**it);
-		}
-		bullets_.Show(app_);
 		panel_.Show(app_);
 		app_.Display();
-		app_.Clear();
+
 	}
 	return next;
+}
+
+
+void Game::NotifyPlayerDead()
+{
+	player_dead_ = true;
 }
 
 
@@ -595,13 +566,8 @@ Game::Scene Game::InGameMenu()
 		particles_.Update(app_.GetFrameTime());
 
 		// rendering
-		bullets_.Show(app_);
 		particles_.Show(app_);
-		std::list<Entity*>::iterator it;
-		for (it = entities_.begin(); it != entities_.end(); ++it)
-		{
-			app_.Draw(**it);
-		}
+		app_.Draw(entitymanager_);
 		panel_.Show(app_);
 
 		app_.Draw(title);
@@ -632,9 +598,10 @@ Game::Scene Game::EndPlay()
 	info.SetColor(sf::Color::White);
 	info.SetFont(GET_FONT());
 
+
 	// si perdu
-	if ((entities_.size() > 1 && mode_ != STORY2X) ||
-		(entities_.size() > 2 && mode_ == STORY2X))
+	if ((entitymanager_.Count() > 1 && mode_ != STORY2X) ||
+		(entitymanager_.Count() > 2 && mode_ == STORY2X))
 	{
 #ifndef NO_AUDIO
 		sound.SetBuffer(GET_SOUNDBUF("game-over"));
@@ -706,13 +673,8 @@ Game::Scene Game::EndPlay()
 			(sf::Uint8)(255 - 255 * timer / DURATION)));
 
 		// rendering
-		bullets_.Show(app_);
 		particles_.Show(app_);
-		std::list<Entity*>::iterator it;
-		for (it = entities_.begin(); it != entities_.end(); ++it)
-		{
-			app_.Draw(**it);
-		}
+		app_.Draw(entitymanager_);
 		panel_.Show(app_);
 		app_.Draw(info);
 		app_.Display();
@@ -782,40 +744,21 @@ Game::Scene Game::ArcadeResult()
 }
 
 
-
-void Game::RemoveEntities()
-{
-	std::list<Entity*>::iterator it;
-	for (it = entities_.begin(); it != entities_.end(); ++it)
-	{
-		delete *it;
-	}
-	entities_.clear();
-}
-
-
-void Game::AddEntity(Entity* entity)
-{
-	entity->SetID(last_id_++);
-	entities_.push_front(entity);
-}
-
-
 void Game::Init()
 {
-	last_id_ = 0;
-	RemoveEntities();
 
-	assert(entities_.empty());
+	entitymanager_.Clear();
+
 	sf::Vector2f offset;
 	offset.x = 0;
+	player_dead_ = false;
 	player1_ = new PlayerShip(sf::Vector2f(), "spaceship-red");
-	AddEntity(player1_);
+	entitymanager_.AddEntity(player1_);
 
 	if (mode_ == STORY2X)
 	{
 		player2_ = new PlayerShip(sf::Vector2f(), "spaceship-green");
-		AddEntity(player2_);
+		entitymanager_.AddEntity(player2_);
 
 		player1_->SetControls(AC::KEYBOARD);
 		player2_->SetControls(AC::JOYSTICK);
@@ -829,7 +772,6 @@ void Game::Init()
 	}
 	player1_->SetPosition(offset);
 
-	bullets_.Clear();
 	particles_.Clear();
 	particles_.AddStars();
 }
@@ -837,9 +779,8 @@ void Game::Init()
 
 /* behaviors */
 
-void Game::ForwardAction1P(AC::Action action, AC::Device device)
+void Game::ForwardAction1P(AC::Action action, AC::Device)
 {
-	(void) device;
 	player1_->HandleAction(action);
 }
 
@@ -859,33 +800,35 @@ void Game::ForwardAction2P(AC::Action action, AC::Device device)
 
 bool Game::ArcadeMoreBadGuys()
 {
-	if (entities_.size() < (size_t) timer_ / 10 + 4)
+	// number of max bad guys = time / STEP + START
+	const int STEP = 8;
+	const int START = 4;
+	if (entitymanager_.Count() < timer_ / STEP + START)
 	{
-		// ajout d'une ennemi au hasard
-		// <hack>
-		Entity* ship = player1_; // toujours le joueur 1 ... :/
 		sf::Vector2f offset;
 		offset.x = WIN_WIDTH;
 		offset.y = sf::Randomizer::Random(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
 		int random = sf::Randomizer::Random(0, 10);
+		Entity* entity = NULL;
 		if (random > 6)
 		{
-			AddEntity(Ennemy::Make(Ennemy::INTERCEPTOR, offset, ship));
+			entity = entitymanager_.CreateSpaceShip(3, offset.x, offset.y);
 		}
 		else if (random > 4)
 		{
-			AddEntity(Ennemy::Make(Ennemy::BLORB, offset, ship));
+			entity = entitymanager_.CreateSpaceShip(1, offset.x, offset.y);
 		}
 		else if (random > 2)
 		{
-			AddEntity(Ennemy::Make(Ennemy::DRONE, offset, ship));
+			entity = entitymanager_.CreateSpaceShip(2, offset.x, offset.y);
 		}
 		else
 		{
-			AddEntity(new Asteroid(offset, Asteroid::BIG));
+			entity = new Asteroid(offset, Asteroid::BIG);
 		}
-		// </hack>
+		entitymanager_.AddEntity(entity);
 	}
+	// always false, kill you till you die
 	return false;
 }
 
@@ -895,14 +838,14 @@ bool Game::StoryMoreBadBuys()
 	Entity* p = levels_.GiveNext(timer_);
 	while (p != NULL)
 	{
-		AddEntity(p);
+		entitymanager_.AddEntity(p);
 		p = levels_.GiveNext(timer_);
 	}
 
 	// le niveau n'est pas fini tant qu'il reste des ennemis, soit en file
-	// d'attente, soit dans le conteur entities_
+	// d'attente, soit dans le gestionnaire d'entités
 	return (levels_.RemainingEntities() == 0)
-		&& (entities_.size() == (mode_ == STORY2X ? 2 : 1));
+		&& (entitymanager_.Count() == (mode_ == STORY2X ? 2 : 1));
 }
 
 
@@ -950,7 +893,8 @@ void load_menu(OptionMenu what, Menu& menu, sf::String& title)
 			title.SetText("Musique");
 			menu.AddItem("Space", 1);
 			menu.AddItem("Aurora", 2);
-			menu.AddItem("Pas de musique", 3);
+			menu.AddItem("Escape For Assault", 3);
+			menu.AddItem("Pas de musique", 4);
 			break;
 		case OPT_KEYBOARD:
 			title.SetText("Clavier");
@@ -1174,7 +1118,7 @@ Game::Scene Game::Options()
 									action_bind = AC::VALID;
 									break;
 								default:
-									assert(0);
+									abort();
 							}
 							controls_.SetBinding(action_bind, AC::JOYSTICK, sfml_code);
 							load_menu(OPT_JOYSTICK, menu, title);
@@ -1190,11 +1134,14 @@ Game::Scene Game::Options()
 									LoadMusic("aurora");
 									break;
 								case 3:
+									LoadMusic("escape_for_assault");
+									break;
+								case 4:
 									StopMusic();
 									music_name_ = "NULL";
 									break;
 								default:
-									assert(0);
+									abort();
 							}
 							break;
 					}

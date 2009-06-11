@@ -3,11 +3,13 @@
 #include <SFML/System.hpp>
 
 #include "PlayerShip.hpp"
+#include "Asteroid.hpp"
 #include "EntityManager.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../core/Window.hpp"
 #include "../utils/Math.hpp"
 #include "../core/ParticleSystem.hpp"
+#include "../core/Game.hpp"
 
 #ifdef DEBUG
 #include <iostream>
@@ -35,7 +37,7 @@
 
 
 PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
-	Entity(GET_IMG(image), offset),
+	Entity(GET_IMG(image), offset, HP_DEFAULT),
 	Animated(GET_ANIM("playership"), *this),
 	controller_(AC::GetInstance()),
 	panel_(ControlPanel::GetInstance()),
@@ -47,7 +49,6 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 #ifdef DEBUG
 	puts("PlayerShip()");
 #endif
-	hp_ = HP_DEFAULT;
 	shield_ = SHIELD_DEFAULT;
 	coolers_ = COOLER_DEFAULT;
 	overheated_ = false;
@@ -139,8 +140,11 @@ void PlayerShip::HandleAction(AC::Action action)
 }
 
 
-void PlayerShip::Action()
+
+
+void PlayerShip::Update(float frametime)
 {
+
 	if (!overheated_)
 	{
 		float h = 0.0f;
@@ -162,11 +166,8 @@ void PlayerShip::Action()
 			panel_.SetInfo("Surchauffe !");
 		}
 	}
-}
+	// -------------
 
-
-void PlayerShip::Move(float frametime)
-{
 	static const float WIDTH = GetSize().x;
 	static const float HEIGHT = GetSize().y;
 	// déplacement
@@ -275,7 +276,7 @@ void PlayerShip::Move(float frametime)
 }
 
 
-void PlayerShip::Hit(int damage)
+void PlayerShip::TakeDamage(int damage)
 {
 	static ParticleSystem& p = ParticleSystem::GetInstance();
 	if (shield_ > 0)
@@ -297,11 +298,12 @@ void PlayerShip::Hit(int damage)
 	}
 	else
 	{
-		Entity::Hit(damage);
+		Entity::TakeDamage(damage);
 		panel_.SetShipHP(hp_);
 		if (IsDead())
 		{
 			p.AddExplosion(GetPosition());
+			Game::GetInstance().NotifyPlayerDead();
 		}
 	}
 }
@@ -314,9 +316,11 @@ void PlayerShip::OnCollide(Entity& entity)
 	{
 		HandleBonus(*bonus);
 	}
-	else
+	else if (typeid (entity) == typeid (Asteroid)
+		|| typeid (entity) == typeid (SpaceShip))
 	{
-		Hit(1);
+		TakeDamage(1);
+		entity.TakeDamage(1);
 	}
 }
 

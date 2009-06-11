@@ -8,7 +8,6 @@
 
 #include "Entity.hpp"
 
-class BulletManager;
 
 /**
  * Une arme associée à une entité
@@ -17,13 +16,20 @@ class Weapon
 {
 public:
     /**
-     * @parma[in] sender: entité qui possède l'arme
+     * @param[in] image: image du projectile
+     * @param[in] fire_rate: nombre de tirs par seconde
+     * @param[in] heat_cost: chaleur dégagée par tir
+     * @param[in] damage: dégâts infligés par tir
+     * @param[in] speed: vitesse du tir en pixels par seconde
+     * @param[in] sound: son joué lors d'un tir (NULL si pas de son)
      */
-	Weapon(const sf::Image& image, float fire_rate, float heat_cost, int damage, int speed);
+	Weapon(const sf::Image& image, float fire_rate, float heat_cost, int damage, int speed, const char* sound = NULL);
+
+	void SetOffset(int x, int y);
 
 	void SetOwner(Entity* owner);
 
-    float Shoot(const sf::Vector2f& offset, float angle = 0.f);
+    float Shoot(sf::Vector2f offset, float angle = 0.f);
 
     void Update(float frametime);
 
@@ -43,11 +49,12 @@ private:
     float fire_timer_;
 
 
-
+	const char* sound_;
     bool triple_;
 	Entity* owner_;
-	static BulletManager& bullets_;
+
+	int x_;
+	int y_;
 };
 
-#endif /* WEAPON_HPP */
-
+#endif // WEAPON_HPP

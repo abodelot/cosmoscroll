@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<spaceships>
+
+	<ship id="1" name="Capsule" ia_move="forward" animation="capsule" hp="3" speed="75">
+	</ship>
+	
+	<ship id="2" name="Scoot" ia_move="forward" animation="scoot" hp="4" speed="200">
+		<weapon id="0" x="0" y="16" />
+	</ship>
+	
+	<ship id="3" name="Interceptor" animation="interceptor" hp="8" speed="25">
+		<weapon id="0" x="0" y="32" />
+	</ship>
+</spaceships>
+

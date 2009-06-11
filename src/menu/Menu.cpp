@@ -1,6 +1,7 @@
 #include <cassert>
 
 #include "Menu.hpp"
+#include "../core/SoundSystem.hpp"
 #include "../utils/MediaManager.hpp"
 
 
@@ -17,11 +18,6 @@ Menu::Menu()
 	unactive_look_.color = sf::Color(0x50, 0x50, 0x50);
 	// pas encore d'éléments, donc pas de sélection
 	selected_ = -1;
-#ifndef NO_AUDIO	
-	buffers_[SELECT] = &GET_SOUNDBUF("menu-select");
-	buffers_[VALID] = &GET_SOUNDBUF("menu-valid");
-	buffers_[NON_ACTIVABLE] = &GET_SOUNDBUF("menu-non-activable");
-#endif
 }
 
 
@@ -43,7 +39,7 @@ void Menu::SetTextSize(int size)
 {
 	textsize_ = size;
 }
-	
+
 
 void Menu::SetOffset(const sf::Vector2f& offset)
 {
@@ -64,7 +60,7 @@ void Menu::AddItem(const std::wstring label, int id, bool activable)
 	item.label.SetFont(GET_FONT());
 	item.id = id;
 	item.activable = activable;
-	
+
 	// si on a ajouté le premier élément
 	if (selected_ == -1)
 	{
@@ -81,6 +77,7 @@ void Menu::AddItem(const std::wstring label, int id, bool activable)
 	items_.push_back(item);
 }
 
+
 void Menu::AddItem(const std::string label, int id, bool activable)
 {
 	MenuItem item;
@@ -88,7 +85,7 @@ void Menu::AddItem(const std::string label, int id, bool activable)
 	item.label.SetFont(GET_FONT());
 	item.id = id;
 	item.activable = activable;
-	
+
 	// si on a ajouté le premier élément
 	if (selected_ == -1)
 	{
@@ -114,30 +111,22 @@ bool Menu::ItemChosen(AC::Action action, int& id)
 			ResetStyle(items_[selected_]);
 			selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
 			ApplyStyle(items_[selected_], highlight_look_);
-#ifndef NO_AUDIO
-			PlaySound(SELECT);
-#endif
+			SoundSystem::GetInstance().PlaySound("menu-select");
 			break;
 		case AC::MOVE_DOWN:
 			ResetStyle(items_[selected_]);
 			selected_ = (selected_ + 1) % items_.size();
 			ApplyStyle(items_[selected_], highlight_look_);
-#ifndef NO_AUDIO
-			PlaySound(SELECT);
-#endif
+			SoundSystem::GetInstance().PlaySound("menu-select");
 			break;
 		case AC::VALID:
 			if (items_[selected_].activable)
 			{
 				id = items_[selected_].id;
-#ifndef NO_AUDIO
-				PlaySound(VALID);
-#endif
+				SoundSystem::GetInstance().PlaySound("menu-valid");
 				return true;
 			}
-#ifndef NO_AUDIO
-			PlaySound(NON_ACTIVABLE);
-#endif
+			SoundSystem::GetInstance().PlaySound("menu-non-activable");
 			break;
 		default:
 			break;
@@ -184,16 +173,3 @@ void Menu::ApplyStyle(MenuItem& item, const ItemLook& look)
 	item.label.SetColor(look.color);
 	item.label.SetStyle(look.style);
 }
-
-
-#ifndef NO_AUDIO
-void Menu::PlaySound(SoundFx fx)
-{
-	static sf::Sound sound;
-	sound.Stop();
-	assert(fx < COUNT_SOUNDFX);
-	sound.SetBuffer(*buffers_[fx]);
-	sound.Play();
-}
-#endif
-

@@ -3,8 +3,8 @@
 
 #include "LevelManager.hpp"
 
+#include "../entities/EntityManager.hpp"
 #include "../entities/Asteroid.hpp"
-#include "../entities/Ennemy.hpp"
 #include "../entities/EvilBoss.hpp"
 #include "Game.hpp"
 #include "../utils/Misc.hpp"
@@ -34,13 +34,13 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 			<< ')' << std::endl;
 		return FILE;
 	}
-	
+
 	// Constitution de la liste de pointeurs vers niveaux
-#ifdef DEBUG 
+#ifdef DEBUG
 	std::cout << "Building LevelManager List: " << std::flush;
 #endif
 	TiXmlNode* node = doc_.RootElement()->FirstChild();
-	
+
 	while (node != NULL)
 	{
 		levels_.push_back(node->ToElement());
@@ -76,59 +76,56 @@ const char* LevelManager::GetDescription(int level) const
 
 LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 {
+	EntityManager& entity_manager = EntityManager::GetInstance();
+
 	elem = elem->FirstChildElement();
-	Entity* player = Game::GetInstance().GetShip();
-	
+	Entity* player = NULL;//Game::GetInstance().GetShip();
+
 	if (elem == NULL)
 	{
 		std::cerr << "Impossible d'atteindre le noeud. Dying." << std::endl;
 		exit(EXIT_FAILURE);
 	}
-	
+
 	EntitySlot slot;
 	sf::Vector2f offset;
 	float t = 0.0f, last_t = 0.0f;
 	std::string classname;
-#ifdef DEBUG
-	printf("parsing level... ");
-#endif
+
+	printf("parsing level...\n");
+
 	while (elem)
 	{
-		classname = elem->Attribute("name");
+		classname = elem->Value();
+
+		// attributs commun à toutes les entités
 		elem->QueryFloatAttribute("x", &offset.x);
 		elem->QueryFloatAttribute("y", &offset.y);
 		elem->QueryFloatAttribute("t", &t);
 		last_t += t;
-		
+
 		slot.spawntime = last_t;
-		
-		if (classname == "Blorb")
+
+		if (classname == "ship")
 		{
-			slot.self = Ennemy::Make(Ennemy::BLORB, offset, player);
+			int id = 0;
+			elem->QueryIntAttribute("id", &id);
+			slot.self = entity_manager.CreateSpaceShip(id, offset.x, offset.y);
 		}
-		else if (classname == "Interceptor")
-		{
-			slot.self = Ennemy::Make(Ennemy::INTERCEPTOR, offset, player);
-		}
-		else if (classname == "Drone")
-		{
-			slot.self = Ennemy::Make(Ennemy::DRONE, offset, player);
-		}
-		else if (classname == "Asteroid")
+		else if (classname == "asteroid")
 		{
 			slot.self = new Asteroid(offset, Asteroid::BIG);
 		}
-		else if (classname == "EvilBoss")
+		else if (classname == "evilboss")
 		{
 			slot.self = new EvilBoss(offset, player);
 		}
 		else
 		{
-			puts("Unimplemented element. Dying.");
-			std::cerr << elem;
-			exit(EXIT_FAILURE);
+			printf("Unimplemented element: %s\n", classname.c_str());
+			abort();
 		}
-		
+
 		waiting_line_.push(slot);
 		elem = elem->NextSiblingElement();
 	}

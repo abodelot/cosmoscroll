@@ -15,7 +15,7 @@ public:
     {
         SMALL, MEDIUM, BIG
     };
-    
+
     /**
      * Création d'un astéroïde
      * @param[in] offset: position
@@ -23,11 +23,11 @@ public:
      * @param[in] angle: orientation
      */
     Asteroid(const sf::Vector2f& offset, Size size, float angle=180);
-    
-    void Move(float frametime);
-    
-    void Hit(int damage);
-    
+
+    void Update(float frametime);
+
+    void TakeDamage(int damage);
+
 private:
     Size size_;
     float angle_;

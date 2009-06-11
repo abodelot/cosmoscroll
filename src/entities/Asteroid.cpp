@@ -1,11 +1,12 @@
 #include "Asteroid.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../core/ParticleSystem.hpp"
-#include "../core/Game.hpp"
+#include "EntityManager.hpp"
 #include "../utils/Math.hpp"
 
 #include <SFML/System.hpp>
 #include <sstream>
+
 
 // division en morceaux de taille moindre
 #define BIG_SPLIT_INTO     2
@@ -36,7 +37,7 @@ Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
 }
 
 
-void Asteroid::Move(float frametime)
+void Asteroid::Update(float frametime)
 {
     sf::Sprite::Move(-50 * frametime, 0); // mouvement latéral
 /*
@@ -57,27 +58,27 @@ TODO
 }
 
 
-void Asteroid::Hit(int damage)
+void Asteroid::TakeDamage(int damage)
 {
 	sf::Vector2f offset = GetPosition();
-	
-    Entity::Hit(damage);
+
+    Entity::TakeDamage(damage);
     if (IsDead())
     {
-        Game& game = Game::GetInstance();
+        EntityManager& entitymanager = EntityManager::GetInstance();
         switch (size_)
         {
             case BIG:
                 for (int i = 0; i < BIG_SPLIT_INTO; ++i)
                 {
-                    game.AddEntity(new Asteroid(offset, MEDIUM,
+                    entitymanager.AddEntity(new Asteroid(offset, MEDIUM,
                         sf::Randomizer::Random(0, 360)));
                 };
                 break;
             case MEDIUM:
                 for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
                 {
-                    game.AddEntity(new Asteroid(offset, SMALL,
+                    entitymanager.AddEntity(new Asteroid(offset, SMALL,
                         sf::Randomizer::Random(0, 360)));
                 }
                 break;
@@ -86,4 +87,5 @@ void Asteroid::Hit(int damage)
         }
     }
 }
+
 

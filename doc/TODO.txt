@@ -9,8 +9,8 @@ core
 
 Gérer les parallaxes (plus de décors dans les niveaux)
 Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
+Conserver le vaisseau du joueur d'un niveau à l'autre (ne pas respawn un neuf à chaque fois)
 
-Sortir la création des menus de Game (définir les menus en XML ?)
 
 Ajout mode plein-écran / fenêtré dans la configuration 
 une seule boucle de jeu, avec des pointeurs de méthode pour spécialiser le comportement
@@ -20,30 +20,29 @@ Mode deux joueurs sur la même machine
 ControlPanel hérite de sf::Drawable, choix de la position dans la config
 
 SoundSytem : Gestionnaire de buffers audio
+ajouter la gestion des musiques
+supprimer toutes les autres références à sf::Audio
+flag NO_AUDIO obsolète, à remplacer par un flag NO_DUMB pour que ceux qu'ils ne veulent/peuvent pas installer libdumb puissent compiler
 
 ParticleSystem :
-	- pool pour les particules
+	- pool pour les particules, ne pas tout allouer à la volée (trop lourd)
 	- Ajouter effet graphique sur bonus speed (Particule Smoke)
 
-Intertionalisation avec GetText
+Intertionalisation (GetText ou solution maison ?)
 
 
 entities
 --------
 
-Supprimer EvilBoss, Drone, Blorb, Ennemy, Interceptor
-Créer une classe SpaceShip (vaisseau générique)
-Créer EntityManager (hérite de sf::Drawable), pour :
+- sélectionner le type d'IA (mouvement et tir) dans les définitions des spaces ships en XML
+- EntityManager:
 	- charger les profils XML des SpaceShips et des armes
-	- rôle de factory pour instancier toutes les entités
+	- rôle de factory pour instancier toutes les entités par clonage
 	- mettre à jour, gestion des collisions et afficher les entitiés
-	- ID pour les entités, ne plus parcourir toutes les tirs quand une entité est morte (regarder id emitter et non l'adresse de l'emitter)
 
 PlayerShip : compteur de frags / points
 
-Supprimer BulletManager
-Créer Hit (hérite de Entity) et PlayerHit (hérite de Hit)
-Les tirs doivent traverser les bonus
+
 Ajouter groupes de formation
 Implémenter un système de pattern d'IA (définition des trajectoire et des tirs)
 Changer tous les timers par un appel à un sf::Clock::GetElapsedTime centralisé dans Game
@@ -56,8 +55,8 @@ plus de sprites :
 menu
 ----
 
-faire une GUI générique
-une sous classe pour chaque menu, à partir d'un module gui ?
+faire une GUI générique (classe Menu)
+une sous classe pour chaque menu. utiliser des callbacks pour réagir à la sélection d'un élément
 
 
 utils

@@ -6,13 +6,13 @@
 #include <SFML/Graphics.hpp>
 
 #include "AbstractController.hpp"
-#include "../entities/BulletManager.hpp"
 #include "ControlPanel.hpp"
 #include "../entities/Entity.hpp"
 #include "LevelManager.hpp"
 #include "../utils/Music.hpp"
 #include "ParticleSystem.hpp"
 #include "../entities/PlayerShip.hpp"
+#include "../entities/EntityManager.hpp"
 
 /**
  * Gestion du déroulement du jeu
@@ -32,6 +32,8 @@ public:
 		return app_;
 	}
 
+	void NotifyPlayerDead();
+
 	inline const sf::Input& GetInput() const
 	{
 		return app_.GetInput();
@@ -41,14 +43,6 @@ public:
 	{
 		return player1_; // FIXME: toujours player 1
 	}
-
-	/**
-	 * Ajout d'une nouvelle unité dans le jeu
-	 */
-	void AddEntity(Entity* entity);
-
-	void Hit(int player_id);
-
 
 
 private:
@@ -107,11 +101,6 @@ private:
 	void Init();
 
 	/**
-	 * Suppression de toutes les unités en jeu
-	 */
-	void RemoveEntities();
-
-	/**
 	 * Allouer et jouer une musique
 	 * @param[in] music_name: identifiant de la musique
 	 */
@@ -133,8 +122,7 @@ private:
 	std::string music_name_;
 
 	PlayerShip *player1_, *player2_;
-	// toutes les unités sont allouées dynamiquement
-	std::list<Entity*> entities_;
+
 
 	/* pointeurs de méthodes pour la boucle de jeu */
 
@@ -150,17 +138,17 @@ private:
 	bool ArcadeMoreBadGuys();
 	bool StoryMoreBadBuys();
 
+	bool player_dead_;
+
 	// Singletons
 	AbstractController& controls_;
-	BulletManager& bullets_;
 	ControlPanel& panel_;
 	LevelManager& levels_;
 	ParticleSystem& particles_;
+	EntityManager& entitymanager_;
 #ifndef NO_AUDIO
 	Music* music_;
 #endif
-	int last_id_;
 };
 
-#endif /* guard GAME_HPP */
-
+#endif // GAME_HPP

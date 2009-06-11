@@ -19,20 +19,14 @@ Entity::~Entity()
 }
 
 
-void Entity::Hit(int damage)
+void Entity::TakeDamage(int damage)
 {
 	hp_ -= damage;
 }
 
 
-void Entity::OnCollide(Entity& entity)
+void Entity::OnCollide(Entity&)
 {
-	// TODO: gérer les collisions de façon plus réaliste, l'angle de this
-	// devrait être modifié en fonction de l'angle de ent
-	// -> comment définir GetAngle() pour chaque entité ?
-	// -> trouver la formule physique adéquate pour gérer les rebonds
-	(void) entity;
-	Hit(1);
 }
 
 
@@ -57,6 +51,15 @@ sf::FloatRect Entity::GetCollideRect() const
 	rect.Right = rect.Left + GetSize().x;
 	rect.Bottom = rect.Top + GetSize().y;
 	return rect;
+}
+
+
+void Entity::GetCollideRect(sf::FloatRect& rect) const
+{
+	rect.Left = GetPosition().x;
+	rect.Top = GetPosition().y;
+	rect.Right = rect.Left + GetSize().x;
+	rect.Bottom = rect.Top + GetSize().y;
 }
 
 

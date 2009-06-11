@@ -1,8 +1,10 @@
-#include "Bonus.hpp"
-#include "../utils/MediaManager.hpp"
-
-#include <SFML/System/Randomizer.hpp>
+#include <typeinfo>
 #include <cassert>
+#include <SFML/System/Randomizer.hpp>
+
+#include "Bonus.hpp"
+#include "PlayerShip.hpp"
+#include "../utils/MediaManager.hpp"
 
 #define BONUS_SPEED 100
 
@@ -33,20 +35,22 @@ Bonus* Bonus::MakeRandom(const sf::Vector2f& offset)
 }
 
 
-void Bonus::Hit(int damage)
+void Bonus::TakeDamage(int)
 {
-	(void) damage; // un bonus ne peut être détruit
+	// un bonus ne peut être détruit
 }
 
 
 void Bonus::OnCollide(Entity& entity)
 {
-	(void) entity;
-	Kill(); // mort subite lors d'une collision
+	if (typeid (entity) == typeid (PlayerShip))
+	{
+		Kill(); // le bonus disparait
+	}
 }
 
 
-void Bonus::Move(float frametime)
+void Bonus::Update(float frametime)
 {
 	sf::Sprite::Move(-BONUS_SPEED * frametime, 0);
 	KillIfOut();

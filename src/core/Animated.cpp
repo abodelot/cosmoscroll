@@ -6,8 +6,9 @@ Animated::Animated(const Animation& animation, sf::Sprite& sprite) :
 {
 	timer_ = animation_.GetDelay();
 	frame_ = 0;
-	
+
 	sprite.SetSubRect(animation_.GetFrame(0));
+	sprite.SetImage(animation_.GetImage());
 }
 
 
@@ -22,3 +23,8 @@ void Animated::Update(float frametime, sf::Sprite& sprite)
 	}
 }
 
+
+const Animation& Animated::GetAnimation() const
+{
+	return animation_;
+}

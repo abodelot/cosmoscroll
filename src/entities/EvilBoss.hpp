@@ -1,35 +1,37 @@
 #ifndef EVILBOSS_HPP
 #define EVILBOSS_HPP
 
-#include "Ennemy.hpp"
+#include "Entity.hpp"
 #include "Weapon.hpp"
 
 
 /**
- * Il est très méchant, et il en veut!
+ * Il est très méchant, et il en veut !
  */
-class EvilBoss: public Ennemy
+class EvilBoss: public Entity
 {
 public:
 	EvilBoss(const sf::Vector2f& offset, Entity* target);
 
-	void Move(float frametime);
+	void Update(float frametime);
+
 	// inherited
 	void OnCollide(Entity& entity);
-	void Action();
-	void Hit(int damage);
+
+	void TakeDamage(int damage);
 
 private:
 	enum Phase
 	{
 		EVIL, MORE_EVIL
 	};
+
 	Phase phase_;
 	bool left_;
 	Weapon eye_left_;
 	Weapon eye_right_;
 	Weapon canon_;
+	Entity* target_;
 };
 
-#endif /* guard EVILBOSS_HPP */
-
+#endif // EVILBOSS_HPP

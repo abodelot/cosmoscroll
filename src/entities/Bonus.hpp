@@ -21,12 +21,14 @@ public:
 	// allouer un bonus aléatoirement
 	static Bonus* MakeRandom(const sf::Vector2f& offset);
 
-	void Hit(int damage);
+	// inherited
+	void TakeDamage(int damage);
 
 	// inherited
 	void OnCollide(Entity& entity);
 
-	void Move(float frametime);
+	// inherited
+	void Update(float frametime);
 
 	/*
 	 * Description textuelle du bonus

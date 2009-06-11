@@ -19,7 +19,9 @@ public:
 	 * @param[out] sprite: sprite à mettre à jour
 	 */
 	void Update(float frametime, sf::Sprite& sprite);
-	
+
+	const Animation& GetAnimation() const;
+
 private:
 	const Animation& animation_;
 	int frame_;

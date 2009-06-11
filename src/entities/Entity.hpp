@@ -14,23 +14,20 @@ public:
 	 * @param[in] offset: position de départ
 	 * @param[in] hp: points de vie
 	 */
-	Entity(const sf::Image& img, const sf::Vector2f& offset, int hp=3);
+	Entity(const sf::Image& img, const sf::Vector2f& offset, int hp);
 
 	virtual ~Entity();
 
 	/**
 	 * Encaisser des dommages
 	 */
-	virtual void Hit(int damage);
+	virtual void TakeDamage(int damage);
 
 	/**
-	 * Déplacer l'entité
+	 * Mettre à jour l'entité
 	 * @param[in] frametime: temps de la frame actuelle
 	 */
-	virtual void Move(float frametime) = 0;
-	virtual void Action() {}
-
-	//virtual void Update(float frametime) = 0;
+	virtual void Update(float frametime) = 0;
 
 	/**
 	 * Notifier l'entité d'une collision
@@ -42,7 +39,7 @@ public:
 	 * Détermine si l'entité est encore en vie
 	 * @return true si l'entité doit être supprimée
 	 */
-	bool IsDead() const
+	inline bool IsDead() const
 	{
 		return hp_ <= 0;
 	}
@@ -75,7 +72,7 @@ public:
 	 * Obtenir la surface de collision du vaisseau
 	 */
 	virtual sf::FloatRect GetCollideRect() const;
-
+	virtual void GetCollideRect(sf::FloatRect& rect) const;
 	void SetID(int id);
 
 	int GetID() const;
@@ -88,5 +85,5 @@ private:
 	int id_;
 };
 
-#endif /* guard ENTITY_HPP */
+#endif // ENTITY_HPP
 

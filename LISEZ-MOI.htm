@@ -4,15 +4,22 @@
 		<title>CosmoScroll</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<style type="text/css">
-.warning
+body
 {
-	color: red;
-	padding: 1em;
-	border: 1px solid red;
+	font-family: arial, serif;
+	margin: 0;
+	padding: 2em;
 }
 h2
 {
-	text-decoration: underline;
+	background-color: #36383D;
+	color: white;
+	padding: 2px;
+	text-indent: 1em;
+}
+div
+{
+	padding-left: 2em;
 }
 td
 {
@@ -38,12 +45,21 @@ Licence : GPL (voir le fichier <a href="./COPYING">COPYING</a>)<br />
 Auteurs : voir le fichier <a href="./AUTHORS">AUTHORS</a>
 </p>
 
-<!--<h2>Avertissement</h2>
-<p class="warning">Ceci est une version de développement, et comporte probablement des bugs.<br />
-Si vous en trouvez un, merci de le rapporter à cette <a href="http://code.google.com/p/cosmoscroll/issues/list">adresse</a> (si le bug n'est pas encore répertorié).
-</p>-->
 
-<h2>Comment jouer</h2>
+<h2>Sommaire</h2>
+<div>
+	<ul>
+		<li><a href="#how-to-play">Comment jouer ?</a></li>
+		<li><a href="#how-to-reset">Comment retrouver la configuration d'origine ?</a></li>
+		<li><a href="#how-to-compile">Comment compiler le jeu depuis les sources ?</a></li>
+		<li><a href="#bug-found">J'ai trouvé un bug !</a></li>
+		<li><a href="#credits">Crédits</a></li>
+	</ul>
+</div>
+
+
+<h2 id="how-to-play">Comment jouer ?</h2>
+<div>
 
 <h3>Modes de jeu</h3>
 <ul>
@@ -52,7 +68,6 @@ Si vous en trouvez un, merci de le rapporter à cette <a href="http://code.googl
 </ul>
 
 <h3>Commandes clavier</h3>
-
 <table>
 	<tr>
 		<td>Déplacer le vaisseau<br />Naviguer dans les menus</td>
@@ -95,27 +110,57 @@ Si vous en trouvez un, merci de le rapporter à cette <a href="http://code.googl
 	<li>Vitesse : multiplie par 2 votre vitesse pendant 10 secondes</li>
 </ul>
 <p><em>Note : il n'y a pas de cheat codes dans ce jeu.</em></p>
-<!-- Cadeau pour les curieux -->
-<!-- Haut - Haut - Bas - Bas - Gauche - Droite - Gauche - Droite - Arme2 - Arme1 : activer le Konami Code :) -->
+<!--
+Cadeau pour les curieux, activer le Konami Code :
+Haut - Haut - Bas - Bas - Gauche - Droite - Gauche - Droite - Arme2 - Arme1
+:D
+-->
+</div>
 
-<h2>Comment retrouver la configuration d'origine</h2>
+
+<h2 id="how-to-reset">Comment retrouver la configuration d'origine ?</h2>
+<div>
 <p>
 	Si vous vous voulez retrouver les paramètres par défaut de l'application, effacez
 	le fichier <code>config/config.txt</code>, un nouveau fichier sera créé automatiquement.<br />
 	(Attention, votre ancienne configuration sera perdue)
 </p>
+</div>
 
-<h2>Comment compiler le jeu depuis les sources</h2>
+
+<h2 id="how-to-compile">Comment compiler le jeu depuis les sources ?</h2>
+<div>
 <p>
-	Un Makefile UNIX est fourni avec les sources du projet.<br />
-	CosmoScroll dépend des bibliothèques suivantes :
+	CosmoScroll compile sous les plateformes GNU/Linux (GCC) et Windows (mingw32)<br />
+	Les autres systèmes et compilateurs n'ont pas été testés.
+</p>
+<p>
+	Vous devez tout d'abord installer les bibliothèques suivantes :
 </p>
 <ul>
-	<li><a href="http://www.sfml-dev.org/">SFML</a> 1.3</li>
+	<li><a href="http://www.sfml-dev.org/">SFML</a>, version 1.4</li>
 	<li><a href="http://dumb.sourceforge.net/">libdumb</a></li>
 </ul>
+<p>
+Le moyen le plus simple de récupérer les sources est de faire un checkout sur le <a href="http://code.google.com/p/cosmoscroll/source/checkout">serveur SVN</a> du projet (reportez-vous aux instructions de la page).</p>
+<p>
+Un fichier projet Code::Blocks multi-plateformes (<em>cosmoscroll.cbp</em>) est fourni et permet de compiler le jeu depuis l'IDE.<br />
+Un Makefile UNIX est également fourni avec les sources du projet (tapez simplement "make" en console) afin de compiler le jeu sans passer par un IDE.
+</p>
 
-<h2>Crédits</h2>
+</div>
+
+
+<h2 id="bug-found">J'ai trouvé un bug !</h2>
+<div>
+<p>Si vous pensez avoir trouvé un disfonctionnement dans CosmoScroll, merci de le rapporter à cette <a href="http://code.google.com/p/cosmoscroll/issues/list">adresse</a> (si le bug n'est pas encore répertorié).<br />
+Une description permettant de reproduire le problème serait également appréciée.
+</p>
+</div>
+
+
+<h2 id="credits">Crédits</h2>
+<div>
 <h3>Images</h3>
 <ul>
     <li>Astéroïdes : images modifiées de <a href="http://www.flyingyogi.com/fun/spritelib.html">SpriteLib GPL</a></li>
@@ -124,7 +169,7 @@ Si vous en trouvez un, merci de le rapporter à cette <a href="http://code.googl
 <ul>
 	<li>boom.ogg : issu de <a href="http://www.reptilelabour.com/software/chromium/">Chromium B.S.U.</a></li>
 	<li>warp.ogg : issu de <a href="http://supertux.lethargik.org/">SuperTux</a></li>
-	<li>title.ogg : réalisé par <a href="http://eien.new.fr/">Tsu</a></li>
+	<li>title.ogg : réalisé par <a href="http://eien.new.fr/">Tsu</a>, merci à lui !</li>
 </ul>
 <p>Sons issus de  <a href="http://www.freesound.org/">freesound.org</a> :</p>
 <ul>
@@ -136,8 +181,10 @@ Si vous en trouvez un, merci de le rapporter à cette <a href="http://code.googl
 </ul>
 <h3>Polices</h3>
 <ul>
-    <li>hemi-head.tff : <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
-</ul>    
+	<li>hemi-head.tff : <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
+</ul>
+</div>
+
     </body>
 </html>
 

@@ -8,6 +8,7 @@
 
 #include "Entity.hpp"
 #include "Weapon.hpp"
+#include "SpaceShip.hpp"
 
 class EntityManager: public sf::Drawable
 {
@@ -34,7 +35,14 @@ public:
 	 */
 	void Clear();
 
+	/**
+	 * @return nombre d'entités
+	 */
+	int Count() const;
+
 	Weapon BuildWeapon(int id) const;
+
+	SpaceShip* CreateSpaceShip(int id, int x, int y);
 
 private:
 	EntityManager();
@@ -50,6 +58,8 @@ private:
 	 */
 	void LoadWeapons(const char* filename);
 
+	void LoadSpaceShips(const char* filename);
+
 	struct WeaponDefinition
 	{
 		std::string name;       // generic name
@@ -58,7 +68,12 @@ private:
 		int speed;              // bullet speed (pixels per second)
 		int damage;             // inflicted damage
 		const sf::Image* image; // hit image
+		std::string sound;      // sound name
 	};
+
+
+	typedef std::map<int, SpaceShip*> SpaceShipMap;
+	SpaceShipMap spaceships_defs_;
 
 	typedef std::map<int, WeaponDefinition> WeaponMap;
 	WeaponMap weapon_defs_;

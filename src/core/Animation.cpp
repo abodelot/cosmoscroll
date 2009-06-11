@@ -1,8 +1,10 @@
 #include "Animation.hpp"
+#include "../utils/MediaManager.hpp"
 
 
 Animation::Animation()
 {
+	image_ = NULL;
 	delay_ = 1.0f;
 }
 
@@ -24,3 +26,14 @@ void Animation::SetDelay(float delay)
 	delay_ = delay;
 }
 
+
+void Animation::SetImage(const sf::Image& image)
+{
+	image_ = &image;
+}
+
+
+const sf::Image& Animation::GetImage() const
+{
+	return *image_;
+}

@@ -25,7 +25,7 @@ public:
 	 * @return référence sur le gestionnaire de ressources
 	 */
 	static MediaManager& GetInstance();
-	
+
 	/**
 	 * Obtenir une image
 	 * @param[in] key: identifiant de l'image
@@ -33,7 +33,7 @@ public:
 	 */
 	const sf::Image& GetImage(const char* key) const;
 
-#ifndef NO_AUDIO	
+#ifndef NO_AUDIO
 	/**
 	 * Obtenir un buffer audio
 	 * @param[in] key: identifiant du buffer
@@ -48,28 +48,28 @@ public:
 	 */
 	Music* GetMusic(const char* key) const;
 #endif
-	
+
 	/**
 	 * Obtenir la police de caractères
 	 * @return référence sur la police
 	 */
 	const sf::Font& GetFont() const;
-	
+
 	/**
 	 * Obtenir une animation
 	 * @param[in] key: identifiant de l'animation
 	 */
 	const Animation& GetAnimation(const char* key) const;
-	
+
 private:
 	/**
 	 * Initialisation (chargement des images)
 	 */
 	MediaManager();
-	
+
 	MediaManager(const MediaManager& other);
 	MediaManager& operator=(const MediaManager& other);
-	
+
 	/**
 	 * Construire les frames d'une animation
 	 * @param[in] name: nom de l'animation
@@ -79,9 +79,9 @@ private:
 	 * @param[in] delay: temps d'attente entre chaque frame
 	 * @param[in] offset: décalage y sur le tileset
 	 */
-	void BuildAnimation(const char* name, int width, int height, int count,
+	void BuildAnimation(const char* name, const char* img, int width, int height, int count,
 		float delay, int offset=0);
-	
+
 	std::map<std::string, sf::Image> images_;
 #ifndef NO_AUDIO
 	std::map<std::string, sf::SoundBuffer> sounds_;

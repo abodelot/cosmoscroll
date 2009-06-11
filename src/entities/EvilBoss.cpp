@@ -15,9 +15,9 @@
 
 
 EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
-	Ennemy(offset, GET_IMG("evil_boss"), 500, target),
-	eye_left_(EntityManager::GetInstance().BuildWeapon(3)),
-	eye_right_(EntityManager::GetInstance().BuildWeapon(3)),
+	Entity(GET_IMG("evil_boss"), offset, 500),
+	eye_left_(EntityManager::GetInstance().BuildWeapon(0)),
+	eye_right_(EntityManager::GetInstance().BuildWeapon(0)),
 	canon_(EntityManager::GetInstance().BuildWeapon(3))
 {
 	left_ = true;
@@ -28,8 +28,20 @@ EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
 }
 
 
-void EvilBoss::Move(float frametime)
+void EvilBoss::Update(float frametime)
 {
+
+	float radians_L = ANGLE(target_->GetPosition(), GetPosition() + L_EYE_OFFSET);
+	float radians_R = ANGLE(target_->GetPosition(), GetPosition() + R_EYE_OFFSET);
+
+	eye_left_.Shoot(GetPosition() + L_EYE_OFFSET, radians_L);
+	eye_right_.Shoot(GetPosition() + R_EYE_OFFSET, radians_R);
+	sf::Vector2f randV2f, my = GetPosition();
+	randV2f.x = my.x + sf::Randomizer::Random(L_MOUTH_X_OFFSET, R_MOUTH_X_OFFSET);
+	randV2f.y = my.y + MOUTH_Y_OFFSET;
+	canon_.Shoot(randV2f, ANGLE(target_->GetPosition(), randV2f));
+
+// ------------
 	bool left = true;
 	static bool direction_ = false;
 	static float mover_ = 10.0;
@@ -71,9 +83,9 @@ void EvilBoss::OnCollide(Entity& entity)
 }
 
 
-void EvilBoss::Hit(int damage)
+void EvilBoss::TakeDamage(int damage)
 {
-	Entity::Hit(damage);
+	Entity::TakeDamage(damage);
 	if (phase_ == EVIL && hp_ < 200)
 	{
 		phase_ = MORE_EVIL;
@@ -81,18 +93,3 @@ void EvilBoss::Hit(int damage)
 		canon_.SetTriple(true);
 	}
 }
-
-
-void EvilBoss::Action()
-{
-	float radians_L = ANGLE(target_->GetPosition(), GetPosition() + L_EYE_OFFSET);
-	float radians_R = ANGLE(target_->GetPosition(), GetPosition() + R_EYE_OFFSET);
-
-	eye_left_.Shoot(GetPosition() + L_EYE_OFFSET, radians_L);
-	eye_right_.Shoot(GetPosition() + R_EYE_OFFSET, radians_R);
-	sf::Vector2f randV2f, my = GetPosition();
-	randV2f.x = my.x + sf::Randomizer::Random(L_MOUTH_X_OFFSET, R_MOUTH_X_OFFSET);
-	randV2f.y = my.y + MOUTH_Y_OFFSET;
-	canon_.Shoot(randV2f, ANGLE(target_->GetPosition(), randV2f));
-}
-

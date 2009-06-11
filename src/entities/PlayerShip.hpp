@@ -25,17 +25,14 @@ public:
 
 	void HandleAction(AC::Action action);
 
-	void Action();
-
 	// inherited
 	void OnCollide(Entity& entity);
 
-	/*
-	 * Déplacer le vaisseau
-	 */
-	void Move(float frametime);
+	// inherited
+	void Update(float frametime);
 
-	void Hit(int damage);
+	// inherited
+	void TakeDamage(int damage);
 
 	inline void SetControls(int controls)
 	{

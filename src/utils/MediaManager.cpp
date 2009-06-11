@@ -125,7 +125,7 @@ Music* MediaManager::GetMusic(const char* key) const
 		std::cerr << "can't give you music file " << key << std::endl;
 		exit(EXIT_FAILURE);
 	}
-	
+
 	std::string path(MUSIC_PATH);
 	Music* mus = new Music((path + it->second).c_str());
 #ifdef DEBUG
@@ -181,23 +181,26 @@ MediaManager::MediaManager()
 	{
 		exit(EXIT_FAILURE);
 	}
-	
+
 	// création des animations
-	BuildAnimation("capsule", 32, 32, 8, 0.1f);
-	BuildAnimation("playership", 64, 40, 2, 0.1f);
-	BuildAnimation("drone", 48, 32, 2, 0.1f);
+	BuildAnimation("capsule", "capsule", 32, 32, 8, 0.1f);
+	BuildAnimation("playership", "spaceship-red", 64, 40, 2, 0.1f);
+	BuildAnimation("scoot", "ennemy-B", 48, 32, 2, 0.1f);
+	BuildAnimation("interceptor", "ennemy-A", 56, 48, 2, 0.1f);
 }
 
 
-void MediaManager::BuildAnimation(const char* name, int width, int height,
+void MediaManager::BuildAnimation(const char* name, const char* img, int width, int height,
 	int count, float delay, int offset)
 {
 	Animation* p = &animations_[name];
+
 	for (int i = 0; i < count; ++i)
 	{
 		p->AddFrame(i * width, offset, width, height);
 	}
 	p->SetDelay(delay);
+	p->SetImage(GetImage(img));
 #ifdef DEBUG
 	std::cout << "building anim:" << name << std::endl;
 #endif

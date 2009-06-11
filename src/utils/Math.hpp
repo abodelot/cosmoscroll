@@ -28,10 +28,10 @@ inline float sin(float x)
 		Sin += .405284735 * x * x;
 	else
 		Sin -= .405284735 * x * x;
-	
+
 	x = (Sin * Sin);
 	if (Sin >= 0) x = -x;
-	
+
 	return Sin + .255 * (x - Sin);*/
 	return std::sin(x);
 }
@@ -57,10 +57,10 @@ inline float RAD_TO_DEG(float radians)
 }
 
 
-inline void TRANSLATE(sf::Vector2f& offset, float angle, float distance)
+inline void TRANSLATE(sf::Vector2f& offset, float angle, float speed)
 {
-	offset.x = offset.x + distance * math::cos(angle);
-	offset.y = offset.y - distance * math::sin(angle);
+	offset.x = offset.x + speed * math::cos(angle);
+	offset.y = offset.y - speed * math::sin(angle);
 }
 
 
@@ -70,11 +70,10 @@ inline float Distance(const float x1, const float y1, const float x2 = 0.f, cons
 	// sqrt( (x1 - x2)² + (y1 - y2)² )
 	return sqrt( (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) );
 }
- 
+
 
 inline float Distance(const sf::Vector2f& p1, const sf::Vector2f& p2 = sf::Vector2f(0.f, 0.f))
 {
-	// Utilisation de l'autre fonction Distance.
 	return Distance(p1.x, p1.y, p2.x, p2.y);
 }
 
@@ -94,5 +93,5 @@ inline float ANGLE(const sf::Vector2f& p1, const sf::Vector2f& p2)
 	return radians;
 }
 
-#endif /* guard MATH_HPP */
+#endif // MATH_HPP
 

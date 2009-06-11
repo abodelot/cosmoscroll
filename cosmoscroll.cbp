@@ -14,6 +14,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DDEBUG" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -56,31 +57,29 @@
 		<Unit filename="src/core/Main.cpp" />
 		<Unit filename="src/core/ParticleSystem.cpp" />
 		<Unit filename="src/core/ParticleSystem.hpp" />
+		<Unit filename="src/core/SoundSystem.cpp" />
+		<Unit filename="src/core/SoundSystem.hpp" />
 		<Unit filename="src/core/Window.hpp" />
 		<Unit filename="src/entities/Asteroid.cpp" />
 		<Unit filename="src/entities/Asteroid.hpp" />
-		<Unit filename="src/entities/Blorb.cpp" />
-		<Unit filename="src/entities/Blorb.hpp" />
 		<Unit filename="src/entities/Bonus.cpp" />
 		<Unit filename="src/entities/Bonus.hpp" />
-		<Unit filename="src/entities/BulletManager.cpp" />
-		<Unit filename="src/entities/BulletManager.hpp" />
-		<Unit filename="src/entities/Drone.cpp" />
-		<Unit filename="src/entities/Drone.hpp" />
-		<Unit filename="src/entities/Ennemy.cpp" />
-		<Unit filename="src/entities/Ennemy.hpp" />
 		<Unit filename="src/entities/Entity.cpp" />
 		<Unit filename="src/entities/Entity.hpp" />
 		<Unit filename="src/entities/EntityManager.cpp" />
 		<Unit filename="src/entities/EntityManager.hpp" />
 		<Unit filename="src/entities/EvilBoss.cpp" />
 		<Unit filename="src/entities/EvilBoss.hpp" />
-		<Unit filename="src/entities/Interceptor.cpp" />
-		<Unit filename="src/entities/Interceptor.hpp" />
+		<Unit filename="src/entities/Hit.cpp" />
+		<Unit filename="src/entities/Hit.hpp" />
 		<Unit filename="src/entities/PlayerShip.cpp" />
 		<Unit filename="src/entities/PlayerShip.hpp" />
+		<Unit filename="src/entities/SpaceShip.cpp" />
+		<Unit filename="src/entities/SpaceShip.hpp" />
 		<Unit filename="src/entities/Weapon.cpp" />
 		<Unit filename="src/entities/Weapon.hpp" />
+		<Unit filename="src/menu/MainMenu.cpp" />
+		<Unit filename="src/menu/MainMenu.hpp" />
 		<Unit filename="src/menu/Menu.cpp" />
 		<Unit filename="src/menu/Menu.hpp" />
 		<Unit filename="src/tinyxml/tinyxml.cpp" />

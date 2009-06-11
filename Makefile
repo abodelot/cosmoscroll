@@ -39,7 +39,10 @@ $(EXEC): $(OBJ)
 .PHONY: clean cleanxml mrproper
 
 clean:
-	-rm src/{core,utils,menu,entities}/*.o
+	-rm src/core/*.o
+	-rm src/utils/*.o
+	-rm src/menu/*.o
+	-rm src/entities/*.o
 
 cleanxml:
 	-rm src/tinyxml/*.o
