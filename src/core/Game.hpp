@@ -39,11 +39,7 @@ public:
 		return app_.GetInput();
 	}
 
-	inline Entity* GetShip() const
-	{
-		return player1_; // FIXME: toujours player 1
-	}
-
+	Entity* GetPlayerShip() const;
 
 private:
 	Game();

@@ -24,8 +24,10 @@ public:
      */
     Asteroid(const sf::Vector2f& offset, Size size, float angle=180);
 
+	// inherited
     void Update(float frametime);
 
+	// inherited
     void TakeDamage(int damage);
 
 private:

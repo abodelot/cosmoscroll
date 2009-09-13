@@ -25,9 +25,6 @@ public:
 	void TakeDamage(int damage);
 
 	// inherited
-	void OnCollide(Entity& entity);
-
-	// inherited
 	void Update(float frametime);
 
 	/*
@@ -44,5 +41,5 @@ private:
 	Type type_;
 };
 
-#endif /* guard BONUS_HPP */
+#endif // BONUS_HPP
 

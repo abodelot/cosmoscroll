@@ -1,13 +1,14 @@
+#include <typeinfo>
+
 #include "Hit.hpp"
+#include "Bonus.hpp"
 #include "../utils/Math.hpp"
 
-#include <typeinfo>
 
 Hit::Hit(int emitter_id, const sf::Vector2f& offset, float angle,
 	const sf::Image* image, int speed, int damage) :
-	Entity(*image, offset, 1)
+	Entity(*image, offset, 1, damage)
 {
-	damage_ = damage;
 	speed_ = speed;
 	SetRotation(RAD_TO_DEG(angle));
 	angle_ = angle;
@@ -26,11 +27,15 @@ void Hit::Update(float frametime)
 
 void Hit::OnCollide(Entity& entity)
 {
-	if (entity.GetID() != emitter_id_ && typeid (entity) != typeid (Hit))
+	// traverse les tirs et les bonus
+	if (entity.GetID() == emitter_id_
+		|| typeid (entity) == typeid (Hit)
+		|| typeid (entity) == typeid (Bonus))
 	{
-		entity.TakeDamage(damage_);
-		Kill();
+		return;
 	}
+	Entity::OnCollide(entity);
+	Kill();
 }
 
 

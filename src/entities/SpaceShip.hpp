@@ -16,10 +16,12 @@ public:
 	 */
 	SpaceShip* Clone() const;
 
+	void SetTarget(Entity* target);
+
 	/**
-	 * Attacher une arme au vaisseau
+	 * Obtenir l'arme au vaisseau
 	 */
-	void SetWeapon(Weapon* weapon);
+	Weapon* GetWeapon();
 
 	// inherited
 	void Update(float frametime);
@@ -29,7 +31,8 @@ public:
 
 private:
 	int speed_;
-	Weapon* weapon_;
+	Weapon weapon_;
+	Entity* target_;
 };
 
 

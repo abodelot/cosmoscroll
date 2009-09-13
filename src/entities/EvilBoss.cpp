@@ -15,22 +15,26 @@
 
 
 EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
-	Entity(GET_IMG("evil_boss"), offset, 500),
-	eye_left_(EntityManager::GetInstance().BuildWeapon(0)),
-	eye_right_(EntityManager::GetInstance().BuildWeapon(0)),
-	canon_(EntityManager::GetInstance().BuildWeapon(3))
+	Entity(GET_IMG("evil_boss"), offset, 500)
 {
-	left_ = true;
-	phase_ = EVIL;
+	// init weapons
+	EntityManager& mgr = EntityManager::GetInstance();
+	mgr.InitWeapon(0, &eye_left_);
+	mgr.InitWeapon(0, &eye_right_);
+	mgr.InitWeapon(3, &canon_);
 	eye_left_.SetOwner(this);
 	eye_right_.SetOwner(this);
 	canon_.SetOwner(this);
+
+	left_ = true;
+	phase_ = EVIL;
+
+	target_ = target;
 }
 
 
 void EvilBoss::Update(float frametime)
 {
-
 	float radians_L = ANGLE(target_->GetPosition(), GetPosition() + L_EYE_OFFSET);
 	float radians_R = ANGLE(target_->GetPosition(), GetPosition() + R_EYE_OFFSET);
 
@@ -74,12 +78,6 @@ void EvilBoss::Update(float frametime)
 	eye_left_.Update(frametime);
 	eye_right_.Update(frametime);
 	canon_.Update(frametime);
-}
-
-
-void EvilBoss::OnCollide(Entity& entity)
-{
-	(void) entity;
 }
 
 

@@ -79,7 +79,7 @@ LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 	EntityManager& entity_manager = EntityManager::GetInstance();
 
 	elem = elem->FirstChildElement();
-	Entity* player = NULL;//Game::GetInstance().GetShip();
+	Entity* player = Game::GetInstance().GetPlayerShip();
 
 	if (elem == NULL)
 	{

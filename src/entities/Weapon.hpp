@@ -15,15 +15,27 @@
 class Weapon
 {
 public:
+	Weapon();
+
     /**
-     * @param[in] image: image du projectile
-     * @param[in] fire_rate: nombre de tirs par seconde
-     * @param[in] heat_cost: chaleur dégagée par tir
-     * @param[in] damage: dégâts infligés par tir
-     * @param[in] speed: vitesse du tir en pixels par seconde
-     * @param[in] sound: son joué lors d'un tir (NULL si pas de son)
+     * @param image: image du projectile
+     * @param fire_rate: nombre de tirs par seconde
+     * @param heat_cost: chaleur dégagée par tir
+     * @param damage: dégâts infligés par tir
+     * @param speed: vitesse du tir en pixels par seconde
      */
-	Weapon(const sf::Image& image, float fire_rate, float heat_cost, int damage, int speed, const char* sound = NULL);
+	void Init(const sf::Image& image, float fire_rate, float heat_cost,
+		int damage, int speed);
+
+	/**
+	 * @return true si l'arme peut être utilisée, sinon false
+	 */
+	bool IsInited() const;
+
+	/**
+	 * @param sound: son joué lors d'un tir (NULL si pas de son)
+	 */
+	void SetSoundName(const char* sound);
 
 	void SetOffset(int x, int y);
 
@@ -48,11 +60,11 @@ private:
     // le timer est mis à jour à chaque frame dans Update
     float fire_timer_;
 
-
-	const char* sound_;
+	const char* sound_name_;
     bool triple_;
 	Entity* owner_;
 
+	bool inited_;
 	int x_;
 	int y_;
 };

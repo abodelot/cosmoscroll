@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<levels count="1" name= "CosmoScroll Test Levels">
+<levels>
 	<level desc="Alors que vous vous baladez\ndans le vide interstellaire...\nOn vous attaque !!!">
 		<ship id="1" x="640" y="250" t="2.2" />
 		<ship id="1" x="640" y="300" t="1.0" />

@@ -5,21 +5,46 @@
 #include "../core/SoundSystem.hpp"
 
 
-Weapon::Weapon(const sf::Image& image, float fire_rate, float heat_cost, int damage, int speed, const char* sound)
+Weapon::Weapon()
 {
 	fire_timer_ = 0.f;
-	fire_rate_ = 1 / fire_rate;
+	fire_rate_ = 0;
 	triple_ = false;
 	owner_ = NULL;
+	image_ = NULL;
+	heat_cost_ = 0;
+	damage_ = 0;
+	speed_ = 0;
+	sound_name_ = NULL;
+	x_ = 0;
+	y_ = 0;
 
+	inited_ = false;
+}
+
+
+void Weapon::Init(const sf::Image& image, float fire_rate, float heat_cost,
+	int damage, int speed)
+{
+	fire_rate_ = 1 / fire_rate;
 	image_ = &image;
 	heat_cost_ = heat_cost;
 	damage_ = damage;
 	speed_ = speed;
-	sound_ = sound;
 
-	x_ = 0;
-	y_ = 0;
+	inited_ = true;
+}
+
+
+bool Weapon::IsInited() const
+{
+	return inited_;
+}
+
+
+void Weapon::SetSoundName(const char* sound)
+{
+	sound_name_ = sound;
 }
 
 
@@ -62,9 +87,9 @@ float Weapon::Shoot(sf::Vector2f offset, float angle)
 		}
 		fire_timer_ = fire_rate_;
 
-		if (*sound_ != '\0')
+		if (sound_name_ != NULL)
 		{
-			sound_sys.PlaySound(sound_);
+			sound_sys.PlaySound(sound_name_);
 		}
 		return heat_cost_;
 	}

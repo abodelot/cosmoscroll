@@ -1,16 +1,13 @@
 #ifndef PLAYERSHIP_HPP
 #define PLAYERSHIP_HPP
 
-#ifndef NO_AUDIO
-#include <SFML/Audio.hpp>
-#endif
 #include <SFML/System.hpp>
 
-#include "../core/AbstractController.hpp"
-#include "Bonus.hpp"
-#include "../core/ControlPanel.hpp"
 #include "Entity.hpp"
+#include "Bonus.hpp"
 #include "Weapon.hpp"
+#include "../core/AbstractController.hpp"
+#include "../core/ControlPanel.hpp"
 #include "../core/Animated.hpp"
 
 /**
@@ -22,6 +19,8 @@ public:
 	PlayerShip(const sf::Vector2f& offset, const char* image);
 
 	~PlayerShip();
+
+	void SetTarget(Entity* target);
 
 	void HandleAction(AC::Action action);
 
@@ -80,13 +79,11 @@ private:
 	int coolers_, shield_, speed_;
 
 	int controls_;
-#ifndef NO_AUDIO
-	sf::Sound shield_sfx_;
-#endif
+
 	AbstractController& controller_;
 	ControlPanel& panel_;
 	Weapon laserbeam_, hellfire_;
 };
 
-#endif /* guard PLAYERSHIP_HPP */
+#endif // PLAYERSHIP_HPP
 

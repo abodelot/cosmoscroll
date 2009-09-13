@@ -1,9 +1,7 @@
-#include <typeinfo>
 #include <cassert>
 #include <SFML/System/Randomizer.hpp>
 
 #include "Bonus.hpp"
-#include "PlayerShip.hpp"
 #include "../utils/MediaManager.hpp"
 
 #define BONUS_SPEED 100
@@ -22,7 +20,7 @@ static inline const sf::Image& select_image(Bonus::Type type)
 
 
 Bonus::Bonus(Type type, const sf::Vector2f& offset) :
-	Entity(select_image(type), offset, 1)
+	Entity(select_image(type), offset, 1, 0)
 {
 	type_ = type;
 }
@@ -38,15 +36,6 @@ Bonus* Bonus::MakeRandom(const sf::Vector2f& offset)
 void Bonus::TakeDamage(int)
 {
 	// un bonus ne peut être détruit
-}
-
-
-void Bonus::OnCollide(Entity& entity)
-{
-	if (typeid (entity) == typeid (PlayerShip))
-	{
-		Kill(); // le bonus disparait
-	}
 }
 
 

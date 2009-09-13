@@ -10,6 +10,7 @@
 #include "Weapon.hpp"
 #include "SpaceShip.hpp"
 
+
 class EntityManager: public sf::Drawable
 {
 public:
@@ -40,7 +41,7 @@ public:
 	 */
 	int Count() const;
 
-	Weapon BuildWeapon(int id) const;
+	void InitWeapon(int id, Weapon* weapon) const;
 
 	SpaceShip* CreateSpaceShip(int id, int x, int y);
 
@@ -85,4 +86,4 @@ private:
 };
 
 
-#endif /* ENTITYMANAGER_HPP */
+#endif // ENTITYMANAGER_HPP

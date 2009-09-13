@@ -18,10 +18,8 @@ public:
 
 private:
 	float angle_;
-	int damage_;
 	int speed_;
 	int emitter_id_;
 };
-
 
 #endif // HIT_HPP

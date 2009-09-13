@@ -3,7 +3,8 @@
 #include "../core/Window.hpp"
 
 
-Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp)
+Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp,
+	int collide_damage)
 {
 	id_ = -1;
 
@@ -11,6 +12,7 @@ Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp)
 	SetPosition(offset);
 	hp_ = hp;
 	flipped_ = false;
+	collide_damage_ = collide_damage;
 }
 
 
@@ -25,8 +27,15 @@ void Entity::TakeDamage(int damage)
 }
 
 
-void Entity::OnCollide(Entity&)
+void Entity::OnCollide(Entity& entity)
 {
+	entity.TakeDamage(collide_damage_);
+}
+
+
+void Entity::Kill()
+{
+	hp_ = 0;
 }
 
 

@@ -33,3 +33,5 @@ shield.png
 spaceship-red.png
 spaceship-green.png
 star.png
+cosmoscroll-logo.png
+sfml-logo.png

@@ -34,6 +34,7 @@
 		<Compiler>
 			<Add option="-pedantic" />
 			<Add option="-Wall" />
+			<Add option="-ansi" />
 		</Compiler>
 		<Linker>
 			<Add library="sfml-graphics" />
@@ -78,8 +79,6 @@
 		<Unit filename="src/entities/SpaceShip.hpp" />
 		<Unit filename="src/entities/Weapon.cpp" />
 		<Unit filename="src/entities/Weapon.hpp" />
-		<Unit filename="src/menu/MainMenu.cpp" />
-		<Unit filename="src/menu/MainMenu.hpp" />
 		<Unit filename="src/menu/Menu.cpp" />
 		<Unit filename="src/menu/Menu.hpp" />
 		<Unit filename="src/tinyxml/tinyxml.cpp" />
@@ -88,6 +87,7 @@
 		<Unit filename="src/tinyxml/tinyxmlparser.cpp" />
 		<Unit filename="src/utils/ConfigParser.cpp" />
 		<Unit filename="src/utils/ConfigParser.hpp" />
+		<Unit filename="src/utils/DIE.hpp" />
 		<Unit filename="src/utils/Math.cpp" />
 		<Unit filename="src/utils/Math.hpp" />
 		<Unit filename="src/utils/MediaManager.cpp" />

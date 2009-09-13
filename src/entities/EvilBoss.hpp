@@ -13,11 +13,10 @@ class EvilBoss: public Entity
 public:
 	EvilBoss(const sf::Vector2f& offset, Entity* target);
 
+	// inherited
 	void Update(float frametime);
 
 	// inherited
-	void OnCollide(Entity& entity);
-
 	void TakeDamage(int damage);
 
 private:

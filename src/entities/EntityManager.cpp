@@ -1,8 +1,8 @@
-#include <iostream>
-
 #include "EntityManager.hpp"
+#include "../core/Game.hpp"
 #include "../tinyxml/tinyxml.h"
 #include "../utils/MediaManager.hpp"
+#include "../utils/DIE.hpp"
 
 #define WEAPON_DEFINITIONS "data/xml/weapons.xml"
 
@@ -89,6 +89,7 @@ void EntityManager::Clear()
 		delete *it;
 	}
 	entities_.clear();
+	last_id_ = 0;
 }
 
 
@@ -96,22 +97,6 @@ int EntityManager::Count() const
 {
 	return entities_.size();
 }
-
-
-Weapon EntityManager::BuildWeapon(int id) const
-{
-	WeaponMap::const_iterator it;
-	it = weapon_defs_.find(id);
-
-	if (it != weapon_defs_.end())
-	{
-		const WeaponDefinition& def = it->second;
-		Weapon weapon(*def.image, def.fire_rate, def.heat_cost, def.damage, def.speed, def.sound.c_str());
-		return weapon;
-	}
-	abort();
-}
-
 
 
 void EntityManager::Render(sf::RenderTarget& target) const
@@ -125,89 +110,12 @@ void EntityManager::Render(sf::RenderTarget& target) const
 }
 
 
-void EntityManager::LoadWeapons(const char* filename)
-{
-	const MediaManager& media = MediaManager::GetInstance();
-
-	TiXmlDocument doc;
-	if (!doc.LoadFile(filename))
-	{
-		std::cerr << "can't load weapon definitions: " << filename << "\n";
-		std::cerr << doc.ErrorDesc() << std::endl;
-		abort();
-	}
-	TiXmlHandle handle(&doc);
-	TiXmlElement* elem = handle.FirstChildElement().FirstChildElement().Element();
-
-	while (elem != NULL)
-	{
-		int id;
-		if (elem->QueryIntAttribute("id", &id) != TIXML_SUCCESS)
-		{
-			std::cerr << "weapon id is missing" << std::endl;
-			abort();
-		}
-		WeaponDefinition* weapon = &weapon_defs_[id];
-
-		const char* p = elem->Attribute("name");
-		if (p == NULL)
-		{
-			std::cerr << "weapon name is missing" << std::endl;
-			abort();
-		}
-		weapon->name = p;
-
-		p = elem->Attribute("image");
-		if (p == NULL)
-		{
-			std::cerr << "weapon image is missing" << std::endl;
-			abort();
-		}
-		weapon->image = &media.GetImage(p);
-
-		// sound (optional)
-		p = elem->Attribute("sound");
-		weapon->sound = p == NULL ? "" : p;
-
-
-		if (elem->QueryFloatAttribute("heat_cost", &weapon->heat_cost) != TIXML_SUCCESS)
-		{
-			std::cerr << "weapon heat cost is missing" << std::endl;
-			abort();
-		}
-
-		if (elem->QueryFloatAttribute("fire_rate", &weapon->fire_rate) != TIXML_SUCCESS)
-		{
-			std::cerr << "weapon fire rate is missing" << std::endl;
-			abort();
-		}
-
-		if (elem->QueryIntAttribute("damage", &weapon->damage) != TIXML_SUCCESS)
-		{
-			std::cerr << "weapon damage is missing" << std::endl;
-			abort();
-		}
-
-		if (elem->QueryIntAttribute("speed", &weapon->speed) != TIXML_SUCCESS)
-		{
-			std::cerr << "weapon speed is missing" << std::endl;
-			abort();
-		}
-
-		elem = elem->NextSiblingElement();
-	}
-}
-
-
 void EntityManager::LoadSpaceShips(const char* filename)
 {
-
 	TiXmlDocument doc;
 	if (!doc.LoadFile(filename))
 	{
-		std::cerr << "can't load space ships definitions: " << filename << "\n";
-		std::cerr << doc.ErrorDesc() << std::endl;
-		abort();
+		DIE("can't load space ships definitions: '%s' (%s)", filename, doc.ErrorDesc());
 	}
 	TiXmlHandle handle(&doc);
 	TiXmlElement* elem = handle.FirstChildElement().FirstChildElement().Element();
@@ -217,36 +125,31 @@ void EntityManager::LoadSpaceShips(const char* filename)
 		int id;
 		if (elem->QueryIntAttribute("id", &id) != TIXML_SUCCESS)
 		{
-			std::cerr << "space ship id is missing" << std::endl;
-			abort();
+			DIE("space ship id is missing");
 		}
 
 		const char* name = elem->Attribute("name");
 		if (name == NULL)
 		{
-			std::cerr << "space ship name is missing" << std::endl;
-			abort();
+			DIE("space ship name is missing")
 		}
 
 		const char* animation = elem->Attribute("animation");
 		if (animation == NULL)
 		{
-			std::cerr << "space ship animation is missing" << std::endl;
-			abort();
+			DIE("space ship animation is missing");
 		}
 
 		int hp;
 		if (elem->QueryIntAttribute("hp", &hp) != TIXML_SUCCESS)
 		{
-			std::cerr << "space ship HP is missing" << std::endl;
-			abort();
+			DIE("space ship HP is missing")
 		}
 
 		int speed;
 		if (elem->QueryIntAttribute("speed", &speed) != TIXML_SUCCESS)
 		{
-			std::cerr << "space ship speed is missing" << std::endl;
-			abort();
+			DIE("space ship speed is missing");
 		}
 
 		SpaceShip* ship = new SpaceShip(animation, hp, speed);
@@ -257,32 +160,93 @@ void EntityManager::LoadSpaceShips(const char* filename)
 			int w_id, w_x, w_y;
 			if (weapon->QueryIntAttribute("id", &w_id) != TIXML_SUCCESS)
 			{
-				std::cerr << "ship weapon id not found" << std::endl;
-				abort();
+				DIE("ship weapon id not found");
 			}
 
 			if (weapon->QueryIntAttribute("x", &w_x) != TIXML_SUCCESS)
 			{
-				std::cerr << "ship weapon offset x not found" << std::endl;
-				abort();
+				DIE("ship weapon offset x not found");
 			}
 
 			if (weapon->QueryIntAttribute("y", &w_y) != TIXML_SUCCESS)
 			{
-				std::cerr << "ship weapon offset y not found" << std::endl;
-				abort();
+				DIE("ship weapon offset y not found");
 			}
-			Weapon* weapon_object = new Weapon(BuildWeapon(w_id));
-			weapon_object->SetOffset(w_x, w_y);
-			ship->SetWeapon(weapon_object);
-
+			Weapon* weapon = ship->GetWeapon();
+			InitWeapon(w_id, weapon);
+			weapon->SetOffset(w_x, w_y);
 		}
 
 		spaceships_defs_[id] = ship;
+		printf("new ship defined: id %d\n", id);
+		elem = elem->NextSiblingElement();
+	}
+}
+
+
+void EntityManager::LoadWeapons(const char* filename)
+{
+	const MediaManager& media = MediaManager::GetInstance();
+
+	TiXmlDocument doc;
+	if (!doc.LoadFile(filename))
+	{
+		DIE("can't load weapon definitions: '%s' (%s)", filename, doc.ErrorDesc());
+	}
+	TiXmlHandle handle(&doc);
+	TiXmlElement* elem = handle.FirstChildElement().FirstChildElement().Element();
+
+	while (elem != NULL)
+	{
+		int id;
+		if (elem->QueryIntAttribute("id", &id) != TIXML_SUCCESS)
+		{
+			DIE("weapon id is missing");
+		}
+		WeaponDefinition* weapon = &weapon_defs_[id];
+
+		const char* p = elem->Attribute("name");
+		if (p == NULL)
+		{
+			DIE("weapon name is missing");
+		}
+		weapon->name = p;
+
+		p = elem->Attribute("image");
+		if (p == NULL)
+		{
+			DIE("weapon image is missing")
+		}
+		weapon->image = &media.GetImage(p);
+
+		// sound (optional)
+		p = elem->Attribute("sound");
+		weapon->sound = p == NULL ? "" : p;
+
+		if (elem->QueryFloatAttribute("heat_cost", &weapon->heat_cost) != TIXML_SUCCESS)
+		{
+			DIE("weapon heat cost is missing");
+		}
+
+		if (elem->QueryFloatAttribute("fire_rate", &weapon->fire_rate) != TIXML_SUCCESS)
+		{
+			DIE("weapon fire rate is missing");
+		}
+
+		if (elem->QueryIntAttribute("damage", &weapon->damage) != TIXML_SUCCESS)
+		{
+			DIE("weapon damage is missing");
+		}
+
+		if (elem->QueryIntAttribute("speed", &weapon->speed) != TIXML_SUCCESS)
+		{
+			DIE("weapon speed is missing");
+		}
 
 		elem = elem->NextSiblingElement();
 	}
 }
+
 
 SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 {
@@ -293,8 +257,29 @@ SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 	{
 		SpaceShip* ship = it->second->Clone();
 		ship->SetPosition(x, y);
+		ship->SetTarget(Game::GetInstance().GetPlayerShip());
 		return ship;
 	}
-	abort();
+	DIE("space ship id '%d' is not implemented", id);
 	return NULL;
+}
+
+
+void EntityManager::InitWeapon(int id, Weapon* weapon) const
+{
+	WeaponMap::const_iterator it = weapon_defs_.find(id);
+	if (it != weapon_defs_.end())
+	{
+		const WeaponDefinition& def = it->second;
+		weapon->Init(*def.image, def.fire_rate, def.heat_cost, def.damage,
+			def.speed);
+		if (!def.sound.empty())
+		{
+			weapon->SetSoundName(def.sound.c_str());
+		}
+	}
+	else
+	{
+		DIE("weapon id '%d' is not implemented", id);
+	}
 }

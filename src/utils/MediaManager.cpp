@@ -89,6 +89,42 @@ MediaManager& MediaManager::GetInstance()
 	return self;
 }
 
+MediaManager::MediaManager()
+{
+	// chargement des images
+	if (!load_from_list(IMG_LIST, images_))
+	{
+		std::cerr << "can't open image list: " << IMG_LIST << std::endl;
+		exit(EXIT_FAILURE);
+	}
+#ifndef NO_AUDIO
+	// chargement des buffers audio
+	if (!load_from_list(SOUND_LIST, sounds_))
+	{
+		std::cerr << "can't open sound list: " << SOUND_LIST << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	// chargement des musiques
+	if (!load_from_list(MUSIC_LIST, musics_))
+	{
+		std::cerr << "can't open music list: " << MUSIC_LIST << std::endl;
+		exit(EXIT_FAILURE);
+	}
+#endif
+	// chargement des fontes
+	if (!font_.LoadFromFile(FONT_FILENAME, 60))
+	{
+		exit(EXIT_FAILURE);
+	}
+
+	// création des animations
+	BuildAnimation("capsule", "capsule", 32, 32, 8, 0.1f);
+	BuildAnimation("playership", "spaceship-red", 64, 40, 2, 0.1f);
+	BuildAnimation("scoot", "ennemy-B", 48, 32, 2, 0.1f);
+	BuildAnimation("interceptor", "ennemy-A", 56, 48, 2, 0.1f);
+}
+
 
 const sf::Image& MediaManager::GetImage(const char* image) const
 {
@@ -153,40 +189,9 @@ const Animation& MediaManager::GetAnimation(const char* key) const
 }
 
 
-MediaManager::MediaManager()
+void MediaManager::SmoothImage(const char* key, bool smooth)
 {
-	// chargement des images
-	if (!load_from_list(IMG_LIST, images_))
-	{
-		std::cerr << "can't open image list: " << IMG_LIST << std::endl;
-		exit(EXIT_FAILURE);
-	}
-#ifndef NO_AUDIO
-	// chargement des buffers audio
-	if (!load_from_list(SOUND_LIST, sounds_))
-	{
-		std::cerr << "can't open sound list: " << SOUND_LIST << std::endl;
-		exit(EXIT_FAILURE);
-	}
-
-	// chargement des musiques
-	if (!load_from_list(MUSIC_LIST, musics_))
-	{
-		std::cerr << "can't open music list: " << MUSIC_LIST << std::endl;
-		exit(EXIT_FAILURE);
-	}
-#endif
-	// chargement des fontes
-	if (!font_.LoadFromFile(FONT_FILENAME, 60))
-	{
-		exit(EXIT_FAILURE);
-	}
-
-	// création des animations
-	BuildAnimation("capsule", "capsule", 32, 32, 8, 0.1f);
-	BuildAnimation("playership", "spaceship-red", 64, 40, 2, 0.1f);
-	BuildAnimation("scoot", "ennemy-B", 48, 32, 2, 0.1f);
-	BuildAnimation("interceptor", "ennemy-A", 56, 48, 2, 0.1f);
+	images_[key].SetSmooth(smooth);
 }
 
 

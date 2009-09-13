@@ -4,17 +4,16 @@
 
 #include "Game.hpp"
 #include "SoundSystem.hpp"
-
+#include "Window.hpp"
+#include "LevelManager.hpp"
 #include "../entities/Asteroid.hpp"
 #include "../entities/SpaceShip.hpp"
 #include "../entities/EvilBoss.hpp"
-
-#include "LevelManager.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../menu/Menu.hpp"
 #include "../utils/Misc.hpp"
 #include "../utils/Math.hpp"
-#include "Window.hpp"
+#include "../utils/DIE.hpp"
 #include "../utils/ConfigParser.hpp"
 
 #define CONFIG_FILE "config/config.txt"
@@ -150,36 +149,24 @@ Game::Scene Game::Intro()
 	puts("[ Game::Intro ]");
 #endif
 	AC::Action action;
-
 	Scene what = MAIN_MENU;
 	const int DURATION = 6, PADDING = 10;
 	float time, elapsed = 0;
 	bool played = false;
 
-	sf::FloatRect rect;
+	sf::Sprite background(GET_IMG("background"));
 
-	sf::Sprite background;
-		background.SetImage(GET_IMG("background"));
-
-	sf::String title;
-	title.SetText("CosmoScroll");
-	title.SetFont(GET_FONT());
-	title.SetSize(1000);
-	title.SetColor(sf::Color::White);
+	sf::Sprite title(GET_IMG("cosmoscroll-logo"));
+	title.SetCenter(title.GetSize().x / 2, title.GetSize().y / 2);
 	title.SetPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
-	rect = title.GetRect();
-	title.SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
+	title.Resize(title.GetSize().x * 7, title.GetSize().y * 7);
 
-	sf::String sfml;
-	sfml.SetText("Powered by SFML");
-	sfml.SetFont(GET_FONT());
-	sfml.SetSize(22);
-	sfml.SetColor(sf::Color(0xE0, 0xE0, 0xE0));
-	rect = sfml.GetRect();
-	sfml.SetPosition(WIN_WIDTH - rect.GetWidth() - PADDING,
-		WIN_HEIGHT - rect.GetHeight() - PADDING);
+	MediaManager::GetInstance().SmoothImage("cosmoscroll-logo", true);
+	sf::Sprite sfml_logo(GET_IMG("sfml-logo"));
+	sfml_logo.SetX(WIN_WIDTH - sfml_logo.GetSize().x - PADDING);
+	sfml_logo.SetY(WIN_HEIGHT - sfml_logo.GetSize().y - PADDING);
 
-	PlayerShip ship(sf::Vector2f(-20, 100), "spaceship-red");
+	PlayerShip ship(sf::Vector2f(-80, 100), "spaceship-red");
 
 	while (elapsed < DURATION)
 	{
@@ -197,21 +184,20 @@ Game::Scene Game::Intro()
 		}
 		time = app_.GetFrameTime();
 		elapsed += time;
-#ifndef NO_AUDIO
-		if (static_cast<int>(elapsed) == 1 && !played)
+		if (!played && elapsed >= 2)
 		{
 			played = true;
 			SoundSystem::GetInstance().PlaySound("title");
 		}
-#endif
+
 		ship.Update(time);
-		ship.Move(180 * time, 25 * time);
+		ship.Move(170 * time, 25 * time);
 		title.Scale(0.99, 0.99); // FIXME: dépendant des FPS
 		title.SetColor(sf::Color(255, 255, 255,
 			(sf::Uint8) (255 * elapsed / DURATION)));
 
 		app_.Draw(background);
-		app_.Draw(sfml);
+		app_.Draw(sfml_logo);
 		app_.Draw(title);
 		app_.Draw(ship);
 
@@ -232,11 +218,10 @@ Game::Scene Game::MainMenu()
 #ifdef DEBUG
 	puts("[ Game::MainMenu ]");
 #endif
-	sf::String title("CosmoScroll");
-	title.SetFont(GET_FONT());
-	title.SetSize(60);
+	sf::Sprite title(GET_IMG("cosmoscroll-logo"));
+
 	title.SetY(42);
-	title.SetX((WIN_WIDTH - title.GetRect().GetWidth()) / 2);
+	title.SetX((WIN_WIDTH - title.GetSize().x) / 2);
 
 	sf::Sprite back(GET_IMG("main-screen"));
 	Menu menu;
@@ -455,22 +440,23 @@ Game::Scene Game::Play()
 			running = false;
 			next = END_PLAY;
 		}
+		else
+		{
+			app_.Clear();
 
-		app_.Clear();
+			float frametime = app_.GetFrameTime();
+			timer_ += frametime;
+			panel_.SetTimer(timer_);
 
-		float frametime = app_.GetFrameTime();
-		timer_ += frametime;
-		panel_.SetTimer(timer_);
+			particles_.Update(frametime);
+			entitymanager_.Update(frametime);
 
-		entitymanager_.Update(frametime);
-		particles_.Update(frametime);
-
-		// RENDER
-		app_.Draw(entitymanager_);
-		particles_.Show(app_);
-		panel_.Show(app_);
-		app_.Display();
-
+			// RENDER
+			app_.Draw(entitymanager_);
+			particles_.Show(app_);
+			panel_.Show(app_);
+			app_.Display();
+		}
 	}
 	return next;
 }
@@ -587,9 +573,6 @@ Game::Scene Game::EndPlay()
 #ifdef DEBUG
 	puts("[ Game::EndPlay ]");
 #endif
-#ifndef NO_AUDIO
-	sf::Sound sound;
-#endif
 	const float DURATION = 5;
 	float timer = 0;
 	Scene what;
@@ -598,22 +581,19 @@ Game::Scene Game::EndPlay()
 	info.SetColor(sf::Color::White);
 	info.SetFont(GET_FONT());
 
-
 	// si perdu
 	if ((entitymanager_.Count() > 1 && mode_ != STORY2X) ||
 		(entitymanager_.Count() > 2 && mode_ == STORY2X))
 	{
-#ifndef NO_AUDIO
-		sound.SetBuffer(GET_SOUNDBUF("game-over"));
-#endif
+		SoundSystem::GetInstance().PlaySound("game-over");
+
 		info.SetText("Game Over");
 		what = mode_ == ARCADE ? ARCADE_RESULT : MAIN_MENU;
 	}
 	else if (current_level_ < levels_.GetLast()) // on ne peut pas gagner en arcade
 	{
-#ifndef NO_AUDIO
-		sound.SetBuffer(GET_SOUNDBUF("end-level"));
-#endif
+		SoundSystem::GetInstance().PlaySound("end-level");
+
 		info.SetText(str_sprintf(L"Niveau %d terminé", current_level_));
 		++current_level_;
 		if (current_level_ > last_level_reached_)
@@ -627,9 +607,8 @@ Game::Scene Game::EndPlay()
 	}
 	else // si dernier niveau du jeu
 	{
-#ifndef NO_AUDIO
-		sound.SetBuffer(GET_SOUNDBUF("end-level"));
-#endif
+		SoundSystem::GetInstance().PlaySound("end-level");
+
 		std::wstring epic_win = str_sprintf(L"Félicitations :-D\n\n"
 			"Vous avez fini les %d niveaux du jeu.\n"
 			"Vous êtes vraiment doué(e) :D", current_level_);
@@ -644,9 +623,6 @@ Game::Scene Game::EndPlay()
 	bool running = true;
 
 	AC::Action action;
-#ifndef NO_AUDIO
-	sound.Play();
-#endif
 	while (running)
 	{
 		while (controls_.GetAction(action))
@@ -918,15 +894,15 @@ void load_menu(OptionMenu what, Menu& menu, sf::String& title)
 			break;
 		case OPT_JOYSTICK:
 			title.SetText("Joystick");
-			menu.AddItem(str_sprintf("Arme 1 : %u",
+			menu.AddItem(str_sprintf("Arme 1 : bouton %u",
 				controls.GetBinding(AC::WEAPON_1, AC::JOYSTICK)), 1);
-			menu.AddItem(str_sprintf("Arme 2 : %u",
+			menu.AddItem(str_sprintf("Arme 2 : bouton %u",
 				controls.GetBinding(AC::WEAPON_2, AC::JOYSTICK)), 2);
-			menu.AddItem(str_sprintf(L"Utiliser bonus Glaçon : %u",
+			menu.AddItem(str_sprintf(L"Utiliser bonus Glaçon : bouton %u",
 				controls.GetBinding(AC::USE_COOLER, AC::JOYSTICK)), 3);
-			menu.AddItem(str_sprintf("Pause : %u",
+			menu.AddItem(str_sprintf("Pause : bouton %u",
 				controls.GetBinding(AC::PAUSE, AC::JOYSTICK)), 4);
-			menu.AddItem(str_sprintf("Valider : %u",
+			menu.AddItem(str_sprintf("Valider : bouton %u",
 				controls.GetBinding(AC::VALID, AC::JOYSTICK)), 5);
 			break;
 	}
@@ -1158,3 +1134,11 @@ Game::Scene Game::Options()
 }
 
 
+Entity* Game::GetPlayerShip() const
+{
+	if (player1_ == NULL)
+	{
+		DIE("can't retrieve player: playership is not allocated yet");
+	}
+	return player1_;
+}

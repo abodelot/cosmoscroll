@@ -3,19 +3,20 @@
 #include <SFML/System.hpp>
 
 #include "PlayerShip.hpp"
-#include "Asteroid.hpp"
 #include "EntityManager.hpp"
-#include "../utils/MediaManager.hpp"
 #include "../core/Window.hpp"
-#include "../utils/Math.hpp"
-#include "../core/ParticleSystem.hpp"
 #include "../core/Game.hpp"
+#include "../core/ParticleSystem.hpp"
+#include "../core/SoundSystem.hpp"
+#include "../utils/MediaManager.hpp"
+#include "../utils/Math.hpp"
 
 #ifdef DEBUG
 #include <iostream>
 #endif
 
-#define GUN_OFFSET              sf::Vector2f(52, 24)
+#define LASERBEAM_OFFSET        52, 22
+#define HELLFIRE_OFFSET         50, 24
 
 #define DEFAULT_SPEED           200
 #define HIGH_SPEED              320
@@ -40,37 +41,25 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	Entity(GET_IMG(image), offset, HP_DEFAULT),
 	Animated(GET_ANIM("playership"), *this),
 	controller_(AC::GetInstance()),
-	panel_(ControlPanel::GetInstance()),
-	laserbeam_(EntityManager::GetInstance().BuildWeapon(1)),
-	hellfire_(EntityManager::GetInstance().BuildWeapon(2))
+	panel_(ControlPanel::GetInstance())
 {
+	// init weapons
+	EntityManager& mgr = EntityManager::GetInstance();
+	mgr.InitWeapon(1, &laserbeam_);
 	laserbeam_.SetOwner(this);
+	laserbeam_.SetOffset(LASERBEAM_OFFSET);
+	mgr.InitWeapon(2, &hellfire_);
 	hellfire_.SetOwner(this);
-#ifdef DEBUG
-	puts("PlayerShip()");
-#endif
+	hellfire_.SetOffset(HELLFIRE_OFFSET);
+
 	shield_ = SHIELD_DEFAULT;
 	coolers_ = COOLER_DEFAULT;
 	overheated_ = false;
 	shield_timer_ = 0;
 	heat_ = 0.0f;
 	speed_ = DEFAULT_SPEED;
-#ifndef NO_AUDIO
-	shield_sfx_.SetBuffer(GET_SOUNDBUF("warp"));
-#endif
-
+	controls_ = AC::ALL;
 	ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, this);
-
-	panel_.SetMaxShipHP(HP_MAX);
-	panel_.SetMaxShield(SHIELD_MAX);
-	panel_.SetMaxHeat(HEAT_MAX);
-
-	panel_.SetShipHP(hp_);
-	panel_.SetShield(shield_);
-	panel_.SetHeat(static_cast<int>(heat_));
-
-	panel_.SetCoolers(coolers_);
-	panel_.SetInfo("");
 
 	// init timed bonus
 	for (int i = 0; i < TIMED_BONUS_COUNT; ++i)
@@ -78,7 +67,17 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 		bonus_[i] = 0.f;
 	}
 
-	// init Konami Code
+	// init control panel
+	panel_.SetMaxShipHP(HP_MAX);
+	panel_.SetMaxShield(SHIELD_MAX);
+	panel_.SetMaxHeat(HEAT_MAX);
+	panel_.SetShipHP(hp_);
+	panel_.SetShield(shield_);
+	panel_.SetHeat((int) heat_);
+	panel_.SetCoolers(coolers_);
+	panel_.SetInfo("");
+
+	// init Konami code
 	konami_code_[0] = AC::MOVE_UP;
 	konami_code_[1] = AC::MOVE_UP;
 	konami_code_[2] = AC::MOVE_DOWN;
@@ -91,15 +90,16 @@ PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
 	konami_code_[9] = AC::WEAPON_1;
 	current_konami_event_ = 0;
 
-	controls_ = AC::ALL;
-	//use_limits_ = true;
+#ifdef DEBUG
+	printf("PlayerShip created at %p\n", (void*) this);
+#endif
 }
 
 
 PlayerShip::~PlayerShip()
 {
 #ifdef DEBUG
-	puts("~PlayerShip()");
+	puts("PlayerShip deleted");
 #endif
 }
 
@@ -136,10 +136,7 @@ void PlayerShip::HandleAction(AC::Action action)
 	{
 		current_konami_event_ = 0;
 	}
-
 }
-
-
 
 
 void PlayerShip::Update(float frametime)
@@ -148,15 +145,13 @@ void PlayerShip::Update(float frametime)
 	if (!overheated_)
 	{
 		float h = 0.0f;
-		sf::Vector2f offset = GetPosition() + GUN_OFFSET;
-
 		if (controller_.HasInput(AC::WEAPON_1, controls_))
 		{
-			h += hellfire_.Shoot(offset);
+			h += hellfire_.Shoot(GetPosition());
 		}
 		if (controller_.HasInput(AC::WEAPON_2, controls_))
 		{
-			h += laserbeam_.Shoot(offset);
+			h += laserbeam_.Shoot(GetPosition());
 		}
 
 		heat_ += h;
@@ -178,47 +173,19 @@ void PlayerShip::Update(float frametime)
 	float dist = frametime * speed_;
 	if (controller_.HasInput(AC::MOVE_UP, controls_))
 	{
-		/*if (use_limits_)
-		{
-			y = (y - dist < y_limits_.x) ? y_limits_.x : y - dist;
-		}
-		else
-		{*/
-			y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
-		/*}*/
+		y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
 	}
 	if (controller_.HasInput(AC::MOVE_DOWN, controls_))
 	{
-		/*if (use_limits_)
-		{
-			y = (y + dist > y_limits_.y - HEIGHT) ? y_limits_.y - HEIGHT : y + dist;
-		}
-		else
-		{*/
-			y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
-		/*}*/
+		y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
 	}
 	if (controller_.HasInput(AC::MOVE_LEFT, controls_))
 	{
-		/*if (use_limits_)
-		{
-			x = (x - dist < x_limits_.x) ? x_limits_.x : x - dist;
-		}
-		else
-		{*/
-			x = (x - dist < 0) ? 0 : x - dist;
-		/*}*/
+		x = (x - dist < 0) ? 0 : x - dist;
 	}
 	if (controller_.HasInput(AC::MOVE_RIGHT, controls_))
 	{
-		/*if (use_limits_)
-		{
-			x = (x + dist > x_limits_.y - WIDTH) ? x_limits_.y - WIDTH : x + dist;
-		}
-		else
-		{*/
-			x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
-		/*}*/
+		x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
 	}
 	SetPosition(x, y);
 
@@ -289,9 +256,7 @@ void PlayerShip::TakeDamage(int damage)
 		}
 		else
 		{
-#ifndef NO_AUDIO
-			shield_sfx_.Play();
-#endif
+			SoundSystem::GetInstance().PlaySound("warp");
 			shield_ = 0;
 		}
 		panel_.SetShield(shield_);
@@ -315,12 +280,11 @@ void PlayerShip::OnCollide(Entity& entity)
 	if (bonus != NULL)
 	{
 		HandleBonus(*bonus);
+		entity.Kill();
 	}
-	else if (typeid (entity) == typeid (Asteroid)
-		|| typeid (entity) == typeid (SpaceShip))
+	else
 	{
-		TakeDamage(1);
-		entity.TakeDamage(1);
+		Entity::OnCollide(entity);
 	}
 }
 

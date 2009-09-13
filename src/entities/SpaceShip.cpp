@@ -11,36 +11,33 @@ SpaceShip::SpaceShip(const char* animation, int hp, int speed) :
 	Animated(GET_ANIM(animation), *this)
 {
 	speed_ = speed;
-	weapon_ = NULL;
+	weapon_.SetOwner(this);
+	target_ = NULL;
 }
 
 
 SpaceShip::~SpaceShip()
 {
-	if (weapon_ != NULL)
-	{
-		delete weapon_;
-	}
 }
 
 
 SpaceShip* SpaceShip::Clone() const
 {
 	SpaceShip* ship = new SpaceShip(*this);
-	if (weapon_ != NULL)
-	{
-		ship->SetWeapon(new Weapon(*weapon_));
-
-	}
-
+	ship->GetWeapon()->SetOwner(ship);
 	return ship;
 }
 
 
-void SpaceShip::SetWeapon(Weapon* weapon)
+void SpaceShip::SetTarget(Entity* target)
 {
-	 weapon_ = weapon;
-	 weapon->SetOwner(this);
+	target_ = target;
+}
+
+
+Weapon* SpaceShip::GetWeapon()
+{
+	return &weapon_;
 }
 
 
@@ -49,16 +46,23 @@ void SpaceShip::Update(float frametime)
 	sf::Sprite::Move(-speed_ * frametime, 0);
 	KillIfOut();
 	Animated::Update(frametime, *this);
-	if (weapon_ != NULL)
+	if (weapon_.IsInited())
 	{
-		weapon_->Update(frametime);
-		/*float my_y = GetPosition().y;
-		float player_y = target_->GetPosition().y;
-		// Doit on tirer ?
-		if (std::abs(player_y - my_y) < 30)
-		{*/
-			weapon_->Shoot(GetPosition(), -PI);
-		//}
+		weapon_.Update(frametime);
+		if (target_ == NULL)
+		{
+			weapon_.Shoot(GetPosition(), -PI);
+		}
+		else
+		{
+			float my_y = GetPosition().y;
+			float player_y = target_->GetPosition().y;
+			// Doit on tirer ?
+			if (std::abs(player_y - my_y) < 30)
+			{
+				weapon_.Shoot(GetPosition(), -PI);
+			}
+		}
 	}
 }
 
@@ -68,7 +72,6 @@ void SpaceShip::TakeDamage(int damage)
 	Entity::TakeDamage(damage);
 	if (IsDead())
 	{
-		puts("space ship killed");
 #ifdef DEBUG
 		if (sf::Randomizer::Random(0, 2) == 0)
 #else
@@ -82,7 +85,7 @@ void SpaceShip::TakeDamage(int damage)
 }
 
 
-/** interceptor
+/* interceptor
 tir:
  float radians = ANGLE(target_->GetPosition(), GetPosition());
     if (flipped_)

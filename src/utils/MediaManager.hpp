@@ -61,14 +61,20 @@ public:
 	 */
 	const Animation& GetAnimation(const char* key) const;
 
+	/**
+	 * Appliquer ou annuler le filtre smooth sur une image
+	 * @param key: identifiant de l'image
+	 */
+	void SmoothImage(const char* key, bool smooth);
+
 private:
 	/**
 	 * Initialisation (chargement des images)
 	 */
 	MediaManager();
 
-	MediaManager(const MediaManager& other);
-	MediaManager& operator=(const MediaManager& other);
+	MediaManager(const MediaManager&);
+	MediaManager& operator=(const MediaManager&);
 
 	/**
 	 * Construire les frames d'une animation
@@ -121,5 +127,5 @@ inline const Animation& GET_ANIM(const char* key)
 	return MediaManager::GetInstance().GetAnimation(key);
 }
 
-#endif /* guard MEDIAMANAGER_HPP */
+#endif // MEDIAMANAGER_HPP
 
