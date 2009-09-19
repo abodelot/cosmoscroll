@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<animations>
+	<anim name="capsule" img="ship-capsule" width="32" height="32" count="8" delay="0.1" />
+	<anim name="scoot" img="ship-scoot" width="48" height="32" count="2" delay="0.1" />
+	<anim name="interceptor" img="ship-interceptor" width="56" height="48" count="2" delay="0.1" />
+	<anim name="playership-red" img="playership" width="64" height="40" count="2" delay="0.1" />
+</animations>
+

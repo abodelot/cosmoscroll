@@ -9,10 +9,14 @@ class Bonus: public Entity
 public:
 	enum Type
 	{
-		COOLER,   // ajoute 1 glaçon
-		HEALTH,   // ajoute 1 point de vie
-		SPEED,    // vitesse x2
-		TRISHOT,  // tir x3
+		HEALTH,       // +1 hp
+		SHIELD,       // +1 shield
+		COOLER,       // +1 cooler
+		MISSILE,      // +1 cooler
+		TRIPLE_SHOT,  // shot * 3 (10s)
+		SPEED,        // speed * 2 (10s)
+		STONED,       // inverted movement (10s)
+		MAGIC_BANANA, // invincible (10s)
 		BONUS_COUNT
 	};
 
@@ -36,6 +40,8 @@ public:
 	{
 		return type_;
 	}
+
+	static sf::IntRect GetSubRect(Type type);
 
 private:
 	Type type_;

@@ -22,10 +22,11 @@ public:
 private:
 	enum Phase
 	{
-		EVIL, MORE_EVIL
+		EVIL = 600, MORE_EVIL = 400, DAMN_EVIL = 200
 	};
 
-	Phase phase_;
+	Phase phase_, next_;
+
 	bool left_;
 	Weapon eye_left_;
 	Weapon eye_right_;

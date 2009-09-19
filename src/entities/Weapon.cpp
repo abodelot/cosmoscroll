@@ -78,12 +78,12 @@ float Weapon::Shoot(sf::Vector2f offset, float angle)
 		offset.x += x_;
 		offset.y += y_;
 
-		int emitter = owner_->GetID();
-		entitymanager.AddEntity(new Hit(emitter, offset, angle, image_, speed_, damage_));
+		Entity::Team team = owner_->GetTeam();
+		entitymanager.AddEntity(new Hit(team, offset, angle, image_, speed_, damage_));
 		if (triple_)
 		{
-			entitymanager.AddEntity(new Hit(emitter, offset, angle - 0.15, image_, speed_, damage_));
-			entitymanager.AddEntity(new Hit(emitter, offset, angle + 0.15, image_, speed_, damage_));
+			entitymanager.AddEntity(new Hit(team, offset, angle - 0.15, image_, speed_, damage_));
+			entitymanager.AddEntity(new Hit(team, offset, angle + 0.15, image_, speed_, damage_));
 		}
 		fire_timer_ = fire_rate_;
 

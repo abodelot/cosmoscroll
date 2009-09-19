@@ -7,7 +7,7 @@
 class Hit: public Entity
 {
 public:
-	Hit(int emitter_id, const sf::Vector2f& offset, float angle,
+	Hit(Entity::Team team, const sf::Vector2f& offset, float angle,
 		const sf::Image* image, int speed, int damage);
 
 	void Update(float frametime);
@@ -19,7 +19,6 @@ public:
 private:
 	float angle_;
 	int speed_;
-	int emitter_id_;
 };
 
 #endif // HIT_HPP

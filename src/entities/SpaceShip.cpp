@@ -7,9 +7,11 @@
 
 
 SpaceShip::SpaceShip(const char* animation, int hp, int speed) :
-	Entity(GET_ANIM(animation).GetImage(), sf::Vector2f(0, 0), hp),
-	Animated(GET_ANIM(animation), *this)
+	Entity(sf::Vector2f(0, 0), hp),
+	Animated(EntityManager::GetInstance().GetAnimation(animation), *this)
 {
+	SetTeam(Entity::BAD);
+
 	speed_ = speed;
 	weapon_.SetOwner(this);
 	target_ = NULL;
@@ -80,6 +82,7 @@ void SpaceShip::TakeDamage(int damage)
 		{
 			EntityManager::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
 		}
+		puts("ennemi abattu");
 		ParticleSystem::GetInstance().AddExplosion(GetPosition());
 	}
 }

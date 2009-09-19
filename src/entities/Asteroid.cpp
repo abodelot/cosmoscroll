@@ -1,21 +1,23 @@
-#include "Asteroid.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../core/ParticleSystem.hpp"
-#include "EntityManager.hpp"
-#include "../utils/Math.hpp"
-
 #include <SFML/System.hpp>
 #include <sstream>
 
+#include "Asteroid.hpp"
+#include "EntityManager.hpp"
+#include "../core/ParticleSystem.hpp"
+#include "../utils/MediaManager.hpp"
+#include "../utils/Math.hpp"
 
 // division en morceaux de taille moindre
 #define BIG_SPLIT_INTO     2
 #define MEDIUM_SPLIT_INTO  6
+#define SLOWDOWN           0.99f
+#define VERTICAL_SPEED     50
 
 
-inline const sf::Image& select_image(Asteroid::Size size)
+Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
+    Entity(offset, size + 1)
 {
-    const int NB = 3;
+	const int NB = 3;
     static const char* image_bases[] = {
         "asteroid-small",
         "asteroid-medium",
@@ -23,23 +25,47 @@ inline const sf::Image& select_image(Asteroid::Size size)
     };
     std::ostringstream key;
     key << image_bases[size] << '-' << sf::Randomizer::Random(1, NB);
-    return GET_IMG(key.str().c_str());
-}
+    SetImage(GET_IMG(key.str().c_str()));
 
-
-Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
-    Entity(select_image(size), offset, size + 1)
-{
-    size_ = size;
     speed_ = 100;
     angle_ = DEG_TO_RAD(angle);
-    //SetCenter(GetImage()->GetWidth() / 2, GetImage()->GetHeight() / 2);
+
+    size_ = size;
+    /*SetCenter(GetImage()->GetWidth() / 2, GetImage()->GetHeight() / 2);
+    static const sf::IntRect rect_big[COUNT_BIG] = {
+    	sf::IntRect(),
+    	sf::IntRect(),
+    	sf::IntRect()
+    };
+    static const sf::IntRect rect_medium[COUNT_MEDIUM] = {
+    	sf::IntRect(),
+    	sf::IntRect(),
+    	sf::IntRect()
+    };
+    static const sf::IntRect rect_small[COUNT_SMALL] = {
+    	sf::IntRect(),
+    	sf::IntRect(),
+    	sf::IntRect(),
+    	sf::IntRect()
+    }
+    switch (size)
+    {
+    	case SMALL:
+			SetSubRect(rect_small[sf::Randomizer::Random(0, COUNT_SMALL - 1)]);
+			break;
+		case MEDIUM:
+			SetSubRect(rect_medium[sf::Randomizer::Random(0, COUNT_MEDIUM - 1)]);
+			break;
+		case BIG:
+			SetSubRect(rect_big[sf::Randomizer::Random(0, COUNT_BIG - 1)]);
+			break;
+    }*/
 }
 
 
 void Asteroid::Update(float frametime)
 {
-    sf::Sprite::Move(-50 * frametime, 0); // mouvement latéral
+    sf::Sprite::Move(-VERTICAL_SPEED * frametime, 0);
 /*
 TODO
 (00:08:43) Alexandre: manque un ajustement sur le facteur de ralentissement 0.99 appliqué à chaque frame
@@ -47,7 +73,7 @@ TODO
 (00:09:31) Alexandre: faut impliquer frametime dans le calcul pour que ce soit indépendant des FPS
 (sinon plus on a de FPS plus l'astéro ralentit vite)
 */
-    speed_ *= 0.99;
+    speed_ *= SLOWDOWN;
     float framespeed = frametime * speed_;
     sf::Vector2f offset = GetPosition();
     offset.x = offset.x + framespeed * math::cos(angle_);
@@ -62,30 +88,29 @@ void Asteroid::TakeDamage(int damage)
 {
 	sf::Vector2f offset = GetPosition();
 
-    Entity::TakeDamage(damage);
-    if (IsDead())
-    {
-        EntityManager& entitymanager = EntityManager::GetInstance();
-        switch (size_)
-        {
-            case BIG:
-                for (int i = 0; i < BIG_SPLIT_INTO; ++i)
-                {
-                    entitymanager.AddEntity(new Asteroid(offset, MEDIUM,
-                        sf::Randomizer::Random(0, 360)));
-                };
-                break;
-            case MEDIUM:
-                for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
-                {
-                    entitymanager.AddEntity(new Asteroid(offset, SMALL,
-                        sf::Randomizer::Random(0, 360)));
-                }
-                break;
-            default:
-                break;
-        }
-    }
+	Entity::TakeDamage(damage);
+	if (IsDead())
+	{
+		static EntityManager& entitymanager = EntityManager::GetInstance();
+		switch (size_)
+		{
+			case BIG:
+				for (int i = 0; i < BIG_SPLIT_INTO; ++i)
+				{
+					entitymanager.AddEntity(new Asteroid(offset, MEDIUM,
+						sf::Randomizer::Random(0, 360)));
+				};
+				break;
+			case MEDIUM:
+				for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
+				{
+					entitymanager.AddEntity(new Asteroid(offset, SMALL,
+						sf::Randomizer::Random(0, 360)));
+				}
+				break;
+			default:
+				break;
+		}
+	}
 }
-
 

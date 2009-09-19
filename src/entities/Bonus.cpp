@@ -5,23 +5,14 @@
 #include "../utils/MediaManager.hpp"
 
 #define BONUS_SPEED 100
-
-
-static inline const sf::Image& select_image(Bonus::Type type)
-{
-	static const char* keys[Bonus::BONUS_COUNT] = {
-		"bonus-cooler",
-		"bonus-health",
-		"bonus-speed",
-		"bonus-trishot"
-	};
-	return GET_IMG(keys[type]);
-}
+#define SIZE        16
 
 
 Bonus::Bonus(Type type, const sf::Vector2f& offset) :
-	Entity(select_image(type), offset, 1, 0)
+	Entity(offset, 1, 0)
 {
+	SetImage(GET_IMG("bonus"));
+	SetSubRect(GetSubRect(type));
 	type_ = type;
 }
 
@@ -50,16 +41,31 @@ const wchar_t* Bonus::WhatItIs() const
 {
 	switch (type_)
 	{
-		case COOLER:
-			return L"Glaçon";
 		case HEALTH:
 			return L"Health";
+		case SHIELD:
+			return L"Bouclier";
+		case COOLER:
+			return L"Glaçon";
+		case MISSILE:
+			return L"Missile";
+		case TRIPLE_SHOT:
+			return L"Triple tir";
 		case SPEED:
 			return L"Vitesse";
-		case TRISHOT:
-			return L"Triple tir";
+		case STONED:
+			return L"Stoned :D";
+		case MAGIC_BANANA:
+			return L"Magic Banana!";
 		default:
-			assert(0);
+			break;
 	}
+	return L"<unknow bonus>";
+}
+
+
+sf::IntRect Bonus::GetSubRect(Type type)
+{
+	return sf::IntRect(type * SIZE, 0, (type + 1) * SIZE, SIZE);
 }
 

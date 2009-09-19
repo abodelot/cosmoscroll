@@ -16,7 +16,7 @@
 class PlayerShip: public Entity, public Animated
 {
 public:
-	PlayerShip(const sf::Vector2f& offset, const char* image);
+	PlayerShip(const sf::Vector2f& position, const char* animation);
 
 	~PlayerShip();
 
@@ -46,7 +46,10 @@ public:
 private:
 	enum TimedBonus
 	{
-		T_TRISHOT, T_SPEED, TIMED_BONUS_COUNT
+		T_TRISHOT,
+		T_SPEED,
+		T_STONED,
+		TIMED_BONUS_COUNT
 	};
 
 	/**

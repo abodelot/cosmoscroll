@@ -117,12 +117,6 @@ MediaManager::MediaManager()
 	{
 		exit(EXIT_FAILURE);
 	}
-
-	// création des animations
-	BuildAnimation("capsule", "capsule", 32, 32, 8, 0.1f);
-	BuildAnimation("playership", "spaceship-red", 64, 40, 2, 0.1f);
-	BuildAnimation("scoot", "ennemy-B", 48, 32, 2, 0.1f);
-	BuildAnimation("interceptor", "ennemy-A", 56, 48, 2, 0.1f);
 }
 
 
@@ -177,37 +171,7 @@ const sf::Font& MediaManager::GetFont() const
 }
 
 
-const Animation& MediaManager::GetAnimation(const char* key) const
-{
-	std::map<std::string, Animation>::const_iterator it;
-	it = animations_.find(key);
-	if (it == animations_.end())
-	{
-		std::cerr << "can't give you animation " << key << std::endl;
-	}
-	return it->second;
-}
-
-
 void MediaManager::SmoothImage(const char* key, bool smooth)
 {
 	images_[key].SetSmooth(smooth);
 }
-
-
-void MediaManager::BuildAnimation(const char* name, const char* img, int width, int height,
-	int count, float delay, int offset)
-{
-	Animation* p = &animations_[name];
-
-	for (int i = 0; i < count; ++i)
-	{
-		p->AddFrame(i * width, offset, width, height);
-	}
-	p->SetDelay(delay);
-	p->SetImage(GetImage(img));
-#ifdef DEBUG
-	std::cout << "building anim:" << name << std::endl;
-#endif
-}
-

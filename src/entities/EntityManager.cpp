@@ -4,8 +4,6 @@
 #include "../utils/MediaManager.hpp"
 #include "../utils/DIE.hpp"
 
-#define WEAPON_DEFINITIONS "data/xml/weapons.xml"
-
 
 EntityManager& EntityManager::GetInstance()
 {
@@ -16,9 +14,11 @@ EntityManager& EntityManager::GetInstance()
 
 EntityManager::EntityManager()
 {
-	last_id_ = 0;
-	LoadWeapons(WEAPON_DEFINITIONS);
-	LoadSpaceShips("data/xml/spaceships.xml");
+	/*background_ = sf::Shape::Rectangle(0, 56, 640, 480, sf::Color::White);
+	background_.SetPointColor(0, sf::Color::Black);
+	background_.SetPointColor(1, sf::Color::Black);
+	background_.SetPointColor(2, sf::Color(0, 0, 96));
+	background_.SetPointColor(3, sf::Color(0, 0, 96));*/
 }
 
 
@@ -75,7 +75,6 @@ void EntityManager::Update(float frametime)
 
 void EntityManager::AddEntity(Entity* entity)
 {
-	entity->SetID(++last_id_);
 	entities_.push_front(entity);
 }
 
@@ -89,7 +88,6 @@ void EntityManager::Clear()
 		delete *it;
 	}
 	entities_.clear();
-	last_id_ = 0;
 }
 
 
@@ -101,12 +99,124 @@ int EntityManager::Count() const
 
 void EntityManager::Render(sf::RenderTarget& target) const
 {
+	//target.Draw(background_);
 	// affichage de toutes les entités
 	for (EntityList::const_iterator it = entities_.begin();
 		it != entities_.end(); ++it)
 	{
 		target.Draw(**it);
 	}
+}
+
+
+void EntityManager::LoadWeapons(const char* filename)
+{
+	const MediaManager& media = MediaManager::GetInstance();
+
+	TiXmlDocument doc;
+	if (!doc.LoadFile(filename))
+	{
+		DIE("can't load weapon definitions: '%s' (%s)", filename, doc.ErrorDesc());
+	}
+	TiXmlHandle handle(&doc);
+	TiXmlElement* elem = handle.FirstChildElement().FirstChildElement().Element();
+
+	while (elem != NULL)
+	{
+		int id;
+		if (elem->QueryIntAttribute("id", &id) != TIXML_SUCCESS)
+		{
+			DIE("weapon id is missing");
+		}
+		WeaponDefinition* weapon = &weapon_defs_[id];
+
+		const char* p = elem->Attribute("name");
+		if (p == NULL)
+		{
+			DIE("weapon name is missing");
+		}
+		weapon->name = p;
+
+		p = elem->Attribute("image");
+		if (p == NULL)
+		{
+			DIE("weapon image is missing")
+		}
+		weapon->image = &media.GetImage(p);
+
+		// sound (optional)
+		p = elem->Attribute("sound");
+		weapon->sound = p == NULL ? "" : p;
+
+		if (elem->QueryFloatAttribute("heat_cost", &weapon->heat_cost) != TIXML_SUCCESS)
+		{
+			DIE("weapon heat cost is missing");
+		}
+
+		if (elem->QueryFloatAttribute("fire_rate", &weapon->fire_rate) != TIXML_SUCCESS)
+		{
+			DIE("weapon fire rate is missing");
+		}
+
+		if (elem->QueryIntAttribute("damage", &weapon->damage) != TIXML_SUCCESS)
+		{
+			DIE("weapon damage is missing");
+		}
+
+		if (elem->QueryIntAttribute("speed", &weapon->speed) != TIXML_SUCCESS)
+		{
+			DIE("weapon speed is missing");
+		}
+
+		elem = elem->NextSiblingElement();
+	}
+}
+
+
+void EntityManager::LoadAnimations(const char* filename)
+{
+	// ppd
+	// chargement des animations
+	TiXmlDocument doc;
+	if (!doc.LoadFile(filename))
+	{
+		DIE("can't open animation definitions: %s (%s)", filename, doc.ErrorDesc());
+	}
+
+	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
+	// attributs
+	int width, height, count;
+	float delay;
+	const char* name;
+	const char* img;
+	while (elem != NULL)
+	{
+		bool ok = true;
+		ok &= ((name = elem->Attribute("name")) != NULL);
+		ok &= ((img = elem->Attribute("img")) != NULL);
+		ok &= (elem->QueryIntAttribute("width", &width) == TIXML_SUCCESS);
+		ok &= (elem->QueryIntAttribute("height", &height) == TIXML_SUCCESS);
+		ok &= (elem->QueryIntAttribute("count", &count) == TIXML_SUCCESS);
+		ok &= (elem->QueryFloatAttribute("delay", &delay) == TIXML_SUCCESS);
+		int x = 0, y = 0;
+		elem->QueryIntAttribute("x", &x);
+		elem->QueryIntAttribute("y", &y);
+
+		if (ok)
+		{
+			// construction de l'animation
+			Animation* p = &animations_[name];
+			for (int i = 0; i < count; ++i)
+			{
+				p->AddFrame(x + i * width, y, width, height);
+			}
+			p->SetDelay(delay);
+			p->SetImage(GET_IMG(img));
+			printf("loading animation %s\n", name);
+		}
+		elem = elem->NextSiblingElement();
+	}
+	puts("animations loaded");
 }
 
 
@@ -184,70 +294,6 @@ void EntityManager::LoadSpaceShips(const char* filename)
 }
 
 
-void EntityManager::LoadWeapons(const char* filename)
-{
-	const MediaManager& media = MediaManager::GetInstance();
-
-	TiXmlDocument doc;
-	if (!doc.LoadFile(filename))
-	{
-		DIE("can't load weapon definitions: '%s' (%s)", filename, doc.ErrorDesc());
-	}
-	TiXmlHandle handle(&doc);
-	TiXmlElement* elem = handle.FirstChildElement().FirstChildElement().Element();
-
-	while (elem != NULL)
-	{
-		int id;
-		if (elem->QueryIntAttribute("id", &id) != TIXML_SUCCESS)
-		{
-			DIE("weapon id is missing");
-		}
-		WeaponDefinition* weapon = &weapon_defs_[id];
-
-		const char* p = elem->Attribute("name");
-		if (p == NULL)
-		{
-			DIE("weapon name is missing");
-		}
-		weapon->name = p;
-
-		p = elem->Attribute("image");
-		if (p == NULL)
-		{
-			DIE("weapon image is missing")
-		}
-		weapon->image = &media.GetImage(p);
-
-		// sound (optional)
-		p = elem->Attribute("sound");
-		weapon->sound = p == NULL ? "" : p;
-
-		if (elem->QueryFloatAttribute("heat_cost", &weapon->heat_cost) != TIXML_SUCCESS)
-		{
-			DIE("weapon heat cost is missing");
-		}
-
-		if (elem->QueryFloatAttribute("fire_rate", &weapon->fire_rate) != TIXML_SUCCESS)
-		{
-			DIE("weapon fire rate is missing");
-		}
-
-		if (elem->QueryIntAttribute("damage", &weapon->damage) != TIXML_SUCCESS)
-		{
-			DIE("weapon damage is missing");
-		}
-
-		if (elem->QueryIntAttribute("speed", &weapon->speed) != TIXML_SUCCESS)
-		{
-			DIE("weapon speed is missing");
-		}
-
-		elem = elem->NextSiblingElement();
-	}
-}
-
-
 SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 {
 	SpaceShipMap::const_iterator it;
@@ -283,3 +329,18 @@ void EntityManager::InitWeapon(int id, Weapon* weapon) const
 		DIE("weapon id '%d' is not implemented", id);
 	}
 }
+
+
+
+const Animation& EntityManager::GetAnimation(const char* key) const
+{
+	AnimationMap::const_iterator it;
+	it = animations_.find(key);
+	if (it == animations_.end())
+	{
+		DIE("animation %s not found\n", key);
+	}
+	return it->second;
+}
+
+

@@ -6,6 +6,7 @@
 #include "SoundSystem.hpp"
 #include "Window.hpp"
 #include "LevelManager.hpp"
+#include "../entities/EntityManager.hpp"
 #include "../entities/Asteroid.hpp"
 #include "../entities/SpaceShip.hpp"
 #include "../entities/EvilBoss.hpp"
@@ -19,6 +20,10 @@
 #define CONFIG_FILE "config/config.txt"
 
 #define MARGIN_X 120
+
+#define XML_WEAPONS    "data/xml/weapons.xml"
+#define XML_ANIMATIONS "data/xml/animations.xml"
+#define XML_SPACESHIPS "data/xml/spaceships.xml"
 
 
 Game& Game::GetInstance()
@@ -36,6 +41,13 @@ Game::Game() :
 	entitymanager_(EntityManager::GetInstance())
 {
 	puts("boot sur le flex ...");
+	// init entity manager
+	entitymanager_.LoadWeapons(XML_WEAPONS);
+	entitymanager_.LoadAnimations(XML_ANIMATIONS);
+	entitymanager_.LoadSpaceShips(XML_SPACESHIPS);
+	entitymanager_.SetPosition(0, ControlPanel::HEIGHT);
+
+	particles_.SetPosition(0, ControlPanel::HEIGHT);
 	// loading config
 	ConfigParser config;
 	bool fullscreen = false;
@@ -150,7 +162,7 @@ Game::Scene Game::Intro()
 #endif
 	AC::Action action;
 	Scene what = MAIN_MENU;
-	const int DURATION = 6, PADDING = 10;
+	const int DURATION = 6;
 	float time, elapsed = 0;
 	bool played = false;
 
@@ -160,13 +172,9 @@ Game::Scene Game::Intro()
 	title.SetCenter(title.GetSize().x / 2, title.GetSize().y / 2);
 	title.SetPosition(WIN_WIDTH / 2, WIN_HEIGHT / 2);
 	title.Resize(title.GetSize().x * 7, title.GetSize().y * 7);
-
 	MediaManager::GetInstance().SmoothImage("cosmoscroll-logo", true);
-	sf::Sprite sfml_logo(GET_IMG("sfml-logo"));
-	sfml_logo.SetX(WIN_WIDTH - sfml_logo.GetSize().x - PADDING);
-	sfml_logo.SetY(WIN_HEIGHT - sfml_logo.GetSize().y - PADDING);
 
-	PlayerShip ship(sf::Vector2f(-80, 100), "spaceship-red");
+	PlayerShip ship(sf::Vector2f(-80, 100), "playership-red");
 
 	while (elapsed < DURATION)
 	{
@@ -197,7 +205,6 @@ Game::Scene Game::Intro()
 			(sf::Uint8) (255 * elapsed / DURATION)));
 
 		app_.Draw(background);
-		app_.Draw(sfml_logo);
 		app_.Draw(title);
 		app_.Draw(ship);
 
@@ -448,12 +455,13 @@ Game::Scene Game::Play()
 			timer_ += frametime;
 			panel_.SetTimer(timer_);
 
-			particles_.Update(frametime);
 			entitymanager_.Update(frametime);
+			particles_.Update(frametime);
 
 			// RENDER
 			app_.Draw(entitymanager_);
-			particles_.Show(app_);
+			app_.Draw(particles_);
+
 			panel_.Show(app_);
 			app_.Display();
 		}
@@ -481,9 +489,11 @@ Game::Scene Game::About()
 	info.SetPosition(MARGIN_X, 60);
 
 	sf::Sprite back(GET_IMG("main-screen"));
-	menu.SetOffset(sf::Vector2f(MARGIN_X, 320));
+	menu.SetOffset(sf::Vector2f(MARGIN_X, 340));
 	menu.AddItem("Retour", MAIN_MENU);
 
+	sf::Sprite logos(GET_IMG("libs-logo"));
+	logos.SetY(WIN_HEIGHT - logos.GetSize().y - 10);
 
 	while (running)
 	{
@@ -499,6 +509,7 @@ Game::Scene Game::About()
 			}
 		}
 		app_.Draw(back);
+		app_.Draw(logos);
 		app_.Draw(info);
 		menu.Show(app_);
 		app_.Display();
@@ -552,8 +563,8 @@ Game::Scene Game::InGameMenu()
 		particles_.Update(app_.GetFrameTime());
 
 		// rendering
-		particles_.Show(app_);
 		app_.Draw(entitymanager_);
+		app_.Draw(particles_);
 		panel_.Show(app_);
 
 		app_.Draw(title);
@@ -573,7 +584,7 @@ Game::Scene Game::EndPlay()
 #ifdef DEBUG
 	puts("[ Game::EndPlay ]");
 #endif
-	const float DURATION = 5;
+	const float DURATION = 7;
 	float timer = 0;
 	Scene what;
 	sf::String info;
@@ -645,11 +656,9 @@ Game::Scene Game::EndPlay()
 		}
 		// seules les particules sont mises à jour
 		particles_.Update(frametime);
-		info.SetColor(sf::Color(255, 255, 255,
-			(sf::Uint8)(255 - 255 * timer / DURATION)));
 
 		// rendering
-		particles_.Show(app_);
+		app_.Draw(particles_);
 		app_.Draw(entitymanager_);
 		panel_.Show(app_);
 		app_.Draw(info);
@@ -728,12 +737,12 @@ void Game::Init()
 	sf::Vector2f offset;
 	offset.x = 0;
 	player_dead_ = false;
-	player1_ = new PlayerShip(sf::Vector2f(), "spaceship-red");
+	player1_ = new PlayerShip(sf::Vector2f(), "playership-red");
 	entitymanager_.AddEntity(player1_);
 
 	if (mode_ == STORY2X)
 	{
-		player2_ = new PlayerShip(sf::Vector2f(), "spaceship-green");
+		player2_ = new PlayerShip(sf::Vector2f(), "playership-green");
 		entitymanager_.AddEntity(player2_);
 
 		player1_->SetControls(AC::KEYBOARD);
@@ -783,7 +792,7 @@ bool Game::ArcadeMoreBadGuys()
 	{
 		sf::Vector2f offset;
 		offset.x = WIN_WIDTH;
-		offset.y = sf::Randomizer::Random(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
+		offset.y = sf::Randomizer::Random(ControlPanel::HEIGHT, WIN_HEIGHT);
 		int random = sf::Randomizer::Random(0, 10);
 		Entity* entity = NULL;
 		if (random > 6)

@@ -45,6 +45,24 @@ public:
 
 	SpaceShip* CreateSpaceShip(int id, int x, int y);
 
+	const Animation& GetAnimation(const char* key) const;
+
+	/**
+	 * Charger les définitions des XML armes
+	 * @param[in] filename: fichier XML des armes
+	 */
+	void LoadWeapons(const char* filename);
+
+	/**
+	 * Charger les définitions XML des animations
+	 */
+	void LoadAnimations(const char* filename);
+
+	/**
+	 * Charger les défintions XML des vaisseaux
+	 */
+	void LoadSpaceShips(const char* filename);
+
 private:
 	EntityManager();
 	EntityManager(const EntityManager&);
@@ -52,14 +70,6 @@ private:
 
 	/// inherited
 	void Render(sf::RenderTarget& target) const;
-
-	/**
-	 * Charger les définitions des armes
-	 * @param[in] filename: fichier XML des armes
-	 */
-	void LoadWeapons(const char* filename);
-
-	void LoadSpaceShips(const char* filename);
 
 	struct WeaponDefinition
 	{
@@ -76,14 +86,16 @@ private:
 	typedef std::map<int, SpaceShip*> SpaceShipMap;
 	SpaceShipMap spaceships_defs_;
 
+	typedef std::map<std::string, Animation> AnimationMap;
+	AnimationMap animations_;
+
 	typedef std::map<int, WeaponDefinition> WeaponMap;
 	WeaponMap weapon_defs_;
 
 	typedef std::list<Entity*> EntityList;
-
 	EntityList entities_;
-	int last_id_;
-};
 
+	//sf::Shape background_;
+};
 
 #endif // ENTITYMANAGER_HPP

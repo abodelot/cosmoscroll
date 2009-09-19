@@ -1,18 +1,14 @@
 #ifndef MEDIAMANAGER_HPP
 #define MEDIAMANAGER_HPP
 
+#include <map>
+#include <string>
 #include <SFML/Graphics.hpp>
 
 #ifndef NO_AUDIO
 #include <SFML/Audio.hpp>
 #include "../utils/Music.hpp"
 #endif
-
-#include <map>
-#include <string>
-
-#include "../core/Animation.hpp"
-
 
 /**
  * Classe singleton pour gérer les ressources (images, font)
@@ -56,12 +52,6 @@ public:
 	const sf::Font& GetFont() const;
 
 	/**
-	 * Obtenir une animation
-	 * @param[in] key: identifiant de l'animation
-	 */
-	const Animation& GetAnimation(const char* key) const;
-
-	/**
 	 * Appliquer ou annuler le filtre smooth sur une image
 	 * @param key: identifiant de l'image
 	 */
@@ -72,28 +62,14 @@ private:
 	 * Initialisation (chargement des images)
 	 */
 	MediaManager();
-
 	MediaManager(const MediaManager&);
 	MediaManager& operator=(const MediaManager&);
-
-	/**
-	 * Construire les frames d'une animation
-	 * @param[in] name: nom de l'animation
-	 * @param[in] width: largeur d'une frame
-	 * @param[in] height: hauteur d'une frame
-	 * @param[in] count: nombre de frames
-	 * @param[in] delay: temps d'attente entre chaque frame
-	 * @param[in] offset: décalage y sur le tileset
-	 */
-	void BuildAnimation(const char* name, const char* img, int width, int height, int count,
-		float delay, int offset=0);
 
 	std::map<std::string, sf::Image> images_;
 #ifndef NO_AUDIO
 	std::map<std::string, sf::SoundBuffer> sounds_;
 	std::map<std::string, std::string> musics_;
 #endif
-	std::map<std::string, Animation> animations_;
 	sf::Font font_;
 };
 
@@ -120,11 +96,6 @@ inline Music* GET_MUSIC(const char* key)
 inline const sf::Font& GET_FONT()
 {
 	return MediaManager::GetInstance().GetFont();
-}
-
-inline const Animation& GET_ANIM(const char* key)
-{
-	return MediaManager::GetInstance().GetAnimation(key);
 }
 
 #endif // MEDIAMANAGER_HPP

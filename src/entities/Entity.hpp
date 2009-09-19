@@ -9,14 +9,17 @@
 class Entity: public sf::Sprite
 {
 public:
+	enum Team
+	{
+		GOOD, NEUTRAL, BAD
+	};
+
 	/**
-	 * @param[in] img: image du vaisseau
-	 * @param[in] offset: position de départ
+	 * @param[in] position: position (x, y) de départ
 	 * @param[in] hp: points de vie
 	 * @param[in] collide_damage: dégâts infligés lors d'une collision
 	 */
-	Entity(const sf::Image& img, const sf::Vector2f& offset, int hp,
-		int collide_damage = 1);
+	Entity(const sf::Vector2f& position, int hp, int collide_damage = 1);
 
 	virtual ~Entity();
 
@@ -74,22 +77,22 @@ public:
 	virtual void GetCollideRect(sf::FloatRect& rect) const;
 
 	/**
-	 * Attribuer un identifiant à l'entité
+	 * Obtenir l'équipe de l'entité
 	 */
-	void SetID(int id);
-
-	/**
-	 * Obtenir l'identifiant de l'entité
-	 */
-	int GetID() const;
+	Team GetTeam() const;
 
 protected:
+	/**
+	 * Attribuer une équipe à l'entité (défaut: NEUTRAL)
+	 */
+	void SetTeam(Team team);
+
 	int hp_;
 	bool flipped_;
 
 private:
 	int collide_damage_;
-	int id_;
+	Team team_;
 };
 
 #endif // ENTITY_HPP

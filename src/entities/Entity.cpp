@@ -1,15 +1,12 @@
 #include "Entity.hpp"
-#include "Bonus.hpp"
 #include "../core/Window.hpp"
 
 
-Entity::Entity(const sf::Image& img, const sf::Vector2f& offset, int hp,
-	int collide_damage)
+Entity::Entity(const sf::Vector2f& position, int hp, int collide_damage)
 {
-	id_ = -1;
+	SetPosition(position);
 
-	SetImage(img);
-	SetPosition(offset);
+	team_ = NEUTRAL;
 	hp_ = hp;
 	flipped_ = false;
 	collide_damage_ = collide_damage;
@@ -29,7 +26,10 @@ void Entity::TakeDamage(int damage)
 
 void Entity::OnCollide(Entity& entity)
 {
-	entity.TakeDamage(collide_damage_);
+	if (team_ != entity.team_)
+	{
+		entity.TakeDamage(collide_damage_);
+	}
 }
 
 
@@ -72,13 +72,16 @@ void Entity::GetCollideRect(sf::FloatRect& rect) const
 }
 
 
-void Entity::SetID(int id)
+Entity::Team Entity::GetTeam() const
 {
-	id_ = id;
+	return team_;
 }
 
 
-int Entity::GetID() const
+void Entity::SetTeam(Team team)
 {
-	return id_;
+	team_ = team;
 }
+
+
+

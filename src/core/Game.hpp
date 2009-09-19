@@ -7,12 +7,12 @@
 
 #include "AbstractController.hpp"
 #include "ControlPanel.hpp"
-#include "../entities/Entity.hpp"
+#include "ParticleSystem.hpp"
 #include "LevelManager.hpp"
 #include "../utils/Music.hpp"
-#include "ParticleSystem.hpp"
 #include "../entities/PlayerShip.hpp"
-#include "../entities/EntityManager.hpp"
+
+class EntityManager;
 
 /**
  * Gestion du déroulement du jeu

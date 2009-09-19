@@ -3,16 +3,19 @@
 #include "Hit.hpp"
 #include "Bonus.hpp"
 #include "../utils/Math.hpp"
+#include "../core/ParticleSystem.hpp"
 
 
-Hit::Hit(int emitter_id, const sf::Vector2f& offset, float angle,
+Hit::Hit(Entity::Team team, const sf::Vector2f& offset, float angle,
 	const sf::Image* image, int speed, int damage) :
-	Entity(*image, offset, 1, damage)
+	Entity(offset, 1, damage)
 {
-	speed_ = speed;
+	SetImage(*image);
+	SetTeam(team);
 	SetRotation(RAD_TO_DEG(angle));
+
+	speed_ = speed;
 	angle_ = angle;
-	emitter_id_ = emitter_id;
 }
 
 
@@ -28,13 +31,14 @@ void Hit::Update(float frametime)
 void Hit::OnCollide(Entity& entity)
 {
 	// traverse les tirs et les bonus
-	if (entity.GetID() == emitter_id_
+	if (entity.GetTeam() == GetTeam()
 		|| typeid (entity) == typeid (Hit)
 		|| typeid (entity) == typeid (Bonus))
 	{
 		return;
 	}
 	Entity::OnCollide(entity);
+	ParticleSystem::GetInstance().AddImpact(GetPosition(), 10);
 	Kill();
 }
 

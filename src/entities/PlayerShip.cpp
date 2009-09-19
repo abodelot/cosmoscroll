@@ -19,7 +19,7 @@
 #define HELLFIRE_OFFSET         50, 24
 
 #define DEFAULT_SPEED           200
-#define HIGH_SPEED              320
+#define SPEED_BONUS_FACTOR      2
 
 #define COOLER_DEFAULT          0
 #define COOLER_MAX              3
@@ -37,12 +37,14 @@
 #define TIMED_BONUS_DURATION    10
 
 
-PlayerShip::PlayerShip(const sf::Vector2f& offset, const char* image) :
-	Entity(GET_IMG(image), offset, HP_DEFAULT),
-	Animated(GET_ANIM("playership"), *this),
+PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
+	Entity(position, HP_DEFAULT),
+	Animated(EntityManager::GetInstance().GetAnimation(animation), *this),
 	controller_(AC::GetInstance()),
 	panel_(ControlPanel::GetInstance())
 {
+	SetTeam(Entity::GOOD);
+	SetSubRect(GetAnimation().GetFrame(0)); // WTF
 	// init weapons
 	EntityManager& mgr = EntityManager::GetInstance();
 	mgr.InitWeapon(1, &laserbeam_);
@@ -141,6 +143,8 @@ void PlayerShip::HandleAction(AC::Action action)
 
 void PlayerShip::Update(float frametime)
 {
+	// animation
+	Animated::Update(frametime, *this);
 
 	if (!overheated_)
 	{
@@ -161,31 +165,44 @@ void PlayerShip::Update(float frametime)
 			panel_.SetInfo("Surchauffe !");
 		}
 	}
-	// -------------
-
-	static const float WIDTH = GetSize().x;
-	static const float HEIGHT = GetSize().y;
 	// déplacement
 	const sf::Vector2f& offset = GetPosition();
 	float x = offset.x;
 	float y = offset.y;
-
-	float dist = frametime * speed_;
+	static const int X_BOUND = WIN_WIDTH - GetSize().x;
+	static const int Y_BOUND = WIN_HEIGHT - ControlPanel::HEIGHT - GetSize().y;
 	if (controller_.HasInput(AC::MOVE_UP, controls_))
 	{
-		y = (y - dist < CONTROL_PANEL_HEIGHT) ? CONTROL_PANEL_HEIGHT : y - dist;
+		y = y - frametime * speed_;
 	}
 	if (controller_.HasInput(AC::MOVE_DOWN, controls_))
 	{
-		y = (y + HEIGHT + dist > WIN_HEIGHT) ? WIN_HEIGHT - HEIGHT : y + dist;
+		y = y + frametime * speed_;
 	}
 	if (controller_.HasInput(AC::MOVE_LEFT, controls_))
 	{
-		x = (x - dist < 0) ? 0 : x - dist;
+		x = x - frametime * speed_;
 	}
 	if (controller_.HasInput(AC::MOVE_RIGHT, controls_))
 	{
-		x = (x + WIDTH + dist > WIN_WIDTH) ? WIN_WIDTH - WIDTH : x + dist;
+		x = x + frametime * speed_;
+	}
+
+	if (y < 0)
+	{
+		y = 0;
+	}
+	else if (y > Y_BOUND)
+	{
+		y = Y_BOUND;
+	}
+	if (x < 0)
+	{
+		x = 0;
+	}
+	else if (x > X_BOUND)
+	{
+		x = X_BOUND;
 	}
 	SetPosition(x, y);
 
@@ -237,9 +254,6 @@ void PlayerShip::Update(float frametime)
 	}
 	laserbeam_.Update(frametime);
 	hellfire_.Update(frametime);
-
-	// animation
-	Animated::Update(frametime, *this);
 }
 
 
@@ -293,7 +307,7 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 {
 	switch (bonus.GetType())
 	{
-		case Bonus::TRISHOT:
+		case Bonus::TRIPLE_SHOT:
 			if (bonus_[T_TRISHOT] == 0)
 			{
 				hellfire_.SetTriple(true);
@@ -309,12 +323,12 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 		case Bonus::SPEED:
 			if (bonus_[T_SPEED] == 0)
 			{
-				speed_ = HIGH_SPEED;
-				//puts("bonus speed activé");
+				speed_ *= SPEED_BONUS_FACTOR;
+				puts("bonus speed activé");
 			}
 			else
 			{
-				//puts("bonus speed relancé");
+				puts("bonus speed relancé");
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
 			break;
@@ -331,6 +345,10 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 				++coolers_;
 				panel_.SetCoolers(coolers_);
 			}
+			break;
+		case Bonus::STONED:
+			speed_ *= -1;
+			bonus_[T_STONED] += TIMED_BONUS_DURATION;
 			break;
 		default:
 			break;
@@ -350,8 +368,11 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 			//puts("bonus triple tir désactivé");
 			break;
 		case T_SPEED:
-			speed_ = DEFAULT_SPEED;
-			//puts("bonus speed désactivé");
+			speed_ /= SPEED_BONUS_FACTOR;
+			puts("bonus speed désactivé");
+			break;
+		case T_STONED:
+			speed_ *= -1;
 			break;
 		default:
 			assert(0);

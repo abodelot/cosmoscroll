@@ -19,7 +19,6 @@ Mode deux joueurs sur la même machine
 
 ControlPanel hérite de sf::Drawable, choix de la position dans la config
 
-SoundSytem : Gestionnaire de buffers audio
 ajouter la gestion des musiques
 supprimer toutes les autres références à sf::Audio
 flag NO_AUDIO obsolète, à remplacer par un flag NO_DUMB pour que ceux qu'ils ne veulent/peuvent pas installer libdumb puissent compiler
@@ -35,17 +34,11 @@ entities
 --------
 
 - sélectionner le type d'IA (mouvement et tir) dans les définitions des spaces ships en XML
-- EntityManager:
-	- charger les profils XML des SpaceShips et des armes
-	- rôle de factory pour instancier toutes les entités par clonage
-	- mettre à jour, gestion des collisions et afficher les entitiés
-
 PlayerShip : compteur de frags / points
 
 
 Ajouter groupes de formation
 Implémenter un système de pattern d'IA (définition des trajectoire et des tirs)
-Changer tous les timers par un appel à un sf::Clock::GetElapsedTime centralisé dans Game
 
 plus de sprites :
 	- nouvelles armes

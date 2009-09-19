@@ -36,5 +36,5 @@ private:
     float speed_;
 };
 
-#endif /* guard ASTEROID_HPP */
+#endif // ASTEROID_HPP
 

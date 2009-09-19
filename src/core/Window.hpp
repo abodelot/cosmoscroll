@@ -12,14 +12,14 @@
 #define SVN_REV "???"
 #endif
 
-#define COSMOSCROLL_VERSION "0.1"
+#define COSMOSCROLL_VERSION "0.2-devel"
 #define COSMOSCROLL_ABOUT str_sprintf(\
 		L"À propos de CosmoScroll\n\n" \
-		"Version : %s\n" \
+		"Version : %s\n\n" \
 		"Auteurs :\n" \
-		"\tAlexandre Bodelot\n" \
-		"\tArnaud Wolff\n" \
-		"\nLicence : GPL", COSMOSCROLL_VERSION)/*, SVN_REV)*/
+		"     Alexandre Bodelot\n" \
+		"     Arnaud Wolff\n\n" \
+		"Licence : GPL", COSMOSCROLL_VERSION)/*, SVN_REV)*/
 
 #include <SFML/Graphics/Rect.hpp>
 
@@ -28,10 +28,10 @@
 
 inline bool outside_universe(const sf::FloatRect& rect)
 {
-	static const sf::FloatRect UNIVERSE(0, CONTROL_PANEL_HEIGHT, WIN_WIDTH,
+	static const sf::FloatRect UNIVERSE(0, ControlPanel::HEIGHT, WIN_WIDTH,
 		WIN_HEIGHT);
 	return !UNIVERSE.Intersects(rect);
 }
 
-#endif /* guard WINDOW_HPP */
+#endif // WINDOW_HPP
 

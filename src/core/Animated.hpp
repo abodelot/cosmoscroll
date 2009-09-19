@@ -28,5 +28,5 @@ private:
 	float timer_;
 };
 
-#endif /* ANIMATED_HPP */
+#endif // ANIMATED_HPP
 

@@ -1,4 +1,5 @@
 #include "ParticleSystem.hpp"
+#include "SoundSystem.hpp"
 #include "Window.hpp"
 #include "../utils/Math.hpp"
 
@@ -14,15 +15,25 @@ ParticleSystem& ParticleSystem::GetInstance()
 }
 
 
+ParticleSystem::ParticleSystem() :
+	media_(MediaManager::GetInstance())
+{
+}
+
+
+ParticleSystem::~ParticleSystem()
+{
+	Clear();
+}
+
+
 void ParticleSystem::AddExplosion(const sf::Vector2f& offset)
 {
 	for (int i = 0; i < PARTICLES_PER_EXPLOSION; ++i)
 	{
 		particles_.push_front(new Fiery(offset, media_.GetImage("fiery")));
 	}
-#ifndef NO_AUDIO
-	sfx_boom_.Play();
-#endif
+	SoundSystem::GetInstance().PlaySound("boom");
 }
 
 
@@ -47,9 +58,7 @@ void ParticleSystem::AddStars(int count)
 void ParticleSystem::AddMessage(const sf::Vector2f& offset, const wchar_t* text)
 {
 	particles_.push_front(new TextParticle(offset, text));
-#ifndef NO_AUDIO
-	sfx_msg_.Play();
-#endif
+	SoundSystem::GetInstance().PlaySound("bonus");
 }
 
 
@@ -101,12 +110,12 @@ void ParticleSystem::Update(float frametime)
 }
 
 
-void ParticleSystem::Show(sf::RenderWindow& app) const
+void ParticleSystem::Render(sf::RenderTarget& target) const
 {
-	ParticleList::const_iterator it;
-	for (it = particles_.begin(); it != particles_.end(); ++it)
+	ParticleList::const_iterator it = particles_.begin();
+	for (; it != particles_.end(); ++it)
 	{
-		(**it).Show(app);
+		(**it).Show(target);
 	}
 }
 
@@ -120,23 +129,6 @@ void ParticleSystem::Clear()
 	}
 	particles_.clear();
 }
-
-
-ParticleSystem::ParticleSystem() :
-	media_(MediaManager::GetInstance())
-{
-#ifndef NO_AUDIO
-    sfx_boom_.SetBuffer(GET_SOUNDBUF("boom"));
-    sfx_msg_.SetBuffer(GET_SOUNDBUF("bonus"));
-#endif
-}
-
-
-ParticleSystem::~ParticleSystem()
-{
-	Clear();
-}
-
 
 // -----------
 
@@ -175,7 +167,7 @@ ParticleSystem::Star::Star()
 {
 	sprite_.SetImage(GET_IMG("star"));
 	float x = sf::Randomizer::Random(0, WIN_WIDTH);
-	float y = sf::Randomizer::Random(CONTROL_PANEL_HEIGHT, WIN_HEIGHT);
+	float y = sf::Randomizer::Random(ControlPanel::HEIGHT, WIN_HEIGHT);
 	sprite_.SetPosition(x, y);
 	float scale = sf::Randomizer::Random(0.5f, 2.0f);
 	sprite_.SetScale(scale, scale);
@@ -188,7 +180,7 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 	if (sprite_.GetPosition().x < 0)
 	{
 		sprite_.SetX(WIN_WIDTH);
-		sprite_.SetY(sf::Randomizer::Random(CONTROL_PANEL_HEIGHT, WIN_HEIGHT));
+		sprite_.SetY(sf::Randomizer::Random(ControlPanel::HEIGHT, WIN_HEIGHT));
 		sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED);
 		float scale = sf::Randomizer::Random(0.5f, 1.5f);
 		sprite_.SetScale(scale, scale);
@@ -232,7 +224,7 @@ ParticleSystem::LinkedParticle::LinkedParticle(const sf::Sprite* handle,
 	sprite_.SetImage(GET_IMG("shield"));
 	sprite_.SetCenter(sprite_.GetSize().x / 2, sprite_.GetSize().y / 2);
 	handle_ = handle;
-	
+
 	angle_ = angle;
 	sprite_.SetRotation(RAD_TO_DEG(angle + 0.5 * PI));
 }
@@ -266,7 +258,7 @@ bool Follow::OnUpdate(float frametime)
 {
 	const sf::Vector2f offset = handle_->GetPosition();
 	sf::Vector2f myp = GetPosition();
-	
+
 	angle_ = ANGLE(offset, myp);
 	float d = Distance(myp, offset) * 2;
 	float dist =  d * frametime;

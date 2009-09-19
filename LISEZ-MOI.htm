@@ -4,31 +4,36 @@
 		<title>CosmoScroll</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<style type="text/css">
-body
-{
+body {
 	font-family: arial, serif;
+	font-size: 11pt;
 	margin: 0;
 	padding: 2em;
 }
-h2
-{
+h1 {
+	color: #36383D;
+}
+h2 {
 	background-color: #36383D;
 	color: white;
 	padding: 2px;
 	text-indent: 1em;
 }
-div
-{
+div {
 	padding-left: 2em;
 }
-td
-{
+code {
+	background-color: #FFF0C0;
+}
+table.infotab {
+	border-collapse: collapse;
+}
+table.infotab td, table.infotab th {
 	border: 1px solid black;
 	padding: 0.3em;
 }
-table
-{
-	border-collapse: collapse;
+table.infotab th {
+	background-color: silver;
 }
 		</style>
 	</head>
@@ -38,8 +43,8 @@ table
 <h1>CosmoScroll</h1>
 
 <p>
-Version : 0.1<br />
-Date de sortie : 17/12/2008 <br />
+Version : 0.2-dev<br />
+Date de sortie : <br />
 Site web : <a href="http://cosmoscroll.googlecode.com">cosmoscroll.googlecode.com</a><br />
 Licence : GPL (voir le fichier <a href="./COPYING">COPYING</a>)<br />
 Auteurs : voir le fichier <a href="./AUTHORS">AUTHORS</a>
@@ -54,6 +59,7 @@ Auteurs : voir le fichier <a href="./AUTHORS">AUTHORS</a>
 		<li><a href="#how-to-compile">Comment compiler le jeu depuis les sources ?</a></li>
 		<li><a href="#bug-found">J'ai trouvé un bug !</a></li>
 		<li><a href="#credits">Crédits</a></li>
+		<li><a href="#histo">Historique des versions</a></li>
 	</ul>
 </div>
 
@@ -68,7 +74,11 @@ Auteurs : voir le fichier <a href="./AUTHORS">AUTHORS</a>
 </ul>
 
 <h3>Commandes clavier</h3>
-<table>
+<table class="infotab">
+	<tr>
+		<th>Action</th>
+		<th>Touche</th>
+	</tr>
 	<tr>
 		<td>Déplacer le vaisseau<br />Naviguer dans les menus</td>
 		<td>Flèches directionnelles (haut, bas, gauche, droite)</td>
@@ -87,7 +97,7 @@ Auteurs : voir le fichier <a href="./AUTHORS">AUTHORS</a>
 	</tr>
 	<tr>
 		<td>Utiliser bonus Glaçon</td>
-		<td>Control (Gauche)</td>
+		<td>Contrôle gauche</td>
 	</tr>
 	<tr>
 		<td>Mettre en pause/Reprendre la partie</td>
@@ -105,9 +115,13 @@ Auteurs : voir le fichier <a href="./AUTHORS">AUTHORS</a>
 <h3>Bonus</h3>
 <ul>
 	<li>Health : redonne 1 point de vie au vaisseau</li>
-	<li>Triple tir : multiplie par 3 votre puissance de feu pendant 10 secondes !</li>
-	<li>Glaçon : utiliser un glaçon permet d'annuler les effets de la surchauffe, jusqu'à 3 glaçons peuvent être cumulés</li>
+	<li>Bouclier : redonne 1 point de bouclier</li>
+	<li>Glaçon : donne 1 glaçon. utiliser un glaçon permet d'annuler les effets de la surchauffe, jusqu'à 3 glaçons peuvent être cumulés</li>
+	<li>Missile : donne 1 missile. jusqu'à 3 missiles peuvent être cumulés</li>
+	<li>Triple tir : multiplie par 3 vos tirs pendant 10 secondes !</li>
 	<li>Vitesse : multiplie par 2 votre vitesse pendant 10 secondes</li>
+	<li>Stoned : Vous ne savez plus très bien piloter pendant 10 secondes...</li>
+	<li>Banane magique : invincibilité pendant 10 secondes</li>
 </ul>
 <p><em>Note : il n'y a pas de cheat codes dans ce jeu.</em></p>
 <!--
@@ -184,6 +198,11 @@ Une description permettant de reproduire le problème serait également appréci
 	<li>hemi-head.tff : <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
 </ul>
 </div>
+
+<h2 id="histo">Historique des versions</h2>
+<ul>
+	<li>0.1 : 17/12/2008</li>
+</ul>
 
     </body>
 </html>
