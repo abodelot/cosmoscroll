@@ -20,7 +20,7 @@ public:
 
 	~PlayerShip();
 
-	void SetTarget(Entity* target);
+	PlayerShip* Clone() const;
 
 	void HandleAction(AC::Action action);
 

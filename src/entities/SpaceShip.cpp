@@ -82,7 +82,6 @@ void SpaceShip::TakeDamage(int damage)
 		{
 			EntityManager::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
 		}
-		puts("ennemi abattu");
 		ParticleSystem::GetInstance().AddExplosion(GetPosition());
 	}
 }

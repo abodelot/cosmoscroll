@@ -25,6 +25,9 @@ public:
     Asteroid(const sf::Vector2f& offset, Size size, float angle=180);
 
 	// inherited
+	Asteroid* Clone() const;
+
+	// inherited
     void Update(float frametime);
 
 	// inherited

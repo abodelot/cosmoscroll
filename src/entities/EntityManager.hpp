@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include <map>
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 #include "Entity.hpp"
@@ -63,6 +64,7 @@ public:
 	 */
 	void LoadSpaceShips(const char* filename);
 
+	Entity* CreateRandomEntity() const;
 private:
 	EntityManager();
 	EntityManager(const EntityManager&);
@@ -95,7 +97,7 @@ private:
 	typedef std::list<Entity*> EntityList;
 	EntityList entities_;
 
-	//sf::Shape background_;
+	std::vector<Entity*> uniques_;
 };
 
 #endif // ENTITYMANAGER_HPP

@@ -18,6 +18,11 @@ Entity::~Entity()
 }
 
 
+void Entity::SetTarget(Entity*)
+{
+}
+
+
 void Entity::TakeDamage(int damage)
 {
 	hp_ -= damage;

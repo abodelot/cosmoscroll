@@ -22,6 +22,8 @@ public:
 
 	Bonus(Type type, const sf::Vector2f& offset);
 
+	Bonus* Clone() const;
+
 	// allouer un bonus aléatoirement
 	static Bonus* MakeRandom(const sf::Vector2f& offset);
 

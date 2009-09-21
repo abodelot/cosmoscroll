@@ -1,5 +1,6 @@
 #include "EvilBoss.hpp"
 #include "EntityManager.hpp"
+#include "../core/ParticleSystem.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/Math.hpp"
 
@@ -33,6 +34,12 @@ EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
 	phase_ = EVIL;
 	next_ = MORE_EVIL;
 	target_ = target;
+}
+
+
+EvilBoss* EvilBoss::Clone() const
+{
+	return new EvilBoss(*this);
 }
 
 
@@ -105,6 +112,16 @@ void EvilBoss::TakeDamage(int damage)
 				break;
 			default:
 				break;
+		}
+	}
+	else if (hp_ <= 0)
+	{
+		sf::Vector2f pos = GetPosition();
+		pos.x += GetSize().x / 2;
+		pos.y += GetSize().y / 2;
+		for (int i = 0; i < 4; ++i)
+		{
+			ParticleSystem::GetInstance().AddExplosion(pos);
 		}
 	}
 }

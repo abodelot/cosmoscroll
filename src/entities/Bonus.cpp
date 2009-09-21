@@ -17,6 +17,12 @@ Bonus::Bonus(Type type, const sf::Vector2f& offset) :
 }
 
 
+Bonus* Bonus::Clone() const
+{
+	return new Bonus(*this);
+}
+
+
 Bonus* Bonus::MakeRandom(const sf::Vector2f& offset)
 {
 	Type type = (Type) sf::Randomizer::Random(0, BONUS_COUNT - 1);

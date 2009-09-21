@@ -10,6 +10,8 @@ public:
 	Hit(Entity::Team team, const sf::Vector2f& offset, float angle,
 		const sf::Image* image, int speed, int damage);
 
+	Hit* Clone() const;
+
 	void Update(float frametime);
 
 	void OnCollide(Entity& entity);

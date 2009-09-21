@@ -107,6 +107,8 @@ private:
 	 */
 	void StopMusic();
 
+	void SetBackgroundColor(const sf::Color& topcolor, const sf::Color& bottomcolor);
+
 	sf::RenderWindow app_;
 
 	float timer_;
@@ -145,6 +147,7 @@ private:
 #ifndef NO_AUDIO
 	Music* music_;
 #endif
+	sf::Shape background_;
 };
 
 #endif // GAME_HPP

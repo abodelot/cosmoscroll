@@ -7,9 +7,6 @@
 #include "Window.hpp"
 #include "LevelManager.hpp"
 #include "../entities/EntityManager.hpp"
-#include "../entities/Asteroid.hpp"
-#include "../entities/SpaceShip.hpp"
-#include "../entities/EvilBoss.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../menu/Menu.hpp"
 #include "../utils/Misc.hpp"
@@ -85,6 +82,8 @@ Game::Game() :
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
+
+	background_ = sf::Shape::Rectangle(0, 56, 640, 480, sf::Color::White);
 }
 
 
@@ -287,6 +286,7 @@ Game::Scene Game::MainMenu()
 			timer_ = 0.f;
 			p_ForwardAction_ = &Game::ForwardAction1P;
 			p_StopPlay_ = &Game::ArcadeMoreBadGuys;
+			SetBackgroundColor(sf::Color::Black, sf::Color::Black);
 			break;
 		case 3:
 			next = OPTIONS;
@@ -357,6 +357,8 @@ Game::Scene Game::SelectLevel()
 					levels_.Set(current_level_);
 					panel_.SetGameInfo(str_sprintf("Niveau %i", current_level_).c_str());
 					next = LEVEL_CAPTION;
+					SetBackgroundColor(levels_.GetTopColor(current_level_),
+									   levels_.GetBottomColor(current_level_));
 				}
 			}
 		}
@@ -459,8 +461,9 @@ Game::Scene Game::Play()
 			particles_.Update(frametime);
 
 			// RENDER
-			app_.Draw(entitymanager_);
+			app_.Draw(background_);
 			app_.Draw(particles_);
+			app_.Draw(entitymanager_);
 
 			panel_.Show(app_);
 			app_.Display();
@@ -731,7 +734,6 @@ Game::Scene Game::ArcadeResult()
 
 void Game::Init()
 {
-
 	entitymanager_.Clear();
 
 	sf::Vector2f offset;
@@ -793,24 +795,10 @@ bool Game::ArcadeMoreBadGuys()
 		sf::Vector2f offset;
 		offset.x = WIN_WIDTH;
 		offset.y = sf::Randomizer::Random(ControlPanel::HEIGHT, WIN_HEIGHT);
-		int random = sf::Randomizer::Random(0, 10);
-		Entity* entity = NULL;
-		if (random > 6)
-		{
-			entity = entitymanager_.CreateSpaceShip(3, offset.x, offset.y);
-		}
-		else if (random > 4)
-		{
-			entity = entitymanager_.CreateSpaceShip(1, offset.x, offset.y);
-		}
-		else if (random > 2)
-		{
-			entity = entitymanager_.CreateSpaceShip(2, offset.x, offset.y);
-		}
-		else
-		{
-			entity = new Asteroid(offset, Asteroid::BIG);
-		}
+
+		Entity* entity = entitymanager_.CreateRandomEntity();
+		entity->SetPosition(offset);
+		entity->SetTarget(player1_);
 		entitymanager_.AddEntity(entity);
 	}
 	// always false, kill you till you die
@@ -1150,4 +1138,13 @@ Entity* Game::GetPlayerShip() const
 		DIE("can't retrieve player: playership is not allocated yet");
 	}
 	return player1_;
+}
+
+
+void Game::SetBackgroundColor(const sf::Color& topcolor, const sf::Color& bottomcolor)
+{
+	background_.SetPointColor(0, topcolor);
+	background_.SetPointColor(1, topcolor);
+	background_.SetPointColor(2, bottomcolor);
+	background_.SetPointColor(3, bottomcolor);
 }

@@ -19,6 +19,12 @@ Hit::Hit(Entity::Team team, const sf::Vector2f& offset, float angle,
 }
 
 
+Hit* Hit::Clone() const
+{
+	return new Hit(*this);
+}
+
+
 void Hit::Update(float frametime)
 {
 	sf::Vector2f pos = GetPosition();

@@ -21,6 +21,7 @@ bonus.png
 ship-capsule.png
 ship-scoot.png
 ship-interceptor.png
+ship-ufo.png
 evil_boss.png
 fiery.png
 impact.png

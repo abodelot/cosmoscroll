@@ -1,4 +1,5 @@
 #include "EntityManager.hpp"
+#include "Asteroid.hpp"
 #include "../core/Game.hpp"
 #include "../tinyxml/tinyxml.h"
 #include "../utils/MediaManager.hpp"
@@ -14,11 +15,7 @@ EntityManager& EntityManager::GetInstance()
 
 EntityManager::EntityManager()
 {
-	/*background_ = sf::Shape::Rectangle(0, 56, 640, 480, sf::Color::White);
-	background_.SetPointColor(0, sf::Color::Black);
-	background_.SetPointColor(1, sf::Color::Black);
-	background_.SetPointColor(2, sf::Color(0, 0, 96));
-	background_.SetPointColor(3, sf::Color(0, 0, 96));*/
+	uniques_.push_back(new Asteroid(sf::Vector2f(0, 0), Asteroid::BIG));
 }
 
 
@@ -26,10 +23,9 @@ EntityManager::~EntityManager()
 {
 	Clear();
 
-	SpaceShipMap::iterator it;
-	for (it = spaceships_defs_.begin(); it != spaceships_defs_.end(); ++it)
+	for (size_t i = 0; i < uniques_.size(); ++i)
 	{
-		delete it->second;
+		delete uniques_[i];
 	}
 }
 
@@ -99,7 +95,6 @@ int EntityManager::Count() const
 
 void EntityManager::Render(sf::RenderTarget& target) const
 {
-	//target.Draw(background_);
 	// affichage de toutes les entités
 	for (EntityList::const_iterator it = entities_.begin();
 		it != entities_.end(); ++it)
@@ -288,6 +283,7 @@ void EntityManager::LoadSpaceShips(const char* filename)
 		}
 
 		spaceships_defs_[id] = ship;
+		uniques_.push_back(ship);
 		printf("new ship defined: id %d\n", id);
 		elem = elem->NextSiblingElement();
 	}
@@ -308,6 +304,14 @@ SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 	}
 	DIE("space ship id '%d' is not implemented", id);
 	return NULL;
+}
+
+
+Entity* EntityManager::CreateRandomEntity() const
+{
+	Entity* entity = uniques_[sf::Randomizer::Random(0, uniques_.size() - 1)];
+	Entity* copy = entity->Clone();
+	return copy;
 }
 
 
@@ -342,5 +346,4 @@ const Animation& EntityManager::GetAnimation(const char* key) const
 	}
 	return it->second;
 }
-
 

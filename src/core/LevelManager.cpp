@@ -25,6 +25,12 @@ LevelManager::LevelManager()
 }
 
 
+LevelManager::~LevelManager()
+{
+	Purge();
+}
+
+
 LevelManager::Error LevelManager::ParseFile(const char* file)
 {
 	if (!doc_.LoadFile(file))
@@ -74,18 +80,30 @@ const char* LevelManager::GetDescription(int level) const
 }
 
 
+sf::Color LevelManager::GetTopColor(int level) const
+{
+	--level;
+	assert(level >= 0 && level < (int) levels_.size());
+	const char* p = levels_[level]->Attribute("bg_top");
+	return p != NULL ? HexaToColor(p) : sf::Color::Black;
+}
+
+
+sf::Color LevelManager::GetBottomColor(int level) const
+{
+	--level;
+	assert(level >= 0 && level < (int) levels_.size());
+	const char* p = levels_[level]->Attribute("bg_bottom");
+	return p != NULL ? HexaToColor(p) : sf::Color::Black;
+}
+
+
 LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 {
 	EntityManager& entity_manager = EntityManager::GetInstance();
 
 	elem = elem->FirstChildElement();
 	Entity* player = Game::GetInstance().GetPlayerShip();
-
-	if (elem == NULL)
-	{
-		std::cerr << "Impossible d'atteindre le noeud. Dying." << std::endl;
-		exit(EXIT_FAILURE);
-	}
 
 	EntitySlot slot;
 	sf::Vector2f offset;
@@ -162,8 +180,14 @@ void LevelManager::Purge()
 }
 
 
-LevelManager::~LevelManager()
+sf::Color LevelManager::HexaToColor(const std::string& hexcolor)
 {
-	Purge();
+	sf::Color color = sf::Color::Black;
+	if (hexcolor.size() == 7)
+	{
+		color.r = strtoul(hexcolor.substr(1, 2).c_str(), NULL, 16);
+		color.g = strtoul(hexcolor.substr(3, 2).c_str(), NULL, 16);
+		color.b = strtoul(hexcolor.substr(5, 2).c_str(), NULL, 16);
+	}
+	return color;
 }
-

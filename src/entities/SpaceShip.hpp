@@ -16,6 +16,7 @@ public:
 	 */
 	SpaceShip* Clone() const;
 
+	// inherited
 	void SetTarget(Entity* target);
 
 	/**
@@ -36,4 +37,4 @@ private:
 };
 
 
-#endif /* SPACESHIP_HPP */
+#endif // SPACESHIP_HPP

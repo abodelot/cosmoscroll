@@ -23,6 +23,10 @@ public:
 
 	virtual ~Entity();
 
+	virtual Entity* Clone() const = 0;
+
+	virtual void SetTarget(Entity* target);
+
 	/**
 	 * Encaisser des dommages
 	 */

@@ -106,6 +106,12 @@ PlayerShip::~PlayerShip()
 }
 
 
+PlayerShip* PlayerShip::Clone() const
+{
+	return new PlayerShip(*this);
+}
+
+
 void PlayerShip::HandleAction(AC::Action action)
 {
 	if (action == AC::NONE)
@@ -307,16 +313,17 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 {
 	switch (bonus.GetType())
 	{
+		// timed bonus
 		case Bonus::TRIPLE_SHOT:
 			if (bonus_[T_TRISHOT] == 0)
 			{
 				hellfire_.SetTriple(true);
 				laserbeam_.SetTriple(true);
-				//puts("bonus triple tir activé");
+				puts("bonus triple tir activé");
 			}
 			else
 			{
-				//puts("bonus triple tir relancé");
+				puts("bonus triple tir relancé");
 			}
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
 			break;
@@ -324,14 +331,28 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			if (bonus_[T_SPEED] == 0)
 			{
 				speed_ *= SPEED_BONUS_FACTOR;
-				puts("bonus speed activé");
+				printf("bonus speed activé, speed=%d\n", speed_);
 			}
 			else
 			{
-				puts("bonus speed relancé");
+				printf("bonus speed relancé, speed=%d\n", speed_);
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
 			break;
+		case Bonus::STONED:
+			if (bonus_[T_STONED] == 0)
+			{
+				speed_ *= -1;
+				printf("bonus stoned activé, speed=%d\n", speed_);
+			}
+			else
+			{
+				printf("bonus stoned relancé, speed=%d\n", speed_);
+			}
+			bonus_[T_STONED] += TIMED_BONUS_DURATION;
+			break;
+
+		// other bonus
 		case Bonus::HEALTH:
 			if (hp_ < HP_MAX)
 			{
@@ -345,10 +366,6 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 				++coolers_;
 				panel_.SetCoolers(coolers_);
 			}
-			break;
-		case Bonus::STONED:
-			speed_ *= -1;
-			bonus_[T_STONED] += TIMED_BONUS_DURATION;
 			break;
 		default:
 			break;
@@ -365,17 +382,18 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 		case T_TRISHOT:
 			hellfire_.SetTriple(false);
 			laserbeam_.SetTriple(false);
-			//puts("bonus triple tir désactivé");
+			puts("info: bonus triple tir désactivé");
 			break;
 		case T_SPEED:
 			speed_ /= SPEED_BONUS_FACTOR;
-			puts("bonus speed désactivé");
+			printf("info: bonus speed désactivé, speed=%d\n", speed_);
 			break;
 		case T_STONED:
 			speed_ *= -1;
+			printf("info: bonus stoned désactivé, speed=%d\n", speed_);
 			break;
 		default:
-			assert(0);
+			abort();
 	}
 	bonus_[tbonus] = 0;
 }

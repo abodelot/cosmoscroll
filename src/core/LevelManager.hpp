@@ -19,15 +19,15 @@ public:
 		FILE,   // Erreur d'e-s
 		UNDEF,  // Niveau non défini
 		PARSE,  // Erreur de parsing
-		END	 // Fin de chaînage  
+		END	 // Fin de chaînage
 	};
-	
+
 	/**
 	 * Récupérer l'instance unique
 	 * @return référence sur le gestionnaire de niveaux
 	 */
 	static LevelManager& GetInstance();
-	
+
 	/**
 	 * Obtenir la prochaine unité du niveau
 	 * @param[in] timer: temps écoulé
@@ -35,7 +35,7 @@ public:
 	 * sinon, NULL (il n'y pas d'entity avant timer)
 	 */
 	Entity* GiveNext(float timer);
-	
+
 	/**
 	 * Obtenir le nombre d'unités restantes dans la file d'attente du niveau
 	 */
@@ -43,20 +43,24 @@ public:
 	{
 		return waiting_line_.size();
 	};
-	
+
 	/**
 	 * Définir le niveau courant
 	 * @param[in] level: indice du niveau
 	 */
 	Error Set(int level);
-	
+
 	/**
 	 * Obtenir la description d'un niveau
 	 * @param[in] level: indice du niveau
 	 * @return chaîne de description
 	 */
 	const char* GetDescription(int level) const;
-	
+
+	sf::Color GetTopColor(int level) const;
+
+	sf::Color GetBottomColor(int level) const;
+
 	/**
 	 * Retourne le nuémro du dernier niveau
 	 */
@@ -64,27 +68,32 @@ public:
 	{
 		return levels_.size();
 	};
-	
+
 private:
 	struct EntitySlot
 	{
 		Entity* self;
 		float spawntime;
 	};
-	
+
 	LevelManager();
 	~LevelManager();
-	
+
 	Error ParseFile(const char* file);
-	
+
 	Error ParseLevel(TiXmlElement* elem);
-	
+
 	void Purge();
-	
+
+	/**
+	 * "#FF0000" -> sf::Color(255, 0, 0)
+	 */
+	static sf::Color HexaToColor(const std::string& hexcolor);
+
 	std::queue<EntitySlot> waiting_line_;
 	std::vector<TiXmlElement*> levels_;
 	TiXmlDocument doc_;
 };
 
-#endif /* guard LEVELMANAGER_HPP */
+#endif // LEVELMANAGER_HPP
 

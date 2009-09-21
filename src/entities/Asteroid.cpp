@@ -63,6 +63,12 @@ Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
 }
 
 
+Asteroid* Asteroid::Clone() const
+{
+	return new Asteroid(*this);
+}
+
+
 void Asteroid::Update(float frametime)
 {
     sf::Sprite::Move(-VERTICAL_SPEED * frametime, 0);
