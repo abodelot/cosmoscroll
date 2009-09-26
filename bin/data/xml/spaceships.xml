@@ -9,7 +9,7 @@
 		<weapon id="0" x="0" y="32" />
 	</ship>
 	<ship id="4" name="UFO" animation="ufo" hp="6" speed="80">
-		<weapon id="0" x="0" y="24" />
+		<weapon id="4" x="0" y="24" />
 	</ship>
 </spaceships>
 

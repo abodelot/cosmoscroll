@@ -142,7 +142,7 @@ ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset, const sf::Image& img)
 	sprite_.SetImage(img);
 	sprite_.SetPosition(offset);
 	angle_ = sf::Randomizer::Random(-PI, PI);
-	sprite_.SetRotation(RAD_TO_DEG(angle_));
+	sprite_.SetRotation(math::rad_to_deg(angle_));
 	lifetime_ = sf::Randomizer::Random(FIERY_MIN_LIFETIME, FIERY_MAX_LIFETIME);
 	timer_ = 0.f;
 }
@@ -226,7 +226,7 @@ ParticleSystem::LinkedParticle::LinkedParticle(const sf::Sprite* handle,
 	handle_ = handle;
 
 	angle_ = angle;
-	sprite_.SetRotation(RAD_TO_DEG(angle + 0.5 * PI));
+	sprite_.SetRotation(math::rad_to_deg(angle + 0.5 * PI));
 }
 
 
@@ -239,7 +239,7 @@ bool ParticleSystem::LinkedParticle::OnUpdate(float frametime)
 	offset.x = offset.x + SHIELD_RADIUS * math::cos(angle_);
 	offset.y = offset.y - SHIELD_RADIUS * math::sin(angle_);
 	sprite_.SetPosition(offset);
-	sprite_.SetRotation(RAD_TO_DEG(angle_ + (0.5 * PI)));
+	sprite_.SetRotation(math::rad_to_deg(angle_ + (0.5 * PI)));
 	return false;
 }
 

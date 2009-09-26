@@ -46,13 +46,11 @@ void Entity::Kill()
 
 void Entity::KillIfOut()
 {
-	if (outside_universe(GetCollideRect()))
+	static const sf::FloatRect UNIVERSE(0, 0, WIN_WIDTH, GAME_HEIGHT);
+
+	if (!UNIVERSE.Intersects(GetCollideRect()))
 	{
 		hp_ = 0;
-#ifdef DEBUG_ENTITY
-		sf::Vector2f pos = GetPosition();
-		printf("(entity is out : x %f, y %f)\n", pos.x, pos.y);
-#endif
 	}
 }
 
@@ -87,6 +85,3 @@ void Entity::SetTeam(Team team)
 {
 	team_ = team;
 }
-
-
-

@@ -67,6 +67,8 @@ private:
 	 */
 	void KonamiCodeOn();
 
+	void IncreaseShield(int count = 1);
+
 	enum
 	{
 		KONAMI_CODE_LENGTH = 10

@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <levels>
 	<level desc="Alors que vous vous baladez\ndans le vide interstellaire...\nOn vous attaque !!!">
-		<ship id="1" x="640" y="250" t="2.2" />
-		<ship id="1" x="640" y="300" t="1.0" />
-		<ship id="1" x="640" y="200" t="0.0" />
-		<ship id="1" x="640" y="350" t="1.0" />
-		<ship id="1" x="640" y="150" t="0.0" />
-
+		<for count="4">
+			<ship id="2" x="640" y="100" t="2.3" />
+			<ship id="2" x="640" y="200" t="0" />
+			<for count="2">
+				<ship id="1" x="640" y="200" t="1.0" />
+				<ship id="1" x="640" y="170" t="0.5f" />
+				<ship id="1" x="640" y="230" t="0" />
+			</for>
+			<asteroid x="640" y="250" t="0.5" />
+		</for>
+		<ship id="3" x="640" y="100" t="2.3" />
+	</level>
+	<level desc="">
+		<for count="3">
+			<ship id="1" x="640" y="250" t="2.2" />
+			<ship id="1" x="640" y="300" t="1.0" />
+			<ship id="1" x="640" y="200" t="0.0" />
+			<ship id="1" x="640" y="350" t="1.0" />
+			<ship id="1" x="640" y="150" t="0.0" />
+		</for>
 		<ship id="2" x="640" y="270" t="5.0" />
 		<ship id="2" x="640" y="340" t="2.0" />
 		<ship id="2" x="640" y="300" t="2.0" />
 		<ship id="2" x="640" y="110" t="2.0" />
 		<ship id="2" x="640" y="270" t="2.0" />
 		<ship id="2" x="640" y="170" t="2.0" />
-
 		<asteroid x="640" y="100" t="4.0" />
 		<asteroid x="640" y="300" t="0.0" />
 		<asteroid x="640" y="200" t="2.0" />
 		<asteroid x="640" y="400" t="0.0" />
-	
 		<ship id="1" x="640" y="350" t="2.0" />
 		<ship id="1" x="640" y="150" t="0.0" />
 		<ship id="1" x="640" y="300" t="1.0" />
@@ -29,8 +41,7 @@
 		<ship id="1" x="640" y="350" t="1.0" />
 		<ship id="1" x="640" y="150" t="0.0" />
 	</level>
-	<level desc="Vous continuez votre ballade\ndans le vide interstellaire\nHeh !!!"
-	bg_top="#000000" bg_bottom="#3060B0">
+	<level desc="Vous continuez votre ballade\ndans le vide interstellaire\nHeh !!!" bg_top="#000000" bg_bottom="#3060B0">
 		<!-- interceptors -->
 		<ship id="2" x="640" y="400" t="4.0" />
 		<ship id="3" x="640" y="140" t="1.2" />
@@ -112,18 +123,18 @@
 		<ship id="2" x="640" y="270" t="2.0" />
 		<ship id="2" x="640" y="270" t="2.0" /> 
 	</level>
-	<level desc="Vers l'infini ...\n       ... et au dela !!!"
-	bg_top="#000000" bg_bottom="#3060B0">
-		<asteroid x="640" y="200" t="4.0" />
-		<asteroid x="640" y="400" t="0.0" />
-		<asteroid x="640" y="300" t="1.0" />
-		<asteroid x="640" y="150" t="0.5" />
-		<asteroid x="640" y="350" t="0.5" />
-		<asteroid x="640" y="450" t="0.5" />
-		<asteroid x="640" y="100" t="0.5" />
-		<asteroid x="640" y="175" t="0.5" />
-		<asteroid x="640" y="342" t="0.5" />
-		
+	<level desc="Vers l'infini ...\n       ... et au dela !!!" bg_top="#000000" bg_bottom="#3060B0">
+		<for count="2">
+			<asteroid x="640" y="200" t="4.0" />
+			<asteroid x="640" y="400" t="0.0" />
+			<asteroid x="640" y="300" t="1.0" />
+			<asteroid x="640" y="150" t="0.5" />
+			<asteroid x="640" y="350" t="0.5" />
+			<asteroid x="640" y="450" t="0.5" />
+			<asteroid x="640" y="100" t="0.5" />
+			<asteroid x="640" y="175" t="0.5" />
+			<asteroid x="640" y="342" t="0.5" />
+		</for>
 		<ship id="3" x="640" y="250" t="0.0" />
 		<ship id="3" x="640" y="300" t="1.0" />
 		<ship id="3" x="640" y="200" t="0.0" />
@@ -135,7 +146,6 @@
 		<ship id="3" x="640" y="200" t="0.0" />
 		<ship id="3" x="640" y="350" t="1.0" />
 		<ship id="3" x="640" y="150" t="0.0" />
-		
 		<asteroid x="640" y="150" t="2.0" />
 		<asteroid x="640" y="220" t="0.5" />
 		<asteroid x="640" y="410" t="0.5" />
@@ -155,23 +165,24 @@
 		<ship id="2" x="640" y="200" t="0.8" />
 		<ship id="3" x="640" y="300" t="1.0" />
 	</level>
-	<level desc=" "
-	bg_bottom="#001100" bg_top="#008822">
-		<ship id="4" x="640" y="100" t="1" />
-		<ship id="4" x="640" y="120" t="1" />
-		<ship id="4" x="640" y="80" t="1" />
-		<ship id="4" x="640" y="100" t="1" />
-		<ship id="4" x="640" y="120" t="1" />
-		<ship id="4" x="640" y="80" t="1" />
-		<ship id="4" x="640" y="100" t="1" />
-		<ship id="4" x="640" y="120" t="1" />
-		<ship id="4" x="640" y="80" t="1" />
-		<ship id="4" x="640" y="100" t="1" />
-		<ship id="4" x="640" y="120" t="1" />
-		<ship id="4" x="640" y="80" t="1" />
-		<ship id="4" x="640" y="100" t="1" />
-		<ship id="4" x="640" y="120" t="1" />
-		<ship id="4" x="640" y="80" t="1" />
+	<level desc=" " bg_bottom="#001100" bg_top="#008822">
+		<for count="2">
+			<ship id="4" x="640" y="100" t="1" />
+			<ship id="4" x="640" y="120" t="1" />
+			<ship id="4" x="640" y="80" t="1" />
+			<ship id="4" x="640" y="100" t="1" />
+			<ship id="4" x="640" y="120" t="1" />
+			<ship id="4" x="640" y="80" t="1" />
+			<ship id="4" x="640" y="100" t="1" />
+			<ship id="4" x="640" y="120" t="1" />
+			<ship id="4" x="640" y="80" t="1" />
+			<ship id="4" x="640" y="100" t="1" />
+			<ship id="4" x="640" y="120" t="1" />
+			<ship id="4" x="640" y="80" t="1" />
+			<ship id="4" x="640" y="100" t="1" />
+			<ship id="4" x="640" y="120" t="1" />
+			<ship id="4" x="640" y="80" t="1" />
+		</for>
 	</level>
 	<level desc="For Great Justice !">
 		<asteroid x="640" y="100" t="2.0" />
@@ -198,10 +209,12 @@
 		<ship id="2" x="640" y="270" t="0.0" />
 		<ship id="2" x="640" y="330" t="0.0" />
 		
-		<ship id="1" x="640" y="150" t="3.0" />
-		<ship id="1" x="640" y="350" t="0.0" />
-		<ship id="3" x="640" y="150" t="1.0" />
-		<ship id="3" x="640" y="350" t="0.0" />
+		<for count="3">
+			<ship id="1" x="640" y="150" t="3.0" />
+			<ship id="4" x="640" y="350" t="0.0" />
+			<ship id="3" x="640" y="150" t="1.0" />
+			<ship id="3" x="640" y="350" t="0.0" />
+		</for>
 		
 		<ship id="2" x="640" y="240" t="3.8" />
 		
@@ -285,17 +298,18 @@
 		<ship id="2" x="640" y="270" t="0.0" />
 		<ship id="2" x="640" y="330" t="0.0" />
 	</level>
-	<level desc="C'est la confrontation\navec le boss final\nOuille !!!"
-	bg_top="#000000" bg_bottom="#880000">
-		<ship id="3" x="640" y="270" t="4.0" />
-		<ship id="2" x="640" y="170" t="2.0" />
-		<ship id="3" x="640" y="370" t="0.7" />
-		<asteroid x="640" y="120" t="0.0" />
-		<ship id="3" x="640" y="370" t="2.0" />
-		<ship id="2" x="640" y="270" t="2.0" />
-		<ship id="3" x="640" y="300" t="0.0" />
-		<ship id="2" x="640" y="170" t="2.0" />
-		<ship id="3" x="640" y="370" t="2.0" />
+	<level desc="C'est la confrontation\navec le boss final\nOuille !!!" bg_top="#000000" bg_bottom="#880000">
+		<for count="2">
+			<ship id="3" x="640" y="270" t="4.0" />
+			<ship id="2" x="640" y="170" t="2.0" />
+			<ship id="3" x="640" y="370" t="0.7" />
+			<asteroid x="640" y="120" t="0.0" />
+			<ship id="3" x="640" y="370" t="2.0" />
+			<ship id="4" x="640" y="270" t="2.0" />
+			<ship id="1" x="640" y="300" t="0.0" />
+			<ship id="2" x="640" y="170" t="2.0" />
+			<ship id="3" x="640" y="370" t="2.0" />
+		</for>
 		<evilboss x="360" y="170" t = "6.0" />
 	</level>
 </levels>

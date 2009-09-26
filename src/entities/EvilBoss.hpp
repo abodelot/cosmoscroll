@@ -11,7 +11,7 @@
 class EvilBoss: public Entity
 {
 public:
-	EvilBoss(const sf::Vector2f& offset, Entity* target);
+	EvilBoss(const sf::Vector2f& position);
 
 	EvilBoss* Clone() const;
 

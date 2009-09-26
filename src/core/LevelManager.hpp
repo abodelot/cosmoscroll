@@ -18,8 +18,7 @@ public:
 		SUCCESS ,
 		FILE,   // Erreur d'e-s
 		UNDEF,  // Niveau non défini
-		PARSE,  // Erreur de parsing
-		END	 // Fin de chaînage
+		PARSE  // Erreur de parsing
 	};
 
 	/**
@@ -30,11 +29,11 @@ public:
 
 	/**
 	 * Obtenir la prochaine unité du niveau
-	 * @param[in] timer: temps écoulé
+	 * @param timer: temps écoulé depuis le début du niveau
 	 * @return entity s'il y en a au moins une qui doit aparaître avant timer
 	 * sinon, NULL (il n'y pas d'entity avant timer)
 	 */
-	Entity* GiveNext(float timer);
+	Entity* GiveNextEntity(float timer);
 
 	/**
 	 * Obtenir le nombre d'unités restantes dans la file d'attente du niveau
@@ -46,53 +45,73 @@ public:
 
 	/**
 	 * Définir le niveau courant
-	 * @param[in] level: indice du niveau
+	 * @param level: numéro du niveau
 	 */
-	Error Set(int level);
+	Error SetCurrent(int level);
 
 	/**
 	 * Obtenir la description d'un niveau
-	 * @param[in] level: indice du niveau
+	 * @param level: numéro du niveau
 	 * @return chaîne de description
 	 */
 	const char* GetDescription(int level) const;
 
+	/**
+	 * Obtenir la couleur de fond haut
+	 */
 	sf::Color GetTopColor(int level) const;
 
+	/**
+	 * Obtenir la couleur de fond bas
+	 */
 	sf::Color GetBottomColor(int level) const;
 
 	/**
-	 * Retourne le nuémro du dernier niveau
+	 * Obtenir le nombre de niveaux chargés
 	 */
-	inline int GetLast() const
-	{
-		return levels_.size();
-	};
+	int CountLevel() const;
 
 private:
-	struct EntitySlot
-	{
-		Entity* self;
-		float spawntime;
-	};
-
 	LevelManager();
+	LevelManager(const LevelManager&);
 	~LevelManager();
 
+	/**
+	 * Parser un fichier de niveaux
+	 */
 	Error ParseFile(const char* file);
 
 	Error ParseLevel(TiXmlElement* elem);
 
+	void ParseEntity(TiXmlElement* elem);
+
+	void AppendToWaitingLine(Entity* entity, float time);
+
 	void Purge();
+
+	/**
+	 * Obtenir l'élément XML d'un niveau
+	 * @return element, premier niveau si niveau inexistant
+	 */
+	TiXmlElement* GetLevelElement(int level) const;
 
 	/**
 	 * "#FF0000" -> sf::Color(255, 0, 0)
 	 */
 	static sf::Color HexaToColor(const std::string& hexcolor);
 
-	std::queue<EntitySlot> waiting_line_;
+	struct EntitySlot
+	{
+		Entity* entity;
+		float spawntime;
+	};
+
+	// pointeurs vers les définitions XML des niveaux
 	std::vector<TiXmlElement*> levels_;
 	TiXmlDocument doc_;
+	// liste des vaisseaux à spawner pour le niveau courant
+	std::queue<EntitySlot> waiting_line_;
+	float last_insert_time_;
 };
 
 #endif // LEVELMANAGER_HPP

@@ -325,7 +325,7 @@ Game::Scene Game::SelectLevel()
 
 	bool running = true;
 	Scene next = EXIT_APP;
-	int last = levels_.GetLast();
+	int last = levels_.CountLevel();
 	for (int i = 0; i < last; ++i)
 	{
 		bool activable = i < last_level_reached_;
@@ -354,7 +354,7 @@ Game::Scene Game::SelectLevel()
 				{
 					current_level_ = level + 1;
 					Init();
-					levels_.Set(current_level_);
+					levels_.SetCurrent(current_level_);
 					panel_.SetGameInfo(str_sprintf("Niveau %i", current_level_).c_str());
 					next = LEVEL_CAPTION;
 					SetBackgroundColor(levels_.GetTopColor(current_level_),
@@ -604,7 +604,7 @@ Game::Scene Game::EndPlay()
 		info.SetText("Game Over");
 		what = mode_ == ARCADE ? ARCADE_RESULT : MAIN_MENU;
 	}
-	else if (current_level_ < levels_.GetLast()) // on ne peut pas gagner en arcade
+	else if (current_level_ < levels_.CountLevel()) // on ne peut pas gagner en arcade
 	{
 		SoundSystem::GetInstance().PlaySound("end-level");
 
@@ -792,13 +792,13 @@ bool Game::ArcadeMoreBadGuys()
 	const int START = 4;
 	if (entitymanager_.Count() < timer_ / STEP + START)
 	{
-		sf::Vector2f offset;
-		offset.x = WIN_WIDTH;
-		offset.y = sf::Randomizer::Random(ControlPanel::HEIGHT, WIN_HEIGHT);
-
 		Entity* entity = entitymanager_.CreateRandomEntity();
-		entity->SetPosition(offset);
+		sf::Vector2f pos;
+		pos.x = WIN_WIDTH;
+		pos.y = sf::Randomizer::Random(0, GAME_HEIGHT - (int) entity->GetSize().y);
+		entity->SetPosition(pos);
 		entity->SetTarget(player1_);
+
 		entitymanager_.AddEntity(entity);
 	}
 	// always false, kill you till you die
@@ -808,11 +808,11 @@ bool Game::ArcadeMoreBadGuys()
 
 bool Game::StoryMoreBadBuys()
 {
-	Entity* p = levels_.GiveNext(timer_);
+	Entity* p = levels_.GiveNextEntity(timer_);
 	while (p != NULL)
 	{
 		entitymanager_.AddEntity(p);
-		p = levels_.GiveNext(timer_);
+		p = levels_.GiveNextEntity(timer_);
 	}
 
 	// le niveau n'est pas fini tant qu'il reste des ennemis, soit en file

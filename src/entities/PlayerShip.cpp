@@ -15,8 +15,8 @@
 #include <iostream>
 #endif
 
-#define LASERBEAM_OFFSET        52, 22
-#define HELLFIRE_OFFSET         50, 24
+#define WEAPON1_OFFSET          52, 22
+#define WEAPON2_OFFSET         50, 24
 
 #define DEFAULT_SPEED           200
 #define SPEED_BONUS_FACTOR      2
@@ -49,10 +49,10 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	EntityManager& mgr = EntityManager::GetInstance();
 	mgr.InitWeapon(1, &laserbeam_);
 	laserbeam_.SetOwner(this);
-	laserbeam_.SetOffset(LASERBEAM_OFFSET);
+	laserbeam_.SetOffset(WEAPON1_OFFSET);
 	mgr.InitWeapon(2, &hellfire_);
 	hellfire_.SetOwner(this);
-	hellfire_.SetOffset(HELLFIRE_OFFSET);
+	hellfire_.SetOffset(WEAPON2_OFFSET);
 
 	shield_ = SHIELD_DEFAULT;
 	coolers_ = COOLER_DEFAULT;
@@ -218,14 +218,8 @@ void PlayerShip::Update(float frametime)
 		shield_timer_ -= frametime;
 		if (shield_timer_ <= 0.f)
 		{
-			// ajout d'une boule supplémentaire
-			++shield_;
-			ParticleSystem& p = ParticleSystem::GetInstance();
-			p.RemoveShield(this);
-			p.AddShield(shield_, this);
-
+			IncreaseShield();
 			shield_timer_ = 1 / SHIELD_RECOVERY_RATE;
-			panel_.SetShield(shield_);
 		}
 	}
 
@@ -360,6 +354,12 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 				panel_.SetShipHP(hp_);
 			}
 			break;
+		case Bonus::SHIELD:
+			if (shield_ < SHIELD_MAX)
+			{
+				IncreaseShield();
+			}
+			break;
 		case Bonus::COOLER:
 			if (coolers_ < COOLER_MAX)
 			{
@@ -419,3 +419,14 @@ void PlayerShip::KonamiCodeOn()
 	particles.AddMessage(GetPosition(), L"Have you mooed today?");
 }
 
+
+void PlayerShip::IncreaseShield(int count)
+{
+	shield_ += count;
+	// update particles
+	ParticleSystem& p = ParticleSystem::GetInstance();
+	p.RemoveShield(this);
+	p.AddShield(shield_, this);
+	// update panel count
+	panel_.SetShield(shield_);
+}

@@ -8,7 +8,7 @@
 
 namespace math
 {
-/*
+
 inline float quick_bound(float x)
 {
 	if (x < - PI)
@@ -18,17 +18,19 @@ inline float quick_bound(float x)
 
 	return x;
 }
-*/
 
 inline float sin(float x)
 {
 	/*x = quick_bound(x);
 	float Sin = 1.27323954 * x;
 	if (x < 0)
+	{
 		Sin += .405284735 * x * x;
+	}
 	else
+	{
 		Sin -= .405284735 * x * x;
-
+	}
 	x = (Sin * Sin);
 	if (Sin >= 0) x = -x;
 
@@ -39,32 +41,31 @@ inline float sin(float x)
 
 inline float cos(float x)
 {
-	//return quick_sin(x + PI / 2);
+	//return math::sin(x + PI / 2);
 	return std::cos(x);
 }
 
-}
 
-inline float DEG_TO_RAD(float degres)
+inline float deg_to_rad(float degres)
 {
 	return degres * PI / 180;
 }
 
 
-inline float RAD_TO_DEG(float radians)
+inline float rad_to_deg(float radians)
 {
 	return radians / PI * 180;
 }
 
 
-inline void TRANSLATE(sf::Vector2f& offset, float angle, float speed)
+inline void translate(sf::Vector2f& offset, float angle, float speed)
 {
 	offset.x = offset.x + speed * math::cos(angle);
 	offset.y = offset.y - speed * math::sin(angle);
 }
 
 
-inline float Distance(const float x1, const float y1, const float x2 = 0.f, const float y2 = 0.f)
+inline float distance(float x1, float y1, float x2 = 0.f, float y2 = 0.f)
 {
 	// Formule de calcul de la distance entre deux points :
 	// sqrt( (x1 - x2)² + (y1 - y2)² )
@@ -72,12 +73,13 @@ inline float Distance(const float x1, const float y1, const float x2 = 0.f, cons
 }
 
 
-inline float Distance(const sf::Vector2f& p1, const sf::Vector2f& p2 = sf::Vector2f(0.f, 0.f))
+inline float distance(const sf::Vector2f& p1, const sf::Vector2f& p2 = sf::Vector2f(0.f, 0.f))
 {
-	return Distance(p1.x, p1.y, p2.x, p2.y);
+	return distance(p1.x, p1.y, p2.x, p2.y);
 }
 
-inline float ANGLE(const sf::Vector2f& p1, const sf::Vector2f& p2)
+
+inline float angle(const sf::Vector2f& p1, const sf::Vector2f& p2)
 {
 	float x = p1.x - p2.x;
 	if (x == 0.f)
@@ -91,6 +93,8 @@ inline float ANGLE(const sf::Vector2f& p1, const sf::Vector2f& p2)
 		radians += PI;
 	}
 	return radians;
+}
+
 }
 
 #endif // MATH_HPP

@@ -25,13 +25,8 @@
 
 #include "ControlPanel.hpp"
 
+#define GAME_HEIGHT (WIN_HEIGHT - ControlPanel::HEIGHT)
 
-inline bool outside_universe(const sf::FloatRect& rect)
-{
-	static const sf::FloatRect UNIVERSE(0, ControlPanel::HEIGHT, WIN_WIDTH,
-		WIN_HEIGHT);
-	return !UNIVERSE.Intersects(rect);
-}
 
 #endif // WINDOW_HPP
 

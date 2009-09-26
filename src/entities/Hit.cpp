@@ -12,7 +12,7 @@ Hit::Hit(Entity::Team team, const sf::Vector2f& offset, float angle,
 {
 	SetImage(*image);
 	SetTeam(team);
-	SetRotation(RAD_TO_DEG(angle));
+	SetRotation(math::rad_to_deg(angle));
 
 	speed_ = speed;
 	angle_ = angle;
@@ -28,7 +28,7 @@ Hit* Hit::Clone() const
 void Hit::Update(float frametime)
 {
 	sf::Vector2f pos = GetPosition();
-	TRANSLATE(pos, angle_, speed_ * frametime);
+	math::translate(pos, angle_, speed_ * frametime);
 	SetPosition(pos);
 	KillIfOut();
 }

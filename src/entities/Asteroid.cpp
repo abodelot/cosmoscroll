@@ -28,7 +28,7 @@ Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
     SetImage(GET_IMG(key.str().c_str()));
 
     speed_ = 100;
-    angle_ = DEG_TO_RAD(angle);
+    angle_ = math::deg_to_rad(angle);
 
     size_ = size;
     /*SetCenter(GetImage()->GetWidth() / 2, GetImage()->GetHeight() / 2);

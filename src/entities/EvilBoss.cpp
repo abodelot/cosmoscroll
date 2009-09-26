@@ -1,5 +1,6 @@
 #include "EvilBoss.hpp"
 #include "EntityManager.hpp"
+#include "../core/Game.hpp"
 #include "../core/ParticleSystem.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/Math.hpp"
@@ -15,8 +16,8 @@
 #define MOUTH_Y_OFFSET   128
 
 
-EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
-	Entity(offset, EVIL)
+EvilBoss::EvilBoss(const sf::Vector2f& position) :
+	Entity(position, EVIL)
 {
 	SetImage(GET_IMG("evil_boss"));
 	SetSubRect(sf::IntRect(0, 0, 242, 160));
@@ -33,7 +34,7 @@ EvilBoss::EvilBoss(const sf::Vector2f& offset, Entity* target) :
 	left_ = true;
 	phase_ = EVIL;
 	next_ = MORE_EVIL;
-	target_ = target;
+	target_ = Game::GetInstance().GetPlayerShip();
 }
 
 
@@ -45,8 +46,8 @@ EvilBoss* EvilBoss::Clone() const
 
 void EvilBoss::Update(float frametime)
 {
-	float radians_L = ANGLE(target_->GetPosition(), GetPosition() + L_EYE_OFFSET);
-	float radians_R = ANGLE(target_->GetPosition(), GetPosition() + R_EYE_OFFSET);
+	float radians_L = math::angle(target_->GetPosition(), GetPosition() + L_EYE_OFFSET);
+	float radians_R = math::angle(target_->GetPosition(), GetPosition() + R_EYE_OFFSET);
 
 	eye_left_.Shoot(GetPosition() + L_EYE_OFFSET, radians_L);
 	eye_right_.Shoot(GetPosition() + R_EYE_OFFSET, radians_R);
@@ -55,7 +56,7 @@ void EvilBoss::Update(float frametime)
 	randV2f.y = my.y + MOUTH_Y_OFFSET;
 	if (canon_.IsInited())
 	{
-		canon_.Shoot(randV2f, ANGLE(target_->GetPosition(), randV2f));
+		canon_.Shoot(randV2f, math::angle(target_->GetPosition(), randV2f));
 	}
 
 	bool left = true;

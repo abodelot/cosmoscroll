@@ -65,6 +65,10 @@ public:
 	void LoadSpaceShips(const char* filename);
 
 	Entity* CreateRandomEntity() const;
+
+	template <class T>
+	void ApplyToEach(T& functor);
+
 private:
 	EntityManager();
 	EntityManager(const EntityManager&);
@@ -99,5 +103,15 @@ private:
 
 	std::vector<Entity*> uniques_;
 };
+
+template <class T>
+void EntityManager::ApplyToEach(T& functor)
+{
+	for (EntityList::iterator it = entities_.begin();
+		it != entities_.end(); ++it)
+	{
+		functor(**it);
+	}
+}
 
 #endif // ENTITYMANAGER_HPP
