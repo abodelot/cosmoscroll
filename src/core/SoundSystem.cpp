@@ -46,6 +46,15 @@ void SoundSystem::PlaySound(const char* sound_name)
 }
 
 
+void SoundSystem::SetSoundVolume(int volume)
+{
+	for (int i = 0; i < MAX_SOUNDS; ++i)
+	{
+		sounds_[i].SetVolume(volume);
+	}
+}
+
+
 void SoundSystem::PlayMusic(const char* music_name)
 {
 #if 0

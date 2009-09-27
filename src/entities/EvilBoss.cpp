@@ -8,8 +8,8 @@
 #define SPEED 25
 #define CHILDS 8
 
-#define L_EYE_OFFSET    sf::Vector2f(131,  67)
-#define R_EYE_OFFSET    sf::Vector2f(233, 70)
+#define L_EYE_OFFSET    sf::Vector2f(105, 55)
+#define R_EYE_OFFSET    sf::Vector2f(190, 55)
 
 #define L_MOUTH_X_OFFSET 85
 #define R_MOUTH_X_OFFSET 201

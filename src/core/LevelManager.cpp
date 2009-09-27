@@ -110,62 +110,6 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 }
 
 
-/*LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
-{
-	last_insert_time_ = 0.f;
-
-	elem = elem->FirstChildElement();
-	Entity* player = Game::GetInstance().GetPlayerShip();
-
-	EntitySlot slot;
-	sf::Vector2f offset;
-	float t = 0.0f, last_t = 0.0f;
-	std::string classname;
-
-	printf("parsing level...\n");
-
-	while (elem)
-	{
-		classname = elem->Value();
-
-		// attributs commun à toutes les entités
-		elem->QueryFloatAttribute("x", &offset.x);
-		elem->QueryFloatAttribute("y", &offset.y);
-		elem->QueryFloatAttribute("t", &t);
-		last_t += t;
-
-		slot.spawntime = last_t;
-
-		if (classname == "ship")
-		{
-			int id = 0;
-			elem->QueryIntAttribute("id", &id);
-			slot.self = entity_manager.CreateSpaceShip(id, offset.x, offset.y);
-		}
-		else if (classname == "asteroid")
-		{
-			slot.self = new Asteroid(offset, Asteroid::BIG);
-		}
-		else if (classname == "evilboss")
-		{
-			slot.self = new EvilBoss(offset, player);
-		}
-		else
-		{
-			printf("Unimplemented element: %s\n", classname.c_str());
-			abort();
-		}
-
-		waiting_line_.push(slot);
-		elem = elem->NextSiblingElement();
-	}
-#ifdef DEBUG
-	puts("done.");
-#endif
-	return SUCCESS;
-}*/
-
-
 LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 {
 	last_insert_time_ = 0.f;

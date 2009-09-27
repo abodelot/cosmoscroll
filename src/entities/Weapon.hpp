@@ -1,9 +1,6 @@
 #ifndef WEAPON_HPP
 #define WEAPON_HPP
 
-#ifndef NO_AUDIO
-#include <SFML/Audio.hpp>
-#endif
 #include <SFML/System/Vector2.hpp>
 
 #include "Entity.hpp"

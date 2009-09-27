@@ -71,7 +71,7 @@ void EntityManager::Update(float frametime)
 
 void EntityManager::AddEntity(Entity* entity)
 {
-	entities_.push_front(entity);
+	entities_.push_back(entity);
 }
 
 
@@ -113,9 +113,8 @@ void EntityManager::LoadWeapons(const char* filename)
 	{
 		DIE("can't load weapon definitions: '%s' (%s)", filename, doc.ErrorDesc());
 	}
-	TiXmlHandle handle(&doc);
-	TiXmlElement* elem = handle.FirstChildElement().FirstChildElement().Element();
 
+	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	while (elem != NULL)
 	{
 		int id;
@@ -222,9 +221,8 @@ void EntityManager::LoadSpaceShips(const char* filename)
 	{
 		DIE("can't load space ships definitions: '%s' (%s)", filename, doc.ErrorDesc());
 	}
-	TiXmlHandle handle(&doc);
-	TiXmlElement* elem = handle.FirstChildElement().FirstChildElement().Element();
 
+	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	while (elem != NULL)
 	{
 		int id;
@@ -258,6 +256,11 @@ void EntityManager::LoadSpaceShips(const char* filename)
 		}
 
 		SpaceShip* ship = new SpaceShip(animation, hp, speed);
+
+		const char* move_pattern = elem->Attribute("move");
+		const char* attack_pattern = elem->Attribute("attack");
+		ship->SetMovePattern(move_pattern);
+		ship->SetAttackPattern(attack_pattern);
 
 		TiXmlElement* weapon = elem->FirstChildElement();
 		if (weapon != NULL)

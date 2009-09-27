@@ -9,7 +9,7 @@
 #include "ControlPanel.hpp"
 #include "ParticleSystem.hpp"
 #include "LevelManager.hpp"
-#include "../utils/Music.hpp"
+#include "../utils/DumbMusic.hpp"
 #include "../entities/PlayerShip.hpp"
 
 class EntityManager;
@@ -144,8 +144,8 @@ private:
 	LevelManager& levels_;
 	ParticleSystem& particles_;
 	EntityManager& entitymanager_;
-#ifndef NO_AUDIO
-	Music* music_;
+#ifndef NO_DUMB_MUSIC
+	DumbMusic* music_;
 #endif
 	sf::Shape background_;
 };

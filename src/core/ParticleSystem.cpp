@@ -72,6 +72,16 @@ void ParticleSystem::AddShield(int count, const sf::Sprite* handle)
 }
 
 
+void ParticleSystem::AddFollow(int count, const sf::Sprite* handle)
+{
+	for (int i = 0; i < count; ++i)
+	{
+		puts("lulz!");
+		particles_.push_front(new Follow(handle));
+	}
+}
+
+
 void ParticleSystem::RemoveShield(const sf::Sprite* handle)
 {
 	ParticleList::iterator it;
@@ -243,27 +253,49 @@ bool ParticleSystem::LinkedParticle::OnUpdate(float frametime)
 	return false;
 }
 
+#define MAX_LIFETIME_FOLLOW 1.5f
 
-/*
-ne pas effacer =)
-Follow::Follow(const sf::Sprite* handle)
+ParticleSystem::Follow::Follow(const sf::Sprite* handle)
 {
 	handle_ = handle;
-	SetPosition(handle->GetPosition());
-	SetImage(GET_IMG("blue_ammo"));
-	speed_ = 0.0f;
+	sf::Vector2f pos = handle->GetPosition();
+
+	sprite_.SetPosition(pos.x, pos.y);
+	sprite_.SetImage(GET_IMG("star"));
+	speed_ = FIERY_VELOCITY;
+	angle_ = sf::Randomizer::Random(0, 360);
+	timer_ = sf::Randomizer::Random(0.0f, MAX_LIFETIME_FOLLOW);
 }
 
-bool Follow::OnUpdate(float frametime)
-{
-	const sf::Vector2f offset = handle_->GetPosition();
-	sf::Vector2f myp = GetPosition();
 
-	angle_ = ANGLE(offset, myp);
-	float d = Distance(myp, offset) * 2;
+bool ParticleSystem::Follow::OnUpdate(float frametime)
+{
+	timer_ += frametime;
+	if (timer_ >= MAX_LIFETIME_FOLLOW)
+	{
+		timer_ = 0;
+		sprite_.SetPosition(handle_->GetPosition().x, handle_->GetPosition().y + handle_->GetSize().y / 2);
+		angle_ = sf::Randomizer::Random(0, 360);
+	}
+
+
+	sf::Vector2f pos = sprite_.GetPosition();
+	int speed = static_cast<int> ((MAX_LIFETIME_FOLLOW - timer_) * 500 * frametime);
+
+	math::translate(pos, angle_, speed * frametime);
+	sprite_.SetPosition(pos);
+
+	sprite_.SetColor(sf::Color(255, 255, 255, (sf::Uint8) (255 - 255 * timer_ / MAX_LIFETIME_FOLLOW)));
+	/*
+	sf::Vector2f offset = handle_->GetPosition();
+	sf::Vector2f myp = sprite_.GetPosition();
+	offset.x = offset.x + (handle_->GetSize().x / 2) + sf::Randomizer::Random(-100, 100);
+	offset.y = offset.y + (handle_->GetSize().y / 2) + sf::Randomizer::Random(-100, 100);
+	angle_ = math::angle(offset, myp);
+	float d = math::distance(myp, offset) * 2;
 	float dist =  d * frametime;
-	TRANSLATE(myp, angle_, dist);
-	SetPosition(myp);
+	math::translate(myp, angle_, dist);
+	sprite_.SetPosition(myp);*/
 	return false;
 }
-*/
+

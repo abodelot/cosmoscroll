@@ -45,6 +45,8 @@ public:
 
 	void AddShield(int count, const sf::Sprite* handle);
 
+	void AddFollow(int count, const sf::Sprite* handle);
+
 	void RemoveShield(const sf::Sprite* handle);
 
 	/**
@@ -171,6 +173,24 @@ private:
 		const sf::Sprite* handle_; // hack... le sprite cible sert de handle
 		sf::Sprite sprite_;
 		float angle_; // en radians
+	};
+
+	class Follow: public Particle
+	{
+	public:
+		Follow(const sf::Sprite* handle);
+		~Follow() { }
+		bool OnUpdate(float frametime);
+		inline void Show(sf::RenderTarget& target) const
+		{
+			target.Draw(sprite_);
+		}
+	private:
+		float angle_;
+		float speed_;
+		sf::Sprite sprite_;
+		const sf::Sprite* handle_;
+		float timer_;
 	};
 
 	typedef std::list<Particle*> ParticleList;

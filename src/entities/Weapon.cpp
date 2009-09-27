@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "Weapon.hpp"
 #include "EntityManager.hpp"
 #include "Hit.hpp"
@@ -69,6 +71,7 @@ void Weapon::Update(float frametime)
 
 float Weapon::Shoot(sf::Vector2f offset, float angle)
 {
+	assert(inited_);
 	static SoundSystem& sound_sys = SoundSystem::GetInstance();
 	static EntityManager& entitymanager = EntityManager::GetInstance();
 

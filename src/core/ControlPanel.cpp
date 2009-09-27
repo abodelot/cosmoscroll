@@ -1,7 +1,7 @@
 #include "ControlPanel.hpp"
 #include "../entities/Bonus.hpp"
 #include "../utils/MediaManager.hpp"
-#include "../utils/Misc.hpp"
+#include "../utils/StringUtils.hpp"
 
 #define LABEL_LENGTH 60
 #define BAR_HEIGHT   15

@@ -26,7 +26,6 @@ static void load_or_die(sf::Image& image, const char* filename)
 	image.SetSmooth(false);
 }
 
-#ifndef NO_AUDIO
 // charger un buffer audio
 static void load_or_die(sf::SoundBuffer& buffer, const char* filename)
 {
@@ -37,7 +36,7 @@ static void load_or_die(sf::SoundBuffer& buffer, const char* filename)
 	}
 }
 
-
+#ifndef NO_DUMB_MUSIC
 // charger un buffer lié a une instance de la lib dumb
 static void load_or_die(std::string& music_name, const char* filename)
 {
@@ -97,14 +96,13 @@ MediaManager::MediaManager()
 		std::cerr << "can't open image list: " << IMG_LIST << std::endl;
 		exit(EXIT_FAILURE);
 	}
-#ifndef NO_AUDIO
 	// chargement des buffers audio
 	if (!load_from_list(SOUND_LIST, sounds_))
 	{
 		std::cerr << "can't open sound list: " << SOUND_LIST << std::endl;
 		exit(EXIT_FAILURE);
 	}
-
+#ifndef NO_DUMB_MUSIC
 	// chargement des musiques
 	if (!load_from_list(MUSIC_LIST, musics_))
 	{
@@ -132,7 +130,7 @@ const sf::Image& MediaManager::GetImage(const char* image) const
 	return it->second;
 }
 
-#ifndef NO_AUDIO
+
 const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
 {
 	std::map<std::string, sf::SoundBuffer>::const_iterator it;
@@ -145,8 +143,8 @@ const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
 	return it->second;
 }
 
-
-Music* MediaManager::GetMusic(const char* key) const
+#ifndef NO_DUMB_MUSIC
+DumbMusic* MediaManager::GetDumbMusic(const char* key) const
 {
 	std::map<std::string, std::string>::const_iterator it;
 	it = musics_.find(key);
@@ -157,7 +155,7 @@ Music* MediaManager::GetMusic(const char* key) const
 	}
 
 	std::string path(MUSIC_PATH);
-	Music* mus = new Music((path + it->second).c_str());
+	DumbMusic* mus = new DumbMusic((path + it->second).c_str());
 #ifdef DEBUG
 	std::cout << path << it->second << " made." <<  std::endl;
 #endif

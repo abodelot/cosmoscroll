@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <levels>
+	<level desc="Pour PAPA">
+		<for count="2">
+		<ship id="1" x="640" y="100" t="10" />
+		<ship id="1" x="640" y="220" t="10" />
+		<ship id="1" x="640" y="330" t="10" />
+		<ship id="1" x="640" y="250" t="10" />
+		<ship id="2" x="640" y="100" t="10" />
+		<ship id="2" x="640" y="220" t="10" />
+		<ship id="2" x="640" y="330" t="10" />
+		<ship id="2" x="640" y="250" t="10" />
+		</for>
+	</level>
 	<level desc="Alors que vous vous baladez\ndans le vide interstellaire...\nOn vous attaque !!!">
 		<for count="4">
 			<ship id="2" x="640" y="100" t="2.3" />

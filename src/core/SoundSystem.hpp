@@ -14,6 +14,8 @@ public:
 	 */
 	void PlaySound(const char* sound_name);
 
+	void SetSoundVolume(int volume);
+
 	/**
 	 * Jouer une musique (une musique à la fois)
 	 */
@@ -43,4 +45,4 @@ private:
 	bool enable_music_;
 };
 
-#endif /* SOUNDSYSTEM_HPP */
+#endif // SOUNDSYSTEM_HPP

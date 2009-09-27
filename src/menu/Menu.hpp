@@ -5,10 +5,6 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-#ifndef NO_AUDIO
-#include <SFML/Audio.hpp>
-#endif
-
 #include "../core/AbstractController.hpp"
 
 /**

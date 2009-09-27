@@ -32,3 +32,4 @@ playership.png
 star.png
 cosmoscroll-logo.png
 libs-logo.png
+icon.bmp

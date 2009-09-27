@@ -1,62 +1,38 @@
-CosmoScroll TODO List
+COSMOSCROLL TODO LIST
 =====================
 
 Milestone 0.2
+-------------
 
-
-core
-----
-
-Gérer les parallaxes (plus de décors dans les niveaux)
-Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
 Conserver le vaisseau du joueur d'un niveau à l'autre (ne pas respawn un neuf à chaque fois)
 
-
 Ajout mode plein-écran / fenêtré dans la configuration 
-une seule boucle de jeu, avec des pointeurs de méthode pour spécialiser le comportement
+une seule boucle de jeu, faire une classe abstraite Scene, base de tout conteneur d'éléments affichables
 
 Mode deux joueurs sur la même machine
 
 ControlPanel hérite de sf::Drawable, choix de la position dans la config
 
-ajouter la gestion des musiques
-supprimer toutes les autres références à sf::Audio
-flag NO_AUDIO obsolète, à remplacer par un flag NO_DUMB pour que ceux qu'ils ne veulent/peuvent pas installer libdumb puissent compiler
-
 ParticleSystem :
-	- pool pour les particules, ne pas tout allouer à la volée (trop lourd)
+	- optimiser l'allocation des particules, allouer les particules d'un même effet par groupe
 	- Ajouter effet graphique sur bonus speed (Particule Smoke)
 
-Intertionalisation (GetText ou solution maison ?)
-
-
-entities
---------
-
-- sélectionner le type d'IA (mouvement et tir) dans les définitions des spaces ships en XML
-PlayerShip : compteur de frags / points
-
-
-Ajouter groupes de formation
-Implémenter un système de pattern d'IA (définition des trajectoire et des tirs)
-
-plus de sprites :
-	- nouvelles armes
-	- nouveaux vaisseaux
-
+- Intertionalisation (fichiers de langues pour fr, en, de)
+- compteur de frags et/ou de points
 
 menu
-----
+	- intégrer un module de GUI indépendant et générique
+	- une sous classe pour chaque menu. utiliser des callbacks pour réagir à la sélection d'un élément
 
-faire une GUI générique (classe Menu)
-une sous classe pour chaque menu. utiliser des callbacks pour réagir à la sélection d'un élément
+- Optimiser cos/sin avec une table pré-calculée
+- mieux factoriser tous les calculs de déplacements
+- MediaManager doit stocker les objets DumbMusic directement, mieux intégrer la gestion des musiques
 
 
-utils
------
+Milestone 0.3
+-------------
 
-Optimiser cos/sin avec une table pré-calculée
-mieux factoriser tous les calculs de déplacements
-MediaManager doit stocker les objets Music directement
-
+- Gérer les parallaxes (plus de décors dans les niveaux)
+- Ajouter groupes de formation dans les niveaux
+- Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
 

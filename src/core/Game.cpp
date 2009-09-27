@@ -9,7 +9,7 @@
 #include "../entities/EntityManager.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../menu/Menu.hpp"
-#include "../utils/Misc.hpp"
+#include "../utils/StringUtils.hpp"
 #include "../utils/Math.hpp"
 #include "../utils/DIE.hpp"
 #include "../utils/ConfigParser.hpp"
@@ -82,8 +82,10 @@ Game::Game() :
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
+	const sf::Image& icon = GET_IMG("icon");
+	app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
 
-	background_ = sf::Shape::Rectangle(0, 56, 640, 480, sf::Color::White);
+	background_ = sf::Shape::Rectangle(0, ControlPanel::HEIGHT, WIN_WIDTH, GAME_HEIGHT, sf::Color::White);
 }
 
 
@@ -146,9 +148,8 @@ void Game::Run()
 				break;
 		}
 	} while (what != EXIT_APP);
-#ifndef NO_AUDIO
+
 	StopMusic();
-#endif
 }
 
 // les méthodes-écrans
@@ -209,12 +210,12 @@ Game::Scene Game::Intro()
 
 		app_.Display();
 	}
-#ifndef NO_AUDIO
+
 	if (music_name_ != "NULL")
 	{
 		LoadMusic(music_name_.c_str());
 	}
-#endif
+	SoundSystem::GetInstance().SetSoundVolume(60);
 	return what;
 }
 
@@ -381,7 +382,7 @@ Game::Scene Game::LevelCaption()
 	sf::Sprite back(GET_IMG("background"));
 	std::string content = str_sprintf("Niveau %d\n\n%s", current_level_,
 		levels_.GetDescription(current_level_));
-	find_replace(content, "\\n", "\n");
+	str_replace(content, "\\n", "\n");
 
 	sf::String description(content);
 	description.SetColor(sf::Color::White);
@@ -623,9 +624,9 @@ Game::Scene Game::EndPlay()
 	{
 		SoundSystem::GetInstance().PlaySound("end-level");
 
-		std::wstring epic_win = str_sprintf(L"Félicitations :-D\n\n"
+		std::wstring epic_win = str_sprintf(L"Félicitations !\n\n"
 			"Vous avez fini les %d niveaux du jeu.\n"
-			"Vous êtes vraiment doué(e) :D", current_level_);
+			"Vous êtes vraiment doué(e) ! :D", current_level_);
 		info.SetText(epic_win);
 		info.SetSize(30);
 		what = MAIN_MENU;
@@ -825,21 +826,25 @@ bool Game::StoryMoreBadBuys()
 void Game::LoadMusic(const char* music_name)
 {
 	StopMusic();
-	music_ = GET_MUSIC(music_name);
+#ifndef NO_DUMB_MUSIC
+	music_ = GET_DUMB_MUSIC(music_name);
 	music_->SetVolume(30);
 	music_->Play();
+#endif
 	music_name_ = music_name;
 }
 
 
 void Game::StopMusic()
 {
+#ifndef NO_DUMB_MUSIC
 	if (music_ != NULL)
 	{
 		music_->Stop();
 		delete music_;
 		music_ = NULL;
 	}
+#endif
 }
 
 // Menu des options

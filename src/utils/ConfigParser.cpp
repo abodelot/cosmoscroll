@@ -1,13 +1,14 @@
 #include <fstream>
 
 #include "ConfigParser.hpp"
-#include "../utils/Misc.hpp"
+#include "StringUtils.hpp"
 
-#define OPEN_TOKEN      '{'
-#define CLOSE_TOKEN     '}'
-#define PROP_SEPARATOR  ':'
-#define PROP_END        ';'
-#define COMMENT         '#'
+// éléments de la syntaxe
+#define TOKEN_OPEN       '{'
+#define TOKEN_CLOSE      '}'
+#define TOKEN_SEPARATOR  ':'
+#define TOKEN_END        ';'
+#define TOKEN_COMMENT    '#'
 
 #define INDENT          '\t'
 
@@ -27,8 +28,8 @@ bool ConfigParser::LoadFromFile(const char* filename)
 		std::string content;
 		while (getline(file, line))
 		{
-			trim(line);
-			if (line.size() > 0 && line[0] != COMMENT)
+			line = str_trim(line);
+			if (line.size() > 0 && line[0] != TOKEN_COMMENT)
 				content += line;
 		}
 		file.close();
@@ -50,16 +51,16 @@ bool ConfigParser::SaveToFile(const char* filename) const
 		for (; it_sec != sections_.end(); ++it_sec)
 		{
 			// nom de la section
-			file << it_sec->first << '\n' << OPEN_TOKEN << '\n';
+			file << it_sec->first << '\n' << TOKEN_OPEN << '\n';
 			// pour chaque élément
 			const Properties& props = it_sec->second;
 			Properties::const_iterator it_item = props.begin();
 			for (; it_item != props.end(); ++it_item)
 			{
-				file << INDENT << it_item->first << PROP_SEPARATOR << ' '
-					<< it_item->second << PROP_END << '\n';
+				file << INDENT << it_item->first << TOKEN_SEPARATOR << ' '
+					<< it_item->second << TOKEN_END << '\n';
 			}
-			file << CLOSE_TOKEN << "\n\n";
+			file << TOKEN_CLOSE << "\n\n";
 		}
 		file.close();
 		return true;
@@ -76,9 +77,9 @@ void ConfigParser::SeekSection(const char* section)
 
 
 void ConfigParser::Parse(const std::string& content)
-{   
+{
 	bool inside_section = false;
-	
+
 	const int length = content.size();
 	size_t token;
 	for (int i = 0; i < length; ++i)
@@ -86,34 +87,33 @@ void ConfigParser::Parse(const std::string& content)
 		if (!inside_section)
 		{
 			// recherche du token de début de section
-			token = content.find(OPEN_TOKEN, i);
+			token = content.find(TOKEN_OPEN, i);
 			if (token != std::string::npos)
 			{
-				std::string section_name = extract(content, i, token);
-				
-				//printf("parsing section: %s\n", section_name.c_str());
+				std::string section_name = str_trim(str_extract(content, i, token));
 				cursor_ = &sections_[section_name];
 				inside_section = true;
 				i = token;
 			}
 			else
 			{
-				i = length;
-				puts("EOF");
+				break; // fin du fichier
 			}
 		}
 		else // sinon, on est à l'intérieur de la section
 		{
-			token = content.find(CLOSE_TOKEN, i);
+			token = content.find(TOKEN_CLOSE, i);
 			if (token != std::string::npos)
 			{
-				ParseProperties(extract(content, i, token), *cursor_);
+				ParseProperties(str_trim(str_extract(content, i, token)), *cursor_);
 				i = token;
 			}
 			else
 			{
-				std::cerr << "closing bracket '}' missing" << std::endl;
-				i = length;
+#ifdef DEBUG
+				std::cerr << "missing closing symbol "<< TOKEN_CLOSE << std::endl;
+#endif
+				break;
 			}
 			// fin des propriétés, on sort de l'item
 			inside_section = false;
@@ -124,50 +124,64 @@ void ConfigParser::Parse(const std::string& content)
 
 void ConfigParser::ParseProperties(const std::string& content, Properties& props)
 {
-	enum Status
-	{
-		SEARCH_SEPARATOR,
-		SEARCH_END_PROP
-	};
-	Status status = SEARCH_SEPARATOR;
+	bool at_end = true;
 	const int length = content.size();
 	size_t token;
 	std::string current_prop;
-	
+
 	for (int i = 0; i < length; ++i)
 	{
-		if (status == SEARCH_SEPARATOR)
+		if (at_end)
 		{
-			token = content.find(PROP_SEPARATOR, i);
+			token = content.find(TOKEN_SEPARATOR, i);
 			if (token != std::string::npos)
 			{
-				current_prop = extract(content, i, token);
-				//printf("add prop : %s\n", current_prop.c_str());
-				status = SEARCH_END_PROP;
+				current_prop = str_trim(str_extract(content, i, token));
+				at_end = false;
 				i = token;
 			}
 			else
 			{
-				i = length;
+				break;
 			}
 		}
-		else if (status == SEARCH_END_PROP)
+		else
 		{
-			token = content.find(PROP_END, i);
+			token = content.find(TOKEN_END, i);
 			if (token != std::string::npos)
 			{
-				std::string prop_value = extract(content, i, token);
+				std::string prop_value = str_trim(str_extract(content, i, token));
 				// nouvelle paire clef: valeur enregistrée
 				props[current_prop] = prop_value;
-				
-				status = SEARCH_SEPARATOR;
+				at_end = true;
 				i = token;
 			}
 			else
 			{
-				i = length;
+				break;
 			}
 		}
 	}
+}
+
+
+bool ConfigParser::ReadItem(const char* item, std::string& value)
+{
+	if (cursor_ == NULL)
+	{
+		std::cerr << "ConfigParser: no section defined" << std::endl;
+		return false;
+	}
+	Properties::const_iterator it = cursor_->find(item);
+	// l'élément est-il dans la section pointée ?
+	if (it == cursor_->end())
+	{
+#ifdef DEBUG
+		std::cerr << item << " not found in current section" << std::endl;
+#endif
+		return false;
+	}
+	value = it->second;
+	return true;
 }
 

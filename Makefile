@@ -19,10 +19,10 @@ ifeq ($(LINK), dynamic)
 	CFLAGS += -DSFML_DYNAMIC
 endif
 
-# disable audio
-NO_AUDIO=no
-ifeq ($(NO_AUDIO), yes)
-	CFLAGS += -DNO_AUDIO
+# enable compilation without lib dumb
+NO_DUMB_MUSIC=no
+ifeq ($(NO_DUMB_MUSIC), yes)
+	CFLAGS += -DNO_DUMB_MUSIC
 endif
 
 # svn revision

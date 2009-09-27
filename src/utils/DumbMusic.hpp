@@ -1,7 +1,7 @@
 #ifndef MUSIC_HPP
 #define MUSIC_HPP
 
-#ifndef NO_AUDIO
+#ifndef NO_DUMB_MUSIC
 
 #include <dumb.h>
 #include <SFML/System.hpp>
@@ -16,16 +16,16 @@
 /**
  * Musique chargée avec libdumb (support du format .mod)
  */
-class Music : public sf::SoundStream
+class DumbMusic: public sf::SoundStream
 {
 public:
-    Music(const char* name);
-    ~Music();
-	
-	virtual bool OnStart();
+    DumbMusic(const char* name);
+    ~DumbMusic();
 
-	virtual bool OnGetData(Chunk& data);
-	
+	bool OnStart();
+
+	bool OnGetData(Chunk& data);
+
 private:
 	sf::Int16 samples_[BUFFER_SIZE * N_CHANNELS];
 
@@ -33,7 +33,7 @@ private:
 	DUH_SIGRENDERER* player_;
 };
 
-#endif /* NO_AUDIO */
+#endif // NO_DUMB_MUSIC
 
-#endif /* guard MUSIC_HPP */
+#endif // DUMBMUSIC_HPP
 
