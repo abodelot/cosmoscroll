@@ -82,7 +82,7 @@ bool AbstractController::GetAction(Action& action, Device* device)
 				{
 					action = MOVE_UP;
 					_device = JOYSTICK;
-				}				
+				}
 			}
 		}
 		if (device != NULL)
@@ -103,7 +103,7 @@ bool AbstractController::HasInput(Action action, int device)
 	{
 		return true;
 	}
-	if (device & JOYSTICK) 
+	if (device & JOYSTICK)
 	{
 		if (input_.IsJoystickButtonDown(JOY_ID, joystick_binds_[action]))
 		{
@@ -164,7 +164,7 @@ void AbstractController::SaveConfig(ConfigParser& config) const
 	config.WriteItem("weapon_1", keyboard_binds_[WEAPON_1]);
 	config.WriteItem("weapon_2", keyboard_binds_[WEAPON_2]);
 	config.WriteItem("use_cooler", keyboard_binds_[USE_COOLER]);
-	
+
 	config.SeekSection("Joystick");
 	config.WriteItem("pause", joystick_binds_[PAUSE]);
 	config.WriteItem("valid", joystick_binds_[VALID]);
@@ -185,7 +185,7 @@ unsigned int AbstractController::GetBinding(Action action, Device device) const
 		default:
 			assert(0);
 	}
-}	
+}
 
 void AbstractController::SetBinding(Action action, Device device, unsigned int binding)
 {
@@ -309,7 +309,7 @@ const char* AbstractController::KeyToString(int code)
 		case F14: return "F14";
 		case F15: return "F15";
 		case Pause: return "Pause";
-		
+
 		default: return "<Unknown key>";
 	}
 }
@@ -327,6 +327,7 @@ AbstractController::AbstractController()
 	keyboard_binds_[WEAPON_1] = sf::Key::Space;
 	keyboard_binds_[WEAPON_2] = sf::Key::A;
 	keyboard_binds_[USE_COOLER] = sf::Key::LControl;
+	keyboard_binds_[TAKE_SCREENSHOT] = sf::Key::F1;
 	keyboard_binds_[EXIT_APP] = sf::Key::Escape;
 	// joystick
 	joystick_binds_[PAUSE] = 1;

@@ -1,29 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <levels>
-	<level desc="Pour PAPA">
-		<for count="2">
-		<ship id="1" x="640" y="100" t="10" />
-		<ship id="1" x="640" y="220" t="10" />
-		<ship id="1" x="640" y="330" t="10" />
-		<ship id="1" x="640" y="250" t="10" />
-		<ship id="2" x="640" y="100" t="10" />
-		<ship id="2" x="640" y="220" t="10" />
-		<ship id="2" x="640" y="330" t="10" />
-		<ship id="2" x="640" y="250" t="10" />
-		</for>
-	</level>
 	<level desc="Alors que vous vous baladez\ndans le vide interstellaire...\nOn vous attaque !!!">
 		<for count="4">
-			<ship id="2" x="640" y="100" t="2.3" />
-			<ship id="2" x="640" y="200" t="0" />
 			<for count="2">
-				<ship id="1" x="640" y="200" t="1.0" />
+				<ship id="1" x="640" y="200" t="1.5" />
 				<ship id="1" x="640" y="170" t="0.5f" />
 				<ship id="1" x="640" y="230" t="0" />
 			</for>
+			<ship id="2" x="640" y="100" t="2.3" />
+			<ship id="2" x="640" y="200" t="0" />
 			<asteroid x="640" y="250" t="0.5" />
 		</for>
-		<ship id="3" x="640" y="100" t="2.3" />
+		<ship id="1" x="640" y="100" t="2.3" />
 	</level>
 	<level desc="">
 		<for count="3">
@@ -310,7 +298,7 @@
 		<ship id="2" x="640" y="270" t="0.0" />
 		<ship id="2" x="640" y="330" t="0.0" />
 	</level>
-	<level desc="C'est la confrontation\navec le boss final\nOuille !!!" bg_top="#000000" bg_bottom="#880000">
+	<level desc="C'est la confrontation\navec le boss final\nOuille !!!" bg_top="#220000" bg_bottom="#771100">
 		<for count="2">
 			<ship id="3" x="640" y="270" t="4.0" />
 			<ship id="2" x="640" y="170" t="2.0" />

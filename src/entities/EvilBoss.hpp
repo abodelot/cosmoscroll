@@ -21,6 +21,9 @@ public:
 	// inherited
 	void TakeDamage(int damage);
 
+	// inherited
+	bool PixelPerfectCollide() const;
+
 private:
 	enum Phase
 	{

@@ -303,6 +303,12 @@ void PlayerShip::OnCollide(Entity& entity)
 }
 
 
+bool PlayerShip::PixelPerfectCollide() const
+{
+	return true;
+}
+
+
 void PlayerShip::HandleBonus(const Bonus& bonus)
 {
 	switch (bonus.GetType())

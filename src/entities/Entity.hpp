@@ -81,6 +81,16 @@ public:
 	virtual void GetCollideRect(sf::FloatRect& rect) const;
 
 	/**
+	 * Indique si l'entité utilise une détection de collision pixel perfect
+	 */
+	virtual bool PixelPerfectCollide() const;
+
+	/**
+	 * Indique si l'entité est en collision avec une autre entité
+	 */
+	bool IsCollidingWith(const Entity& other);
+
+	/**
 	 * Obtenir l'équipe de l'entité
 	 */
 	Team GetTeam() const;

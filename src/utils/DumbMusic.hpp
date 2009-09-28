@@ -1,5 +1,5 @@
-#ifndef MUSIC_HPP
-#define MUSIC_HPP
+#ifndef DUMBMUSIC_HPP
+#define DUMBMUSIC_HPP
 
 #ifndef NO_DUMB_MUSIC
 

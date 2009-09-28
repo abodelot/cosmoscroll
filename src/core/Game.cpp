@@ -85,7 +85,7 @@ Game::Game() :
 	const sf::Image& icon = GET_IMG("icon");
 	app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
 
-	background_ = sf::Shape::Rectangle(0, ControlPanel::HEIGHT, WIN_WIDTH, GAME_HEIGHT, sf::Color::White);
+	background_ = sf::Shape::Rectangle(0, ControlPanel::HEIGHT, WIN_WIDTH, WIN_HEIGHT, sf::Color::White);
 }
 
 
@@ -438,6 +438,10 @@ Game::Scene Game::Play()
 			{
 				running = false;
 				next = IN_GAME_MENU;
+			}
+			else if (action == AC::TAKE_SCREENSHOT)
+			{
+				TakeScreenshot("screenshot");
 			}
 			else
 			{
@@ -1152,4 +1156,17 @@ void Game::SetBackgroundColor(const sf::Color& topcolor, const sf::Color& bottom
 	background_.SetPointColor(1, topcolor);
 	background_.SetPointColor(2, bottomcolor);
 	background_.SetPointColor(3, bottomcolor);
+}
+
+
+void Game::TakeScreenshot(const char* directory)
+{
+	char current_time[256];
+	time_t t = time(NULL);
+	strftime(current_time, sizeof current_time, "%d-%m-%Y_%H-%M-%S", localtime(&t));
+
+	std::string filename = str_sprintf("%s/%s.png", directory, current_time, t);
+
+	printf("screenshot saved to %s\n", filename.c_str());
+	app_.Capture().SaveToFile(filename);
 }

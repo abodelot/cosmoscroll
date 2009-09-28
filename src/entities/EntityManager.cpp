@@ -49,17 +49,14 @@ void EntityManager::Update(float frametime)
 	}
 
 	// update and collision
-	sf::FloatRect rect, rect2;
 	for (it = entities_.begin(); it != entities_.end(); ++it)
 	{
 		(**it).Update(frametime);
 
-		(**it).GetCollideRect(rect);
 		it2 = it;
 		for (++it2; it2 != entities_.end(); ++it2)
 		{
-			(**it2).GetCollideRect(rect2);
-			if (rect.Intersects(rect2))
+			if ((**it).IsCollidingWith(**it2))
 			{
 				(**it).OnCollide(**it2);
 				(**it2).OnCollide(**it);

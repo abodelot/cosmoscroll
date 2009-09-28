@@ -109,6 +109,8 @@ private:
 
 	void SetBackgroundColor(const sf::Color& topcolor, const sf::Color& bottomcolor);
 
+	void TakeScreenshot(const char* directory);
+
 	sf::RenderWindow app_;
 
 	float timer_;

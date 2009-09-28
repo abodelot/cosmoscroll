@@ -33,6 +33,9 @@ public:
 	// inherited
 	void TakeDamage(int damage);
 
+	// inherited
+	bool PixelPerfectCollide() const;
+
 	inline void SetControls(int controls)
 	{
 		controls_ = controls;

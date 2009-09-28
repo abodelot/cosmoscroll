@@ -24,8 +24,8 @@ EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	SetTeam(Entity::BAD);
 	// init weapons
 	EntityManager& mgr = EntityManager::GetInstance();
-	mgr.InitWeapon(0, &eye_left_);
-	mgr.InitWeapon(0, &eye_right_);
+	mgr.InitWeapon(3, &eye_left_);
+	mgr.InitWeapon(3, &eye_right_);
 	// (init canon later)
 	eye_left_.SetOwner(this);
 	eye_right_.SetOwner(this);
@@ -104,12 +104,14 @@ void EvilBoss::TakeDamage(int damage)
 		{
 			case MORE_EVIL:
 				SetSubRect(sf::IntRect(242, 0, 242 * 2, 160));
-				EntityManager::GetInstance().InitWeapon(3, &canon_);
+				EntityManager::GetInstance().InitWeapon(4, &canon_);
 				next_ = DAMN_EVIL;
 				break;
 			case DAMN_EVIL:
 				SetSubRect(sf::IntRect(242 * 2, 0, 242 * 3, 160));
 				canon_.SetTriple(true);
+				eye_left_.SetTriple(true);
+				eye_right_.SetTriple(true);
 				break;
 			default:
 				break;
@@ -125,4 +127,9 @@ void EvilBoss::TakeDamage(int damage)
 			ParticleSystem::GetInstance().AddExplosion(pos);
 		}
 	}
+}
+
+bool EvilBoss::PixelPerfectCollide() const
+{
+	return true;
 }

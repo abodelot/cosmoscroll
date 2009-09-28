@@ -9,8 +9,6 @@ Conserver le vaisseau du joueur d'un niveau à l'autre (ne pas respawn un neuf �
 Ajout mode plein-écran / fenêtré dans la configuration 
 une seule boucle de jeu, faire une classe abstraite Scene, base de tout conteneur d'éléments affichables
 
-Mode deux joueurs sur la même machine
-
 ControlPanel hérite de sf::Drawable, choix de la position dans la config
 
 ParticleSystem :
@@ -25,13 +23,13 @@ menu
 	- une sous classe pour chaque menu. utiliser des callbacks pour réagir à la sélection d'un élément
 
 - Optimiser cos/sin avec une table pré-calculée
-- mieux factoriser tous les calculs de déplacements
 - MediaManager doit stocker les objets DumbMusic directement, mieux intégrer la gestion des musiques
 
 
 Milestone 0.3
 -------------
 
+- Mode deux joueurs sur la même machine
 - Gérer les parallaxes (plus de décors dans les niveaux)
 - Ajouter groupes de formation dans les niveaux
 - Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
