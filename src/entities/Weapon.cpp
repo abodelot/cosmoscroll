@@ -1,10 +1,13 @@
 #include <cassert>
+#include <cmath>
 
 #include "Weapon.hpp"
 #include "EntityManager.hpp"
 #include "Hit.hpp"
 
 #include "../core/SoundSystem.hpp"
+
+#define ANGLE_VARIATION 0.15f
 
 
 Weapon::Weapon()
@@ -85,8 +88,10 @@ float Weapon::Shoot(sf::Vector2f offset, float angle)
 		entitymanager.AddEntity(new Hit(team, offset, angle, image_, speed_, damage_));
 		if (triple_)
 		{
-			entitymanager.AddEntity(new Hit(team, offset, angle - 0.15, image_, speed_, damage_));
-			entitymanager.AddEntity(new Hit(team, offset, angle + 0.15, image_, speed_, damage_));
+			entitymanager.AddEntity(new Hit(team, offset,
+				angle - ANGLE_VARIATION, image_, speed_, damage_));
+			entitymanager.AddEntity(new Hit(team, offset,
+				angle + ANGLE_VARIATION, image_, speed_, damage_));
 		}
 		fire_timer_ = fire_rate_;
 
@@ -98,7 +103,6 @@ float Weapon::Shoot(sf::Vector2f offset, float angle)
 	}
 	return 0.f;
 }
-
 
 void Weapon::SetTriple(bool triple)
 {

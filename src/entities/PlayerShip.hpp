@@ -20,6 +20,7 @@ public:
 
 	~PlayerShip();
 
+	// inherited
 	PlayerShip* Clone() const;
 
 	void HandleAction(AC::Action action);
@@ -55,6 +56,19 @@ private:
 		TIMED_BONUS_COUNT
 	};
 
+	void ComputeMove(float frametime);
+
+	void ComputeMoveOnDrugs(float frametime);
+
+	/**
+	 * Calculer la vitesse sur un axe
+	 * @param speed: vitesse à mettre à jour
+	 * @param lower: action diminuant la vitesse
+	 * @param upper: action augmentant la vitesse
+	 * @param diff: différence avec la nouvelle vitesse
+	 */
+	void ComputeAxisSpeed(float& speed, AC::Action lower, AC::Action upper, float diff);
+
 	/**
 	 * Gérer un bonus attrapé
 	 */
@@ -84,13 +98,18 @@ private:
 	float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
 	bool overheated_;
 	float heat_, shield_timer_;
-	int coolers_, shield_, speed_;
+	int coolers_, shield_, missiles_;
+	float speed_x_, speed_y_;
+	float acceleration_delay_;
+	int max_speed_;
 
 	int controls_;
 
 	AbstractController& controller_;
 	ControlPanel& panel_;
 	Weapon laserbeam_, hellfire_;
+
+	void (PlayerShip::*compute_move_)(float);
 };
 
 #endif // PLAYERSHIP_HPP

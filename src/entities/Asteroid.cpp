@@ -15,22 +15,22 @@
 
 
 Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
-    Entity(offset, size + 1)
+	Entity(offset, size + 1)
 {
 	const int NB = 3;
-    static const char* image_bases[] = {
-        "asteroid-small",
-        "asteroid-medium",
-        "asteroid-big"
-    };
-    std::ostringstream key;
-    key << image_bases[size] << '-' << sf::Randomizer::Random(1, NB);
-    SetImage(GET_IMG(key.str().c_str()));
+	static const char* image_bases[] = {
+		"asteroid-small",
+		"asteroid-medium",
+		"asteroid-big"
+	};
+	std::ostringstream key;
+	key << image_bases[size] << '-' << sf::Randomizer::Random(1, NB);
+	SetImage(GET_IMG(key.str().c_str()));
 
-    speed_ = 100;
-    angle_ = math::deg_to_rad(angle);
+	speed_ = 100;
+	angle_ = math::deg_to_rad(angle);
 
-    size_ = size;
+	size_ = size;
     /*SetCenter(GetImage()->GetWidth() / 2, GetImage()->GetHeight() / 2);
     static const sf::IntRect rect_big[COUNT_BIG] = {
     	sf::IntRect(),

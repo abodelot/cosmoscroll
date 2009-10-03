@@ -4,60 +4,66 @@
 #include <SFML/Graphics.hpp>
 
 
-class ControlPanel
+class ControlPanel: public sf::Drawable
 {
 public:
+	// hauteur en pixels
 	enum { HEIGHT = 56 };
 
-    static ControlPanel& GetInstance();
+	static ControlPanel& GetInstance();
 
-	void SetGameInfo(const wchar_t* text);
+	/**
+	 * @param text: texte d'information
+	 */
+	void SetGameInfo(const sf::Unicode::Text& text);
 
-	void SetGameInfo(const char* text);
+	/**
+	 * @param text: texte sur la barre de chaleur
+	 */
+	void SetOverheatText(const sf::Unicode::Text& text);
 
 	void SetShipHP(int value);
 
-    void SetMaxShipHP(int max);
+	void SetMaxShipHP(int max);
 
-    void SetShield(int value);
+	void SetShield(int value);
 
-    void SetMaxShield(int max);
+	void SetMaxShield(int max);
 
-    void SetHeat(int value);
+	void SetHeat(int value);
 
-    void SetMaxHeat(int max);
+	void SetMaxHeat(int max);
 
-	void SetInfo(const wchar_t* text);
+	void SetTimer(float seconds);
 
-    void SetInfo(const char* text);
+	void SetCoolers(int coolers);
 
-    void SetTimer(float seconds);
-
-    void SetCoolers(int coolers);
-
-    void Show(sf::RenderWindow& app) const;
+	void SetMissiles(int count);
 
 private:
-    ControlPanel();
-    ControlPanel(const ControlPanel& other);
+	ControlPanel();
+	ControlPanel(const ControlPanel& other);
 
-    enum
-    {
-        SHIELD, HP, HEAT, PBAR_COUNT
-    };
+	// inherited
+	void Render(sf::RenderTarget& target) const;
 
-    struct ProgressBar
-    {
-        sf::String label;
-        sf::Shape background;
-        sf::Sprite bar;
-        int max_value;
+	enum
+	{
+		SHIELD, HP, HEAT, PBAR_COUNT
+	};
 
-        ProgressBar();
-        // redimensionne la barre
-        void SetPercent(int value);
-        void Init(const sf::Font& font, float x, float y);
-    };
+	struct ProgressBar
+	{
+		sf::String label;
+		sf::Shape background;
+		sf::Sprite bar;
+		int max_value;
+
+		ProgressBar();
+		// redimensionne la barre
+		void SetPercent(int value);
+		void Init(const sf::Font& font, float x, float y);
+	};
 
 	struct BonusCount
 	{
@@ -67,16 +73,16 @@ private:
 		void Init(const sf::IntRect& subrect, int x, int y);
 	};
 
-    ProgressBar pbars_[PBAR_COUNT];
-    BonusCount coolers_;
-    BonusCount missiles_;
+	ProgressBar pbars_[PBAR_COUNT];
+	BonusCount coolers_;
+	BonusCount missiles_;
 
-    sf::String timer_;
-    sf::String info_;
+	sf::String timer_;
+	sf::String info_;
 	sf::String game_info_;
-    sf::Sprite panel_;
-    sf::Font font_;
-    sf::Font font_big_;
+	sf::Sprite panel_;
+	sf::Font font_;
+	sf::Font font_big_;
 };
 
 #endif // CONTROLPANEL_HPP

@@ -11,24 +11,41 @@
 #include "Weapon.hpp"
 #include "SpaceShip.hpp"
 
-
+/**
+ * Gestionnaire de la vie, l'univers et tout le reste
+ */
 class EntityManager: public sf::Drawable
 {
 public:
 	/**
-	 * Obtenir l'instance unique
+	 * @return l'instance unique
 	 */
 	static EntityManager& GetInstance();
 
 	/**
+	 * Dimensions de l'univers
+	 */
+	void SetSize(int width, int height);
+
+	/**
+	 * @return largeur de l'univers
+	 */
+	int GetWidth() const;
+
+	/**
+	 * @return hauteur de l'univers
+	 */
+	int GetHeight() const;
+
+	/**
 	 * Mettre à jour les entités
-	 * @param[in] frametime: temps de la frame courante
+	 * @param frametime: temps de la frame courante
 	 */
 	void Update(float frametime);
 
 	/**
 	 * Ajouter une entité
-	 * @param[in] entity: entité à ajouter
+	 * @param entity: entité à ajouter
 	 */
 	void AddEntity(Entity* entity);
 
@@ -42,30 +59,52 @@ public:
 	 */
 	int Count() const;
 
+	/**
+	 * Initialiser une arme
+	 * @param id: type de l'arme demandé
+	 * @param weapon: arme à initialiser
+	 */
 	void InitWeapon(int id, Weapon* weapon) const;
 
+	/**
+	 * Allouer un vaisseau
+	 * @param id: type du vaisseau demandé
+	 * @param x: position x (pixels)
+	 * @param y: position y (pixels)
+	 * @return vaisseau
+	 */
 	SpaceShip* CreateSpaceShip(int id, int x, int y);
 
+	/**
+	 * Obtenir une animation
+	 * @param key: identifiant de l'animation
+	 */
 	const Animation& GetAnimation(const char* key) const;
 
 	/**
 	 * Charger les définitions des XML armes
-	 * @param[in] filename: fichier XML des armes
+	 * @param filename: fichier XML des armes
 	 */
 	void LoadWeapons(const char* filename);
 
 	/**
 	 * Charger les définitions XML des animations
+	 * @param filename: fichier XML des animations
 	 */
 	void LoadAnimations(const char* filename);
 
 	/**
 	 * Charger les défintions XML des vaisseaux
+	 * @param filename: fichier XML des vaisseaux
 	 */
 	void LoadSpaceShips(const char* filename);
 
 	Entity* CreateRandomEntity() const;
 
+	/**
+	 * Appliquer un foncteur sur chaque entité
+	 * @param functor: foncteur prenant une entité en paramètre
+	 */
 	template <class T>
 	void ApplyToEach(T& functor);
 
@@ -74,7 +113,7 @@ private:
 	EntityManager(const EntityManager&);
 	~EntityManager();
 
-	/// inherited
+	// inherited
 	void Render(sf::RenderTarget& target) const;
 
 	struct WeaponDefinition
@@ -102,7 +141,11 @@ private:
 	EntityList entities_;
 
 	std::vector<Entity*> uniques_;
+
+	int width_;
+	int height_;
 };
+
 
 template <class T>
 void EntityManager::ApplyToEach(T& functor)

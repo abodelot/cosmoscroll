@@ -34,11 +34,14 @@ public:
 	 */
 	void SetSoundName(const char* sound);
 
+	/**
+	 * Position de l'arme relative à la position de son propriétaire
+	 */
 	void SetOffset(int x, int y);
 
 	void SetOwner(Entity* owner);
 
-    float Shoot(sf::Vector2f offset, float angle = 0.f);
+	float Shoot(sf::Vector2f offset, float angle);
 
     void Update(float frametime);
 

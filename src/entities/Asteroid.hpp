@@ -11,7 +11,7 @@
 class Asteroid: public Entity
 {
 public:
-    enum Size
+	enum Size
     {
         SMALL, MEDIUM, BIG
     };

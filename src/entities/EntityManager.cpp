@@ -15,6 +15,8 @@ EntityManager& EntityManager::GetInstance()
 
 EntityManager::EntityManager()
 {
+	width_ = 480;
+	height_ = 320;
 	uniques_.push_back(new Asteroid(sf::Vector2f(0, 0), Asteroid::BIG));
 }
 
@@ -27,6 +29,33 @@ EntityManager::~EntityManager()
 	{
 		delete uniques_[i];
 	}
+}
+
+
+void EntityManager::SetSize(int width, int height)
+{
+	if (width < 0)
+	{
+		width = 0;
+	}
+	if (height < 0)
+	{
+		height = 0;
+	}
+	width_ = width;
+	height_ = height;
+}
+
+
+int EntityManager::GetWidth() const
+{
+	return width_;
+}
+
+
+int EntityManager::GetHeight() const
+{
+	return height_;
 }
 
 
@@ -86,7 +115,7 @@ void EntityManager::Clear()
 
 int EntityManager::Count() const
 {
-	return entities_.size();
+	return (int) entities_.size();
 }
 
 
@@ -166,7 +195,6 @@ void EntityManager::LoadWeapons(const char* filename)
 
 void EntityManager::LoadAnimations(const char* filename)
 {
-	// ppd
 	// chargement des animations
 	TiXmlDocument doc;
 	if (!doc.LoadFile(filename))

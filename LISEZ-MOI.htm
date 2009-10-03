@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>CosmoScroll</title>
+		<title>CosmoScroll : Manuel d'utilisation</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<style type="text/css">
 body {
@@ -69,8 +69,11 @@ table.infotab th {
 
 <h3>Modes de jeu</h3>
 <ul>
-	<li>Mode histoire : terminez tous les niveaux jusqu'à l'affrontement avec boss final !</li>
-	<li>Mode arcade : tenez le plus longtemps possible face à des ennemis de plus en plus nombreux.</li>
+	<li><strong>Mode histoire</strong> : terminez tous les niveaux jusqu'à l'affrontement avec le boss final !<br />
+		Terminez un niveau pour accéder au niveau suivant.
+	</li>
+	<li><strong>Mode arcade</strong> : tenez le plus longtemps possible face à des ennemis de plus en plus nombreux et tentez d'établir un nouveau record.
+	</li>
 </ul>
 
 <h3>Commandes clavier</h3>
@@ -104,6 +107,18 @@ table.infotab th {
 		<td>P</td>
 	</tr>
 	<tr>
+		<td>Positionner le panneau de contrôle en haut de l'écran</td>
+		<td>Page Haut</td>
+	</tr>
+	<tr>
+		<td>Positionner le panneau de contrôle en bas de l'écran</td>
+		<td>Page Bas</td>
+	</tr>
+	<tr>
+		<td>Prendre une capture d'écran (enregistrée dans <code>screenshot/</code>)</td>
+		<td>F1</td>
+	</tr>
+	<tr>
 		<td>Quitter immédiatement le jeu</td>
 		<td>Échap</td>
 	</tr>
@@ -120,14 +135,14 @@ table.infotab th {
 	<li>Missile : donne 1 missile. jusqu'à 3 missiles peuvent être cumulés</li>
 	<li>Triple tir : multiplie par 3 vos tirs pendant 10 secondes !</li>
 	<li>Vitesse : multiplie par 2 votre vitesse pendant 10 secondes</li>
-	<li>Stoned : Vous ne savez plus très bien piloter pendant 10 secondes...</li>
-	<li>Banane magique : invincibilité pendant 10 secondes</li>
+	<li>Stoned : Vos réflexes ne sont plus très bons pendant 10 secondes...</li>
+	<li>Banane invincible : invincibilité pendant 10 secondes</li>
 </ul>
 <p><em>Note : il n'y a pas de cheat codes dans ce jeu.</em></p>
 <!--
-Cadeau pour les curieux, activer le Konami Code :
+Félicitations, vous avez trouver le Konami Code !
+Tapez la séquence suivante en cours de jeu pour l'activer :
 Haut - Haut - Bas - Bas - Gauche - Droite - Gauche - Droite - Arme2 - Arme1
-:D
 -->
 </div>
 
@@ -135,9 +150,9 @@ Haut - Haut - Bas - Bas - Gauche - Droite - Gauche - Droite - Arme2 - Arme1
 <h2 id="how-to-reset">Comment retrouver la configuration d'origine ?</h2>
 <div>
 <p>
-	Si vous vous voulez retrouver les paramètres par défaut de l'application, effacez
-	le fichier <code>config/config.txt</code>, un nouveau fichier sera créé automatiquement.<br />
-	(Attention, votre ancienne configuration sera perdue)
+	Si vous voulez retrouver les paramètres par défaut de l'application, effacez
+	le fichier <code>config/config.cfg</code>, un nouveau fichier sera créé automatiquement.<br />
+	Attention, votre ancienne configuration (scores, préférences, etc.) sera perdue.
 </p>
 </div>
 
@@ -152,14 +167,14 @@ Haut - Haut - Bas - Bas - Gauche - Droite - Gauche - Droite - Arme2 - Arme1
 	Vous devez tout d'abord installer les bibliothèques suivantes :
 </p>
 <ul>
-	<li><a href="http://www.sfml-dev.org/">SFML</a>, version 1.4</li>
+	<li><a href="http://www.sfml-dev.org/">SFML</a>, version 1.5</li>
 	<li><a href="http://dumb.sourceforge.net/">libdumb</a></li>
 </ul>
 <p>
 Le moyen le plus simple de récupérer les sources est de faire un checkout sur le <a href="http://code.google.com/p/cosmoscroll/source/checkout">serveur SVN</a> du projet (reportez-vous aux instructions de la page).</p>
 <p>
-Un fichier projet Code::Blocks multi-plateformes (<em>cosmoscroll.cbp</em>) est fourni et permet de compiler le jeu depuis l'IDE.<br />
-Un Makefile UNIX est également fourni avec les sources du projet (tapez simplement "make" en console) afin de compiler le jeu sans passer par un IDE.
+Un fichier projet Code::Blocks multi-plateformes (<code>cosmoscroll.cbp</code>) est fourni et permet de compiler le jeu depuis cet IDE.<br />
+Un Makefile UNIX est également fourni avec les sources du projet (tapez simplement <code>make</code> en console) afin de compiler le jeu sans passer par un IDE.
 </p>
 
 </div>

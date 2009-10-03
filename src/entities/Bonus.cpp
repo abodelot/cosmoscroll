@@ -43,12 +43,12 @@ void Bonus::Update(float frametime)
 }
 
 
-const wchar_t* Bonus::WhatItIs() const
+const wchar_t* Bonus::GetDescription() const
 {
 	switch (type_)
 	{
 		case HEALTH:
-			return L"Health";
+			return L"Point de vie";
 		case SHIELD:
 			return L"Bouclier";
 		case COOLER:
@@ -62,7 +62,7 @@ const wchar_t* Bonus::WhatItIs() const
 		case STONED:
 			return L"Stoned :D";
 		case MAGIC_BANANA:
-			return L"Magic Banana!";
+			return L"Banane invincible !";
 		default:
 			break;
 	}
@@ -70,8 +70,16 @@ const wchar_t* Bonus::WhatItIs() const
 }
 
 
+Bonus::Type Bonus::GetType() const
+{
+	return type_;
+}
+
+
 sf::IntRect Bonus::GetSubRect(Type type)
 {
+	// l'ordre des bonus dans la feuille de sprites est le même que celui
+	// de l'énumération Bonus::Type
 	return sf::IntRect(type * SIZE, 0, (type + 1) * SIZE, SIZE);
 }
 

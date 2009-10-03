@@ -58,6 +58,18 @@ inline float rad_to_deg(float radians)
 }
 
 
+/**
+ * @param position: position à mettre à jour
+ * @param angle: angle de déplacement en radian
+ * @param speed: vecteur vitesse
+ */
+inline void translate(sf::Vector2f& position, float angle, const sf::Vector2f& speed)
+{
+	position.x = position.x + speed.x * std::cos(angle);
+	position.y = position.y - speed.y * std::sin(angle);
+}
+
+
 inline void translate(sf::Vector2f& offset, float angle, float speed)
 {
 	offset.x = offset.x + speed * math::cos(angle);

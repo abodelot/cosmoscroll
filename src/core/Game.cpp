@@ -14,7 +14,7 @@
 #include "../utils/DIE.hpp"
 #include "../utils/ConfigParser.hpp"
 
-#define CONFIG_FILE "config/config.txt"
+#define CONFIG_FILE "config/config.cfg"
 
 #define MARGIN_X 120
 
@@ -22,6 +22,14 @@
 #define XML_ANIMATIONS "data/xml/animations.xml"
 #define XML_SPACESHIPS "data/xml/spaceships.xml"
 
+#define COSMOSCROLL_VERSION "0.2-devel"
+#define COSMOSCROLL_ABOUT str_sprintf(\
+		L"À propos de CosmoScroll\n\n" \
+		"Version : %s\n\n" \
+		"Auteurs :\n" \
+		"     Alexandre Bodelot\n" \
+		"     Arnaud Wolff\n\n" \
+		"Licence : GPL", COSMOSCROLL_VERSION)
 
 Game& Game::GetInstance()
 {
@@ -174,7 +182,10 @@ Game::Scene Game::Intro()
 	title.Resize(title.GetSize().x * 7, title.GetSize().y * 7);
 	MediaManager::GetInstance().SmoothImage("cosmoscroll-logo", true);
 
-	PlayerShip ship(sf::Vector2f(-80, 100), "playership-red");
+	// we allow the player ship to go beyond screen limits during the intro scene
+	entitymanager_.SetSize(1000, 1000);
+	PlayerShip* ship = new PlayerShip(sf::Vector2f(-80, 100), "playership-red");
+	entitymanager_.AddEntity(ship);
 
 	while (elapsed < DURATION)
 	{
@@ -197,16 +208,17 @@ Game::Scene Game::Intro()
 			played = true;
 			SoundSystem::GetInstance().PlaySound("title");
 		}
+		entitymanager_.Update(time);
 
-		ship.Update(time);
-		ship.Move(170 * time, 25 * time);
+		ship->Move(170 * time, 25 * time);
 		title.Scale(0.99, 0.99); // FIXME: dépendant des FPS
 		title.SetColor(sf::Color(255, 255, 255,
 			(sf::Uint8) (255 * elapsed / DURATION)));
 
 		app_.Draw(background);
+		app_.Draw(entitymanager_);
 		app_.Draw(title);
-		app_.Draw(ship);
+		//app_.Draw(ship);
 
 		app_.Display();
 	}
@@ -216,6 +228,9 @@ Game::Scene Game::Intro()
 		LoadMusic(music_name_.c_str());
 	}
 	SoundSystem::GetInstance().SetSoundVolume(60);
+	// make entity manager ready for game use
+	entitymanager_.Clear();
+	entitymanager_.SetSize(WIN_WIDTH, WIN_HEIGHT - ControlPanel::HEIGHT);
 	return what;
 }
 
@@ -430,22 +445,31 @@ Game::Scene Game::Play()
 	{
 		while (controls_.GetAction(action, &device))
 		{
-			if (action == AC::EXIT_APP)
+			switch (action)
 			{
-				running = false;
-			}
-			else if (action == AC::PAUSE)
-			{
-				running = false;
-				next = IN_GAME_MENU;
-			}
-			else if (action == AC::TAKE_SCREENSHOT)
-			{
-				TakeScreenshot("screenshot");
-			}
-			else
-			{
-				(this->*p_ForwardAction_)(action, device);
+				case AC::EXIT_APP:
+					running = false;
+					break;
+				case AC::PAUSE:
+					running = false;
+					next = IN_GAME_MENU;
+					break;
+				case AC::TAKE_SCREENSHOT:
+					TakeScreenshot("screenshot");
+					break;
+				case AC::PANEL_UP:
+					panel_.SetY(0);
+					entitymanager_.SetY(ControlPanel::HEIGHT);
+					particles_.SetY(ControlPanel::HEIGHT);
+					break;
+				case AC::PANEL_DOWN:
+					panel_.SetY(WIN_HEIGHT - ControlPanel::HEIGHT);
+					particles_.SetY(0);
+					entitymanager_.SetY(0);
+					break;
+				default:
+					(this->*p_ForwardAction_)(action, device);
+					break;
 			}
 		}
 
@@ -470,7 +494,7 @@ Game::Scene Game::Play()
 			app_.Draw(particles_);
 			app_.Draw(entitymanager_);
 
-			panel_.Show(app_);
+			app_.Draw(panel_);
 			app_.Display();
 		}
 	}
@@ -573,7 +597,7 @@ Game::Scene Game::InGameMenu()
 		// rendering
 		app_.Draw(entitymanager_);
 		app_.Draw(particles_);
-		panel_.Show(app_);
+		app_.Draw(panel_);
 
 		app_.Draw(title);
 		menu.Show(app_);
@@ -668,7 +692,7 @@ Game::Scene Game::EndPlay()
 		// rendering
 		app_.Draw(particles_);
 		app_.Draw(entitymanager_);
-		panel_.Show(app_);
+		app_.Draw(panel_);
 		app_.Draw(info);
 		app_.Display();
 		app_.Clear();
@@ -800,7 +824,8 @@ bool Game::ArcadeMoreBadGuys()
 		Entity* entity = entitymanager_.CreateRandomEntity();
 		sf::Vector2f pos;
 		pos.x = WIN_WIDTH;
-		pos.y = sf::Randomizer::Random(0, GAME_HEIGHT - (int) entity->GetSize().y);
+		pos.y = sf::Randomizer::Random(0,
+			entitymanager_.GetHeight() - (int) entity->GetSize().y);
 		entity->SetPosition(pos);
 		entity->SetTarget(player1_);
 

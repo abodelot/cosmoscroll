@@ -15,7 +15,7 @@ public:
 		MISSILE,      // +1 cooler
 		TRIPLE_SHOT,  // shot * 3 (10s)
 		SPEED,        // speed * 2 (10s)
-		STONED,       // inverted movement (10s)
+		STONED,       // inertia (10s)
 		MAGIC_BANANA, // invincible (10s)
 		BONUS_COUNT
 	};
@@ -36,12 +36,9 @@ public:
 	/*
 	 * Description textuelle du bonus
 	 */
-	const wchar_t* WhatItIs() const;
+	const wchar_t* GetDescription() const;
 
-	inline Type GetType() const
-	{
-		return type_;
-	}
+	Type GetType() const;
 
 	static sf::IntRect GetSubRect(Type type);
 

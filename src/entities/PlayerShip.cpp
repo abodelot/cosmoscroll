@@ -4,7 +4,6 @@
 
 #include "PlayerShip.hpp"
 #include "EntityManager.hpp"
-#include "../core/Window.hpp"
 #include "../core/Game.hpp"
 #include "../core/ParticleSystem.hpp"
 #include "../core/SoundSystem.hpp"
@@ -15,26 +14,29 @@
 #include <iostream>
 #endif
 
-#define WEAPON1_OFFSET          52, 22
-#define WEAPON2_OFFSET         50, 24
+#define WEAPON1_OFFSET              52, 22
+#define WEAPON2_OFFSET              50, 24
 
-#define DEFAULT_SPEED           200
-#define SPEED_BONUS_FACTOR      2
+#define MAX_SPEED                   200.f
+#define BONUS_MAX_SPEED             (MAX_SPEED * 2)
+#define ACCELERATION_DELAY_ON_DRUGS 0.4f // time to reach MAX_SPEED from 0 (or 0 from MAX_SPEED)
 
-#define COOLER_DEFAULT          0
-#define COOLER_MAX              3
+#define COOLER_DEFAULT              0
+#define COOLER_MAX                  3
 
-#define HEAT_MAX                100
-#define HEAT_RECOVERY_RATE      13
+#define HEAT_MAX                    100
+#define HEAT_RECOVERY_RATE          13
 
-#define HP_DEFAULT              3
-#define HP_MAX                  5
+#define HP_DEFAULT                  3
+#define HP_MAX                      5
 
-#define SHIELD_DEFAULT          3
-#define SHIELD_MAX              6
-#define SHIELD_RECOVERY_RATE    0.3 //boules /sec.
+#define MISSILES_MAX                3
 
-#define TIMED_BONUS_DURATION    10
+#define SHIELD_DEFAULT              3 // shield points at start
+#define SHIELD_MAX                  6 // max shield points
+#define SHIELD_RECOVERY_RATE        0.3 // shield point per second
+
+#define TIMED_BONUS_DURATION        10 // seconds
 
 
 PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
@@ -56,10 +58,15 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 
 	shield_ = SHIELD_DEFAULT;
 	coolers_ = COOLER_DEFAULT;
+	missiles_ = 0;
 	overheated_ = false;
 	shield_timer_ = 0;
 	heat_ = 0.0f;
-	speed_ = DEFAULT_SPEED;
+
+	max_speed_ = MAX_SPEED;
+	speed_x_ = speed_y_ = 0.f;
+	compute_move_ = &PlayerShip::ComputeMove;
+
 	controls_ = AC::ALL;
 	ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, this);
 
@@ -77,7 +84,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	panel_.SetShield(shield_);
 	panel_.SetHeat((int) heat_);
 	panel_.SetCoolers(coolers_);
-	panel_.SetInfo("");
+	panel_.SetMissiles(missiles_);
+	panel_.SetOverheatText("");
 
 	// init Konami code
 	konami_code_[0] = AC::MOVE_UP;
@@ -127,7 +135,7 @@ void PlayerShip::HandleAction(AC::Action action)
 			panel_.SetCoolers(coolers_);
 			heat_ = 0.f;
 			overheated_ = false;
-			panel_.SetInfo("");
+			panel_.SetOverheatText("");
 		}
 	}
 	// konami code
@@ -152,65 +160,52 @@ void PlayerShip::Update(float frametime)
 	// animation
 	Animated::Update(frametime, *this);
 
+	// tirs
 	if (!overheated_)
 	{
 		float h = 0.0f;
 		if (controller_.HasInput(AC::WEAPON_1, controls_))
 		{
-			h += hellfire_.Shoot(GetPosition());
+			h += hellfire_.Shoot(GetPosition(), 0);
 		}
 		if (controller_.HasInput(AC::WEAPON_2, controls_))
 		{
-			h += laserbeam_.Shoot(GetPosition());
+			h += laserbeam_.Shoot(GetPosition(), 0);
 		}
 
 		heat_ += h;
 		if (heat_ >= HEAT_MAX)
 		{
 			overheated_ = true;
-			panel_.SetInfo("Surchauffe !");
+			panel_.SetOverheatText("Surchauffe !");
 		}
 	}
 	// déplacement
-	const sf::Vector2f& offset = GetPosition();
-	float x = offset.x;
-	float y = offset.y;
-	static const int X_BOUND = WIN_WIDTH - GetSize().x;
-	static const int Y_BOUND = WIN_HEIGHT - ControlPanel::HEIGHT - GetSize().y;
-	if (controller_.HasInput(AC::MOVE_UP, controls_))
-	{
-		y = y - frametime * speed_;
-	}
-	if (controller_.HasInput(AC::MOVE_DOWN, controls_))
-	{
-		y = y + frametime * speed_;
-	}
-	if (controller_.HasInput(AC::MOVE_LEFT, controls_))
-	{
-		x = x - frametime * speed_;
-	}
-	if (controller_.HasInput(AC::MOVE_RIGHT, controls_))
-	{
-		x = x + frametime * speed_;
-	}
+	(this->*compute_move_)(frametime);
+	sf::Vector2f pos = GetPosition();
+	pos.y = pos.y + speed_y_ * frametime;
+	pos.x = pos.x + speed_x_ * frametime;
 
-	if (y < 0)
+	const int X_BOUND = EntityManager::GetInstance().GetWidth() - GetSize().x;
+	const int Y_BOUND = EntityManager::GetInstance().GetHeight() - GetSize().y;
+
+	if (pos.y < 0)
 	{
-		y = 0;
+		pos.y = 0;
 	}
-	else if (y > Y_BOUND)
+	else if (pos.y > Y_BOUND)
 	{
-		y = Y_BOUND;
+		pos.y = Y_BOUND;
 	}
-	if (x < 0)
+	if (pos.x < 0)
 	{
-		x = 0;
+		pos.x = 0;
 	}
-	else if (x > X_BOUND)
+	else if (pos.x > X_BOUND)
 	{
-		x = X_BOUND;
+		pos.x = X_BOUND;
 	}
-	SetPosition(x, y);
+	SetPosition(pos);
 
 	// regénération bouclier
 	if (shield_ < SHIELD_MAX)
@@ -233,7 +228,7 @@ void PlayerShip::Update(float frametime)
 			if (overheated_ )
 			{
 				overheated_ = false;
-				panel_.SetInfo("");
+				panel_.SetOverheatText("");
 			}
 		}
 	}
@@ -309,6 +304,67 @@ bool PlayerShip::PixelPerfectCollide() const
 }
 
 
+
+void PlayerShip::ComputeMove(float)
+{
+	speed_x_ = speed_y_ = 0;
+	if (controller_.HasInput(AC::MOVE_UP))
+	{
+		speed_y_ = -max_speed_;
+	}
+	else if (controller_.HasInput(AC::MOVE_DOWN))
+	{
+		speed_y_ = max_speed_;
+	}
+	if (controller_.HasInput(AC::MOVE_LEFT))
+	{
+		speed_x_ = -max_speed_;
+	}
+	else if (controller_.HasInput(AC::MOVE_RIGHT))
+	{
+		speed_x_ = max_speed_;
+	}
+}
+
+
+void PlayerShip::ComputeMoveOnDrugs(float frametime)
+{
+	float speed_diff = frametime * max_speed_ / ACCELERATION_DELAY_ON_DRUGS;
+	ComputeAxisSpeed(speed_x_, AC::MOVE_LEFT, AC::MOVE_RIGHT, speed_diff);
+	ComputeAxisSpeed(speed_y_, AC::MOVE_UP, AC::MOVE_DOWN, speed_diff);
+}
+
+
+void PlayerShip::ComputeAxisSpeed(float& speed, AC::Action lower, AC::Action upper, float diff)
+{
+	if (controller_.HasInput(lower, controls_) && -speed < max_speed_)
+	{
+		speed -= diff;
+	}
+	else if (speed < 0)
+	{
+		speed += diff;
+		if (speed > 0.1)
+		{
+			speed = 0;
+		}
+	}
+
+	if (controller_.HasInput(upper, controls_) && speed < max_speed_)
+	{
+		speed += diff;
+	}
+	else if (speed > 0)
+	{
+		speed -= diff;
+		if (speed < 0.1)
+		{
+			speed = 0;
+		}
+	}
+}
+
+
 void PlayerShip::HandleBonus(const Bonus& bonus)
 {
 	switch (bonus.GetType())
@@ -330,24 +386,24 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 		case Bonus::SPEED:
 			if (bonus_[T_SPEED] == 0)
 			{
-				speed_ *= SPEED_BONUS_FACTOR;
-				printf("bonus speed activé, speed=%d\n", speed_);
+				max_speed_ = BONUS_MAX_SPEED;
+				//printf("bonus speed activé, speed=%d\n", speed_);
 			}
 			else
 			{
-				printf("bonus speed relancé, speed=%d\n", speed_);
+				//printf("bonus speed relancé, speed=%d\n", speed_);
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
 			break;
 		case Bonus::STONED:
 			if (bonus_[T_STONED] == 0)
 			{
-				speed_ *= -1;
-				printf("bonus stoned activé, speed=%d\n", speed_);
+				compute_move_ = &PlayerShip::ComputeMoveOnDrugs;
+				//printf("bonus stoned activé, speed=%d\n", speed_);
 			}
 			else
 			{
-				printf("bonus stoned relancé, speed=%d\n", speed_);
+				//printf("bonus stoned relancé, speed=%d\n", speed_);
 			}
 			bonus_[T_STONED] += TIMED_BONUS_DURATION;
 			break;
@@ -373,11 +429,18 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 				panel_.SetCoolers(coolers_);
 			}
 			break;
+		case Bonus::MISSILE:
+			if (missiles_ < MISSILES_MAX)
+			{
+				++missiles_;
+				panel_.SetMissiles(missiles_);
+			}
+			break;
 		default:
 			break;
 	}
 	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(),
-		bonus.WhatItIs());
+		bonus.GetDescription());
 }
 
 
@@ -388,15 +451,15 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 		case T_TRISHOT:
 			hellfire_.SetTriple(false);
 			laserbeam_.SetTriple(false);
-			puts("info: bonus triple tir désactivé");
+			//puts("info: bonus triple tir désactivé");
 			break;
 		case T_SPEED:
-			speed_ /= SPEED_BONUS_FACTOR;
-			printf("info: bonus speed désactivé, speed=%d\n", speed_);
+			max_speed_ = MAX_SPEED;
+			//printf("info: bonus speed désactivé, speed=%d\n", speed_);
 			break;
 		case T_STONED:
-			speed_ *= -1;
-			printf("info: bonus stoned désactivé, speed=%d\n", speed_);
+			compute_move_ = &PlayerShip::ComputeMove;
+			//printf("info: bonus stoned désactivé, speed=%d\n", speed_);
 			break;
 		default:
 			abort();
@@ -409,11 +472,14 @@ void PlayerShip::KonamiCodeOn()
 {
 	ParticleSystem& particles = ParticleSystem::GetInstance();
 	overheated_ = false;
-	panel_.SetInfo("");
+	panel_.SetOverheatText("");
 	heat_ = 0.f;
 	panel_.SetHeat((int) heat_);
+	max_speed_ = BONUS_MAX_SPEED;
 	coolers_ = 42;
 	panel_.SetCoolers(42);
+	missiles_ = 42;
+	panel_.SetMissiles(42);
 	hp_ = 42;
 	panel_.SetShipHP(hp_);
 	shield_ = 42;
@@ -422,6 +488,7 @@ void PlayerShip::KonamiCodeOn()
 	particles.AddShield(shield_, this);
 	hellfire_.SetTriple(true);
 	laserbeam_.SetTriple(true);
+
 	particles.AddMessage(GetPosition(), L"Have you mooed today?");
 }
 

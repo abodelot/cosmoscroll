@@ -18,11 +18,21 @@ public:
 	// tous les types d'évènements gérés par le jeu
 	enum Action
 	{
-		EXIT_APP, PAUSE, VALID,
-		MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT,
-		WEAPON_1, WEAPON_2, USE_COOLER,
+		EXIT_APP,
+		PAUSE,
+		VALID,
+		MOVE_UP,
+		MOVE_DOWN,
+		MOVE_LEFT,
+		MOVE_RIGHT,
+		WEAPON_1,
+		WEAPON_2,
+		USE_COOLER,
 		TAKE_SCREENSHOT,
-		COUNT_ACTION, NONE
+		PANEL_UP,
+		PANEL_DOWN,
+		COUNT_ACTION,
+		NONE
 	};
 
 	enum Device

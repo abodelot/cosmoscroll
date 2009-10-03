@@ -1,6 +1,7 @@
 #include "ParticleSystem.hpp"
 #include "SoundSystem.hpp"
 #include "Window.hpp"
+#include "ControlPanel.hpp"
 #include "../utils/Math.hpp"
 
 #include <SFML/System.hpp>

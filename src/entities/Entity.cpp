@@ -1,5 +1,5 @@
 #include "Entity.hpp"
-#include "../core/Window.hpp"
+#include "EntityManager.hpp"
 
 
 Entity::Entity(const sf::Vector2f& position, int hp, int collide_damage)
@@ -46,9 +46,13 @@ void Entity::Kill()
 
 void Entity::KillIfOut()
 {
-	static const sf::FloatRect UNIVERSE(0, 0, WIN_WIDTH, GAME_HEIGHT);
-
-	if (!UNIVERSE.Intersects(GetCollideRect()))
+	static EntityManager& entity_mgr = EntityManager::GetInstance();
+	sf::FloatRect rect;
+	GetCollideRect(rect);
+	if (rect.Bottom < 0
+	 || rect.Top    > entity_mgr.GetHeight()
+	 || rect.Right  < 0
+	 || rect.Left   > entity_mgr.GetWidth())
 	{
 		hp_ = 0;
 	}

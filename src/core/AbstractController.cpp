@@ -328,6 +328,8 @@ AbstractController::AbstractController()
 	keyboard_binds_[WEAPON_2] = sf::Key::A;
 	keyboard_binds_[USE_COOLER] = sf::Key::LControl;
 	keyboard_binds_[TAKE_SCREENSHOT] = sf::Key::F1;
+	keyboard_binds_[PANEL_UP] = sf::Key::PageUp;
+	keyboard_binds_[PANEL_DOWN] = sf::Key::PageDown;
 	keyboard_binds_[EXIT_APP] = sf::Key::Escape;
 	// joystick
 	joystick_binds_[PAUSE] = 1;

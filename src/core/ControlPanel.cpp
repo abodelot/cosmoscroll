@@ -17,15 +17,54 @@ ControlPanel& ControlPanel::GetInstance()
 }
 
 
-void ControlPanel::SetGameInfo(const wchar_t* text)
+ControlPanel::ControlPanel()
+{
+	panel_.SetImage(GET_IMG("score-board"));
+
+	font_.LoadFromFile("data/font/visitor2.ttf", FONT_1);
+	font_big_.LoadFromFile("data/font/visitor2.ttf", FONT_2);
+
+	pbars_[HP].Init(font_, 45, 10);
+	pbars_[HP].label.SetText("Coque");
+	pbars_[HP].bar.SetImage(GET_IMG("bar_hp"));
+	pbars_[SHIELD].Init(font_, 45, 30);
+	pbars_[SHIELD].label.SetText("Bouclier");
+	pbars_[SHIELD].bar.SetImage(GET_IMG("bar_shield"));
+	pbars_[HEAT].Init(font_, 220, 10);
+	pbars_[HEAT].label.SetText("Chaleur");
+	pbars_[HEAT].bar.SetImage(GET_IMG("bar_heat"));
+	sf::Vector2f pos = pbars_[HEAT].bar.GetPosition();
+	info_.SetPosition(pos.x + 8, pos.y - 6);
+	info_.SetFont(font_);
+	info_.SetSize(FONT_1);
+	info_.SetColor(sf::Color::Red);
+
+	coolers_.Init(Bonus::GetSubRect(Bonus::COOLER), 230, 30);
+	coolers_.count.SetFont(font_);
+	missiles_.Init(Bonus::GetSubRect(Bonus::MISSILE), 300, 30);
+	missiles_.count.SetFont(font_);
+
+	timer_.SetPosition(450, 0);
+	timer_.SetFont(font_big_);
+	timer_.SetSize(FONT_2);
+	timer_.SetColor(sf::Color::White);
+
+	game_info_.SetPosition(450, 18);
+	game_info_.SetFont(font_big_);
+	game_info_.SetSize(FONT_2);
+	game_info_.SetColor(sf::Color::White);
+}
+
+
+void ControlPanel::SetGameInfo(const sf::Unicode::Text& text)
 {
 	game_info_.SetText(text);
 }
 
 
-void ControlPanel::SetGameInfo(const char* text)
+void ControlPanel::SetOverheatText(const sf::Unicode::Text& text)
 {
-	game_info_.SetText(text);
+	info_.SetText(text);
 }
 
 
@@ -65,21 +104,15 @@ void ControlPanel::SetMaxHeat(int max)
 }
 
 
-void ControlPanel::SetInfo(const wchar_t* text)
-{
-	info_.SetText(text);
-}
-
-
-void ControlPanel::SetInfo(const char* text)
-{
-    info_.SetText(text);
-}
-
-
 void ControlPanel::SetCoolers(int coolers)
 {
 	coolers_.count.SetText(str_sprintf("x %d", coolers));
+}
+
+
+void ControlPanel::SetMissiles(int count)
+{
+	missiles_.count.SetText(str_sprintf("x %d", count));
 }
 
 
@@ -90,62 +123,23 @@ void ControlPanel::SetTimer(float seconds)
 }
 
 
-void ControlPanel::Show(sf::RenderWindow& app) const
+void ControlPanel::Render(sf::RenderTarget& target) const
 {
-    app.Draw(panel_);
+    target.Draw(panel_);
     for (int i = 0; i < PBAR_COUNT; ++i)
     {
-        app.Draw(pbars_[i].label);
-        app.Draw(pbars_[i].background);
-        app.Draw(pbars_[i].bar);
+        target.Draw(pbars_[i].label);
+        target.Draw(pbars_[i].background);
+        target.Draw(pbars_[i].bar);
     }
-	app.Draw(game_info_);
-    app.Draw(info_);
-    app.Draw(timer_);
+	target.Draw(game_info_);
+    target.Draw(info_);
+    target.Draw(timer_);
 
-    app.Draw(coolers_.icon);
-    app.Draw(coolers_.count);
-    app.Draw(missiles_.icon);
-    app.Draw(missiles_.count);
-}
-
-
-ControlPanel::ControlPanel()
-{
-    panel_.SetImage(GET_IMG("score-board"));
-
-	font_.LoadFromFile("data/font/visitor2.ttf", FONT_1);
-	font_big_.LoadFromFile("data/font/visitor2.ttf", FONT_2);
-
-    pbars_[HP].Init(font_, 45, 10);
-    pbars_[HP].label.SetText("Coque");
-    pbars_[HP].bar.SetImage(GET_IMG("bar_hp"));
-    pbars_[SHIELD].Init(font_, 45, 30);
-    pbars_[SHIELD].label.SetText("Bouclier");
-    pbars_[SHIELD].bar.SetImage(GET_IMG("bar_shield"));
-    pbars_[HEAT].Init(font_, 220, 10);
-    pbars_[HEAT].label.SetText("Chaleur");
-    pbars_[HEAT].bar.SetImage(GET_IMG("bar_heat"));
-	sf::Vector2f pos = pbars_[HEAT].bar.GetPosition();
-    info_.SetPosition(pos.x + 8, pos.y - 6);
-    info_.SetFont(font_);
-    info_.SetSize(FONT_1);
-    info_.SetColor(sf::Color::Red);
-
-	coolers_.Init(Bonus::GetSubRect(Bonus::COOLER), 230, 30);
-    coolers_.count.SetFont(font_);
-    missiles_.Init(Bonus::GetSubRect(Bonus::MISSILE), 300, 30);
-    missiles_.count.SetFont(font_);
-
-	timer_.SetPosition(450, 0);
-	timer_.SetFont(font_big_);
-    timer_.SetSize(FONT_2);
-    timer_.SetColor(sf::Color::White);
-
-    game_info_.SetPosition(450, 18);
-    game_info_.SetFont(font_big_);
-    game_info_.SetSize(FONT_2);
-    game_info_.SetColor(sf::Color::White);
+    target.Draw(coolers_.icon);
+    target.Draw(coolers_.count);
+    target.Draw(missiles_.icon);
+    target.Draw(missiles_.count);
 }
 
 

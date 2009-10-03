@@ -14,8 +14,9 @@ Hit::Hit(Entity::Team team, const sf::Vector2f& offset, float angle,
 	SetTeam(team);
 	SetRotation(math::rad_to_deg(angle));
 
-	speed_ = speed;
-	angle_ = angle;
+	// calcul du vecteur vitesse à partir de l'angle et de la vitesse
+	speed_.x = std::cos(angle) * speed;
+	speed_.y = -std::sin(angle) * speed;
 }
 
 
@@ -28,7 +29,8 @@ Hit* Hit::Clone() const
 void Hit::Update(float frametime)
 {
 	sf::Vector2f pos = GetPosition();
-	math::translate(pos, angle_, speed_ * frametime);
+	pos.x = pos.x + speed_.x * frametime;
+	pos.y = pos.y + speed_.y * frametime;
 	SetPosition(pos);
 	KillIfOut();
 }
@@ -36,16 +38,19 @@ void Hit::Update(float frametime)
 
 void Hit::OnCollide(Entity& entity)
 {
-	// traverse les tirs et les bonus
-	if (entity.GetTeam() == GetTeam()
-		|| typeid (entity) == typeid (Hit)
-		|| typeid (entity) == typeid (Bonus))
+	if (!IsDead())
 	{
-		return;
+		// ignore les alliés, les tirs et les bonus
+		if (entity.GetTeam() == GetTeam()
+			|| typeid (entity) == typeid (Hit)
+			|| typeid (entity) == typeid (Bonus))
+		{
+			return;
+		}
+		Entity::OnCollide(entity);
+		ParticleSystem::GetInstance().AddImpact(GetPosition(), 10);
+		Kill();
 	}
-	Entity::OnCollide(entity);
-	ParticleSystem::GetInstance().AddImpact(GetPosition(), 10);
-	Kill();
 }
 
 
