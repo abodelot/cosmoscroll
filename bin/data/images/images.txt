@@ -3,7 +3,7 @@ ammo/hellfire.png
 ammo/laserbeam.png
 ammo/plasma.png
 ammo/plasma-pink.png
-ammo/wasp.png
+ammo/missile.png
 asteroid-big-1.png
 asteroid-big-2.png
 asteroid-big-3.png
@@ -24,11 +24,11 @@ ship-scoot.png
 ship-interceptor.png
 ship-ufo.png
 evil_boss.png
-fiery.png
-impact.png
 score-board.png
+explosion.png
 shield.png
 playership.png
+impact.png
 star.png
 cosmoscroll-logo.png
 libs-logo.png

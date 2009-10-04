@@ -95,6 +95,8 @@ public:
 	 */
 	Team GetTeam() const;
 
+	int GetCollideDamage() const;
+
 protected:
 	/**
 	 * Attribuer une équipe à l'entité (défaut: NEUTRAL)

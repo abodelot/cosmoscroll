@@ -9,6 +9,7 @@
 #include "../core/SoundSystem.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/Math.hpp"
+#include "ImpactHit.hpp"
 
 #ifdef DEBUG
 #include <iostream>
@@ -24,13 +25,14 @@
 #define COOLER_DEFAULT              0
 #define COOLER_MAX                  3
 
+#define MISSILES_DEFAULT            1
+#define MISSILES_MAX                3
+
 #define HEAT_MAX                    100
 #define HEAT_RECOVERY_RATE          13
 
 #define HP_DEFAULT                  3
 #define HP_MAX                      5
-
-#define MISSILES_MAX                3
 
 #define SHIELD_DEFAULT              3 // shield points at start
 #define SHIELD_MAX                  6 // max shield points
@@ -49,16 +51,21 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	SetSubRect(GetAnimation().GetFrame(0)); // WTF
 	// init weapons
 	EntityManager& mgr = EntityManager::GetInstance();
-	mgr.InitWeapon(1, &laserbeam_);
-	laserbeam_.SetOwner(this);
-	laserbeam_.SetOffset(WEAPON1_OFFSET);
-	mgr.InitWeapon(2, &hellfire_);
-	hellfire_.SetOwner(this);
-	hellfire_.SetOffset(WEAPON2_OFFSET);
+	mgr.InitWeapon(1, &weapon1_);
+	weapon1_.SetOwner(this);
+	weapon1_.SetOffset(WEAPON1_OFFSET);
+
+	mgr.InitWeapon(2, &weapon2_);
+	weapon2_.SetOwner(this);
+	weapon2_.SetOffset(WEAPON2_OFFSET);
+
+	mgr.InitWeapon(5, &missile_launcher_);
+	missile_launcher_.SetOwner(this);
+	missile_launcher_.SetOffset(WEAPON2_OFFSET);
 
 	shield_ = SHIELD_DEFAULT;
 	coolers_ = COOLER_DEFAULT;
-	missiles_ = 0;
+	missiles_ = MISSILES_DEFAULT;
 	overheated_ = false;
 	shield_timer_ = 0;
 	heat_ = 0.0f;
@@ -122,22 +129,32 @@ PlayerShip* PlayerShip::Clone() const
 
 void PlayerShip::HandleAction(AC::Action action)
 {
-	if (action == AC::NONE)
+	switch (action)
 	{
-		return;
+		case AC::NONE:
+			return;
+		case AC::USE_COOLER:
+			if (coolers_ > 0)
+			{
+				--coolers_;
+				panel_.SetCoolers(coolers_);
+				heat_ = 0.f;
+				overheated_ = false;
+				panel_.SetOverheatText("");
+			}
+			break;
+		case AC::USE_MISSILE:
+			if (missiles_ > 0 && missile_launcher_.IsReady())
+			{
+				--missiles_;
+				panel_.SetMissiles(missiles_);
+				missile_launcher_.Shoot(GetPosition(), 0);
+			}
+			break;
+		default:
+			break;
 	}
 
-	if (action == AC::USE_COOLER)
-	{
-		if (coolers_ > 0)
-		{
-			--coolers_;
-			panel_.SetCoolers(coolers_);
-			heat_ = 0.f;
-			overheated_ = false;
-			panel_.SetOverheatText("");
-		}
-	}
 	// konami code
 	if (action == konami_code_[current_konami_event_])
 	{
@@ -166,11 +183,11 @@ void PlayerShip::Update(float frametime)
 		float h = 0.0f;
 		if (controller_.HasInput(AC::WEAPON_1, controls_))
 		{
-			h += hellfire_.Shoot(GetPosition(), 0);
+			h += weapon1_.Shoot(GetPosition(), 0);
 		}
 		if (controller_.HasInput(AC::WEAPON_2, controls_))
 		{
-			h += laserbeam_.Shoot(GetPosition(), 0);
+			h += weapon2_.Shoot(GetPosition(), 0);
 		}
 
 		heat_ += h;
@@ -247,8 +264,9 @@ void PlayerShip::Update(float frametime)
 			}
 		}
 	}
-	laserbeam_.Update(frametime);
-	hellfire_.Update(frametime);
+	weapon1_.Update(frametime);
+	weapon2_.Update(frametime);
+	missile_launcher_.Update(frametime);
 }
 
 
@@ -373,8 +391,8 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 		case Bonus::TRIPLE_SHOT:
 			if (bonus_[T_TRISHOT] == 0)
 			{
-				hellfire_.SetTriple(true);
-				laserbeam_.SetTriple(true);
+				weapon1_.SetTriple(true);
+				weapon2_.SetTriple(true);
 				puts("bonus triple tir activé");
 			}
 			else
@@ -449,17 +467,15 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 	switch (tbonus)
 	{
 		case T_TRISHOT:
-			hellfire_.SetTriple(false);
-			laserbeam_.SetTriple(false);
+			weapon1_.SetTriple(false);
+			weapon2_.SetTriple(false);
 			//puts("info: bonus triple tir désactivé");
 			break;
 		case T_SPEED:
 			max_speed_ = MAX_SPEED;
-			//printf("info: bonus speed désactivé, speed=%d\n", speed_);
 			break;
 		case T_STONED:
 			compute_move_ = &PlayerShip::ComputeMove;
-			//printf("info: bonus stoned désactivé, speed=%d\n", speed_);
 			break;
 		default:
 			abort();
@@ -486,8 +502,8 @@ void PlayerShip::KonamiCodeOn()
 	panel_.SetShield(shield_);
 	particles.RemoveShield(this);
 	particles.AddShield(shield_, this);
-	hellfire_.SetTriple(true);
-	laserbeam_.SetTriple(true);
+	weapon1_.SetTriple(true);
+	weapon2_.SetTriple(true);
 
 	particles.AddMessage(GetPosition(), L"Have you mooed today?");
 }

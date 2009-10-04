@@ -25,6 +25,8 @@ public:
 		return delay_;
 	}
 
+	float GetDuration() const;
+
 	/**
 	 * Ajouter une frame dans l'animation
 	 * @param[in] subrect: rectangle de la frame

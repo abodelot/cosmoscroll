@@ -4,26 +4,28 @@ COSMOSCROLL TODO LIST
 Milestone 0.2
 -------------
 
-Conserver le vaisseau du joueur d'un niveau à l'autre (ne pas respawn un neuf à chaque fois)
-
-Ajout mode plein-écran / fenêtré dans la configuration 
-une seule boucle de jeu, faire une classe abstraite Scene, base de tout conteneur d'éléments affichables
-
-ControlPanel hérite de sf::Drawable, choix de la position dans la config
-
-ParticleSystem :
-	- optimiser l'allocation des particules, allouer les particules d'un même effet par groupe
-	- Ajouter effet graphique sur bonus speed (Particule Smoke)
-
+- Niveaux variés avec difficulté croissante
+- Conserver le vaisseau du joueur d'un niveau à l'autre (ne pas respawn un neuf à chaque fois)
+- une seule boucle de jeu, faire une classe abstraite Scene, base de tout conteneur d'éléments affichables
 - Intertionalisation (fichiers de langues pour fr, en, de)
 - compteur de frags et/ou de points
+
+- MediaManager doit stocker les objets DumbMusic directement, mieux intégrer la gestion des musiques
+
+recoder le ParticleSystem :
+	- optimiser les déplacements avec un vecteur vitesse, au lieu de calculer la pos sin(angle)/cos(angle) à chaque frame
+	- optimiser l'allocation des particules, allouer les particules d'un même effet par groupe
+	- Ajouter effet graphique sur bonus speed
+	- Ajouter effet graphique sur bonus invincibilité
+
 
 menu
 	- intégrer un module de GUI indépendant et générique
 	- une sous classe pour chaque menu. utiliser des callbacks pour réagir à la sélection d'un élément
 
-- Optimiser cos/sin avec une table pré-calculée
-- MediaManager doit stocker les objets DumbMusic directement, mieux intégrer la gestion des musiques
+	- Ajout mode plein-écran / fenêtré dans la configuration
+	- Son on/off + choix volume
+	- Musique on/off + choix volume
 
 
 Milestone 0.3

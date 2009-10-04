@@ -30,9 +30,20 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::AddExplosion(const sf::Vector2f& offset)
 {
-	for (int i = 0; i < PARTICLES_PER_EXPLOSION; ++i)
+	/*for (int i = 0; i < PARTICLES_PER_EXPLOSION; ++i)
 	{
 		particles_.push_front(new Fiery(offset, media_.GetImage("fiery")));
+	}*/
+	particles_.push_front(new Explosion(offset));
+	SoundSystem::GetInstance().PlaySound("boom");
+}
+
+
+void ParticleSystem::AddBigExplosion(const sf::Vector2f& pos)
+{
+	for (int i = 0; i < PARTICLES_PER_EXPLOSION; ++i)
+	{
+		particles_.push_front(new Fiery(pos, media_.GetImage("fiery")));
 	}
 	SoundSystem::GetInstance().PlaySound("boom");
 }
@@ -77,7 +88,6 @@ void ParticleSystem::AddFollow(int count, const sf::Sprite* handle)
 {
 	for (int i = 0; i < count; ++i)
 	{
-		puts("lulz!");
 		particles_.push_front(new Follow(handle));
 	}
 }
@@ -154,6 +164,8 @@ ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset, const sf::Image& img)
 	sprite_.SetPosition(offset);
 	angle_ = sf::Randomizer::Random(-PI, PI);
 	sprite_.SetRotation(math::rad_to_deg(angle_));
+	float scale = sf::Randomizer::Random(0.5f, 1.2f);
+	sprite_.SetScale(scale, scale);
 	lifetime_ = sf::Randomizer::Random(FIERY_MIN_LIFETIME, FIERY_MAX_LIFETIME);
 	timer_ = 0.f;
 }
@@ -162,10 +174,10 @@ ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset, const sf::Image& img)
 bool ParticleSystem::Fiery::OnUpdate(float frametime)
 {
 	timer_ += frametime;
-	int speed = static_cast<int> ((lifetime_ - timer_) * FIERY_VELOCITY * frametime);
+	int speed = (int) ((lifetime_ - timer_) * FIERY_VELOCITY * frametime);
 	sprite_.Move(speed * math::cos(angle_), -speed * math::sin(angle_));
 	// transparence
-	sprite_.SetColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(255 - 255 * timer_ / lifetime_)));
+	sprite_.SetColor(sf::Color(255, 255, 255, (int) (255 - 255 * timer_ / lifetime_)));
 	return timer_ >= lifetime_;
 }
 
@@ -180,9 +192,9 @@ ParticleSystem::Star::Star()
 	float x = sf::Randomizer::Random(0, WIN_WIDTH);
 	float y = sf::Randomizer::Random(ControlPanel::HEIGHT, WIN_HEIGHT);
 	sprite_.SetPosition(x, y);
-	float scale = sf::Randomizer::Random(0.5f, 2.0f);
+	float scale = sf::Randomizer::Random(0.5f, 1.5f);
 	sprite_.SetScale(scale, scale);
-	speed_ = static_cast<int> (sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED));
+	speed_ = (int) (sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED));
 }
 
 
@@ -260,9 +272,10 @@ ParticleSystem::Follow::Follow(const sf::Sprite* handle)
 {
 	handle_ = handle;
 	sf::Vector2f pos = handle->GetPosition();
-
+	static const sf::Image& img = GET_IMG("star");
 	sprite_.SetPosition(pos.x, pos.y);
-	sprite_.SetImage(GET_IMG("star"));
+	sprite_.SetImage(img);
+	//sprite_.SetColor(sf::Color::Red);
 	speed_ = FIERY_VELOCITY;
 	angle_ = sf::Randomizer::Random(0, 360);
 	timer_ = sf::Randomizer::Random(0.0f, MAX_LIFETIME_FOLLOW);
@@ -274,6 +287,10 @@ bool ParticleSystem::Follow::OnUpdate(float frametime)
 	timer_ += frametime;
 	if (timer_ >= MAX_LIFETIME_FOLLOW)
 	{
+		if (handle_ == NULL)
+		{
+			return true;
+		}
 		timer_ = 0;
 		sprite_.SetPosition(handle_->GetPosition().x, handle_->GetPosition().y + handle_->GetSize().y / 2);
 		angle_ = sf::Randomizer::Random(0, 360);

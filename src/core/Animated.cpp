@@ -12,6 +12,7 @@ Animated::Animated(const Animation& animation, sf::Sprite& sprite) :
 }
 
 
+
 void Animated::Update(float frametime, sf::Sprite& sprite)
 {
 	timer_ -= frametime;

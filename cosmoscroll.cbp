@@ -73,6 +73,10 @@
 		<Unit filename="src/entities/EvilBoss.hpp" />
 		<Unit filename="src/entities/Hit.cpp" />
 		<Unit filename="src/entities/Hit.hpp" />
+		<Unit filename="src/entities/ImpactHit.cpp" />
+		<Unit filename="src/entities/ImpactHit.hpp" />
+		<Unit filename="src/entities/MissileLauncher.cpp" />
+		<Unit filename="src/entities/MissileLauncher.hpp" />
 		<Unit filename="src/entities/PlayerShip.cpp" />
 		<Unit filename="src/entities/PlayerShip.hpp" />
 		<Unit filename="src/entities/SpaceShip.cpp" />

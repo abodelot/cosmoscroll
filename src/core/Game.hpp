@@ -1,7 +1,6 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <limits>
 #include <list>
 #include <SFML/Graphics.hpp>
 

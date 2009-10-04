@@ -40,8 +40,13 @@ void SoundSystem::PlaySound(const char* sound_name)
 	{
 		last_used_ = 0;
 	}
-	sounds_[last_used_].SetBuffer(media.GetSoundBuf(sound_name));
-	sounds_[last_used_].Play();
+	sf::Sound& sound = sounds_[last_used_];
+	if (sound.GetStatus() == sf::Sound::Playing)
+	{
+		sound.Stop();
+	}
+	sound.SetBuffer(media.GetSoundBuf(sound_name));
+	sound.Play();
 	++last_used_;
 }
 

@@ -41,11 +41,40 @@ public:
 
 	void SetOwner(Entity* owner);
 
+	/**
+	 * Indique si l'arme est prête à tirer
+	 */
+	bool IsReady() const;
+
+	/**
+	 * @param offset: position du tireur
+	 * @param angle: angle de tir en radians
+	 */
 	float Shoot(sf::Vector2f offset, float angle);
 
     void Update(float frametime);
 
     void SetTriple(bool triple);
+
+protected:
+	virtual void ThrowHit(const sf::Vector2f& offset, float angle);
+
+	Entity* GetOwner() const;
+
+	const sf::Image* GetImage() const
+	{
+		return image_;
+	}
+
+	int GetSpeed() const
+	{
+		return speed_;
+	}
+
+	int GetDamage() const
+	{
+		return damage_;
+	}
 
 private:
 	// cadence de tir

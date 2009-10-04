@@ -72,11 +72,16 @@ void Weapon::Update(float frametime)
 }
 
 
+bool Weapon::IsReady() const
+{
+	return fire_timer_ <= 0;
+}
+
+
 float Weapon::Shoot(sf::Vector2f offset, float angle)
 {
 	assert(inited_);
 	static SoundSystem& sound_sys = SoundSystem::GetInstance();
-	static EntityManager& entitymanager = EntityManager::GetInstance();
 
 	// peut-on tirer ?
 	if (fire_timer_ <= 0.f)
@@ -84,14 +89,12 @@ float Weapon::Shoot(sf::Vector2f offset, float angle)
 		offset.x += x_;
 		offset.y += y_;
 
-		Entity::Team team = owner_->GetTeam();
-		entitymanager.AddEntity(new Hit(team, offset, angle, image_, speed_, damage_));
+		ThrowHit(offset, angle);
+
 		if (triple_)
 		{
-			entitymanager.AddEntity(new Hit(team, offset,
-				angle - ANGLE_VARIATION, image_, speed_, damage_));
-			entitymanager.AddEntity(new Hit(team, offset,
-				angle + ANGLE_VARIATION, image_, speed_, damage_));
+			ThrowHit(offset, angle - ANGLE_VARIATION);
+			ThrowHit(offset, angle + ANGLE_VARIATION);
 		}
 		fire_timer_ = fire_rate_;
 
@@ -104,8 +107,21 @@ float Weapon::Shoot(sf::Vector2f offset, float angle)
 	return 0.f;
 }
 
+
 void Weapon::SetTriple(bool triple)
 {
 	triple_ = triple;
 }
 
+
+void Weapon::ThrowHit(const sf::Vector2f& offset, float angle)
+{
+	static EntityManager& entitymanager = EntityManager::GetInstance();
+	entitymanager.AddEntity(new Hit(owner_->GetTeam(), offset, angle, image_, speed_, damage_));
+}
+
+
+Entity* Weapon::GetOwner() const
+{
+	return owner_;
+}

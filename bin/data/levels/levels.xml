@@ -13,7 +13,7 @@
 		</for>
 		<ship id="1" x="640" y="100" t="2.3" />
 	</level>
-	<level desc="">
+	<level desc="" bg_top="#200030" bg_bottom="#000000">
 		<for count="3">
 			<ship id="1" x="640" y="250" t="2.2" />
 			<ship id="1" x="640" y="300" t="1.0" />

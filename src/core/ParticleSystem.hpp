@@ -4,6 +4,8 @@
 #include <list>
 #include <SFML/Graphics.hpp>
 
+#include "Animated.hpp"
+#include "../entities/EntityManager.hpp"
 #include "../utils/MediaManager.hpp"
 
 /**
@@ -22,7 +24,7 @@ public:
 	 * @param[in] offset: position de l'explosion
 	 */
 	void AddExplosion(const sf::Vector2f& offset);
-
+	void AddBigExplosion(const sf::Vector2f& pos);
 	/**
 	 * Ajouter un effet d'impact
 	 * @param[in] offset: position de l'impact
@@ -46,6 +48,20 @@ public:
 	void AddShield(int count, const sf::Sprite* handle);
 
 	void AddFollow(int count, const sf::Sprite* handle);
+
+	void ClearFollow(const sf::Sprite* handle)
+	{
+		for (ParticleList::iterator it = particles_.begin();
+			it != particles_.end(); ++it)
+		{
+			Follow* p = dynamic_cast<Follow*>(*it);
+			if (p != NULL && p->GetHandle() == handle)
+			{
+				p->SetHandle(NULL);
+			}
+
+		}
+	}
 
 	void RemoveShield(const sf::Sprite* handle);
 
@@ -185,6 +201,14 @@ private:
 		{
 			target.Draw(sprite_);
 		}
+		const sf::Sprite* GetHandle() const
+		{
+			return handle_;
+		}
+		void SetHandle(const sf::Sprite* handle)
+		{
+			handle_ = handle;
+		}
 	private:
 		float angle_;
 		float speed_;
@@ -193,6 +217,35 @@ private:
 		float timer_;
 	};
 
+	class Explosion: public Particle, public Animated
+	{
+		public:
+		Explosion(const sf::Vector2f& pos) :
+			Animated(EntityManager::GetInstance().GetAnimation("explosion"))
+		{
+			Animated::InitSprite(sprite_);
+			sprite_.SetPosition(pos);
+			sprite_.SetSubRect(Animated::GetAnimation().GetFrame(0));
+			timer_ = 0;
+		}
+		bool OnUpdate(float frametime)
+		{
+			Animated::Update(frametime, sprite_);
+			timer_ += frametime;
+			if (timer_ > Animated::GetAnimation().GetDuration())
+			{
+				return true;
+			}
+			return false;
+		}
+		inline void Show(sf::RenderTarget& target) const
+		{
+			target.Draw(sprite_);
+		}
+		private:
+		sf::Sprite sprite_;
+		float timer_;
+	};
 	typedef std::list<Particle*> ParticleList;
 
 	ParticleList particles_;

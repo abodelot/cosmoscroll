@@ -12,7 +12,18 @@ class Animated
 {
 public:
 	Animated(const Animation& animation, sf::Sprite& sprite);
+Animated(const Animation& animation) :
+	animation_(animation)
+{
+	timer_ = animation_.GetDelay();
+	frame_ = 0;
+}
 
+void InitSprite(sf::Sprite& sprite)
+{
+	sprite.SetSubRect(animation_.GetFrame(0));
+	sprite.SetImage(animation_.GetImage());
+}
 	/**
 	 * Mettre à jour le subrect d'un sprite animé
 	 * @param[in] framtime: temps de la frame courante

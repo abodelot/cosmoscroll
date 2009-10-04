@@ -363,7 +363,6 @@ void EntityManager::InitWeapon(int id, Weapon* weapon) const
 }
 
 
-
 const Animation& EntityManager::GetAnimation(const char* key) const
 {
 	AnimationMap::const_iterator it;

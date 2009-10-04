@@ -9,3 +9,4 @@ menu-select.wav
 menu-valid.ogg
 title.ogg
 warp.ogg
+missile-gasfire.ogg

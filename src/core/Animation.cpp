@@ -9,6 +9,12 @@ Animation::Animation()
 }
 
 
+float Animation::GetDuration() const
+{
+	return subrects_.size() * delay_;
+}
+
+
 void Animation::AddFrame(const sf::IntRect& subrect)
 {
 	subrects_.push_back(subrect);

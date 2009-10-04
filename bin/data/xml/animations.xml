@@ -5,5 +5,6 @@
 	<anim name="interceptor" img="ship-interceptor" width="56" height="48" count="2" delay="0.1" />
 	<anim name="playership-red" img="playership" width="64" height="40" count="2" delay="0.1" />
 	<anim name="ufo" img="ship-ufo" width="48" height="48" count="3" delay="0.1" />
+	<anim name="explosion" img="explosion" width="64" height="64" count="11" delay="0.12" />
 </animations>
 

@@ -132,6 +132,12 @@ Entity::Team Entity::GetTeam() const
 }
 
 
+int Entity::GetCollideDamage() const
+{
+	return collide_damage_;
+}
+
+
 void Entity::SetTeam(Team team)
 {
 	team_ = team;

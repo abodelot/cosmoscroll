@@ -6,6 +6,7 @@
 #include "Entity.hpp"
 #include "Bonus.hpp"
 #include "Weapon.hpp"
+#include "MissileLauncher.hpp"
 #include "../core/AbstractController.hpp"
 #include "../core/ControlPanel.hpp"
 #include "../core/Animated.hpp"
@@ -107,7 +108,9 @@ private:
 
 	AbstractController& controller_;
 	ControlPanel& panel_;
-	Weapon laserbeam_, hellfire_;
+	Weapon weapon1_;
+	Weapon weapon2_;
+	MissileLauncher missile_launcher_;
 
 	void (PlayerShip::*compute_move_)(float);
 };

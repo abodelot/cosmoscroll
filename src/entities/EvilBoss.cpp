@@ -46,17 +46,21 @@ EvilBoss* EvilBoss::Clone() const
 
 void EvilBoss::Update(float frametime)
 {
-	float radians_L = math::angle(target_->GetPosition(), GetPosition() + L_EYE_OFFSET);
-	float radians_R = math::angle(target_->GetPosition(), GetPosition() + R_EYE_OFFSET);
+	sf::Vector2f target_pos = target_->GetPosition();
+	target_pos.x += target_->GetSize().x / 2;
+	target_pos.y += target_->GetSize().y / 2;
 
-	eye_left_.Shoot(GetPosition() + L_EYE_OFFSET, radians_L);
-	eye_right_.Shoot(GetPosition() + R_EYE_OFFSET, radians_R);
-	sf::Vector2f randV2f, my = GetPosition();
-	randV2f.x = my.x + sf::Randomizer::Random(L_MOUTH_X_OFFSET, R_MOUTH_X_OFFSET);
-	randV2f.y = my.y + MOUTH_Y_OFFSET;
+	float radians_left = math::angle(target_pos, GetPosition() + L_EYE_OFFSET);
+	float radians_right = math::angle(target_pos, GetPosition() + R_EYE_OFFSET);
+	eye_left_.Shoot(GetPosition() + L_EYE_OFFSET, radians_left);
+	eye_right_.Shoot(GetPosition() + R_EYE_OFFSET, radians_right);
+
 	if (canon_.IsInited())
 	{
-		canon_.Shoot(randV2f, math::angle(target_->GetPosition(), randV2f));
+		sf::Vector2f randV2f, my = GetPosition();
+		randV2f.x = my.x + sf::Randomizer::Random(L_MOUTH_X_OFFSET, R_MOUTH_X_OFFSET);
+		randV2f.y = my.y + MOUTH_Y_OFFSET;
+		canon_.Shoot(randV2f, math::angle(target_pos, randV2f));
 	}
 
 	bool left = true;
@@ -119,11 +123,12 @@ void EvilBoss::TakeDamage(int damage)
 	}
 	else if (hp_ <= 0)
 	{
-		sf::Vector2f pos = GetPosition();
-		pos.x += GetSize().x / 2;
-		pos.y += GetSize().y / 2;
-		for (int i = 0; i < 4; ++i)
+
+		for (int i = 0; i < 10; ++i)
 		{
+			sf::Vector2f pos = GetPosition();
+			pos.x += GetSize().x / 2 + sf::Randomizer::Random(-100, 100);
+			pos.y += GetSize().y / 2 + sf::Randomizer::Random(-100, 100);
 			ParticleSystem::GetInstance().AddExplosion(pos);
 		}
 	}

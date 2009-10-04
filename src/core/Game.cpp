@@ -191,14 +191,18 @@ Game::Scene Game::Intro()
 	{
 		while (controls_.GetAction(action))
 		{
-			if (action == AC::EXIT_APP)
+			switch (action)
 			{
-				elapsed = DURATION;
-				what = EXIT_APP;
-			}
-			else if (action == AC::VALID)
-			{
-				elapsed = DURATION;
+				case AC::EXIT_APP:
+					elapsed = DURATION;
+					what = EXIT_APP;
+					break;
+				case AC::VALID:
+					elapsed = DURATION;
+					break;
+				default:
+					ship->HandleAction(action);
+					break;
 			}
 		}
 		time = app_.GetFrameTime();
@@ -218,7 +222,6 @@ Game::Scene Game::Intro()
 		app_.Draw(background);
 		app_.Draw(entitymanager_);
 		app_.Draw(title);
-		//app_.Draw(ship);
 
 		app_.Display();
 	}
