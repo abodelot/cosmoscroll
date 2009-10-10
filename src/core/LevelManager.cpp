@@ -5,8 +5,6 @@
 #include "../entities/Asteroid.hpp"
 #include "../entities/EvilBoss.hpp"
 
-#define LEVEL_FILE "data/levels/levels.xml"
-
 
 LevelManager& LevelManager::GetInstance()
 {
@@ -18,13 +16,12 @@ LevelManager& LevelManager::GetInstance()
 LevelManager::LevelManager()
 {
 	last_insert_time_ = 0.f;
-	ParseFile(LEVEL_FILE);
 }
 
 
 LevelManager::~LevelManager()
 {
-	Purge();
+	ClearWaitingLine();
 }
 
 
@@ -45,7 +42,7 @@ Entity* LevelManager::GiveNextEntity(float timer)
 
 LevelManager::Error LevelManager::SetCurrent(int level)
 {
-	Purge();
+	ClearWaitingLine();
 	--level;
 	if (level < 0 || level >= (int) levels_.size())
 	{
@@ -93,9 +90,6 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 	}
 
 	// Constitution de la liste de pointeurs vers niveaux
-#ifdef DEBUG
-	std::cout << "Building LevelManager list ... " << std::flush;
-#endif
 	TiXmlNode* node = doc_.RootElement()->FirstChild();
 
 	while (node != NULL)
@@ -103,9 +97,6 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 		levels_.push_back(node->ToElement());
 		node = node->NextSibling();
 	}
-#ifdef DEBUG
-	std::cout << levels_.size() << " levels found" << std::endl;
-#endif
 	return SUCCESS;
 }
 
@@ -114,13 +105,11 @@ LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 {
 	last_insert_time_ = 0.f;
 	elem = elem->FirstChildElement();
-	printf("parsing level...\n");
 	while (elem)
 	{
 		ParseEntity(elem);
 		elem = elem->NextSiblingElement();
 	}
-	puts("done!");
 	return SUCCESS;
 }
 
@@ -185,7 +174,7 @@ void LevelManager::AppendToWaitingLine(Entity* entity, float time)
 }
 
 
-void LevelManager::Purge()
+void LevelManager::ClearWaitingLine()
 {
 	// désallocation des entités restées en file d'attente
 	while (!waiting_line_.empty())

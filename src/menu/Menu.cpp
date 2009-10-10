@@ -103,23 +103,23 @@ void Menu::AddItem(const std::string label, int id, bool activable)
 }
 
 
-bool Menu::ItemChosen(AC::Action action, int& id)
+bool Menu::ItemChosen(Input::Action action, int& id)
 {
 	switch (action)
 	{
-		case AC::MOVE_UP:
+		case Input::MOVE_UP:
 			ResetStyle(items_[selected_]);
 			selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
 			ApplyStyle(items_[selected_], highlight_look_);
 			SoundSystem::GetInstance().PlaySound("menu-select");
 			break;
-		case AC::MOVE_DOWN:
+		case Input::MOVE_DOWN:
 			ResetStyle(items_[selected_]);
 			selected_ = (selected_ + 1) % items_.size();
 			ApplyStyle(items_[selected_], highlight_look_);
 			SoundSystem::GetInstance().PlaySound("menu-select");
 			break;
-		case AC::VALID:
+		case Input::ENTER:
 			if (items_[selected_].activable)
 			{
 				id = items_[selected_].id;

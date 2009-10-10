@@ -43,8 +43,6 @@
 			<Add library="sfml-audio" />
 			<Add library="dumb" />
 		</Linker>
-		<Unit filename="src/core/AbstractController.cpp" />
-		<Unit filename="src/core/AbstractController.hpp" />
 		<Unit filename="src/core/Animated.cpp" />
 		<Unit filename="src/core/Animated.hpp" />
 		<Unit filename="src/core/Animation.cpp" />
@@ -53,6 +51,8 @@
 		<Unit filename="src/core/ControlPanel.hpp" />
 		<Unit filename="src/core/Game.cpp" />
 		<Unit filename="src/core/Game.hpp" />
+		<Unit filename="src/core/Input.cpp" />
+		<Unit filename="src/core/Input.hpp" />
 		<Unit filename="src/core/LevelManager.cpp" />
 		<Unit filename="src/core/LevelManager.hpp" />
 		<Unit filename="src/core/Main.cpp" />

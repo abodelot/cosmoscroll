@@ -34,7 +34,6 @@ public:
 	void TakeDamage(int);
 
 private:
-
 	sf::Vector2f speed_;
 };
 

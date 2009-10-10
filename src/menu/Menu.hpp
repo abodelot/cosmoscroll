@@ -5,7 +5,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-#include "../core/AbstractController.hpp"
+#include "../core/Input.hpp"
 
 /**
  * Menu navigable pour sélectionner un choix
@@ -63,7 +63,7 @@ public:
 	 * @param[out] id: identifiant de l'action validée
 	 * @return true si une action a été validée, sinon fasle
 	 */
-	bool ItemChosen(AC::Action action, int& id);
+	bool ItemChosen(Input::Action action, int& id);
 
 	/**
 	 * Présélectionne un item du menu

@@ -7,7 +7,7 @@
 #include "Bonus.hpp"
 #include "Weapon.hpp"
 #include "MissileLauncher.hpp"
-#include "../core/AbstractController.hpp"
+#include "../core/Input.hpp"
 #include "../core/ControlPanel.hpp"
 #include "../core/Animated.hpp"
 
@@ -24,7 +24,7 @@ public:
 	// inherited
 	PlayerShip* Clone() const;
 
-	void HandleAction(AC::Action action);
+	void HandleAction(Input::Action action);
 
 	// inherited
 	void OnCollide(Entity& entity);
@@ -37,16 +37,6 @@ public:
 
 	// inherited
 	bool PixelPerfectCollide() const;
-
-	inline void SetControls(int controls)
-	{
-		controls_ = controls;
-	}
-
-	inline int GetControls() const
-	{
-		return controls_;
-	}
 
 private:
 	enum TimedBonus
@@ -68,7 +58,8 @@ private:
 	 * @param upper: action augmentant la vitesse
 	 * @param diff: différence avec la nouvelle vitesse
 	 */
-	void ComputeAxisSpeed(float& speed, AC::Action lower, AC::Action upper, float diff);
+	void ComputeAxisSpeed(float& speed, Input::Action lower,
+		Input::Action upper, float diff);
 
 	/**
 	 * Gérer un bonus attrapé
@@ -85,6 +76,10 @@ private:
 	 */
 	void KonamiCodeOn();
 
+	/**
+	 * Augmenter l'énergie du bouclier
+	 * @param count: quantité à ajouter
+	 */
 	void IncreaseShield(int count = 1);
 
 	enum
@@ -93,7 +88,7 @@ private:
 	};
 
 	// la séquence du Code Konami
-	AC::Action konami_code_[KONAMI_CODE_LENGTH];
+	Input::Action konami_code_[KONAMI_CODE_LENGTH];
 	int current_konami_event_;
 
 	float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
@@ -104,9 +99,7 @@ private:
 	float acceleration_delay_;
 	int max_speed_;
 
-	int controls_;
-
-	AbstractController& controller_;
+	Input& input_;
 	ControlPanel& panel_;
 	Weapon weapon1_;
 	Weapon weapon2_;

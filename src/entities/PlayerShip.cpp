@@ -44,7 +44,7 @@
 PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	Entity(position, HP_DEFAULT),
 	Animated(EntityManager::GetInstance().GetAnimation(animation), *this),
-	controller_(AC::GetInstance()),
+	input_(Input::GetInstance()),
 	panel_(ControlPanel::GetInstance())
 {
 	SetTeam(Entity::GOOD);
@@ -74,7 +74,6 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	speed_x_ = speed_y_ = 0.f;
 	compute_move_ = &PlayerShip::ComputeMove;
 
-	controls_ = AC::ALL;
 	ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, this);
 
 	// init timed bonus
@@ -95,16 +94,16 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	panel_.SetOverheatText("");
 
 	// init Konami code
-	konami_code_[0] = AC::MOVE_UP;
-	konami_code_[1] = AC::MOVE_UP;
-	konami_code_[2] = AC::MOVE_DOWN;
-	konami_code_[3] = AC::MOVE_DOWN;
-	konami_code_[4] = AC::MOVE_LEFT;
-	konami_code_[5] = AC::MOVE_RIGHT;
-	konami_code_[6] = AC::MOVE_LEFT;
-	konami_code_[7] = AC::MOVE_RIGHT;
-	konami_code_[8] = AC::WEAPON_2;
-	konami_code_[9] = AC::WEAPON_1;
+	konami_code_[0] = Input::MOVE_UP;
+	konami_code_[1] = Input::MOVE_UP;
+	konami_code_[2] = Input::MOVE_DOWN;
+	konami_code_[3] = Input::MOVE_DOWN;
+	konami_code_[4] = Input::MOVE_LEFT;
+	konami_code_[5] = Input::MOVE_RIGHT;
+	konami_code_[6] = Input::MOVE_LEFT;
+	konami_code_[7] = Input::MOVE_RIGHT;
+	konami_code_[8] = Input::USE_WEAPON_2;
+	konami_code_[9] = Input::USE_WEAPON_1;
 	current_konami_event_ = 0;
 
 #ifdef DEBUG
@@ -127,13 +126,11 @@ PlayerShip* PlayerShip::Clone() const
 }
 
 
-void PlayerShip::HandleAction(AC::Action action)
+void PlayerShip::HandleAction(Input::Action action)
 {
 	switch (action)
 	{
-		case AC::NONE:
-			return;
-		case AC::USE_COOLER:
+		case Input::USE_COOLER:
 			if (coolers_ > 0)
 			{
 				--coolers_;
@@ -143,7 +140,7 @@ void PlayerShip::HandleAction(AC::Action action)
 				panel_.SetOverheatText("");
 			}
 			break;
-		case AC::USE_MISSILE:
+		case Input::USE_MISSILE:
 			if (missiles_ > 0 && missile_launcher_.IsReady())
 			{
 				--missiles_;
@@ -151,6 +148,8 @@ void PlayerShip::HandleAction(AC::Action action)
 				missile_launcher_.Shoot(GetPosition(), 0);
 			}
 			break;
+		case Input::COUNT: // filter non-events
+			return;
 		default:
 			break;
 	}
@@ -181,11 +180,11 @@ void PlayerShip::Update(float frametime)
 	if (!overheated_)
 	{
 		float h = 0.0f;
-		if (controller_.HasInput(AC::WEAPON_1, controls_))
+		if (input_.HasInput(Input::USE_WEAPON_1))
 		{
 			h += weapon1_.Shoot(GetPosition(), 0);
 		}
-		if (controller_.HasInput(AC::WEAPON_2, controls_))
+		if (input_.HasInput(Input::USE_WEAPON_2))
 		{
 			h += weapon2_.Shoot(GetPosition(), 0);
 		}
@@ -326,19 +325,19 @@ bool PlayerShip::PixelPerfectCollide() const
 void PlayerShip::ComputeMove(float)
 {
 	speed_x_ = speed_y_ = 0;
-	if (controller_.HasInput(AC::MOVE_UP))
+	if (input_.HasInput(Input::MOVE_UP))
 	{
 		speed_y_ = -max_speed_;
 	}
-	else if (controller_.HasInput(AC::MOVE_DOWN))
+	else if (input_.HasInput(Input::MOVE_DOWN))
 	{
 		speed_y_ = max_speed_;
 	}
-	if (controller_.HasInput(AC::MOVE_LEFT))
+	if (input_.HasInput(Input::MOVE_LEFT))
 	{
 		speed_x_ = -max_speed_;
 	}
-	else if (controller_.HasInput(AC::MOVE_RIGHT))
+	else if (input_.HasInput(Input::MOVE_RIGHT))
 	{
 		speed_x_ = max_speed_;
 	}
@@ -348,14 +347,15 @@ void PlayerShip::ComputeMove(float)
 void PlayerShip::ComputeMoveOnDrugs(float frametime)
 {
 	float speed_diff = frametime * max_speed_ / ACCELERATION_DELAY_ON_DRUGS;
-	ComputeAxisSpeed(speed_x_, AC::MOVE_LEFT, AC::MOVE_RIGHT, speed_diff);
-	ComputeAxisSpeed(speed_y_, AC::MOVE_UP, AC::MOVE_DOWN, speed_diff);
+	ComputeAxisSpeed(speed_x_, Input::MOVE_LEFT, Input::MOVE_RIGHT, speed_diff);
+	ComputeAxisSpeed(speed_y_, Input::MOVE_UP, Input::MOVE_DOWN, speed_diff);
 }
 
 
-void PlayerShip::ComputeAxisSpeed(float& speed, AC::Action lower, AC::Action upper, float diff)
+void PlayerShip::ComputeAxisSpeed(float& speed, Input::Action lower,
+	Input::Action upper, float diff)
 {
-	if (controller_.HasInput(lower, controls_) && -speed < max_speed_)
+	if (input_.HasInput(lower) && -speed < max_speed_)
 	{
 		speed -= diff;
 	}
@@ -368,7 +368,7 @@ void PlayerShip::ComputeAxisSpeed(float& speed, AC::Action lower, AC::Action upp
 		}
 	}
 
-	if (controller_.HasInput(upper, controls_) && speed < max_speed_)
+	if (input_.HasInput(upper) && speed < max_speed_)
 	{
 		speed += diff;
 	}

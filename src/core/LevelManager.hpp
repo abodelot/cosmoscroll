@@ -15,10 +15,10 @@ class LevelManager
 public:
 	enum Error
 	{
-		SUCCESS ,
+		SUCCESS,
 		FILE,   // Erreur d'e-s
 		UNDEF,  // Niveau non défini
-		PARSE  // Erreur de parsing
+		PARSE   // Erreur de parsing
 	};
 
 	/**
@@ -26,6 +26,11 @@ public:
 	 * @return référence sur le gestionnaire de niveaux
 	 */
 	static LevelManager& GetInstance();
+
+	/**
+	 * Parser un fichier de niveaux
+	 */
+	Error ParseFile(const char* file);
 
 	/**
 	 * Obtenir la prochaine unité du niveau
@@ -77,17 +82,27 @@ private:
 	~LevelManager();
 
 	/**
-	 * Parser un fichier de niveaux
+	 * Parser un niveau
+	 * @param elem: noeud XML contenant le niveau
 	 */
-	Error ParseFile(const char* file);
-
 	Error ParseLevel(TiXmlElement* elem);
 
+	/**
+	 * Parser un élément de niveau
+	 */
 	void ParseEntity(TiXmlElement* elem);
 
+	/**
+	 * Ajouter une entité à la file d'attente
+	 * @param entity: entité à ajouter en fin de queue
+	 * @param time: temps de l'apparition relatif au temps de la dernière entité
+	 */
 	void AppendToWaitingLine(Entity* entity, float time);
 
-	void Purge();
+	/**
+	 * Supprimer toutes les entités en file d'attente
+	 */
+	void ClearWaitingLine();
 
 	/**
 	 * Obtenir l'élément XML d'un niveau
@@ -106,12 +121,12 @@ private:
 		float spawntime;
 	};
 
+	float last_insert_time_;
+	TiXmlDocument doc_;
 	// pointeurs vers les définitions XML des niveaux
 	std::vector<TiXmlElement*> levels_;
-	TiXmlDocument doc_;
 	// liste des vaisseaux à spawner pour le niveau courant
 	std::queue<EntitySlot> waiting_line_;
-	float last_insert_time_;
 };
 
 #endif // LEVELMANAGER_HPP

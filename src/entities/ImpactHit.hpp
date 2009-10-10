@@ -11,6 +11,7 @@ public:
 
 	~ImpactHit();
 
+	// inherited
 	void OnCollide(Entity& entity);
 };
 

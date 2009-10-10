@@ -4,7 +4,7 @@
 #include <list>
 #include <SFML/Graphics.hpp>
 
-#include "AbstractController.hpp"
+#include "Input.hpp"
 #include "ControlPanel.hpp"
 #include "ParticleSystem.hpp"
 #include "LevelManager.hpp"
@@ -44,6 +44,10 @@ private:
 	Game();
 	~Game();
 
+	bool LoadConfig(const char* filename);
+
+	void WriteConfig(const char* filename) const;
+
 	enum Scene
 	{
 		INTRO,
@@ -61,7 +65,7 @@ private:
 
 	enum GameMode
 	{
-		STORY, STORY2X, ARCADE, PONG
+		STORY, ARCADE
 	};
 
 
@@ -120,16 +124,7 @@ private:
 	float best_arcade_time_;
 	std::string music_name_;
 
-	PlayerShip *player1_, *player2_;
-
-
-	/* pointeurs de méthodes pour la boucle de jeu */
-
-	// transmettre les actions de la boucle d'évènements aux joueurs
-	void (Game::*p_ForwardAction_)(AC::Action action, AC::Device device);
-
-	void ForwardAction1P(AC::Action action, AC::Device device);
-	void ForwardAction2P(AC::Action action, AC::Device device);
+	PlayerShip* player_;
 
 	// condition pour stopper la boucle de jeu
 	bool (Game::*p_StopPlay_)();
@@ -138,9 +133,13 @@ private:
 	bool StoryMoreBadBuys();
 
 	bool player_dead_;
+	bool fullscreen_;
+
+	// temp hack
+	bool GetAction(Input::Action& action);
 
 	// Singletons
-	AbstractController& controls_;
+	Input& input_;
 	ControlPanel& panel_;
 	LevelManager& levels_;
 	ParticleSystem& particles_;

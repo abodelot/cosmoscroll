@@ -14,13 +14,14 @@
 #include "../utils/DIE.hpp"
 #include "../utils/ConfigParser.hpp"
 
-#define CONFIG_FILE "config/config.cfg"
-
-#define MARGIN_X 120
+#define CONFIG_FILE    "config/config.cfg"
+#define LEVEL_FILE     "data/levels/levels.xml"
 
 #define XML_WEAPONS    "data/xml/weapons.xml"
 #define XML_ANIMATIONS "data/xml/animations.xml"
 #define XML_SPACESHIPS "data/xml/spaceships.xml"
+
+#define MARGIN_X 120
 
 #define COSMOSCROLL_VERSION "0.2-devel"
 #define COSMOSCROLL_ABOUT str_sprintf(\
@@ -39,10 +40,10 @@ Game& Game::GetInstance()
 
 
 Game::Game() :
-	controls_	(AbstractController::GetInstance()),
-	panel_		(ControlPanel::GetInstance()),
-	levels_		(LevelManager::GetInstance()),
-	particles_	(ParticleSystem::GetInstance()),
+	input_	      (Input::GetInstance()),
+	panel_		  (ControlPanel::GetInstance()),
+	levels_		  (LevelManager::GetInstance()),
+	particles_	  (ParticleSystem::GetInstance()),
 	entitymanager_(EntityManager::GetInstance())
 {
 	puts("boot sur le flex ...");
@@ -53,32 +54,27 @@ Game::Game() :
 	entitymanager_.SetPosition(0, ControlPanel::HEIGHT);
 
 	particles_.SetPosition(0, ControlPanel::HEIGHT);
+
+	input_.Init(app_.GetInput());
+
+	// init level manager
+	levels_.ParseFile(LEVEL_FILE);
+	printf("info: %d levels loaded\n", levels_.CountLevel());
+
 	// loading config
-	ConfigParser config;
-	bool fullscreen = false;
+	bool fullscreen_ = false;
 	last_level_reached_ = 1;
 	current_level_ = 1;
 	best_arcade_time_ = 0;
 	music_ = NULL;
 	music_name_ = "space";
+	LoadConfig(CONFIG_FILE);
 
-	if (config.LoadFromFile(CONFIG_FILE))
-	{
-		config.SeekSection("Settings");
-		config.ReadItem("last_level_reached", last_level_reached_);
-		config.ReadItem("current_level", current_level_);
-		config.ReadItem("best_arcade_time", best_arcade_time_);
-		config.ReadItem("fullscreen", fullscreen);
-		config.ReadItem("music", music_name_);
-		controls_.LoadConfig(config);
-	}
-
-	p_ForwardAction_ = NULL;
 	p_StopPlay_ = NULL;
-	player1_ = player2_ = NULL;
+	player_ = NULL;
 	player_dead_ = false;
 
-	if (!fullscreen)
+	if (!fullscreen_)
 	{
 		app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE);
 	}
@@ -101,18 +97,85 @@ Game::~Game()
 {
 	entitymanager_.Clear();
 	app_.Close();
+	WriteConfig(CONFIG_FILE);
+}
 
-	// writing configuration
+
+
+bool Game::LoadConfig(const char* filename)
+{
 	ConfigParser config;
+	if (config.LoadFromFile(filename))
+	{
+		// reading settings
+		config.SeekSection("Settings");
+		config.ReadItem("last_level_reached", last_level_reached_);
+		config.ReadItem("current_level", current_level_);
+		config.ReadItem("best_arcade_time", best_arcade_time_);
+		config.ReadItem("fullscreen", fullscreen_);
+		config.ReadItem("music", music_name_);
+
+		// reading keyboard and joystick bindings
+		input_.LoadFromConfig(config);
+
+		return true;
+	}
+	return false;
+}
+
+
+void Game::WriteConfig(const char* filename) const
+{
+	ConfigParser config;
+
+	// writing settings
 	config.SeekSection("Settings");
 	config.WriteItem("last_level_reached", last_level_reached_);
 	config.WriteItem("current_level", current_level_);
 	config.WriteItem("best_arcade_time", best_arcade_time_);
 	config.WriteItem("music", music_name_);
 
-	controls_.SaveConfig(config);
-	config.SaveToFile(CONFIG_FILE);
+	// writing keyboard and joystick bindings
+	input_.SaveToConfig(config);
+
+	// saving configuration to file
+	config.SaveToFile(filename);
 }
+
+/*
+void Game::MainLoop()
+{
+	sf::Event event;
+	Input::Action action;
+	while (running_)
+	{
+		while (app_.GetEvent(event))
+		{
+			action = input_.EventToAction(event);
+			switch (action)
+			{
+				// these events are always handled
+				case Input::EXIT_APP:
+					running_ = false;
+					break;
+				case Input::TAKE_SCREENSHOT:
+					TakeScreenshot("screenshot");
+					break;
+				// other events are send to the current scene
+				default:
+					current_scene_->OnEvent(event);
+					break;
+			}
+		}
+		app_.Clear();
+
+		current_scene_->OnUpdate(app_.GetFrameTime());
+
+		current_scene_->Show(app_);
+
+		app_.Display();
+	}
+}*/
 
 
 void Game::Run()
@@ -162,13 +225,25 @@ void Game::Run()
 
 // les méthodes-écrans
 
+bool Game::GetAction(Input::Action& action)
+{
+	static sf::Event event;
+	if (app_.GetEvent(event))
+	{
+		action = input_.EventToAction(event);
+		return true;
+	}
+	return false;
+}
+
+
 // une (superbe) intro au lancement
 Game::Scene Game::Intro()
 {
 #ifdef DEBUG
 	puts("[ Game::Intro ]");
 #endif
-	AC::Action action;
+	Input::Action action;
 	Scene what = MAIN_MENU;
 	const int DURATION = 6;
 	float time, elapsed = 0;
@@ -189,15 +264,15 @@ Game::Scene Game::Intro()
 
 	while (elapsed < DURATION)
 	{
-		while (controls_.GetAction(action))
+		while (GetAction(action))
 		{
 			switch (action)
 			{
-				case AC::EXIT_APP:
+				case Input::EXIT_APP:
 					elapsed = DURATION;
 					what = EXIT_APP;
 					break;
-				case AC::VALID:
+				case Input::ENTER:
 					elapsed = DURATION;
 					break;
 				default:
@@ -261,12 +336,12 @@ Game::Scene Game::MainMenu()
 	bool running = true;
 	int choice = -1;
 	Scene next;
-	AC::Action action;
+	Input::Action action;
 	while (running)
 	{
-		while (controls_.GetAction(action))
+		while (GetAction(action))
 		{
-			if (action == AC::EXIT_APP)
+			if (action == Input::EXIT_APP)
 			{
 				running = false;
 				next = EXIT_APP;
@@ -291,10 +366,10 @@ Game::Scene Game::MainMenu()
 			next = SELECT_LEVEL;
 
 			break;
-		case 1:
+		/*case 1:
 			mode_ = STORY2X;
 			next = SELECT_LEVEL;
-			break;
+			break;*/
 		case 2:
 			mode_ = ARCADE;
 			next = PLAY;
@@ -303,7 +378,6 @@ Game::Scene Game::MainMenu()
 				(int) best_arcade_time_ % 60).c_str());
 			Init();
 			timer_ = 0.f;
-			p_ForwardAction_ = &Game::ForwardAction1P;
 			p_StopPlay_ = &Game::ArcadeMoreBadGuys;
 			SetBackgroundColor(sf::Color::Black, sf::Color::Black);
 			break;
@@ -331,16 +405,13 @@ Game::Scene Game::SelectLevel()
 	puts("[ Game::SelectLevel ]");
 #endif
 	p_StopPlay_ = &Game::StoryMoreBadBuys;
-
-	p_ForwardAction_ = mode_ == STORY2X ?
-		&Game::ForwardAction2P : &Game::ForwardAction1P;
 	timer_ = 0.f;
 
 	sf::Sprite back(GET_IMG("main-screen"));
 	Menu menu;
 	menu.SetOffset(sf::Vector2f(MARGIN_X, 130));
 
-	AC::Action action;
+	Input::Action action;
 
 	bool running = true;
 	Scene next = EXIT_APP;
@@ -356,9 +427,9 @@ Game::Scene Game::SelectLevel()
 	int level;
 	while (running)
 	{
-		while (controls_.GetAction(action))
+		while (GetAction(action))
 		{
-			if (action == AC::EXIT_APP)
+			if (action == Input::EXIT_APP)
 			{
 				running = false;
 			}
@@ -394,7 +465,7 @@ Game::Scene Game::LevelCaption()
 #ifdef DEBUG
 	puts("[ Game::LevelCaption ]");
 #endif
-	AC::Action action;
+	Input::Action action;
 	bool running = true;
 	Scene what = EXIT_APP;
 	sf::Sprite back(GET_IMG("background"));
@@ -412,13 +483,13 @@ Game::Scene Game::LevelCaption()
 
 	while (running)
 	{
-		while (controls_.GetAction(action))
+		while (GetAction(action))
 		{
-			if (action == AC::EXIT_APP)
+			if (action == Input::EXIT_APP)
 			{
 				running = false;
 			}
-			else if (action == AC::VALID)
+			else if (action == Input::ENTER)
 			{
 				running = false;
 				what = PLAY;
@@ -438,40 +509,39 @@ Game::Scene Game::Play()
 #ifdef DEBUG
 	puts("[ Game::Play ]");
 #endif
-	AC::Action action;
-	AC::Device device;
+	Input::Action action;
 	bool running = true;
 	Scene next = EXIT_APP;
 	std::list<Entity*>::iterator it;
 
 	while (running)
 	{
-		while (controls_.GetAction(action, &device))
+		while (GetAction(action))
 		{
 			switch (action)
 			{
-				case AC::EXIT_APP:
+				case Input::EXIT_APP:
 					running = false;
 					break;
-				case AC::PAUSE:
+				case Input::PAUSE:
 					running = false;
 					next = IN_GAME_MENU;
 					break;
-				case AC::TAKE_SCREENSHOT:
+				case Input::TAKE_SCREENSHOT:
 					TakeScreenshot("screenshot");
 					break;
-				case AC::PANEL_UP:
+				case Input::PANEL_UP:
 					panel_.SetY(0);
 					entitymanager_.SetY(ControlPanel::HEIGHT);
 					particles_.SetY(ControlPanel::HEIGHT);
 					break;
-				case AC::PANEL_DOWN:
+				case Input::PANEL_DOWN:
 					panel_.SetY(WIN_HEIGHT - ControlPanel::HEIGHT);
 					particles_.SetY(0);
 					entitymanager_.SetY(0);
 					break;
 				default:
-					(this->*p_ForwardAction_)(action, device);
+					player_->HandleAction(action);
 					break;
 			}
 		}
@@ -515,7 +585,7 @@ Game::Scene Game::About()
 {
 	bool running = true;
 	int choice = MAIN_MENU;
-	AC::Action action;
+	Input::Action action;
 	Menu menu;
 	sf::String info;
 	info.SetText(COSMOSCROLL_ABOUT);
@@ -532,9 +602,9 @@ Game::Scene Game::About()
 
 	while (running)
 	{
-		while (controls_.GetAction(action))
+		while (GetAction(action))
 		{
-			if (action == AC::EXIT_APP)
+			if (action == Input::EXIT_APP)
 			{
 				running = false;
 			}
@@ -559,7 +629,7 @@ Game::Scene Game::InGameMenu()
 #ifdef DEBUG
 	puts("[ Game::InGameMenu ]");
 #endif
-	AC::Action action;
+	Input::Action action;
 
 	sf::String title("PAUSE");
 	title.SetPosition(200, 130);
@@ -576,14 +646,14 @@ Game::Scene Game::InGameMenu()
 	int what;
 	while (paused)
 	{
-		while (controls_.GetAction(action))
+		while (GetAction(action))
 		{
-			if (action == AC::EXIT_APP)
+			if (action == Input::EXIT_APP)
 			{
 				what = EXIT_APP;
 				paused = false;
 			}
-			else if (action == AC::PAUSE)
+			else if (action == Input::PAUSE)
 			{
 				what = PLAY;
 				paused = false;
@@ -628,15 +698,17 @@ Game::Scene Game::EndPlay()
 	info.SetFont(GET_FONT());
 
 	// si perdu
-	if ((entitymanager_.Count() > 1 && mode_ != STORY2X) ||
-		(entitymanager_.Count() > 2 && mode_ == STORY2X))
+	/* entitymanager_.Count() > 1 && mode_ != STORY2X) ||
+		(entitymanager_.Count() > 2 && mode_ == STORY2X))*/
+	 // on ne peut pas gagner en arcade
+	if (mode_ == ARCADE || entitymanager_.Count() > 1)
 	{
 		SoundSystem::GetInstance().PlaySound("game-over");
 
 		info.SetText("Game Over");
 		what = mode_ == ARCADE ? ARCADE_RESULT : MAIN_MENU;
 	}
-	else if (current_level_ < levels_.CountLevel()) // on ne peut pas gagner en arcade
+	else if (current_level_ < levels_.CountLevel())
 	{
 		SoundSystem::GetInstance().PlaySound("end-level");
 
@@ -668,17 +740,17 @@ Game::Scene Game::EndPlay()
 		(WIN_HEIGHT - rect.GetHeight()) / 2);
 	bool running = true;
 
-	AC::Action action;
+	Input::Action action;
 	while (running)
 	{
-		while (controls_.GetAction(action))
+		while (GetAction(action))
 		{
-			if (action == AC::EXIT_APP)
+			if (action == Input::EXIT_APP)
 			{
 				running = false;
 				what = EXIT_APP;
 			}
-			else if (action == AC::VALID)
+			else if (action == Input::ENTER)
 			{
 				running = false;
 			}
@@ -740,13 +812,13 @@ Game::Scene Game::ArcadeResult()
 	bool running = true;
 	int choice = EXIT_APP;
 
-	AC::Action action;
+	Input::Action action;
 
 	while (running)
 	{
-		while (controls_.GetAction(action))
+		while (GetAction(action))
 		{
-			if (action == AC::EXIT_APP)
+			if (action == Input::EXIT_APP)
 			{
 				running = false;
 			}
@@ -771,10 +843,10 @@ void Game::Init()
 	sf::Vector2f offset;
 	offset.x = 0;
 	player_dead_ = false;
-	player1_ = new PlayerShip(sf::Vector2f(), "playership-red");
-	entitymanager_.AddEntity(player1_);
+	player_ = new PlayerShip(sf::Vector2f(), "playership-red");
+	entitymanager_.AddEntity(player_);
 
-	if (mode_ == STORY2X)
+	/*if (mode_ == STORY2X)
 	{
 		player2_ = new PlayerShip(sf::Vector2f(), "playership-green");
 		entitymanager_.AddEntity(player2_);
@@ -786,10 +858,10 @@ void Game::Init()
 		offset.y = WIN_HEIGHT / 3;
 	}
 	else
-	{
+	{*/
 		offset.y = WIN_HEIGHT / 2;
-	}
-	player1_->SetPosition(offset);
+	/*}*/
+	player_->SetPosition(offset);
 
 	particles_.Clear();
 	particles_.AddStars();
@@ -797,25 +869,6 @@ void Game::Init()
 
 
 /* behaviors */
-
-void Game::ForwardAction1P(AC::Action action, AC::Device)
-{
-	player1_->HandleAction(action);
-}
-
-
-void Game::ForwardAction2P(AC::Action action, AC::Device device)
-{
-	if (!player1_->IsDead() && device == player1_->GetControls())
-	{
-		player1_->HandleAction(action);
-	}
-	else if (!player2_->IsDead() && device == player2_->GetControls())
-	{
-		player2_->HandleAction(action);
-	}
-}
-
 
 bool Game::ArcadeMoreBadGuys()
 {
@@ -830,7 +883,7 @@ bool Game::ArcadeMoreBadGuys()
 		pos.y = sf::Randomizer::Random(0,
 			entitymanager_.GetHeight() - (int) entity->GetSize().y);
 		entity->SetPosition(pos);
-		entity->SetTarget(player1_);
+		entity->SetTarget(player_);
 
 		entitymanager_.AddEntity(entity);
 	}
@@ -851,7 +904,7 @@ bool Game::StoryMoreBadBuys()
 	// le niveau n'est pas fini tant qu'il reste des ennemis, soit en file
 	// d'attente, soit dans le gestionnaire d'entités
 	return (levels_.RemainingEntities() == 0)
-		&& (entitymanager_.Count() == (mode_ == STORY2X ? 2 : 1));
+		&& (entitymanager_.Count() == /*(mode_ == STORY2X ? 2 :*/ 1/*)*/);
 }
 
 
@@ -890,7 +943,7 @@ enum OptionMenu
 void load_menu(OptionMenu what, Menu& menu, sf::String& title)
 {
 	menu.Clear();
-	AC& controls = AC::GetInstance();
+	Input& input = Input::GetInstance();
 	switch (what)
 	{
 		case OPT_MAIN:
@@ -909,49 +962,62 @@ void load_menu(OptionMenu what, Menu& menu, sf::String& title)
 		case OPT_KEYBOARD:
 			title.SetText("Clavier");
 			menu.SetLineSpace(4);
-			menu.AddItem(str_sprintf("Haut : %s", AC::KeyToString(
-				controls.GetBinding(AC::MOVE_UP, AC::KEYBOARD))), 1);
-			menu.AddItem(str_sprintf("Bas : %s", AC::KeyToString(
-				controls.GetBinding(AC::MOVE_DOWN, AC::KEYBOARD))), 2);
-			menu.AddItem(str_sprintf("Gauche : %s", AC::KeyToString(
-				controls.GetBinding(AC::MOVE_LEFT, AC::KEYBOARD))), 3);
-			menu.AddItem(str_sprintf("Droite : %s", AC::KeyToString(
-				controls.GetBinding(AC::MOVE_RIGHT, AC::KEYBOARD))), 4);
-			menu.AddItem(str_sprintf("Arme 1 : %s", AC::KeyToString(
-				controls.GetBinding(AC::WEAPON_1, AC::KEYBOARD))), 5);
-			menu.AddItem(str_sprintf("Arme 2 : %s", AC::KeyToString(
-				controls.GetBinding(AC::WEAPON_2, AC::KEYBOARD))), 6);
-			menu.AddItem(str_sprintf(L"Utiliser bonus Glaçon : %s", AC::KeyToString(
-				controls.GetBinding(AC::USE_COOLER, AC::KEYBOARD))), 7);
-			menu.AddItem(str_sprintf("Pause : %s", AC::KeyToString(
-				controls.GetBinding(AC::PAUSE, AC::KEYBOARD))), 8);
+			menu.AddItem(
+				str_sprintf("Haut : %s",
+				Input::KeyToString(input.GetKeyboardBind(Input::MOVE_UP))), 1);
+			menu.AddItem(
+				str_sprintf("Bas : %s",
+				Input::KeyToString(input.GetKeyboardBind(Input::MOVE_DOWN))), 2);
+			menu.AddItem(
+				str_sprintf("Gauche : %s",
+				Input::KeyToString(input.GetKeyboardBind(Input::MOVE_LEFT))), 3);
+			menu.AddItem(
+				str_sprintf("Droite : %s",
+				Input::KeyToString(input.GetKeyboardBind(Input::MOVE_RIGHT))), 4);
+			menu.AddItem(
+				str_sprintf("Arme 1 : %s",
+				Input::KeyToString(input.GetKeyboardBind(Input::USE_WEAPON_1))), 5);
+			menu.AddItem(
+				str_sprintf("Arme 2 : %s",
+				Input::KeyToString(input.GetKeyboardBind(Input::USE_WEAPON_2))), 6);
+			menu.AddItem(
+				str_sprintf(L"Utiliser bonus Glaçon : %s",
+				Input::KeyToString(input.GetKeyboardBind(Input::USE_COOLER))), 7);
+			menu.AddItem(
+				str_sprintf("Pause : %s",
+				Input::KeyToString(input.GetKeyboardBind(Input::PAUSE))), 8);
 			break;
 		case OPT_JOYSTICK:
 			title.SetText("Joystick");
-			menu.AddItem(str_sprintf("Arme 1 : bouton %u",
-				controls.GetBinding(AC::WEAPON_1, AC::JOYSTICK)), 1);
-			menu.AddItem(str_sprintf("Arme 2 : bouton %u",
-				controls.GetBinding(AC::WEAPON_2, AC::JOYSTICK)), 2);
-			menu.AddItem(str_sprintf(L"Utiliser bonus Glaçon : bouton %u",
-				controls.GetBinding(AC::USE_COOLER, AC::JOYSTICK)), 3);
-			menu.AddItem(str_sprintf("Pause : bouton %u",
-				controls.GetBinding(AC::PAUSE, AC::JOYSTICK)), 4);
-			menu.AddItem(str_sprintf("Valider : bouton %u",
-				controls.GetBinding(AC::VALID, AC::JOYSTICK)), 5);
+			menu.AddItem(
+				str_sprintf("Arme 1 : bouton %u",
+				input.GetJoystickBind(Input::USE_WEAPON_1)), 1);
+			menu.AddItem(
+				str_sprintf("Arme 2 : bouton %u",
+				input.GetJoystickBind(Input::USE_WEAPON_2)), 2);
+			menu.AddItem(
+				str_sprintf(L"Utiliser bonus Glaçon : bouton %u",
+				input.GetJoystickBind(Input::USE_COOLER)), 3);
+			menu.AddItem(
+				str_sprintf("Pause : bouton %u",
+				input.GetJoystickBind(Input::PAUSE)), 4);
+			menu.AddItem(
+				str_sprintf("Valider : bouton %u",
+				input.GetJoystickBind(Input::ENTER)), 5);
 			break;
 	}
 	menu.AddItem("Retour", 0);
 }
 
 
-bool get_input(AC::Device device, unsigned int& sfml_code)
+bool get_input(Input::Device device, unsigned int& sfml_code)
 {
 	sf::String prompt;
-	if (device == AC::KEYBOARD)
+	if (device == Input::KEYBOARD)
 	{
 		prompt.SetText(L"Appuyez sur une touche\n(Échap pour annuler)");
 	}
-	else if (device == AC::JOYSTICK)
+	else if (device == Input::JOYSTICK)
 	{
 		prompt.SetText(L"Appuyez sur un bouton du contrôleur\n(Échap pour annuler)");
 	}
@@ -975,19 +1041,20 @@ bool get_input(AC::Device device, unsigned int& sfml_code)
 					running = false;
 					valid = false;
 				}
-				else if (device == AC::KEYBOARD)
+				else if (device == Input::KEYBOARD)
 				{
 					running = false;
 					sfml_code = event.Key.Code;
 				}
 			}
 			else if (event.Type == sf::Event::JoyButtonPressed
-				&& device == AC::JOYSTICK)
+				&& device == Input::JOYSTICK)
 			{
 				running = false;
 				sfml_code = event.JoyButton.Button;
 			}
 		}
+		app.Clear();
 		app.Draw(prompt);
 		app.Display();
 	}
@@ -1014,14 +1081,14 @@ Game::Scene Game::Options()
 
 	sf::Sprite back(GET_IMG("main-screen"));
 	bool running = true;
-	AC::Action action;
+	Input::Action action;
 	int id;
 	Scene next = EXIT_APP;
 	while (running)
 	{
-		while (controls_.GetAction(action))
+		while (GetAction(action))
 		{
-			if (action == AC::EXIT_APP)
+			if (action == Input::EXIT_APP)
 			{
 				running = false;
 			}
@@ -1044,7 +1111,7 @@ Game::Scene Game::Options()
 				else
 				{
 					unsigned int sfml_code;
-					AC::Action action_bind;
+					Input::Action action_bind;
 					switch (current_menu)
 					{
 						// comportement de l'id en fonction du menu courant
@@ -1068,69 +1135,69 @@ Game::Scene Game::Options()
 							break;
 						case OPT_KEYBOARD:
 							// on récupère le nouveau binding clavier
-							if (!get_input(AC::KEYBOARD, sfml_code))
+							if (!get_input(Input::KEYBOARD, sfml_code))
 							{
 								break;
 							}
 							switch (id)
 							{
 								case 1:
-									action_bind = AC::MOVE_UP;
+									action_bind = Input::MOVE_UP;
 									break;
 								case 2:
-									action_bind = AC::MOVE_DOWN;
+									action_bind = Input::MOVE_DOWN;
 									break;
 								case 3:
-									action_bind = AC::MOVE_LEFT;
+									action_bind = Input::MOVE_LEFT;
 									break;
 								case 4:
-									action_bind = AC::MOVE_RIGHT;
+									action_bind = Input::MOVE_RIGHT;
 									break;
 								case 5:
-									action_bind = AC::WEAPON_1;
+									action_bind = Input::USE_WEAPON_1;
 									break;
 								case 6:
-									action_bind = AC::WEAPON_2;
+									action_bind = Input::USE_WEAPON_2;
 									break;
 								case 7:
-									action_bind = AC::USE_COOLER;
+									action_bind = Input::USE_COOLER;
 									break;
 								case 8:
-									action_bind = AC::PAUSE;
+									action_bind = Input::PAUSE;
 									break;
 								default:
 									assert(0);
 							}
-							controls_.SetBinding(action_bind, AC::KEYBOARD, sfml_code);
+							input_.SetKeyboardBind((sf::Key::Code)sfml_code, action_bind);
 							load_menu(OPT_KEYBOARD, menu, title);
 							break;
 						case OPT_JOYSTICK:
 							// on récupère le nouveau binding joystick
-							if (!get_input(AC::JOYSTICK, sfml_code))
+							if (!get_input(Input::JOYSTICK, sfml_code))
 							{
 								break;
 							}
 							switch (id)
 							{
 								case 1:
-									action_bind = AC::WEAPON_1;
+									action_bind = Input::USE_WEAPON_1;
 									break;
 								case 2:
-									action_bind = AC::WEAPON_2;
+									action_bind = Input::USE_WEAPON_2;
 									break;
 								case 3:
-									action_bind = AC::USE_COOLER;
+									action_bind = Input::USE_COOLER;
 									break;
 								case 4:
-									action_bind = AC::PAUSE;
+									action_bind = Input::PAUSE;
 									break;
 								case 5:
-									action_bind = AC::VALID;
+									action_bind = Input::ENTER;
 									break;
 								default:
 									abort();
 							}
-							controls_.SetBinding(action_bind, AC::JOYSTICK, sfml_code);
+							input_.SetJoystickBind(sfml_code, action_bind);
 							load_menu(OPT_JOYSTICK, menu, title);
 							break;
 						case OPT_MUSIC:
@@ -1170,11 +1237,11 @@ Game::Scene Game::Options()
 
 Entity* Game::GetPlayerShip() const
 {
-	if (player1_ == NULL)
+	if (player_ == NULL)
 	{
 		DIE("can't retrieve player: playership is not allocated yet");
 	}
-	return player1_;
+	return player_;
 }
 
 
