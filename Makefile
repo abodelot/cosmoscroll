@@ -41,7 +41,7 @@ $(EXEC): $(OBJ)
 clean:
 	-rm src/core/*.o
 	-rm src/utils/*.o
-	-rm src/menu/*.o
+	-rm src/scenes/*.o
 	-rm src/entities/*.o
 
 cleanxml:

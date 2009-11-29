@@ -10,6 +10,8 @@
 #include "../utils/DumbMusic.hpp"
 #endif
 
+#include "MediaNotFoundException.hpp"
+
 /**
  * Classe singleton pour gérer les ressources (images, font)
  */
@@ -63,13 +65,15 @@ private:
 	 * Initialisation (chargement des images)
 	 */
 	MediaManager();
+	~MediaManager();
 	MediaManager(const MediaManager&);
 	MediaManager& operator=(const MediaManager&);
 
 	std::map<std::string, sf::Image> images_;
 	std::map<std::string, sf::SoundBuffer> sounds_;
 #ifndef NO_DUMB_MUSIC
-	std::map<std::string, std::string> musics_;
+	typedef std::map<std::string, DumbMusic*> DumbMusicMap;
+	DumbMusicMap musics_;
 #endif
 	sf::Font font_;
 };

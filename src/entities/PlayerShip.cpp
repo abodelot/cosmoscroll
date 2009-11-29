@@ -4,7 +4,6 @@
 
 #include "PlayerShip.hpp"
 #include "EntityManager.hpp"
-#include "../core/Game.hpp"
 #include "../core/ParticleSystem.hpp"
 #include "../core/SoundSystem.hpp"
 #include "../utils/MediaManager.hpp"
@@ -51,11 +50,11 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	SetSubRect(GetAnimation().GetFrame(0)); // WTF
 	// init weapons
 	EntityManager& mgr = EntityManager::GetInstance();
-	mgr.InitWeapon(1, &weapon1_);
+	mgr.InitWeapon(2, &weapon1_);
 	weapon1_.SetOwner(this);
 	weapon1_.SetOffset(WEAPON1_OFFSET);
 
-	mgr.InitWeapon(2, &weapon2_);
+	mgr.InitWeapon(1, &weapon2_);
 	weapon2_.SetOwner(this);
 	weapon2_.SetOffset(WEAPON2_OFFSET);
 
@@ -294,7 +293,7 @@ void PlayerShip::TakeDamage(int damage)
 		if (IsDead())
 		{
 			p.AddExplosion(GetPosition());
-			Game::GetInstance().NotifyPlayerDead();
+			EntityManager::GetInstance().TerminateGame();
 		}
 	}
 }

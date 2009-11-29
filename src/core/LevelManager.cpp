@@ -16,12 +16,19 @@ LevelManager& LevelManager::GetInstance()
 LevelManager::LevelManager()
 {
 	last_insert_time_ = 0.f;
+	current_level_ = last_unlocked_level_ = 1;
 }
 
 
 LevelManager::~LevelManager()
 {
 	ClearWaitingLine();
+}
+
+
+LevelManager::Error LevelManager::LoadCurrent()
+{
+	return ParseLevel(GetLevelElement(current_level_));
 }
 
 
@@ -42,14 +49,42 @@ Entity* LevelManager::GiveNextEntity(float timer)
 
 LevelManager::Error LevelManager::SetCurrent(int level)
 {
-	ClearWaitingLine();
-	--level;
-	if (level < 0 || level >= (int) levels_.size())
+	if (level <= 0 || level > (int) levels_.size())
 	{
-		std::cerr << "level " << level << " is undefined" << std::endl;
-		return UNDEF;
+		printf("warning: level %d is out of bounds, current level is now 1\n",
+			level);
+		level = 1;
+		//std::cerr << "level " << level << " is undefined" << std::endl;
+		//return UNDEF;
 	}
-	return ParseLevel(levels_[level]);
+	current_level_ = level;
+	return SUCCESS;
+}
+
+
+int LevelManager::GetCurrent() const
+{
+	return current_level_;
+}
+
+
+void LevelManager::SetLastUnlocked(int level_num)
+{
+	if (level_num > 0 && level_num <= (int) levels_.size())
+	{
+		last_unlocked_level_ = level_num;
+	}
+	else
+	{
+		printf("warning: level %d is out of bounds, "
+			"last unlocked level is now 1\n", level_num);
+	}
+}
+
+
+int LevelManager::GetLastUnlocked() const
+{
+	return last_unlocked_level_;
 }
 
 
@@ -103,6 +138,7 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 
 LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 {
+	ClearWaitingLine();
 	last_insert_time_ = 0.f;
 	elem = elem->FirstChildElement();
 	while (elem)
@@ -176,7 +212,7 @@ void LevelManager::AppendToWaitingLine(Entity* entity, float time)
 
 void LevelManager::ClearWaitingLine()
 {
-	// désallocation des entités restées en file d'attente
+	// delete remaining entities in the waiting line
 	while (!waiting_line_.empty())
 	{
 		delete waiting_line_.front().entity;
@@ -187,7 +223,7 @@ void LevelManager::ClearWaitingLine()
 
 TiXmlElement* LevelManager::GetLevelElement(int level) const
 {
-    --level;
+    --level; // first level is index 0
     if (level < 0 || level >= (int) levels_.size())
     {
         printf("info: level %d is not a valid level, using first level instead\n", level + 1);

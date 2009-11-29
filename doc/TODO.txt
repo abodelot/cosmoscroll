@@ -5,12 +5,10 @@ Milestone 0.2
 -------------
 
 - Niveaux variés avec difficulté croissante
+- système de procédures stockées pour les niveaux
 - Conserver le vaisseau du joueur d'un niveau à l'autre (ne pas respawn un neuf à chaque fois)
-- une seule boucle de jeu, faire une classe abstraite Scene, base de tout conteneur d'éléments affichables
 - Intertionalisation (fichiers de langues pour fr, en, de)
 - compteur de frags et/ou de points
-
-- MediaManager doit stocker les objets DumbMusic directement, mieux intégrer la gestion des musiques
 
 recoder le ParticleSystem :
 	- optimiser les déplacements avec un vecteur vitesse, au lieu de calculer la pos sin(angle)/cos(angle) à chaque frame
@@ -21,7 +19,6 @@ recoder le ParticleSystem :
 
 menu
 	- intégrer un module de GUI indépendant et générique
-	- une sous classe pour chaque menu. utiliser des callbacks pour réagir à la sélection d'un élément
 
 	- Ajout mode plein-écran / fenêtré dans la configuration
 	- Son on/off + choix volume

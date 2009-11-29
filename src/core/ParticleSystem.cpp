@@ -16,8 +16,7 @@ ParticleSystem& ParticleSystem::GetInstance()
 }
 
 
-ParticleSystem::ParticleSystem() :
-	media_(MediaManager::GetInstance())
+ParticleSystem::ParticleSystem()
 {
 }
 
@@ -41,9 +40,10 @@ void ParticleSystem::AddExplosion(const sf::Vector2f& offset)
 
 void ParticleSystem::AddBigExplosion(const sf::Vector2f& pos)
 {
+	static const sf::Image& fiery = GET_IMG("fiery");
 	for (int i = 0; i < PARTICLES_PER_EXPLOSION; ++i)
 	{
-		particles_.push_front(new Fiery(pos, media_.GetImage("fiery")));
+		particles_.push_front(new Fiery(pos, fiery));
 	}
 	SoundSystem::GetInstance().PlaySound("boom");
 }
@@ -51,9 +51,10 @@ void ParticleSystem::AddBigExplosion(const sf::Vector2f& pos)
 
 void ParticleSystem::AddImpact(const sf::Vector2f& offset, int count)
 {
+	static const sf::Image& img = GET_IMG("impact");
 	for (; count > 0; --count)
 	{
-		particles_.push_front(new Fiery(offset, media_.GetImage("impact")));
+		particles_.push_front(new Fiery(offset, img));
 	}
 }
 
@@ -63,6 +64,15 @@ void ParticleSystem::AddStars(int count)
 	for (; count > 0; --count)
 	{
 		particles_.push_front(new Star());
+	}
+}
+
+
+void ParticleSystem::AddCenteredStars(int count)
+{
+	for (; count > 0; --count)
+	{
+		particles_.push_front(new CenteredStar());
 	}
 }
 
@@ -213,6 +223,37 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 }
 
 
+ParticleSystem::CenteredStar::CenteredStar()
+{
+	sprite_.SetImage(GET_IMG("star"));
+	float x = WIN_WIDTH / 2;
+	float y = WIN_HEIGHT / 2;
+	sprite_.SetPosition(x, y);
+	float scale = sf::Randomizer::Random(0.5f, 1.5f);
+	sprite_.SetScale(scale, scale);
+	speed_ = (int) (sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED));
+	angle_ = sf::Randomizer::Random(-PI, PI);
+}
+
+
+bool ParticleSystem::CenteredStar::OnUpdate(float frametime)
+{
+	static const sf::FloatRect UNIVERSE(0, 0, WIN_WIDTH, WIN_HEIGHT);
+	sf::Vector2f pos = sprite_.GetPosition();
+	if (!UNIVERSE.Contains(pos.x, pos.y))
+	{
+		pos.x = WIN_WIDTH / 2;
+		pos.y = WIN_HEIGHT / 2;
+		sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED);
+		float scale = sf::Randomizer::Random(0.5f, 1.5f);
+		sprite_.SetScale(scale, scale);
+		angle_ = sf::Randomizer::Random(-PI, PI);
+	}
+
+	math::translate(pos, angle_, speed_ * frametime);
+	sprite_.SetPosition(pos);
+	return false;
+}
 // TextParticle
 #define MESSAGE_LIFETIME   5.0
 #define MESSAGE_SPEED      50

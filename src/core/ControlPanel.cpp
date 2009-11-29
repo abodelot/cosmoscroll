@@ -118,8 +118,13 @@ void ControlPanel::SetMissiles(int count)
 
 void ControlPanel::SetTimer(float seconds)
 {
-    int s = (int) seconds; // arrondi
-    timer_.SetText(str_sprintf("Temps : %02d:%02d", s / 60, s % 60));
+    static int previous = -1; // negative, to force update at first call
+    int rounded = (int) seconds;
+    if (rounded != previous)
+    {
+		timer_.SetText(str_sprintf("Temps : %02d:%02d", rounded / 60, rounded % 60));
+		previous = rounded;
+    }
 }
 
 

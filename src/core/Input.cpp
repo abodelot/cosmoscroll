@@ -1,5 +1,6 @@
 #include "Input.hpp"
-
+#include "Game.hpp"
+#include "../utils/StringUtils.hpp"
 
 #define JOY_ID			 0
 #define JOY_DEADZONE	50.f
@@ -47,7 +48,7 @@ void Input::Init(const sf::Input& sfinput)
 	SetKeyboardBind(sf::Key::A,        USE_WEAPON_2);
 	SetKeyboardBind(sf::Key::LControl, USE_COOLER);
 	SetKeyboardBind(sf::Key::Z,        USE_MISSILE);
-	SetKeyboardBind(sf::Key::F11,      TAKE_SCREENSHOT);
+	SetKeyboardBind(sf::Key::F1,       TAKE_SCREENSHOT);
 	SetKeyboardBind(sf::Key::Escape,   EXIT_APP);
 
 	// default joystick binding
@@ -118,6 +119,11 @@ void Input::SetKeyboardBind(sf::Key::Code key, Action action)
 {
 	if (action < Input::COUNT && key < sf::Key::Count)
 	{
+		sf::Key::Code old_key = action_to_key_[action];
+		if (old_key != sf::Key::Count)
+		{
+			key_to_action_[old_key] = COUNT;
+		}
 		action_to_key_[action] = key;
 		key_to_action_[key] = action;
 	}
@@ -153,6 +159,45 @@ unsigned int Input::GetJoystickBind(Action action)
 {
 	return action < Input::COUNT ?
 		action_to_joybutton_[action] : MAX_JOY_BUTTON;
+}
+
+
+const wchar_t* Input::ActionToString(Action action)
+{
+	switch (action)
+	{
+		case PAUSE:
+			return L"Pause";
+		case TAKE_SCREENSHOT:
+			return L"Capture d'écran";
+		case PANEL_UP:
+			return L"Panneau en haut";
+		case PANEL_DOWN:
+			return L"Panneau en bas";
+		case MOVE_UP:
+			return L"Haut";
+		case MOVE_DOWN:
+			return L"Bas";
+		case MOVE_LEFT:
+			return L"Gauche";
+		case MOVE_RIGHT:
+			return L"Right";
+		case USE_WEAPON_1:
+			return L"Arme 1";
+		case USE_WEAPON_2:
+			return L"Arme 2";
+		case USE_COOLER:
+			return L"Utiliser bonus Glaçon";
+		case USE_MISSILE:
+			return L"Utiliser bonus Missile";
+		case ENTER:
+			return L"Valider";
+		case EXIT_APP:
+			return L"Quitter le jeu";
+		default:
+			break;
+	}
+	return L"<Unknown action>";
 }
 
 
@@ -272,25 +317,97 @@ void Input::SetDevices(unsigned int flag)
 }
 
 
+void Input::AskUserInput(Device device, Action action)
+{
+	std::wstring str;
+	if (device == Input::KEYBOARD)
+	{
+		str = L"Appuyez sur une touche du clavier\npour l'action '";
+	}
+	else if (device == Input::JOYSTICK)
+	{
+		str = L"Appuyez sur un bouton du contrôleur\npour l'action '";
+	}
+	str += Input::ActionToString(action);
+	str += L"'\n\n(Échap pour annuler)";
+
+	sf::String prompt;
+	prompt.SetText(str);
+	prompt.SetColor(sf::Color::White);
+	sf::FloatRect rect = prompt.GetRect();
+	prompt.SetPosition(
+		(Game::WIDTH - rect.GetWidth()) / 2,
+		(Game::HEIGHT - rect.GetHeight()) / 2
+	);
+
+	sf::Event event;
+	bool running = true;
+	sf::RenderWindow& app = Game::GetInstance().GetApp();
+	while (running)
+	{
+		while (app.GetEvent(event))
+		{
+			if (event.Type == sf::Event::KeyPressed)
+			{
+				if (event.Key.Code == sf::Key::Escape)
+				{
+					running = false;
+				}
+				else if (device == Input::KEYBOARD)
+				{
+					running = false;
+					SetKeyboardBind(event.Key.Code, action);
+				}
+			}
+			else if (event.Type == sf::Event::JoyButtonPressed
+				&& device == Input::JOYSTICK)
+			{
+				running = false;
+				SetJoystickBind(event.JoyButton.Button, action);
+			}
+		}
+		app.Clear();
+		app.Draw(prompt);
+		app.Display();
+	}
+}
+
+
 void Input::LoadFromConfig(ConfigParser& config)
 {
 	config.SeekSection("Keyboard");
-	config.ReadItem("move_up",     action_to_key_[MOVE_UP]);
-	config.ReadItem("move_down",   action_to_key_[MOVE_DOWN]);
-	config.ReadItem("move_left",   action_to_key_[MOVE_LEFT]);
-	config.ReadItem("move_right",  action_to_key_[MOVE_RIGHT]);
-	config.ReadItem("pause",       action_to_key_[PAUSE]);
-	config.ReadItem("weapon_1",    action_to_key_[USE_WEAPON_1]);
-	config.ReadItem("weapon_2",    action_to_key_[USE_WEAPON_2]);
-	config.ReadItem("use_cooler",  action_to_key_[USE_COOLER]);
-	config.ReadItem("use_missile", action_to_key_[USE_MISSILE]);
+	sf::Key::Code key;
+	if (config.ReadItem("move_up", key))
+		SetKeyboardBind(key, MOVE_UP);
+	if (config.ReadItem("move_down", key))
+		SetKeyboardBind(key, MOVE_DOWN);
+	if (config.ReadItem("move_left", key))
+		SetKeyboardBind(key, MOVE_LEFT);
+	if (config.ReadItem("move_right", key))
+		SetKeyboardBind(key, MOVE_RIGHT);
+	if (config.ReadItem("pause", key))
+		SetKeyboardBind(key, PAUSE);
+	if (config.ReadItem("weapon_1", key))
+		SetKeyboardBind(key, USE_WEAPON_1);
+	if (config.ReadItem("weapon_2", key))
+		SetKeyboardBind(key, USE_WEAPON_2);
+	if (config.ReadItem("use_cooler", key))
+		SetKeyboardBind(key, USE_COOLER);
+	if (config.ReadItem("use_missile", key))
+		SetKeyboardBind(key, USE_MISSILE);
 
 	config.SeekSection("Joystick");
-	config.ReadItem("pause",       action_to_joybutton_[PAUSE]);
-	config.ReadItem("weapon_1",    action_to_joybutton_[USE_WEAPON_1]);
-	config.ReadItem("weapon_2",    action_to_joybutton_[USE_WEAPON_2]);
-	config.ReadItem("use_cooler",  action_to_joybutton_[USE_COOLER]);
-	config.ReadItem("use_missile", action_to_joybutton_[USE_MISSILE]);
+	unsigned int button;
+	if (config.ReadItem("pause", button))
+		SetJoystickBind(button, PAUSE);
+	if (config.ReadItem("weapon_1", button))
+		SetJoystickBind(button, USE_WEAPON_1);
+	if (config.ReadItem("weapon_2", button))
+		SetJoystickBind(button, USE_WEAPON_2);
+	if (config.ReadItem("use_cooler", button))
+		SetJoystickBind(button, USE_COOLER);
+	if (config.ReadItem("use_missile", button))
+		SetJoystickBind(button, USE_MISSILE);
 }
 
 

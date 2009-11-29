@@ -5,12 +5,11 @@
 #include <SFML/Graphics.hpp>
 
 #include "Input.hpp"
-#include "ControlPanel.hpp"
 #include "ParticleSystem.hpp"
 #include "LevelManager.hpp"
-#include "../utils/DumbMusic.hpp"
-#include "../entities/PlayerShip.hpp"
 
+
+class BaseScene;
 class EntityManager;
 
 /**
@@ -19,6 +18,36 @@ class EntityManager;
 class Game
 {
 public:
+	enum Size
+	{
+		WIDTH =    640,
+		HEIGHT =   480,
+		MARGIN_X = 120
+	};
+
+	enum Scene
+	{
+		SC_IntroScene,
+		SC_InGameScene,
+		SC_EndGameScene,
+		SC_EndGameMenu,
+		SC_PauseMenu,
+		SC_MainMenu,
+		SC_AboutMenu,
+		SC_LevelMenu,
+		SC_IntroLevelScene,
+		SC_OptionMenu,
+		SC_KeyboardMenu,
+		SC_JoystickMenu,
+		SC_SettingsMenu,
+		SC_AudioMenu,
+
+		SC_COUNT
+	};
+
+	/**
+	 * @return instance unique
+	 */
 	static Game& GetInstance();
 
 	/**
@@ -26,128 +55,57 @@ public:
 	 */
 	void Run();
 
-	inline sf::RenderWindow& GetApp()
-	{
-		return app_;
-	}
+	/**
+	 * @return application rendering window
+	 */
+	sf::RenderWindow& GetApp();
 
-	void NotifyPlayerDead();
+	/**
+	 * Quitter CosmoScroll
+	 */
+	void Quit();
 
-	inline const sf::Input& GetInput() const
-	{
-		return app_.GetInput();
-	}
+	/**
+	 * Indiquer la prochaine scène à afficher
+	 */
+	void SetNextScene(Scene scene);
 
-	Entity* GetPlayerShip() const;
+	/**
+	 * Basculer entre les modes fenêtré et plein écran
+	 */
+	//void SetFullscreen(bool full);
 
 private:
 	Game();
 	~Game();
 
+	/**
+	 * Load a configuration file
+	 */
 	bool LoadConfig(const char* filename);
 
+	/**
+	 * Write the configuration in a file
+	 */
 	void WriteConfig(const char* filename) const;
 
-	enum Scene
-	{
-		INTRO,
-		MAIN_MENU,
-		OPTIONS,
-		PLAY,
-		IN_GAME_MENU,
-		ABOUT,
-		END_PLAY,
-		SELECT_LEVEL,
-		LEVEL_CAPTION,
-		ARCADE_RESULT,
-		EXIT_APP
-	};
-
-	enum GameMode
-	{
-		STORY, ARCADE
-	};
-
-
-	/* Gestion des scènes */
-
-	// scène d'intro
-	Scene Intro();
-	// menu principal
-	Scene MainMenu();
-	// les options de configurations
-	Scene Options();
-	// jouer
-	Scene Play();
-	// menu en cours de jeu (pause)
-	Scene InGameMenu();
-	// fin de partie
-	Scene EndPlay();
-	// sélection d'un niveau
-	Scene SelectLevel();
-	// Introduction d'un niveau
-	Scene LevelCaption();
-	// résultat d'une partie en mode arcade
-	Scene ArcadeResult();
-	// About
-	Scene About();
-
-
-	/* Gestion de la boucle de jeu */
-
-	// initialiser le jeu avant de lancer une partie
-	// (nettoyage des parties précédentes, allocation des joueurs)
-	void Init();
-
 	/**
-	 * Allouer et jouer une musique
-	 * @param[in] music_name: identifiant de la musique
+	 * Take a screenshot and save the image
 	 */
-	void LoadMusic(const char* music_name);
-
-	/**
-	 * Désallouer et stopper la musique en cours
-	 */
-	void StopMusic();
-
-	void SetBackgroundColor(const sf::Color& topcolor, const sf::Color& bottomcolor);
-
 	void TakeScreenshot(const char* directory);
 
 	sf::RenderWindow app_;
-
-	float timer_;
-	GameMode mode_;
-
-	int current_level_;
-	int last_level_reached_;
-	float best_arcade_time_;
-	std::string music_name_;
-
-	PlayerShip* player_;
-
-	// condition pour stopper la boucle de jeu
-	bool (Game::*p_StopPlay_)();
-
-	bool ArcadeMoreBadGuys();
-	bool StoryMoreBadBuys();
-
-	bool player_dead_;
 	bool fullscreen_;
+	bool running_;
 
-	// temp hack
-	bool GetAction(Input::Action& action);
-
-	// Singletons
+	// singletons
 	Input& input_;
-	ControlPanel& panel_;
 	LevelManager& levels_;
 	ParticleSystem& particles_;
 	EntityManager& entitymanager_;
-#ifndef NO_DUMB_MUSIC
-	DumbMusic* music_;
-#endif
-	sf::Shape background_;
+	// scènes
+	BaseScene* scenes_[SC_COUNT];
+	BaseScene* current_scene_;
 };
 
 #endif // GAME_HPP

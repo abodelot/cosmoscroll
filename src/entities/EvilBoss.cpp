@@ -1,6 +1,5 @@
 #include "EvilBoss.hpp"
 #include "EntityManager.hpp"
-#include "../core/Game.hpp"
 #include "../core/ParticleSystem.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/Math.hpp"
@@ -34,7 +33,7 @@ EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	left_ = true;
 	phase_ = EVIL;
 	next_ = MORE_EVIL;
-	target_ = Game::GetInstance().GetPlayerShip();
+	target_ = EntityManager::GetInstance().GetPlayerShip();
 }
 
 

@@ -1,9 +1,15 @@
 #include "EntityManager.hpp"
 #include "Asteroid.hpp"
+#include "PlayerShip.hpp"
+
 #include "../core/Game.hpp"
-#include "../tinyxml/tinyxml.h"
+#include "../core/LevelManager.hpp"
+#include "../core/ControlPanel.hpp"
+#include "../core/ParticleSystem.hpp"
 #include "../utils/MediaManager.hpp"
+#include "../utils/StringUtils.hpp"
 #include "../utils/DIE.hpp"
+#include "../tinyxml/tinyxml.h"
 
 
 EntityManager& EntityManager::GetInstance()
@@ -13,22 +19,69 @@ EntityManager& EntityManager::GetInstance()
 }
 
 
-EntityManager::EntityManager()
+EntityManager::EntityManager():
+	particles_(ParticleSystem::GetInstance()),
+	levels_(LevelManager::GetInstance())
 {
-	width_ = 480;
-	height_ = 320;
-	uniques_.push_back(new Asteroid(sf::Vector2f(0, 0), Asteroid::BIG));
+	SetSize(Game::WIDTH, Game::HEIGHT);
+
+	player_ = NULL;
+	more_bad_guys_ = &EntityManager::MoreBadGuys_ARCADE;
+	game_over_ = false;
+	mode_ = MODE_ARCADE;
+	timer_ = arcade_record_ = 0.f;
 }
 
 
 EntityManager::~EntityManager()
 {
 	Clear();
-
 	for (size_t i = 0; i < uniques_.size(); ++i)
 	{
 		delete uniques_[i];
 	}
+}
+
+
+void EntityManager::SetMode(Mode mode)
+{
+	switch (mode)
+	{
+		case MODE_STORY:
+			more_bad_guys_ = &EntityManager::MoreBadGuys_STORY;
+			break;
+
+		case MODE_ARCADE:
+			more_bad_guys_ = &EntityManager::MoreBadGuys_ARCADE;
+			SetBackgroundColor(sf::Color::Black, sf::Color::Black);
+			ControlPanel::GetInstance().SetGameInfo(
+				str_sprintf("Record : %02d:%02d",
+				(int) arcade_record_ / 60,
+				(int) arcade_record_ % 60).c_str()
+			);
+			break;
+	}
+	mode_ = mode;
+}
+
+
+EntityManager::Mode EntityManager::GetMode() const
+{
+	return mode_;
+}
+
+
+void EntityManager::RespawnPlayer()
+{
+	particles_.Clear();
+	particles_.AddStars();
+
+	Clear();
+	sf::Vector2f position(0, height_ / 2);
+	player_ = new PlayerShip(position, "playership-red");
+	AddEntity(player_);
+	game_over_ = false;
+	timer_ = 0.f;
 }
 
 
@@ -42,6 +95,8 @@ void EntityManager::SetSize(int width, int height)
 	{
 		height = 0;
 	}
+	background_ = sf::Shape::Rectangle(0, 0, width, height, sf::Color(255, 255, 255, 0));
+	background_.SetColor(sf::Color::White);
 	width_ = width;
 	height_ = height;
 }
@@ -56,6 +111,12 @@ int EntityManager::GetWidth() const
 int EntityManager::GetHeight() const
 {
 	return height_;
+}
+
+
+void EntityManager::HandleAction(Input::Action action)
+{
+	player_->HandleAction(action);
 }
 
 
@@ -92,6 +153,8 @@ void EntityManager::Update(float frametime)
 			}
 		}
 	}
+	particles_.Update(frametime);
+	timer_ += frametime;
 }
 
 
@@ -119,8 +182,38 @@ int EntityManager::Count() const
 }
 
 
+void EntityManager::TerminateGame()
+{
+	game_over_ = true;
+}
+
+
+bool EntityManager::CheckGameOver()
+{
+	return (this->*more_bad_guys_)() || game_over_;
+}
+
+
+void EntityManager::SetBackgroundColor(const sf::Color& top, const sf::Color& bottom)
+{
+	background_.SetPointColor(0, top);
+	background_.SetPointColor(1, top);
+	background_.SetPointColor(2, bottom);
+	background_.SetPointColor(3, bottom);
+}
+
+
+void EntityManager::UpdateArcadeRecord()
+{
+	assert(timer_ > arcade_record_);
+	arcade_record_ = timer_;
+}
+
+
 void EntityManager::Render(sf::RenderTarget& target) const
 {
+	target.Draw(background_);
+	target.Draw(particles_);
 	// affichage de toutes les entités
 	for (EntityList::const_iterator it = entities_.begin();
 		it != entities_.end(); ++it)
@@ -139,7 +232,7 @@ void EntityManager::LoadWeapons(const char* filename)
 	{
 		DIE("can't load weapon definitions: '%s' (%s)", filename, doc.ErrorDesc());
 	}
-
+	puts("* loading weapons...");
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	while (elem != NULL)
 	{
@@ -201,7 +294,7 @@ void EntityManager::LoadAnimations(const char* filename)
 	{
 		DIE("can't open animation definitions: %s (%s)", filename, doc.ErrorDesc());
 	}
-
+	puts("* loading animations...");
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	// attributs
 	int width, height, count;
@@ -231,11 +324,9 @@ void EntityManager::LoadAnimations(const char* filename)
 			}
 			p->SetDelay(delay);
 			p->SetImage(GET_IMG(img));
-			printf("loading animation %s\n", name);
 		}
 		elem = elem->NextSiblingElement();
 	}
-	puts("animations loaded");
 }
 
 
@@ -246,7 +337,7 @@ void EntityManager::LoadSpaceShips(const char* filename)
 	{
 		DIE("can't load space ships definitions: '%s' (%s)", filename, doc.ErrorDesc());
 	}
-
+	puts("* loading spaceships...");
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	while (elem != NULL)
 	{
@@ -312,9 +403,10 @@ void EntityManager::LoadSpaceShips(const char* filename)
 
 		spaceships_defs_[id] = ship;
 		uniques_.push_back(ship);
-		printf("new ship defined: id %d\n", id);
 		elem = elem->NextSiblingElement();
 	}
+
+	uniques_.push_back(new Asteroid(sf::Vector2f(0, 0), Asteroid::BIG));
 }
 
 
@@ -327,7 +419,7 @@ SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 	{
 		SpaceShip* ship = it->second->Clone();
 		ship->SetPosition(x, y);
-		ship->SetTarget(Game::GetInstance().GetPlayerShip());
+		ship->SetTarget(player_);
 		return ship;
 	}
 	DIE("space ship id '%d' is not implemented", id);
@@ -339,6 +431,7 @@ Entity* EntityManager::CreateRandomEntity() const
 {
 	Entity* entity = uniques_[sf::Randomizer::Random(0, uniques_.size() - 1)];
 	Entity* copy = entity->Clone();
+	copy->SetTarget(player_);
 	return copy;
 }
 
@@ -372,5 +465,50 @@ const Animation& EntityManager::GetAnimation(const char* key) const
 		DIE("animation %s not found\n", key);
 	}
 	return it->second;
+}
+
+
+Entity* EntityManager::GetPlayerShip() const
+{
+	if (player_ == NULL)
+	{
+		DIE("can't retrieve player: playership is not allocated yet");
+	}
+	return player_;
+}
+
+
+bool EntityManager::MoreBadGuys_ARCADE()
+{
+	// number of max bad guys = time / STEP + START
+	const int STEP = 8;
+	const int START = 2;
+	if (Count() < timer_ / STEP + START)
+	{
+		Entity* entity = CreateRandomEntity();
+		sf::Vector2f pos;
+		pos.x = Game::WIDTH;
+		pos.y = sf::Randomizer::Random(0,
+			height_ - (int) entity->GetSize().y);
+		entity->SetPosition(pos);
+		AddEntity(entity);
+	}
+	// always false, kill you till you die
+	return false;
+}
+
+
+bool EntityManager::MoreBadGuys_STORY()
+{
+	Entity* p = levels_.GiveNextEntity(timer_);
+	while (p != NULL)
+	{
+		AddEntity(p);
+		p = levels_.GiveNextEntity(timer_);
+	}
+
+	// le niveau n'est pas fini tant qu'il reste des ennemis, soit en file
+	// d'attente, soit dans le gestionnaire d'entités
+	return levels_.RemainingEntities() == 0 && Count() == 1;
 }
 

@@ -38,6 +38,8 @@ public:
 	 */
 	void AddStars(int count = 33);
 
+	void AddCenteredStars(int count);
+
 	/**
 	 * Ajouter un message défilant
 	 * @param[in] offset: position
@@ -140,11 +142,21 @@ private:
 		{
 			target.Draw(sprite_);
 		}
-	private:
+	protected:
 		int speed_;
 		sf::Sprite sprite_;
 	};
 
+	class CenteredStar: public Star
+	{
+	public:
+		CenteredStar();
+		~CenteredStar() {};
+		bool OnUpdate(float frametime);
+
+	private:
+		float angle_;
+	};
 
 	/**
 	 * Court message défilant
@@ -249,7 +261,6 @@ private:
 	typedef std::list<Particle*> ParticleList;
 
 	ParticleList particles_;
-	MediaManager& media_;
 };
 
 #endif // PARTICLESYSTEM_HPP

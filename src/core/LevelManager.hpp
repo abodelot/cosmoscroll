@@ -32,6 +32,8 @@ public:
 	 */
 	Error ParseFile(const char* file);
 
+	Error LoadCurrent();
+
 	/**
 	 * Obtenir la prochaine unité du niveau
 	 * @param timer: temps écoulé depuis le début du niveau
@@ -50,9 +52,18 @@ public:
 
 	/**
 	 * Définir le niveau courant
-	 * @param level: numéro du niveau
+	 * @param level_num: numéro du niveau
 	 */
-	Error SetCurrent(int level);
+	Error SetCurrent(int level_num);
+
+	int GetCurrent() const;
+
+	/**
+	 * Définir le dernier niveau débloqué
+	 */
+	void SetLastUnlocked(int level_num);
+
+	int GetLastUnlocked() const;
 
 	/**
 	 * Obtenir la description d'un niveau
@@ -127,6 +138,8 @@ private:
 	std::vector<TiXmlElement*> levels_;
 	// liste des vaisseaux à spawner pour le niveau courant
 	std::queue<EntitySlot> waiting_line_;
+	int current_level_;
+	int last_unlocked_level_;
 };
 
 #endif // LEVELMANAGER_HPP

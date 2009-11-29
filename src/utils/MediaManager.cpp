@@ -37,12 +37,12 @@ static void load_or_die(sf::SoundBuffer& buffer, const char* filename)
 }
 
 #ifndef NO_DUMB_MUSIC
-// charger un buffer lié a une instance de la lib dumb
-static void load_or_die(std::string& music_name, const char* filename)
+// charger une musique avec la libdumb
+static void load_or_die(DumbMusic*& music, const char* filename)
 {
-	music_name = filename;
+	std::string path(MUSIC_PATH);
+	music = new DumbMusic((path + filename).c_str());
 }
-
 #endif
 
 // charger une liste de ressources depuis un fichier
@@ -55,9 +55,6 @@ static bool load_from_list(const char* filelist, std::map<std::string, Ressource
 		std::string line;
 		while (getline(f, line))
 		{
-#ifdef DEBUG
-			std::cout << "loading: " << line << std::endl;
-#endif
 			// la clef de la ressource dans la map est le nom du fichier
 			// sans son extension
 			size_t found = line.find_last_of('.');
@@ -88,20 +85,30 @@ MediaManager& MediaManager::GetInstance()
 	return self;
 }
 
+
 MediaManager::MediaManager()
 {
 	// chargement des images
+#ifdef DEBUG
+	puts("* loading images...");
+#endif
 	if (!load_from_list(IMG_LIST, images_))
 	{
 		std::cerr << "can't open image list: " << IMG_LIST << std::endl;
 		exit(EXIT_FAILURE);
 	}
+#ifdef DEBUG
+	puts("* loading sounds...");
+#endif
 	// chargement des buffers audio
 	if (!load_from_list(SOUND_LIST, sounds_))
 	{
 		std::cerr << "can't open sound list: " << SOUND_LIST << std::endl;
 		exit(EXIT_FAILURE);
 	}
+#ifdef DEBUG
+	puts("* loading musics...");
+#endif
 #ifndef NO_DUMB_MUSIC
 	// chargement des musiques
 	if (!load_from_list(MUSIC_LIST, musics_))
@@ -118,14 +125,25 @@ MediaManager::MediaManager()
 }
 
 
-const sf::Image& MediaManager::GetImage(const char* image) const
+MediaManager::~MediaManager()
+{
+#ifndef NO_DUMB_MUSIC
+	DumbMusicMap::iterator it = musics_.begin();
+	for (; it != musics_.end(); ++it)
+	{
+		delete it->second;
+	}
+#endif
+}
+
+
+const sf::Image& MediaManager::GetImage(const char* key) const
 {
 	std::map<std::string, sf::Image>::const_iterator it;
-	it = images_.find(image);
+	it = images_.find(key);
 	if (it == images_.end())
 	{
-		std::cerr << "can't give you image " << image << std::endl;
-		exit(EXIT_FAILURE);
+		throw MediaNotFoundException(key);
 	}
 	return it->second;
 }
@@ -137,8 +155,7 @@ const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
 	it = sounds_.find(key);
 	if (it == sounds_.end())
 	{
-		std::cerr << "can't give you sound buffer " << key << std::endl;
-		exit(EXIT_FAILURE);
+		throw MediaNotFoundException(key);
 	}
 	return it->second;
 }
@@ -146,20 +163,13 @@ const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
 #ifndef NO_DUMB_MUSIC
 DumbMusic* MediaManager::GetDumbMusic(const char* key) const
 {
-	std::map<std::string, std::string>::const_iterator it;
+	DumbMusicMap::const_iterator it;
 	it = musics_.find(key);
 	if (it == musics_.end())
 	{
-		std::cerr << "can't give you music file " << key << std::endl;
-		exit(EXIT_FAILURE);
+		throw MediaNotFoundException(key);
 	}
-
-	std::string path(MUSIC_PATH);
-	DumbMusic* mus = new DumbMusic((path + it->second).c_str());
-#ifdef DEBUG
-	std::cout << path << it->second << " made." <<  std::endl;
-#endif
-	return mus;
+	return it->second;
 }
 #endif
 

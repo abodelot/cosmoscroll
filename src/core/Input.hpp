@@ -5,6 +5,9 @@
 
 #include "../utils/ConfigParser.hpp"
 
+/**
+ * Association des événements issus des périphériques aux actions du jeu
+ */
 class Input
 {
 public:
@@ -80,9 +83,14 @@ public:
 	unsigned int GetJoystickBind(Action action);
 
 	/**
+	 * Obtenir le nom d'une action
+	 */
+	static const wchar_t* ActionToString(Action action);
+
+	/**
 	 * Obtenir le nom d'une touche
 	 * @param key: key code sfml de la touche
-	 * @return nom en anglais
+	 * @return nom (en anglais)
 	 */
 	static const char* KeyToString(int key);
 
@@ -91,6 +99,13 @@ public:
 	 * @param flag: bitmask des périphériques
 	 */
 	void SetDevices(unsigned int flag);
+
+	/**
+	 * Saisi d'un binding par l'utilisateur
+	 * @param device: périphérique à tester
+	 * @param action: action dont le binding doit être modifié
+	 */
+	void AskUserInput(Device device, Action action);
 
 	/**
 	 * Charger une configuration de bindings

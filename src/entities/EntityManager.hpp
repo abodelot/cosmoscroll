@@ -7,9 +7,14 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "../core/Input.hpp"
 #include "Entity.hpp"
 #include "Weapon.hpp"
 #include "SpaceShip.hpp"
+
+class ParticleSystem;
+class PlayerShip;
+class LevelManager;
 
 /**
  * Gestionnaire de la vie, l'univers et tout le reste
@@ -17,10 +22,25 @@
 class EntityManager: public sf::Drawable
 {
 public:
+	enum Mode
+	{
+		MODE_STORY,
+		MODE_ARCADE
+	};
+
 	/**
-	 * @return l'instance unique
+	 * @return instance unique
 	 */
 	static EntityManager& GetInstance();
+
+	/**
+	 * Indiquer le mode de jeu
+	 */
+	void SetMode(Mode mode);
+
+	Mode GetMode() const;
+
+	void RespawnPlayer();
 
 	/**
 	 * Dimensions de l'univers
@@ -36,6 +56,8 @@ public:
 	 * @return hauteur de l'univers
 	 */
 	int GetHeight() const;
+
+	void HandleAction(Input::Action action);
 
 	/**
 	 * Mettre à jour les entités
@@ -58,6 +80,25 @@ public:
 	 * @return nombre d'entités
 	 */
 	int Count() const;
+
+	/**
+	 * Mettre fin à la partie en cours
+	 */
+	void TerminateGame();
+
+	/**
+	 * Tester si le jeu est terminé
+	 * @return true si game over
+	 */
+	bool CheckGameOver();
+
+	/**
+	 * @param top: couleur du haut du dégradé
+	 * @param bottom: couleur du bas du dégradé
+	 */
+	void SetBackgroundColor(const sf::Color& top, const sf::Color& bottom);
+
+	Entity* CreateRandomEntity() const;
 
 	/**
 	 * Initialiser une arme
@@ -99,7 +140,10 @@ public:
 	 */
 	void LoadSpaceShips(const char* filename);
 
-	Entity* CreateRandomEntity() const;
+	/**
+	 * Obtenir le vaisseau du joueur
+	 */
+	Entity* GetPlayerShip() const;
 
 	/**
 	 * Appliquer un foncteur sur chaque entité
@@ -108,6 +152,15 @@ public:
 	template <class T>
 	void ApplyToEach(T& functor);
 
+	inline float GetTimer() const { return timer_; }
+
+	inline float GetArcadeRecord() const { return arcade_record_; }
+
+	inline void SetArcadeRecord(float record) { arcade_record_ = record; }
+
+	void UpdateArcadeRecord();
+
+
 private:
 	EntityManager();
 	EntityManager(const EntityManager&);
@@ -115,6 +168,18 @@ private:
 
 	// inherited
 	void Render(sf::RenderTarget& target) const;
+
+	/**
+	 * Spawner les prochains éléments du jeu en mode Arcade
+	 * @return true si jeu terminé
+	 */
+	bool MoreBadGuys_ARCADE();
+
+	/**
+	 * Spawner les prochains éléments du jeu en mode Story
+	 * @return true si jeu terminé
+	 */
+	bool MoreBadGuys_STORY();
 
 	struct WeaponDefinition
 	{
@@ -144,6 +209,34 @@ private:
 
 	int width_;
 	int height_;
+
+	Mode mode_;
+	sf::Shape background_;
+	ParticleSystem& particles_;
+
+	struct PlayerSave
+	{
+		PlayerSave()
+		{
+			hp = 3;
+			shield = 3;
+			missiles = 1;
+			coolers = 0;
+		}
+
+		int hp;
+		int shield;
+		int missiles;
+		int coolers;
+	};
+
+	PlayerShip* player_;
+	PlayerSave player_save_;
+	bool (EntityManager::*more_bad_guys_)();
+	bool game_over_;
+	float timer_;
+	float arcade_record_;
+	LevelManager& levels_;
 };
 
 

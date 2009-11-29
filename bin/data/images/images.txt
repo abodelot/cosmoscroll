@@ -14,7 +14,7 @@ asteroid-small-1.png
 asteroid-small-2.png
 asteroid-small-3.png
 background.png
-main-screen.jpg
+main-screen.png
 bar_heat.png
 bar_hp.png
 bar_shield.png
