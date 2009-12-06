@@ -23,14 +23,6 @@ SoundSystem::SoundSystem()
 
 SoundSystem::~SoundSystem()
 {
-	for (int i = 0; i < MAX_SOUNDS; ++i)
-	{
-		if (sounds_[i].GetStatus() == sf::Sound::Playing)
-		{
-			sounds_[i].Stop();
-		}
-	}
-	StopMusic();
 }
 
 
@@ -138,4 +130,17 @@ void SoundSystem::EnableMusic(bool enabled)
 bool SoundSystem::IsMusicEnabled() const
 {
 	return enable_music_;
+}
+
+
+void SoundSystem::StopAll()
+{
+	for (int i = 0; i < MAX_SOUNDS; ++i)
+	{
+		if (sounds_[i].GetStatus() == sf::Sound::Playing)
+		{
+			sounds_[i].Stop();
+		}
+	}
+	StopMusic();
 }

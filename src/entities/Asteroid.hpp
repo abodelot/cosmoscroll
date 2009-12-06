@@ -12,31 +12,31 @@ class Asteroid: public Entity
 {
 public:
 	enum Size
-    {
-        SMALL, MEDIUM, BIG
-    };
+	{
+		SMALL, MEDIUM, BIG
+	};
 
-    /**
-     * Création d'un astéroïde
-     * @param[in] offset: position
-     * @param[in] size: taille
-     * @param[in] angle: orientation
-     */
-    Asteroid(const sf::Vector2f& offset, Size size, float angle=180);
+	/**
+	 * Création d'un astéroïde
+	 * @param[in] offset: position
+	 * @param[in] size: taille
+	 * @param[in] angle: orientation
+	 */
+	Asteroid(const sf::Vector2f& offset, Size size, float angle=180);
 
 	// inherited
 	Asteroid* Clone() const;
 
 	// inherited
-    void Update(float frametime);
+	void Update(float frametime);
 
 	// inherited
-    void TakeDamage(int damage);
+	void TakeDamage(int damage);
 
 private:
-    Size size_;
-    float angle_;
-    float speed_;
+	Size size_;
+	float angle_;
+	float speed_;
 };
 
 #endif // ASTEROID_HPP

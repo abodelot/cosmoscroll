@@ -52,7 +52,7 @@ void InGameScene::Update(float frametime)
 
 void InGameScene::Show(sf::RenderTarget& target) const
 {
-	target.Draw(panel_);
 	target.Draw(entities_);
+	target.Draw(panel_);
 }
 

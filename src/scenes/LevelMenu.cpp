@@ -43,8 +43,7 @@ void LevelMenu::Callback(int id)
 			levels_.GetTopColor(id),
 			levels_.GetBottomColor(id)
 		);
-		entities.SetMode(EntityManager::MODE_STORY);
-		entities.RespawnPlayer();
+		entities.InitMode(EntityManager::MODE_STORY);
 		levels_.SetCurrent(id);
 		levels_.LoadCurrent();
 

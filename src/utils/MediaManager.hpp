@@ -60,6 +60,8 @@ public:
 	 */
 	void SmoothImage(const char* key, bool smooth);
 
+	void Unload();
+
 private:
 	/**
 	 * Initialisation (chargement des images)

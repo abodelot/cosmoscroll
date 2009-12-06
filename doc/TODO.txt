@@ -6,7 +6,6 @@ Milestone 0.2
 
 - Niveaux variés avec difficulté croissante
 - système de procédures stockées pour les niveaux
-- Conserver le vaisseau du joueur d'un niveau à l'autre (ne pas respawn un neuf à chaque fois)
 - Intertionalisation (fichiers de langues pour fr, en, de)
 - compteur de frags et/ou de points
 

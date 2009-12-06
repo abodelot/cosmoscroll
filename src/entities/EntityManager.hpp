@@ -34,13 +34,11 @@ public:
 	static EntityManager& GetInstance();
 
 	/**
-	 * Indiquer le mode de jeu
+	 * Initialiser un mode de jeu avant une partie
 	 */
-	void SetMode(Mode mode);
+	void InitMode(Mode mode);
 
 	Mode GetMode() const;
-
-	void RespawnPlayer();
 
 	/**
 	 * Dimensions de l'univers
@@ -160,7 +158,6 @@ public:
 
 	void UpdateArcadeRecord();
 
-
 private:
 	EntityManager();
 	EntityManager(const EntityManager&);
@@ -180,6 +177,11 @@ private:
 	 * @return true si jeu terminé
 	 */
 	bool MoreBadGuys_STORY();
+
+	/**
+	 * Ré-allouer le vaisseau du joueur
+	 */
+	void RespawnPlayer();
 
 	struct WeaponDefinition
 	{

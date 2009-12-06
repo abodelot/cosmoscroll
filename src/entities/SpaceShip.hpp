@@ -11,7 +11,6 @@ public:
 	SpaceShip(const char* animation, int hp, int speed);
 	~SpaceShip();
 
-
 	void SetMovePattern(const char* pattern);
 
 	void SetAttackPattern(const char* pattern);

@@ -1,7 +1,6 @@
 #include "ParticleSystem.hpp"
+#include "Game.hpp"
 #include "SoundSystem.hpp"
-#include "Window.hpp"
-#include "ControlPanel.hpp"
 #include "../utils/Math.hpp"
 
 #include <SFML/System.hpp>
@@ -141,7 +140,7 @@ void ParticleSystem::Update(float frametime)
 }
 
 
-void ParticleSystem::Render(sf::RenderTarget& target) const
+void ParticleSystem::Show(sf::RenderTarget& target) const
 {
 	ParticleList::const_iterator it = particles_.begin();
 	for (; it != particles_.end(); ++it)
@@ -199,8 +198,8 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 ParticleSystem::Star::Star()
 {
 	sprite_.SetImage(GET_IMG("star"));
-	float x = sf::Randomizer::Random(0, WIN_WIDTH);
-	float y = sf::Randomizer::Random(ControlPanel::HEIGHT, WIN_HEIGHT);
+	float x = sf::Randomizer::Random(0, Game::WIDTH);
+	float y = sf::Randomizer::Random(0, Game::HEIGHT);
 	sprite_.SetPosition(x, y);
 	float scale = sf::Randomizer::Random(0.5f, 1.5f);
 	sprite_.SetScale(scale, scale);
@@ -212,8 +211,8 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 {
 	if (sprite_.GetPosition().x < 0)
 	{
-		sprite_.SetX(WIN_WIDTH);
-		sprite_.SetY(sf::Randomizer::Random(ControlPanel::HEIGHT, WIN_HEIGHT));
+		sprite_.SetX(Game::WIDTH);
+		sprite_.SetY(sf::Randomizer::Random(0, Game::HEIGHT));
 		sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED);
 		float scale = sf::Randomizer::Random(0.5f, 1.5f);
 		sprite_.SetScale(scale, scale);
@@ -226,8 +225,8 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 ParticleSystem::CenteredStar::CenteredStar()
 {
 	sprite_.SetImage(GET_IMG("star"));
-	float x = WIN_WIDTH / 2;
-	float y = WIN_HEIGHT / 2;
+	float x = Game::WIDTH / 2;
+	float y = Game::HEIGHT / 2;
 	sprite_.SetPosition(x, y);
 	float scale = sf::Randomizer::Random(0.5f, 1.5f);
 	sprite_.SetScale(scale, scale);
@@ -238,12 +237,12 @@ ParticleSystem::CenteredStar::CenteredStar()
 
 bool ParticleSystem::CenteredStar::OnUpdate(float frametime)
 {
-	static const sf::FloatRect UNIVERSE(0, 0, WIN_WIDTH, WIN_HEIGHT);
+	static const sf::FloatRect UNIVERSE(0, 0, Game::WIDTH, Game::HEIGHT);
 	sf::Vector2f pos = sprite_.GetPosition();
 	if (!UNIVERSE.Contains(pos.x, pos.y))
 	{
-		pos.x = WIN_WIDTH / 2;
-		pos.y = WIN_HEIGHT / 2;
+		pos.x = Game::WIDTH / 2;
+		pos.y = Game::HEIGHT / 2;
 		sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED);
 		float scale = sf::Randomizer::Random(0.5f, 1.5f);
 		sprite_.SetScale(scale, scale);

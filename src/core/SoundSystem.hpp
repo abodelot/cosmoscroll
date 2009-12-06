@@ -46,6 +46,11 @@ public:
 
 	bool IsMusicEnabled() const;
 
+	/**
+	 * Arrêter la lecture de tous les fichier en cours
+	 */
+	void StopAll();
+
 private:
 	SoundSystem();
 	SoundSystem(const SoundSystem&);

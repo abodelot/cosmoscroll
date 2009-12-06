@@ -21,6 +21,11 @@ public:
 
 	~PlayerShip();
 
+	/**
+	 * @return points de bouclier
+	 */
+	inline int GetShield() const { return shield_; }
+
 	// inherited
 	PlayerShip* Clone() const;
 

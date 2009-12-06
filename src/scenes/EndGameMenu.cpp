@@ -50,8 +50,7 @@ void EndGameMenu::Callback(int id)
 	switch (id)
 	{
 		case 0:
-			EntityManager::GetInstance().SetMode(EntityManager::MODE_ARCADE);
-			EntityManager::GetInstance().RespawnPlayer();
+			EntityManager::GetInstance().InitMode(EntityManager::MODE_ARCADE);
 			Game::GetInstance().SetNextScene(Game::SC_InGameScene);
 			break;
 		case 1:

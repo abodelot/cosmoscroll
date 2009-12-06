@@ -113,6 +113,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 
 PlayerShip::~PlayerShip()
 {
+	ParticleSystem::GetInstance().RemoveShield(this);
 #ifdef DEBUG
 	puts("PlayerShip deleted");
 #endif

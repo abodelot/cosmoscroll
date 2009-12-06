@@ -1,7 +1,5 @@
 #include "Game.hpp"
-
 #include "SoundSystem.hpp"
-#include "Window.hpp"
 #include "LevelManager.hpp"
 #include "ControlPanel.hpp"
 #include "../entities/EntityManager.hpp"
@@ -31,6 +29,10 @@
 #define XML_ANIMATIONS "data/xml/animations.xml"
 #define XML_SPACESHIPS "data/xml/spaceships.xml"
 
+// constantes de configuration de la fenêtre
+#define WIN_BPP     32
+#define WIN_FPS     60
+#define WIN_TITLE   "CosmoScroll"
 
 Game& Game::GetInstance()
 {
@@ -54,11 +56,11 @@ Game::Game() :
 
 	if (!fullscreen_)
 	{
-		app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE);
+		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE);
 	}
 	else
 	{
-		app_.Create(sf::VideoMode(WIN_WIDTH, WIN_HEIGHT, WIN_BPP), WIN_TITLE,
+		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE,
 			sf::Style::Fullscreen);
 	}
 	app_.Display();
@@ -89,7 +91,8 @@ Game::Game() :
 
 Game::~Game()
 {
-	SoundSystem::GetInstance().StopMusic();
+	SoundSystem::GetInstance().StopAll();
+	MediaManager::GetInstance().Unload();
 
 	entitymanager_.Clear();
 	app_.Close();

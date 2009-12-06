@@ -43,16 +43,41 @@ EntityManager::~EntityManager()
 }
 
 
-void EntityManager::SetMode(Mode mode)
+void EntityManager::InitMode(Mode mode)
 {
 	switch (mode)
 	{
 		case MODE_STORY:
 			more_bad_guys_ = &EntityManager::MoreBadGuys_STORY;
+			// le vaisseau du joueur est conservé d'un niveau à l'autre
+			if (player_ == NULL || player_->IsDead())
+			{
+				RespawnPlayer();
+			}
+			else
+			{
+				// suppression de toutes les unités, sauf le joueur
+				for (EntityList::iterator it = entities_.begin();
+					it != entities_.end();)
+				{
+					if (*it != player_)
+					{
+						delete *it;
+						it = entities_.erase(it);
+					}
+					else
+					{
+						++it;
+					}
+				}
+				player_->SetPosition(0, height_ / 2);
+			}
 			break;
 
 		case MODE_ARCADE:
 			more_bad_guys_ = &EntityManager::MoreBadGuys_ARCADE;
+			// on démarre toujours le mode arcade avec un nouveau vaisseau
+			RespawnPlayer();
 			SetBackgroundColor(sf::Color::Black, sf::Color::Black);
 			ControlPanel::GetInstance().SetGameInfo(
 				str_sprintf("Record : %02d:%02d",
@@ -61,27 +86,21 @@ void EntityManager::SetMode(Mode mode)
 			);
 			break;
 	}
+
 	mode_ = mode;
+	// initialisation avant une nouvelle partie
+	game_over_ = false;
+	timer_ = 0.f;
+	// re-init particles
+	particles_.Clear();
+	particles_.AddStars();
+	particles_.AddShield(player_->GetShield(), player_);
 }
 
 
 EntityManager::Mode EntityManager::GetMode() const
 {
 	return mode_;
-}
-
-
-void EntityManager::RespawnPlayer()
-{
-	particles_.Clear();
-	particles_.AddStars();
-
-	Clear();
-	sf::Vector2f position(0, height_ / 2);
-	player_ = new PlayerShip(position, "playership-red");
-	AddEntity(player_);
-	game_over_ = false;
-	timer_ = 0.f;
 }
 
 
@@ -196,10 +215,10 @@ bool EntityManager::CheckGameOver()
 
 void EntityManager::SetBackgroundColor(const sf::Color& top, const sf::Color& bottom)
 {
-	background_.SetPointColor(0, top);
-	background_.SetPointColor(1, top);
-	background_.SetPointColor(2, bottom);
-	background_.SetPointColor(3, bottom);
+	background_.SetPointColor(0, top);    // top left
+	background_.SetPointColor(1, top);    // top right
+	background_.SetPointColor(2, bottom); // bottom left
+	background_.SetPointColor(3, bottom); // bottom right
 }
 
 
@@ -213,7 +232,7 @@ void EntityManager::UpdateArcadeRecord()
 void EntityManager::Render(sf::RenderTarget& target) const
 {
 	target.Draw(background_);
-	target.Draw(particles_);
+	particles_.Show(target);
 	// affichage de toutes les entités
 	for (EntityList::const_iterator it = entities_.begin();
 		it != entities_.end(); ++it)
@@ -470,10 +489,7 @@ const Animation& EntityManager::GetAnimation(const char* key) const
 
 Entity* EntityManager::GetPlayerShip() const
 {
-	if (player_ == NULL)
-	{
-		DIE("can't retrieve player: playership is not allocated yet");
-	}
+	assert(player_ != NULL);
 	return player_;
 }
 
@@ -493,7 +509,7 @@ bool EntityManager::MoreBadGuys_ARCADE()
 		entity->SetPosition(pos);
 		AddEntity(entity);
 	}
-	// always false, kill you till you die
+	// always false, spawn bad guys till you die
 	return false;
 }
 
@@ -509,6 +525,14 @@ bool EntityManager::MoreBadGuys_STORY()
 
 	// le niveau n'est pas fini tant qu'il reste des ennemis, soit en file
 	// d'attente, soit dans le gestionnaire d'entités
-	return levels_.RemainingEntities() == 0 && Count() == 1;
+	return levels_.RemainingEntities() == 0 && Count() == 1; // 0 ennemis + le joueur = 1
 }
 
+
+void EntityManager::RespawnPlayer()
+{
+	Clear();
+	sf::Vector2f position(0, height_ / 2);
+	player_ = new PlayerShip(position, "playership-red");
+	AddEntity(player_);
+}

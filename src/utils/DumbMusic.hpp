@@ -19,8 +19,8 @@
 class DumbMusic: public sf::SoundStream
 {
 public:
-    DumbMusic(const char* name);
-    ~DumbMusic();
+	DumbMusic(const char* name);
+	~DumbMusic();
 
 	bool OnStart();
 

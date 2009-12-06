@@ -127,13 +127,6 @@ MediaManager::MediaManager()
 
 MediaManager::~MediaManager()
 {
-#ifndef NO_DUMB_MUSIC
-	DumbMusicMap::iterator it = musics_.begin();
-	for (; it != musics_.end(); ++it)
-	{
-		delete it->second;
-	}
-#endif
 }
 
 
@@ -182,4 +175,16 @@ const sf::Font& MediaManager::GetFont() const
 void MediaManager::SmoothImage(const char* key, bool smooth)
 {
 	images_[key].SetSmooth(smooth);
+}
+
+
+void MediaManager::Unload()
+{
+	#ifndef NO_DUMB_MUSIC
+	DumbMusicMap::iterator it = musics_.begin();
+	for (; it != musics_.end(); ++it)
+	{
+		delete it->second;
+	}
+	#endif
 }

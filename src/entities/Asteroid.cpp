@@ -31,26 +31,26 @@ Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
 	angle_ = math::deg_to_rad(angle);
 
 	size_ = size;
-    /*SetCenter(GetImage()->GetWidth() / 2, GetImage()->GetHeight() / 2);
-    static const sf::IntRect rect_big[COUNT_BIG] = {
-    	sf::IntRect(),
-    	sf::IntRect(),
-    	sf::IntRect()
-    };
-    static const sf::IntRect rect_medium[COUNT_MEDIUM] = {
-    	sf::IntRect(),
-    	sf::IntRect(),
-    	sf::IntRect()
-    };
-    static const sf::IntRect rect_small[COUNT_SMALL] = {
-    	sf::IntRect(),
-    	sf::IntRect(),
-    	sf::IntRect(),
-    	sf::IntRect()
-    }
-    switch (size)
-    {
-    	case SMALL:
+	/*SetCenter(GetImage()->GetWidth() / 2, GetImage()->GetHeight() / 2);
+	static const sf::IntRect rect_big[COUNT_BIG] = {
+		sf::IntRect(),
+		sf::IntRect(),
+		sf::IntRect()
+	};
+	static const sf::IntRect rect_medium[COUNT_MEDIUM] = {
+		sf::IntRect(),
+		sf::IntRect(),
+		sf::IntRect()
+	};
+	static const sf::IntRect rect_small[COUNT_SMALL] = {
+		sf::IntRect(),
+		sf::IntRect(),
+		sf::IntRect(),
+		sf::IntRect()
+	}
+	switch (size)
+	{
+		case SMALL:
 			SetSubRect(rect_small[sf::Randomizer::Random(0, COUNT_SMALL - 1)]);
 			break;
 		case MEDIUM:
@@ -59,7 +59,7 @@ Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
 		case BIG:
 			SetSubRect(rect_big[sf::Randomizer::Random(0, COUNT_BIG - 1)]);
 			break;
-    }*/
+	}*/
 }
 
 
@@ -71,7 +71,7 @@ Asteroid* Asteroid::Clone() const
 
 void Asteroid::Update(float frametime)
 {
-    sf::Sprite::Move(-VERTICAL_SPEED * frametime, 0);
+	sf::Sprite::Move(-VERTICAL_SPEED * frametime, 0);
 /*
 TODO
 (00:08:43) Alexandre: manque un ajustement sur le facteur de ralentissement 0.99 appliqué à chaque frame
@@ -79,14 +79,14 @@ TODO
 (00:09:31) Alexandre: faut impliquer frametime dans le calcul pour que ce soit indépendant des FPS
 (sinon plus on a de FPS plus l'astéro ralentit vite)
 */
-    speed_ *= SLOWDOWN;
-    float framespeed = frametime * speed_;
-    sf::Vector2f offset = GetPosition();
-    offset.x = offset.x + framespeed * math::cos(angle_);
-    offset.y = offset.y - framespeed * math::sin(angle_);
-    SetPosition(offset);
-    //Rotate(90 * frametime);
-    KillIfOut();
+	speed_ *= SLOWDOWN;
+	float framespeed = frametime * speed_;
+	sf::Vector2f offset = GetPosition();
+	offset.x = offset.x + framespeed * math::cos(angle_);
+	offset.y = offset.y - framespeed * math::sin(angle_);
+	SetPosition(offset);
+	//Rotate(90 * frametime);
+	KillIfOut();
 }
 
 

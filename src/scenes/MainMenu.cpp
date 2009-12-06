@@ -39,8 +39,7 @@ void MainMenu::Callback(int id)
 			break;
 		case 2:
 			game.SetNextScene(Game::SC_InGameScene);
-			EntityManager::GetInstance().SetMode(EntityManager::MODE_ARCADE);
-			EntityManager::GetInstance().RespawnPlayer();
+			EntityManager::GetInstance().InitMode(EntityManager::MODE_ARCADE);
 			break;
 		case 3:
 			game.SetNextScene(Game::SC_OptionMenu);
@@ -53,17 +52,3 @@ void MainMenu::Callback(int id)
 			break;
 	}
 }
-
-
-	/*
-		case 2:
-			mode_ = ARCADE;
-			next = PLAY;
-			panel_.SetGameInfo(str_sprintf("Record : %02d:%02d",
-				(int) best_arcade_time_ / 60,
-				(int) best_arcade_time_ % 60).c_str());
-			Init();
-			timer_ = 0.f;
-			p_StopPlay_ = &Game::ArcadeMoreBadGuys;
-
-	*/

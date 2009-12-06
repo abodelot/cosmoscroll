@@ -11,7 +11,7 @@
 /**
  * Moteur de particules pour gérer des effets graphiques (singleton)
  */
-class ParticleSystem: public sf::Drawable
+class ParticleSystem
 {
 public:
 	/**
@@ -21,20 +21,20 @@ public:
 
 	/**
 	 * Ajouter une explosion
-	 * @param[in] offset: position de l'explosion
+	 * @param offset: position de l'explosion
 	 */
 	void AddExplosion(const sf::Vector2f& offset);
 	void AddBigExplosion(const sf::Vector2f& pos);
 	/**
 	 * Ajouter un effet d'impact
-	 * @param[in] offset: position de l'impact
-	 * @param[in] count: nombre d'étincelles
+	 * @param offset: position de l'impact
+	 * @param count: nombre d'étincelles
 	 */
 	void AddImpact(const sf::Vector2f& offset, int count);
 
 	/**
 	 * Ajouter des étoiles défilantes dans la scène
-	 * @param[in] count: nombre d'étoiles
+	 * @param count: nombre d'étoiles
 	 */
 	void AddStars(int count = 33);
 
@@ -42,8 +42,8 @@ public:
 
 	/**
 	 * Ajouter un message défilant
-	 * @param[in] offset: position
-	 * @param[in] text: contenu du message
+	 * @param offset: position
+	 * @param text: contenu du message
 	 */
 	void AddMessage(const sf::Vector2f& offset, const wchar_t* text);
 
@@ -61,7 +61,6 @@ public:
 			{
 				p->SetHandle(NULL);
 			}
-
 		}
 	}
 
@@ -77,14 +76,12 @@ public:
 	 */
 	void Clear();
 
+	void Show(sf::RenderTarget& target) const;
 private:
 	ParticleSystem();
 	ParticleSystem(const ParticleSystem& other);
 	ParticleSystem& operator=(const ParticleSystem& other);
 	~ParticleSystem();
-
-	// inherited
-	void Render(sf::RenderTarget& target) const;
 
 	/**
 	 * Particule abstraite
