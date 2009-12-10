@@ -21,7 +21,7 @@ AboutMenu::AboutMenu()
 	info_text_.SetColor(sf::Color::White);
 	info_text_.SetFont(GET_FONT());
 
-	logos_.SetImage(GET_IMG("libs-logo"));
+	logos_.SetImage(GET_IMG("gui/libs-logo"));
 	logos_.SetY(Game::HEIGHT - logos_.GetSize().y);
 	logos_.SetX((Game::WIDTH - logos_.GetSize().x) / 2);
 	SetOffset(Game::MARGIN_X, 340);

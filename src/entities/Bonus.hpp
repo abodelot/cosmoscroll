@@ -16,7 +16,7 @@ public:
 		TRIPLE_SHOT,  // shot * 3 (10s)
 		SPEED,        // speed * 2 (10s)
 		STONED,       // inertia (10s)
-		MAGIC_BANANA, // invincible (10s)
+		SUPER_BANANA, // invincible (10s)
 		BONUS_COUNT
 	};
 

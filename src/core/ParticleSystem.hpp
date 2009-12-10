@@ -24,7 +24,8 @@ public:
 	 * @param offset: position de l'explosion
 	 */
 	void AddExplosion(const sf::Vector2f& offset);
-	void AddBigExplosion(const sf::Vector2f& pos);
+	void AddFiery(int x, int y);
+
 	/**
 	 * Ajouter un effet d'impact
 	 * @param offset: position de l'impact
@@ -48,13 +49,11 @@ public:
 	void AddMessage(const sf::Vector2f& offset, const wchar_t* text);
 
 	void AddShield(int count, const sf::Sprite* handle);
+	void RemoveShield(const sf::Sprite* handle);
 
 	void AddSmoke(int count, const sf::Sprite* handle);
-
 	void ClearSmoke(const sf::Sprite* handle);
 
-
-	void RemoveShield(const sf::Sprite* handle);
 
 	/**
 	 * Mise à jour des particules (déplacement)

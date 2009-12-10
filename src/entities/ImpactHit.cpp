@@ -50,7 +50,7 @@ void ImpactHit::OnCollide(Entity& entity)
 		Hit::OnCollide(entity);
 		if (IsDead())
 		{
-			ParticleSystem::GetInstance().AddImpact(GetPosition(), 512);
+			ParticleSystem::GetInstance().AddImpact(GetPosition(), 400);
 			Impact impact(*this);
 			EntityManager::GetInstance().ApplyToEach(impact);
 		}

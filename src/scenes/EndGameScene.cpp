@@ -60,7 +60,6 @@ void EndGameScene::Poke()
 	{
 		SoundSystem::GetInstance().PlaySound("game-over");
 		info_.SetText("Game Over");
-		printf("remaining entites = %d\n", (int) entities_.Count());
 	}
 	else
 	{

@@ -60,9 +60,9 @@ const wchar_t* Bonus::GetDescription() const
 		case SPEED:
 			return L"Vitesse";
 		case STONED:
-			return L"Stoned :D";
-		case MAGIC_BANANA:
-			return L"Banane invincible !";
+			return L"Stoned !";
+		case SUPER_BANANA:
+			return L"Super Banane !";
 		default:
 			break;
 	}

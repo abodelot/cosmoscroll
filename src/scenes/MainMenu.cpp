@@ -5,7 +5,7 @@
 
 MainMenu::MainMenu()
 {
-	title_.SetImage(GET_IMG("cosmoscroll-logo"));
+	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
 	title_.SetPosition((Game::WIDTH - title_.GetSize().x) / 2, 12);
 
 	SetOffset(Game::MARGIN_X, 130);

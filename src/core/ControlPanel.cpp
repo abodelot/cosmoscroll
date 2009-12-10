@@ -19,20 +19,20 @@ ControlPanel& ControlPanel::GetInstance()
 
 ControlPanel::ControlPanel()
 {
-	panel_.SetImage(GET_IMG("score-board"));
+	panel_.SetImage(GET_IMG("gui/score-board"));
 
 	font_.LoadFromFile("data/font/visitor2.ttf", FONT_1);
 	font_big_.LoadFromFile("data/font/visitor2.ttf", FONT_2);
 
 	pbars_[HP].Init(font_, 45, 10);
 	pbars_[HP].label.SetText("Coque");
-	pbars_[HP].bar.SetImage(GET_IMG("bar_hp"));
+	pbars_[HP].bar.SetImage(GET_IMG("gui/bar-hp"));
 	pbars_[SHIELD].Init(font_, 45, 30);
 	pbars_[SHIELD].label.SetText("Bouclier");
-	pbars_[SHIELD].bar.SetImage(GET_IMG("bar_shield"));
+	pbars_[SHIELD].bar.SetImage(GET_IMG("gui/bar-shield"));
 	pbars_[HEAT].Init(font_, 220, 10);
 	pbars_[HEAT].label.SetText("Chaleur");
-	pbars_[HEAT].bar.SetImage(GET_IMG("bar_heat"));
+	pbars_[HEAT].bar.SetImage(GET_IMG("gui/bar-heat"));
 	sf::Vector2f pos = pbars_[HEAT].bar.GetPosition();
 	info_.SetPosition(pos.x + 8, pos.y - 6);
 	info_.SetFont(font_);

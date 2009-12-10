@@ -68,7 +68,7 @@ Game::Game() :
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
 
-	const sf::Image& icon = GET_IMG("icon");
+	const sf::Image& icon = GET_IMG("gui/icon");
 	app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
 
 	// init entity manager

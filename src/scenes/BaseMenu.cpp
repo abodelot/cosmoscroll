@@ -9,8 +9,8 @@
 
 BaseMenu::BaseMenu()
 {
-	background_.SetImage(GET_IMG("background"));
-	background2_.SetImage(GET_IMG("main-screen"));
+	background_.SetImage(GET_IMG("gui/background"));
+	background2_.SetImage(GET_IMG("gui/main-screen"));
 
 	// default settings
 	textsize_ = 32;

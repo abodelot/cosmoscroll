@@ -7,13 +7,13 @@
 
 IntroLevelScene::IntroLevelScene()
 {
-	background_.SetImage(GET_IMG("background"));
+	background_.SetImage(GET_IMG("gui/background"));
 
 	description_.SetColor(sf::Color::White);
 	description_.SetFont(GET_FONT());
 	description_.SetSize(30);
 
-	title_.SetImage(GET_IMG("cosmoscroll-logo"));
+	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
 	title_.SetCenter(title_.GetSize().x / 2, 0);
 	title_.SetPosition(Game::WIDTH / 2, 12);
 }

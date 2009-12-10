@@ -13,10 +13,10 @@
 IntroScene::IntroScene() :
 	entity_mgr_(EntityManager::GetInstance())
 {
-	background_.SetImage(GET_IMG("background"));
+	background_.SetImage(GET_IMG("gui/background"));
 
-	MediaManager::GetInstance().SmoothImage("cosmoscroll-logo", true);
-	title_.SetImage(GET_IMG("cosmoscroll-logo"));
+	MediaManager::GetInstance().SmoothImage("gui/cosmoscroll-logo", true);
+	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
 	title_.SetCenter(title_.GetSize().x / 2, title_.GetSize().y / 2);
 	title_.SetPosition(Game::WIDTH / 2, Game::HEIGHT / 2);
 	title_.Resize(title_.GetSize().x * ZOOM_FACTOR, title_.GetSize().y * ZOOM_FACTOR);

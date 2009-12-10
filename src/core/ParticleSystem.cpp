@@ -5,8 +5,6 @@
 
 #include <SFML/System.hpp>
 
-#define PARTICLES_PER_EXPLOSION 40
-
 
 ParticleSystem& ParticleSystem::GetInstance()
 {
@@ -28,23 +26,19 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::AddExplosion(const sf::Vector2f& offset)
 {
-	/*for (int i = 0; i < PARTICLES_PER_EXPLOSION; ++i)
-	{
-		particles_.push_front(new Fiery(offset, media_.GetImage("fiery")));
-	}*/
 	particles_.push_front(new Explosion(offset));
 	SoundSystem::GetInstance().PlaySound("boom");
 }
 
 
-void ParticleSystem::AddBigExplosion(const sf::Vector2f& pos)
+void ParticleSystem::AddFiery(int x, int y)
 {
-	static const sf::Image& fiery = GET_IMG("fiery");
-	for (int i = 0; i < PARTICLES_PER_EXPLOSION; ++i)
+	static const sf::Image& fiery = GET_IMG("particles/fiery");
+	sf::Vector2f pos(x, y);
+	for (int i = 0; i < 42; ++i)
 	{
 		particles_.push_front(new Fiery(pos, fiery));
 	}
-	SoundSystem::GetInstance().PlaySound("boom");
 }
 
 
@@ -178,12 +172,12 @@ void ParticleSystem::Clear()
 	particles_.clear();
 }
 
-// -----------
+// particles -------------------------------------------------------------------
 
 // Fiery
 #define FIERY_VELOCITY          150
-#define FIERY_MIN_LIFETIME      0.6f
-#define FIERY_MAX_LIFETIME      3.6f
+#define FIERY_MIN_LIFETIME      1.0f
+#define FIERY_MAX_LIFETIME      4.0f
 
 ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset, const sf::Image& img)
 {
@@ -271,6 +265,7 @@ bool ParticleSystem::CenteredStar::OnUpdate(float frametime)
 	sprite_.SetPosition(pos);
 	return false;
 }
+
 // TextParticle
 #define MESSAGE_LIFETIME   5.0
 #define MESSAGE_SPEED      50

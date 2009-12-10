@@ -8,7 +8,7 @@
 #include "../core/SoundSystem.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/Math.hpp"
-#include "ImpactHit.hpp"
+#include "../utils/DIE.hpp"
 
 #define WEAPON1_OFFSET              52, 22
 #define WEAPON2_OFFSET              50, 24
@@ -33,7 +33,7 @@
 #define SHIELD_MAX                  6 // max shield points
 #define SHIELD_RECOVERY_RATE        0.3 // shield point per second
 
-#define TIMED_BONUS_DURATION        10 // seconds
+#define TIMED_BONUS_DURATION        12 // seconds
 
 
 PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
@@ -62,6 +62,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	coolers_ = COOLER_DEFAULT;
 	missiles_ = MISSILES_DEFAULT;
 	overheated_ = false;
+	invincible_ = false;
 	shield_timer_ = 0;
 	heat_ = 0.0f;
 
@@ -100,19 +101,13 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	konami_code_[8] = Input::USE_WEAPON_2;
 	konami_code_[9] = Input::USE_WEAPON_1;
 	current_konami_event_ = 0;
-
-#ifdef DEBUG
-	printf("PlayerShip created at %p\n", (void*) this);
-#endif
 }
 
 
 PlayerShip::~PlayerShip()
 {
 	ParticleSystem::GetInstance().RemoveShield(this);
-#ifdef DEBUG
-	puts("PlayerShip deleted");
-#endif
+	ParticleSystem::GetInstance().ClearSmoke(this);
 }
 
 
@@ -198,8 +193,9 @@ void PlayerShip::Update(float frametime)
 	pos.y = pos.y + speed_y_ * frametime;
 	pos.x = pos.x + speed_x_ * frametime;
 
-	const int X_BOUND = EntityManager::GetInstance().GetWidth() - GetSize().x;
-	const int Y_BOUND = EntityManager::GetInstance().GetHeight() - GetSize().y;
+	static const EntityManager& manager = EntityManager::GetInstance();
+	const int X_BOUND = manager.GetWidth() - GetSize().x;
+	const int Y_BOUND = manager.GetHeight() - GetSize().y;
 
 	if (pos.y < 0)
 	{
@@ -259,6 +255,7 @@ void PlayerShip::Update(float frametime)
 			}
 		}
 	}
+	// update armes
 	weapon1_.Update(frametime);
 	weapon2_.Update(frametime);
 	missile_launcher_.Update(frametime);
@@ -267,6 +264,10 @@ void PlayerShip::Update(float frametime)
 
 void PlayerShip::TakeDamage(int damage)
 {
+	if (invincible_) {
+		return;
+	}
+
 	static ParticleSystem& p = ParticleSystem::GetInstance();
 	if (shield_ > 0)
 	{
@@ -389,11 +390,6 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			{
 				weapon1_.SetTriple(true);
 				weapon2_.SetTriple(true);
-				puts("bonus triple tir activé");
-			}
-			else
-			{
-				puts("bonus triple tir relancé");
 			}
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
 			break;
@@ -411,6 +407,16 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 				compute_move_ = &PlayerShip::ComputeMoveOnDrugs;
 			}
 			bonus_[T_STONED] += TIMED_BONUS_DURATION;
+			break;
+		case Bonus::SUPER_BANANA:
+			if (bonus_[T_INVINCIBLE] == 0)
+			{
+				invincible_ = true;
+			}
+			ParticleSystem::GetInstance().AddFiery(
+				GetPosition().x + GetSize().x / 2,
+				GetPosition().y + GetSize().y / 2);
+			bonus_[T_INVINCIBLE] += TIMED_BONUS_DURATION;
 			break;
 
 		// other bonus
@@ -464,10 +470,25 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 		case T_STONED:
 			compute_move_ = &PlayerShip::ComputeMove;
 			break;
+		case T_INVINCIBLE:
+			invincible_ = false;
+			break;
 		default:
-			abort();
+			DIE("unknown bonus");
 	}
 	bonus_[tbonus] = 0;
+}
+
+
+void PlayerShip::IncreaseShield(int count)
+{
+	shield_ += count;
+	// update particles
+	ParticleSystem& p = ParticleSystem::GetInstance();
+	p.RemoveShield(this);
+	p.AddShield(shield_, this);
+	// update panel count
+	panel_.SetShield(shield_);
 }
 
 
@@ -483,26 +504,13 @@ void PlayerShip::KonamiCodeOn()
 	panel_.SetCoolers(42);
 	missiles_ = 42;
 	panel_.SetMissiles(42);
-	hp_ = 42;
-	panel_.SetShipHP(hp_);
-	shield_ = 42;
-	panel_.SetShield(shield_);
-	particles.RemoveShield(this);
-	particles.AddShield(shield_, this);
 	weapon1_.SetTriple(true);
 	weapon2_.SetTriple(true);
+	missile_launcher_.SetTriple(true);
+	invincible_ = true;
 
 	particles.AddMessage(GetPosition(), L"Have you mooed today?");
 }
 
 
-void PlayerShip::IncreaseShield(int count)
-{
-	shield_ += count;
-	// update particles
-	ParticleSystem& p = ParticleSystem::GetInstance();
-	p.RemoveShield(this);
-	p.AddShield(shield_, this);
-	// update panel count
-	panel_.SetShield(shield_);
-}
+
