@@ -9,6 +9,7 @@
 LevelMenu::LevelMenu():
 	levels_(LevelManager::GetInstance())
 {
+	SetTitle(L"Choix du niveau");
 	SetOffset(Game::MARGIN_X, 100);
 }
 

@@ -92,6 +92,13 @@ public:
 protected:
 	virtual void Callback(int id);
 
+	/**
+	 * Indiquer le titre du menu (aucun par défaut)
+	 * @param text: contenu du titre
+	 * @param y: décalage axe Y
+	 */
+	void SetTitle(const wchar_t* text, int y = 20);
+
 	void DrawItems(sf::RenderTarget& target) const;
 
 private:
@@ -123,6 +130,7 @@ private:
 
 	void ResetStyle(MenuItem& item);
 
+	sf::String title_;
 	mutable sf::Sprite background_;
 	sf::Sprite background2_;
 	std::vector<MenuItem> items_;

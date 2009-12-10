@@ -5,8 +5,7 @@
 
 #define COSMOSCROLL_VERSION "0.2-devel"
 #define COSMOSCROLL_ABOUT str_sprintf(\
-		L"À propos de CosmoScroll\n\n" \
-		"Version : %s\n\n" \
+		L"Version : %s\n\n" \
 		"Auteurs :\n" \
 		"     Alexandre Bodelot\n" \
 		"     Arnaud Wolff\n\n" \
@@ -15,8 +14,10 @@
 
 AboutMenu::AboutMenu()
 {
+	SetTitle(L"À propos de CosmoScroll");
+
 	info_text_.SetText(COSMOSCROLL_ABOUT);
-	info_text_.SetPosition(Game::MARGIN_X, 40);
+	info_text_.SetPosition(Game::MARGIN_X, 120);
 	info_text_.SetColor(sf::Color::White);
 	info_text_.SetFont(GET_FONT());
 

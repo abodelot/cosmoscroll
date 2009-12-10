@@ -17,8 +17,6 @@ public:
 private:
 	// inherited
 	void Callback(int id);
-
-	sf::String title_;
 };
 
 #endif // PAUSEMENU_HPP

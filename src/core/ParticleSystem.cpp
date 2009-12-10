@@ -50,7 +50,7 @@ void ParticleSystem::AddBigExplosion(const sf::Vector2f& pos)
 
 void ParticleSystem::AddImpact(const sf::Vector2f& offset, int count)
 {
-	static const sf::Image& img = GET_IMG("impact");
+	static const sf::Image& img = GET_IMG("particles/impact");
 	for (; count > 0; --count)
 	{
 		particles_.push_front(new Fiery(offset, img));
@@ -88,26 +88,31 @@ void ParticleSystem::AddShield(int count, const sf::Sprite* handle)
 	float angle = 2 * PI / count;
 	for (int i = 0; i < count; ++i)
 	{
-		particles_.push_front(new LinkedParticle(handle, angle * (i + 1)));
+		particles_.push_front(new ShieldParticle(handle, angle * (i + 1)));
 	}
 }
 
 
-void ParticleSystem::AddFollow(int count, const sf::Sprite* handle)
+void ParticleSystem::AddSmoke(int count, const sf::Sprite* handle)
 {
 	for (int i = 0; i < count; ++i)
 	{
-		particles_.push_front(new Follow(handle));
+		particles_.push_front(new Smoke(handle));
 	}
 }
 
+
+/*template <class TParticle>
+void ParticleSystem::RemoveLinkedBy(const sf::Sprite* handle)
+{
+}*/
 
 void ParticleSystem::RemoveShield(const sf::Sprite* handle)
 {
 	ParticleList::iterator it;
 	for (it = particles_.begin(); it != particles_.end();)
 	{
-		LinkedParticle* p = dynamic_cast<LinkedParticle*>(*it);
+		ShieldParticle* p = dynamic_cast<ShieldParticle*>(*it);
 		if (p != NULL and p->GetHandle() == handle)
 		{
 			delete *it;
@@ -120,7 +125,20 @@ void ParticleSystem::RemoveShield(const sf::Sprite* handle)
 	}
 }
 
-/*void ParticleSystem::KillAllLinkedBy(const sf::Sprite* handle) */
+
+void ParticleSystem::ClearSmoke(const sf::Sprite* handle)
+{
+	for (ParticleList::iterator it = particles_.begin();
+		it != particles_.end(); ++it)
+	{
+		Smoke* p = dynamic_cast<Smoke*>(*it);
+		if (p != NULL && p->GetHandle() == handle)
+		{
+			p->SetHandle(NULL);
+		}
+	}
+}
+
 
 void ParticleSystem::Update(float frametime)
 {
@@ -197,7 +215,7 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 
 ParticleSystem::Star::Star()
 {
-	sprite_.SetImage(GET_IMG("star"));
+	sprite_.SetImage(GET_IMG("particles/star"));
 	float x = sf::Randomizer::Random(0, Game::WIDTH);
 	float y = sf::Randomizer::Random(0, Game::HEIGHT);
 	sprite_.SetPosition(x, y);
@@ -224,7 +242,7 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 
 ParticleSystem::CenteredStar::CenteredStar()
 {
-	sprite_.SetImage(GET_IMG("star"));
+	sprite_.SetImage(GET_IMG("particles/star"));
 	float x = Game::WIDTH / 2;
 	float y = Game::HEIGHT / 2;
 	sprite_.SetPosition(x, y);
@@ -277,14 +295,14 @@ bool ParticleSystem::TextParticle::OnUpdate(float frametime)
 }
 
 
-// LinkedParticle
+// SmokeParticle
 // distance vaisseau <-> particule (plus elle est éloignée, plus elle va vite)
 #define SHIELD_RADIUS 42
 
-ParticleSystem::LinkedParticle::LinkedParticle(const sf::Sprite* handle,
+ParticleSystem::ShieldParticle::ShieldParticle(const sf::Sprite* handle,
 	float angle)
 {
-	sprite_.SetImage(GET_IMG("shield"));
+	sprite_.SetImage(GET_IMG("particles/shield"));
 	sprite_.SetCenter(sprite_.GetSize().x / 2, sprite_.GetSize().y / 2);
 	handle_ = handle;
 
@@ -293,7 +311,7 @@ ParticleSystem::LinkedParticle::LinkedParticle(const sf::Sprite* handle,
 }
 
 
-bool ParticleSystem::LinkedParticle::OnUpdate(float frametime)
+bool ParticleSystem::ShieldParticle::OnUpdate(float frametime)
 {
 	sf::Vector2f offset = handle_->GetPosition();
 	angle_ += (2 * PI * frametime); // rotation de 2 * PI par seconde
@@ -306,26 +324,33 @@ bool ParticleSystem::LinkedParticle::OnUpdate(float frametime)
 	return false;
 }
 
-#define MAX_LIFETIME_FOLLOW 1.5f
+#define SMOKE_MAX_LIFETIME 3.f
+#define SMOKE_BASE_SPEED   1100
+#define SMOKE_MIN_SIZE     0.5f
+#define SMOKE_MAX_SIZE     1.2f
+#define SMOKE_MIN_ANGLE    (PI - 1.f)
+#define SMOKE_MAX_ANGLE    (PI + 1.f)
 
-ParticleSystem::Follow::Follow(const sf::Sprite* handle)
+
+ParticleSystem::Smoke::Smoke(const sf::Sprite* handle)
 {
+	static const sf::Image& img = GET_IMG("particles/smoke");
+
 	handle_ = handle;
-	sf::Vector2f pos = handle->GetPosition();
-	static const sf::Image& img = GET_IMG("star");
+	const sf::Vector2f& pos = handle->GetPosition();
 	sprite_.SetPosition(pos.x, pos.y);
 	sprite_.SetImage(img);
-	//sprite_.SetColor(sf::Color::Red);
-	speed_ = FIERY_VELOCITY;
-	angle_ = sf::Randomizer::Random(0, 360);
-	timer_ = sf::Randomizer::Random(0.0f, MAX_LIFETIME_FOLLOW);
+	float size = sf::Randomizer::Random(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
+	sprite_.SetScale(size, size);
+	angle_ = sf::Randomizer::Random(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
+	timer_ = sf::Randomizer::Random(0.0f, SMOKE_MAX_LIFETIME);
 }
 
 
-bool ParticleSystem::Follow::OnUpdate(float frametime)
+bool ParticleSystem::Smoke::OnUpdate(float frametime)
 {
 	timer_ += frametime;
-	if (timer_ >= MAX_LIFETIME_FOLLOW)
+	if (timer_ >= SMOKE_MAX_LIFETIME)
 	{
 		if (handle_ == NULL)
 		{
@@ -333,18 +358,23 @@ bool ParticleSystem::Follow::OnUpdate(float frametime)
 		}
 		timer_ = 0;
 		sprite_.SetPosition(handle_->GetPosition().x, handle_->GetPosition().y + handle_->GetSize().y / 2);
-		angle_ = sf::Randomizer::Random(0, 360);
+		angle_ = sf::Randomizer::Random(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
 	}
 
 
 	sf::Vector2f pos = sprite_.GetPosition();
-	int speed = static_cast<int> ((MAX_LIFETIME_FOLLOW - timer_) * 500 * frametime);
+	int speed = (int) ((SMOKE_MAX_LIFETIME - timer_) * SMOKE_BASE_SPEED * frametime);
 
 	math::translate(pos, angle_, speed * frametime);
 	sprite_.SetPosition(pos);
+	sprite_.SetColor(sf::Color(255, 255, 255, (sf::Uint8) (255 - 255 * timer_ / SMOKE_MAX_LIFETIME)));
 
-	sprite_.SetColor(sf::Color(255, 255, 255, (sf::Uint8) (255 - 255 * timer_ / MAX_LIFETIME_FOLLOW)));
-	/*
+	return false;
+}
+
+
+/*
+	// MAGNET STUFF
 	sf::Vector2f offset = handle_->GetPosition();
 	sf::Vector2f myp = sprite_.GetPosition();
 	offset.x = offset.x + (handle_->GetSize().x / 2) + sf::Randomizer::Random(-100, 100);
@@ -353,7 +383,5 @@ bool ParticleSystem::Follow::OnUpdate(float frametime)
 	float d = math::distance(myp, offset) * 2;
 	float dist =  d * frametime;
 	math::translate(myp, angle_, dist);
-	sprite_.SetPosition(myp);*/
-	return false;
-}
-
+	sprite_.SetPosition(myp);
+*/

@@ -5,6 +5,7 @@
 
 KeyboardMenu::KeyboardMenu()
 {
+	SetTitle(L"Configuration clavier");
 	SetOffset(Game::MARGIN_X, 100);
 	SetTextSize(26);
 }

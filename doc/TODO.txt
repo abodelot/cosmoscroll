@@ -12,7 +12,6 @@ Milestone 0.2
 recoder le ParticleSystem :
 	- optimiser les déplacements avec un vecteur vitesse, au lieu de calculer la pos sin(angle)/cos(angle) à chaque frame
 	- optimiser l'allocation des particules, allouer les particules d'un même effet par groupe
-	- Ajouter effet graphique sur bonus speed
 	- Ajouter effet graphique sur bonus invincibilité
 
 

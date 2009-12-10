@@ -6,17 +6,13 @@
 
 PauseMenu::PauseMenu()
 {
+	SetTitle(L"Pause", 130);
 	SetOffset(200, 210);
 
 	AddOption("Reprendre la partie",       1);
 	AddOption("Options",                   2);
 	AddOption("Revenir au menu principal", 3);
 	AddOption("Quitter le jeu",            4);
-
-	title_.SetText("Pause");
-	title_.SetPosition(200, 130);
-	title_.SetSize(60);
-	title_.SetFont(GET_FONT());
 }
 
 
@@ -36,6 +32,7 @@ void PauseMenu::Callback(int id)
 			break;
 		case 4:
 			game.Quit();
+			break;
 	}
 }
 
@@ -51,6 +48,5 @@ void PauseMenu::Show(sf::RenderTarget& target) const
 	target.Draw(ControlPanel::GetInstance());
 	target.Draw(EntityManager::GetInstance());
 	BaseMenu::DrawItems(target);
-	target.Draw(title_);
 }
 

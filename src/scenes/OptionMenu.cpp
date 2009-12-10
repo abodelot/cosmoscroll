@@ -4,6 +4,7 @@
 
 OptionMenu::OptionMenu()
 {
+	SetTitle(L"Options");
 	SetOffset(Game::MARGIN_X, 100);
 
 	AddOption("Configuration clavier",  1);

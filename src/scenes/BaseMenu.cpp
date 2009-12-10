@@ -89,6 +89,7 @@ void BaseMenu::Show(sf::RenderTarget& target) const
 
 void BaseMenu::DrawItems(sf::RenderTarget& target) const
 {
+	target.Draw(title_);
 	const int length = items_.size();
 	for (int i = 0; i < length; ++i)
 	{
@@ -154,15 +155,16 @@ void BaseMenu::AddOption(const sf::Unicode::Text& label, int id, bool activable)
 	if (selected_ == -1)
 	{
 		selected_ = 0;
-		item.label.SetPosition(offset_);
+		item.label.SetY(offset_.y);
 		ApplyStyle(item, highlight_look_);
 	}
 	else
 	{
 		sf::FloatRect rect = items_.back().label.GetRect();
-		item.label.SetPosition(rect.Left, rect.Bottom + linespace_);
+		item.label.SetY(rect.Bottom + linespace_);
 		ApplyStyle(item, activable ? normal_look_ : unactive_look_);
 	}
+	item.label.SetX((Game::WIDTH - item.label.GetRect().GetWidth()) / 2);
 	items_.push_back(item);
 }
 
@@ -200,6 +202,16 @@ void BaseMenu::Clear()
 
 void BaseMenu::Callback(int)
 {
+}
+
+
+void BaseMenu::SetTitle(const wchar_t* text, int y)
+{
+	title_.SetFont(GET_FONT());
+	title_.SetSize(50);
+	title_.SetText(text);
+	title_.SetX((Game::WIDTH - title_.GetRect().GetWidth()) / 2);
+	title_.SetY(y);
 }
 
 

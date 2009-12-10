@@ -4,6 +4,10 @@ ammo/laserbeam.png
 ammo/plasma.png
 ammo/plasma-pink.png
 ammo/missile.png
+particles/smoke.png
+particles/star.png
+particles/shield.png
+particles/impact.png
 asteroid-big-1.png
 asteroid-big-2.png
 asteroid-big-3.png
@@ -26,10 +30,7 @@ ship-ufo.png
 evil_boss.png
 score-board.png
 explosion.png
-shield.png
 playership.png
-impact.png
-star.png
 cosmoscroll-logo.png
 libs-logo.png
 icon.bmp

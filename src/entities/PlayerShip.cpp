@@ -10,15 +10,11 @@
 #include "../utils/Math.hpp"
 #include "ImpactHit.hpp"
 
-#ifdef DEBUG
-#include <iostream>
-#endif
-
 #define WEAPON1_OFFSET              52, 22
 #define WEAPON2_OFFSET              50, 24
 
 #define MAX_SPEED                   200.f
-#define BONUS_MAX_SPEED             (MAX_SPEED * 2)
+#define BONUS_MAX_SPEED             350.f
 #define ACCELERATION_DELAY_ON_DRUGS 0.4f // time to reach MAX_SPEED from 0 (or 0 from MAX_SPEED)
 
 #define COOLER_DEFAULT              0
@@ -405,11 +401,7 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			if (bonus_[T_SPEED] == 0)
 			{
 				max_speed_ = BONUS_MAX_SPEED;
-				//printf("bonus speed activé, speed=%d\n", speed_);
-			}
-			else
-			{
-				//printf("bonus speed relancé, speed=%d\n", speed_);
+				ParticleSystem::GetInstance().AddSmoke(96, this);
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
 			break;
@@ -417,11 +409,6 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			if (bonus_[T_STONED] == 0)
 			{
 				compute_move_ = &PlayerShip::ComputeMoveOnDrugs;
-				//printf("bonus stoned activé, speed=%d\n", speed_);
-			}
-			else
-			{
-				//printf("bonus stoned relancé, speed=%d\n", speed_);
 			}
 			bonus_[T_STONED] += TIMED_BONUS_DURATION;
 			break;
@@ -469,10 +456,10 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 		case T_TRISHOT:
 			weapon1_.SetTriple(false);
 			weapon2_.SetTriple(false);
-			//puts("info: bonus triple tir désactivé");
 			break;
 		case T_SPEED:
 			max_speed_ = MAX_SPEED;
+			ParticleSystem::GetInstance().ClearSmoke(this);
 			break;
 		case T_STONED:
 			compute_move_ = &PlayerShip::ComputeMove;

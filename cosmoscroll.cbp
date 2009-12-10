@@ -60,7 +60,6 @@
 		<Unit filename="src/core/ParticleSystem.hpp" />
 		<Unit filename="src/core/SoundSystem.cpp" />
 		<Unit filename="src/core/SoundSystem.hpp" />
-		<Unit filename="src/core/Window.hpp" />
 		<Unit filename="src/entities/Asteroid.cpp" />
 		<Unit filename="src/entities/Asteroid.hpp" />
 		<Unit filename="src/entities/Bonus.cpp" />

@@ -6,6 +6,7 @@
 
 JoystickMenu::JoystickMenu()
 {
+	SetTitle(L"Configuration joystick");
 	SetOffset(Game::MARGIN_X, 100);
 }
 

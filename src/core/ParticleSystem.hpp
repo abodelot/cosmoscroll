@@ -49,20 +49,10 @@ public:
 
 	void AddShield(int count, const sf::Sprite* handle);
 
-	void AddFollow(int count, const sf::Sprite* handle);
+	void AddSmoke(int count, const sf::Sprite* handle);
 
-	void ClearFollow(const sf::Sprite* handle)
-	{
-		for (ParticleList::iterator it = particles_.begin();
-			it != particles_.end(); ++it)
-		{
-			Follow* p = dynamic_cast<Follow*>(*it);
-			if (p != NULL && p->GetHandle() == handle)
-			{
-				p->SetHandle(NULL);
-			}
-		}
-	}
+	void ClearSmoke(const sf::Sprite* handle);
+
 
 	void RemoveShield(const sf::Sprite* handle);
 
@@ -178,11 +168,11 @@ private:
 	/**
 	 * Particule liée à un objet externe au ParticleSystem (non autonome)
 	 */
-	class LinkedParticle: public Particle
+	class ShieldParticle: public Particle
 	{
 	public:
-		LinkedParticle(const sf::Sprite* handle, float angle);
-		~LinkedParticle() {};
+		ShieldParticle(const sf::Sprite* handle, float angle);
+		~ShieldParticle() {};
 		bool OnUpdate(float frametime);
 
 		inline void Show(sf::RenderTarget& target) const
@@ -200,11 +190,11 @@ private:
 		float angle_; // en radians
 	};
 
-	class Follow: public Particle
+	class Smoke: public Particle
 	{
 	public:
-		Follow(const sf::Sprite* handle);
-		~Follow() { }
+		Smoke(const sf::Sprite* handle);
+		~Smoke() { }
 		bool OnUpdate(float frametime);
 		inline void Show(sf::RenderTarget& target) const
 		{
@@ -220,7 +210,6 @@ private:
 		}
 	private:
 		float angle_;
-		float speed_;
 		sf::Sprite sprite_;
 		const sf::Sprite* handle_;
 		float timer_;

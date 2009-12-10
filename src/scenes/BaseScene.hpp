@@ -33,31 +33,3 @@ public:
 };
 
 #endif // BASESCENE_HPP
-/*
-	// inherited
-	void OnEvent(const sf::Event& event);
-
-	// inherited
-	void Update(float frametime);
-
-	// inherited
-	void Show(sf::RenderTarget& target) const;
-
-
-void OnEvent(const sf::Event& event)
-{
-
-}
-
-
-void Update(float frametime)
-{
-
-}
-
-
-void Show(sf::RenderTarget& target) const
-{
-
-}
-*/
