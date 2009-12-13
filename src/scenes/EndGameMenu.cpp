@@ -9,6 +9,7 @@ EndGameMenu::EndGameMenu()
 	SetTitle(L"Game Over");
 	result_.SetColor(sf::Color::White);
 	result_.SetFont(GET_FONT());
+	result_.SetSize(30);
 	result_.SetPosition(Game::MARGIN_X, 150);
 
 	SetOffset(Game::MARGIN_X, 300);

@@ -19,8 +19,8 @@ h2 {
 	padding: 2px;
 	text-indent: 1em;
 }
-div {
-	padding-left: 2em;
+div.part {
+	padding: 0 2em;
 }
 code {
 	background-color: #FFF0C0;
@@ -43,16 +43,16 @@ table.infotab th {
 <h1>CosmoScroll</h1>
 
 <p>
-<strong>Version :</strong> 0.2-dev<br />
-<strong>Date de sortie :</strong> JJ/MM/AAAA<br />
-<strong>Site web :</strong> <a href="http://cosmoscroll.googlecode.com">cosmoscroll.googlecode.com</a><br />
-<strong>Licence :</strong> GPL (voir le fichier <a href="./COPYING">COPYING</a>)<br />
-<strong>Auteurs :</strong> voir le fichier <a href="./AUTHORS">AUTHORS</a>
+	<strong>Version :</strong> 0.2-dev<br />
+	<strong>Date de sortie :</strong> JJ/MM/AAAA<br />
+	<strong>Site web :</strong> <a href="http://cosmoscroll.googlecode.com">cosmoscroll.googlecode.com</a><br />
+	<strong>Licence :</strong> GPL (voir le fichier <a href="./COPYING">COPYING</a>)<br />
+	<strong>Auteurs :</strong> voir le fichier <a href="./AUTHORS">AUTHORS</a>
 </p>
 
 
 <h2>Sommaire</h2>
-<div>
+<div class="part">
 	<ul>
 		<li><a href="#how-to-play">Comment jouer ?</a></li>
 		<li><a href="#how-to-reset">Comment retrouver la configuration d'origine ?</a></li>
@@ -65,165 +65,159 @@ table.infotab th {
 
 
 <h2 id="how-to-play">Comment jouer ?</h2>
-<div>
-
+<div class="part">
 <h3>Modes de jeu</h3>
-<ul>
-	<li><strong>Mode histoire</strong> : terminez tous les niveaux jusqu'à l'affrontement avec le boss final !<br />
-		Terminez un niveau pour accéder au niveau suivant.
-	</li>
-	<li><strong>Mode arcade</strong> : tenez le plus longtemps possible face à des ennemis de plus en plus nombreux et tentez d'établir un nouveau record.
-	</li>
-</ul>
+	<ul>
+		<li><strong>Mode histoire</strong> : terminez tous les niveaux jusqu'à l'affrontement avec le boss final !<br />
+			Terminez un niveau pour accéder au niveau suivant.
+		</li>
+		<li><strong>Mode arcade</strong> : tenez le plus longtemps possible face à des ennemis de plus en plus nombreux et tentez d'établir un nouveau record.
+		</li>
+	</ul>
 
 <h3>Commandes clavier</h3>
-<table class="infotab">
-	<tr>
-		<th>Action</th>
-		<th>Touche</th>
-	</tr>
-	<tr>
-		<td>Déplacer le vaisseau<br />Naviguer dans les menus</td>
-		<td>Flèches directionnelles (haut, bas, gauche, droite)</td>
-	</tr>
-	<tr>
-		<td>Valider un choix dans les menus</td>
-		<td>Entrée</td>
-	</tr>
-	<tr>
-		<td>Utiliser arme 1</td>
-		<td>Espace</td>
-	</tr>
-	<tr>
-		<td>Utiliser arme 2</td>
-		<td>A</td>
-	</tr>
-	<tr>
-		<td>Tirer un missile</td>
-		<td>Z</td>
-	</tr>
-	<tr>
-		<td>Utiliser bonus Glaçon</td>
-		<td>Contrôle gauche</td>
-	</tr>
-	<tr>
-		<td>Mettre en pause/Reprendre la partie</td>
-		<td>P</td>
-	</tr>
-	<tr>
-		<td>Positionner le panneau de contrôle en haut de l'écran</td>
-		<td>Page Haut</td>
-	</tr>
-	<tr>
-		<td>Positionner le panneau de contrôle en bas de l'écran</td>
-		<td>Page Bas</td>
-	</tr>
-	<tr>
-		<td>Prendre une capture d'écran (enregistrée dans <code>screenshot/</code>)</td>
-		<td>F1</td>
-	</tr>
-	<tr>
-		<td>Quitter immédiatement le jeu</td>
-		<td>Échap</td>
-	</tr>
-</table>
+	<table class="infotab">
+		<tr>
+			<th>Action</th>
+			<th>Touche</th>
+		</tr>
+		<tr>
+			<td>Déplacer le vaisseau<br />Naviguer dans les menus</td>
+			<td>Flèches directionnelles (haut, bas, gauche, droite)</td>
+		</tr>
+		<tr>
+			<td>Valider un choix dans les menus</td>
+			<td>Entrée</td>
+		</tr>
+		<tr>
+			<td>Utiliser arme 1</td>
+			<td>Espace</td>
+		</tr>
+		<tr>
+			<td>Utiliser arme 2</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td>Tirer un missile</td>
+			<td>Z</td>
+		</tr>
+		<tr>
+			<td>Utiliser bonus Glaçon</td>
+			<td>Contrôle gauche</td>
+		</tr>
+		<tr>
+			<td>Mettre en pause/Reprendre la partie</td>
+			<td>P</td>
+		</tr>
+		<tr>
+			<td>Positionner le panneau de contrôle en haut de l'écran</td>
+			<td>Page Haut</td>
+		</tr>
+		<tr>
+			<td>Positionner le panneau de contrôle en bas de l'écran</td>
+			<td>Page Bas</td>
+		</tr>
+		<tr>
+			<td>Prendre une capture d'écran (enregistrée dans <code>screenshot/</code>)</td>
+			<td>F1</td>
+		</tr>
+		<tr>
+			<td>Quitter immédiatement le jeu</td>
+			<td>Échap</td>
+		</tr>
+	</table>
 
-<p>Le jeu peut également être contrôlé avec un joystick ou une manette de jeu.</p>
-<p>Les touches du clavier et les boutons du contrôleur peuvent être redéfinis dans les options.</p>
+	<p>Le jeu peut également être contrôlé avec un joystick ou une manette de jeu.</p>
+	<p>Les touches du clavier et les boutons du contrôleur peuvent être redéfinis dans les options.</p>
 
 <h3>Bonus</h3>
-<ul>
-	<li>Health : Redonne 1 point de vie au vaisseau.</li>
-	<li>Bouclier : Redonne 1 point de bouclier.</li>
-	<li>Glaçon : Donne 1 <em>Glaçon</em>. Utiliser un glaçon permet d'annuler les effets de la surchauffe, jusqu'à 3 glaçons peuvent être cumulés.</li>
-	<li>Missile : Donne 1 <em>Missile</em>. Jusqu'à 3 missiles peuvent être cumulés. À utiliser quand les ennemis sont trop nombreux !</li>
-	<li>Triple tir : multiplie par 3 vos tirs pendant 12 secondes !</li>
-	<li>Vitesse : multiplie par 2 votre vitesse pendant 12 secondes</li>
-	<li>Stoned : Vos réflexes ne sont plus très bons pendant 12 secondes...</li>
-	<li>Super Banane : invincibilité pendant 12 secondes</li>
-</ul>
-<p><em>Note : il n'y a pas de cheat codes dans ce jeu.</em></p>
-<!--
-Félicitations, vous avez trouver le Konami Code !
-Tapez la séquence suivante en cours de jeu pour l'activer :
-Haut - Haut - Bas - Bas - Gauche - Droite - Gauche - Droite - Arme2 - Arme1
--->
+	<ul>
+		<li><b>Point de vie</b> : Donne +1 point de vie au vaisseau.</li>
+		<li><b>Bouclier</b> : Donne 1 point de bouclier.</li>
+		<li><b>Glaçon</b> : Donne +1 <em>Glaçon</em>. Utiliser un glaçon permet d'annuler les effets de la surchauffe, jusqu'à 3 glaçons peuvent être cumulés.</li>
+		<li><b>Missile</b> : Donne +1 <em>Missile</em>. Jusqu'à 3 missiles peuvent être cumulés. À utiliser quand les ennemis sont trop nombreux (à utiliser de loin pour éviter le souffle de l'explosion) !</li>
+		<li><b>Triple tir</b> : multiplie par 3 vos tirs pendant 10 secondes !</li>
+		<li><b>Vitesse</b> : multiplie par 2 votre vitesse pendant 10 secondes</li>
+		<li><b>Stoned</b> : Vos réflexes ne sont plus très bons pendant 10 secondes (ce n'est pas vraiment un bonus...).</li>
+		<li><b>Super Banane</b> : Redonne max point de vie, max bouclier, chaleur à 0, +1 Glaçon, +1 Missile</li>
+	</ul>
+	<p>
+		<em>Note : il n'y a pas de cheat codes dans ce jeu.</em><br />
+		<span style="color: white;">
+		Félicitations, vous avez trouver le Konami Code !
+		Tapez la séquence suivante en cours de jeu pour l'activer :<br />
+		Haut - Haut - Bas - Bas - Gauche - Droite - Gauche - Droite - Arme2 - Arme1</span>
+	</p>
 </div>
 
 
 <h2 id="how-to-reset">Comment retrouver la configuration d'origine ?</h2>
-<div>
-<p>
+<div class="part">
+	<p>
 	Si vous voulez retrouver les paramètres par défaut de l'application, effacez
-	le fichier <code>config/config.cfg</code>, un nouveau fichier sera créé automatiquement.<br />
-	Attention, votre ancienne configuration (scores, préférences, etc.) sera perdue.
-</p>
+	le fichier <code>config/config.cfg</code>, un nouveau fichier sera créé automatiquement à la prochaine utilisation du jeu.<br />
+	Attention, en effaçant ce fichier, votre ancienne configuration (scores, préférences, etc.) sera perdue.
+	</p>
 </div>
 
 
 <h2 id="how-to-compile">Comment compiler le jeu depuis les sources ?</h2>
-<div>
-<p>
-	CosmoScroll compile sous les plateformes GNU/Linux (GCC) et Windows (mingw32)<br />
+<div class="part">
+	<p>
+	CosmoScroll compile sous les plateformes <b>GNU/Linux</b> (GCC), <b>Mac OS</b> (GCC) et <b>Windows</b> (mingw32).<br />
 	Les autres systèmes et compilateurs n'ont pas été testés.
-</p>
-<p>
-	Vous devez tout d'abord installer les bibliothèques suivantes :
-</p>
-<ul>
-	<li><a href="http://www.sfml-dev.org/">SFML</a>, version 1.4 ou 1.5</li>
-	<li><a href="http://dumb.sourceforge.net/">libdumb</a> (pour Debian/Ubuntu, voir le paquet <code>libdumb1-dev</code>)</li>
-</ul>
-<p>
-Le moyen le plus simple de récupérer les sources est de faire un checkout sur le <a href="http://code.google.com/p/cosmoscroll/source/checkout">serveur SVN</a> du projet (reportez-vous aux instructions de la page).</p>
-<p>
-Un fichier projet Code::Blocks multi-plateformes (<code>cosmoscroll.cbp</code>) est fourni et permet de compiler le jeu depuis cet IDE.<br />
-Un Makefile UNIX est également fourni avec les sources du projet (tapez simplement <code>make</code> en console) afin de compiler le jeu sans passer par un IDE.
-</p>
-
+	</p>
+	<p>Vous devez tout d'abord installer les bibliothèques suivantes :</p>
+	<ul>
+		<li><a href="http://www.sfml-dev.org/">SFML</a>, version 1.4 ou 1.5</li>
+		<li><a href="http://dumb.sourceforge.net/">libdumb</a> (pour Debian/Ubuntu, voir le paquet <code>libdumb1-dev</code>)</li>
+	</ul>
+	<p>
+	Le moyen le plus simple de récupérer les sources est de faire un checkout sur le <a href="http://code.google.com/p/cosmoscroll/source/checkout">serveur SVN</a> du projet (reportez-vous aux instructions de la page).</p>
+	<p>
+	Un fichier projet Code::Blocks multi-plateformes (<code>cosmoscroll.cbp</code>) est fourni et permet de compiler le jeu depuis cet IDE.<br />
+	Un Makefile UNIX est également fourni avec les sources du projet (tapez simplement <code>make</code> en console) afin de compiler le jeu sans passer par un IDE.
+	</p>
 </div>
 
-
 <h2 id="bug-found">J'ai trouvé un bug !</h2>
-<div>
-<p>Si vous pensez avoir trouvé un disfonctionnement dans CosmoScroll, merci de le rapporter à cette <a href="http://code.google.com/p/cosmoscroll/issues/list">adresse</a> (si le bug n'est pas encore répertorié).<br />
-Une description permettant de reproduire le problème serait également appréciée.
-</p>
+<div class="part">
+	<p>Si vous pensez avoir trouvé un disfonctionnement dans CosmoScroll, merci de le rapporter à cette <a href="http://code.google.com/p/cosmoscroll/issues/list">adresse</a> (si le bug n'est pas encore répertorié).<br />
+	Une description permettant de reproduire le problème serait également appréciée.
+	</p>
 </div>
 
 
 <h2 id="credits">Crédits</h2>
-<div>
+<div class="part">
 <h3>Images</h3>
-<ul>
-    <li>Astéroïdes : images modifiées de <a href="http://www.flyingyogi.com/fun/spritelib.html">SpriteLib GPL</a></li>
-</ul>
+	<ul>
+		<li>Astéroïdes : images modifiées de <a href="http://www.flyingyogi.com/fun/spritelib.html">SpriteLib GPL</a></li>
+	</ul>
 <h3>Sons</h3>
-<ul>
-	<li>boom.ogg : issu de <a href="http://www.reptilelabour.com/software/chromium/">Chromium B.S.U.</a></li>
-	<li>warp.ogg : issu de <a href="http://supertux.lethargik.org/">SuperTux</a></li>
-	<li>title.ogg : réalisé par <a href="http://eien.new.fr/">Tsu</a>, merci à lui !</li>
-</ul>
-<p>Sons issus de  <a href="http://www.freesound.org/">freesound.org</a> :</p>
-<ul>
-	<li>bonus.ogg : 17633__flatfly__pman8.wav</li>
-	<li>menu-non-activable.ogg : 8721_charliecrash_CHH.wav</li>
-	<li>menu-select.ogg : 50561_broumbroum_sf3_sfx_menu_select.wav</li>
-	<li>end-level.ogg : 38728_metamorphmuses_itsjustgreat.wav</li>
-	<li>game-over.ogg : 43698_notchfilter_game_over03.wav</li>
-</ul>
+	<ul>
+		<li>boom.ogg : issu de <a href="http://www.reptilelabour.com/software/chromium/">Chromium B.S.U.</a></li>
+		<li>warp.ogg : issu de <a href="http://supertux.lethargik.org/">SuperTux</a></li>
+		<li>title.ogg : réalisé par <a href="http://eien.new.fr/">Tsu</a>, merci à lui !</li>
+		<li>bonus.ogg : <a href="http://www.freesound.org/">freesound.org</a> 17633__flatfly__pman8.wav</li>
+		<li>menu-non-activable.ogg : <a href="http://www.freesound.org/">freesound.org</a> 8721_charliecrash_CHH.wav</li>
+
+		<li>end-level.ogg : <a href="http://www.freesound.org/">freesound.org</a> 38728_metamorphmuses_itsjustgreat.wav</li>
+		<li>game-over.ogg : <a href="http://www.freesound.org/">freesound.org</a> 43698_notchfilter_game_over03.wav</li>
+	</ul>
 <h3>Polices</h3>
-<ul>
-	<li>hemi-head.tff : <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
-</ul>
+	<ul>
+		<li>hemi-head.tff : <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
+		<li>digital-7.tff : <a href="http://www.dafont.com/fr/digital-7.font">dafont</a></li>
+	</ul>
 </div>
 
 <h2 id="histo">Historique des versions</h2>
-<div>
-<ul>
-	<li>0.1 : 17/12/2008</li>
-</ul>
-<p>Les anciennes versions restent disponibles dans la section <a href="http://code.google.com/p/cosmoscroll/downloads/list?can=4">Deprecated</a> des téléchargements</p>
+<div class="part">
+	<ul>
+		<li>0.1 : 17/12/2008</li>
+	</ul>
+	<p>Les anciennes versions restent disponibles dans la section <a href="http://code.google.com/p/cosmoscroll/downloads/list?can=4">Deprecated</a> des téléchargements</p>
 </div>
     </body>
 </html>

@@ -26,6 +26,5 @@ Milestone 0.3
 
 - Mode deux joueurs sur la même machine
 - Gérer les parallaxes (plus de décors dans les niveaux)
-- Ajouter groupes de formation dans les niveaux
 - Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
 

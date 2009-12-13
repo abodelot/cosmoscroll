@@ -20,7 +20,7 @@
 #define COOLER_DEFAULT              0
 #define COOLER_MAX                  3
 
-#define MISSILES_DEFAULT            1
+#define MISSILES_DEFAULT            0
 #define MISSILES_MAX                3
 
 #define HEAT_MAX                    100
@@ -29,11 +29,11 @@
 #define HP_DEFAULT                  3
 #define HP_MAX                      5
 
-#define SHIELD_DEFAULT              3 // shield points at start
+#define SHIELD_DEFAULT              0 // shield points at start
 #define SHIELD_MAX                  6 // max shield points
-#define SHIELD_RECOVERY_RATE        0.3 // shield point per second
+#define SHIELD_RECOVERY_RATE        0.2 // shield point per second
 
-#define TIMED_BONUS_DURATION        12 // seconds
+#define TIMED_BONUS_DURATION        10 // seconds
 
 
 PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
@@ -62,7 +62,6 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	coolers_ = COOLER_DEFAULT;
 	missiles_ = MISSILES_DEFAULT;
 	overheated_ = false;
-	invincible_ = false;
 	shield_timer_ = 0;
 	heat_ = 0.0f;
 
@@ -264,10 +263,6 @@ void PlayerShip::Update(float frametime)
 
 void PlayerShip::TakeDamage(int damage)
 {
-	if (invincible_) {
-		return;
-	}
-
 	static ParticleSystem& p = ParticleSystem::GetInstance();
 	if (shield_ > 0)
 	{
@@ -302,7 +297,8 @@ void PlayerShip::OnCollide(Entity& entity)
 	Bonus* bonus = dynamic_cast<Bonus*>(&entity);
 	if (bonus != NULL)
 	{
-		HandleBonus(*bonus);
+		HandleBonus(bonus->GetType());
+		ParticleSystem::GetInstance().AddMessage(bonus->GetPosition(), bonus->GetDescription());
 		entity.Kill();
 	}
 	else
@@ -380,9 +376,9 @@ void PlayerShip::ComputeAxisSpeed(float& speed, Input::Action lower,
 }
 
 
-void PlayerShip::HandleBonus(const Bonus& bonus)
+void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 {
-	switch (bonus.GetType())
+	switch (bonus_t)
 	{
 		// timed bonus
 		case Bonus::TRIPLE_SHOT:
@@ -408,18 +404,24 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			}
 			bonus_[T_STONED] += TIMED_BONUS_DURATION;
 			break;
+		// immediate bonus
 		case Bonus::SUPER_BANANA:
-			if (bonus_[T_INVINCIBLE] == 0)
-			{
-				invincible_ = true;
-			}
 			ParticleSystem::GetInstance().AddFiery(
 				GetPosition().x + GetSize().x / 2,
 				GetPosition().y + GetSize().y / 2);
-			bonus_[T_INVINCIBLE] += TIMED_BONUS_DURATION;
+			// max hp
+			hp_ = HP_MAX;
+			panel_.SetShipHP(hp_);
+			// max shield
+			IncreaseShield(SHIELD_MAX - shield_);
+			// no overheat
+			heat_ = 0;
+			overheated_ = false;
+			panel_.SetOverheatText("");
+			// +1 missile, +1 cooler
+			HandleBonus(Bonus::MISSILE);
+			HandleBonus(Bonus::COOLER);
 			break;
-
-		// other bonus
 		case Bonus::HEALTH:
 			if (hp_ < HP_MAX)
 			{
@@ -448,10 +450,9 @@ void PlayerShip::HandleBonus(const Bonus& bonus)
 			}
 			break;
 		default:
+			DIE("can't handle unknown bonus");
 			break;
 	}
-	ParticleSystem::GetInstance().AddMessage(bonus.GetPosition(),
-		bonus.GetDescription());
 }
 
 
@@ -470,11 +471,9 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 		case T_STONED:
 			compute_move_ = &PlayerShip::ComputeMove;
 			break;
-		case T_INVINCIBLE:
-			invincible_ = false;
-			break;
 		default:
-			DIE("unknown bonus");
+			DIE("can't disable unknown bonus");
+			break;
 	}
 	bonus_[tbonus] = 0;
 }
@@ -494,12 +493,8 @@ void PlayerShip::IncreaseShield(int count)
 
 void PlayerShip::KonamiCodeOn()
 {
-	ParticleSystem& particles = ParticleSystem::GetInstance();
-	overheated_ = false;
-	panel_.SetOverheatText("");
-	heat_ = 0.f;
-	panel_.SetHeat((int) heat_);
-	max_speed_ = BONUS_MAX_SPEED;
+	HandleBonus(Bonus::SUPER_BANANA);
+	HandleBonus(Bonus::SPEED);
 	coolers_ = 42;
 	panel_.SetCoolers(42);
 	missiles_ = 42;
@@ -507,9 +502,8 @@ void PlayerShip::KonamiCodeOn()
 	weapon1_.SetTriple(true);
 	weapon2_.SetTriple(true);
 	missile_launcher_.SetTriple(true);
-	invincible_ = true;
 
-	particles.AddMessage(GetPosition(), L"Have you mooed today?");
+	ParticleSystem::GetInstance().AddMessage(GetPosition(), L"Have you mooed today?");
 }
 
 

@@ -18,7 +18,7 @@ public:
 	 * Mettre la scène à jour
 	 * @param frametime: temps de la frame courante
 	 */
-	virtual void Update(float frametime) {}
+	virtual void Update(float frametime) { (void) frametime; }
 
 	/**
 	 * Afficher la scène et tous ses éléments

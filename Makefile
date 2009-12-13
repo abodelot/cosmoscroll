@@ -10,7 +10,7 @@ DEBUG=yes
 ifeq ($(DEBUG), yes)
 	CFLAGS += -g -DDEBUG
 else
-	CFLAGS += -O2
+	CFLAGS += -O2 -march=native -fomit-frame-pointer
 endif
 
 # static/dynamic linking
@@ -26,8 +26,8 @@ ifeq ($(NO_DUMB_MUSIC), yes)
 endif
 
 # svn revision
-SVNDEF= -DSVN_REV="\"$(shell svnversion -n .)\""
-CFLAGS += $(SVNDEF)
+#SVNDEF= -DSVN_REV="\"$(shell svnversion -n .)\""
+#CFLAGS += $(SVNDEF)
 
 
 $(EXEC): $(OBJ) 
@@ -36,16 +36,14 @@ $(EXEC): $(OBJ)
 %.o: %.cpp
 	$(CC) $< -c -o $@ $(CFLAGS)
 
-.PHONY: clean cleanxml mrproper
+.PHONY: clean mrproper
 
 clean:
 	-rm src/core/*.o
 	-rm src/utils/*.o
 	-rm src/scenes/*.o
 	-rm src/entities/*.o
-
-cleanxml:
-	-rm src/tinyxml/*.o
+	-rm src/tinyxml/*.o	
 	
 mrproper: clean
 	-rm $(EXEC)

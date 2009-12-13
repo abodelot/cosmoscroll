@@ -49,7 +49,6 @@ private:
 		T_TRISHOT,
 		T_SPEED,
 		T_STONED,
-		T_INVINCIBLE,
 		TIMED_BONUS_COUNT
 	};
 
@@ -70,7 +69,7 @@ private:
 	/**
 	 * Gérer un bonus attrapé
 	 */
-	void HandleBonus(const Bonus& bonus);
+	void HandleBonus(Bonus::Type bonus_t);
 
 	/**
 	 * Désactiver un bonus à effet temporaire
@@ -99,7 +98,6 @@ private:
 
 	float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
 	bool overheated_;
-	bool invincible_;
 	float heat_, shield_timer_;
 	int coolers_, shield_, missiles_;
 	float speed_x_, speed_y_;

@@ -4,6 +4,9 @@
 #include <SFML/Graphics.hpp>
 
 
+/**
+ * Panel d'affichage des informations du joueur et de la partie en cours
+ */
 class ControlPanel: public sf::Drawable
 {
 public:
@@ -18,26 +21,37 @@ public:
 	void SetGameInfo(const sf::Unicode::Text& text);
 
 	/**
+	 * @param seconds: nombre de secondes écoulées
+	 */
+	void SetTimer(float seconds);
+
+	/// nb points de vie
+	void SetShipHP(int value);
+
+	/// maximum points de vie
+	void SetMaxShipHP(int max);
+
+	/// nb points de bouclier
+	void SetShield(int value);
+
+	/// maximum points de bouclier
+	void SetMaxShield(int max);
+
+	/// chaleur courante
+	void SetHeat(int value);
+
+	/// chaleur maximum
+	void SetMaxHeat(int max);
+
+	/**
 	 * @param text: texte sur la barre de chaleur
 	 */
 	void SetOverheatText(const sf::Unicode::Text& text);
 
-	void SetShipHP(int value);
-
-	void SetMaxShipHP(int max);
-
-	void SetShield(int value);
-
-	void SetMaxShield(int max);
-
-	void SetHeat(int value);
-
-	void SetMaxHeat(int max);
-
-	void SetTimer(float seconds);
-
+	/// nb bonus coolers
 	void SetCoolers(int coolers);
 
+	/// nb bonus missiles
 	void SetMissiles(int count);
 
 private:
@@ -51,9 +65,10 @@ private:
 	{
 		SHIELD, HP, HEAT, PBAR_COUNT
 	};
-
 	struct ProgressBar
 	{
+
+
 		sf::String label;
 		sf::Shape background;
 		sf::Sprite bar;
@@ -82,7 +97,6 @@ private:
 	sf::String game_info_;
 	sf::Sprite panel_;
 	sf::Font font_;
-	sf::Font font_big_;
 };
 
 #endif // CONTROLPANEL_HPP

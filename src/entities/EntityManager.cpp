@@ -317,7 +317,7 @@ void EntityManager::LoadAnimations(const char* filename)
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	// attributs
 	int width, height, count;
-	float delay;
+	float delay = 0.f;
 	const char* name;
 	const char* img;
 	while (elem != NULL)

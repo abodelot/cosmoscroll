@@ -120,7 +120,7 @@ bool Game::LoadConfig(const char* filename)
 		int current_level = 1, last_unlocked_level = 1;
 		config.ReadItem("current_level", current_level);
 		levels_.SetCurrent(current_level);
-		config.ReadItem("unlocked", last_unlocked_level);
+		config.ReadItem("last_unlocked_level", last_unlocked_level);
 		levels_.SetLastUnlocked(last_unlocked_level);
 
 		float record = 0;
