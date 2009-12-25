@@ -1,4 +1,5 @@
 #include <sstream>
+#include <cstdio>
 #include <cassert>
 
 #include "StringUtils.hpp"

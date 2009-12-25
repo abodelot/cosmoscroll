@@ -82,6 +82,8 @@ public:
 	 */
 	sf::Color GetBottomColor(int level) const;
 
+	int GetStarsCount() const;
+
 	/**
 	 * Obtenir le nombre de niveaux chargés
 	 */

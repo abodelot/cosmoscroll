@@ -3,13 +3,12 @@
 #include "../utils/MediaManager.hpp"
 #include "../utils/StringUtils.hpp"
 
-#define COSMOSCROLL_VERSION "0.2-devel"
-#define COSMOSCROLL_ABOUT str_sprintf(\
-		L"Version : %s\n\n" \
+#define COSMOSCROLL_ABOUT \
+		L"Version : 0.2-devel\n\n" \
 		"Auteurs :\n" \
 		"     Alexandre Bodelot\n" \
 		"     Arnaud Wolff\n\n" \
-		"Licence : GPL", COSMOSCROLL_VERSION)
+		"Licence : GPL"
 
 
 AboutMenu::AboutMenu()

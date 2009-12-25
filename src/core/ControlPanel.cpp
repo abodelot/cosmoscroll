@@ -39,7 +39,7 @@ ControlPanel::ControlPanel()
 	pbars_[HEAT].label.SetText("Chaleur");
 	pbars_[HEAT].bar.SetImage(GET_IMG("gui/bar-heat"));
 	sf::Vector2f pos = pbars_[HEAT].bar.GetPosition();
-	info_.SetPosition(pos.x + 8, pos.y - 6);
+	info_.SetPosition(pos.x + 8, pos.y - TEXT_PADDING_Y);
 	info_.SetFont(font_);
 	info_.SetSize(FONT_SIZE);
 	info_.SetColor(sf::Color::Red);

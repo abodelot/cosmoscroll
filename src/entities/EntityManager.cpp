@@ -45,6 +45,9 @@ EntityManager::~EntityManager()
 
 void EntityManager::InitMode(Mode mode)
 {
+	// re-init particles
+	particles_.Clear();
+
 	switch (mode)
 	{
 		case MODE_STORY:
@@ -72,6 +75,7 @@ void EntityManager::InitMode(Mode mode)
 				}
 				player_->SetPosition(0, height_ / 2);
 			}
+			particles_.AddStars(LevelManager::GetInstance().GetStarsCount());
 			break;
 
 		case MODE_ARCADE:
@@ -84,16 +88,13 @@ void EntityManager::InitMode(Mode mode)
 				(int) arcade_record_ / 60,
 				(int) arcade_record_ % 60).c_str()
 			);
+			particles_.AddStars();
 			break;
 	}
-
 	mode_ = mode;
 	// initialisation avant une nouvelle partie
 	game_over_ = false;
 	timer_ = 0.f;
-	// re-init particles
-	particles_.Clear();
-	particles_.AddStars();
 	particles_.AddShield(player_->GetShield(), player_);
 }
 

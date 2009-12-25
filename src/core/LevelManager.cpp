@@ -5,6 +5,8 @@
 #include "../entities/Asteroid.hpp"
 #include "../entities/EvilBoss.hpp"
 
+#define DEFAULT_STARS_COUNT 33
+
 
 LevelManager& LevelManager::GetInstance()
 {
@@ -105,6 +107,14 @@ sf::Color LevelManager::GetBottomColor(int level) const
 {
 	const char* p = GetLevelElement(level)->Attribute("bg_bottom");
 	return p != NULL ? HexaToColor(p) : sf::Color::Black;
+}
+
+
+int LevelManager::GetStarsCount() const
+{
+	int nb_stars = DEFAULT_STARS_COUNT;
+	GetLevelElement(current_level_)->QueryIntAttribute("stars", &nb_stars);
+	return nb_stars;
 }
 
 
