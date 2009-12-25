@@ -180,6 +180,7 @@ void EntityManager::Update(float frametime)
 
 void EntityManager::AddEntity(Entity* entity)
 {
+	entity->SetTarget(player_);
 	entities_.push_back(entity);
 }
 
@@ -439,7 +440,6 @@ SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 	{
 		SpaceShip* ship = it->second->Clone();
 		ship->SetPosition(x, y);
-		ship->SetTarget(player_);
 		return ship;
 	}
 	DIE("space ship id '%d' is not implemented", id);
@@ -450,9 +450,7 @@ SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 Entity* EntityManager::CreateRandomEntity() const
 {
 	Entity* entity = uniques_[sf::Randomizer::Random(0, uniques_.size() - 1)];
-	Entity* copy = entity->Clone();
-	copy->SetTarget(player_);
-	return copy;
+	return entity->Clone();
 }
 
 
