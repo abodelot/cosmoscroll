@@ -1,6 +1,19 @@
 #include "KeyboardMenu.hpp"
 #include "../core/Game.hpp"
-#include "../utils/StringUtils.hpp"
+
+
+static void build_action_string(std::wstring& label, Input::Action action)
+{
+	Input& input = Input::GetInstance();
+
+	label = Input::ActionToString(action);
+	label += L" : ";
+	// convert key string to wstring
+	const std::string str = Input::KeyToString(input.GetKeyboardBind(action));
+	std::wstring wstr(str.length(), L' ');
+	std::copy(str.begin(), str.end(), wstr.begin());
+	label += wstr;
+}
 
 
 KeyboardMenu::KeyboardMenu()
@@ -30,12 +43,8 @@ void KeyboardMenu::Poke()
 
 void KeyboardMenu::AddBindOpt(Input::Action action)
 {
-	Input& input = Input::GetInstance();
-
-	std::wstring label = str_sprintf(L"%ls : %s",
-		Input::ActionToString(action),
-		Input::KeyToString(input.GetKeyboardBind(action)));
-
+	std::wstring label;
+	build_action_string(label, action);
 	AddOption(label, action);
 }
 
@@ -49,11 +58,10 @@ void KeyboardMenu::Callback(int id)
 	else
 	{
 		// Input::Action enumerations are used as menu ids
-		Input& input = Input::GetInstance();
 		Input::Action action = (Input::Action) id;
-		input.AskUserInput(Input::KEYBOARD, action);
-		std::wstring label = Input::ActionToString(action);
-		label += str_sprintf(L" : %s", Input::KeyToString(input.GetKeyboardBind(action)));
+		Input::GetInstance().AskUserInput(Input::KEYBOARD, action);
+		std::wstring label;
+		build_action_string(label, action);
 		SetTextOption(label, id);
 	}
 }

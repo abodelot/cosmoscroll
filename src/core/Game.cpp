@@ -63,7 +63,6 @@ Game::Game() :
 		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE,
 			sf::Style::Fullscreen);
 	}
-	app_.Display();
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
