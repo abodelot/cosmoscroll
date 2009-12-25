@@ -10,7 +10,7 @@ LevelMenu::LevelMenu():
 	levels_(LevelManager::GetInstance())
 {
 	SetTitle(L"Choix du niveau");
-	SetOffset(Game::MARGIN_X, 100);
+	SetOffsetY(100);
 }
 
 
@@ -44,9 +44,9 @@ void LevelMenu::Callback(int id)
 			levels_.GetTopColor(id),
 			levels_.GetBottomColor(id)
 		);
-		entities.InitMode(EntityManager::MODE_STORY);
 		levels_.SetCurrent(id);
 		levels_.LoadCurrent();
+		entities.InitMode(EntityManager::MODE_STORY);
 
 		ControlPanel::GetInstance().SetGameInfo(str_sprintf("Niveau %d", id));
 		Game::GetInstance().SetNextScene(Game::SC_IntroLevelScene);

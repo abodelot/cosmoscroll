@@ -15,7 +15,7 @@
 		<ship id="1" x="640" y="100" t="2.3" />
 	</level>
 	<level desc="Vous continuez votre ballade\ndans le vide interstellaire\nHeh !!!"
-	bg_top="#200030" bg_bottom="#000000" stars="35">
+	bg_top="#200030" bg_bottom="#000000" stars="25">
 		<for count="3">
 			<ship id="1" x="640" y="250" t="2.2" />
 			<ship id="1" x="640" y="300" t="1.0" />

@@ -5,17 +5,14 @@ Milestone 0.2
 -------------
 
 - Niveaux variés avec difficulté croissante
-- système de procédures stockées pour les niveaux
 - Intertionalisation (fichiers de langues pour fr, en, de)
-- compteur de frags et/ou de points
+- optimiser les déplacements des particules avec un vecteur vitesse, au lieu de calculer la pos sin(angle)/cos(angle) à chaque frame
+- bugfix bindings joystick dans les menus
+- rétablir les différents modèles d'astéroïdes
 
-recoder le ParticleSystem :
-	- optimiser les déplacements avec un vecteur vitesse, au lieu de calculer la pos sin(angle)/cos(angle) à chaque frame
-	- optimiser l'allocation des particules, allouer les particules d'un même effet par groupe
 
 menu
 	- intégrer un module de GUI indépendant et générique
-
 	- Ajout mode plein-écran / fenêtré dans la configuration
 	- Son on/off + choix volume
 	- Musique on/off + choix volume
@@ -27,4 +24,6 @@ Milestone 0.3
 - Mode deux joueurs sur la même machine
 - Gérer les parallaxes (plus de décors dans les niveaux)
 - Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
-
+- système de procédures stockées pour les niveaux
+- optimiser l'allocation des particules, allouer les particules d'un même effet par groupe
+- éditeur de niveaux en Python/Qt4

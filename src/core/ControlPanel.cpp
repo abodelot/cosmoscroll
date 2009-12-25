@@ -133,6 +133,12 @@ void ControlPanel::SetTimer(float seconds)
 }
 
 
+bool ControlPanel::IsOnTop() const
+{
+	return (int) GetPosition().y == 0;
+}
+
+
 void ControlPanel::Render(sf::RenderTarget& target) const
 {
     target.Draw(panel_);

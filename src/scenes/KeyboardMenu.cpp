@@ -6,7 +6,7 @@
 KeyboardMenu::KeyboardMenu()
 {
 	SetTitle(L"Configuration clavier");
-	SetOffset(Game::MARGIN_X, 100);
+	SetOffsetY(100);
 	SetTextSize(26);
 }
 
@@ -32,8 +32,9 @@ void KeyboardMenu::AddBindOpt(Input::Action action)
 {
 	Input& input = Input::GetInstance();
 
-	std::wstring label = Input::ActionToString(action);
-	label += str_sprintf(L" : %s", Input::KeyToString(input.GetKeyboardBind(action)));
+	std::wstring label = str_sprintf(L"%ls : %s",
+		Input::ActionToString(action),
+		Input::KeyToString(input.GetKeyboardBind(action)));
 
 	AddOption(label, action);
 }

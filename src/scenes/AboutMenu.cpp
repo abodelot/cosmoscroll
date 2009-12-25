@@ -16,14 +16,14 @@ AboutMenu::AboutMenu()
 	SetTitle(L"À propos de CosmoScroll");
 
 	info_text_.SetText(COSMOSCROLL_ABOUT);
-	info_text_.SetPosition(Game::MARGIN_X, 120);
+	info_text_.SetPosition(120, 120);
 	info_text_.SetColor(sf::Color::White);
 	info_text_.SetFont(GET_FONT());
 
 	logos_.SetImage(GET_IMG("gui/libs-logo"));
 	logos_.SetY(Game::HEIGHT - logos_.GetSize().y);
 	logos_.SetX((Game::WIDTH - logos_.GetSize().x) / 2);
-	SetOffset(Game::MARGIN_X, 340);
+	SetOffsetY(340);
 	AddOption("Retour", 1);
 }
 

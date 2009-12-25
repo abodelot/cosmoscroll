@@ -4,6 +4,9 @@
 #include "../core/SoundSystem.hpp"
 #include "../core/LevelManager.hpp"
 #include "../core/ControlPanel.hpp"
+#include "../entities/EntityManager.hpp"
+#include "../core/ParticleSystem.hpp"
+#include "../utils/MediaManager.hpp"
 #include "../utils/StringUtils.hpp"
 
 #define DURATION 7

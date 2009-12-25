@@ -1,6 +1,8 @@
 #include "MainMenu.hpp"
 #include "../core/Game.hpp"
 #include "../core/SoundSystem.hpp"
+#include "../utils/MediaManager.hpp"
+#include "../entities/EntityManager.hpp"
 
 
 MainMenu::MainMenu()
@@ -8,7 +10,7 @@ MainMenu::MainMenu()
 	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
 	title_.SetPosition((Game::WIDTH - title_.GetSize().x) / 2, 12);
 
-	SetOffset(Game::MARGIN_X, 130);
+	SetOffsetY(130);
 
 	AddOption("Mode Histoire", 1);
 	AddOption("Mode Arcade",   2);

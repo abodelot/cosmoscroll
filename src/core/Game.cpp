@@ -3,6 +3,7 @@
 #include "LevelManager.hpp"
 #include "ControlPanel.hpp"
 #include "../entities/EntityManager.hpp"
+#include "../utils/MediaManager.hpp"
 #include "../utils/ConfigParser.hpp"
 #include "../utils/StringUtils.hpp"
 
@@ -44,7 +45,6 @@ Game& Game::GetInstance()
 Game::Game() :
 	input_	      (Input::GetInstance()),
 	levels_		  (LevelManager::GetInstance()),
-	particles_	  (ParticleSystem::GetInstance()),
 	entitymanager_(EntityManager::GetInstance())
 {
 	// init level manager
@@ -128,6 +128,14 @@ bool Game::LoadConfig(const char* filename)
 		entitymanager_.SetArcadeRecord(record);
 		config.ReadItem("fullscreen", fullscreen_);
 
+		int top = 1;
+		config.ReadItem("panel_on_top", top);
+		if (top == 0)
+		{
+			ControlPanel::GetInstance().SetY(Game::HEIGHT - ControlPanel::HEIGHT);
+			entitymanager_.SetY(0);
+		}
+
 		int enable_music = 1;
 		config.ReadItem("enable_music", enable_music);
 		SoundSystem::GetInstance().EnableMusic(enable_music);
@@ -150,6 +158,8 @@ void Game::WriteConfig(const char* filename) const
 
 	// writing settings
 	config.SeekSection("Settings");
+	config.WriteItem("fullscreen", (int) fullscreen_);
+	config.WriteItem("panel_on_top", (int) ControlPanel::GetInstance().IsOnTop());
 	config.WriteItem("last_unlocked_level", levels_.GetLastUnlocked());
 	config.WriteItem("current_level", levels_.GetCurrent());
 	config.WriteItem("best_arcade_time", entitymanager_.GetArcadeRecord());

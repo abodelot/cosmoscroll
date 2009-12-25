@@ -6,7 +6,7 @@
 AudioMenu::AudioMenu()
 {
 	SetTitle(L"Musique");
-	SetOffset(Game::MARGIN_X, 100);
+	SetOffsetY(100);
 
 	AddOption("Space Song", 1);
 	AddOption("Aurora", 2);

@@ -181,7 +181,7 @@ const wchar_t* Input::ActionToString(Action action)
 		case MOVE_LEFT:
 			return L"Gauche";
 		case MOVE_RIGHT:
-			return L"Right";
+			return L"Droite";
 		case USE_WEAPON_1:
 			return L"Arme 1";
 		case USE_WEAPON_2:

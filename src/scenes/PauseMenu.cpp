@@ -1,18 +1,18 @@
 #include "PauseMenu.hpp"
 #include "../core/Game.hpp"
 #include "../core/ControlPanel.hpp"
+#include "../core/ParticleSystem.hpp"
 #include "../entities/EntityManager.hpp"
 
 
 PauseMenu::PauseMenu()
 {
 	SetTitle(L"Pause", 130);
-	SetOffset(200, 210);
+	SetOffsetY(210);
 
 	AddOption("Reprendre la partie",       1);
-	AddOption("Options",                   2);
-	AddOption("Revenir au menu principal", 3);
-	AddOption("Quitter le jeu",            4);
+	AddOption("Revenir au menu principal", 2);
+	AddOption("Quitter le jeu",            3);
 }
 
 
@@ -25,12 +25,9 @@ void PauseMenu::Callback(int id)
 			game.SetNextScene(Game::SC_InGameScene);
 			break;
 		case 2:
-			game.SetNextScene(Game::SC_OptionMenu);
-			break;
-		case 3:
 			game.SetNextScene(Game::SC_MainMenu);
 			break;
-		case 4:
+		case 3:
 			game.Quit();
 			break;
 	}

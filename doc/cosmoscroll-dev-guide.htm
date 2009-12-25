@@ -64,6 +64,7 @@ table.infotab th {
 		<li><a href="#xml-ships">Vaisseaux</a></li>
 		<li><a href="#xml-animations">Animations</a></li>
 		<li><a href="#xml-weapons">Armes</a></li>
+		<li><a href="#config">Fichier de configuration</a></li>
 	</ul>
 	</div>
 	
@@ -392,7 +393,31 @@ private:
 			</ul>
 		</li>
 	</ul>
-	</div>		
+	</div>
+	
+	<h2 id="#config">Fichier de configuration</h2>
+	<div class="part">
+	<p>Les préférences du joueur et ses scores sont stockés dans le fichier de configuration (<code>config/config.cfg</code>).<br />
+	Ce fichier n'est pas nécessaire au fonctionnement du jeu et sera créé automatiquement lors de la première utilisation
+	</p>
+	<p>Le fichier est structuré en différentes sections :</p>
+	<ul>
+		<li>Joystick<br />Les bindings des actions pour le joystick (numéros des boutons)</li>
+		<li>Keyboard<br />Les bindings des actions pour le clavier (code SFML des touches du clavier)</li>
+		<li>Settings
+			<ul>
+				<li>best_arcade_time : temps record en mode arcade, en secondes</li>
+				<li>current_level : niveau sélectionné par défaut</li>
+				<li>enable_music :</li>
+				<li>fullscreen : 0 = mode fenêtré, 1 = mode plein écran (défaut : 0)</li>
+				<li>last_unlocked_level : dernier niveau débloqué</li>
+				<li>music_name : nom de la musique choisie</li>
+				<li>panel_on_top : 0 = panel en bas, 1 = panel en haut (défaut : 1)</li>
+			</ul>
+		</li>
+	</ul>
+	</div>
+	
 	</body>
 </html>
 

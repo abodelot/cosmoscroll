@@ -1,6 +1,7 @@
 #include "EndGameMenu.hpp"
 #include "../core/Game.hpp"
 #include "../entities/EntityManager.hpp"
+#include "../utils/MediaManager.hpp"
 #include "../utils/StringUtils.hpp"
 
 
@@ -10,9 +11,9 @@ EndGameMenu::EndGameMenu()
 	result_.SetColor(sf::Color::White);
 	result_.SetFont(GET_FONT());
 	result_.SetSize(30);
-	result_.SetPosition(Game::MARGIN_X, 150);
+	result_.SetPosition(120, 150);
 
-	SetOffset(Game::MARGIN_X, 300);
+	SetOffsetY(300);
 
 	AddOption("Rejouer", 0);
 	AddOption("Revenir au menu principal", 1);

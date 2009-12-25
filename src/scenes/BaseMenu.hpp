@@ -46,11 +46,10 @@ public:
 	void SetTextSize(int size);
 
 	/**
-	 * Fixer l'orignie haut-gauche du menu
+	 * Fixer l'origine Y du menu
 	 * @param offset: position
 	 */
-	void SetOffset(const sf::Vector2f& offset);
-	void SetOffset(float x, float y);
+	void SetOffsetY(float y);
 
 	/**
 	 * Fixer l'intergline entre les éléments
@@ -134,7 +133,7 @@ private:
 	mutable sf::Sprite background_;
 	sf::Sprite background2_;
 	std::vector<MenuItem> items_;
-	sf::Vector2f offset_;
+	float offset_y_;
 	int selected_; // indice de l'élément sélectionné
 	int textsize_;
 	int linespace_; // interligne en pixels

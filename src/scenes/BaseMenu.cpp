@@ -15,6 +15,7 @@ BaseMenu::BaseMenu()
 	// default settings
 	textsize_ = 32;
 	linespace_ = 10;
+	offset_y_ = 10;
 	normal_look_.style = sf::String::Regular;
 	normal_look_.color = sf::Color::White;
 	highlight_look_.style = sf::String::Underlined;
@@ -118,15 +119,9 @@ void BaseMenu::SetTextSize(int size)
 }
 
 
-void BaseMenu::SetOffset(const sf::Vector2f& offset)
+void BaseMenu::SetOffsetY(float y)
 {
-	offset_ = offset;
-}
-
-
-void BaseMenu::SetOffset(float x, float y)
-{
-	SetOffset(sf::Vector2f(x, y));
+	offset_y_ = y;
 }
 
 
@@ -155,7 +150,7 @@ void BaseMenu::AddOption(const sf::Unicode::Text& label, int id, bool activable)
 	if (selected_ == -1)
 	{
 		selected_ = 0;
-		item.label.SetY(offset_.y);
+		item.label.SetY(offset_y_);
 		ApplyStyle(item, highlight_look_);
 	}
 	else

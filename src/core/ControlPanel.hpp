@@ -54,6 +54,9 @@ public:
 	/// nb bonus missiles
 	void SetMissiles(int count);
 
+	/// @return true si le panel est en haut de l'écran
+	bool IsOnTop() const;
+
 private:
 	ControlPanel();
 	ControlPanel(const ControlPanel& other);

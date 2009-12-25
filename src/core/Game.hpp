@@ -1,11 +1,9 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <list>
 #include <SFML/Graphics.hpp>
 
 #include "Input.hpp"
-#include "ParticleSystem.hpp"
 #include "LevelManager.hpp"
 
 
@@ -21,8 +19,7 @@ public:
 	enum Size
 	{
 		WIDTH =    640,
-		HEIGHT =   480,
-		MARGIN_X = 120
+		HEIGHT =   480
 	};
 
 	enum Scene
@@ -101,7 +98,6 @@ private:
 	// singletons
 	Input& input_;
 	LevelManager& levels_;
-	ParticleSystem& particles_;
 	EntityManager& entitymanager_;
 	// scènes
 	BaseScene* scenes_[SC_COUNT];
