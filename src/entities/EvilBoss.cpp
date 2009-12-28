@@ -30,10 +30,10 @@ EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	eye_right_.SetOwner(this);
 	canon_.SetOwner(this);
 
+	target_ = NULL;
 	left_ = true;
 	phase_ = EVIL;
 	next_ = MORE_EVIL;
-	target_ = EntityManager::GetInstance().GetPlayerShip();
 }
 
 
@@ -133,7 +133,15 @@ void EvilBoss::TakeDamage(int damage)
 	}
 }
 
+
 bool EvilBoss::PixelPerfectCollide() const
 {
 	return true;
 }
+
+
+void EvilBoss::SetTarget(Entity* target)
+{
+	target_ = target;
+}
+

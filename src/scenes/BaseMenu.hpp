@@ -6,7 +6,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "BaseScene.hpp"
-#include "../core/Input.hpp"
 
 /**
  * Menu navigable pour sélectionner un choix

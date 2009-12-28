@@ -2,7 +2,6 @@
 
 #include "BaseMenu.hpp"
 #include "../core/Game.hpp"
-#include "../core/Input.hpp"
 #include "../core/SoundSystem.hpp"
 #include "../utils/MediaManager.hpp"
 
@@ -29,32 +28,37 @@ BaseMenu::BaseMenu()
 
 void BaseMenu::OnEvent(const sf::Event& event)
 {
-	Input::Action action = Input::GetInstance().EventToAction(event);
-	switch (action)
+	switch (event.Type)
 	{
-		case Input::MOVE_UP:
-			ResetStyle(items_[selected_]);
-			selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
-			ApplyStyle(items_[selected_], highlight_look_);
-			SoundSystem::GetInstance().PlaySound("menu-select");
-			break;
-		case Input::MOVE_DOWN:
-			ResetStyle(items_[selected_]);
-			selected_ = (selected_ + 1) % items_.size();
-			ApplyStyle(items_[selected_], highlight_look_);
-			SoundSystem::GetInstance().PlaySound("menu-select");
-			break;
-		case Input::ENTER:
-			if (items_[selected_].activable)
+		case sf::Event::KeyPressed:
+			switch (event.Key.Code)
 			{
-				Callback(items_[selected_].id);
-				SoundSystem::GetInstance().PlaySound("menu-valid");
+				case sf::Key::Up:
+					ResetStyle(items_[selected_]);
+					selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
+					ApplyStyle(items_[selected_], highlight_look_);
+					SoundSystem::GetInstance().PlaySound("menu-select");
+					break;
+				case sf::Key::Down:
+					ResetStyle(items_[selected_]);
+					selected_ = (selected_ + 1) % items_.size();
+					ApplyStyle(items_[selected_], highlight_look_);
+					SoundSystem::GetInstance().PlaySound("menu-select");
+					break;
+				case sf::Key::Return:
+					if (items_[selected_].activable)
+					{
+						Callback(items_[selected_].id);
+						SoundSystem::GetInstance().PlaySound("menu-valid");
+					}
+					else
+					{
+						SoundSystem::GetInstance().PlaySound("menu-non-activable");
+					}
+					break;
+				default:
+					break;
 			}
-			else
-			{
-				SoundSystem::GetInstance().PlaySound("menu-non-activable");
-			}
-			break;
 		default:
 			break;
 	}

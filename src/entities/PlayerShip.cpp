@@ -282,7 +282,7 @@ void PlayerShip::TakeDamage(int damage)
 	else
 	{
 		Entity::TakeDamage(damage);
-		panel_.SetShipHP(hp_);
+		panel_.SetShipHP(hp_ > 0 ? hp_ : 0);
 		if (IsDead())
 		{
 			p.AddExplosion(GetPosition());
