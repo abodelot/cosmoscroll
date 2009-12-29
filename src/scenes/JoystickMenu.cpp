@@ -20,7 +20,7 @@ void JoystickMenu::Poke()
 	AddBindOpt(Input::USE_MISSILE);
 	AddBindOpt(Input::PAUSE);
 
-	AddOption("Retour", 0);
+	AddOption("Retour", -1);
 }
 
 
@@ -37,7 +37,7 @@ void JoystickMenu::AddBindOpt(Input::Action action)
 
 void JoystickMenu::Callback(int id)
 {
-	if (id == 0)
+	if (id == -1)
 	{
 		Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
 	}

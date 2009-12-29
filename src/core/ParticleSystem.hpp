@@ -4,7 +4,7 @@
 #include <list>
 #include <SFML/Graphics.hpp>
 
-#include "Animated.hpp"
+#include "../entities/Animated.hpp"
 #include "../entities/EntityManager.hpp"
 #include "../utils/MediaManager.hpp"
 

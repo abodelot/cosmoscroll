@@ -1,16 +1,28 @@
 #include "Animated.hpp"
 
 
+Animated::Animated(const Animation& animation) :
+	animation_(animation)
+{
+	timer_ = animation_.GetDelay();
+	frame_ = 0;
+}
+
+
 Animated::Animated(const Animation& animation, sf::Sprite& sprite) :
 	animation_(animation)
 {
 	timer_ = animation_.GetDelay();
 	frame_ = 0;
+	InitSprite(sprite);
+}
 
+
+void Animated::InitSprite(sf::Sprite& sprite)
+{
 	sprite.SetSubRect(animation_.GetFrame(0));
 	sprite.SetImage(animation_.GetImage());
 }
-
 
 
 void Animated::Update(float frametime, sf::Sprite& sprite)

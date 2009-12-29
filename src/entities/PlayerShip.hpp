@@ -4,12 +4,12 @@
 #include <SFML/System.hpp>
 
 #include "Entity.hpp"
+#include "Animated.hpp"
 #include "Bonus.hpp"
 #include "Weapon.hpp"
 #include "MissileLauncher.hpp"
 #include "../core/Input.hpp"
 #include "../core/ControlPanel.hpp"
-#include "../core/Animated.hpp"
 
 /**
  * Vaisseau spatial contrôlable par un joueur

@@ -34,31 +34,36 @@ void BaseMenu::OnEvent(const sf::Event& event)
 			switch (event.Key.Code)
 			{
 				case sf::Key::Up:
-					ResetStyle(items_[selected_]);
-					selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
-					ApplyStyle(items_[selected_], highlight_look_);
-					SoundSystem::GetInstance().PlaySound("menu-select");
+					OnUp();
 					break;
 				case sf::Key::Down:
-					ResetStyle(items_[selected_]);
-					selected_ = (selected_ + 1) % items_.size();
-					ApplyStyle(items_[selected_], highlight_look_);
-					SoundSystem::GetInstance().PlaySound("menu-select");
+					OnDown();
 					break;
 				case sf::Key::Return:
-					if (items_[selected_].activable)
-					{
-						Callback(items_[selected_].id);
-						SoundSystem::GetInstance().PlaySound("menu-valid");
-					}
-					else
-					{
-						SoundSystem::GetInstance().PlaySound("menu-non-activable");
-					}
+					OnSelect();
 					break;
 				default:
 					break;
 			}
+		case sf::Event::JoyButtonPressed:
+			if (event.JoyButton.Button == 0)
+			{
+				OnSelect();
+			}
+			break;
+		case sf::Event::JoyMoved:
+			if (event.JoyMove.Axis == sf::Joy::AxisX)
+			{
+				if (event.JoyMove.Position > 0.f)
+				{
+					OnDown();
+				}
+				else if (event.JoyMove.Position < 0.f)
+				{
+					OnUp();
+				}
+			}
+			break;
 		default:
 			break;
 	}
@@ -227,3 +232,33 @@ void BaseMenu::ResetStyle(MenuItem& item)
 }
 
 
+void BaseMenu::OnUp()
+{
+	ResetStyle(items_[selected_]);
+	selected_ = selected_ == 0 ? items_.size() - 1 : selected_ - 1;
+	ApplyStyle(items_[selected_], highlight_look_);
+	SoundSystem::GetInstance().PlaySound("menu-select");
+}
+
+
+void BaseMenu::OnDown()
+{
+	ResetStyle(items_[selected_]);
+	selected_ = (selected_ + 1) % items_.size();
+	ApplyStyle(items_[selected_], highlight_look_);
+	SoundSystem::GetInstance().PlaySound("menu-select");
+}
+
+
+void BaseMenu::OnSelect()
+{
+	if (items_[selected_].activable)
+	{
+		Callback(items_[selected_].id);
+		SoundSystem::GetInstance().PlaySound("menu-valid");
+	}
+	else
+	{
+		SoundSystem::GetInstance().PlaySound("menu-non-activable");
+	}
+}

@@ -128,6 +128,13 @@ private:
 
 	void ResetStyle(MenuItem& item);
 
+	/**
+	 * Déplacements/actions dans le menu
+	 */
+	void OnUp();
+	void OnDown();
+	void OnSelect();
+
 	sf::String title_;
 	mutable sf::Sprite background_;
 	sf::Sprite background2_;

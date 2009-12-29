@@ -47,9 +47,17 @@ Game::Game() :
 	levels_		  (LevelManager::GetInstance()),
 	entitymanager_(EntityManager::GetInstance())
 {
+	input_.Init(app_.GetInput());
+
 	// init level manager
 	levels_.ParseFile(LEVEL_FILE);
 	printf("info: %d levels loaded\n", levels_.CountLevel());
+
+	// init entity manager
+	entitymanager_.LoadWeapons(XML_WEAPONS);
+	entitymanager_.LoadAnimations(XML_ANIMATIONS);
+	entitymanager_.LoadSpaceShips(XML_SPACESHIPS);
+	entitymanager_.SetPosition(0, ControlPanel::HEIGHT);
 
 	// loading config
 	LoadConfig(CONFIG_FILE);
@@ -64,19 +72,12 @@ Game::Game() :
 			sf::Style::Fullscreen);
 	}
 	app_.SetFramerateLimit(WIN_FPS);
+	app_.SetJoystickThreshold(50.f);
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
 
 	const sf::Image& icon = GET_IMG("gui/icon");
 	app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
-
-	// init entity manager
-	entitymanager_.LoadWeapons(XML_WEAPONS);
-	entitymanager_.LoadAnimations(XML_ANIMATIONS);
-	entitymanager_.LoadSpaceShips(XML_SPACESHIPS);
-	entitymanager_.SetPosition(0, ControlPanel::HEIGHT);
-
-	input_.Init(app_.GetInput());
 
 	// scenes will be allocated only if requested
 	for (int i = 0; i < SC_COUNT; ++i)

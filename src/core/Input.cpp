@@ -3,7 +3,6 @@
 #include "../utils/StringUtils.hpp"
 
 #define JOY_ID			 0
-#define JOY_DEADZONE	50.f
 
 
 Input& Input::GetInstance()
@@ -52,6 +51,7 @@ void Input::Init(const sf::Input& sfinput)
 	SetKeyboardBind(sf::Key::Escape,   EXIT_APP);
 
 	// default joystick binding
+	SetJoystickBind(0, ENTER);
 	SetJoystickBind(1, PAUSE);
 	SetJoystickBind(6, USE_WEAPON_1);
 	SetJoystickBind(7, USE_WEAPON_2);
@@ -75,6 +75,9 @@ Input::Action Input::EventToAction(const sf::Event& event)
 		case sf::Event::Closed:
 			return EXIT_APP;
 
+		case sf::Event::LostFocus:
+			return PAUSE;
+
 		default:
 			break;
 	}
@@ -96,19 +99,19 @@ bool Input::HasInput(Action action)
 		}
 		if (action == Input::MOVE_UP)
 		{
-			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisY) < -JOY_DEADZONE;
+			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisY) < 0.f;
 		}
 		if (action == Input::MOVE_DOWN)
 		{
-			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisY) > JOY_DEADZONE;
+			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisY) > 0.f;
 		}
 		if (action == Input::MOVE_LEFT)
 		{
-			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisX) < -JOY_DEADZONE;
+			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisX) < 0.f;
 		}
 		if (action == Input::MOVE_RIGHT)
 		{
-			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisX) > JOY_DEADZONE;
+			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisX) > 0.f;
 		}
 	}
 	return false;

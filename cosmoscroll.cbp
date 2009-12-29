@@ -43,10 +43,6 @@
 			<Add library="sfml-audio" />
 			<Add library="dumb" />
 		</Linker>
-		<Unit filename="src/core/Animated.cpp" />
-		<Unit filename="src/core/Animated.hpp" />
-		<Unit filename="src/core/Animation.cpp" />
-		<Unit filename="src/core/Animation.hpp" />
 		<Unit filename="src/core/ControlPanel.cpp" />
 		<Unit filename="src/core/ControlPanel.hpp" />
 		<Unit filename="src/core/Game.cpp" />
@@ -60,6 +56,10 @@
 		<Unit filename="src/core/ParticleSystem.hpp" />
 		<Unit filename="src/core/SoundSystem.cpp" />
 		<Unit filename="src/core/SoundSystem.hpp" />
+		<Unit filename="src/entities/Animated.cpp" />
+		<Unit filename="src/entities/Animated.hpp" />
+		<Unit filename="src/entities/Animation.cpp" />
+		<Unit filename="src/entities/Animation.hpp" />
 		<Unit filename="src/entities/Asteroid.cpp" />
 		<Unit filename="src/entities/Asteroid.hpp" />
 		<Unit filename="src/entities/Bonus.cpp" />

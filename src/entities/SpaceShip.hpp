@@ -3,7 +3,7 @@
 
 #include "Entity.hpp"
 #include "Weapon.hpp"
-#include "../core/Animated.hpp"
+#include "Animated.hpp"
 
 class SpaceShip: public Entity, public Animated
 {
