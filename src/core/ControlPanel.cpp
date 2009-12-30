@@ -18,8 +18,8 @@
 
 ControlPanel& ControlPanel::GetInstance()
 {
-    static ControlPanel self;
-    return self;
+	static ControlPanel self;
+	return self;
 }
 
 
@@ -75,37 +75,37 @@ void ControlPanel::SetOverheatText(const sf::Unicode::Text& text)
 
 void ControlPanel::SetShipHP(int value)
 {
-    pbars_[HP].SetPercent(value);
+	pbars_[HP].SetPercent(value);
 }
 
 
 void ControlPanel::SetMaxShipHP(int max)
 {
-    pbars_[HP].max_value = max;
+	pbars_[HP].max_value = max;
 }
 
 
 void ControlPanel::SetShield(int value)
 {
-    pbars_[SHIELD].SetPercent(value);
+	pbars_[SHIELD].SetPercent(value);
 }
 
 
 void ControlPanel::SetMaxShield(int max)
 {
-    pbars_[SHIELD].max_value = max;
+	pbars_[SHIELD].max_value = max;
 }
 
 
 void ControlPanel::SetHeat(int value)
 {
-    pbars_[HEAT].SetPercent(value);
+	pbars_[HEAT].SetPercent(value);
 }
 
 
 void ControlPanel::SetMaxHeat(int max)
 {
-    pbars_[HEAT].max_value = max;
+	pbars_[HEAT].max_value = max;
 }
 
 
@@ -123,13 +123,13 @@ void ControlPanel::SetMissiles(int count)
 
 void ControlPanel::SetTimer(float seconds)
 {
-    static int previous = -1; // negative, to force update at first call
-    int rounded = (int) seconds;
-    if (rounded != previous)
-    {
+	static int previous = -1; // negative, to force update at first call
+	int rounded = (int) seconds;
+	if (rounded != previous)
+	{
 		timer_.SetText(str_sprintf("Temps : %02d:%02d", rounded / 60, rounded % 60));
 		previous = rounded;
-    }
+	}
 }
 
 
@@ -141,27 +141,27 @@ bool ControlPanel::IsOnTop() const
 
 void ControlPanel::Render(sf::RenderTarget& target) const
 {
-    target.Draw(panel_);
-    for (int i = 0; i < PBAR_COUNT; ++i)
-    {
-        target.Draw(pbars_[i].label);
-        target.Draw(pbars_[i].background);
-        target.Draw(pbars_[i].bar);
-    }
+	target.Draw(panel_);
+	for (int i = 0; i < PBAR_COUNT; ++i)
+	{
+		target.Draw(pbars_[i].label);
+		target.Draw(pbars_[i].background);
+		target.Draw(pbars_[i].bar);
+	}
 	target.Draw(game_info_);
-    target.Draw(info_);
-    target.Draw(timer_);
+	target.Draw(info_);
+	target.Draw(timer_);
 
-    target.Draw(coolers_.icon);
-    target.Draw(coolers_.count);
-    target.Draw(missiles_.icon);
-    target.Draw(missiles_.count);
+	target.Draw(coolers_.icon);
+	target.Draw(coolers_.count);
+	target.Draw(missiles_.icon);
+	target.Draw(missiles_.count);
 }
 
 
 ControlPanel::ProgressBar::ProgressBar()
 {
-    background = sf::Shape::Rectangle(0, 0, 100, BAR_HEIGHT, BAR_COLOR, 1.f);
+	background = sf::Shape::Rectangle(0, 0, 100, BAR_HEIGHT, BAR_COLOR, 1.f);
 }
 
 
@@ -170,9 +170,9 @@ void ControlPanel::ProgressBar::Init(const sf::Font& font, float x, float y)
 	label.SetFont(font);
 	label.SetSize(FONT_SIZE);
 	label.SetColor(sf::Color::White);
-    label.SetPosition(x, y - TEXT_PADDING_Y);
-    background.SetPosition(x + LABEL_LENGTH, y);
-    bar.SetPosition(x + LABEL_LENGTH, y);
+	label.SetPosition(x, y - TEXT_PADDING_Y);
+	background.SetPosition(x + LABEL_LENGTH, y);
+	bar.SetPosition(x + LABEL_LENGTH, y);
 }
 
 
@@ -183,7 +183,7 @@ void ControlPanel::ProgressBar::SetPercent(int value)
 	{
 		length = 0.1f;
 	}
-    bar.Resize(length, BAR_HEIGHT);
+	bar.Resize(length, BAR_HEIGHT);
 }
 
 

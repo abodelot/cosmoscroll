@@ -110,6 +110,7 @@ MediaManager::MediaManager()
 	puts("* loading musics...");
 #endif
 #ifndef NO_DUMB_MUSIC
+	DumbMusic::Init();
 	// chargement des musiques
 	if (!load_from_list(MUSIC_LIST, musics_))
 	{
@@ -127,6 +128,7 @@ MediaManager::MediaManager()
 
 MediaManager::~MediaManager()
 {
+	DumbMusic::Exit();
 }
 
 

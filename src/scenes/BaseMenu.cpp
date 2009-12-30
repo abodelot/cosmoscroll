@@ -45,6 +45,7 @@ void BaseMenu::OnEvent(const sf::Event& event)
 				default:
 					break;
 			}
+			break;
 		case sf::Event::JoyButtonPressed:
 			if (event.JoyButton.Button == 0)
 			{

@@ -212,11 +212,11 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 
 void LevelManager::AppendToWaitingLine(Entity* entity, float time)
 {
-    EntitySlot slot;
-    slot.entity = entity;
-    last_insert_time_ += time;
-    slot.spawntime = last_insert_time_;
-    waiting_line_.push(slot);
+	EntitySlot slot;
+	slot.entity = entity;
+	last_insert_time_ += time;
+	slot.spawntime = last_insert_time_;
+	waiting_line_.push(slot);
 }
 
 
@@ -233,13 +233,13 @@ void LevelManager::ClearWaitingLine()
 
 TiXmlElement* LevelManager::GetLevelElement(int level) const
 {
-    --level; // first level is index 0
-    if (level < 0 || level >= (int) levels_.size())
-    {
-        printf("info: level %d is not a valid level, using first level instead\n", level + 1);
-        level = 0;
-    }
-    return levels_[level];
+	--level; // first level is index 0
+	if (level < 0 || level >= (int) levels_.size())
+	{
+		printf("info: level %d is not a valid level, using first level instead\n", level + 1);
+		level = 0;
+	}
+	return levels_[level];
 }
 
 

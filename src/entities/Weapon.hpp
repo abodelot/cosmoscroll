@@ -14,13 +14,13 @@ class Weapon
 public:
 	Weapon();
 
-    /**
-     * @param image: image du projectile
-     * @param fire_rate: nombre de tirs par seconde
-     * @param heat_cost: chaleur dégagée par tir
-     * @param damage: dégâts infligés par tir
-     * @param speed: vitesse du tir en pixels par seconde
-     */
+	/**
+	 * @param image: image du projectile
+	 * @param fire_rate: nombre de tirs par seconde
+	 * @param heat_cost: chaleur dégagée par tir
+	 * @param damage: dégâts infligés par tir
+	 * @param speed: vitesse du tir en pixels par seconde
+	 */
 	void Init(const sf::Image& image, float fire_rate, float heat_cost,
 		int damage, int speed);
 
@@ -52,9 +52,9 @@ public:
 	 */
 	float Shoot(sf::Vector2f offset, float angle);
 
-    void Update(float frametime);
+	void Update(float frametime);
 
-    void SetTriple(bool triple);
+	void SetTriple(bool triple);
 
 protected:
 	virtual void ThrowHit(const sf::Vector2f& offset, float angle);
@@ -78,19 +78,19 @@ protected:
 
 private:
 	// cadence de tir
-    float fire_rate_;
-    float heat_cost_;
-    int speed_;
-    int damage_;
+	float fire_rate_;
+	float heat_cost_;
+	int speed_;
+	int damage_;
 	const sf::Image* image_;
 
-    // timer "compte à rebours" pour que la cadence de tir soit indépendante
-    // du nombre de FPS. Si <= 0, on peut tirer. Si tir, timer reinitialisé.
-    // le timer est mis à jour à chaque frame dans Update
-    float fire_timer_;
+	// timer "compte à rebours" pour que la cadence de tir soit indépendante
+	// du nombre de FPS. Si <= 0, on peut tirer. Si tir, timer reinitialisé.
+	// le timer est mis à jour à chaque frame dans Update
+	float fire_timer_;
 
 	const char* sound_name_;
-    bool triple_;
+	bool triple_;
 	Entity* owner_;
 
 	bool inited_;

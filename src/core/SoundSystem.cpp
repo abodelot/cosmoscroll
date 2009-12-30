@@ -135,12 +135,12 @@ bool SoundSystem::IsMusicEnabled() const
 
 void SoundSystem::StopAll()
 {
-	for (int i = 0; i < MAX_SOUNDS; ++i)
+	/*for (int i = 0; i < MAX_SOUNDS; ++i)
 	{
 		if (sounds_[i].GetStatus() == sf::Sound::Playing)
 		{
 			sounds_[i].Stop();
 		}
-	}
+	}*/
 	StopMusic();
 }

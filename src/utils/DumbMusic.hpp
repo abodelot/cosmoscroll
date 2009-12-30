@@ -9,7 +9,6 @@
 
 #define SAMPLING_RATE  44100
 #define N_CHANNELS     2
-#define DELTA          65536.0f / SAMPLING_RATE
 #define BUFFER_LENGTH  1	// Fixme: Magique?
 #define BUFFER_SIZE    SAMPLING_RATE / BUFFER_LENGTH
 
@@ -22,11 +21,21 @@ public:
 	DumbMusic(const char* name);
 	~DumbMusic();
 
+	/**
+	 * Initaliser le module DUMB en début de programme
+	 */
+	static void Init();
+	
+	/**
+	 * Quitter le module DUMB en fin de programme
+	 */
+	static void Exit();
+
+private:
 	bool OnStart();
 
 	bool OnGetData(Chunk& data);
-
-private:
+	
 	sf::Int16 samples_[BUFFER_SIZE * N_CHANNELS];
 
 	DUH* module_;

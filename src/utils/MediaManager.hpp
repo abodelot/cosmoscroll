@@ -7,7 +7,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #ifndef NO_DUMB_MUSIC
-#include "../utils/DumbMusic.hpp"
+#include "DumbMusic.hpp"
 #endif
 
 #include "MediaNotFoundException.hpp"
