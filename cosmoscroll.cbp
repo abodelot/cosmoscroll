@@ -122,12 +122,16 @@
 		<Unit filename="src/utils/DIE.hpp" />
 		<Unit filename="src/utils/DumbMusic.cpp" />
 		<Unit filename="src/utils/DumbMusic.hpp" />
+		<Unit filename="src/utils/I18n.cpp" />
+		<Unit filename="src/utils/I18n.hpp" />
 		<Unit filename="src/utils/Math.cpp" />
 		<Unit filename="src/utils/Math.hpp" />
 		<Unit filename="src/utils/MediaManager.cpp" />
 		<Unit filename="src/utils/MediaManager.hpp" />
 		<Unit filename="src/utils/MediaNotFoundException.cpp" />
 		<Unit filename="src/utils/MediaNotFoundException.hpp" />
+		<Unit filename="src/utils/Str.cpp" />
+		<Unit filename="src/utils/Str.h" />
 		<Unit filename="src/utils/StringUtils.cpp" />
 		<Unit filename="src/utils/StringUtils.hpp" />
 		<Extensions>

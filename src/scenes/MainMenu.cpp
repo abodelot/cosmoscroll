@@ -2,6 +2,7 @@
 #include "../core/Game.hpp"
 #include "../core/SoundSystem.hpp"
 #include "../utils/MediaManager.hpp"
+#include "../utils/I18n.hpp"
 #include "../entities/EntityManager.hpp"
 
 
@@ -12,11 +13,11 @@ MainMenu::MainMenu()
 
 	SetOffsetY(130);
 
-	AddOption("Mode Histoire", 1);
-	AddOption("Mode Arcade",   2);
-	AddOption("Options",       3);
-	AddOption(L"À Propos",     4);
-	AddOption("Quitter",       5);
+	AddOption(I18n::t("menu.main.story"),   1);
+	AddOption(I18n::t("menu.main.arcade"),  2);
+	AddOption(I18n::t("menu.main.options"), 3);
+	AddOption(I18n::t("menu.main.about"),   4);
+	AddOption(I18n::t("menu.main.quit"),    5);
 
 	// init background music at first launch of main menu
 	SoundSystem& sound = SoundSystem::GetInstance();

@@ -134,8 +134,7 @@ MediaManager::~MediaManager()
 
 const sf::Image& MediaManager::GetImage(const char* key) const
 {
-	std::map<std::string, sf::Image>::const_iterator it;
-	it = images_.find(key);
+	std::map<std::string, sf::Image>::const_iterator it = images_.find(key);
 	if (it == images_.end())
 	{
 		throw MediaNotFoundException(key);
@@ -146,8 +145,7 @@ const sf::Image& MediaManager::GetImage(const char* key) const
 
 const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
 {
-	std::map<std::string, sf::SoundBuffer>::const_iterator it;
-	it = sounds_.find(key);
+	std::map<std::string, sf::SoundBuffer>::const_iterator it = sounds_.find(key);
 	if (it == sounds_.end())
 	{
 		throw MediaNotFoundException(key);
@@ -158,8 +156,7 @@ const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
 #ifndef NO_DUMB_MUSIC
 DumbMusic* MediaManager::GetDumbMusic(const char* key) const
 {
-	DumbMusicMap::const_iterator it;
-	it = musics_.find(key);
+	DumbMusicMap::const_iterator it = musics_.find(key);
 	if (it == musics_.end())
 	{
 		throw MediaNotFoundException(key);

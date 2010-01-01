@@ -42,7 +42,7 @@ public:
 #ifndef NO_DUMB_MUSIC
 	/**
 	 * Obtenir une musique
-	 * @param[in] key: identifiant de la musique
+	 * @param key: identifiant de la musique
 	 * @return pointeur sur la musique
 	 */
 	DumbMusic* GetDumbMusic(const char* key) const;

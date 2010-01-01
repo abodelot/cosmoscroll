@@ -95,7 +95,7 @@ protected:
 	 * @param text: contenu du titre
 	 * @param y: décalage axe Y
 	 */
-	void SetTitle(const wchar_t* text, int y = 20);
+	void SetTitle(const sf::Unicode::Text& text, int y = 20);
 
 	void DrawItems(sf::RenderTarget& target) const;
 

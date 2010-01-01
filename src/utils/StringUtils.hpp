@@ -50,5 +50,10 @@ void str_lower(std::string& str);
  */
 void str_upper(std::string& str);
 
+/**
+ * Convertion UTF-8 <-> wstring
+ */
+void utf8_to_wstr(std::wstring& dest, const std::string& src);
+void wstr_to_utf8(std::string& dest, const std::wstring& src);
 
 #endif // STRINGUTILS_HPP

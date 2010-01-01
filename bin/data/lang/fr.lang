@@ -1,0 +1,9 @@
+## FRENCH
+
+# Menu principal
+menu.main.story = Mode Histoire
+menu.main.arcade = Mode Arcade
+menu.main.options = Options
+menu.main.about = À propos
+menu.main.quit = Quitter
+

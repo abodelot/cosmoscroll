@@ -210,7 +210,7 @@ void BaseMenu::Callback(int)
 }
 
 
-void BaseMenu::SetTitle(const wchar_t* text, int y)
+void BaseMenu::SetTitle(const sf::Unicode::Text& text, int y)
 {
 	title_.SetFont(GET_FONT());
 	title_.SetSize(50);

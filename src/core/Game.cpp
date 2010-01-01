@@ -140,8 +140,8 @@ bool Game::LoadConfig(const char* filename)
 		config.ReadItem("enable_music", enable_music);
 		SoundSystem::GetInstance().EnableMusic(enable_music);
 		std::string music;
-		config.ReadItem("music_name", music);
-		SoundSystem::GetInstance().SetMusicName(music);
+		if (config.ReadItem("music_name", music))
+			SoundSystem::GetInstance().SetMusicName(music);
 
 		// reading keyboard and joystick bindings
 		input_.LoadFromConfig(config);
