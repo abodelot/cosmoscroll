@@ -37,7 +37,7 @@ menu.keyboard.title = Configuration clavier
 
 # Menu joystick
 menu.joystick.title = Configuration joystick
-menu.joystick.button = %ls : Bouton %d
+menu.joystick.button_bind = %ls : Bouton %d
 
 # Menu musique
 menu.audio.title = Musique

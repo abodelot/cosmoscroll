@@ -29,7 +29,9 @@ const std::wstring& I18n::Translate(const char* key) const
 	if (it == content_.end())
 	{
 		printf("i18n: no translation found for identifier '%s'\n", key);
-		return str_sprintf(L"<translation '%s' missing>", key);
+		static std::wstring error;
+		error = str_sprintf(L"<translation '%s' missing>", key);
+		return error;
 	}
 	return it->second;
 }

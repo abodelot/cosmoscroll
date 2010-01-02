@@ -30,6 +30,8 @@ public:
 	 * Notifier la scène qu'elle est la scène courante
 	 */
 	virtual void Poke() {}
+	
+	virtual ~BaseScene() {}
 };
 
 #endif // BASESCENE_HPP

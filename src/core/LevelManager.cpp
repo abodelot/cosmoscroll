@@ -128,7 +128,7 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 {
 #ifdef DEBUG
 	printf("* loading levels... ");
-#endif;
+#endif
 	if (!doc_.LoadFile(file))
 	{
 		std::cerr << "erreur lors du chargement de " << file << std::endl;
