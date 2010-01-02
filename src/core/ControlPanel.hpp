@@ -44,9 +44,9 @@ public:
 	void SetMaxHeat(int max);
 
 	/**
-	 * @param text: texte sur la barre de chaleur
+	 * Enable/disable overheat label on overheat bar
 	 */
-	void SetOverheatText(const sf::Unicode::Text& text);
+	void SetOverheat(bool overheat);
 
 	/// nb bonus coolers
 	void SetCoolers(int coolers);

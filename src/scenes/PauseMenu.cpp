@@ -3,16 +3,17 @@
 #include "../core/ControlPanel.hpp"
 #include "../core/ParticleSystem.hpp"
 #include "../entities/EntityManager.hpp"
+#include "../utils/I18n.hpp"
 
 
 PauseMenu::PauseMenu()
 {
-	SetTitle(L"Pause", 130);
+	SetTitle(I18n::t("menu.pause.title"), 130);
 	SetOffsetY(210);
 
-	AddOption("Reprendre la partie",       1);
-	AddOption("Revenir au menu principal", 2);
-	AddOption("Quitter le jeu",            3);
+	AddOption(I18n::t("menu.pause.resume"),   1);
+	AddOption(I18n::t("menu.back_main_menu"), 2);
+	AddOption(I18n::t("menu.pause.quit"),     3);
 }
 
 

@@ -86,7 +86,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	panel_.SetHeat((int) heat_);
 	panel_.SetCoolers(coolers_);
 	panel_.SetMissiles(missiles_);
-	panel_.SetOverheatText("");
+	panel_.SetOverheat(false);
 
 	// init Konami code
 	konami_code_[0] = Input::MOVE_UP;
@@ -127,7 +127,7 @@ void PlayerShip::HandleAction(Input::Action action)
 				panel_.SetCoolers(coolers_);
 				heat_ = 0.f;
 				overheated_ = false;
-				panel_.SetOverheatText("");
+				panel_.SetOverheat(false);
 			}
 			break;
 		case Input::USE_MISSILE:
@@ -183,7 +183,7 @@ void PlayerShip::Update(float frametime)
 		if (heat_ >= HEAT_MAX)
 		{
 			overheated_ = true;
-			panel_.SetOverheatText("Surchauffe !");
+			panel_.SetOverheat(true);
 		}
 	}
 	// déplacement
@@ -235,7 +235,7 @@ void PlayerShip::Update(float frametime)
 			if (overheated_ )
 			{
 				overheated_ = false;
-				panel_.SetOverheatText("");
+				panel_.SetOverheat(false);
 			}
 		}
 	}
@@ -414,10 +414,6 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 			panel_.SetShipHP(hp_);
 			// max shield
 			IncreaseShield(SHIELD_MAX - shield_);
-			// no overheat
-			heat_ = 0;
-			overheated_ = false;
-			panel_.SetOverheatText("");
 			// +1 missile, +1 cooler
 			HandleBonus(Bonus::MISSILE);
 			HandleBonus(Bonus::COOLER);

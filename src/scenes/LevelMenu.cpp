@@ -4,12 +4,13 @@
 #include "../core/ControlPanel.hpp"
 #include "../entities/EntityManager.hpp"
 #include "../utils/StringUtils.hpp"
+#include "../utils/I18n.hpp"
 
 
 LevelMenu::LevelMenu():
 	levels_(LevelManager::GetInstance())
 {
-	SetTitle(L"Choix du niveau");
+	SetTitle(I18n::t("menu.level.title"));
 	SetOffsetY(100);
 }
 
@@ -23,9 +24,9 @@ void LevelMenu::Poke()
 	for (int i = 1; i <= last; ++i)
 	{
 		bool activable = i <= last_unlocked;
-		AddOption(str_sprintf("Niveau %d", i), i, activable);
+		AddOption(str_sprintf(I18n::t("menu.level.level").c_str(), i), i, activable);
 	}
-	AddOption("Retour au menu principal", 0);
+	AddOption(I18n::t("menu.back"), 0);
 	SelectItem(current - 1);
 }
 
@@ -48,7 +49,7 @@ void LevelMenu::Callback(int id)
 		levels_.LoadCurrent();
 		entities.InitMode(EntityManager::MODE_STORY);
 
-		ControlPanel::GetInstance().SetGameInfo(str_sprintf("Niveau %d", id));
+		ControlPanel::GetInstance().SetGameInfo(str_sprintf(I18n::t("panel.level").c_str(), id));
 		Game::GetInstance().SetNextScene(Game::SC_IntroLevelScene);
 	}
 }

@@ -126,6 +126,9 @@ int LevelManager::CountLevel() const
 
 LevelManager::Error LevelManager::ParseFile(const char* file)
 {
+#ifdef DEBUG
+	printf("* loading levels... ");
+#endif;
 	if (!doc_.LoadFile(file))
 	{
 		std::cerr << "erreur lors du chargement de " << file << std::endl;
@@ -142,6 +145,9 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 		levels_.push_back(node->ToElement());
 		node = node->NextSibling();
 	}
+#ifdef DEBUG
+	printf("%d levels found\n", levels_.size());
+#endif
 	return SUCCESS;
 }
 

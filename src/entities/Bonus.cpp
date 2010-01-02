@@ -3,6 +3,7 @@
 
 #include "Bonus.hpp"
 #include "../utils/MediaManager.hpp"
+#include "../utils/I18n.hpp"
 
 #define BONUS_SPEED 100
 #define SIZE        16
@@ -48,21 +49,21 @@ const wchar_t* Bonus::GetDescription() const
 	switch (type_)
 	{
 		case HEALTH:
-			return L"Point de vie";
+			return I18n::t("bonus.hp").c_str();
 		case SHIELD:
-			return L"Bouclier";
+			return I18n::t("bonus.shield").c_str();
 		case COOLER:
-			return L"Glaçon";
+			return I18n::t("bonus.cooler").c_str();
 		case MISSILE:
-			return L"Missile";
+			return I18n::t("bonus.missile").c_str();
 		case TRIPLE_SHOT:
-			return L"Triple tir";
+			return I18n::t("bonus.triple_shot").c_str();
 		case SPEED:
-			return L"Vitesse";
+			return I18n::t("bonus.speed").c_str();
 		case STONED:
-			return L"Stoned !";
+			return I18n::t("bonus.stoned").c_str();
 		case SUPER_BANANA:
-			return L"Super Banane !";
+			return I18n::t("bonus.banana").c_str();
 		default:
 			break;
 	}

@@ -1,18 +1,19 @@
 #include "AudioMenu.hpp"
 #include "../core/Game.hpp"
 #include "../core/SoundSystem.hpp"
+#include "../utils/I18n.hpp"
 
 
 AudioMenu::AudioMenu()
 {
-	SetTitle(L"Musique");
+	SetTitle(I18n::t("menu.audio.title"));
 	SetOffsetY(100);
 
 	AddOption("Space Song", 1);
 	AddOption("Aurora", 2);
 	AddOption("Escape For Assault", 3);
-	AddOption("Pas de musique", 4);
-	AddOption("Retour", 0);
+	AddOption(I18n::t("menu.audio.no_music"), 4);
+	AddOption(I18n::t("menu.back"), 0);
 }
 
 

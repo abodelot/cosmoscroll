@@ -3,6 +3,7 @@
 #include "../core/LevelManager.hpp"
 #include "../utils/StringUtils.hpp"
 #include "../utils/MediaManager.hpp"
+#include "../utils/I18n.hpp"
 
 
 IntroLevelScene::IntroLevelScene()
@@ -47,13 +48,12 @@ void IntroLevelScene::Poke()
 	LevelManager& levels = LevelManager::GetInstance();
 	int current_level = levels.GetCurrent();
 
-	std::string content = str_sprintf(
-		"Niveau %d\n\n%s\n\nEnnemis : %d",
+	std::wstring content = str_sprintf(
+		I18n::t("menu.level.intro").c_str(),
 		current_level,
-		levels.GetDescription(current_level),
+		I18n::t(levels.GetDescription(current_level)).c_str(),
 		levels.RemainingEntities()
 	);
-	str_replace(content, "\\n", "\n"); // handling line feed characters
 	description_.SetText(content);
 	// centered on screen
 	sf::FloatRect rect = description_.GetRect();

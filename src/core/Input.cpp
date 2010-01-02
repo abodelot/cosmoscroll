@@ -1,6 +1,7 @@
 #include "Input.hpp"
 #include "Game.hpp"
 #include "../utils/StringUtils.hpp"
+#include "../utils/I18n.hpp"
 
 #define JOY_ID			 0
 
@@ -170,33 +171,23 @@ const wchar_t* Input::ActionToString(Action action)
 	switch (action)
 	{
 		case PAUSE:
-			return L"Pause";
-		case TAKE_SCREENSHOT:
-			return L"Capture d'écran";
-		case PANEL_UP:
-			return L"Panneau en haut";
-		case PANEL_DOWN:
-			return L"Panneau en bas";
+			return I18n::t("action.pause").c_str();
 		case MOVE_UP:
-			return L"Haut";
+			return I18n::t("action.up").c_str();
 		case MOVE_DOWN:
-			return L"Bas";
+			return I18n::t("action.down").c_str();
 		case MOVE_LEFT:
-			return L"Gauche";
+			return I18n::t("action.left").c_str();
 		case MOVE_RIGHT:
-			return L"Droite";
+			return I18n::t("action.right").c_str();
 		case USE_WEAPON_1:
-			return L"Arme 1";
+			return I18n::t("action.weapon_1").c_str();
 		case USE_WEAPON_2:
-			return L"Arme 2";
+			return I18n::t("action.weapon_2").c_str();
 		case USE_COOLER:
-			return L"Utiliser bonus Glaçon";
+			return I18n::t("action.cooler").c_str();
 		case USE_MISSILE:
-			return L"Utiliser bonus Missile";
-		case ENTER:
-			return L"Valider";
-		case EXIT_APP:
-			return L"Quitter le jeu";
+			return I18n::t("action.missile").c_str();
 		default:
 			break;
 	}
@@ -322,17 +313,19 @@ void Input::SetDevices(unsigned int flag)
 
 void Input::AskUserInput(Device device, Action action)
 {
-	std::wstring str;
+	std::wstring str(L"");
 	if (device == Input::KEYBOARD)
 	{
-		str = L"Appuyez sur une touche du clavier\npour l'action '";
+		str += I18n::t("input.press_key");
 	}
 	else if (device == Input::JOYSTICK)
 	{
-		str = L"Appuyez sur un bouton du contrôleur\npour l'action '";
+		str += I18n::t("input.press_button");
 	}
+	str += L" '";
 	str += Input::ActionToString(action);
-	str += L"'\n\n(Échap pour annuler)";
+	str += L"'\n\n";
+	str += I18n::t("input.cancel");
 
 	sf::String prompt;
 	prompt.SetText(str);

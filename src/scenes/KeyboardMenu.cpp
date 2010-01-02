@@ -1,5 +1,6 @@
 #include "KeyboardMenu.hpp"
 #include "../core/Game.hpp"
+#include "../utils/I18n.hpp"
 
 
 static void build_action_string(std::wstring& label, Input::Action action)
@@ -18,7 +19,7 @@ static void build_action_string(std::wstring& label, Input::Action action)
 
 KeyboardMenu::KeyboardMenu()
 {
-	SetTitle(L"Configuration clavier");
+	SetTitle(I18n::t("menu.keyboard.title"));
 	SetOffsetY(100);
 	SetTextSize(26);
 }
@@ -37,7 +38,7 @@ void KeyboardMenu::Poke()
 	AddBindOpt(Input::USE_MISSILE);
 	AddBindOpt(Input::PAUSE);
 
-	AddOption("Retour", 8000);
+	AddOption(I18n::t("menu.back"), 8000);
 }
 
 

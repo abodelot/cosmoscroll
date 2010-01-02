@@ -2,11 +2,12 @@
 #include "../core/Game.hpp"
 #include "../core/Input.hpp"
 #include "../utils/StringUtils.hpp"
+#include "../utils/I18n.hpp"
 
 
 JoystickMenu::JoystickMenu()
 {
-	SetTitle(L"Configuration joystick");
+	SetTitle(I18n::t("menu.joystick.title"));
 	SetOffsetY(100);
 }
 
@@ -20,7 +21,7 @@ void JoystickMenu::Poke()
 	AddBindOpt(Input::USE_MISSILE);
 	AddBindOpt(Input::PAUSE);
 
-	AddOption("Retour", -1);
+	AddOption(I18n::t("menu.back"), -1);
 }
 
 
@@ -28,8 +29,8 @@ void JoystickMenu::AddBindOpt(Input::Action action)
 {
 	Input& input = Input::GetInstance();
 
-	std::wstring label = Input::ActionToString(action);
-	label += str_sprintf(L" : bouton %d", input.GetJoystickBind(action));
+	std::wstring label = str_sprintf(I18n::t("menu.joystick.button_bind").c_str(),
+		Input::ActionToString(action), input.GetJoystickBind(action));
 
 	AddOption(label, action);
 }

@@ -1,9 +1,100 @@
 ## ENGLISH
 
+menu.back = Back
+menu.back_main_menu = Back to main menu
+
 # Main menu
 menu.main.story = Story mode
 menu.main.arcade = Arcade mode
 menu.main.options = Options
 menu.main.about = About
 menu.main.quit = Quit
+
+# Level menu
+menu.level.title = Level choice
+menu.level.level = - Level %d
+menu.level.intro = Level %d\n\n%ls\n\nEnemies: %d
+
+# Pause menu
+menu.pause.title = Paused
+menu.pause.resume = Resume game
+menu.pause.quit = Exit game
+
+# Game over menu
+menu.gameover.title = Game Over
+menu.gameover.play_again = Play again
+menu.gameover.record = New record !\n    You've lasted %d min %d sec !
+menu.gameover.no_record = You've lasted only\n%02d min et %02d sec ...
+
+# Options menu
+menu.options.title = Options
+menu.options.keyboard = Keyboard settings
+menu.options.joystick = Joystick settings
+menu.options.music = Music
+
+# Keyboard menu
+menu.keyboard.title = Keyboard settings
+
+# Joystick menu
+menu.joystick.title = Joystick settings
+menu.joystick.button_bind = %ls: Button %d
+
+# Music menu
+menu.audio.title = Music
+menu.audio.no_music = No music
+
+# About menu
+menu.about.title = About CosmoScroll
+menu.about.version = Version:
+menu.about.authors = Authors:
+menu.about.licence = Licence:
+
+# End game
+endgame.game_over = Game Over
+endgame.end_level = Level %d cleared
+endgame.end_last_level = Congratulations!\n\nYou've cleared the %d levels of the game\nand beat the evil boss!
+
+# Control panel
+panel.bar_hp = Ship
+panel.bar_shield = Shield
+panel.bar_heat = Heat
+panel.overheat = Overheat!
+panel.level = Level %d
+panel.record = Record: %02d:%02d
+panel.timer = Time: %02d:%02d
+
+# Bonus
+bonus.hp = Healt point
+bonus.shield = Shield point
+bonus.cooler = Cooler
+bonus.missile = Missile
+bonus.triple_shot = Triple shot
+bonus.speed = Speed
+bonus.stoned = Stoned
+bonus.banana = Super Banana!
+
+# Actions
+action.up = Up
+action.down = Down
+action.left = Left
+action.right = Right
+action.weapon_1 = Weapon 1
+action.weapon_2 = Weapon 2
+action.pause = Pause
+action.cooler = Use Cooler bonus
+action.missile = Use Missile bonus
+
+# Ask input
+input.press_key = Press a key to bind\naction
+input.press_button = Press a joystick button to bind\naction
+input.cancel = (press Escape to cancel)
+
+# Levels description
+level_1 =
+level_2 =
+level_3 =
+level_4 =
+level_5 =
+level_6 =
+level_7 =
 

@@ -1,9 +1,100 @@
 ## FRENCH
 
+menu.back = Retour
+menu.back_main_menu = Retour au menu principal
+
 # Menu principal
 menu.main.story = Mode Histoire
 menu.main.arcade = Mode Arcade
 menu.main.options = Options
 menu.main.about = À propos
 menu.main.quit = Quitter
+
+# Menu niveaux
+menu.level.title = Choix du niveau
+menu.level.level = - Niveau %d
+menu.level.intro = Niveau %d\n\n%ls\n\nEnnemis : %d
+
+# Menu pause
+menu.pause.title = Pause
+menu.pause.resume = Reprendre la partie
+menu.pause.quit = Quitter le jeu
+
+# Menu game over
+menu.gameover.title = Game Over
+menu.gameover.play_again = Rejouer
+menu.gameover.record = Nouveau record !\n    Vous avez tenu %d min %d sec !
+menu.gameover.no_record = Vous avez tenu seulement\n%02d min et %02d sec ...
+
+# Menu options
+menu.options.title = Options
+menu.options.keyboard = Configuration clavier
+menu.options.joystick = Configuration joystick
+menu.options.music = Musique
+
+# Menu clavier
+menu.keyboard.title = Configuration clavier
+
+# Menu joystick
+menu.joystick.title = Configuration joystick
+menu.joystick.button = %ls : Bouton %d
+
+# Menu musique
+menu.audio.title = Musique
+menu.audio.no_music = Pas de musique
+
+# Menu à propos
+menu.about.title = À propos de CosmoScroll
+menu.about.version = Version :
+menu.about.authors = Auteurs :
+menu.about.licence = Licence :
+
+# Fin de jeu
+endgame.game_over = Game Over
+endgame.end_level = Niveau %d terminé
+endgame.end_last_level = Félicitations !\n\nVous avez fini les %d niveaux du jeu\net battu le boss de fin !
+
+# Panneau de contrôle
+panel.bar_hp = Coque
+panel.bar_shield = Bouclier
+panel.bar_heat = Chaleur
+panel.overheat = Surchauffe !
+panel.level = Niveau %d
+panel.record = Record : %02d:%02d
+panel.timer = Temps : %02d:%02d
+
+# Bonus
+bonus.hp = Point de vie
+bonus.shield = Bouclier
+bonus.cooler = Glaçon
+bonus.missile = Missile
+bonus.triple_shot = Triple tir
+bonus.speed = Vitesse
+bonus.stoned = Stoned
+bonus.banana = Super Banane !
+
+# Actions
+action.up = Haut
+action.down = Bas
+action.left = Gauche
+action.right = Droite
+action.weapon_1 = Arme 1
+action.weapon_2 = Arme 2
+action.pause = Pause
+action.cooler = Utiliser bonus Glaçon
+action.missile = Utiliser bonus Missile
+
+# Ask input
+input.press_key = Appuyez sur une touche du clavier\npour l'action
+input.press_button = Appuyez sur un bouton du contrôleur\npour l'action
+input.cancel = (Échap pour annuler)
+
+# Description des niveaux
+level_1 = Alors que vous vous baladez\ndans le vide interstellaire...\nOn vous attaque !!!
+level_2 = Vous continuez votre ballade\ndans le vide interstellaire\nHeh !!!
+level_3 =
+level_4 =
+level_5 =
+level_6 =
+level_7 = C'est la confrontation\navec le boss final\nOuille !!!
 

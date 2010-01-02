@@ -8,6 +8,7 @@
 #include "../core/ParticleSystem.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/StringUtils.hpp"
+#include "../utils/I18n.hpp"
 
 #define DURATION 7
 
@@ -62,7 +63,7 @@ void EndGameScene::Poke()
 	if (mode == EntityManager::MODE_ARCADE || entities_.Count() > 1)
 	{
 		SoundSystem::GetInstance().PlaySound("game-over");
-		info_.SetText("Game Over");
+		info_.SetText(I18n::t("endgame.game_over"));
 	}
 	else
 	{
@@ -72,14 +73,14 @@ void EndGameScene::Poke()
 		{
 			SoundSystem::GetInstance().PlaySound("end-level");
 
-			info_.SetText(str_sprintf(L"Niveau %d terminé", current));
+			info_.SetText(str_sprintf(I18n::t("endgame.end_level").c_str(), current));
 			levels.SetCurrent(++current);
 
 			if (current > levels.GetLastUnlocked())
 			{
 				levels.SetLastUnlocked(current);
 #ifdef DEBUG
-				printf("nouveau niveau atteint : %d\n", current);
+				printf("level %d unlocked\n", current);
 #endif
 			}
 		}
@@ -87,9 +88,7 @@ void EndGameScene::Poke()
 		{
 			SoundSystem::GetInstance().PlaySound("end-level");
 
-			std::wstring epic_win = str_sprintf(L"Félicitations !\n\n"
-				"Vous avez fini les %d niveaux du jeu.\n"
-				"Vous êtes vraiment doué(e) ! :D", current);
+			std::wstring epic_win = str_sprintf(I18n::t("endgame.end_last_level").c_str(), current);
 			info_.SetText(epic_win);
 			info_.SetSize(30);
 		}

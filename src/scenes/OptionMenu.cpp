@@ -1,17 +1,18 @@
 #include "OptionMenu.hpp"
 #include "../core/Game.hpp"
+#include "../utils/I18n.hpp"
 
 
 OptionMenu::OptionMenu()
 {
-	SetTitle(L"Options");
+	SetTitle(I18n::t("menu.options.title"));
 	SetOffsetY(100);
 
-	AddOption("Configuration clavier",  1);
-	AddOption("Configuration joystick", 2);
-	AddOption("Sons & musique",         3);
-	AddOption(L"Préférences",           4);
-	AddOption("Retour",                 5);
+	AddOption(I18n::t("menu.options.keyboard"), 1);
+	AddOption(I18n::t("menu.options.joystick"), 2);
+	AddOption(I18n::t("menu.options.music"),    3);
+	//AddOption(L"Préférences",           4);
+	AddOption(I18n::t("menu.back"),             5);
 }
 
 

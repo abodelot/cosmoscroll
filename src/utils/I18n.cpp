@@ -29,8 +29,7 @@ const std::wstring& I18n::Translate(const char* key) const
 	if (it == content_.end())
 	{
 		printf("i18n: no translation found for identifier '%s'\n", key);
-		static const std::wstring FAIL_STRING = L"<translation missing>";
-		return FAIL_STRING;
+		return str_sprintf(L"<translation '%s' missing>", key);
 	}
 	return it->second;
 }
@@ -89,10 +88,9 @@ bool I18n::LoadFromFile(const char* filename)
 			{
 				std::string key = str_trim(line.substr(0, pos));
 				std::string text = str_trim(line.substr(pos + 1));
-				str_replace(text, std::string("\\n"), std::string("\n"));
-				std::wstring wtext;
-				utf8_to_wstr(wtext, text);
-				content_[key] = wtext;
+				str_replace(text, "\\n", "\n");
+				// register wstring translation
+				utf8_to_wstr(content_[key], text);
 			}
 		}
 		return true;

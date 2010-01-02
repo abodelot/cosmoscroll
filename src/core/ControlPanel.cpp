@@ -2,6 +2,7 @@
 #include "../entities/Bonus.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/StringUtils.hpp"
+#include "../utils/I18n.hpp"
 
 #define LABEL_LENGTH 60   // longueur du texte des progess bars
 #define BONUS_LENGTH 25   // longueur des icones bonus
@@ -30,13 +31,13 @@ ControlPanel::ControlPanel()
 	font_.LoadFromFile(FONT_FILENAME, FONT_SIZE);
 
 	pbars_[HP].Init(font_, 45, Y_LINE_1);
-	pbars_[HP].label.SetText("Coque");
+	pbars_[HP].label.SetText(I18n::t("panel.bar_hp"));
 	pbars_[HP].bar.SetImage(GET_IMG("gui/bar-hp"));
 	pbars_[SHIELD].Init(font_, 45, Y_LINE_2);
-	pbars_[SHIELD].label.SetText("Bouclier");
+	pbars_[SHIELD].label.SetText(I18n::t("panel.bar_shield"));
 	pbars_[SHIELD].bar.SetImage(GET_IMG("gui/bar-shield"));
 	pbars_[HEAT].Init(font_, 220, Y_LINE_1);
-	pbars_[HEAT].label.SetText("Chaleur");
+	pbars_[HEAT].label.SetText(I18n::t("panel.bar_heat"));
 	pbars_[HEAT].bar.SetImage(GET_IMG("gui/bar-heat"));
 	sf::Vector2f pos = pbars_[HEAT].bar.GetPosition();
 	info_.SetPosition(pos.x + 8, pos.y - TEXT_PADDING_Y);
@@ -67,9 +68,16 @@ void ControlPanel::SetGameInfo(const sf::Unicode::Text& text)
 }
 
 
-void ControlPanel::SetOverheatText(const sf::Unicode::Text& text)
+void ControlPanel::SetOverheat(bool overheat)
 {
-	info_.SetText(text);
+	if (overheat)
+	{
+		info_.SetText(I18n::t("panel.overheat"));
+	}
+	else
+	{
+		info_.SetText("");
+	}
 }
 
 
@@ -127,7 +135,7 @@ void ControlPanel::SetTimer(float seconds)
 	int rounded = (int) seconds;
 	if (rounded != previous)
 	{
-		timer_.SetText(str_sprintf("Temps : %02d:%02d", rounded / 60, rounded % 60));
+		timer_.SetText(str_sprintf(I18n::t("panel.timer").c_str(), rounded / 60, rounded % 60));
 		previous = rounded;
 	}
 }

@@ -51,7 +51,6 @@ Game::Game() :
 
 	// init level manager
 	levels_.ParseFile(LEVEL_FILE);
-	printf("info: %d levels loaded\n", levels_.CountLevel());
 
 	// init entity manager
 	entitymanager_.LoadWeapons(XML_WEAPONS);

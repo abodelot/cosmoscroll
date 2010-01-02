@@ -6,8 +6,7 @@ Milestone 0.2
 
 - Faire des niveaux variés, avec difficulté croissante
 - 1 vaisseau et/ou 1 arme de plus ?
-- Intertionalisation (fichiers de langues pour fr, en, de)
-- fix erreur Windows XP quand on quitte (sf::String)
+- Intertionalisation (fichiers de langues pour fr, en, de) : Manque Allemand, vérifier le reste
 - rétablir les différents modèles d'astéroïdes
 - plus d'options dans les menus (plein écran ? son on/off ? volume son/musique ?)
 
@@ -21,3 +20,4 @@ Milestone 0.3
 - système de procédures stockées pour les niveaux
 - ParticleSystem: optimiser l'allocation des particules, allouer les particules d'un même effet par groupe, optimiser déplacements
 - éditeur de niveaux en Python/Qt4
+

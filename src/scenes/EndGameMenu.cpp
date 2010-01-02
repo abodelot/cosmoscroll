@@ -3,11 +3,12 @@
 #include "../entities/EntityManager.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/StringUtils.hpp"
+#include "../utils/I18n.hpp"
 
 
 EndGameMenu::EndGameMenu()
 {
-	SetTitle(L"Game Over");
+	SetTitle(I18n::t("menu.gameover.title"));
 	result_.SetColor(sf::Color::White);
 	result_.SetFont(GET_FONT());
 	result_.SetSize(30);
@@ -15,8 +16,8 @@ EndGameMenu::EndGameMenu()
 
 	SetOffsetY(300);
 
-	AddOption("Rejouer", 0);
-	AddOption("Revenir au menu principal", 1);
+	AddOption(I18n::t("menu.gameover.play_again"), 0);
+	AddOption(I18n::t("menu.back_main_menu"), 1);
 }
 
 
@@ -31,19 +32,18 @@ void EndGameMenu::Poke()
 {
 	EntityManager& entities = EntityManager::GetInstance();
 
-	std::string text;
 	int min = (int) entities.GetTimer() / 60;
 	int sec = (int) entities.GetTimer() % 60;
+	std::wstring text;
 	if (entities.GetTimer() > entities.GetArcadeRecord())
 	{
 		entities.UpdateArcadeRecord();
-		text = str_sprintf("Nouveau record !\n    %02d min %02d sec !", min, sec);
+		text = str_sprintf(I18n::t("menu.gameover.record").c_str(), min, sec);
 	}
 	else
 	{
-		text = str_sprintf("Vous avez tenu seulement\n%02d min %02d sec ...", min, sec);
+		text = str_sprintf(I18n::t("menu.gameover.no_record").c_str(), min, sec);
 	}
-
 	result_.SetText(text);
 }
 
