@@ -21,12 +21,11 @@ IntroScene::IntroScene() :
 	title_.SetPosition(Game::WIDTH / 2, Game::HEIGHT / 2);
 	title_.Resize(title_.GetSize().x * ZOOM_FACTOR, title_.GetSize().y * ZOOM_FACTOR);
 
-	// we show a tempory player ship during the scene
-	ship_ = new PlayerShip(sf::Vector2f(-200, 100), "playership-red");
+	// show a tempory player ship during the scene
+	ship_ = new PlayerShip(sf::Vector2f(-200, 100), "player");
 	entity_mgr_.AddEntity(ship_);
 
-	// we allow the player ship to go beyond screen limits during the intro scene
-	//entity_mgr_.SetPosition(-200, -50);
+	// allow the player ship to go beyond screen limits during the intro scene
 	entity_mgr_.SetSize(1000, 1000);
 	elapsed_ = 0.f;
 }
@@ -52,7 +51,7 @@ void IntroScene::Update(float frametime)
 	static bool jingle_played = false;
 
 	elapsed_ += frametime;
-	// play once cosmoscroll jingle
+	// play cosmoscroll jingle once
 	if (!jingle_played && elapsed_ >= JINGLE_TIME)
 	{
 		jingle_played = true;
@@ -68,12 +67,8 @@ void IntroScene::Update(float frametime)
 
 	if (elapsed_ >= DURATION)
 	{
-		/*if (music_name_ != "NULL")
-		{
-			LoadMusic(music_name_.c_str());
-		}*/
 		SoundSystem::GetInstance().SetSoundVolume(60);
-		// make entity manager ready for game use
+		// make entity manager ready for game use and restore original size
 		entity_mgr_.Clear();
 		entity_mgr_.SetSize(Game::WIDTH, Game::HEIGHT - ControlPanel::HEIGHT);
 		Game::GetInstance().SetNextScene(Game::SC_MainMenu);

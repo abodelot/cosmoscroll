@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <levels>
 	<level desc="level_1" stars="30">
+		<ship id="5" x="640" y="300" t="1" />
 		<for count="3">
 			<for count="2">
 				<ship id="1" x="640" y="200" t="2.5" />

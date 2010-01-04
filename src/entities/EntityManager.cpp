@@ -497,7 +497,7 @@ bool EntityManager::MoreBadGuys_ARCADE()
 {
 	// number of max bad guys = time / STEP + START
 	const int STEP = 8;
-	const int START = 2;
+	const int START = 1;
 	if (Count() < timer_ / STEP + START)
 	{
 		Entity* entity = CreateRandomEntity();
@@ -532,6 +532,6 @@ void EntityManager::RespawnPlayer()
 {
 	Clear();
 	sf::Vector2f position(0, height_ / 2);
-	player_ = new PlayerShip(position, "playership-red");
+	player_ = new PlayerShip(position, "player");
 	AddEntity(player_);
 }

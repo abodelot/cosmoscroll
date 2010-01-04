@@ -4,17 +4,18 @@ COSMOSCROLL TODO LIST
 Milestone 0.2
 -------------
 
-- Faire des niveaux variés, avec difficulté croissante
-- 1 vaisseau et/ou 1 arme de plus ?
+- Revoir les niveaux (ennemis variés, difficulté croissante)
 - Intertionalisation (fichiers de langues pour fr, en, de) : Manque Allemand, vérifier le reste
-- rétablir les différents modèles d'astéroïdes
-- plus d'options dans les menus (plein écran ? son on/off ? volume son/musique ?)
+- Rétablir les différents modèles d'astéroïdes en mode Arcade
+
 
 
 Milestone 0.3
 -------------
 
+- Plus d'options dans les menus (plein écran ? son on/off ? volume son/musique ?)
 - Mode deux joueurs sur la même machine
+- Publication du record en ligne
 - Gérer les parallaxes (plus de décors dans les niveaux)
 - Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
 - système de procédures stockées pour les niveaux

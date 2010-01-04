@@ -8,7 +8,8 @@
 #include "EntityManager.hpp"
 #include "Bonus.hpp"
 
-#define DROP_LUCK_PERCENT      2
+// bonus freq = 1 / DROP_LUCK
+#define DROP_LUCK 8
 
 #define DEFAULT_MOVE_PATTERN   &SpaceShip::MP_STRAIGHT;
 #define DEFAULT_ATTACK_PATTERN &SpaceShip::AP_NO_ATTACK;
@@ -56,7 +57,7 @@ void SpaceShip::SetMovePattern(const char* pattern)
 	TEST_MOVE(pattern, STRAIGHT, move_pattern_)
 	TEST_MOVE(pattern, MAGNET, move_pattern_)
 
-	printf("undefined move pattern: %s\n", pattern);
+	printf("error: undefined move pattern: %s\n", pattern);
 }
 
 
@@ -69,7 +70,7 @@ void SpaceShip::SetAttackPattern(const char* pattern)
 	TEST_ATTACK(pattern, ON_SIGHT, attack_pattern_)
 	TEST_ATTACK(pattern, NO_ATTACK, attack_pattern_)
 
-	printf("undefined attack pattern: %s\n", pattern);
+	printf("error: undefined attack pattern: %s\n", pattern);
 }
 
 
@@ -111,7 +112,7 @@ void SpaceShip::TakeDamage(int damage)
 		Entity::TakeDamage(damage);
 		if (IsDead())
 		{
-			if (sf::Randomizer::Random(0, DROP_LUCK_PERCENT) == 0)
+			if (sf::Randomizer::Random(1, DROP_LUCK) == 1)
 			{
 				EntityManager::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
 			}

@@ -107,7 +107,7 @@ void EvilBoss::TakeDamage(int damage)
 		{
 			case MORE_EVIL:
 				SetSubRect(sf::IntRect(242, 0, 242 * 2, 160));
-				EntityManager::GetInstance().InitWeapon(4, &canon_);
+				EntityManager::GetInstance().InitWeapon(6, &canon_);
 				next_ = DAMN_EVIL;
 				break;
 			case DAMN_EVIL:

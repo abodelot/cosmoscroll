@@ -499,7 +499,7 @@ void PlayerShip::KonamiCodeOn()
 	weapon2_.SetTriple(true);
 	missile_launcher_.SetTriple(true);
 
-	ParticleSystem::GetInstance().AddMessage(GetPosition(), L"Have you mooed today?");
+	ParticleSystem::GetInstance().AddMessage(GetPosition(), L"For great justice!");
 }
 
 

@@ -65,6 +65,7 @@ table.infotab th {
 		<li><a href="#xml-animations">Animations</a></li>
 		<li><a href="#xml-weapons">Armes</a></li>
 		<li><a href="#config">Fichier de configuration</a></li>
+		<li><a href="#i18n">Internationalisation</a></li>
 	</ul>
 	</div>
 	
@@ -396,7 +397,7 @@ private:
 	</ul>
 	</div>
 	
-	<h2 id="#config">Fichier de configuration</h2>
+	<h2 id="config">Fichier de configuration</h2>
 	<div class="part">
 	<p>Les préférences du joueur et ses scores sont stockés dans le fichier de configuration (<code>config/config.cfg</code>).<br />
 	Ce fichier n'est pas nécessaire au fonctionnement du jeu et sera créé automatiquement lors de la première utilisation
@@ -419,6 +420,18 @@ private:
 	</ul>
 	</div>
 	
+	<h2 id="i18n">Internationalisation</h2>
+	<div class="part">
+	<p>L'internationalisation est prise en charge avec les fichiers de langue situés dans <code>data/lang/</code>. Le jeu détecte automatiquement la locale du système et tente de charger le fichier de langue correspondant à <code>data/lang/&lt;les deux premières lettres de la locale en minuscules&gt;.lang</code>. Si ce fichier est introuvable, <code>en.lang</code> (english) sera utilisé par défaut.</p>
+	<p>Les fichier .lang <b>doivent</b> être encodés en UTF-8, et contiennent un élément de traduction par ligne, la syntaxe est <code>clef = chaîne traduite</code>.<br />Exemple :</p>
+	<pre>
+# Ceci est un commentaire
+
+menu.play = Jouer
+menu.quit = Quitter
+</pre>
+	
+	</div>
 	</body>
 </html>
 
