@@ -1,36 +1,26 @@
 #include <SFML/System.hpp>
-#include <sstream>
 
 #include "Asteroid.hpp"
 #include "EntityManager.hpp"
 #include "../core/ParticleSystem.hpp"
 #include "../utils/MediaManager.hpp"
+#include "../utils/StringUtils.hpp"
 #include "../utils/Math.hpp"
 
 // division en morceaux de taille moindre
 #define BIG_SPLIT_INTO     2
-#define MEDIUM_SPLIT_INTO  6
+#define MEDIUM_SPLIT_INTO  4
 #define SLOWDOWN           0.99f
-#define VERTICAL_SPEED     50
+#define SCROLL_SPEED       50
 
 
 Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
 	Entity(offset, size + 1)
 {
-	const int NB = 3;
-	static const char* image_bases[] = {
-		"asteroid-small",
-		"asteroid-medium",
-		"asteroid-big"
-	};
-	std::ostringstream key;
-	key << image_bases[size] << '-' << sf::Randomizer::Random(1, NB);
-	SetImage(GET_IMG(key.str().c_str()));
-
 	speed_ = 100;
 	angle_ = math::deg_to_rad(angle);
-
 	size_ = size;
+	SetRandomImage();
 	/*SetCenter(GetImage()->GetWidth() / 2, GetImage()->GetHeight() / 2);
 	static const sf::IntRect rect_big[COUNT_BIG] = {
 		sf::IntRect(),
@@ -65,13 +55,15 @@ Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
 
 Asteroid* Asteroid::Clone() const
 {
-	return new Asteroid(*this);
+	Asteroid* asteroid = new Asteroid(*this);
+	asteroid->SetRandomImage();
+	return asteroid;
 }
 
 
 void Asteroid::Update(float frametime)
 {
-	sf::Sprite::Move(-VERTICAL_SPEED * frametime, 0);
+	sf::Sprite::Move(-SCROLL_SPEED * frametime, 0);
 /*
 TODO
 (00:08:43) Alexandre: manque un ajustement sur le facteur de ralentissement 0.99 appliqué à chaque frame
@@ -119,4 +111,29 @@ void Asteroid::TakeDamage(int damage)
 		}
 	}
 }
+
+
+void Asteroid::SetRandomImage()
+{
+	int x = 0;
+	switch (size_)
+	{
+		case SMALL:
+			SetImage(GET_IMG("entities/asteroid-small"));
+			x = sf::Randomizer::Random(0, 3) * 16;
+			SetSubRect(sf::IntRect(x, 0, x + 16, 16));
+			break;
+		case MEDIUM:
+			SetImage(GET_IMG("entities/asteroid-medium"));
+			x = sf::Randomizer::Random(0, 2) * 32;
+			SetSubRect(sf::IntRect(x, 0, x + 32, 32));
+			break;
+		case BIG:
+			SetImage(GET_IMG("entities/asteroid-big"));
+			x = sf::Randomizer::Random(0, 2) * 48;
+			SetSubRect(sf::IntRect(x, 0, x + 48, 48));
+			break;
+	}
+}
+
 

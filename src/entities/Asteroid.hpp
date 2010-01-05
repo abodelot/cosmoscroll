@@ -18,9 +18,9 @@ public:
 
 	/**
 	 * Création d'un astéroïde
-	 * @param[in] offset: position
-	 * @param[in] size: taille
-	 * @param[in] angle: orientation
+	 * @param offset: position
+	 * @param size: taille
+	 * @param angle: orientation
 	 */
 	Asteroid(const sf::Vector2f& offset, Size size, float angle=180);
 
@@ -34,6 +34,11 @@ public:
 	void TakeDamage(int damage);
 
 private:
+	/**
+	 * Set a random image, according to the size
+	 */
+	void SetRandomImage();
+
 	Size size_;
 	float angle_;
 	float speed_;

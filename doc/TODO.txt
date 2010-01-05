@@ -6,8 +6,6 @@ Milestone 0.2
 
 - Revoir les niveaux (ennemis variés, difficulté croissante)
 - Intertionalisation (fichiers de langues pour fr, en, de) : Manque Allemand, vérifier le reste
-- Rétablir les différents modèles d'astéroïdes en mode Arcade
-
 
 
 Milestone 0.3
