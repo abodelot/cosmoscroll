@@ -9,6 +9,7 @@
 #include "../utils/MediaManager.hpp"
 #include "../utils/StringUtils.hpp"
 #include "../utils/DIE.hpp"
+#include "../utils/I18n.hpp"
 #include "../tinyxml/tinyxml.h"
 
 
@@ -84,10 +85,9 @@ void EntityManager::InitMode(Mode mode)
 			RespawnPlayer();
 			SetBackgroundColor(sf::Color::Black, sf::Color::Black);
 			ControlPanel::GetInstance().SetGameInfo(
-				str_sprintf("Record : %02d:%02d",
+				str_sprintf(I18n::t("panel.record").c_str(),
 				(int) arcade_record_ / 60,
-				(int) arcade_record_ % 60).c_str()
-			);
+				(int) arcade_record_ % 60));
 			particles_.AddStars();
 			break;
 	}

@@ -12,7 +12,7 @@
 Bonus::Bonus(Type type, const sf::Vector2f& offset) :
 	Entity(offset, 1, 0)
 {
-	SetImage(GET_IMG("bonus"));
+	SetImage(GET_IMG("entities/bonus"));
 	SetSubRect(GetSubRect(type));
 	type_ = type;
 }

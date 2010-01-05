@@ -4,7 +4,6 @@
 #include "EntityManager.hpp"
 #include "../core/ParticleSystem.hpp"
 #include "../utils/MediaManager.hpp"
-#include "../utils/StringUtils.hpp"
 #include "../utils/Math.hpp"
 
 // division en morceaux de taille moindre
@@ -21,35 +20,7 @@ Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
 	angle_ = math::deg_to_rad(angle);
 	size_ = size;
 	SetRandomImage();
-	/*SetCenter(GetImage()->GetWidth() / 2, GetImage()->GetHeight() / 2);
-	static const sf::IntRect rect_big[COUNT_BIG] = {
-		sf::IntRect(),
-		sf::IntRect(),
-		sf::IntRect()
-	};
-	static const sf::IntRect rect_medium[COUNT_MEDIUM] = {
-		sf::IntRect(),
-		sf::IntRect(),
-		sf::IntRect()
-	};
-	static const sf::IntRect rect_small[COUNT_SMALL] = {
-		sf::IntRect(),
-		sf::IntRect(),
-		sf::IntRect(),
-		sf::IntRect()
-	}
-	switch (size)
-	{
-		case SMALL:
-			SetSubRect(rect_small[sf::Randomizer::Random(0, COUNT_SMALL - 1)]);
-			break;
-		case MEDIUM:
-			SetSubRect(rect_medium[sf::Randomizer::Random(0, COUNT_MEDIUM - 1)]);
-			break;
-		case BIG:
-			SetSubRect(rect_big[sf::Randomizer::Random(0, COUNT_BIG - 1)]);
-			break;
-	}*/
+	//SetCenter(GetImage()->GetWidth() / 2, GetImage()->GetHeight() / 2);
 }
 
 
@@ -110,6 +81,7 @@ void Asteroid::TakeDamage(int damage)
 				break;
 		}
 	}
+	ParticleSystem::GetInstance().AddImpact(GetPosition(), 10);
 }
 
 

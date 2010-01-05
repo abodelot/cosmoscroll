@@ -198,7 +198,7 @@ void ControlPanel::ProgressBar::SetPercent(int value)
 void ControlPanel::BonusCount::Init(const sf::IntRect& subrect, int x, int y)
 {
 	icon.SetPosition(x, y);
-	icon.SetImage(GET_IMG("bonus"));
+	icon.SetImage(GET_IMG("entities/bonus"));
 	icon.SetSubRect(subrect);
 	count.SetPosition(x + BONUS_LENGTH, y);
 	count.SetSize(FONT_SIZE);

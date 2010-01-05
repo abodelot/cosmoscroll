@@ -18,7 +18,7 @@
 EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	Entity(position, EVIL)
 {
-	SetImage(GET_IMG("evil_boss"));
+	SetImage(GET_IMG("entities/evil-boss"));
 	SetSubRect(sf::IntRect(0, 0, 242, 160));
 	SetTeam(Entity::BAD);
 	// init weapons
