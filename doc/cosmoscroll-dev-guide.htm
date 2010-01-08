@@ -225,46 +225,64 @@ private:
 	
 	<h2 id="xml-levels">Niveaux</h2>
 	<p>Les niveaux sont scriptés en XML et sont stockés dans le fichier <code>bin/data/levels/levels.xml</code></p>
+	<p>Le fichier se compose de deux éléments :</p>
+	<ul>
+		<li>functions : des procédures stockées qui peuvent être appelées comme une fonction en programmation</li>
+		<li>levels : la liste des niveaux</li>
+	</ul>
+	<h3>Fonctions</h3>
+	<p>Chaque fonction est défini par un tag <b>def</b> et un attribut <b>name</b> unique</p>
+	<p>Le corps d'une fonction (ses tags enfants) est constitué de tag-entités (voir définitiosn plus bas)</p>
+	
+	<h3>Niveau</h3>
+	<p>Chaque niveau est identifié par un tag <b>level</b>.<br />
+	<em>Attributs :</em></p>
+	<ul>
+		<li><b>desc</b> : nom ou texte de description du niveau</li>
+		<li><b>bg_top</b> (optionnel) : couleur de fond du haut de l'écran au format HTML, noir si non indiqué</li>
+		<li><b>bg_bottom</b> (optionnel) : couleur de fond du bas de l'écran au format HTML, noir si non indiqué</li>
+		<li><b>starts</b> : nombre d'étoiles défilantes dans l'arrière plan</li>
+	</ul>
+	<p>Le corps d'un niveau (ses tags enfants) est constitué de tag-entités</p>
+	
+	<h3>Les tag-entités</h3>
+	<p><em>Tags de déclaration d'entités :</em></p>
 	<ul>
 		<li>
-			<b>level</b><br />
-			<p><em>attributs :</em></p>
+			<b>ship</b> : instance de SpaceShip<br />
+			<em>attributs :</em>
 			<ul>
-				<li><b>desc</b> : nom ou texte de description du niveau</li>
-				<li><b>bg_top</b> (optionnel) : couleur de fond du haut de l'écran au format HTML, noir si non indiqué</li>
-				<li><b>bg_bottom</b> (optionnel) : couleur de fond du bas de l'écran au format HTML, noir si non indiqué</li>
+				<li><b>id</b> : id du type de vaisseau (voir <a href="#xml-ships">défintion des vaisseaux</a>)</li>
 			</ul>
-			<p><em>tags enfants de déclaration d'entités :</em></p>
+		</li>		
+		<li><b>asteroid</b> : instance de Asteroid</li>
+		<li><b>evilboss</b> : instance de EvilBoss</li>
+		<em>attributs obligatoires communs à tous les tags entités :</em>
+		<ul>
+			<li><b>x</b> : position x</li>
+			<li><b>y</b> : position y</li>
+			<li><b>t</b> : temps d'apparition en seconde, relatif au t de l'entité précédente</li>
+		</ul>
+	</ul>
+	<p><em>Autres tags possibles considérés comme des tags-entités :</em></p>
+	<ul>
+		<li>
+			<b>for</b> : permet de boucler sur les tags enfants contenus<br />
+			<em>attributs :</em>
 			<ul>
-				<li>
-					<b>ship</b> : instance de SpaceShip<br />
-					<em>attributs :</em>
-					<ul>
-						<li><b>id</b> : </li>
-						<li><b>x</b> : </li>
-						<li><b>y</b> : </li>
-					</ul>
-				</li>
-				
-				<li>
-					asteroid : instance de Asteroid
-				</li>
-				<li>
-					evilboss : instance de EvilBoss
-				</li>
+				<li><b>count</b> : nombre de passage dans la boucle</li>
 			</ul>
-			<p><em>autres tags enfants</em></p>
+			Ce tag peut accepter n'importe quel tag-entité comme tag enfant.
+		</li>
+		<li>
+			<b>call</b> : appeler une fonction<br />
+			<em>attributs :</em>
 			<ul>
-				<li>
-					<b>loop</b> : répéter les tags enfant contenus plusieurs fois<br />
-					<em>attributs :</em>
-					<ul>
-						<li><b>count</b> : nombre de passage dans la boucle</li>
-					</ul>
-				</li>
+				<li><b>func</b> : nom de la fonction à appeler</li>
 			</ul>
 		</li>
 	</ul>
+	<p>Ces tags permettent une meilleure factorisation du code XML des niveaux, des fonctions peuvent appeler d'autres fonctions, des boucles peuvent être imbriquées dans d'autres boucles, etc.</p>
 	
 	<h2 id="xml-ships">Vaisseaux</h2>
 	<div class="part">

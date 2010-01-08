@@ -128,6 +128,7 @@ MediaManager::MediaManager()
 
 MediaManager::~MediaManager()
 {
+	Unload();
 	DumbMusic::Exit();
 }
 

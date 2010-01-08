@@ -54,7 +54,7 @@ void EntityManager::InitMode(Mode mode)
 		case MODE_STORY:
 			more_bad_guys_ = &EntityManager::MoreBadGuys_STORY;
 			// le vaisseau du joueur est conservé d'un niveau à l'autre
-			if (player_ == NULL || player_->IsDead())
+			if (mode_ != MODE_STORY || player_ == NULL || player_->IsDead())
 			{
 				RespawnPlayer();
 			}

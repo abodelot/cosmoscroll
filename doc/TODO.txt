@@ -16,7 +16,6 @@ Milestone 0.3
 - Publication du record en ligne
 - Gérer les parallaxes (plus de décors dans les niveaux)
 - Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
-- système de procédures stockées pour les niveaux
 - ParticleSystem: optimiser l'allocation des particules, allouer les particules d'un même effet par groupe, optimiser déplacements
 - éditeur de niveaux en Python/Qt4
 

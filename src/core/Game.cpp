@@ -90,12 +90,7 @@ Game::Game() :
 
 Game::~Game()
 {
-	SoundSystem::GetInstance().StopAll();
-	MediaManager::GetInstance().Unload();
-
-	entitymanager_.Clear();
 	app_.Close();
-	WriteConfig(CONFIG_FILE);
 
 	// delete allocated scenes
 	for (int i = 0; i < SC_COUNT; ++i)
@@ -192,7 +187,7 @@ void Game::Run()
 			{
 				// these events are always handled on each scene
 				case Input::EXIT_APP:
-					running_ = false;
+					Quit();
 					break;
 				case Input::TAKE_SCREENSHOT:
 					TakeScreenshot("screenshot");
@@ -260,6 +255,8 @@ void Game::SetNextScene(Scene enum_scene)
 void Game::Quit()
 {
 	running_ = false;
+	SoundSystem::GetInstance().StopAll();
+	WriteConfig(CONFIG_FILE);
 }
 
 

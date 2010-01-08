@@ -137,9 +137,21 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 		return FILE;
 	}
 
-	// Constitution de la liste de pointeurs vers niveaux
-	TiXmlNode* node = doc_.RootElement()->FirstChild();
-
+	// Constitution de la map de pointeurs vers les fonctions
+	TiXmlNode* node = doc_.RootElement()->FirstChild("functions")->FirstChild();
+	while (node != NULL)
+	{
+		TiXmlElement* element = node->ToElement();
+		const char* name = element->Attribute("name");
+		if (name != NULL)
+			functions_[name] = element;
+		else
+			puts("warning: function doesn't have a proper name");
+		node = node->NextSibling();
+	}
+	
+	// Constitution de la liste de pointeurs vers les niveaux
+	node = doc_.RootElement()->FirstChild("levels")->FirstChild();
 	while (node != NULL)
 	{
 		levels_.push_back(node->ToElement());
@@ -183,6 +195,23 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 				child = child->NextSiblingElement();
 			}
 			--count;
+		}
+	}
+	else if (strcmp(classname, "call") == 0)
+	{
+		const char* func_name = elem->Attribute("func");
+		if (func_name != NULL)
+		{
+			TiXmlElement* child = functions_[func_name]->FirstChildElement();
+			while (child != NULL)
+			{
+				ParseEntity(child);
+				child = child->NextSiblingElement();
+			}
+		}
+		else
+		{
+			puts("missing func attribute");
 		}
 	}
 	else

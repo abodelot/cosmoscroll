@@ -2,10 +2,12 @@
 #define LEVELMANAGER_HPP
 
 #include <queue>
+#include <map>
 #include <string>
+#include <SFML/Graphics/Color.hpp>
 
 #include "../tinyxml/tinyxml.h"
-#include "../entities/Entity.hpp"
+class Entity;
 
 /**
  * Singleton du gestionnaire de niveaux (file d'attente des unités à venir)
@@ -138,6 +140,8 @@ private:
 	TiXmlDocument doc_;
 	// pointeurs vers les définitions XML des niveaux
 	std::vector<TiXmlElement*> levels_;
+	// fonctions XML des niveaux
+	std::map<std::string, TiXmlElement*> functions_;
 	// liste des vaisseaux à spawner pour le niveau courant
 	std::queue<EntitySlot> waiting_line_;
 	int current_level_;
