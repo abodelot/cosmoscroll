@@ -14,6 +14,8 @@ AudioMenu::AudioMenu()
 	AddOption("Escape For Assault", 3);
 	AddOption(I18n::t("menu.audio.no_music"), 4);
 	AddOption(I18n::t("menu.back"), 0);
+	AddOption("-", 5);
+	AddOption("+", 6);
 }
 
 
@@ -36,5 +38,11 @@ void AudioMenu::Callback(int id)
 		case 4:
 			SoundSystem::GetInstance().EnableMusic(false);
 			break;
+	case 5:
+	  SoundSystem::GetInstance().SetMusicVolume(33);
+	  break;
+	case 6:
+	  SoundSystem::GetInstance().SetMusicVolume(100);
+	  break;
 	}
 }

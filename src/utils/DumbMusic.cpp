@@ -1,5 +1,7 @@
 #ifndef NO_DUMB_MUSIC
 
+
+#include <cassert>
 #include "DumbMusic.hpp"
 
 #define DELTA          65536.0f / SAMPLING_RATE
@@ -49,6 +51,12 @@ bool DumbMusic::OnGetData(Chunk& data)
 	data.Samples = samples_;
 	data.NbSamples = BUFFER_SIZE; // nombre de samples
 	return true;
+}
+
+
+void		DumbMusic::SetVolume(float &vol)
+{
+  this->volume_ = vol / 100.f;
 }
 
 #endif // NO_DUMB_MUSIC

@@ -31,10 +31,15 @@ public:
 	 */
 	static void Exit();
 
+
+        void  SetVolume(float &);
+
 private:
 	bool OnStart();
 
 	bool OnGetData(Chunk& data);
+
+	float volume_;
 	
 	sf::Int16 samples_[BUFFER_SIZE * N_CHANNELS];
 
