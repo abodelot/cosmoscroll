@@ -164,8 +164,17 @@ void SpaceShip::MP_STRAIGHT(float frametime)
 void SpaceShip::AP_AUTO_AIM()
 {
 	float radians = math::angle(target_->GetPosition(), GetPosition());
-	weapon_.Shoot(GetPosition(), radians);
-	// handle flipped ?
+
+	if (flipped_)
+	{
+		sf::Vector2f pos = GetPosition();
+		pos.x += GetSize().x;
+		weapon_.Shoot(pos, radians);
+	}
+	else
+	{
+		weapon_.Shoot(GetPosition(), radians);
+	}
 }
 
 

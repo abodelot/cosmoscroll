@@ -42,6 +42,8 @@ menu.joystick.button_bind = %ls: Button %d
 # Music menu
 menu.audio.title = Music
 menu.audio.no_music = No music
+menu.audio.increase_volume = Increase volume
+menu.audio.decrease_volume = Decrease volume
 
 # About menu
 menu.about.title = About CosmoScroll
@@ -94,7 +96,7 @@ level_1 = This is the first level.
 level_2 = Ahoi captain of the space!
 level_3 = This doesn't smell good.
 level_4 = Where did I put those keys again?
-level_5 = There's a legend about a guy living in the oceans...
+level_5 = There's a legend about\na guy living in the oceans...
 level_6 = And it's all about choices...
 level_7 = Excepted when you oughta kill da boss.
 

@@ -136,7 +136,9 @@ bool Game::LoadConfig(const char* filename)
 		std::string music;
 		if (config.ReadItem("music_name", music))
 			SoundSystem::GetInstance().SetMusicName(music);
-
+		int music_volume;
+		if (config.ReadItem("music_volume", music_volume))
+			SoundSystem::GetInstance().SetMusicVolume(music_volume);
 		// reading keyboard and joystick bindings
 		input_.LoadFromConfig(config);
 
@@ -158,6 +160,7 @@ void Game::WriteConfig(const char* filename) const
 	config.WriteItem("current_level", levels_.GetCurrent());
 	config.WriteItem("best_arcade_time", entitymanager_.GetArcadeRecord());
 	config.WriteItem("enable_music", (int) SoundSystem::GetInstance().IsMusicEnabled());
+	config.WriteItem("music_volume", SoundSystem::GetInstance().GetMusicVolume());
 	config.WriteItem("music_name", SoundSystem::GetInstance().GetMusicName());
 
 	// writing keyboard and joystick bindings

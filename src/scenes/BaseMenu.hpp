@@ -70,11 +70,18 @@ public:
 	void AddOption(const sf::Unicode::Text& label, int id, bool activable=true);
 
 	/**
+	 * Ajouter un espace (saut de ligne) avant le prochain appel à AddOption
+	 */
+	void AddSpacer();
+
+	/**
 	 * Modifier le texte d'un élément du menu
 	 * @param text: nouvelle versiond du texte
 	 * @param id: id de l'élément à modifier
 	 */
 	void SetTextOption(const sf::Unicode::Text& text, int id);
+
+	void SetItemActive(int id, bool active);
 
 	/**
 	 * Présélectionne un item du menu

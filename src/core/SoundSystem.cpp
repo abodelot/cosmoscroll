@@ -15,7 +15,7 @@ SoundSystem::SoundSystem()
 {
 	last_used_ = 0;
 	music_ = NULL;
-	music_volume_ = 50.f;
+	music_volume_ = 80;
 	enable_music_ = true;
 	music_name_ = DEFAULT_MUSIC;
 }
@@ -71,7 +71,7 @@ void SoundSystem::PlayMusic(const std::string& music_name, bool force_enable)
 		music_name_ = DEFAULT_MUSIC;
 	}
 
-	if (enable_music_ && music != music_)
+	if (force_enable || (enable_music_ && music != music_))
 	{
 		StopMusic();
 
@@ -103,8 +103,14 @@ void SoundSystem::StopMusic()
 }
 
 
-void SoundSystem::SetMusicVolume(float volume)
+void SoundSystem::SetMusicVolume(int volume)
 {
+	if (volume > 100) {
+		volume = 100;
+	}
+	else if (volume < 0) {
+		volume = 0;
+	}
 	music_volume_ = volume;
 	if (music_ != NULL)
 	{

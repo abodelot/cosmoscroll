@@ -153,6 +153,7 @@ void BaseMenu::AddOption(const sf::Unicode::Text& label, int id, bool activable)
 	item.label.SetText(label);
 	item.label.SetFont(GET_FONT());
 	item.label.SetSize(textsize_);
+	item.label.SetY(offset_y_);
 	item.id = id;
 	item.activable = activable;
 
@@ -160,17 +161,22 @@ void BaseMenu::AddOption(const sf::Unicode::Text& label, int id, bool activable)
 	if (selected_ == -1)
 	{
 		selected_ = 0;
-		item.label.SetY(offset_y_);
 		ApplyStyle(item, highlight_look_);
 	}
 	else
 	{
-		sf::FloatRect rect = items_.back().label.GetRect();
-		item.label.SetY(rect.Bottom + linespace_);
 		ApplyStyle(item, activable ? normal_look_ : unactive_look_);
 	}
 	item.label.SetX((Game::WIDTH - item.label.GetRect().GetWidth()) / 2);
 	items_.push_back(item);
+	AddSpacer();
+}
+
+
+void BaseMenu::AddSpacer()
+{
+	// increase offset y for next items
+	offset_y_ += items_.back().label.GetRect().GetHeight() + linespace_;
 }
 
 
@@ -182,6 +188,22 @@ void BaseMenu::SetTextOption(const sf::Unicode::Text& text, int id)
 		if (it->id == id)
 		{
 			it->label.SetText(text);
+			it->label.SetX((Game::WIDTH - it->label.GetRect().GetWidth()) / 2);
+			break;
+		}
+	}
+}
+
+
+void BaseMenu::SetItemActive(int id, bool active)
+{
+	std::vector<MenuItem>::iterator it;
+	for (it = items_.begin(); it != items_.end(); ++it)
+	{
+		if (it->id == id)
+		{
+			it->activable = active;
+			ApplyStyle(*it, active ? normal_look_ : unactive_look_);
 			break;
 		}
 	}

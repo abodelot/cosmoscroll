@@ -42,6 +42,8 @@ menu.joystick.button_bind = %ls : Bouton %d
 # Menu musique
 menu.audio.title = Musique
 menu.audio.no_music = Pas de musique
+menu.audio.increase_volume = Augmenter le volume
+menu.audio.decrease_volume = Diminuer le volume
 
 # Menu à propos
 menu.about.title = À propos de CosmoScroll

@@ -37,7 +37,8 @@ public:
 	/**
 	 * Indiquer le volume de la musique
 	 */
-	void SetMusicVolume(float volume);
+	void SetMusicVolume(int volume);
+	inline int GetMusicVolume() const { return music_volume_; }
 
 	/**
 	 * Activer/Desactiver la musique
@@ -62,7 +63,7 @@ private:
 	int last_used_;
 	sf::SoundStream* music_;
 	std::string music_name_;
-	float music_volume_;
+	int music_volume_;
 	bool enable_music_;
 };
 
