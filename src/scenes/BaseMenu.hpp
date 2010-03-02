@@ -147,6 +147,7 @@ private:
 	sf::Sprite background2_;
 	std::vector<MenuItem> items_;
 	float offset_y_;
+	float default_offset_y_;
 	int selected_; // indice de l'élément sélectionné
 	int textsize_;
 	int linespace_; // interligne en pixels

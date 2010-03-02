@@ -4,7 +4,8 @@
 #include "../utils/MediaManager.hpp"
 #include "../utils/Math.hpp"
 
-#define SPEED 25
+#define SPEED_Y 25
+#define SPEED_X 100
 #define CHILDS 8
 
 #define L_EYE_OFFSET    sf::Vector2f(105, 55)
@@ -14,6 +15,7 @@
 #define R_MOUTH_X_OFFSET 201
 #define MOUTH_Y_OFFSET   128
 
+#define POS_X 360
 
 EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	Entity(position, EVIL)
@@ -65,8 +67,8 @@ void EvilBoss::Update(float frametime)
 	bool left = true;
 	static bool direction_ = false;
 	static float mover_ = 10.0;
-	float moving_ = SPEED * frametime;
-	mover_ -= moving_;
+	float moving = SPEED_Y * frametime;
+	mover_ -= moving;
 	if (mover_ < 1 && mover_ > -1)
 	{
 		mover_ = 30.0;
@@ -74,11 +76,11 @@ void EvilBoss::Update(float frametime)
 	}
 	if (direction_)
 	{
-		sf::Sprite::Move(0, -SPEED * frametime);
+		sf::Sprite::Move(0, -moving);
 	}
 	else
 	{
-		sf::Sprite::Move(0, SPEED * frametime);
+		sf::Sprite::Move(0, moving);
 	}
 
 	if (GetPosition().x < target_->GetPosition().x)
@@ -90,6 +92,10 @@ void EvilBoss::Update(float frametime)
 	{
 		FlipX(!left);
 		left_ = left;
+	}
+	if (GetPosition().x > POS_X)
+	{
+		sf::Sprite::Move(-SPEED_X * frametime, 0);
 	}
 	eye_left_.Update(frametime);
 	eye_right_.Update(frametime);

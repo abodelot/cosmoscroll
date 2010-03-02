@@ -30,7 +30,7 @@ menu.gameover.no_record = Vous avez tenu seulement\n%02d min et %02d sec ...
 menu.options.title = Options
 menu.options.keyboard = Configuration clavier
 menu.options.joystick = Configuration joystick
-menu.options.music = Musique
+menu.options.audio = Son et musique
 
 # Menu clavier
 menu.keyboard.title = Configuration clavier
@@ -40,10 +40,12 @@ menu.joystick.title = Configuration joystick
 menu.joystick.button_bind = %ls : Bouton %d
 
 # Menu musique
-menu.audio.title = Musique
+menu.audio.title = Son et musique
 menu.audio.no_music = Pas de musique
-menu.audio.increase_volume = Augmenter le volume
-menu.audio.decrease_volume = Diminuer le volume
+menu.audio.music_volume_up = Augmenter le volume de la musique
+menu.audio.music_volume_down = Diminuer le volume de la musique
+menu.audio.sound_volume_up = Augmenter le volume du son
+menu.audio.sound_volume_down = Diminuer le volume du son
 
 # Menu à propos
 menu.about.title = À propos de CosmoScroll
@@ -92,11 +94,11 @@ input.press_button = Appuyez sur un bouton du contrôleur\npour l'action
 input.cancel = (Échap pour annuler)
 
 # Description des niveaux
-level_1 = Alors que vous vous baladez\ndans le vide interstellaire...\nOn vous attaque !!!
-level_2 = Vous continuez votre ballade\ndans le vide interstellaire\nHeh !!!
-level_3 =
-level_4 =
-level_5 =
-level_6 =
-level_7 = C'est la confrontation\navec le boss final\nOuille !!!
+level_1 = This is the first level.
+level_2 = Ahoi captain of the space!
+level_3 = This doesn't smell good.
+level_4 = Where did I put those keys again?
+level_5 = There's a legend about\na guy living in the oceans...
+level_6 = And it's all about choices...
+level_7 = Excepted when you oughta kill da boss.
 

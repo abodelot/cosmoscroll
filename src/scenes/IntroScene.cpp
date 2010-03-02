@@ -67,7 +67,6 @@ void IntroScene::Update(float frametime)
 
 	if (elapsed_ >= DURATION)
 	{
-		SoundSystem::GetInstance().SetSoundVolume(60);
 		// make entity manager ready for game use and restore original size
 		entity_mgr_.Clear();
 		entity_mgr_.SetSize(Game::WIDTH, Game::HEIGHT - ControlPanel::HEIGHT);

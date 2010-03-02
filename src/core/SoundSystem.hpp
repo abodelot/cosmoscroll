@@ -17,7 +17,8 @@ public:
 	/**
 	 * Indiquer le volume du son
 	 */
-	void SetSoundVolume(float volume);
+	void SetSoundVolume(int volume);
+	inline int GetSoundVolume() const { return sound_volume_; }
 
 	const std::string& GetMusicName() const;
 	void SetMusicName(const std::string& music_name);
@@ -64,6 +65,7 @@ private:
 	sf::SoundStream* music_;
 	std::string music_name_;
 	int music_volume_;
+	int sound_volume_;
 	bool enable_music_;
 };
 

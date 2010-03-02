@@ -23,10 +23,10 @@ public:
 
 	// inherited
 	bool PixelPerfectCollide() const;
-	
+
 	// inherited
 	void SetTarget(Entity* target);
-	
+
 private:
 	enum Phase
 	{

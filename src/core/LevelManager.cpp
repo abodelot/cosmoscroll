@@ -118,6 +118,16 @@ int LevelManager::GetStarsCount() const
 }
 
 
+int LevelManager::GetDuration() const
+{
+	if (waiting_line_.empty())
+	{
+		return 0;
+	}
+	return waiting_line_.back().spawntime;
+}
+
+
 int LevelManager::CountLevel() const
 {
 	return levels_.size();
@@ -149,7 +159,7 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 			puts("warning: function doesn't have a proper name");
 		node = node->NextSibling();
 	}
-	
+
 	// Constitution de la liste de pointeurs vers les niveaux
 	node = doc_.RootElement()->FirstChild("levels")->FirstChild();
 	while (node != NULL)
@@ -181,8 +191,8 @@ LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 void LevelManager::ParseEntity(TiXmlElement* elem)
 {
 	EntityManager& entity_mgr = EntityManager::GetInstance();
-	const char* classname = elem->Value();
-	if (strcmp(classname, "for") == 0)
+	const char* tag_name = elem->Value();
+	if (strcmp(tag_name, "loop") == 0)
 	{
 		int count = 0;
 		elem->QueryIntAttribute("count", &count);
@@ -197,7 +207,7 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 			--count;
 		}
 	}
-	else if (strcmp(classname, "call") == 0)
+	else if (strcmp(tag_name, "call") == 0)
 	{
 		const char* func_name = elem->Attribute("func");
 		if (func_name != NULL)
@@ -214,31 +224,38 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 			puts("missing func attribute");
 		}
 	}
+	else if (strcmp(tag_name, "wait") == 0)
+	{
+		float t = 0.f;
+		elem->QueryFloatAttribute("t", &t);
+		last_insert_time_ += t;
+	}
 	else
 	{
 		sf::Vector2f position;
-		float time = 0.f;
+		position.x = 640; // default: screen right side
+		float time = 0.f; // default: instant
 		elem->QueryFloatAttribute("x", &position.x);
 		elem->QueryFloatAttribute("y", &position.y);
 		elem->QueryFloatAttribute("t", &time);
 		Entity* entity = NULL;
-		if (strcmp(classname, "ship") == 0)
+		if (strcmp(tag_name, "ship") == 0)
 		{
 			int id = 0;
 			elem->QueryIntAttribute("id", &id);
 			entity = entity_mgr.CreateSpaceShip(id, position.x, position.y);
 		}
-		else if (strcmp(classname, "asteroid") == 0)
+		else if (strcmp(tag_name, "asteroid") == 0)
 		{
 			entity = new Asteroid(position, Asteroid::BIG);
 		}
-		else if (strcmp(classname, "evilboss") == 0)
+		else if (strcmp(tag_name, "evilboss") == 0)
 		{
 			entity = new EvilBoss(position);
 		}
 		else
 		{
-			printf("warning: undefined element '%s' while parsing level (ignored)\n", classname);
+			printf("warning: undefined element '%s' while parsing level (ignored)\n", tag_name);
 		}
 		AppendToWaitingLine(entity, time);
 	}

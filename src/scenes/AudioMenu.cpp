@@ -6,16 +6,20 @@
 
 AudioMenu::AudioMenu()
 {
+	SetTextSize(24);
 	SetTitle(I18n::t("menu.audio.title"));
 	SetOffsetY(100);
 
 	AddOption("Space Song", 1);
 	AddOption("Aurora", 2);
 	AddOption("Escape For Assault", 3);
-	AddSpacer();
 	AddOption(I18n::t("menu.audio.no_music"), 4);
-	AddOption(I18n::t("menu.audio.decrease_volume"), 5);
-	AddOption(I18n::t("menu.audio.increase_volume"), 6);
+
+	AddSpacer();
+	AddOption(I18n::t("menu.audio.music_volume_down"), 5);
+	AddOption(I18n::t("menu.audio.music_volume_up"), 6);
+	AddOption(I18n::t("menu.audio.sound_volume_down"), 7);
+	AddOption(I18n::t("menu.audio.sound_volume_up"), 8);
 	AddOption(I18n::t("menu.back"), 0);
 }
 
@@ -47,6 +51,12 @@ void AudioMenu::Callback(int id)
 			break;
 		case 6:
 			sound.SetMusicVolume(sound.GetMusicVolume() + 10);
+			break;
+		case 7:
+			sound.SetSoundVolume(sound.GetSoundVolume() - 10);
+			break;
+		case 8:
+			sound.SetSoundVolume(sound.GetSoundVolume() + 10);
 			break;
 	}
 	if (id >= 1 && id <= 3)

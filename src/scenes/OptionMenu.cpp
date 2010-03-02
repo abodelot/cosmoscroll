@@ -10,7 +10,7 @@ OptionMenu::OptionMenu()
 
 	AddOption(I18n::t("menu.options.keyboard"), 1);
 	AddOption(I18n::t("menu.options.joystick"), 2);
-	AddOption(I18n::t("menu.options.music"),    3);
+	AddOption(I18n::t("menu.options.audio"),    3);
 	//AddOption(L"Préférences",           4);
 	AddOption(I18n::t("menu.back"),             5);
 }

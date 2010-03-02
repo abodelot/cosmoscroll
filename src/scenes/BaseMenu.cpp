@@ -14,7 +14,7 @@ BaseMenu::BaseMenu()
 	// default settings
 	textsize_ = 32;
 	linespace_ = 10;
-	offset_y_ = 10;
+	default_offset_y_ = offset_y_ = 10;
 	normal_look_.style = sf::String::Regular;
 	normal_look_.color = sf::Color::White;
 	highlight_look_.style = sf::String::Underlined;
@@ -131,7 +131,7 @@ void BaseMenu::SetTextSize(int size)
 
 void BaseMenu::SetOffsetY(float y)
 {
-	offset_y_ = y;
+	default_offset_y_ = offset_y_ = y;
 }
 
 
@@ -222,6 +222,7 @@ void BaseMenu::SelectItem(int n)
 
 void BaseMenu::Clear()
 {
+	offset_y_ = default_offset_y_;
 	items_.clear();
 	selected_ = -1;
 }

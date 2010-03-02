@@ -1,16 +1,10 @@
 COSMOSCROLL TODO LIST
 =====================
 
-Milestone 0.2
--------------
-
-- Revoir les niveaux (ennemis variés, difficulté croissante)
-- Intertionalisation (fichiers de langues pour fr, en, de) : Manque Allemand, vérifier le reste
-
-
 Milestone 0.3
 -------------
 
+- i18n Allemand
 - Plus d'options dans les menus (plein écran ? son on/off ? volume son/musique ?)
 - Mode deux joueurs sur la même machine
 - Publication du record en ligne

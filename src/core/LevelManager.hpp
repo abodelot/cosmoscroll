@@ -86,6 +86,8 @@ public:
 
 	int GetStarsCount() const;
 
+	int GetDuration() const;
+
 	/**
 	 * Obtenir le nombre de niveaux chargés
 	 */

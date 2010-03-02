@@ -1,0 +1,30 @@
+CHANGELOG
+
+CosmoScroll 0.2
+---------------
+
+Gameplay
+* Les bonus ne bloquent plus les tirs
+* Collisions pixel perfect pour le joueur
+* Vaisseau du joueur conservé d'un niveau à un autre
+* Les vaisseaux ennemis ne peuvent plus se tirer dessus, mais peuvent entre en collision avec un astéroïde
+* 7 niveaux dans le mode histoire
+* 2 nouveaux vaisseaux, plus d'armes
+* 4 nouveaux bonus : Bouclier, Missile, Super banane, Stoned
+* Mise en pause automatique si la fenêtre n'a plus le focus
+
+Affichage
+* Vrais noms des touches dans le menu de configuration du clavier (au lieu des numéros)
+* Le panneau de contrôle peut être positionné en haut ou en bas de l'écran
+* Défilement des étoiles moins rapide
+* Sprites animés pour les vaisseaux
+
+Autres
+* Possibilité de prendre des captures d'écran
+* Easter egg : le vaisseau dans la scène d'intro est jouable
+* 1 nouvelle musique
+* Réglage du volume du son et de la musique
+* Jeu beaucoup plus modulaire : armes, animations et vaisseaux sont définis dans des fichiers XML facilement éditables
+* Scripting XML des niveaux plus élaborés (voir la doc)
+* Localisation : le jeu détecte la langue du système et est disponible en français et anglais, d'autres langues peuvent facilement être ajoutées
+

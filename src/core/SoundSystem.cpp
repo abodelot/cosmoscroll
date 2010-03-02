@@ -2,6 +2,20 @@
 #include "../utils/MediaManager.hpp"
 
 #define DEFAULT_MUSIC  "space"
+#define DEFAULT_VOLUME 50
+
+template <class T>
+static inline void ensure_range(T& value, T min, T max)
+{
+	if (value > max)
+	{
+		value = max;
+	}
+	else if (value < min)
+	{
+		value = min;
+	}
+}
 
 
 SoundSystem& SoundSystem::GetInstance()
@@ -15,7 +29,8 @@ SoundSystem::SoundSystem()
 {
 	last_used_ = 0;
 	music_ = NULL;
-	music_volume_ = 80;
+	music_volume_ = DEFAULT_VOLUME;
+	SetSoundVolume(DEFAULT_VOLUME);
 	enable_music_ = true;
 	music_name_ = DEFAULT_MUSIC;
 }
@@ -44,8 +59,10 @@ void SoundSystem::PlaySound(const char* sound_name)
 }
 
 
-void SoundSystem::SetSoundVolume(float volume)
+void SoundSystem::SetSoundVolume(int volume)
 {
+	ensure_range(volume, 0, 100);
+	sound_volume_ = volume;
 	for (int i = 0; i < MAX_SOUNDS; ++i)
 	{
 		sounds_[i].SetVolume(volume);
@@ -105,12 +122,7 @@ void SoundSystem::StopMusic()
 
 void SoundSystem::SetMusicVolume(int volume)
 {
-	if (volume > 100) {
-		volume = 100;
-	}
-	else if (volume < 0) {
-		volume = 0;
-	}
+	ensure_range(volume, 0, 100);
 	music_volume_ = volume;
 	if (music_ != NULL)
 	{
