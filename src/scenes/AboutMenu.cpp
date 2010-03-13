@@ -4,7 +4,7 @@
 #include "../utils/StringUtils.hpp"
 #include "../utils/I18n.hpp"
 
-#define COSMOSCROLL_VERSION L"0.2-devel"
+#define COSMOSCROLL_VERSION L"0.2"
 #define COSMOSCROLL_LICENCE L"GPL"
 #define COSMOSCROLL_AUTHORS L"\n" \
 							 "    Alexandre Bodelot\n" \

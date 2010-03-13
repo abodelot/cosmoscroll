@@ -61,5 +61,4 @@ void IntroLevelScene::Poke()
 		(Game::WIDTH  - rect.GetWidth())  / 2,
 		(Game::HEIGHT - rect.GetHeight()) / 2
 	);
-	printf("duration %d sec\n", levels.GetDuration());
 }

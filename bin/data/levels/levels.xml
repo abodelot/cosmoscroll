@@ -318,9 +318,9 @@
 			<call func="scoot_line_3"/>
 			<ship id="4" y="20" t="1"/>
 			<ship id="4" y="300"/>
-			<ship id="4" y="100" t=1/>
+			<ship id="4" y="100" t="1"/>
 			<ship id="4" y="180"/>
-			<ship id="4" y="250" t=1/>
+			<ship id="4" y="250" t="1"/>
 			<asteroid y="120" t="2"/>
 			<asteroid y="310" t="0.5"/>
 			<asteroid y="205" t="0.5"/>
