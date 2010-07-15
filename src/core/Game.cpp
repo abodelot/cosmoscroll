@@ -6,6 +6,7 @@
 #include "../utils/MediaManager.hpp"
 #include "../utils/ConfigParser.hpp"
 #include "../utils/StringUtils.hpp"
+#include "../md5/md5.hpp"
 
 // scenes
 #include "../scenes/BaseScene.hpp"
