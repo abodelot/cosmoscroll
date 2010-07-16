@@ -6,6 +6,8 @@
 #include "../utils/MediaManager.hpp"
 #include "../utils/ConfigParser.hpp"
 #include "../utils/StringUtils.hpp"
+
+#include "data_check.hpp"
 #include "../md5/md5.hpp"
 
 // scenes
@@ -36,6 +38,7 @@
 #define WIN_FPS     60
 #define WIN_TITLE   "CosmoScroll"
 
+
 Game& Game::GetInstance()
 {
 	static Game self;
@@ -48,6 +51,7 @@ Game::Game() :
 	levels_		  (LevelManager::GetInstance()),
 	entitymanager_(EntityManager::GetInstance())
 {
+	CheckPurity();
 	input_.Init(app_.GetInput());
 
 	// init level manager
@@ -281,3 +285,11 @@ void Game::TakeScreenshot(const char* directory)
 }
 
 
+void Game::CheckPurity()
+{
+	puts("* checking purity...");
+	pure_ = true;
+	pure_ &= MD5::check_file_against("data/xml/weapons.xml",    MD5SUM_WEAPONS);
+	pure_ &= MD5::check_file_against("data/xml/spaceships.xml", MD5SUM_SPACESHIPS);
+	pure_ &= MD5::check_file_against("data/xml/animations.xml", MD5SUM_ANIMATIONS);
+}

@@ -91,9 +91,15 @@ private:
 	 */
 	void TakeScreenshot(const char* directory);
 
+	/**
+	 * Check game data files are unaltered
+	 */
+	void CheckPurity();
+
 	sf::RenderWindow app_;
 	bool fullscreen_;
 	bool running_;
+    bool pure_;
 
 	// singletons
 	Input& input_;

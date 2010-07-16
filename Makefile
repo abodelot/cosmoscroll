@@ -30,7 +30,7 @@ endif
 #CFLAGS += $(SVNDEF)
 
 
-$(EXEC): $(OBJ) 
+$(EXEC): $(OBJ)
 	$(CC) $^ -o $(EXEC) $(LDFLAGS)
 
 %.o: %.cpp
@@ -43,8 +43,9 @@ clean:
 	-rm src/utils/*.o
 	-rm src/scenes/*.o
 	-rm src/entities/*.o
-	-rm src/tinyxml/*.o	
-	
+	-rm src/tinyxml/*.o
+	-rm src/md5/*.o
+
 mrproper: clean
 	-rm $(EXEC)
 

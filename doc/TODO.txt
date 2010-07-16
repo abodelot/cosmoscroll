@@ -5,7 +5,6 @@ Milestone 0.3
 -------------
 
 - i18n Allemand
-- Plus d'options dans les menus (plein écran ? son on/off ? volume son/musique ?)
 - Mode deux joueurs sur la même machine
 - Publication du record en ligne
 - Gérer les parallaxes (plus de décors dans les niveaux)

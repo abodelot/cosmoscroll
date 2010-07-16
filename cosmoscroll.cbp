@@ -56,6 +56,7 @@
 		<Unit filename="src/core/ParticleSystem.hpp" />
 		<Unit filename="src/core/SoundSystem.cpp" />
 		<Unit filename="src/core/SoundSystem.hpp" />
+		<Unit filename="src/core/data_check.hpp" />
 		<Unit filename="src/entities/Animated.cpp" />
 		<Unit filename="src/entities/Animated.hpp" />
 		<Unit filename="src/entities/Animation.cpp" />
@@ -82,6 +83,8 @@
 		<Unit filename="src/entities/SpaceShip.hpp" />
 		<Unit filename="src/entities/Weapon.cpp" />
 		<Unit filename="src/entities/Weapon.hpp" />
+		<Unit filename="src/md5/md5.cpp" />
+		<Unit filename="src/md5/md5.hpp" />
 		<Unit filename="src/scenes/AboutMenu.cpp" />
 		<Unit filename="src/scenes/AboutMenu.hpp" />
 		<Unit filename="src/scenes/AudioMenu.cpp" />

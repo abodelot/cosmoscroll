@@ -1,0 +1,11 @@
+#ifndef DATA_CHECK_HPP
+#define DATA_CHECK_HPP
+
+// MD5 checksums for XML game data files
+
+#define MD5SUM_WEAPONS    "1f20512e3677e582a3336117715419c1"
+#define MD5SUM_SPACESHIPS "2438a54b691af8f32d4e1b0872b523e4"
+#define MD5SUM_ANIMATIONS "793494e77d2eae128b5e23cce2fd263d"
+
+#endif // DATA_CHECK_HPP
+

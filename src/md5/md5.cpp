@@ -1,5 +1,4 @@
-// MD5.CC - source code for the C++/object oriented translation and
-//          modification of MD5.
+// md5.cpp - update 2010 by CosmoScroll project
 
 // Translation and modification (c) 1995 by Mordechai T. Abzug
 
@@ -41,8 +40,8 @@ documentation and/or software.
 
 #include "md5.hpp"
 
-#include <assert.h>
-#include <strings.h>
+#include <cassert>
+#include <cstring>
 #include <iostream>
 
 
@@ -248,6 +247,19 @@ std::string MD5::hex_digest()
   std::string str(s);
   delete [] s;
   return str;
+}
+
+
+bool MD5::check_file_against(const char* filename, const char* expected_md5)
+{
+    std::ifstream f(filename);
+    MD5 context(f);
+    f.close();
+    if (strcmp(context.hex_digest().c_str(), expected_md5) != 0) {
+    	std::cerr << "md5 checksum failed: " << filename << std::endl;
+    	return false;
+    }
+    return true;
 }
 
 

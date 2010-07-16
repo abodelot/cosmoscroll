@@ -1,5 +1,4 @@
-// MD5.CC - source code for the C++/object oriented translation and
-//          modification of MD5.
+// md5.hpp - update 2010 by CosmoScroll project
 
 // Translation and modification (c) 1995 by Mordechai T. Abzug
 
@@ -39,6 +38,9 @@ documentation and/or software.
 
 */
 
+#ifndef MD5_HPP
+#define MD5_HPP
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -65,6 +67,9 @@ public:
   unsigned char    *raw_digest ();  // digest as a 16-byte binary array
   std::string       hex_digest ();  // digest as a 33-byte ascii-hex string
   friend std::ostream&   operator<< (std::ostream&, MD5 context);
+
+  // check md5 sum for file
+  static bool check_file_against(const char* filename, const char* expected_md5);
 
 private:
   // first, some types:
@@ -104,3 +109,4 @@ private:
 			    uint4 s, uint4 ac);
 };
 
+#endif // MD5_HPP
