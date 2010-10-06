@@ -11,9 +11,11 @@ menu.main.about = About
 menu.main.quit = Quit
 
 # Level menu
-menu.level.title = Level choice
-menu.level.level = - Level %d
-menu.level.intro = Level %d\n\n%ls\n\nEnemies: %d
+menu.story.title = Story mode
+menu.story.choice = Level choice
+menu.story.level = Level %d
+menu.story.intro = Level %d\n\n%ls\n\nEnemies: %d
+menu.story.play = Play
 
 # Pause menu
 menu.pause.title = Paused
@@ -31,6 +33,7 @@ menu.options.title = Options
 menu.options.keyboard = Keyboard settings
 menu.options.joystick = Joystick settings
 menu.options.audio = Sound and music
+menu.options.settings = Settings
 
 # Keyboard menu
 menu.keyboard.title = Keyboard settings
@@ -39,7 +42,7 @@ menu.keyboard.title = Keyboard settings
 menu.joystick.title = Joystick settings
 menu.joystick.button_bind = %ls: Button %d
 
-# Music menu
+# Audio menu
 menu.audio.title = Sound and music
 menu.audio.no_music = No music
 menu.audio.music_volume_up = Increase music volume

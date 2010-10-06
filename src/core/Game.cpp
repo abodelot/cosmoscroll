@@ -24,7 +24,11 @@
 #include "../scenes/OptionMenu.hpp"
 #include "../scenes/KeyboardMenu.hpp"
 #include "../scenes/JoystickMenu.hpp"
+#include "../scenes/SettingsMenu.hpp"
 #include "../scenes/AudioMenu.hpp"
+
+
+#include "../scenes/CosmoButton.hpp"
 
 // config and data files
 #define CONFIG_FILE    "config/config.cfg"
@@ -51,7 +55,11 @@ Game::Game() :
 	levels_		  (LevelManager::GetInstance()),
 	entitymanager_(EntityManager::GetInstance())
 {
+	// hack
+	CosmoButton::SetBackgroundImage(&GET_IMG("gui/button"));
+
 	CheckPurity();
+
 	input_.Init(app_.GetInput());
 
 	// init level manager
@@ -77,7 +85,7 @@ Game::Game() :
 	}
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.SetJoystickThreshold(50.f);
-	app_.ShowMouseCursor(false);
+	//app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
 
 	const sf::Image& icon = GET_IMG("gui/icon");
@@ -135,9 +143,14 @@ bool Game::LoadConfig(const char* filename)
 			entitymanager_.SetY(0);
 		}
 
-		int enable_music = 1;
-		config.ReadItem("enable_music", enable_music);
-		SoundSystem::GetInstance().EnableMusic(enable_music);
+		int enabled = 1;
+		config.ReadItem("enable_music", enabled);
+		SoundSystem::GetInstance().EnableMusic(enabled);
+
+		enabled = 1;
+		config.ReadItem("enable_sound", enabled);
+		SoundSystem::GetInstance().EnableSound(enabled);
+
 		std::string music;
 		if (config.ReadItem("music_name", music))
 			SoundSystem::GetInstance().SetMusicName(music);
@@ -159,17 +172,20 @@ void Game::WriteConfig(const char* filename) const
 {
 	ConfigParser config;
 
-	// writing settings
+	// Settings
 	config.SeekSection("Settings");
 	config.WriteItem("fullscreen", (int) fullscreen_);
 	config.WriteItem("panel_on_top", (int) ControlPanel::GetInstance().IsOnTop());
 	config.WriteItem("last_unlocked_level", levels_.GetLastUnlocked());
 	config.WriteItem("current_level", levels_.GetCurrent());
 	config.WriteItem("best_arcade_time", entitymanager_.GetArcadeRecord());
-	config.WriteItem("enable_music", (int) SoundSystem::GetInstance().IsMusicEnabled());
-	config.WriteItem("music_name", SoundSystem::GetInstance().GetMusicName());
-	config.WriteItem("music_volume", SoundSystem::GetInstance().GetMusicVolume());
-	config.WriteItem("sound_volume", SoundSystem::GetInstance().GetSoundVolume());
+	// audio settings
+	const SoundSystem& snd = SoundSystem::GetInstance();
+	config.WriteItem("music_name",   snd.GetMusicName());
+	config.WriteItem("enable_music", (int) snd.IsMusicEnabled());
+	config.WriteItem("music_volume", snd.GetMusicVolume());
+	config.WriteItem("enable_sound", (int) snd.IsSoundEnabled());
+	config.WriteItem("sound_volume", snd.GetSoundVolume());
 
 
 	// writing keyboard and joystick bindings
@@ -251,6 +267,7 @@ void Game::SetNextScene(Scene enum_scene)
 			CASE_SCENE(KeyboardMenu, new_scene);
 			CASE_SCENE(JoystickMenu, new_scene);
 			CASE_SCENE(AudioMenu, new_scene);
+			CASE_SCENE(SettingsMenu, new_scene);
 
 			default:
 				puts("warning: can't set next requested scene");

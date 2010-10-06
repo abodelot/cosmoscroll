@@ -16,13 +16,16 @@ public:
 	void Poke();
 
 private:
-	/**
-	 * Ajouter une action à binder en option dans le menu
-	 */
-	void AddBindOpt(Input::Action action);
+	std::wstring GetButtonLabel(Input::Action action) const;
 
 	// inherited
-	void Callback(int id);
+	void EventCallback(int id);
+
+	gui::Button* but_weapon1_;
+	gui::Button* but_weapon2_;
+	gui::Button* but_missile_;
+	gui::Button* but_cooler_;
+	gui::Button* but_pause_;
 };
 
 #endif // JOYSTICKMENU_HPP

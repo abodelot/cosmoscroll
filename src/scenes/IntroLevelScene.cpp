@@ -49,7 +49,7 @@ void IntroLevelScene::Poke()
 	int current_level = levels.GetCurrent();
 
 	std::wstring content = str_sprintf(
-		I18n::t("menu.level.intro").c_str(),
+		I18n::t("menu.story.intro").c_str(),
 		current_level,
 		I18n::t(levels.GetDescription(current_level)).c_str(),
 		levels.RemainingEntities()

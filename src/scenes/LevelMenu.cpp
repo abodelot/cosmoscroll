@@ -10,46 +10,62 @@
 LevelMenu::LevelMenu():
 	levels_(LevelManager::GetInstance())
 {
-	SetTitle(I18n::t("menu.level.title"));
-	SetOffsetY(100);
+	SetTitle(I18n::t("menu.story.title"));
+
+	new gui::Label(this, I18n::t("menu.story.choice"), 100, 170);
+	opt_levels_ = new gui::OptionList(this, 380, 170);
+
+	lab_progresion_ = new gui::Label(this, "Progression", 100, 200);
+
+	CosmoButton* but = NULL;
+	but = new CosmoButton(this, I18n::t("menu.story.play"), 210, 240);
+	but->SetCallbackID(1);
+	but = new CosmoButton(this, I18n::t("menu.back_main_menu"), 210, 300);
+	but->SetCallbackID(0);
 }
 
 
 void LevelMenu::Poke()
 {
-	BaseMenu::Clear();
 	int last = levels_.CountLevel();
 	int current = levels_.GetCurrent();
 	int last_unlocked = levels_.GetLastUnlocked();
+
+	lab_progresion_->SetText(str_sprintf("Progression : %d / %d", last_unlocked, last));
+	opt_levels_->Clear();
 	for (int i = 1; i <= last; ++i)
 	{
 		bool activable = i <= last_unlocked;
-		AddOption(str_sprintf(I18n::t("menu.level.level").c_str(), i), i, activable);
+		if (activable)
+		{
+			opt_levels_->AddOption(str_sprintf(I18n::t("menu.story.level").c_str(), i));
+		}
 	}
-	AddOption(I18n::t("menu.back"), 0);
-	SelectItem(current - 1);
+	opt_levels_->Select(current - 1);
 }
 
 
-void LevelMenu::Callback(int id)
+void LevelMenu::EventCallback(int id)
 {
-	if (id == 0)
+	switch (id)
 	{
-		Game::GetInstance().SetNextScene(Game::SC_MainMenu);
-	}
-	else
-	{
-		// id refers to the current level index
-		EntityManager& entities = EntityManager::GetInstance();
-		entities.SetBackgroundColor(
-			levels_.GetTopColor(id),
-			levels_.GetBottomColor(id)
-		);
-		levels_.SetCurrent(id);
-		levels_.LoadCurrent();
-		entities.InitMode(EntityManager::MODE_STORY);
+		case 0:
+			Game::GetInstance().SetNextScene(Game::SC_MainMenu);
+			break;
+		case 1: {
+			int level_select = opt_levels_->GetSelectedOptionIndex() + 1;
+			EntityManager& entities = EntityManager::GetInstance();
+			entities.SetBackgroundColor(
+				levels_.GetTopColor(level_select),
+				levels_.GetBottomColor(level_select)
+			);
+			levels_.SetCurrent(level_select);
+			levels_.LoadCurrent();
+			entities.InitMode(EntityManager::MODE_STORY);
 
-		ControlPanel::GetInstance().SetGameInfo(str_sprintf(I18n::t("panel.level").c_str(), id));
-		Game::GetInstance().SetNextScene(Game::SC_IntroLevelScene);
+			ControlPanel::GetInstance().SetGameInfo(str_sprintf(I18n::t("panel.level").c_str(), level_select));
+			Game::GetInstance().SetNextScene(Game::SC_IntroLevelScene);
+			}
+			break;
 	}
 }

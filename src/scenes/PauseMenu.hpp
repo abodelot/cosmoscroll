@@ -16,7 +16,7 @@ public:
 
 private:
 	// inherited
-	void Callback(int id);
+	void EventCallback(int id);
 };
 
 #endif // PAUSEMENU_HPP

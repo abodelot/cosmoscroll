@@ -8,37 +8,47 @@
 JoystickMenu::JoystickMenu()
 {
 	SetTitle(I18n::t("menu.joystick.title"));
-	SetOffsetY(100);
+
+	but_weapon1_ = new gui::Button(this, GetButtonLabel(Input::USE_WEAPON_1), 210, 120);
+	but_weapon1_->SetCallbackID(Input::USE_WEAPON_1);
+	but_weapon2_ = new gui::Button(this, GetButtonLabel(Input::USE_WEAPON_2), 210, 160);
+	but_weapon2_->SetCallbackID(Input::USE_WEAPON_2);
+	but_missile_ = new gui::Button(this, GetButtonLabel(Input::USE_MISSILE), 210, 200);
+	but_missile_->SetCallbackID(Input::USE_MISSILE);
+	but_cooler_ =  new gui::Button(this, GetButtonLabel(Input::USE_COOLER), 210, 240);
+	but_cooler_->SetCallbackID(Input::USE_COOLER);
+	but_pause_ =   new gui::Button(this, GetButtonLabel(Input::PAUSE), 210, 280);
+	but_pause_->SetCallbackID(Input::PAUSE);
+
+	(new CosmoButton(this, I18n::t("menu.back"), 210, 410))->SetCallbackID(9000);
 }
 
 
 void JoystickMenu::Poke()
 {
-	Clear();
-	AddBindOpt(Input::USE_WEAPON_1);
-	AddBindOpt(Input::USE_WEAPON_2);
-	AddBindOpt(Input::USE_COOLER);
-	AddBindOpt(Input::USE_MISSILE);
-	AddBindOpt(Input::PAUSE);
+	but_weapon1_->SetText(GetButtonLabel(Input::USE_WEAPON_1));
 
-	AddOption(I18n::t("menu.back"), -1);
+	but_weapon2_->SetText(GetButtonLabel(Input::USE_WEAPON_2));
+
+	but_missile_->SetText(GetButtonLabel(Input::USE_MISSILE));
+
+	but_cooler_->SetText(GetButtonLabel(Input::USE_COOLER));
+
+	but_pause_->SetText(GetButtonLabel(Input::PAUSE));
 }
 
 
-void JoystickMenu::AddBindOpt(Input::Action action)
+std::wstring JoystickMenu::GetButtonLabel(Input::Action action) const
 {
-	Input& input = Input::GetInstance();
-
-	std::wstring label = str_sprintf(I18n::t("menu.joystick.button_bind").c_str(),
-		Input::ActionToString(action), input.GetJoystickBind(action));
-
-	AddOption(label, action);
+	// FIXME: erreur mémoire sous valgrind
+	return str_sprintf(I18n::t("menu.joystick.button_bind").c_str(),
+		Input::ActionToString(action), Input::GetInstance().GetJoystickBind(action));
 }
 
 
-void JoystickMenu::Callback(int id)
+void JoystickMenu::EventCallback(int id)
 {
-	if (id == -1)
+	if (id == 9000)
 	{
 		Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
 	}

@@ -1,0 +1,85 @@
+#ifndef GUI_OPTIONLIST_HPP
+#define GUI_OPTIONLIST_HPP
+
+#include <vector>
+#include <string>
+
+#include "Widget.hpp"
+
+namespace gui
+{
+
+/**
+ * Une liste défilante d'options
+ * callback si : choix modifié
+ */
+class OptionList: public Widget
+{
+public:
+	OptionList(Menu* owner, int x, int y);
+
+	/**
+	 * Ajouter une option à la liste
+	 */
+	void AddOption(const sf::Unicode::Text& option);
+
+	/**
+	 * Obtenir l'option sélectionnée
+	 */
+	std::string GetSelectedOption() const;
+	int GetSelectedOptionIndex() const;
+	void Select(int index);
+
+	// supprimer toutes les options
+	void Clear();
+
+	/**
+	 * Indiquer l'alignement du texte des options
+	 */
+	void SetAlign(Align::EAlign align);
+
+	// inherited
+	void Update(float frametime);
+
+	// inherited callbacks
+	void OnKeyPressed(sf::Key::Code key);
+	void OnMouseClicked(int x, int y);
+	void OnMouseWheelMoved(int delta);
+
+protected:
+	// inherited
+	void OnStateChanged(State::EState state);
+
+	// inherited
+	void ApplyStyle(const WidgetStyle& style);
+private:
+	// inherited
+	void Render(sf::RenderTarget& target) const;
+
+	void BuildBoxes();
+
+	/**
+	 * Calculer l'indentation d'une option selon l'alignement courant
+	 */
+	int ComputeIndentAlign(const sf::String& option) const;
+
+	int PreviousIndex() const;
+	int NextIndex() const;
+
+	sf::Shape box_;
+	sf::Shape inside_box_;
+	sf::Shape left_arrow_;
+	sf::Shape right_arrow_;
+	std::vector<sf::String> options_;
+	int current_opt_;
+	size_t max_opt_width_;
+	int dir_;
+	float scale_;
+	Align::EAlign align_;
+
+	int text_size_;
+};
+
+}
+
+#endif // GUI_OPTIONLIST_HPP

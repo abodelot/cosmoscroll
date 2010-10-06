@@ -70,7 +70,7 @@ public:
 	/**
 	 * Basculer entre les modes fenêtré et plein écran
 	 */
-	//void SetFullscreen(bool full);
+	void SetFullscreen(bool full);
 
 private:
 	Game();

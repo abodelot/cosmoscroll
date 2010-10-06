@@ -2,6 +2,7 @@
 #define LEVELMENU_HPP
 
 #include "BaseMenu.hpp"
+#include <vector>
 
 class LevelManager;
 
@@ -15,10 +16,12 @@ public:
 
 private:
 	// inherited
-	void Callback(int id);
+	void EventCallback(int id);
 
 	sf::String title_;
 	LevelManager& levels_;
+	gui::OptionList* opt_levels_;
+	gui::Label* lab_progresion_;
 };
 
 #endif // LEVELMENU_HPP

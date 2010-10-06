@@ -15,9 +15,9 @@ public:
 	};
 
 	/**
-	 * @param[in] position: position (x, y) de départ
-	 * @param[in] hp: points de vie
-	 * @param[in] collide_damage: dégâts infligés lors d'une collision
+	 * @param position: position (x, y) de départ
+	 * @param hp: points de vie
+	 * @param collide_damage: dégâts infligés lors d'une collision
 	 */
 	Entity(const sf::Vector2f& position, int hp, int collide_damage = 1);
 
@@ -34,13 +34,13 @@ public:
 
 	/**
 	 * Mettre à jour l'entité
-	 * @param[in] frametime: temps de la frame actuelle
+	 * @param frametime: temps de la frame actuelle
 	 */
 	virtual void Update(float frametime) = 0;
 
 	/**
 	 * Notifier l'entité d'une collision
-	 * @param[in, out] entity: entité entrée en collision
+	 * @param entity: entité entrée en collision
 	 */
 	virtual void OnCollide(Entity& entity);
 

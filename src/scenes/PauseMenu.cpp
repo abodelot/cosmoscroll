@@ -8,16 +8,16 @@
 
 PauseMenu::PauseMenu()
 {
-	SetTitle(I18n::t("menu.pause.title"), 130);
-	SetOffsetY(210);
+	SetTitle(I18n::t("menu.pause.title"), 120);
+	SetBackground(sf::Sprite());
 
-	AddOption(I18n::t("menu.pause.resume"),   1);
-	AddOption(I18n::t("menu.back_main_menu"), 2);
-	AddOption(I18n::t("menu.pause.quit"),     3);
+	(new CosmoButton(this, I18n::t("menu.pause.resume"), 210, 200))->SetCallbackID(1);
+	(new CosmoButton(this, I18n::t("menu.back_main_menu"), 210, 250))->SetCallbackID(2);
+	(new CosmoButton(this, I18n::t("menu.pause.quit"), 210, 300))->SetCallbackID(3);
 }
 
 
-void PauseMenu::Callback(int id)
+void PauseMenu::EventCallback(int id)
 {
 	Game& game = Game::GetInstance();
 	switch (id)
@@ -45,6 +45,7 @@ void PauseMenu::Show(sf::RenderTarget& target) const
 {
 	target.Draw(ControlPanel::GetInstance());
 	target.Draw(EntityManager::GetInstance());
-	BaseMenu::DrawItems(target);
+	target.Draw(GetTitle());
+	gui::Menu::Show(target);
 }
 

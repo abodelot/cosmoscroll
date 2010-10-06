@@ -16,13 +16,21 @@ public:
 	void Poke();
 
 private:
-	/**
-	 * Ajouter une action à binder en option dans le menu
-	 */
-	void AddBindOpt(Input::Action action);
 
 	// inherited
-	void Callback(int id);
+	void EventCallback(int id);
+
+	std::wstring GetKeyLabel(Input::Action action) const;
+
+	gui::Button* but_up_;
+	gui::Button* but_down_;
+	gui::Button* but_left_;
+	gui::Button* but_right_;
+	gui::Button* but_weapon1_;
+	gui::Button* but_weapon2_;
+	gui::Button* but_cooler_;
+	gui::Button* but_missile_;
+	gui::Button* but_pause_;
 };
 
 #endif // KEYBOARDMENU_HPP

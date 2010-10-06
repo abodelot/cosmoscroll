@@ -119,7 +119,8 @@ MediaManager::MediaManager()
 	}
 #endif
 	// chargement des fontes
-	if (!font_.LoadFromFile(FONT_FILENAME, 60))
+
+	if (!font_.LoadFromFile(FONT_FILENAME, 40))
 	{
 		exit(EXIT_FAILURE);
 	}

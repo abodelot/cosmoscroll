@@ -32,6 +32,7 @@ SoundSystem::SoundSystem()
 	music_volume_ = DEFAULT_VOLUME;
 	SetSoundVolume(DEFAULT_VOLUME);
 	enable_music_ = true;
+	enable_sound_ = true;
 	music_name_ = DEFAULT_MUSIC;
 }
 
@@ -43,19 +44,22 @@ SoundSystem::~SoundSystem()
 
 void SoundSystem::PlaySound(const char* sound_name)
 {
-	static MediaManager& media = MediaManager::GetInstance();
-	if (last_used_ == MAX_SOUNDS)
+	if (enable_sound_)
 	{
-		last_used_ = 0;
+		static MediaManager& media = MediaManager::GetInstance();
+		if (last_used_ == MAX_SOUNDS)
+		{
+			last_used_ = 0;
+		}
+		sf::Sound& sound = sounds_[last_used_];
+		if (sound.GetStatus() == sf::Sound::Playing)
+		{
+			sound.Stop();
+		}
+		sound.SetBuffer(media.GetSoundBuf(sound_name));
+		sound.Play();
+		++last_used_;
 	}
-	sf::Sound& sound = sounds_[last_used_];
-	if (sound.GetStatus() == sf::Sound::Playing)
-	{
-		sound.Stop();
-	}
-	sound.SetBuffer(media.GetSoundBuf(sound_name));
-	sound.Play();
-	++last_used_;
 }
 
 
@@ -70,12 +74,8 @@ void SoundSystem::SetSoundVolume(int volume)
 }
 
 
-void SoundSystem::PlayMusic(const std::string& music_name, bool force_enable)
+void SoundSystem::PlayMusic(const std::string& music_name)
 {
-	if (force_enable)
-	{
-		enable_music_ = true;
-	}
 	sf::SoundStream* music = NULL;
 	try
 	{
@@ -88,12 +88,15 @@ void SoundSystem::PlayMusic(const std::string& music_name, bool force_enable)
 		music_name_ = DEFAULT_MUSIC;
 	}
 
-	if (force_enable || (enable_music_ && music != music_))
+	if (music != music_)
 	{
 		StopMusic();
-
 		music_ = music;
 		music_->SetVolume(music_volume_);
+	}
+	if (enable_music_)
+	{
+		StopMusic();
 		music_->Play();
 	}
 }
@@ -145,9 +148,21 @@ void SoundSystem::EnableMusic(bool enabled)
 }
 
 
+void SoundSystem::EnableSound(bool enabled)
+{
+	enable_sound_ = enabled;
+}
+
+
 bool SoundSystem::IsMusicEnabled() const
 {
 	return enable_music_;
+}
+
+
+bool SoundSystem::IsSoundEnabled() const
+{
+	return enable_sound_;
 }
 
 

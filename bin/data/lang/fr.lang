@@ -1,7 +1,7 @@
 ## FRENCH
 
 menu.back = Retour
-menu.back_main_menu = Retour au menu principal
+menu.back_main_menu = Retour menu principal
 
 # Menu principal
 menu.main.story = Mode Histoire
@@ -11,9 +11,11 @@ menu.main.about = À propos
 menu.main.quit = Quitter
 
 # Menu niveaux
-menu.level.title = Choix du niveau
-menu.level.level = - Niveau %d
-menu.level.intro = Niveau %d\n\n%ls\n\nEnnemis : %d
+menu.story.title = Mode Histoire
+menu.story.choice = Choix du niveau :
+menu.story.level = Niveau %d
+menu.story.intro = Niveau %d\n\n%ls\n\nEnnemis : %d
+menu.story.play = Jouer
 
 # Menu pause
 menu.pause.title = Pause
@@ -31,6 +33,7 @@ menu.options.title = Options
 menu.options.keyboard = Configuration clavier
 menu.options.joystick = Configuration joystick
 menu.options.audio = Son et musique
+menu.options.settings = Préférences
 
 # Menu clavier
 menu.keyboard.title = Configuration clavier
@@ -39,7 +42,7 @@ menu.keyboard.title = Configuration clavier
 menu.joystick.title = Configuration joystick
 menu.joystick.button_bind = %ls : Bouton %d
 
-# Menu musique
+# Menu sons
 menu.audio.title = Son et musique
 menu.audio.no_music = Pas de musique
 menu.audio.music_volume_up = Augmenter le volume de la musique

@@ -11,13 +11,17 @@ MainMenu::MainMenu()
 	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
 	title_.SetPosition((Game::WIDTH - title_.GetSize().x) / 2, 12);
 
-	SetOffsetY(130);
+	(new CosmoButton(this, I18n::t("menu.main.story"),   210, 120))->SetCallbackID(1);
+	(new CosmoButton(this, I18n::t("menu.main.arcade"),  210, 170))->SetCallbackID(2);
+	(new CosmoButton(this, I18n::t("menu.main.options"), 210, 220))->SetCallbackID(3);
+	(new CosmoButton(this, I18n::t("menu.main.about"),   210, 270))->SetCallbackID(4);
+	(new CosmoButton(this, I18n::t("menu.main.quit"),    210, 320))->SetCallbackID(5);
 
-	AddOption(I18n::t("menu.main.story"),   1);
+	/*AddOption(I18n::t("menu.main.story"),   1);
 	AddOption(I18n::t("menu.main.arcade"),  2);
 	AddOption(I18n::t("menu.main.options"), 3);
 	AddOption(I18n::t("menu.main.about"),   4);
-	AddOption(I18n::t("menu.main.quit"),    5);
+	AddOption(I18n::t("menu.main.quit"),    5);*/
 
 	// init background music at first launch of main menu
 	SoundSystem& sound = SoundSystem::GetInstance();
@@ -32,7 +36,7 @@ void MainMenu::Show(sf::RenderTarget& target) const
 }
 
 
-void MainMenu::Callback(int id)
+void MainMenu::EventCallback(int id)
 {
 	Game& game = Game::GetInstance();
 	switch (id)

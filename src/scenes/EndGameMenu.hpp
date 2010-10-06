@@ -15,7 +15,7 @@ public:
 
 private:
 	// inherited
-	void Callback(int id);
+	void EventCallback(int id);
 
 	sf::String result_;
 };

@@ -4,7 +4,7 @@
 #include "../utils/StringUtils.hpp"
 #include "../utils/I18n.hpp"
 
-#define COSMOSCROLL_VERSION L"0.2"
+#define COSMOSCROLL_VERSION L"0.3-devel"
 #define COSMOSCROLL_LICENCE L"GPL"
 #define COSMOSCROLL_AUTHORS L"\n" \
 							 "    Alexandre Bodelot\n" \
@@ -26,12 +26,12 @@ AboutMenu::AboutMenu()
 	logos_.SetImage(GET_IMG("gui/libs-logo"));
 	logos_.SetY(Game::HEIGHT - logos_.GetSize().y);
 	logos_.SetX((Game::WIDTH - logos_.GetSize().x) / 2);
-	SetOffsetY(340);
-	AddOption(I18n::t("menu.back"), 1);
+
+	(new CosmoButton(this, I18n::t("menu.back"), 210, 340))->SetCallbackID(1);
 }
 
 
-void AboutMenu::Callback(int id)
+void AboutMenu::EventCallback(int id)
 {
 	if (id == 1)
 	{

@@ -26,9 +26,8 @@ public:
 	/**
 	 * Jouer une musique (une musique à la fois)
 	 * @param music: musique à jouer
-	 * @param force_enable: si true, force l'activation de la musique avant de jouer
 	 */
-	void PlayMusic(const std::string& music_name, bool force_enable = false);
+	void PlayMusic(const std::string& music_name);
 
 	/**
 	 * Stopper la lecture de la musique
@@ -45,8 +44,9 @@ public:
 	 * Activer/Desactiver la musique
 	 */
 	void EnableMusic(bool enabled);
-
+	void EnableSound(bool enabled);
 	bool IsMusicEnabled() const;
+	bool IsSoundEnabled() const;
 
 	/**
 	 * Arrêter la lecture de tous les fichier en cours
@@ -67,6 +67,7 @@ private:
 	int music_volume_;
 	int sound_volume_;
 	bool enable_music_;
+	bool enable_sound_;
 };
 
 #endif // SOUNDSYSTEM_HPP

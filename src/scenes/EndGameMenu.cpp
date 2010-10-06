@@ -14,10 +14,8 @@ EndGameMenu::EndGameMenu()
 	result_.SetSize(30);
 	result_.SetPosition(120, 150);
 
-	SetOffsetY(300);
-
-	AddOption(I18n::t("menu.gameover.play_again"), 0);
-	AddOption(I18n::t("menu.back_main_menu"), 1);
+	(new CosmoButton(this, I18n::t("menu.gameover.play_again"), 210, 290))->SetCallbackID(0);
+	(new CosmoButton(this, I18n::t("menu.back_main_menu"), 210, 340))->SetCallbackID(1);
 }
 
 
@@ -48,7 +46,7 @@ void EndGameMenu::Poke()
 }
 
 
-void EndGameMenu::Callback(int id)
+void EndGameMenu::EventCallback(int id)
 {
 	switch (id)
 	{

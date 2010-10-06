@@ -13,7 +13,7 @@ public:
 
 private:
 	// inherited
-	void Callback(int id);
+	void EventCallback(int id);
 
 	sf::String info_text_;
 	sf::Sprite logos_;

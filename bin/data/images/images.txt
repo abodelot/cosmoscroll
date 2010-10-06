@@ -14,6 +14,7 @@ gui/background.png
 gui/bar-heat.png
 gui/bar-hp.png
 gui/bar-shield.png
+gui/button.png
 gui/cosmoscroll-logo.png
 gui/icon.bmp
 gui/libs-logo.png

@@ -1,7 +1,7 @@
 CHANGELOG
 
-CosmoScroll 0.2
----------------
+CosmoScroll 0.2  (2010-03-13)
+-----------------------------
 
 Gameplay
 * Les bonus ne bloquent plus les tirs
@@ -27,4 +27,10 @@ Autres
 * Jeu beaucoup plus modulaire : armes, animations et vaisseaux sont définis dans des fichiers XML facilement éditables
 * Scripting XML des niveaux plus élaborés (voir la doc)
 * Localisation : le jeu détecte la langue du système et est disponible en français et anglais, d'autres langues peuvent facilement être ajoutées
+
+
+CosmoScroll 0.1  (2008-12-17)
+-----------------------------
+
+Première version.
 

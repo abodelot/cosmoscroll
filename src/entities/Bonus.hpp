@@ -33,7 +33,7 @@ public:
 	// inherited
 	void Update(float frametime);
 
-	/*
+	/**
 	 * Description textuelle du bonus
 	 */
 	const wchar_t* GetDescription() const;

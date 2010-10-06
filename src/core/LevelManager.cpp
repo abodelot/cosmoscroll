@@ -168,7 +168,7 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 		node = node->NextSibling();
 	}
 #ifdef DEBUG
-	printf("%d levels found\n", levels_.size());
+	printf("%d levels found\n", (int) levels_.size());
 #endif
 	return SUCCESS;
 }
