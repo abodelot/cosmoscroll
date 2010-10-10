@@ -39,11 +39,7 @@ bool CheckBox::Checked() const
 
 void CheckBox::Check(bool checked)
 {
-	if (checked != checked_)
-	{
-		checked_ = checked;
-		CallTheCallback();
-	}
+	checked_ = checked;
 }
 
 

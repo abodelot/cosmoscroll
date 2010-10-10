@@ -71,6 +71,7 @@ public:
 	 * Basculer entre les modes fenêtré et plein écran
 	 */
 	void SetFullscreen(bool full);
+	bool IsFullscreen() const;
 
 private:
 	Game();

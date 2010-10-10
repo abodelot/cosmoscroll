@@ -5,10 +5,9 @@ Milestone 0.3
 -------------
 
 - i18n Allemand
-- Mode deux joueurs sur la même machine
 - Publication du record en ligne
 - Gérer les parallaxes (plus de décors dans les niveaux)
 - Des éléments statiques dans les niveaux (des portes, bâtiments, tourelles, etc.)
-- ParticleSystem: optimiser l'allocation des particules, allouer les particules d'un même effet par groupe, optimiser déplacements
-- éditeur de niveaux en Python/Qt4
+
+- éditeur de niveaux en Python/Qt4 ?
 

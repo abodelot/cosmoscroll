@@ -14,7 +14,7 @@ menu.main.quit = Quitter
 menu.story.title = Mode Histoire
 menu.story.choice = Choix du niveau :
 menu.story.level = Niveau %d
-menu.story.intro = Niveau %d\n\n%ls\n\nEnnemis : %d
+menu.story.intro = Niveau %d\n\nEnnemis : %d
 menu.story.play = Jouer
 
 # Menu pause
@@ -49,6 +49,10 @@ menu.audio.music_volume_up = Augmenter le volume de la musique
 menu.audio.music_volume_down = Diminuer le volume de la musique
 menu.audio.sound_volume_up = Augmenter le volume du son
 menu.audio.sound_volume_down = Diminuer le volume du son
+
+# Menu préférences
+menu.settings.title = Préférences
+menu.settings.fullscreen = Plein écran :
 
 # Menu à propos
 menu.about.title = À propos de CosmoScroll
@@ -95,13 +99,4 @@ action.missile = Utiliser bonus Missile
 input.press_key = Appuyez sur une touche du clavier\npour l'action
 input.press_button = Appuyez sur un bouton du contrôleur\npour l'action
 input.cancel = (Échap pour annuler)
-
-# Description des niveaux
-level_1 = This is the first level.
-level_2 = Ahoi captain of the space!
-level_3 = This doesn't smell good.
-level_4 = Where did I put those keys again?
-level_5 = There's a legend about\na guy living in the oceans...
-level_6 = So I heard you like mudkips...
-level_7 = FFFFFFFUUUUUUUUUUUUUUUUUUUUUUU
 

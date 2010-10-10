@@ -14,7 +14,7 @@ menu.main.quit = Quit
 menu.story.title = Story mode
 menu.story.choice = Level choice
 menu.story.level = Level %d
-menu.story.intro = Level %d\n\n%ls\n\nEnemies: %d
+menu.story.intro = Level %d\n\nEnemies: %d
 menu.story.play = Play
 
 # Pause menu
@@ -49,6 +49,10 @@ menu.audio.music_volume_up = Increase music volume
 menu.audio.music_volume_down = Decrease music volume
 menu.audio.sound_volume_up = Increase sound volume
 menu.audio.sound_volume_down = Decrease sound volume
+
+# Settings menu
+menu.settings.title = Settings
+menu.settings.fullscreen = Fullscreen:
 
 # About menu
 menu.about.title = About CosmoScroll
@@ -95,13 +99,4 @@ action.missile = Use Missile bonus
 input.press_key = Press a key to bind\naction
 input.press_button = Press a joystick button to bind\naction
 input.cancel = (press Escape to cancel)
-
-# Levels description
-level_1 = This is the first level.
-level_2 = Ahoi captain of the space!
-level_3 = This doesn't smell good.
-level_4 = Where did I put those keys again?
-level_5 = There's a legend about\na guy living in the oceans...
-level_6 = So I heard you like mudkips...
-level_7 = FFFFFFFUUUUUUUUUUUUUUUUUUUUUUU
 

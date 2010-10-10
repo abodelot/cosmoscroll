@@ -142,7 +142,7 @@ bool Game::LoadConfig(const char* filename)
 			ControlPanel::GetInstance().SetY(Game::HEIGHT - ControlPanel::HEIGHT);
 			entitymanager_.SetY(0);
 		}
-
+		// Audio settings
 		int enabled = 1;
 		config.ReadItem("enable_music", enabled);
 		SoundSystem::GetInstance().EnableMusic(enabled);
@@ -172,14 +172,14 @@ void Game::WriteConfig(const char* filename) const
 {
 	ConfigParser config;
 
-	// Settings
+	// General Settings
 	config.SeekSection("Settings");
 	config.WriteItem("fullscreen", (int) fullscreen_);
 	config.WriteItem("panel_on_top", (int) ControlPanel::GetInstance().IsOnTop());
 	config.WriteItem("last_unlocked_level", levels_.GetLastUnlocked());
 	config.WriteItem("current_level", levels_.GetCurrent());
 	config.WriteItem("best_arcade_time", entitymanager_.GetArcadeRecord());
-	// audio settings
+	// Audio settings
 	const SoundSystem& snd = SoundSystem::GetInstance();
 	config.WriteItem("music_name",   snd.GetMusicName());
 	config.WriteItem("enable_music", (int) snd.IsMusicEnabled());
@@ -302,11 +302,33 @@ void Game::TakeScreenshot(const char* directory)
 }
 
 
+void Game::SetFullscreen(bool full)
+{
+	app_.Close();
+	if (full)
+	{
+		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, sf::Style::Fullscreen);
+	}
+	else
+	{
+		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE);
+	}
+	fullscreen_ = full;
+}
+
+
+bool Game::IsFullscreen() const
+{
+	return fullscreen_;
+}
+
+
 void Game::CheckPurity()
 {
-	puts("* checking purity...");
+	printf("* checking purity...");
 	pure_ = true;
 	pure_ &= MD5::check_file_against("data/xml/weapons.xml",    MD5SUM_WEAPONS);
 	pure_ &= MD5::check_file_against("data/xml/spaceships.xml", MD5SUM_SPACESHIPS);
 	pure_ &= MD5::check_file_against("data/xml/animations.xml", MD5SUM_ANIMATIONS);
+	puts(pure_ ? "[OK]" : "[FAIL]");
 }

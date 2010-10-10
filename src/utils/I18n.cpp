@@ -30,7 +30,8 @@ const std::wstring& I18n::Translate(const char* key) const
 	{
 		printf("i18n: no translation found for identifier '%s'\n", key);
 		static std::wstring error;
-		error = str_sprintf(L"<translation '%s' missing>", key);
+
+		utf8_to_wstr(error, str_sprintf("<text '%s' missing>", key));
 		return error;
 	}
 	return it->second;

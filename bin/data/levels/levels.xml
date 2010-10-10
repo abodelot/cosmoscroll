@@ -39,8 +39,9 @@
 			<ship id="2" y="400"/>
 		</def>
 	</functions>
-	<levels>
-		<level desc="level_1" stars="30">
+	<levels>	
+		<level desc="This is the first level." stars="30">
+			<!-- level 1 -->
 			<loop count="2">
 				<call func="caps_x3"/>
 			</loop>
@@ -67,7 +68,8 @@
 			<ship id="2" y="280" t="2"/>
 			<ship id="2" y="100" t="1"/>
 		</level>
-		<level desc="level_2" bg_top="#200030" bg_bottom="#000010" stars="25">
+		<level desc="Ahoi captain of the space!" bg_top="#200030" bg_bottom="#000010" stars="25">
+			<!-- level 2 -->
 			<loop count="2">
 				<call func="caps_x5"/>
 				<ship id="2" y="50" t="1"/>
@@ -117,7 +119,8 @@
 			<ship id="2" y="150" t="1"/>
 			<ship id="2" y="350"/>
 		</level>
-		<level desc="level_3" bg_top="#000000" bg_bottom="#3060B0" stars="38">
+		<level desc=" This doesn't smell good." bg_top="#000000" bg_bottom="#3060B0" stars="38">
+			<!-- level 3 -->
 			<ship id="2" y="360" t="4.0"/>
 			<ship id="3" y="50" t="1"/>
 			<call func="scoot_line_3"/>
@@ -181,8 +184,9 @@
 			<loop count="6">
 				<ship id="2" y="270" t="2"/>
 			</loop>
-		</level>
-		<level desc="level_4" bg_top="#003060" bg_bottom="#001000" stars="35">
+		</level>	
+		<level desc="Where did I put those keys again?" bg_top="#003060" bg_bottom="#001000" stars="35">
+			<!-- level 4 -->
 			<wait t="4"/>
 			<ship id="5" y="120"/>
 			<loop count="2">
@@ -241,7 +245,9 @@
 				<ship id="3" y="40"/>
 			</loop>
 		</level>
-		<level desc="level_5" bg_bottom="#000000" bg_top="#106020" stars="35">
+		<level desc="There's a legend about\na guy living in the oceans..."
+		bg_bottom="#000000" bg_top="#106020" stars="35">
+			<!-- level 5 -->
 			<wait t="2"/>
 			<loop count="3">
 				<ship id="4" y="70" t="1"/>
@@ -278,8 +284,9 @@
 				<ship id="4" y="100" t="1"/>
 				<ship id="4" y="130" t="1"/>		
 			</loop>
-		</level>
-		<level desc="level_6" stars="40">
+		</level>	
+		<level desc="So I heard you like mudkips..." stars="40">
+			<!-- level 6 -->
 			<asteroid y="100" t="2.0"/>
 			<asteroid y="170" t="0.5"/>
 			<asteroid y="360" t="0.5"/>
@@ -308,7 +315,8 @@
 				<ship id="3" y="120"/>
 			</loop>
 		</level>
-		<level desc="level_7" bg_top="#000000" bg_bottom="#771100" stars="70">
+		<level desc="FFFFFFFUUUUUUUUUUUUUUUUUUUUUUU" bg_top="#000000" bg_bottom="#771100" stars="70">
+			<!-- final level! -->
 			<ship id="1" y="300" t="2"/>
 			<wait t="1"/>
 			<call func="caps_x3"/>

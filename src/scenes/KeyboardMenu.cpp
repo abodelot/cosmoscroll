@@ -27,7 +27,7 @@ KeyboardMenu::KeyboardMenu()
 	but_pause_ =   new gui::Button(this, GetKeyLabel(Input::PAUSE), 210, 340);
 	but_pause_->SetCallbackID(Input::PAUSE);
 
-	(new CosmoButton(this, I18n::t("menu.back_main_menu"), 210, 410))->SetCallbackID(9000);
+	(new CosmoButton(this, I18n::t("menu.back"), 210, 410))->SetCallbackID(9000);
 }
 
 
@@ -66,9 +66,6 @@ void KeyboardMenu::EventCallback(int id)
 std::wstring KeyboardMenu::GetKeyLabel(Input::Action action) const
 {
 	Input& input = Input::GetInstance();
-
-
-
 
 	std::wstring label = Input::ActionToString(action);
 	label += L" : ";
