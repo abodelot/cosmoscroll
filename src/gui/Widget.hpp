@@ -23,6 +23,7 @@ namespace State
 		DEFAULT,
 		HOVERED,
 		FOCUSED,
+		HIDDEN,
 		DISABLED // TODO
 	};
 }

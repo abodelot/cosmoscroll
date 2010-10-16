@@ -4,7 +4,7 @@
 #include "../utils/StringUtils.hpp"
 #include "../utils/I18n.hpp"
 
-#define LABEL_LENGTH 60   // longueur du texte des progess bars
+#define LABEL_LENGTH 60   // longueur du texte des progress bars
 #define BONUS_LENGTH 25   // longueur des icones bonus
 #define BAR_HEIGHT   15   // hauteur progress bar
 #define BAR_COLOR    sf::Color(64, 64, 64) // couleur fond progress bar

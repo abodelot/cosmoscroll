@@ -50,6 +50,9 @@ public:
 	 */
 	Widget::WidgetStyle& GetWidgetStyle();
 
+protected:
+	bool FocusWidget(const Widget* widget);
+
 private:
 
 	/**

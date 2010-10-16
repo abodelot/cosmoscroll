@@ -4,7 +4,6 @@ bonus.ogg
 boom.ogg
 end-level.ogg
 game-over.ogg
-menu-non-activable.ogg
 menu-select.wav
 menu-valid.ogg
 title.ogg

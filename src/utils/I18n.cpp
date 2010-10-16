@@ -1,13 +1,14 @@
 #include <clocale>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 
 #include "I18n.hpp"
 #include "StringUtils.hpp"
 
-#define TOKEN_SEPARATOR '='
-#define TOKEN_COMMENT   '#'
-#define DEFAULT_LANG_FILE "data/lang/en.lang"
+#define TOKEN_SEPARATOR   '='
+#define TOKEN_COMMENT     '#'
+#define DEFAULT_LANG_CODE "en"
 
 
 I18n& I18n::GetInstance()
@@ -19,7 +20,7 @@ I18n& I18n::GetInstance()
 
 I18n::I18n()
 {
-	LoadSystemLanguage();
+	code_[0] = '\0';
 }
 
 
@@ -40,16 +41,14 @@ const std::wstring& I18n::Translate(const char* key) const
 
 bool I18n::LoadSystemLanguage()
 {
-	std::string code = GetLocaleCode();
-	std::string filename = "data/lang/" + code + ".lang";
-	if (LoadFromFile(filename.c_str()))
+	if (LoadFromCode(GetLocaleCode()))
 	{
-		printf("i18n: language file '%s' loaded\n", filename.c_str());
+		printf("i18n: language  '%s' loaded\n", code_);
 		return true;
 	}
-	if (LoadFromFile(DEFAULT_LANG_FILE))
+	if (LoadFromCode(DEFAULT_LANG_CODE))
 	{
-		printf("i18n: language file '%s' not found, using default language : '%s'\n", filename.c_str(), DEFAULT_LANG_FILE);
+		printf("i18n: language '%s' not found, using default language : '%s'\n", code_, DEFAULT_LANG_CODE);
 		return true;
 	}
 	puts("i18n: warning, couldn't load any language file!");
@@ -62,7 +61,29 @@ std::string I18n::GetLocaleCode() const
 	std::string locale(setlocale(LC_ALL, ""));
 	locale = locale.substr(0, 2);
 	str_lower(locale);
+	strcpy(code_, locale.c_str());
 	return locale;
+}
+
+
+const char* I18n::GetCurrentCode() const
+{
+	return code_;
+}
+
+
+bool I18n::LoadFromCode(const std::string& code)
+{
+	if (code.size() == 2)
+	{
+		std::string filename = "data/lang/" + code + ".lang";
+		if (LoadFromFile(filename.c_str()))
+		{
+			strcpy(code_, code.c_str());
+			return true;
+		}
+	}
+	return false;
 }
 
 

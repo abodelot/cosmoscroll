@@ -28,7 +28,7 @@ public:
 		ENTER,
 		EXIT_APP,
 
-		COUNT // do NOT use, kthxbye
+		COUNT // do not use
 	};
 
 	enum Device
@@ -108,6 +108,12 @@ public:
 	void AskUserInput(Device device, Action action);
 
 	/**
+	 * Sensibilité du contrôleur de jeu
+	 */
+	int GetSensitivity() const;
+	void SetSensitivity(int sensitivity);
+
+	/**
 	 * Charger une configuration de bindings
 	 */
 	void LoadFromConfig(ConfigParser& config);
@@ -133,6 +139,7 @@ private:
 
 	int device_flag_;
 	const sf::Input* sfinput_;
+	int sensitivity_;
 };
 
 

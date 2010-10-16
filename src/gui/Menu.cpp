@@ -15,7 +15,7 @@ Menu::Menu()
 	// default theme
 	theme_.global_text_size = 20;
 	theme_.global_font = &sf::Font::GetDefaultFont();
-	theme_.global_border_color = sf::Color(0x50, 0x50, 0x50);
+	theme_.global_border_color = sf::Color(0x80, 0x80, 0x80);
 
 	theme_.label_text_color = sf::Color::White;
 
@@ -206,10 +206,12 @@ void Menu::Update(float frametime)
 void Menu::Show(sf::RenderTarget& target) const
 {
 	target.Draw(background_);
-	WidgetList::const_iterator it = widgets_.begin();
-	for (; it != widgets_.end(); ++it)
+	for (WidgetList::const_iterator it = widgets_.begin(); it != widgets_.end(); ++it)
 	{
-		target.Draw(**it);
+		if ((**it).GetState() != State::HIDDEN)
+		{
+			target.Draw(**it);
+		}
 	}
 }
 
@@ -274,6 +276,19 @@ bool Menu::FocusWidget(int index)
 		focus_ = widgets_[index];
 		focus_->SetState(State::FOCUSED);
 		return true;
+	}
+	return false;
+}
+
+
+bool Menu::FocusWidget(const Widget* widget)
+{
+	for (int i = 0; i < (int) widgets_.size(); ++i)
+	{
+		if (widgets_[i] == widget)
+		{
+			return FocusWidget(i);
+		}
 	}
 	return false;
 }

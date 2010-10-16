@@ -12,6 +12,7 @@ private:
 	void EventCallback(int id);
 
 	gui::CheckBox* cb_fullscreen_;
+	gui::OptionList* opt_languages_;
 };
 
 #endif // SETTINGSMENU_HPP

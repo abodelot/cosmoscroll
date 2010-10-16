@@ -22,6 +22,7 @@ public:
 	 * Ajouter une option à la liste
 	 */
 	void AddOption(const sf::Unicode::Text& option);
+	void AddOption(const sf::Unicode::Text& display, const std::string& value);
 
 	/**
 	 * Obtenir l'option sélectionnée
@@ -70,7 +71,7 @@ private:
 	sf::Shape inside_box_;
 	sf::Shape left_arrow_;
 	sf::Shape right_arrow_;
-	std::vector<sf::String> options_;
+	std::vector<std::pair<sf::String, std::string> > options_;
 	int current_opt_;
 	size_t max_opt_width_;
 	int dir_;

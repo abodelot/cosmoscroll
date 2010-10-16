@@ -6,6 +6,7 @@
 #include "../utils/MediaManager.hpp"
 #include "../utils/ConfigParser.hpp"
 #include "../utils/StringUtils.hpp"
+#include "../utils/I18n.hpp"
 
 #include "data_check.hpp"
 #include "../md5/md5.hpp"
@@ -84,7 +85,6 @@ Game::Game() :
 			sf::Style::Fullscreen);
 	}
 	app_.SetFramerateLimit(WIN_FPS);
-	app_.SetJoystickThreshold(50.f);
 	//app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
 
@@ -129,6 +129,12 @@ bool Game::LoadConfig(const char* filename)
 		levels_.SetCurrent(current_level);
 		config.ReadItem("last_unlocked_level", last_unlocked_level);
 		levels_.SetLastUnlocked(last_unlocked_level);
+
+		std::string str;
+		if (!config.ReadItem("language", str) || !I18n::GetInstance().LoadFromCode(str))
+		{
+			I18n::GetInstance().LoadSystemLanguage();
+		}
 
 		float record = 0;
 		config.ReadItem("best_arcade_time", record);
@@ -179,6 +185,8 @@ void Game::WriteConfig(const char* filename) const
 	config.WriteItem("last_unlocked_level", levels_.GetLastUnlocked());
 	config.WriteItem("current_level", levels_.GetCurrent());
 	config.WriteItem("best_arcade_time", entitymanager_.GetArcadeRecord());
+	config.WriteItem("language", I18n::GetInstance().GetCurrentCode());
+
 	// Audio settings
 	const SoundSystem& snd = SoundSystem::GetInstance();
 	config.WriteItem("music_name",   snd.GetMusicName());

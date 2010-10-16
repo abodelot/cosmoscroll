@@ -34,15 +34,24 @@ public:
 	std::string GetLocaleCode() const;
 
 	/**
+	 * Obtenir le code de la langue chargée
+	 */
+	const char* GetCurrentCode() const;
+
+	/**
 	 * Charger un fichier de traduction particulier
 	 * @param filename: nom du fichier à charger
 	 */
 	bool LoadFromFile(const char* filename);
 
+	bool LoadFromCode(const std::string& code);
+
+
 private:
 	I18n();
 	I18n(const I18n&);
 
+	mutable char code_[3];
 	std::map<std::string, std::wstring> content_;
 };
 

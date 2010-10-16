@@ -41,6 +41,7 @@ menu.keyboard.title = Configuration clavier
 # Menu joystick
 menu.joystick.title = Configuration joystick
 menu.joystick.button_bind = %ls : Bouton %d
+menu.joystick.sensitivity = Sensibilité du joystick :
 
 # Menu sons
 menu.audio.title = Son et musique
@@ -53,6 +54,7 @@ menu.audio.sound_volume_down = Diminuer le volume du son
 # Menu préférences
 menu.settings.title = Préférences
 menu.settings.fullscreen = Plein écran :
+menu.settings.language = Langue :
 
 # Menu à propos
 menu.about.title = À propos de CosmoScroll

@@ -49,7 +49,7 @@ int Widget::GetHeight() const
 
 bool Widget::CanGrabFocus() const
 {
-	return focusable_ && state_ != State::DISABLED;
+	return focusable_ && state_ != State::HIDDEN && state_ != State::DISABLED;
 }
 
 

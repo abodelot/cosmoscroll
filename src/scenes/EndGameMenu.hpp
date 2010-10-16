@@ -8,8 +8,6 @@ class EndGameMenu: public BaseMenu
 public:
 	EndGameMenu();
 
-	void Show(sf::RenderTarget& target) const;
-
 	// inherited
 	void Poke();
 
@@ -17,7 +15,9 @@ private:
 	// inherited
 	void EventCallback(int id);
 
-	sf::String result_;
+	gui::Label* result_;
+	CosmoButton* but_send_score_;
+	gui::TextBox* txt_;
 };
 
 #endif // ENDGAMEMENU_HPP

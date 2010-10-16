@@ -46,13 +46,14 @@ void OptionList::BuildBoxes()
 	int inside_box_width = max_opt_width_ + BOX_PADDING * 2;
 	int box_width = inside_box_width + BOX_PADDING * 4 + text_size_ * 2;
 	int pad_text_width = text_size_ + BOX_PADDING * 2;
+	WidgetStyle& style = GetOwner()->GetWidgetStyle();
 
 	inside_box_ = sf::Shape::Rectangle(0, 0,
-		inside_box_width, pad_text_width, sf::Color::White, 1, sf::Color::Black);
+		inside_box_width, pad_text_width, sf::Color::White, 1, style.global_border_color);
 	inside_box_.SetX(pad_text_width);
 
-	box_ = sf::Shape::Rectangle(0, 0, box_width, pad_text_width, sf::Color::White, 1, sf::Color::Black);
-	box_.SetColor(GetOwner()->GetWidgetStyle().optlist_bg_color);
+	box_ = sf::Shape::Rectangle(0, 0, box_width, pad_text_width, sf::Color::White, 1, style.global_border_color);
+	box_.SetColor(style.optlist_bg_color);
 
 	right_arrow_.SetX(pad_text_width + inside_box_width + BOX_PADDING + text_size_ / 2);
 	SetState(IsFocused() ? State::FOCUSED : State::DEFAULT);
@@ -63,6 +64,12 @@ void OptionList::BuildBoxes()
 
 
 void OptionList::AddOption(const sf::Unicode::Text& option)
+{
+	AddOption(option, "");
+}
+
+
+void OptionList::AddOption(const sf::Unicode::Text& option, const std::string& value)
 {
 	sf::String str;
 	str.SetText(option);
@@ -82,14 +89,20 @@ void OptionList::AddOption(const sf::Unicode::Text& option)
 		BuildBoxes();
 	}
 	str.SetX(ComputeIndentAlign(str));
-	options_.push_back(str);
+	std::pair<sf::String, std::string> pair(str, value);
+	options_.push_back(pair);
 }
 
 
 std::string OptionList::GetSelectedOption() const
 {
 	assert(current_opt_ >= 0 && current_opt_ < (int) options_.size());
-	return options_[current_opt_].GetText();
+	const std::pair<sf::String, std::string>& select = options_[current_opt_];
+	if (select.second.size() == 0)
+	{
+		return select.first.GetText();
+	}
+	return select.second;
 }
 
 
@@ -119,10 +132,10 @@ void OptionList::Clear()
 void OptionList::SetAlign(Align::EAlign align)
 {
 	align_ = align;
-	for (std::vector<sf::String>::iterator it = options_.begin();
+	for (std::vector<std::pair<sf::String, std::string> >::iterator it = options_.begin();
 		it != options_.end(); ++it)
 	{
-		it->SetX(ComputeIndentAlign(*it));
+		it->first.SetX(ComputeIndentAlign(it->first));
 	}
 }
 
@@ -264,7 +277,7 @@ void OptionList::Render(sf::RenderTarget& target) const
 	target.Draw(right_arrow_);
 	if (current_opt_ != -1)
 	{
-		target.Draw(options_[current_opt_]);
+		target.Draw(options_[current_opt_].first);
 	}
 }
 

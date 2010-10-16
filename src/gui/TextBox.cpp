@@ -24,7 +24,7 @@ TextBox::TextBox(Menu* owner, int x, int y, int visible_chars, int max_length):
 	int width = display_text_.GetFont().GetCharWidth() * visible_chars + PADDING * 2;
 
 	box_ = sf::Shape::Rectangle(0, 0, width, height,
-		sf::Color::White, OUTLINE, sf::Color::Black);
+		sf::Color::White, OUTLINE, owner->GetWidgetStyle().global_border_color);
 
 	display_text_.SetPosition(PADDING, PADDING);
 

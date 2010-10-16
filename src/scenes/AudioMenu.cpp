@@ -12,9 +12,9 @@ AudioMenu::AudioMenu()
 	new gui::Label(this, L"Musique :", 100, 120);
 
 	opt_music_ = new gui::OptionList(this, 350, 120);
-	opt_music_->AddOption("Space");
-	opt_music_->AddOption("Aurora");
-	opt_music_->AddOption("Escape for assault");
+	opt_music_->AddOption("Space", "space");
+	opt_music_->AddOption("Aurora", "aurora");
+	opt_music_->AddOption("Escape for assault", "escape_for_assault");
 	opt_music_->SetCallbackID(1);
 	const std::string music_name = sound.GetMusicName();
 	if (music_name == "space")
@@ -56,15 +56,8 @@ void AudioMenu::EventCallback(int id)
 		case 0:
 			Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
 			break;
-		case 1: {
-			std::string music = opt_music_->GetSelectedOption();
-			if (music == "Space")
-				sound.PlayMusic("space");
-			else if (music == "Aurora")
-				sound.PlayMusic("aurora");
-			else if (music == "Escape for assault")
-				sound.PlayMusic("escape_for_assault");
-			}
+		case 1:
+			sound.PlayMusic(opt_music_->GetSelectedOption());
 			break;
 		case 2:
 			sound.EnableMusic(cb_music_->Checked());

@@ -55,7 +55,7 @@ void BaseMenu::Show(sf::RenderTarget& target) const
 void BaseMenu::SetTitle(const sf::Unicode::Text& text, int y)
 {
 	title_.SetFont(GET_FONT());
-	title_.SetSize(50);
+	title_.SetSize(40);
 	title_.SetText(text);
 	title_.SetX((Game::WIDTH - title_.GetRect().GetWidth()) / 2);
 	title_.SetY(y);

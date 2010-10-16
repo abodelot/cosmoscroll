@@ -20,7 +20,11 @@ JoystickMenu::JoystickMenu()
 	but_pause_ =   new gui::Button(this, GetButtonLabel(Input::PAUSE), 210, 280);
 	but_pause_->SetCallbackID(Input::PAUSE);
 
-	(new CosmoButton(this, I18n::t("menu.back"), 210, 410))->SetCallbackID(9000);
+	new gui::Label(this, I18n::t("menu.joystick.sensitivity"), 120, 340);
+	sl_joystick_ = new gui::Slider(this, 340, 340, 160);
+	sl_joystick_->SetCallbackID(9000);
+
+	(new CosmoButton(this, I18n::t("menu.back"), 210, 410))->SetCallbackID(9001);
 }
 
 
@@ -35,6 +39,8 @@ void JoystickMenu::Poke()
 	but_cooler_->SetText(GetButtonLabel(Input::USE_COOLER));
 
 	but_pause_->SetText(GetButtonLabel(Input::PAUSE));
+
+	sl_joystick_->SetValue(100 - Input::GetInstance().GetSensitivity());
 }
 
 
@@ -48,15 +54,18 @@ std::wstring JoystickMenu::GetButtonLabel(Input::Action action) const
 
 void JoystickMenu::EventCallback(int id)
 {
-	if (id == 9000)
+	Input& input = Input::GetInstance();
+	switch (id)
 	{
-		Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
-	}
-	else
-	{
-		// Input::Action enumerations are used as menu ids
-		Input& input = Input::GetInstance();
-		input.AskUserInput(Input::JOYSTICK, (Input::Action) id);
-		Poke();
+		case 9000:
+			input.SetSensitivity(100 - sl_joystick_->GetValue());
+			break;
+		case 9001:
+			Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
+			break;
+		default:
+			// Input::Action enumerations are used as menu ids
+			input.AskUserInput(Input::JOYSTICK, (Input::Action) id);
+			Poke();
 	}
 }

@@ -58,6 +58,8 @@ void Input::Init(const sf::Input& sfinput)
 	SetJoystickBind(7, USE_WEAPON_2);
 	SetJoystickBind(2, USE_COOLER);
 	SetJoystickBind(3, USE_MISSILE);
+
+	sensitivity_ = 50;
 }
 
 
@@ -100,19 +102,19 @@ bool Input::HasInput(Action action)
 		}
 		if (action == Input::MOVE_UP)
 		{
-			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisY) < 0.f;
+			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisY) < -sensitivity_;
 		}
 		if (action == Input::MOVE_DOWN)
 		{
-			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisY) > 0.f;
+			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisY) > sensitivity_;
 		}
 		if (action == Input::MOVE_LEFT)
 		{
-			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisX) < 0.f;
+			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisX) < -sensitivity_;
 		}
 		if (action == Input::MOVE_RIGHT)
 		{
-			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisX) > 0.f;
+			return sfinput_->GetJoystickAxis(JOY_ID, sf::Joy::AxisX) > sensitivity_;
 		}
 	}
 	return false;
@@ -369,6 +371,26 @@ void Input::AskUserInput(Device device, Action action)
 }
 
 
+int Input::GetSensitivity() const
+{
+	return sensitivity_;
+}
+
+
+void Input::SetSensitivity(int sensitivity)
+{
+	if (sensitivity < 0)
+	{
+		sensitivity = 0;
+	}
+	else if (sensitivity > 99)
+	{
+		sensitivity = 99;
+	}
+	sensitivity_ = sensitivity;
+}
+
+
 void Input::LoadFromConfig(ConfigParser& config)
 {
 	config.SeekSection("Keyboard");
@@ -404,6 +426,8 @@ void Input::LoadFromConfig(ConfigParser& config)
 		SetJoystickBind(button, USE_COOLER);
 	if (config.ReadItem("use_missile", button))
 		SetJoystickBind(button, USE_MISSILE);
+
+	config.ReadItem("sensitivity", sensitivity_);
 }
 
 
@@ -426,6 +450,7 @@ void Input::SaveToConfig(ConfigParser& config) const
 	config.WriteItem("weapon_2",    action_to_joybutton_[USE_WEAPON_2]);
 	config.WriteItem("use_cooler",  action_to_joybutton_[USE_COOLER]);
 	config.WriteItem("use_missile", action_to_joybutton_[USE_MISSILE]);
+	config.WriteItem("sensitivity", sensitivity_);
 }
 
 
