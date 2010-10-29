@@ -186,6 +186,7 @@ void ControlPanel::ProgressBar::Init(const sf::Font& font, float x, float y)
 
 void ControlPanel::ProgressBar::SetPercent(int value)
 {
+	value = value > 0 ? value : 0;
 	float length = (float) value / max_value * 100;
 	if (length == 0.0f)
 	{

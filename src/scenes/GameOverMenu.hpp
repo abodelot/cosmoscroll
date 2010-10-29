@@ -1,12 +1,12 @@
-#ifndef ENDGAMEMENU_HPP
-#define ENDGAMEMENU_HPP
+#ifndef GAMEOVERMENU_HPP
+#define GAMEOVERMENU_HPP
 
 #include "BaseMenu.hpp"
 
-class EndGameMenu: public BaseMenu
+class GameOverMenu: public BaseMenu
 {
 public:
-	EndGameMenu();
+	GameOverMenu();
 
 	// inherited
 	void Poke();
@@ -20,5 +20,5 @@ private:
 	gui::TextBox* txt_;
 };
 
-#endif // ENDGAMEMENU_HPP
+#endif // GAMEOVERMENU_HPP
 

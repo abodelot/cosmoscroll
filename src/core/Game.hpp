@@ -4,11 +4,10 @@
 #include <SFML/Graphics.hpp>
 
 #include "Input.hpp"
-#include "LevelManager.hpp"
-
 
 class BaseScene;
 class EntityManager;
+class LevelManager;
 
 /**
  * Gestion du déroulement du jeu
@@ -27,7 +26,7 @@ public:
 		SC_IntroScene,
 		SC_InGameScene,
 		SC_EndGameScene,
-		SC_EndGameMenu,
+		SC_GameOverMenu,
 		SC_PauseMenu,
 		SC_MainMenu,
 		SC_AboutMenu,

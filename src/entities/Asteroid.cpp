@@ -9,18 +9,27 @@
 // division en morceaux de taille moindre
 #define BIG_SPLIT_INTO     2
 #define MEDIUM_SPLIT_INTO  4
-#define SLOWDOWN           0.99f
-#define SCROLL_SPEED       50
+
+#define BASE_SPEED         80
+#define ROTATION_SPEED_MIN 40
+#define ROTATION_SPEED_MAX 160
 
 
-Asteroid::Asteroid(const sf::Vector2f& offset, Size size, float angle) :
-	Entity(offset, size + 1)
+Asteroid::Asteroid(const sf::Vector2f& position, Size size, float angle) :
+	Entity(position, size + 1)
 {
-	speed_ = 100;
-	angle_ = math::deg_to_rad(angle);
+	rotation_speed_ = sf::Randomizer::Random(ROTATION_SPEED_MIN, ROTATION_SPEED_MAX);
 	size_ = size;
 	SetRandomImage();
-	//SetCenter(GetImage()->GetWidth() / 2, GetImage()->GetHeight() / 2);
+
+	// calcul du vecteur vitesse à partir de l'angle et de la vitesse
+	angle = math::deg_to_rad(angle);
+	speed_.x = std::cos(angle) * BASE_SPEED;
+	speed_.y = -std::sin(angle) * BASE_SPEED;
+
+	// origin is located at sprite center to allow rotation
+	const sf::IntRect& rect = GetSubRect();
+	SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
 }
 
 
@@ -34,28 +43,30 @@ Asteroid* Asteroid::Clone() const
 
 void Asteroid::Update(float frametime)
 {
-	sf::Sprite::Move(-SCROLL_SPEED * frametime, 0);
-/*
-TODO
-(00:08:43) Alexandre: manque un ajustement sur le facteur de ralentissement 0.99 appliqué à chaque frame
-(00:09:21) Alexandre: donc l'astéro se prend N frames par seconde * 0.99 de ralentissement
-(00:09:31) Alexandre: faut impliquer frametime dans le calcul pour que ce soit indépendant des FPS
-(sinon plus on a de FPS plus l'astéro ralentit vite)
-*/
-	speed_ *= SLOWDOWN;
-	float framespeed = frametime * speed_;
-	sf::Vector2f offset = GetPosition();
-	offset.x = offset.x + framespeed * math::cos(angle_);
-	offset.y = offset.y - framespeed * math::sin(angle_);
-	SetPosition(offset);
-	//Rotate(90 * frametime);
+	sf::Vector2f pos = GetPosition();
+	pos.x += speed_.x * frametime;
+	pos.y += speed_.y * frametime;
+	SetPosition(pos);
+	Rotate(rotation_speed_ * frametime);
 	KillIfOut();
+}
+
+
+void Asteroid::GetCollideRect(sf::FloatRect& rect) const
+{
+	// origin is centered
+	int width = GetSize().x;
+	int height = GetSize().y;
+	rect.Left = GetPosition().x - width / 2;
+	rect.Top = GetPosition().y - height / 2;
+	rect.Right = rect.Left + width;
+	rect.Bottom = rect.Top + height;
 }
 
 
 void Asteroid::TakeDamage(int damage)
 {
-	sf::Vector2f offset = GetPosition();
+	sf::Vector2f pos = GetPosition();
 
 	Entity::TakeDamage(damage);
 	if (IsDead())
@@ -66,15 +77,13 @@ void Asteroid::TakeDamage(int damage)
 			case BIG:
 				for (int i = 0; i < BIG_SPLIT_INTO; ++i)
 				{
-					entitymanager.AddEntity(new Asteroid(offset, MEDIUM,
-						sf::Randomizer::Random(0, 360)));
+					entitymanager.AddEntity(new Asteroid(pos, MEDIUM, sf::Randomizer::Random(0, 360)));
 				};
 				break;
 			case MEDIUM:
 				for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
 				{
-					entitymanager.AddEntity(new Asteroid(offset, SMALL,
-						sf::Randomizer::Random(0, 360)));
+					entitymanager.AddEntity(new Asteroid(pos, SMALL, sf::Randomizer::Random(0, 360)));
 				}
 				break;
 			default:
@@ -92,17 +101,17 @@ void Asteroid::SetRandomImage()
 	{
 		case SMALL:
 			SetImage(GET_IMG("entities/asteroid-small"));
-			x = sf::Randomizer::Random(0, 3) * 16;
+			x = sf::Randomizer::Random(0, 3) * 16; // 4 small images
 			SetSubRect(sf::IntRect(x, 0, x + 16, 16));
 			break;
 		case MEDIUM:
 			SetImage(GET_IMG("entities/asteroid-medium"));
-			x = sf::Randomizer::Random(0, 2) * 32;
+			x = sf::Randomizer::Random(0, 2) * 32; // 3 small images
 			SetSubRect(sf::IntRect(x, 0, x + 32, 32));
 			break;
 		case BIG:
 			SetImage(GET_IMG("entities/asteroid-big"));
-			x = sf::Randomizer::Random(0, 2) * 48;
+			x = sf::Randomizer::Random(0, 2) * 48; // 3 small images
 			SetSubRect(sf::IntRect(x, 0, x + 48, 48));
 			break;
 	}

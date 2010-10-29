@@ -235,12 +235,12 @@ void EntityManager::Render(sf::RenderTarget& target) const
 {
 	target.Draw(background_);
 	particles_.Show(target);
-	// affichage de toutes les entités
-	for (EntityList::const_iterator it = entities_.begin();
-		it != entities_.end(); ++it)
+	// draw each managed entity
+	for (EntityList::const_iterator it = entities_.begin(); it != entities_.end(); ++it)
 	{
 		target.Draw(**it);
 	}
+
 }
 
 
@@ -531,7 +531,7 @@ bool EntityManager::MoreBadGuys_STORY()
 void EntityManager::RespawnPlayer()
 {
 	Clear();
-	sf::Vector2f position(0, height_ / 2);
+	sf::Vector2f position(50, height_ / 2);
 	player_ = new PlayerShip(position, "player");
 	AddEntity(player_);
 }

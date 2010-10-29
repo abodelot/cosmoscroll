@@ -81,7 +81,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	panel_.SetMaxShipHP(HP_MAX);
 	panel_.SetMaxShield(SHIELD_MAX);
 	panel_.SetMaxHeat(HEAT_MAX);
-	panel_.SetShipHP(hp_);
+	panel_.SetShipHP(GetHP());
 	panel_.SetShield(shield_);
 	panel_.SetHeat((int) heat_);
 	panel_.SetCoolers(coolers_);
@@ -282,7 +282,7 @@ void PlayerShip::TakeDamage(int damage)
 	else
 	{
 		Entity::TakeDamage(damage);
-		panel_.SetShipHP(hp_ > 0 ? hp_ : 0);
+		panel_.SetShipHP(GetHP());
 		if (IsDead())
 		{
 			p.AddExplosion(GetPosition());
@@ -410,8 +410,8 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 				GetPosition().x + GetSize().x / 2,
 				GetPosition().y + GetSize().y / 2);
 			// max hp
-			hp_ = HP_MAX;
-			panel_.SetShipHP(hp_);
+			SetHP(HP_MAX);
+			panel_.SetShipHP(HP_MAX);
 			// max shield
 			IncreaseShield(SHIELD_MAX - shield_);
 			// +1 missile, +1 cooler
@@ -419,10 +419,9 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 			HandleBonus(Bonus::COOLER);
 			break;
 		case Bonus::HEALTH:
-			if (hp_ < HP_MAX)
+			if (GetHP() < HP_MAX)
 			{
-				++hp_;
-				panel_.SetShipHP(hp_);
+				panel_.SetShipHP(UpdateHP(1));
 			}
 			break;
 		case Bonus::SHIELD:

@@ -6,17 +6,20 @@
 #include "../core/ParticleSystem.hpp"
 
 
-Hit::Hit(Entity::Team team, const sf::Vector2f& offset, float angle,
+Hit::Hit(Entity::Team team, const sf::Vector2f& position, float angle,
 	const sf::Image* image, int speed, int damage) :
-	Entity(offset, 1, damage)
+	Entity(position, 1, damage)
 {
 	SetImage(*image);
 	SetTeam(team);
 	SetRotation(math::rad_to_deg(angle));
-
 	// calcul du vecteur vitesse à partir de l'angle et de la vitesse
 	speed_.x = std::cos(angle) * speed;
 	speed_.y = -std::sin(angle) * speed;
+
+	// origin is located at sprite center to allow rotation
+	const sf::IntRect& rect = GetSubRect();
+	SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
 }
 
 
@@ -36,11 +39,23 @@ void Hit::Update(float frametime)
 }
 
 
+void Hit::GetCollideRect(sf::FloatRect& rect) const
+{
+	// origin is centered
+	int width = GetSize().x;
+	int height = GetSize().y;
+	rect.Left = GetPosition().x - width / 2;
+	rect.Top = GetPosition().y - height / 2;
+	rect.Right = rect.Left + width;
+	rect.Bottom = rect.Top + height;
+}
+
+
 void Hit::OnCollide(Entity& entity)
 {
 	if (!IsDead())
 	{
-		// ignore les alliés, les tirs et les bonus
+		// ignore friend entities, hit and bonuses
 		if (entity.GetTeam() == GetTeam()
 			|| typeid (entity) == typeid (Hit)
 			|| typeid (entity) == typeid (Bonus))

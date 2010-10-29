@@ -11,25 +11,7 @@
 #include "data_check.hpp"
 #include "../md5/md5.hpp"
 
-// scenes
-#include "../scenes/BaseScene.hpp"
-#include "../scenes/IntroScene.hpp"
-#include "../scenes/MainMenu.hpp"
-#include "../scenes/InGameScene.hpp"
-#include "../scenes/EndGameScene.hpp"
-#include "../scenes/EndGameMenu.hpp"
-#include "../scenes/PauseMenu.hpp"
-#include "../scenes/AboutMenu.hpp"
-#include "../scenes/LevelMenu.hpp"
-#include "../scenes/IntroLevelScene.hpp"
-#include "../scenes/OptionMenu.hpp"
-#include "../scenes/KeyboardMenu.hpp"
-#include "../scenes/JoystickMenu.hpp"
-#include "../scenes/SettingsMenu.hpp"
-#include "../scenes/AudioMenu.hpp"
-
-
-#include "../scenes/CosmoButton.hpp"
+#include "../scenes/scenes.hpp"
 
 // config and data files
 #define CONFIG_FILE    "config/config.cfg"
@@ -56,9 +38,6 @@ Game::Game() :
 	levels_		  (LevelManager::GetInstance()),
 	entitymanager_(EntityManager::GetInstance())
 {
-	// hack
-	CosmoButton::SetBackgroundImage(&GET_IMG("gui/button"));
-
 	CheckPurity();
 
 	input_.Init(app_.GetInput());
@@ -266,7 +245,7 @@ void Game::SetNextScene(Scene enum_scene)
 			CASE_SCENE(MainMenu, new_scene);
 			CASE_SCENE(InGameScene, new_scene);
 			CASE_SCENE(EndGameScene, new_scene);
-			CASE_SCENE(EndGameMenu, new_scene);
+			CASE_SCENE(GameOverMenu, new_scene);
 			CASE_SCENE(PauseMenu, new_scene);
 			CASE_SCENE(AboutMenu, new_scene);
 			CASE_SCENE(LevelMenu, new_scene);

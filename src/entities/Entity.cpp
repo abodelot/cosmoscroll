@@ -44,6 +44,11 @@ void Entity::Kill()
 }
 
 
+int Entity::GetHP() const
+{
+	return hp_;
+}
+
 void Entity::KillIfOut()
 {
 	static EntityManager& entity_mgr = EntityManager::GetInstance();
@@ -62,10 +67,7 @@ void Entity::KillIfOut()
 sf::FloatRect Entity::GetCollideRect() const
 {
 	sf::FloatRect rect;
-	rect.Left = GetPosition().x;
-	rect.Top = GetPosition().y;
-	rect.Right = rect.Left + GetSize().x;
-	rect.Bottom = rect.Top + GetSize().y;
+	GetCollideRect(rect);
 	return rect;
 }
 
@@ -142,3 +144,19 @@ void Entity::SetTeam(Team team)
 {
 	team_ = team;
 }
+
+
+int Entity::UpdateHP(int diff)
+{
+	hp_ += diff;
+	return hp_;
+}
+
+
+void Entity::SetHP(int hp)
+{
+	hp_ = hp;
+}
+
+
+

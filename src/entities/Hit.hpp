@@ -18,7 +18,7 @@ public:
 	 * @param speed: vitesse du projectile (pixels / seconde)
 	 * @param damage: dégâts infligés lors d'une collision
 	 */
-	Hit(Entity::Team team, const sf::Vector2f& offset, float angle,
+	Hit(Entity::Team team, const sf::Vector2f& position, float angle,
 		const sf::Image* image, int speed, int damage);
 
 	// inherited
@@ -26,6 +26,9 @@ public:
 
 	// inherited
 	void Update(float frametime);
+
+	// inherited
+	void GetCollideRect(sf::FloatRect& rect) const;
 
 	// inherited
 	void OnCollide(Entity& entity);

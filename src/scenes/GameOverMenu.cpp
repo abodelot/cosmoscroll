@@ -1,4 +1,4 @@
-#include "EndGameMenu.hpp"
+#include "GameOverMenu.hpp"
 #include "../core/Game.hpp"
 #include "../entities/EntityManager.hpp"
 #include "../utils/MediaManager.hpp"
@@ -6,7 +6,7 @@
 #include "../utils/I18n.hpp"
 
 
-EndGameMenu::EndGameMenu()
+GameOverMenu::GameOverMenu()
 {
 	LoadBitmapFont("data/images/gui/mono12-black.png", 10, 10);
 
@@ -24,7 +24,7 @@ EndGameMenu::EndGameMenu()
 }
 
 
-void EndGameMenu::Poke()
+void GameOverMenu::Poke()
 {
 	EntityManager& entities = EntityManager::GetInstance();
 
@@ -48,7 +48,7 @@ void EndGameMenu::Poke()
 }
 
 
-void EndGameMenu::EventCallback(int id)
+void GameOverMenu::EventCallback(int id)
 {
 	switch (id)
 	{

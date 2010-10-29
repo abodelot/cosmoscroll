@@ -106,7 +106,7 @@ void EvilBoss::Update(float frametime)
 void EvilBoss::TakeDamage(int damage)
 {
 	Entity::TakeDamage(damage);
-	if (hp_ < next_ && hp_ > 0)
+	if (GetHP() < next_ && GetHP() > 0)
 	{
 		phase_ = next_;
 		switch (phase_)
@@ -126,7 +126,7 @@ void EvilBoss::TakeDamage(int damage)
 				break;
 		}
 	}
-	else if (hp_ <= 0)
+	else if (GetHP() <= 0)
 	{
 
 		for (int i = 0; i < 10; ++i)

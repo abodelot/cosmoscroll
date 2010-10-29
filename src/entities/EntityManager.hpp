@@ -245,8 +245,7 @@ private:
 template <class T>
 void EntityManager::ApplyToEach(T& functor)
 {
-	for (EntityList::iterator it = entities_.begin();
-		it != entities_.end(); ++it)
+	for (EntityList::iterator it = entities_.begin(); it != entities_.end(); ++it)
 	{
 		functor(**it);
 	}

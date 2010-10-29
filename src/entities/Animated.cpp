@@ -20,8 +20,8 @@ Animated::Animated(const Animation& animation, sf::Sprite& sprite) :
 
 void Animated::InitSprite(sf::Sprite& sprite)
 {
-	sprite.SetSubRect(animation_.GetFrame(0));
 	sprite.SetImage(animation_.GetImage());
+	sprite.SetSubRect(animation_.GetFrame(0));
 }
 
 

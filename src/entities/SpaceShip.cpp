@@ -121,6 +121,7 @@ void SpaceShip::TakeDamage(int damage)
 	}
 }
 
+// movement patterns -----------------------------------------------------------
 
 void SpaceShip::MP_MAGNET(float frametime)
 {
@@ -146,7 +147,7 @@ void SpaceShip::MP_MAGNET(float frametime)
 	else if (my_pos.y < player_pos.y)
 		vy = velocity;
 
-	if (flipped != flipped_)
+	if (flipped != IsFlipped())
 	{
 		Flip(flipped);
 	}
@@ -160,12 +161,13 @@ void SpaceShip::MP_STRAIGHT(float frametime)
 	sf::Sprite::Move(-speed_ * frametime, 0);
 }
 
+// attack patterns -------------------------------------------------------------
 
 void SpaceShip::AP_AUTO_AIM()
 {
 	float radians = math::angle(target_->GetPosition(), GetPosition());
 
-	if (flipped_)
+	if (IsFlipped())
 	{
 		sf::Vector2f pos = GetPosition();
 		pos.x += GetSize().x;

@@ -20,7 +20,7 @@ public:
 	 * Création d'un astéroïde
 	 * @param offset: position
 	 * @param size: taille
-	 * @param angle: orientation
+	 * @param angle: orientation de la trajectoire (degrés)
 	 */
 	Asteroid(const sf::Vector2f& offset, Size size, float angle=180);
 
@@ -29,6 +29,9 @@ public:
 
 	// inherited
 	void Update(float frametime);
+
+	// inherited
+	void GetCollideRect(sf::FloatRect& rect) const;
 
 	// inherited
 	void TakeDamage(int damage);
@@ -40,8 +43,8 @@ private:
 	void SetRandomImage();
 
 	Size size_;
-	float angle_;
-	float speed_;
+	sf::Vector2f speed_;
+	int rotation_speed_;
 };
 
 #endif // ASTEROID_HPP

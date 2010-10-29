@@ -3,13 +3,14 @@
 
 #include "../gui/Button.hpp"
 
+/**
+ * Bouton avec un style avancé
+ */
 class CosmoButton: public gui::Button
 {
-
 public:
 	CosmoButton(gui::Menu* owner, const sf::Unicode::Text& text, int x, int y);
 
-	static void SetBackgroundImage(const sf::Image* img);
 protected:
 	// inherited
 	void OnStateChanged(gui::State::EState state);

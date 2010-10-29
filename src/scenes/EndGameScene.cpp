@@ -40,7 +40,7 @@ void EndGameScene::Update(float frametime)
 	if (timer_ >= DURATION)
 	{
 		Game::Scene next = entities_.GetMode() == EntityManager::MODE_STORY ?
-			Game::SC_LevelMenu : Game::SC_EndGameMenu;
+			Game::SC_LevelMenu : Game::SC_GameOverMenu;
 		Game::GetInstance().SetNextScene(next);
 	}
 }

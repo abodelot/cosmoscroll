@@ -59,6 +59,11 @@ public:
 	void Kill();
 
 	/**
+	 * @return entity remaining health points
+	 */
+	int GetHP() const;
+
+	/**
 	 * Supprime l'unité si elle est hors de l'univers
 	 */
 	void KillIfOut();
@@ -77,7 +82,7 @@ public:
 	/**
 	 * Obtenir la surface de collision du vaisseau
 	 */
-	virtual sf::FloatRect GetCollideRect() const;
+	sf::FloatRect GetCollideRect() const;
 	virtual void GetCollideRect(sf::FloatRect& rect) const;
 
 	/**
@@ -103,10 +108,14 @@ protected:
 	 */
 	void SetTeam(Team team);
 
-	int hp_;
-	bool flipped_;
+	int UpdateHP(int diff);
+	void SetHP(int hp);
+
+
 
 private:
+	bool flipped_;
+	int hp_;
 	int collide_damage_;
 	Team team_;
 };
