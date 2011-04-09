@@ -1,3 +1,4 @@
+#include <cstdio>
 #include "Input.hpp"
 #include "Game.hpp"
 #include "../utils/StringUtils.hpp"
@@ -135,7 +136,7 @@ void Input::SetKeyboardBind(sf::Key::Code key, Action action)
 	}
 	else
 	{
-		puts("error: bad keyboard binding ignored");
+		fprintf(stderr, "error: bad keyboard binding ignored\n");
 	}
 }
 
@@ -156,7 +157,7 @@ void Input::SetJoystickBind(unsigned int joybutton, Action action)
 	}
 	else
 	{
-		puts("error: bad joystick binding ignored");
+		fprintf(stderr, "error: bad joystick binding ignored\n");
 	}
 }
 

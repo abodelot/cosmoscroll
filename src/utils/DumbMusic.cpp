@@ -53,10 +53,4 @@ bool DumbMusic::OnGetData(Chunk& data)
 	return true;
 }
 
-
-void		DumbMusic::SetVolume(float &vol)
-{
-  this->volume_ = vol / 100.f;
-}
-
 #endif // NO_DUMB_MUSIC

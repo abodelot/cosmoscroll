@@ -25,14 +25,11 @@ public:
 	 * Initaliser le module DUMB en début de programme
 	 */
 	static void Init();
-	
+
 	/**
 	 * Quitter le module DUMB en fin de programme
 	 */
 	static void Exit();
-
-
-        void  SetVolume(float &);
 
 private:
 	bool OnStart();
@@ -40,7 +37,7 @@ private:
 	bool OnGetData(Chunk& data);
 
 	float volume_;
-	
+
 	sf::Int16 samples_[BUFFER_SIZE * N_CHANNELS];
 
 	DUH* module_;

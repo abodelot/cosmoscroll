@@ -34,23 +34,26 @@ public:
 
 private:
 	// MOVEMENT PATTERN
-	// - Suivre le joueur
-	void MP_MAGNET(float frametime);
-	// - Avancer tout droit
-	void MP_STRAIGHT(float frametime);
+	// Suivre le joueur
+	void move_magnet(float frametime);
+	// Avancer tout droit
+	void move_straight(float frametime);
+	// courbe sinus
+	void move_sinus(float frametime);
 
 	// ATTACK PATTERN
 	// - Viser automatiquement le joueur
-	void AP_AUTO_AIM();
+	void attack_auto_aim();
 	// - Tirer si le joueur passe devant
-	void AP_ON_SIGHT();
+	void attack_on_sight();
 	// - ne pas attaquer le joueur
-	void AP_NO_ATTACK();
+	void attack_none();
 
 	void (SpaceShip::*move_pattern_)(float);
 	void (SpaceShip::*attack_pattern_)();
 
 	int speed_;
+	int base_y_;
 	Weapon weapon_;
 	Entity* target_;
 };

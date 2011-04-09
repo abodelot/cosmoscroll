@@ -256,7 +256,6 @@ bool MD5::check_file_against(const char* filename, const char* expected_md5)
     MD5 context(f);
     f.close();
     if (strcmp(context.hex_digest().c_str(), expected_md5) != 0) {
-    	std::cerr << "md5 checksum failed: " << filename << std::endl;
     	return false;
     }
     return true;

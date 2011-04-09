@@ -11,23 +11,26 @@
 // bonus freq = 1 / DROP_LUCK
 #define DROP_LUCK 8
 
-#define DEFAULT_MOVE_PATTERN   &SpaceShip::MP_STRAIGHT;
-#define DEFAULT_ATTACK_PATTERN &SpaceShip::AP_NO_ATTACK;
+#define DEFAULT_MOVE_PATTERN   &SpaceShip::move_straight;
+#define DEFAULT_ATTACK_PATTERN &SpaceShip::attack_none;
 
 #define TEST_MOVE(pattern, test, ptr) \
 	if (strcmp(pattern, #test) == 0)\
 	{\
-		ptr = &SpaceShip::MP_##test;\
+		ptr = &SpaceShip::move_##test;\
 		return;\
 	}
 
 #define TEST_ATTACK(pattern, test, ptr) \
 	if (strcmp(pattern, #test) == 0)\
 	{\
-		ptr = &SpaceShip::AP_##test;\
+		ptr = &SpaceShip::attack_##test;\
 		return;\
 	}
 
+// paramètres de la fonction de déplacement sinus
+#define SINUS_AMPLITUDE 60
+#define SINUS_FREQUENCE 0.02
 
 
 SpaceShip::SpaceShip(const char* animation, int hp, int speed) :
@@ -41,6 +44,7 @@ SpaceShip::SpaceShip(const char* animation, int hp, int speed) :
 	speed_ = speed;
 	weapon_.SetOwner(this);
 	target_ = NULL;
+	base_y_ = -1;
 }
 
 
@@ -54,10 +58,10 @@ void SpaceShip::SetMovePattern(const char* pattern)
 	if (pattern == NULL)
 		return;
 
-	TEST_MOVE(pattern, STRAIGHT, move_pattern_)
-	TEST_MOVE(pattern, MAGNET, move_pattern_)
-
-	printf("error: undefined move pattern: %s\n", pattern);
+	TEST_MOVE(pattern, straight, move_pattern_)
+	TEST_MOVE(pattern, magnet, move_pattern_)
+	TEST_MOVE(pattern, sinus, move_pattern_)
+	fprintf(stderr, "error: undefined move pattern: %s\n", pattern);
 }
 
 
@@ -66,11 +70,11 @@ void SpaceShip::SetAttackPattern(const char* pattern)
 	if (pattern == NULL)
 		return;
 
-	TEST_ATTACK(pattern, AUTO_AIM, attack_pattern_)
-	TEST_ATTACK(pattern, ON_SIGHT, attack_pattern_)
-	TEST_ATTACK(pattern, NO_ATTACK, attack_pattern_)
+	TEST_ATTACK(pattern, auto_aim, attack_pattern_)
+	TEST_ATTACK(pattern, on_sight, attack_pattern_)
+	TEST_ATTACK(pattern, none, attack_pattern_)
 
-	printf("error: undefined attack pattern: %s\n", pattern);
+	fprintf(stderr, "error: undefined attack pattern: %s\n", pattern);
 }
 
 
@@ -101,7 +105,6 @@ void SpaceShip::Update(float frametime)
 
 	Animated::Update(frametime, *this);
 	weapon_.Update(frametime);
-	KillIfOut();
 }
 
 
@@ -123,7 +126,7 @@ void SpaceShip::TakeDamage(int damage)
 
 // movement patterns -----------------------------------------------------------
 
-void SpaceShip::MP_MAGNET(float frametime)
+void SpaceShip::move_magnet(float frametime)
 {
 	float velocity = speed_ * frametime;
 	float vy = 0;
@@ -153,17 +156,49 @@ void SpaceShip::MP_MAGNET(float frametime)
 	}
 
 	sf::Sprite::Move(vx, vy);
+	KillIfOut();
 }
 
 
-void SpaceShip::MP_STRAIGHT(float frametime)
+void SpaceShip::move_straight(float frametime)
 {
 	sf::Sprite::Move(-speed_ * frametime, 0);
+	KillIfOut();
+}
+
+
+void SpaceShip::move_sinus(float frametime)
+{
+	sf::Vector2f pos = GetPosition();
+	pos.x += -speed_ * frametime;
+	if (base_y_ == -1)
+	{
+		// calcul de l'ordonnée à l'origine base_y_ de la fonction sinus
+		// l'amplitude de la courbe ne doit pas sortir de la zone de jeu
+		if (pos.y < SINUS_AMPLITUDE)
+		{
+			base_y_ = SINUS_AMPLITUDE;
+		}
+		else if (base_y_ > EntityManager::GetInstance().GetHeight() - SINUS_AMPLITUDE)
+		{
+			base_y_ = EntityManager::GetInstance().GetHeight() - SINUS_AMPLITUDE;
+		}
+		else
+		{
+			base_y_ = pos.y;
+		}
+	}
+	pos.y = std::sin(pos.x * SINUS_FREQUENCE) * SINUS_AMPLITUDE + base_y_;
+	SetPosition(pos);
+	if (pos.x < -GetSize().x)
+	{
+		Kill();
+	}
 }
 
 // attack patterns -------------------------------------------------------------
 
-void SpaceShip::AP_AUTO_AIM()
+void SpaceShip::attack_auto_aim()
 {
 	float radians = math::angle(target_->GetPosition(), GetPosition());
 
@@ -180,7 +215,7 @@ void SpaceShip::AP_AUTO_AIM()
 }
 
 
-void SpaceShip::AP_ON_SIGHT()
+void SpaceShip::attack_on_sight()
 {
 	float my_y = GetPosition().y;
 	float player_y = target_->GetPosition().y;
@@ -192,6 +227,6 @@ void SpaceShip::AP_ON_SIGHT()
 }
 
 
-void SpaceShip::AP_NO_ATTACK()
+void SpaceShip::attack_none()
 {
 }

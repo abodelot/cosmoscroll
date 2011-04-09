@@ -1,3 +1,4 @@
+#include <cstdio>
 #include "BitmapFont.hpp"
 
 using namespace gui;
