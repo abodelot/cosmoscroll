@@ -118,9 +118,9 @@ void EvilBoss::TakeDamage(int damage)
 				break;
 			case DAMN_EVIL:
 				SetSubRect(sf::IntRect(242 * 2, 0, 242 * 3, 160));
-				canon_.SetTriple(true);
-				eye_left_.SetTriple(true);
-				eye_right_.SetTriple(true);
+				canon_.SetMultiply(3);
+				eye_left_.SetMultiply(3);
+				eye_right_.SetMultiply(3);
 				break;
 			default:
 				break;

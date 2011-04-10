@@ -10,6 +10,7 @@
 // tous les menus
 #include "../scenes/MainMenu.hpp"
 #include "../scenes/GameOverMenu.hpp"
+#include "../scenes/BestScoresMenu.hpp"
 #include "../scenes/PauseMenu.hpp"
 #include "../scenes/LevelMenu.hpp"
 #include "../scenes/OptionMenu.hpp"

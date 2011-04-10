@@ -3,9 +3,9 @@
 
 // MD5 checksums for XML game data files
 
-#define MD5SUM_WEAPONS    "1f20512e3677e582a3336117715419c1"
-#define MD5SUM_SPACESHIPS "2438a54b691af8f32d4e1b0872b523e4"
-#define MD5SUM_ANIMATIONS "793494e77d2eae128b5e23cce2fd263d"
+#define MD5SUM_WEAPONS    "410dd6575cbdf74a3ff466dfc9c53fa7"
+#define MD5SUM_SPACESHIPS "cbc1e488aa1668c8359f6affce61e0bc"
+#define MD5SUM_ANIMATIONS "aaffc777bc1039aabac719b6faace47f"
 
 #endif // DATA_CHECK_HPP
 

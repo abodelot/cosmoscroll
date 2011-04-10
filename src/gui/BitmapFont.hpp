@@ -34,7 +34,7 @@ public:
 	/**
 	 * Obtenir le subrect d'un caractère
 	 * @param character: caractère demandé
-	 * @return: subrect dans l'image de la police
+	 * @return subrect dans l'image de la police
 	 */
 	sf::IntRect GetCharRect(char character) const;
 

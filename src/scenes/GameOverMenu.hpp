@@ -9,15 +9,19 @@ public:
 	GameOverMenu();
 
 	// inherited
-	void Poke();
+	void OnFocus();
 
 private:
 	// inherited
 	void EventCallback(int id);
 
-	gui::Label* result_;
+	void UploadScore();
+
+	int score_;
+	gui::Label* lab_result_;
 	CosmoButton* but_send_score_;
-	gui::TextBox* txt_;
+	gui::Label* lab_pseudo_;
+	gui::TextBox* txt_pseudo_;
 };
 
 #endif // GAMEOVERMENU_HPP

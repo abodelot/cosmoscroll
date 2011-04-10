@@ -99,7 +99,6 @@ private:
 	sf::String info_;
 	sf::String game_info_;
 	sf::Sprite panel_;
-	sf::Font font_;
 };
 
 #endif // CONTROLPANEL_HPP

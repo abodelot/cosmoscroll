@@ -12,10 +12,7 @@
 #define Y_LINE_1       10 // Y première ligne
 #define Y_LINE_2       30 // Y deuxième ligne
 #define TEXT_PADDING_Y 3  // décalage du texte en Y
-
-#define FONT_SIZE 15
-#define FONT_FILENAME "data/font/digital-7.ttf"
-
+#define TEXT_SIZE      15
 
 ControlPanel& ControlPanel::GetInstance()
 {
@@ -28,36 +25,36 @@ ControlPanel::ControlPanel()
 {
 	panel_.SetImage(GET_IMG("gui/score-board"));
 
-	font_.LoadFromFile(FONT_FILENAME, FONT_SIZE);
 
-	pbars_[HP].Init(font_, 45, Y_LINE_1);
+	const sf::Font& font = MediaManager::GetInstance().GetFixedFont();
+	pbars_[HP].Init(font, 45, Y_LINE_1);
 	pbars_[HP].label.SetText(I18n::t("panel.bar_hp"));
 	pbars_[HP].bar.SetImage(GET_IMG("gui/bar-hp"));
-	pbars_[SHIELD].Init(font_, 45, Y_LINE_2);
+	pbars_[SHIELD].Init(font, 45, Y_LINE_2);
 	pbars_[SHIELD].label.SetText(I18n::t("panel.bar_shield"));
 	pbars_[SHIELD].bar.SetImage(GET_IMG("gui/bar-shield"));
-	pbars_[HEAT].Init(font_, 220, Y_LINE_1);
+	pbars_[HEAT].Init(font, 220, Y_LINE_1);
 	pbars_[HEAT].label.SetText(I18n::t("panel.bar_heat"));
 	pbars_[HEAT].bar.SetImage(GET_IMG("gui/bar-heat"));
 	sf::Vector2f pos = pbars_[HEAT].bar.GetPosition();
 	info_.SetPosition(pos.x + 8, pos.y - TEXT_PADDING_Y);
-	info_.SetFont(font_);
-	info_.SetSize(FONT_SIZE);
+	info_.SetFont(font);
+	info_.SetSize(TEXT_SIZE);
 	info_.SetColor(sf::Color::Red);
 
 	coolers_.Init(Bonus::GetSubRect(Bonus::COOLER), 230, Y_LINE_2);
-	coolers_.count.SetFont(font_);
+	coolers_.count.SetFont(font);
 	missiles_.Init(Bonus::GetSubRect(Bonus::MISSILE), 300, Y_LINE_2);
-	missiles_.count.SetFont(font_);
+	missiles_.count.SetFont(font);
 
 	timer_.SetPosition(480, Y_LINE_1 - TEXT_PADDING_Y);
-	timer_.SetFont(font_);
-	timer_.SetSize(FONT_SIZE);
+	timer_.SetFont(font);
+	timer_.SetSize(TEXT_SIZE);
 	timer_.SetColor(sf::Color::White);
 
 	game_info_.SetPosition(480, Y_LINE_2 - TEXT_PADDING_Y);
-	game_info_.SetFont(font_);
-	game_info_.SetSize(FONT_SIZE);
+	game_info_.SetFont(font);
+	game_info_.SetSize(TEXT_SIZE);
 	game_info_.SetColor(sf::Color::White);
 }
 
@@ -176,7 +173,7 @@ ControlPanel::ProgressBar::ProgressBar()
 void ControlPanel::ProgressBar::Init(const sf::Font& font, float x, float y)
 {
 	label.SetFont(font);
-	label.SetSize(FONT_SIZE);
+	label.SetSize(TEXT_SIZE);
 	label.SetColor(sf::Color::White);
 	label.SetPosition(x, y - TEXT_PADDING_Y);
 	background.SetPosition(x + LABEL_LENGTH, y);
@@ -202,7 +199,7 @@ void ControlPanel::BonusCount::Init(const sf::IntRect& subrect, int x, int y)
 	icon.SetImage(GET_IMG("entities/bonus"));
 	icon.SetSubRect(subrect);
 	count.SetPosition(x + BONUS_LENGTH, y);
-	count.SetSize(FONT_SIZE);
+	count.SetSize(TEXT_SIZE);
 	count.SetColor(sf::Color::White);
 	count.SetText("x 0");
 }

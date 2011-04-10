@@ -24,6 +24,8 @@ menu.pause.quit = Quitter le jeu
 
 # Menu game over
 menu.gameover.title = Game Over
+menu.gameover.pseudo = Votre nom :
+menu.gameover.send_score = Envoyer mon score
 menu.gameover.play_again = Rejouer
 menu.gameover.record = Nouveau record !\n    Vous avez tenu %d min %d sec !
 menu.gameover.no_record = Vous avez tenu seulement\n%02d min et %02d sec ...
@@ -81,9 +83,9 @@ bonus.hp = Point de vie
 bonus.shield = Bouclier
 bonus.cooler = Glaçon
 bonus.missile = Missile
+bonus.double_shot = Double tir
 bonus.triple_shot = Triple tir
 bonus.speed = Vitesse
-bonus.stoned = Stoned
 bonus.banana = Super Banane !
 
 # Actions
@@ -101,4 +103,3 @@ action.missile = Utiliser bonus Missile
 input.press_key = Appuyez sur une touche du clavier\npour l'action
 input.press_button = Appuyez sur un bouton du contrôleur\npour l'action
 input.cancel = (Échap pour annuler)
-

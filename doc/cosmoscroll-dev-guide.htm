@@ -48,9 +48,9 @@ table.infotab th {
 		</style>
 	</head>
 	<body>
-	
+
 	<h1>Cosmoscroll - Guide du développeur</h1>
-	
+
 	<h2>Introduction</h2>
 	<div class="part">
 	<p>
@@ -68,7 +68,7 @@ table.infotab th {
 		<li><a href="#i18n">Internationalisation</a></li>
 	</ul>
 	</div>
-	
+
 	<h2 id="scr">Organisation des sources</h2>
 	<div class="part">
 	<h3>Organisation générale</h3>
@@ -122,10 +122,10 @@ table.infotab th {
 		</li>
 	</ul>
 	<p>Détail des sous-dossiers src : </p>
-	
+
 	<h3>core</h3>
 	<p>Contient le point d'entrée du programme (<code>Main.cpp</code>) et les classes directement liées à la gestion du jeu. L'application est pilotée par la classe singleton <code>Game</code>, qui se charge d'initialiser le jeu, d'afficher les scènes, et de sauvegarder la configuration en quittant.</p>
-	
+
 	<h3>entities</h3>
 	<p>Les entités sont les éléments graphiques qui interragissent avec le joueur durant les phases de jeu, le vaisseau du joueur étant lui-même une entité.</p>
 	<p>Toutes les entités héritent de la classe abstraite <code>Entity</code> et sont gérées par le singleton <code>EntityManager</code>. EntityManager se charge ainsi de :</p>
@@ -167,7 +167,7 @@ table.infotab th {
 		</tr>
 	</table>
 	<p>Les autres classes, Weapon et MissileLauncher, sont des attributs des entités et servent à émettre des Hit et des ImpactHit</p>
-	
+
 	<h3>scenes</h3>
 	<p>Les scènes sont la base de tout écran visuel, et héritent toutes de la classe abstraite BaseScene.<br />
 	Les scènes (que l'on peut décrire comme "un écran du jeu") sont gérées par la classe Game qui se charge de les allouer, les afficher (BaseScene::Show), les mettre à jour (BaseScene::Update) et leur envoyer les événements reçus (BaseScene::OnEvent).</p>
@@ -184,11 +184,11 @@ table.infotab th {
 		<li>DIE : macro pour tuer le jeu, avec un message d'erreur indiquant la ligne et le nom du fichier où l'appel a eu lieu</li>
 		<li>DumbMusic : classe pour jouer simplement des musiques avec la libdumb (la classe Music de la SFML ne gère pas le format .mod)</li>
 	</ul>
-	
+
 	<h3>tinyxml</h3>
 	<p>Contient les sources de la bibliothèque TinyXML. Inclure simplement tinyxml/tinyxml.h pour l'utiliser</p>
 	</div>
-	
+
 	<h2 id="coding-style">Style de codage</h2>
 	<div class="part">
 	<ul>
@@ -203,7 +203,7 @@ class MyClass
 {
 public:
 	void GetSometing() const;
-	
+
 	void SetSometing(int value);
 };
 </pre>
@@ -222,7 +222,7 @@ private:
 		<li>Cartouches Doxygen dans les headers</li>
 	</ul>
 	</div>
-	
+
 	<h2 id="xml-levels">Niveaux</h2>
 	<p>Les niveaux sont scriptés en XML et sont stockés dans le fichier <code>bin/data/levels/levels.xml</code></p>
 	<p>Le fichier se divise en deux éléments principaux :</p>
@@ -233,7 +233,7 @@ private:
 	<h3>Fonctions</h3>
 	<p>Chaque fonction est défini par un tag <b>def</b> et un attribut <b>name</b> unique</p>
 	<p>Le scritage du corps d'une fonction obéit aux mêmes règles que le scriptage des niveaux.</p>
-	
+
 	<h3>Niveaux</h3>
 	<p>Chaque niveau est identifié par un tag <b>level</b>.<br />
 	<em>Attributs :</em></p>
@@ -244,7 +244,7 @@ private:
 		<li><b>starts</b> : nombre d'étoiles défilantes dans l'arrière plan</li>
 	</ul>
 	<p>La liste des tags constituant le corps d'un niveau (ou d'une fonction') est indiquée ci-dessous.</p>
-	
+
 	<h3>Tags de déclaration d'entités</h3>
 	<ul>
 		<li>
@@ -253,7 +253,7 @@ private:
 			<ul>
 				<li><b>id</b> : id du type de vaisseau (voir <a href="#xml-ships">définition des vaisseaux</a>)</li>
 			</ul>
-		</li>		
+		</li>
 		<li><b>asteroid</b> : instance de Asteroid</li>
 		<li><b>evilboss</b> : instance de EvilBoss</li>
 		<em>attributs communs à tous les tags entités :</em>
@@ -289,7 +289,7 @@ private:
 		</li>
 	</ul>
 	<p>Ces tags permettent une meilleure factorisation du code XML des niveaux, des fonctions peuvent appeler d'autres fonctions, des boucles peuvent être imbriquées dans d'autres boucles, etc.</p>
-	
+
 	<h2 id="xml-ships">Vaisseaux</h2>
 	<div class="part">
 	<p>Les différents types de vaisseaux (tous instances de la classe <b>SpaceShip</b>) sont définis en XML dans le fichier <code>bin/data/xml/spaceships.xml</code>.</p>
@@ -322,15 +322,16 @@ private:
 				<li><b>speed</b> : vitesse de déplacement, exprimée en pixels/seconde</li>
 				<li><b>move</b> : comportement de déplacement, cet attribut peut prendre les valeurs suivantes :<br />
 					<ul>
-						<li><b>STRAIGHT</b> : le vaisseau avance toujours tout droit</li>
-						<li><b>MAGNET</b> : le vaisseau suit le joueur</li>
+						<li><b>straight</b> : le vaisseau avance toujours tout droit (valeur par défaut)</li>
+						<li><b>magnet</b> : le vaisseau suit le joueur</li>
+						<li><b>sinus</b> : le vaisseau avance sur une courbe sinusoïdale</li>
 					</ul>
 				</li>
 				<li><b>attack</b> : comportement d'attaque, cet attribut peut prendre les valeurs suivantes :<br />
 					<ul>
-						<li><b>NO_ATTACK</b> : le vaisseau n'attaque pas</li>
-						<li><b>ON_SIGHT</b> : le vaisseau tire si le joueur passe devant lui</li>
-						<li><b>AUTO_AIM</b> : le vaisseau tire sur le joueur en continue, en calculant le bon angle de tir</li>
+						<li><b>none</b> : le vaisseau n'attaque jamais (valeur par défaut)</li>
+						<li><b>on_sight</b> : le vaisseau tire si le joueur passe devant lui</li>
+						<li><b>auto_aim</b> : le vaisseau tire sur le joueur en continue, en calculant le bon angle de tir</li>
 					</ul>
 				</li>
 			</ul>
@@ -349,7 +350,7 @@ private:
 		</li>
 	</ul>
 	</div>
-	
+
 	<h2 id="xml-animations">Animations</h2>
 	<div class="part">
 	<p>Les animations servent à définir un cycle d'images pour représenter un objet animé. Elles sont notamment utilisées sur les objets <b>SpaceShip</b><br />
@@ -385,9 +386,9 @@ private:
 				<li><b>delay</b> : délai entre chaque frame, en seconde</li>
 			</ul>
 		</li>
-	</ul>	
+	</ul>
 	</div>
-	
+
 	<h2 id="xml-weapons">Armes</h2>
 	<div class="part">
 	<p>Les armes et leurs projectiles sont définis en XML dans le fichier <code>bin/data/xml/weapons.xml</code></p>
@@ -420,7 +421,7 @@ private:
 		</li>
 	</ul>
 	</div>
-	
+
 	<h2 id="config">Fichier de configuration</h2>
 	<div class="part">
 	<p>Les préférences du joueur et ses scores sont stockés dans le fichier de configuration (<code>config/config.cfg</code>).<br />
@@ -443,7 +444,7 @@ private:
 		</li>
 	</ul>
 	</div>
-	
+
 	<h2 id="i18n">Internationalisation</h2>
 	<div class="part">
 	<p>L'internationalisation est prise en charge avec les fichiers de langue situés dans <code>data/lang/</code>. Le jeu détecte automatiquement la locale du système et tente de charger le fichier de langue correspondant à <code>data/lang/&lt;les deux premières lettres de la locale en minuscules&gt;.lang</code>. Si ce fichier est introuvable, <code>en.lang</code> (english) sera utilisé par défaut.</p>
@@ -454,8 +455,7 @@ private:
 menu.play = Jouer
 menu.quit = Quitter
 </pre>
-	
+
 	</div>
 	</body>
 </html>
-

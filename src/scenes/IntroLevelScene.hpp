@@ -18,7 +18,7 @@ public:
 	void Show(sf::RenderTarget& target) const;
 
 	// inherited
-	void Poke();
+	void OnFocus();
 
 private:
 	sf::String description_;

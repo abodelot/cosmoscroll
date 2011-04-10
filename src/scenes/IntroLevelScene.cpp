@@ -42,7 +42,7 @@ void IntroLevelScene::Show(sf::RenderTarget& target) const
 }
 
 
-void IntroLevelScene::Poke()
+void IntroLevelScene::OnFocus()
 {
 	// get the description of the current level
 	LevelManager& levels = LevelManager::GetInstance();

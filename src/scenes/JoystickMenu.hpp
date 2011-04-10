@@ -13,7 +13,7 @@ public:
 	JoystickMenu();
 
 	// inherited
-	void Poke();
+	void OnFocus();
 
 private:
 	std::wstring GetButtonLabel(Input::Action action) const;

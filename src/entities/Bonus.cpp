@@ -56,12 +56,12 @@ const wchar_t* Bonus::GetDescription() const
 			return I18n::t("bonus.cooler").c_str();
 		case MISSILE:
 			return I18n::t("bonus.missile").c_str();
+		case DOUBLE_SHOT:
+			return I18n::t("bonus.double_shot").c_str();
 		case TRIPLE_SHOT:
 			return I18n::t("bonus.triple_shot").c_str();
 		case SPEED:
 			return I18n::t("bonus.speed").c_str();
-		case STONED:
-			return I18n::t("bonus.stoned").c_str();
 		case SUPER_BANANA:
 			return I18n::t("bonus.banana").c_str();
 		default:

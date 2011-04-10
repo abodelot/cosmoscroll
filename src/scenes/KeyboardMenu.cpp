@@ -31,9 +31,9 @@ KeyboardMenu::KeyboardMenu()
 }
 
 
-void KeyboardMenu::Poke()
+void KeyboardMenu::OnFocus()
 {
-
+	BaseMenu::OnFocus();
 	but_up_->SetText(GetKeyLabel(Input::MOVE_UP));
 	but_down_->SetText(GetKeyLabel(Input::MOVE_DOWN));
 	but_left_->SetText(GetKeyLabel(Input::MOVE_LEFT));
@@ -58,7 +58,7 @@ void KeyboardMenu::EventCallback(int id)
 		// Input::Action enumerations are used as menu ids
 		Input& input = Input::GetInstance();
 		input.AskUserInput(Input::KEYBOARD, (Input::Action) id);
-		Poke();
+		OnFocus();
 	}
 }
 

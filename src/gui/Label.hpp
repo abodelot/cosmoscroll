@@ -11,11 +11,17 @@ class Label: public Widget
 public:
 	Label(Menu* owner, const sf::Unicode::Text& text, int x, int y);
 
-	void SetText(const sf::Unicode::Text& text);
+	// texte du label
+	void SetText(const sf::Unicode::Text& text) { text_.SetText(text); }
+	std::string GetText() const { return text_.GetText(); }
 
-	std::string GetText() const;
+	// taille du texte
+	void SetSize(int size) { text_.SetSize(size); }
+	int GetSize() const { return text_.GetSize(); }
 
-	void SetSize(int size);
+	// fonte du texte
+	void SetFont(const sf::Font& font) { text_.SetFont(font); }
+	const sf::Font& GetFont() const { return text_.GetFont(); }
 
 private:
 	// inherited

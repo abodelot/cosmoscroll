@@ -6,6 +6,7 @@
 #include "EntityManager.hpp"
 #include "../core/ParticleSystem.hpp"
 #include "../core/SoundSystem.hpp"
+#include "../utils/I18n.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/Math.hpp"
 #include "../utils/DIE.hpp"
@@ -67,7 +68,6 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 
 	max_speed_ = MAX_SPEED;
 	speed_x_ = speed_y_ = 0.f;
-	compute_move_ = &PlayerShip::ComputeMove;
 
 	ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, this);
 
@@ -163,6 +163,8 @@ void PlayerShip::HandleAction(Input::Action action)
 
 void PlayerShip::Update(float frametime)
 {
+	static const EntityManager& manager = EntityManager::GetInstance();
+
 	// animation
 	Animated::Update(frametime, *this);
 
@@ -184,15 +186,16 @@ void PlayerShip::Update(float frametime)
 		{
 			overheated_ = true;
 			panel_.SetOverheat(true);
+			ParticleSystem::GetInstance().AddMessage(GetPosition(), I18n::t("panel.overheat").c_str());
 		}
 	}
 	// déplacement
-	(this->*compute_move_)(frametime);
+	ComputeMove(frametime);
 	sf::Vector2f pos = GetPosition();
 	pos.y = pos.y + speed_y_ * frametime;
 	pos.x = pos.x + speed_x_ * frametime;
 
-	static const EntityManager& manager = EntityManager::GetInstance();
+
 	const int X_BOUND = manager.GetWidth() - GetSize().x;
 	const int Y_BOUND = manager.GetHeight() - GetSize().y;
 
@@ -337,55 +340,24 @@ void PlayerShip::ComputeMove(float)
 }
 
 
-void PlayerShip::ComputeMoveOnDrugs(float frametime)
-{
-	float speed_diff = frametime * max_speed_ / ACCELERATION_DELAY_ON_DRUGS;
-	ComputeAxisSpeed(speed_x_, Input::MOVE_LEFT, Input::MOVE_RIGHT, speed_diff);
-	ComputeAxisSpeed(speed_y_, Input::MOVE_UP, Input::MOVE_DOWN, speed_diff);
-}
-
-
-void PlayerShip::ComputeAxisSpeed(float& speed, Input::Action lower,
-	Input::Action upper, float diff)
-{
-	if (input_.HasInput(lower) && -speed < max_speed_)
-	{
-		speed -= diff;
-	}
-	else if (speed < 0)
-	{
-		speed += diff;
-		if (speed > 0.1)
-		{
-			speed = 0;
-		}
-	}
-
-	if (input_.HasInput(upper) && speed < max_speed_)
-	{
-		speed += diff;
-	}
-	else if (speed > 0)
-	{
-		speed -= diff;
-		if (speed < 0.1)
-		{
-			speed = 0;
-		}
-	}
-}
-
-
 void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 {
 	switch (bonus_t)
 	{
 		// timed bonus
+		case Bonus::DOUBLE_SHOT:
+			if (bonus_[T_DOUBLESHOT] == 0)
+			{
+				weapon1_.SetMultiply(2);
+				weapon2_.SetMultiply(2);
+			}
+			bonus_[T_DOUBLESHOT] += TIMED_BONUS_DURATION;
+			break;
 		case Bonus::TRIPLE_SHOT:
 			if (bonus_[T_TRISHOT] == 0)
 			{
-				weapon1_.SetTriple(true);
-				weapon2_.SetTriple(true);
+				weapon1_.SetMultiply(3);
+				weapon2_.SetMultiply(3);
 			}
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
 			break;
@@ -396,13 +368,6 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 				ParticleSystem::GetInstance().AddSmoke(96, this);
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
-			break;
-		case Bonus::STONED:
-			if (bonus_[T_STONED] == 0)
-			{
-				compute_move_ = &PlayerShip::ComputeMoveOnDrugs;
-			}
-			bonus_[T_STONED] += TIMED_BONUS_DURATION;
 			break;
 		// immediate bonus
 		case Bonus::SUPER_BANANA:
@@ -455,16 +420,14 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 {
 	switch (tbonus)
 	{
+		case T_DOUBLESHOT:
 		case T_TRISHOT:
-			weapon1_.SetTriple(false);
-			weapon2_.SetTriple(false);
+			weapon1_.SetMultiply(1);
+			weapon2_.SetMultiply(1);
 			break;
 		case T_SPEED:
 			max_speed_ = MAX_SPEED;
 			ParticleSystem::GetInstance().ClearSmoke(this);
-			break;
-		case T_STONED:
-			compute_move_ = &PlayerShip::ComputeMove;
 			break;
 		default:
 			DIE("can't disable unknown bonus");
@@ -494,9 +457,9 @@ void PlayerShip::KonamiCodeOn()
 	panel_.SetCoolers(42);
 	missiles_ = 42;
 	panel_.SetMissiles(42);
-	weapon1_.SetTriple(true);
-	weapon2_.SetTriple(true);
-	missile_launcher_.SetTriple(true);
+	weapon1_.SetMultiply(3);
+	weapon2_.SetMultiply(2);
+	missile_launcher_.SetMultiply(3);
 
 	ParticleSystem::GetInstance().AddMessage(GetPosition(), L"For great justice!");
 }

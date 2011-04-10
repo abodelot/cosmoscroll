@@ -29,8 +29,8 @@ public:
 	/**
 	 * Notifier la scène qu'elle est la scène courante
 	 */
-	virtual void Poke() {}
-	
+	virtual void OnFocus() {}
+
 	virtual ~BaseScene() {}
 };
 

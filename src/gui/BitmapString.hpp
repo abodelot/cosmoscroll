@@ -104,6 +104,8 @@ private:
 	SpriteVec bitmaps_;
 
 	int char_width_;
+	int last_x_;
+	int last_y_;
 	std::string chars_;
 	const BitmapFont* font_;
 };

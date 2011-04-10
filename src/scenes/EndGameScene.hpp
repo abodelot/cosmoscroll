@@ -20,7 +20,7 @@ public:
 	void Show(sf::RenderTarget& target) const;
 
 	// inherited
-	void Poke();
+	void OnFocus();
 
 private:
 	float timer_;

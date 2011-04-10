@@ -23,6 +23,9 @@ public:
 	// inherited
 	void Show(sf::RenderTarget& target) const;
 
+	// inherited
+	void OnFocus();
+
 private:
 	EntityManager& entities_;
 	ControlPanel& panel_;

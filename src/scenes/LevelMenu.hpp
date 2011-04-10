@@ -12,7 +12,7 @@ public:
 	LevelMenu();
 
 	// inherited
-	void Poke();
+	void OnFocus();
 
 private:
 	// inherited

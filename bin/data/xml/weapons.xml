@@ -8,4 +8,3 @@
 	<weapon id="3" name="Devil Eyes"  image="ammo/devil-eyes"  heat_cost="1"   fire_rate="0.7" damage="6"  speed="430" />
 	<weapon id="5" name="Missile"     image="ammo/missile"     heat_cost="0"   fire_rate="0.4" damage="15" speed="300" sound="missile-gasfire" />
 </weapons>
-

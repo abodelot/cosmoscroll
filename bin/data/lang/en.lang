@@ -24,6 +24,8 @@ menu.pause.quit = Exit game
 
 # Game over menu
 menu.gameover.title = Game Over
+menu.gameover.send_score = Send my score
+menu.gameover.pseudo = Your name:
 menu.gameover.play_again = Play again
 menu.gameover.record = New record !\n    You've lasted %d min %d sec !
 menu.gameover.no_record = You've lasted only\n%02d min %02d sec ...
@@ -81,9 +83,9 @@ bonus.hp = Health point
 bonus.shield = Shield point
 bonus.cooler = Cooler
 bonus.missile = Missile
+bonus.double_shot = Double shot
 bonus.triple_shot = Triple shot
 bonus.speed = Speed
-bonus.stoned = Stoned
 bonus.banana = Super Banana!
 
 # Actions
@@ -101,4 +103,3 @@ action.missile = Use Missile bonus
 input.press_key = Press a key to bind\naction
 input.press_button = Press a joystick button to bind\naction
 input.cancel = (press Escape to cancel)
-

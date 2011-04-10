@@ -7,7 +7,7 @@
 #include "../utils/ConfigParser.hpp"
 #include "../utils/StringUtils.hpp"
 #include "../utils/I18n.hpp"
-
+#include "../utils/DIE.hpp"
 #include "data_check.hpp"
 #include "../md5/md5.hpp"
 
@@ -246,6 +246,7 @@ void Game::SetNextScene(Scene enum_scene)
 			CASE_SCENE(InGameScene, new_scene);
 			CASE_SCENE(EndGameScene, new_scene);
 			CASE_SCENE(GameOverMenu, new_scene);
+			CASE_SCENE(BestScoresMenu, new_scene);
 			CASE_SCENE(PauseMenu, new_scene);
 			CASE_SCENE(AboutMenu, new_scene);
 			CASE_SCENE(LevelMenu, new_scene);
@@ -257,14 +258,13 @@ void Game::SetNextScene(Scene enum_scene)
 			CASE_SCENE(SettingsMenu, new_scene);
 
 			default:
-				puts("warning: can't set next requested scene");
-				abort();
+				DIE("can't set next requested scene");
 				break;
 		}
 		scenes_[enum_scene] = new_scene;
 	}
 	current_scene_ = scenes_[enum_scene];
-	current_scene_->Poke();
+	current_scene_->OnFocus();
 }
 
 
@@ -312,10 +312,21 @@ bool Game::IsFullscreen() const
 
 void Game::CheckPurity()
 {
-	printf("* checking purity...");
+	printf("* checking resources purity... ");
 	pure_ = true;
-	pure_ &= MD5::check_file_against("data/xml/weapons.xml",    MD5SUM_WEAPONS);
-	pure_ &= MD5::check_file_against("data/xml/spaceships.xml", MD5SUM_SPACESHIPS);
-	pure_ &= MD5::check_file_against("data/xml/animations.xml", MD5SUM_ANIMATIONS);
-	puts(pure_ ? "[OK]" : "[FAIL]");
+	std::ifstream file;
+	MD5 md5sum;
+
+	file.open("data/xml/weapons.xml");
+	pure_ &= (md5sum.Calculate(file) == MD5SUM_WEAPONS);
+	file.close();
+
+	file.open("data/xml/spaceships.xml");
+	pure_ &= (md5sum.Calculate(file) == MD5SUM_SPACESHIPS);
+	file.close();
+
+	file.open("data/xml/animations.xml");
+	pure_ &= (md5sum.Calculate(file) == MD5SUM_ANIMATIONS);
+	file.close();
+	puts(pure_ ? "[OK]" : "[FAILED]");
 }

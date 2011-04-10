@@ -56,3 +56,8 @@ void InGameScene::Show(sf::RenderTarget& target) const
 	target.Draw(panel_);
 }
 
+
+void InGameScene::OnFocus()
+{
+	Game::GetInstance().GetApp().ShowMouseCursor(false);
+}

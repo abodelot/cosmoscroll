@@ -41,6 +41,7 @@
 			<Add library="sfml-window" />
 			<Add library="sfml-system" />
 			<Add library="sfml-audio" />
+			<Add library="sfml-network" />
 			<Add library="dumb" />
 		</Linker>
 		<Unit filename="src/core/ControlPanel.cpp" />
@@ -115,6 +116,8 @@
 		<Unit filename="src/scenes/BaseMenu.cpp" />
 		<Unit filename="src/scenes/BaseMenu.hpp" />
 		<Unit filename="src/scenes/BaseScene.hpp" />
+		<Unit filename="src/scenes/BestScoresMenu.cpp" />
+		<Unit filename="src/scenes/BestScoresMenu.hpp" />
 		<Unit filename="src/scenes/CosmoButton.cpp" />
 		<Unit filename="src/scenes/CosmoButton.hpp" />
 		<Unit filename="src/scenes/EndGameScene.cpp" />

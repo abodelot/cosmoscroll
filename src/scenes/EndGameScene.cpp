@@ -54,7 +54,7 @@ void EndGameScene::Show(sf::RenderTarget& target) const
 }
 
 
-void EndGameScene::Poke()
+void EndGameScene::OnFocus()
 {
 	timer_ = 0.f;
 

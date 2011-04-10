@@ -12,7 +12,11 @@
 #define MUSIC_LIST "data/music/music.txt"
 #define MUSIC_PATH "data/music/"
 
-#define FONT_FILENAME "data/font/hemi-head.ttf"
+#define FONT_FILENAME       "data/font/hemi-head.ttf"
+#define FONT_SIZE           40
+#define FIXED_FONT_FILENAME "data/font/digital-7.ttf"
+#define FIXED_FONT_SIZE     15
+
 
 
 // charger une image
@@ -119,8 +123,12 @@ MediaManager::MediaManager()
 	}
 #endif
 	// chargement des fontes
-
-	if (!font_.LoadFromFile(FONT_FILENAME, 40))
+	puts("* loading fonts...");
+	if (!font_.LoadFromFile(FONT_FILENAME, FONT_SIZE))
+	{
+		exit(EXIT_FAILURE);
+	}
+	if (!fixed_font_.LoadFromFile(FIXED_FONT_FILENAME, FIXED_FONT_SIZE))
 	{
 		exit(EXIT_FAILURE);
 	}
@@ -167,11 +175,6 @@ DumbMusic* MediaManager::GetDumbMusic(const char* key) const
 }
 #endif
 
-const sf::Font& MediaManager::GetFont() const
-{
-	return font_;
-}
-
 
 void MediaManager::SmoothImage(const char* key, bool smooth)
 {
@@ -181,11 +184,11 @@ void MediaManager::SmoothImage(const char* key, bool smooth)
 
 void MediaManager::Unload()
 {
-	#ifndef NO_DUMB_MUSIC
+#ifndef NO_DUMB_MUSIC
 	DumbMusicMap::iterator it = musics_.begin();
 	for (; it != musics_.end(); ++it)
 	{
 		delete it->second;
 	}
-	#endif
+#endif
 }

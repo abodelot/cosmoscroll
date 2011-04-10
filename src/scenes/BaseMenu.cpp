@@ -52,6 +52,12 @@ void BaseMenu::Show(sf::RenderTarget& target) const
 }
 
 
+void BaseMenu::OnFocus()
+{
+	Game::GetInstance().GetApp().ShowMouseCursor(true);
+}
+
+
 void BaseMenu::SetTitle(const sf::Unicode::Text& text, int y)
 {
 	title_.SetFont(GET_FONT());

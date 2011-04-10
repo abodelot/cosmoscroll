@@ -14,7 +14,7 @@ Slider::Slider(Menu* owner, int x, int y, int w, int h) :
 	bar_ = sf::Shape::Rectangle(0, 0, w, h, sf::Color::White,
 		1, owner->GetWidgetStyle().global_border_color);
 	handle_ = sf::Shape::Rectangle(0, 0, h, h,
-		sf::Color::White, 1, sf::Color::Black);
+		sf::Color::White, 1, owner->GetWidgetStyle().global_border_color);
 	SetState(State::DEFAULT);
 
 	handle_index_ = 0;

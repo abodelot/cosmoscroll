@@ -13,9 +13,9 @@ public:
 		SHIELD,       // +1 shield
 		COOLER,       // +1 cooler
 		MISSILE,      // +1 cooler
+		DOUBLE_SHOT,  // shot * 2 (10s)
 		TRIPLE_SHOT,  // shot * 3 (10s)
 		SPEED,        // speed * 2 (10s)
-		STONED,       // inertia (10s)
 		SUPER_BANANA, // invincible (10s)
 		BONUS_COUNT
 	};

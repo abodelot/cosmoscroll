@@ -46,25 +46,13 @@ public:
 private:
 	enum TimedBonus
 	{
+		T_DOUBLESHOT,
 		T_TRISHOT,
 		T_SPEED,
-		T_STONED,
 		TIMED_BONUS_COUNT
 	};
 
 	void ComputeMove(float frametime);
-
-	void ComputeMoveOnDrugs(float frametime);
-
-	/**
-	 * Calculer la vitesse sur un axe
-	 * @param speed: vitesse à mettre à jour
-	 * @param lower: action diminuant la vitesse
-	 * @param upper: action augmentant la vitesse
-	 * @param diff: différence avec la nouvelle vitesse
-	 */
-	void ComputeAxisSpeed(float& speed, Input::Action lower,
-		Input::Action upper, float diff);
 
 	/**
 	 * Gérer un bonus attrapé
@@ -109,8 +97,6 @@ private:
 	Weapon weapon1_;
 	Weapon weapon2_;
 	MissileLauncher missile_launcher_;
-
-	void (PlayerShip::*compute_move_)(float);
 };
 
 #endif // PLAYERSHIP_HPP

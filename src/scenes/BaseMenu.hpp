@@ -26,6 +26,9 @@ public:
 	// inherited
 	void Show(sf::RenderTarget& target) const;
 
+	// inherited
+	void OnFocus();
+
 protected:
 	/**
 	 * Indiquer le titre du menu (aucun par défaut)

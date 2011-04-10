@@ -54,7 +54,7 @@ public:
 
 	void Update(float frametime);
 
-	void SetTriple(bool triple);
+	void SetMultiply(int n);
 
 protected:
 	virtual void ThrowHit(const sf::Vector2f& offset, float angle);
@@ -90,7 +90,7 @@ private:
 	float fire_timer_;
 
 	const char* sound_name_;
-	bool triple_;
+	int multiply_;
 	Entity* owner_;
 
 	bool inited_;

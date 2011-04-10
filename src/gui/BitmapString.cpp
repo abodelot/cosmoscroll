@@ -7,6 +7,7 @@ BitmapString::BitmapString()
 {
 	font_ = NULL;
 	char_width_ = 0;
+	last_x_ = last_y_ = 0;
 }
 
 
@@ -14,6 +15,7 @@ BitmapString::BitmapString(const BitmapFont& font)
 {
 	font_ = &font;
 	char_width_ = font_->GetCharWidth();
+	last_x_ = last_y_ = 0;
 }
 
 
@@ -48,12 +50,18 @@ void BitmapString::AppendChar(char character)
 	sprite.SetSubRect(font_->GetCharRect(character));
 	sprite.SetColor(GetColor());
 
-	size_t length = bitmaps_.size();
-	if (length > 0)
+	if (character == '\n')
 	{
-		sprite.SetX(length * char_width_);
+		last_x_ = 0;
+		last_y_ += font_->GetCharHeight();
+		sprite.SetPosition(0, last_y_);
 	}
-	bitmaps_.push_back(sprite);
+	else
+	{
+		last_x_ += char_width_;
+		sprite.SetPosition(last_x_, last_y_);
+		bitmaps_.push_back(sprite);
+	}
 	chars_ += character;
 }
 
@@ -124,6 +132,7 @@ const BitmapFont& BitmapString::GetFont() const
 
 void BitmapString::Clear()
 {
+	last_x_ = last_y_ = 0;
 	bitmaps_.clear();
 	chars_.clear();
 }

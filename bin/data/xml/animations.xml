@@ -8,4 +8,3 @@
 	<anim name="mine"        img="entities/mine"          width="22" height="22" count="12" delay="0.1" />
 	<anim name="explosion"   img="entities/explosion"     width="64" height="64" count="11" delay="0.12" />
 </animations>
-

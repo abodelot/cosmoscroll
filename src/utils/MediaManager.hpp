@@ -52,7 +52,8 @@ public:
 	 * Obtenir la police de caractères
 	 * @return référence sur la police
 	 */
-	const sf::Font& GetFont() const;
+	const sf::Font& GetFont() const { return font_; }
+	const sf::Font& GetFixedFont() const { return fixed_font_; }
 
 	/**
 	 * Appliquer ou annuler le filtre smooth sur une image
@@ -78,6 +79,7 @@ private:
 	DumbMusicMap musics_;
 #endif
 	sf::Font font_;
+	sf::Font fixed_font_;
 };
 
 

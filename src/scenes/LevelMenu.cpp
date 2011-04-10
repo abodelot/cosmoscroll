@@ -25,8 +25,9 @@ LevelMenu::LevelMenu():
 }
 
 
-void LevelMenu::Poke()
+void LevelMenu::OnFocus()
 {
+	BaseMenu::OnFocus();
 	int last = levels_.CountLevel();
 	int current = levels_.GetCurrent();
 	int last_unlocked = levels_.GetLastUnlocked();

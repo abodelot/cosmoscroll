@@ -18,24 +18,6 @@ Label::Label(Menu* owner, const sf::Unicode::Text& text, int x, int y) :
 }
 
 
-void Label::SetText(const sf::Unicode::Text& text)
-{
-	text_.SetText(text);
-}
-
-
-std::string Label::GetText() const
-{
-	return text_.GetText();
-}
-
-
-void Label::SetSize(int size)
-{
-	text_.SetSize(size);
-}
-
-
 void Label::Render(sf::RenderTarget& target) const
 {
 	target.Draw(text_);

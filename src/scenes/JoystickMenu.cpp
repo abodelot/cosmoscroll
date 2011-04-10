@@ -28,8 +28,9 @@ JoystickMenu::JoystickMenu()
 }
 
 
-void JoystickMenu::Poke()
+void JoystickMenu::OnFocus()
 {
+	BaseMenu::OnFocus();
 	but_weapon1_->SetText(GetButtonLabel(Input::USE_WEAPON_1));
 
 	but_weapon2_->SetText(GetButtonLabel(Input::USE_WEAPON_2));
@@ -66,6 +67,6 @@ void JoystickMenu::EventCallback(int id)
 		default:
 			// Input::Action enumerations are used as menu ids
 			input.AskUserInput(Input::JOYSTICK, (Input::Action) id);
-			Poke();
+			OnFocus();
 	}
 }

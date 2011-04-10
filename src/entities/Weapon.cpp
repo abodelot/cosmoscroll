@@ -14,7 +14,7 @@ Weapon::Weapon()
 {
 	fire_timer_ = 0.f;
 	fire_rate_ = 0;
-	triple_ = false;
+	multiply_ = 1;
 	owner_ = NULL;
 	image_ = NULL;
 	heat_cost_ = 0;
@@ -89,28 +89,38 @@ float Weapon::Shoot(sf::Vector2f offset, float angle)
 		offset.x += x_;
 		offset.y += y_;
 
-		ThrowHit(offset, angle);
-
-		if (triple_)
+		switch (multiply_)
 		{
-			ThrowHit(offset, angle - ANGLE_VARIATION);
-			ThrowHit(offset, angle + ANGLE_VARIATION);
+			case 1:
+				ThrowHit(offset, angle);
+				break;
+			case 2:
+				offset.y -= 5;
+				ThrowHit(offset, angle);
+				offset.y += 10;
+				ThrowHit(offset, angle);
+				break;
+			case 3:
+				ThrowHit(offset, angle);
+				ThrowHit(offset, angle - ANGLE_VARIATION);
+				ThrowHit(offset, angle + ANGLE_VARIATION);
+				break;
 		}
-		fire_timer_ = fire_rate_;
 
 		if (sound_name_ != NULL)
 		{
 			sound_sys.PlaySound(sound_name_);
 		}
+		fire_timer_ = fire_rate_;
 		return heat_cost_;
 	}
 	return 0.f;
 }
 
 
-void Weapon::SetTriple(bool triple)
+void Weapon::SetMultiply(int n)
 {
-	triple_ = triple;
+	multiply_ = n;
 }
 
 

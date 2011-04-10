@@ -28,12 +28,12 @@ Menu::Menu()
 	theme_.ckbox_bg_color_focus = sf::Color(239, 228, 176);
 	theme_.ckbox_size = 20; // todo
 
-	theme_.slider_handle_color = sf::Color::Blue;
+	theme_.slider_handle_color = sf::Color(0x37, 0x73, 0xB3);
 	theme_.slider_handle_color_focus = sf::Color(0, 128, 255);
 	theme_.slider_bg_color = sf::Color::White;
 	theme_.slider_bg_color_focus = sf::Color(239, 228, 176);
 
-	theme_.optlist_arrow_color = sf::Color::Blue;
+	theme_.optlist_arrow_color = sf::Color(0x37, 0x73, 0xB3);
 	theme_.optlist_arrow_color_focus = sf::Color(0, 128, 255);
 	theme_.optlist_bg_color = sf::Color::White;
 	theme_.optlist_bg_color_focus = sf::Color(239, 228, 176);
