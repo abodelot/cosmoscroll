@@ -27,6 +27,10 @@ OptionList::OptionList(Menu* owner, int x, int y) :
 	left_arrow_.AddPoint(text_size_, text_size_);
 	left_arrow_.SetCenter(text_size_ / 2, text_size_ / 2);
 	left_arrow_.SetPosition(BOX_PADDING + text_size_ / 2, BOX_PADDING + text_size_ / 2);
+	left_arrow_.SetOutlineWidth(1);
+	left_arrow_.SetPointOutlineColor(0, owner->GetWidgetStyle().global_border_color);
+	left_arrow_.SetPointOutlineColor(1, owner->GetWidgetStyle().global_border_color);
+	left_arrow_.SetPointOutlineColor(2, owner->GetWidgetStyle().global_border_color);
 
 	// right arrow
 	right_arrow_.AddPoint(0, 0);
@@ -34,6 +38,10 @@ OptionList::OptionList(Menu* owner, int x, int y) :
 	right_arrow_.AddPoint(0, text_size_);
 	right_arrow_.SetCenter(text_size_ / 2, text_size_ / 2);
 	right_arrow_.SetY(BOX_PADDING + text_size_ / 2);
+	right_arrow_.SetOutlineWidth(1);
+	right_arrow_.SetPointOutlineColor(0, owner->GetWidgetStyle().global_border_color);
+	right_arrow_.SetPointOutlineColor(1, owner->GetWidgetStyle().global_border_color);
+	right_arrow_.SetPointOutlineColor(2, owner->GetWidgetStyle().global_border_color);
 
 	// SetRect sera exécuté quand on ajoutera une option, la largeur et la largeur
 	// du widget seront alors connus. On mémorie juste la position en attendant.

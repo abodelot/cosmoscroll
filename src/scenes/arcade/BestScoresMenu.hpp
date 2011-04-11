@@ -1,7 +1,7 @@
 #ifndef BESTSCORESMENU_HPP
 #define BESTSCORESMENU_HPP
 
-#include "BaseMenu.hpp"
+#include "scenes/BaseMenu.hpp"
 
 class BestScoresMenu: public BaseMenu
 {

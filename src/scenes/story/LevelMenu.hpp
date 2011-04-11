@@ -1,7 +1,7 @@
 #ifndef LEVELMENU_HPP
 #define LEVELMENU_HPP
 
-#include "BaseMenu.hpp"
+#include "scenes/BaseMenu.hpp"
 #include <vector>
 
 class LevelManager;

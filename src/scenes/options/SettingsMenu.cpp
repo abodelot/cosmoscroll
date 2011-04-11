@@ -1,6 +1,6 @@
 #include "SettingsMenu.hpp"
-#include "../core/Game.hpp"
-#include "../utils/I18n.hpp"
+#include "core/Game.hpp"
+#include "utils/I18n.hpp"
 
 
 SettingsMenu::SettingsMenu()

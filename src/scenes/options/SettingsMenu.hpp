@@ -1,7 +1,7 @@
 #ifndef SETTINGSMENU_HPP
 #define SETTINGSMENU_HPP
 
-#include "BaseMenu.hpp"
+#include "scenes/BaseMenu.hpp"
 
 class SettingsMenu: public BaseMenu
 {

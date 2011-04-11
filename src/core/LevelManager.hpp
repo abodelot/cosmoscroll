@@ -86,6 +86,9 @@ public:
 
 	int GetStarsCount() const;
 
+	/**
+	 * Durée du niveau en secondes
+	 */
 	int GetDuration() const;
 
 	/**

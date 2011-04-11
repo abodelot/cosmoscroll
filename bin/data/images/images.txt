@@ -20,6 +20,8 @@ gui/icon.bmp
 gui/libs-logo.png
 gui/main-screen.png
 gui/score-board.png
+gui/level-bar.png
+gui/level-cursor.png
 entities/capsule.png
 entities/scoot.png
 entities/interceptor.png

@@ -1,7 +1,7 @@
 #include "AudioMenu.hpp"
-#include "../core/Game.hpp"
-#include "../core/SoundSystem.hpp"
-#include "../utils/I18n.hpp"
+#include "core/Game.hpp"
+#include "core/SoundSystem.hpp"
+#include "utils/I18n.hpp"
 
 
 AudioMenu::AudioMenu()

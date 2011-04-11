@@ -15,8 +15,8 @@ Widget::Widget(Menu* owner, bool focusable)
 
 void Widget::SetState(State::EState state)
 {
-	state_ = state;
 	OnStateChanged(state);
+	state_ = state;
 }
 
 
@@ -80,6 +80,7 @@ Menu* Widget::GetOwner() const
 
 void Widget::CallTheCallback()
 {
+	OnCallbackTriggered();
 	if (callback_id_ != -1)
 	{
 		owner_->EventCallback(callback_id_);

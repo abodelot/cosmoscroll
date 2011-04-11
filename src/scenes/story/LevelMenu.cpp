@@ -1,10 +1,10 @@
 #include "LevelMenu.hpp"
-#include "../core/Game.hpp"
-#include "../core/LevelManager.hpp"
-#include "../core/ControlPanel.hpp"
-#include "../entities/EntityManager.hpp"
-#include "../utils/StringUtils.hpp"
-#include "../utils/I18n.hpp"
+#include "core/Game.hpp"
+#include "core/LevelManager.hpp"
+#include "core/ControlPanel.hpp"
+#include "entities/EntityManager.hpp"
+#include "utils/StringUtils.hpp"
+#include "utils/I18n.hpp"
 
 
 LevelMenu::LevelMenu():

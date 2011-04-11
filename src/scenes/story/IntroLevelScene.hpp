@@ -1,7 +1,7 @@
 #ifndef INTROLEVELSCENE_HPP
 #define INTROLEVELSCENE_HPP
 
-#include "BaseScene.hpp"
+#include "scenes/BaseScene.hpp"
 
 /**
  * Scène d'introduction avant le début d'un niveau

@@ -39,7 +39,7 @@
 			<ship id="2" y="400"/>
 		</def>
 	</functions>
-	<levels>	
+	<levels>
 		<level desc="This is the first level." stars="30">
 			<!-- level 1 -->
 			<loop count="2">
@@ -152,7 +152,7 @@
 				<ship id="1" y="100"/>
 				<ship id="1" y="130"/>
 				<ship id="1" y="160"/>
-			</loop>					
+			</loop>
 			<ship id="3" y="340" t="5.2"/>
 			<ship id="3" y="140" t="1.2"/>
 			<ship id="3" y="300" t="1.2"/>
@@ -184,7 +184,7 @@
 			<loop count="6">
 				<ship id="2" y="270" t="2"/>
 			</loop>
-		</level>	
+		</level>
 		<level desc="Where did I put those keys again?" bg_top="#003060" bg_bottom="#001000" stars="35">
 			<!-- level 4 -->
 			<wait t="4"/>
@@ -203,12 +203,12 @@
 				<ship id="5" y="300" t="0.5"/>
 			</loop>
 			<loop count="2">
+				<wait t="4"/>
 				<ship id="3" y="250"/>
 				<ship id="3" y="315" t="1.0"/>
 				<ship id="3" y="185"/>
 				<ship id="3" y="380" t="1.0"/>
 				<ship id="3" y="120"/>
-				<wait t="1"/>
 			</loop>
 			<asteroid y="150" t="4"/>
 			<asteroid y="220" t="0.5"/>
@@ -223,7 +223,7 @@
 			<ship id="2" y="290" t="0.8"/>
 			<ship id="5" y="150"/>
 			<ship id="2" y="260" t="0.8"/>
-			<ship id="2" y="230" t="0.8"/> 
+			<ship id="2" y="230" t="0.8"/>
 			<ship id="5" y="100"/>
 			<ship id="2" y="200" t="0.8"/>
 			<ship id="2" y="230" t="0.8"/>
@@ -237,7 +237,7 @@
 			<ship id="2" y="200" t="0.8"/>
 			<ship id="3" y="300" t="1.0"/>
 			<loop count="3">
-				<wait t="3"/>
+				<wait t="4"/>
 				<ship id="3" y="200"/>
 				<ship id="3" y="280" t="1.0"/>
 				<ship id="3" y="120"/>
@@ -249,6 +249,11 @@
 		bg_bottom="#000000" bg_top="#106020" stars="35">
 			<!-- level 5 -->
 			<wait t="2"/>
+			<loop count="8">
+				<ship id="2" y="100" t="0.5" />
+				<ship id="2" y="300" t="0.5" />
+			</loop>
+
 			<loop count="3">
 				<ship id="4" y="70" t="1"/>
 				<ship id="4" y="150" t="1"/>
@@ -257,6 +262,8 @@
 				<ship id="4" y="230" t="1"/>
 				<ship id="4" y="150" t="1"/>
 			</loop>
+
+
 			<loop count="2">
 				<ship id="3" y="300" t="1"/>
 				<asteroid y="100" t="1"/>
@@ -273,7 +280,7 @@
 			<loop count="3">
 				<ship id="4" y="100" t="1"/>
 				<ship id="4" y="130" t="1"/>
-				<ship id="4" y="160" t="1"/>		
+				<ship id="4" y="160" t="1"/>
 			</loop>
 			<loop count="4">
 				<ship id="3" y="390" t="0.5"/>
@@ -282,9 +289,9 @@
 			<loop count="3">
 				<ship id="4" y="70" t="1"/>
 				<ship id="4" y="100" t="1"/>
-				<ship id="4" y="130" t="1"/>		
+				<ship id="4" y="130" t="1"/>
 			</loop>
-		</level>	
+		</level>
 		<level desc="So I heard you like mudkips..." stars="40">
 			<!-- level 6 -->
 			<asteroid y="100" t="2.0"/>
@@ -315,7 +322,7 @@
 				<ship id="3" y="120"/>
 			</loop>
 		</level>
-		<level desc="FFFFFFFUUUUUUUUUUUUUUUUUUUUUUU" bg_top="#000000" bg_bottom="#771100" stars="70">
+		<level desc="Take me to your leader." bg_top="#000000" bg_bottom="#771100" stars="70">
 			<!-- final level! -->
 			<ship id="1" y="300" t="2"/>
 			<wait t="1"/>
@@ -346,4 +353,3 @@
 		</level>
 	</levels>
 </levelset>
-

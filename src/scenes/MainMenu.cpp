@@ -3,7 +3,6 @@
 #include "../core/SoundSystem.hpp"
 #include "../utils/MediaManager.hpp"
 #include "../utils/I18n.hpp"
-#include "../entities/EntityManager.hpp"
 
 
 MainMenu::MainMenu()
@@ -16,12 +15,6 @@ MainMenu::MainMenu()
 	(new CosmoButton(this, I18n::t("menu.main.options"), 210, 220))->SetCallbackID(3);
 	(new CosmoButton(this, I18n::t("menu.main.about"),   210, 270))->SetCallbackID(4);
 	(new CosmoButton(this, I18n::t("menu.main.quit"),    210, 320))->SetCallbackID(5);
-
-	/*AddOption(I18n::t("menu.main.story"),   1);
-	AddOption(I18n::t("menu.main.arcade"),  2);
-	AddOption(I18n::t("menu.main.options"), 3);
-	AddOption(I18n::t("menu.main.about"),   4);
-	AddOption(I18n::t("menu.main.quit"),    5);*/
 
 	// init background music at first launch of main menu
 	SoundSystem& sound = SoundSystem::GetInstance();
@@ -45,8 +38,7 @@ void MainMenu::EventCallback(int id)
 			game.SetNextScene(Game::SC_LevelMenu);
 			break;
 		case 2:
-			game.SetNextScene(Game::SC_InGameScene);
-			EntityManager::GetInstance().InitMode(EntityManager::MODE_ARCADE);
+			game.SetNextScene(Game::SC_ArcadeMenu);
 			break;
 		case 3:
 			game.SetNextScene(Game::SC_OptionMenu);

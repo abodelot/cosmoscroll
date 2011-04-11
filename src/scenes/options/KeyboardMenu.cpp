@@ -1,30 +1,30 @@
 #include "KeyboardMenu.hpp"
-#include "../core/Game.hpp"
-#include "../utils/I18n.hpp"
-#include "../utils/StringUtils.hpp"
+#include "core/Game.hpp"
+#include "utils/I18n.hpp"
+#include "utils/StringUtils.hpp"
 
 
 KeyboardMenu::KeyboardMenu()
 {
 	SetTitle(I18n::t("menu.keyboard.title"));
 
-	but_up_ =      new gui::Button(this, GetKeyLabel(Input::MOVE_UP), 210, 100);
+	but_up_ =      new gui::Button(this, GetKeyLabel(Input::MOVE_UP), 150, 100);
 	but_up_->SetCallbackID(Input::MOVE_UP);
-	but_down_ =    new gui::Button(this, GetKeyLabel(Input::MOVE_DOWN), 210, 130);
+	but_down_ =    new gui::Button(this, GetKeyLabel(Input::MOVE_DOWN), 150, 130);
 	but_down_->SetCallbackID(Input::MOVE_DOWN);
-	but_left_ =    new gui::Button(this, GetKeyLabel(Input::MOVE_LEFT), 210, 160);
+	but_left_ =    new gui::Button(this, GetKeyLabel(Input::MOVE_LEFT), 150, 160);
 	but_left_->SetCallbackID(Input::MOVE_LEFT);
-	but_right_ =   new gui::Button(this, GetKeyLabel(Input::MOVE_RIGHT), 210, 190);
+	but_right_ =   new gui::Button(this, GetKeyLabel(Input::MOVE_RIGHT), 150, 190);
 	but_right_->SetCallbackID(Input::MOVE_RIGHT);
-	but_weapon1_ = new gui::Button(this, GetKeyLabel(Input::USE_WEAPON_1), 210, 220);
+	but_weapon1_ = new gui::Button(this, GetKeyLabel(Input::USE_WEAPON_1), 150, 220);
 	but_weapon1_->SetCallbackID(Input::USE_WEAPON_1);
-	but_weapon2_ = new gui::Button(this, GetKeyLabel(Input::USE_WEAPON_2), 210, 250);
+	but_weapon2_ = new gui::Button(this, GetKeyLabel(Input::USE_WEAPON_2), 150, 250);
 	but_weapon2_->SetCallbackID(Input::USE_WEAPON_2);
-	but_cooler_ =  new gui::Button(this, GetKeyLabel(Input::USE_COOLER), 210, 280);
+	but_cooler_ =  new gui::Button(this, GetKeyLabel(Input::USE_COOLER), 150, 280);
 	but_cooler_->SetCallbackID(Input::USE_COOLER);
-	but_missile_ = new gui::Button(this, GetKeyLabel(Input::USE_MISSILE), 210, 310);
+	but_missile_ = new gui::Button(this, GetKeyLabel(Input::USE_MISSILE), 150, 310);
 	but_missile_->SetCallbackID(Input::USE_MISSILE);
-	but_pause_ =   new gui::Button(this, GetKeyLabel(Input::PAUSE), 210, 340);
+	but_pause_ =   new gui::Button(this, GetKeyLabel(Input::PAUSE), 150, 340);
 	but_pause_->SetCallbackID(Input::PAUSE);
 
 	(new CosmoButton(this, I18n::t("menu.back"), 210, 410))->SetCallbackID(9000);

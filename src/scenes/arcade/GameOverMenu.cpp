@@ -1,12 +1,12 @@
 #include <SFML/Network.hpp>
 
 #include "GameOverMenu.hpp"
-#include "../core/Game.hpp"
-#include "../entities/EntityManager.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/StringUtils.hpp"
-#include "../utils/I18n.hpp"
-#include "../md5/md5.hpp"
+#include "core/Game.hpp"
+#include "entities/EntityManager.hpp"
+#include "utils/MediaManager.hpp"
+#include "utils/StringUtils.hpp"
+#include "utils/I18n.hpp"
+#include "md5/md5.hpp"
 
 #define COSMO_KEY "not published"
 
@@ -54,6 +54,7 @@ void GameOverMenu::OnFocus()
 
 	but_send_score_->SetState(gui::State::DEFAULT);
 	FocusWidget(but_send_score_);
+	lab_pseudo_->SetState(gui::State::HIDDEN);
 	txt_pseudo_->SetState(gui::State::HIDDEN);
 }
 

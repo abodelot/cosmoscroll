@@ -50,6 +50,12 @@ void CosmoButton::OnStateChanged(gui::State::EState state)
 }
 
 
+void CosmoButton::OnCallbackTriggered()
+{
+	SoundSystem::GetInstance().PlaySound("menu-valid");
+}
+
+
 void CosmoButton::Render(sf::RenderTarget& target) const
 {
 	target.Draw(background_);

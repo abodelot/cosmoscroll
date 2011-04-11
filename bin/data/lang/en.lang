@@ -22,13 +22,21 @@ menu.pause.title = Paused
 menu.pause.resume = Resume game
 menu.pause.quit = Exit game
 
+# Arcade menu
+menu.arcade.title = Arcade Mode
+menu.arcade.play = Play
+menu.arcade.best_scores = View best scores
+
+# Best scores menu
+menu.best_scores.title = Best scores
+
 # Game over menu
 menu.gameover.title = Game Over
 menu.gameover.send_score = Send my score
 menu.gameover.pseudo = Your name:
 menu.gameover.play_again = Play again
-menu.gameover.record = New record !\n    You've lasted %d min %d sec !
-menu.gameover.no_record = You've lasted only\n%02d min %02d sec ...
+menu.gameover.record = New record !\n    You've survived %d" %02d'!
+menu.gameover.no_record = You've survived only\n%d" %02d' ...
 
 # Options menu
 menu.options.title = Options
@@ -100,6 +108,6 @@ action.cooler = Use Cooler bonus
 action.missile = Use Missile bonus
 
 # Ask input
-input.press_key = Press a key to bind\naction
-input.press_button = Press a joystick button to bind\naction
+input.press_key = Press a key to define\nthis action
+input.press_button = Press a joystick button to define\nthis action
 input.cancel = (press Escape to cancel)

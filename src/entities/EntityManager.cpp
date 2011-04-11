@@ -92,6 +92,8 @@ void EntityManager::InitMode(Mode mode)
 			break;
 	}
 	mode_ = mode;
+	ControlPanel::GetInstance().Init(mode);
+	ControlPanel::GetInstance().SetLevelDuration(levels_.GetDuration());
 	// initialisation avant une nouvelle partie
 	game_over_ = false;
 	timer_ = 0.f;

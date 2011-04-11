@@ -12,11 +12,13 @@ public:
 	CosmoButton(gui::Menu* owner, const sf::Unicode::Text& text, int x, int y);
 
 protected:
-	// inherited
+	// override
 	void OnStateChanged(gui::State::EState state);
+	// override
+	void OnCallbackTriggered();
 
 private:
-	// inherited
+	// override
 	void Render(sf::RenderTarget& target) const;
 
 	static const sf::Image* img_;

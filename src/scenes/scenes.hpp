@@ -1,23 +1,23 @@
 #ifndef SCENES_HPP
 #define SCENES_HPP
 
-// toutes les scènes affichables du jeu
-#include "../scenes/IntroScene.hpp"
-#include "../scenes/IntroLevelScene.hpp"
-#include "../scenes/InGameScene.hpp"
-#include "../scenes/EndGameScene.hpp"
+// toutes les scènes et tous les menus du jeu
+#include "scenes/IntroScene.hpp"
+#include "scenes/InGameScene.hpp"
+#include "scenes/EndGameScene.hpp"
 
-// tous les menus
-#include "../scenes/MainMenu.hpp"
-#include "../scenes/GameOverMenu.hpp"
-#include "../scenes/BestScoresMenu.hpp"
-#include "../scenes/PauseMenu.hpp"
-#include "../scenes/LevelMenu.hpp"
-#include "../scenes/OptionMenu.hpp"
-#include "../scenes/KeyboardMenu.hpp"
-#include "../scenes/JoystickMenu.hpp"
-#include "../scenes/AudioMenu.hpp"
-#include "../scenes/SettingsMenu.hpp"
-#include "../scenes/AboutMenu.hpp"
+#include "scenes/PauseMenu.hpp"
+#include "scenes/MainMenu.hpp"
+#include "scenes/AboutMenu.hpp"
+#include "scenes/arcade/ArcadeMenu.hpp"
+#include "scenes/arcade/GameOverMenu.hpp"
+#include "scenes/arcade/BestScoresMenu.hpp"
+#include "scenes/story/LevelMenu.hpp"
+#include "scenes/story/IntroLevelScene.hpp"
+#include "scenes/options/OptionMenu.hpp"
+#include "scenes/options/KeyboardMenu.hpp"
+#include "scenes/options/JoystickMenu.hpp"
+#include "scenes/options/AudioMenu.hpp"
+#include "scenes/options/SettingsMenu.hpp"
 
 #endif // SCENES_HPP

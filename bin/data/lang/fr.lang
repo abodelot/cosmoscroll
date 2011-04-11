@@ -22,13 +22,21 @@ menu.pause.title = Pause
 menu.pause.resume = Reprendre la partie
 menu.pause.quit = Quitter le jeu
 
+# Arcade menu
+menu.arcade.title = Mode Arcade
+menu.arcade.play = Jouer
+menu.arcade.best_scores = Voir les meilleurs temps
+
+# Best scores menu
+menu.best_scores.title = Meilleurs temps
+
 # Menu game over
 menu.gameover.title = Game Over
 menu.gameover.pseudo = Votre nom :
 menu.gameover.send_score = Envoyer mon score
 menu.gameover.play_again = Rejouer
-menu.gameover.record = Nouveau record !\n    Vous avez tenu %d min %d sec !
-menu.gameover.no_record = Vous avez tenu seulement\n%02d min et %02d sec ...
+menu.gameover.record = Nouveau record !\n    Vous avez survécu %d" %02d' !
+menu.gameover.no_record = Vous avez survécu seulement\n%2d" %02d' ...
 
 # Menu options
 menu.options.title = Options
@@ -100,6 +108,6 @@ action.cooler = Utiliser bonus Glaçon
 action.missile = Utiliser bonus Missile
 
 # Ask input
-input.press_key = Appuyez sur une touche du clavier\npour l'action
-input.press_button = Appuyez sur un bouton du contrôleur\npour l'action
+input.press_key = Appuyez sur une touche du clavier\npour définir cette action
+input.press_button = Appuyez sur un bouton du contrôleur\npour définir cette action
 input.cancel = (Échap pour annuler)

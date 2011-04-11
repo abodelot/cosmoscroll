@@ -1,9 +1,9 @@
 #include "IntroLevelScene.hpp"
-#include "../core/Game.hpp"
-#include "../core/LevelManager.hpp"
-#include "../utils/StringUtils.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/I18n.hpp"
+#include "core/Game.hpp"
+#include "core/LevelManager.hpp"
+#include "utils/StringUtils.hpp"
+#include "utils/MediaManager.hpp"
+#include "utils/I18n.hpp"
 
 
 IntroLevelScene::IntroLevelScene()

@@ -2,6 +2,7 @@
 #define CONTROLPANEL_HPP
 
 #include <SFML/Graphics.hpp>
+#include "../entities/EntityManager.hpp"
 
 
 /**
@@ -14,6 +15,8 @@ public:
 	enum { HEIGHT = 56 };
 
 	static ControlPanel& GetInstance();
+
+	void Init(EntityManager::Mode mode);
 
 	/**
 	 * @param text: texte d'information
@@ -57,6 +60,9 @@ public:
 	/// @return true si le panel est en haut de l'écran
 	bool IsOnTop() const;
 
+	// *-----
+	void SetLevelDuration(int seconds);
+
 private:
 	ControlPanel();
 	ControlPanel(const ControlPanel& other);
@@ -70,17 +76,20 @@ private:
 	};
 	struct ProgressBar
 	{
-
-
 		sf::String label;
 		sf::Shape background;
 		sf::Sprite bar;
 		int max_value;
 
 		ProgressBar();
+
+		void Init(const sf::Unicode::Text& text, const sf::Font& font, const sf::Image& img);
+
 		// redimensionne la barre
 		void SetPercent(int value);
-		void Init(const sf::Font& font, float x, float y);
+
+		void SetPosition(int x, int y);
+
 	};
 
 	struct BonusCount
@@ -99,6 +108,12 @@ private:
 	sf::String info_;
 	sf::String game_info_;
 	sf::Sprite panel_;
+
+	EntityManager::Mode game_mode_;
+	// -----------
+	int level_duration_;
+	sf::Sprite level_cursor_;
+	sf::Sprite level_bar_;
 };
 
 #endif // CONTROLPANEL_HPP

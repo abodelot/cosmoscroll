@@ -1,7 +1,7 @@
 #ifndef OPTIONMENU_HPP
 #define OPTIONMENU_HPP
 
-#include "BaseMenu.hpp"
+#include "scenes/BaseMenu.hpp"
 
 class OptionMenu: public BaseMenu
 {

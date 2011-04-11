@@ -1,15 +1,15 @@
 #include <SFML/Network.hpp>
 
 #include "BestScoresMenu.hpp"
-#include "../core/Game.hpp"
-#include "../utils/I18n.hpp"
-#include "../utils/MediaManager.hpp"
+#include "core/Game.hpp"
+#include "utils/I18n.hpp"
+#include "utils/MediaManager.hpp"
 
 
 BestScoresMenu::BestScoresMenu()
 {
-	SetTitle("Meilleurs scores");
-	gui::Button* b = new CosmoButton(this, I18n::t("menu.back_main_menu"), 210, 420);
+	SetTitle(I18n::t("menu.best_scores.title"));
+	gui::Button* b = new CosmoButton(this, I18n::t("menu.back"), 210, 420);
 	b->SetCallbackID(1);
 
 	LoadBitmapFont("data/images/gui/mono12-white.png", 10, 10);
@@ -23,7 +23,7 @@ void BestScoresMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 1:
-			Game::GetInstance().SetNextScene(Game::SC_MainMenu);
+			Game::GetInstance().SetNextScene(Game::SC_ArcadeMenu);
 			break;
 	}
 }

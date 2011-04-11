@@ -245,6 +245,7 @@ void Game::SetNextScene(Scene enum_scene)
 			CASE_SCENE(MainMenu, new_scene);
 			CASE_SCENE(InGameScene, new_scene);
 			CASE_SCENE(EndGameScene, new_scene);
+			CASE_SCENE(ArcadeMenu, new_scene);
 			CASE_SCENE(GameOverMenu, new_scene);
 			CASE_SCENE(BestScoresMenu, new_scene);
 			CASE_SCENE(PauseMenu, new_scene);

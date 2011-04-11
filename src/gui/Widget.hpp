@@ -135,8 +135,12 @@ protected:
 	 * Callback état modifié
 	 * @param state: nouvel état du widget
 	 */
-	virtual void OnStateChanged(State::EState state) {};
+	virtual void OnStateChanged(State::EState state) {}
 
+	/**
+	 * Callback si callback déclenchée
+	 */
+	virtual void OnCallbackTriggered() {}
 
 private:
 	Menu* owner_;

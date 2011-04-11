@@ -1,8 +1,8 @@
 #include "AboutMenu.hpp"
-#include "../core/Game.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/StringUtils.hpp"
-#include "../utils/I18n.hpp"
+#include "core/Game.hpp"
+#include "utils/MediaManager.hpp"
+#include "utils/StringUtils.hpp"
+#include "utils/I18n.hpp"
 
 #define COSMOSCROLL_VERSION L"0.3-devel"
 #define COSMOSCROLL_LICENCE L"GPL"

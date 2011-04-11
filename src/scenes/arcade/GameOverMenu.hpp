@@ -1,7 +1,7 @@
 #ifndef GAMEOVERMENU_HPP
 #define GAMEOVERMENU_HPP
 
-#include "BaseMenu.hpp"
+#include "scenes/BaseMenu.hpp"
 
 class GameOverMenu: public BaseMenu
 {

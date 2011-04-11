@@ -9,13 +9,10 @@ class BaseScene;
 class EntityManager;
 class LevelManager;
 
-#ifdef DEBUG
-	#define COSMO_HOSTNAME "http://127.0.0.1"
-	#define COSMO_URI      "projects/pp_v3/cosmoscroll.php"
-#else
-	#define COSMO_HOSTNAME "http://perkypenguin.free.fr"
-	#define COSMO_URI      "cosmoscroll.php"
-#endif
+
+#define COSMO_HOSTNAME "http://perkypenguin.free.fr"
+#define COSMO_URI      "cosmoscroll.php"
+
 
 /**
  * Gestion du déroulement du jeu
@@ -34,6 +31,7 @@ public:
 		SC_IntroScene,
 		SC_InGameScene,
 		SC_EndGameScene,
+		SC_ArcadeMenu,
 		SC_GameOverMenu,
 		SC_BestScoresMenu,
 		SC_PauseMenu,

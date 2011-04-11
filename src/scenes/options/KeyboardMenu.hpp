@@ -1,8 +1,8 @@
 #ifndef KEYBOARDMENU_HPP
 #define KEYBOARDMENU_HPP
 
-#include "BaseMenu.hpp"
-#include "../core/Input.hpp"
+#include "scenes/BaseMenu.hpp"
+#include "core/Input.hpp"
 
 /**
  * Menu de configuration du clavier
