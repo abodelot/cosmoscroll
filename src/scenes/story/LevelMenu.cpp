@@ -12,10 +12,10 @@ LevelMenu::LevelMenu():
 {
 	SetTitle(I18n::t("menu.story.title"));
 
-	new gui::Label(this, I18n::t("menu.story.choice"), 100, 170);
-	opt_levels_ = new gui::OptionList(this, 380, 170);
+	new gui::Label(this, I18n::t("menu.story.select"), 90, 120);
+	opt_levels_ = new gui::OptionList(this, 300, 120);
 
-	lab_progresion_ = new gui::Label(this, "Progression", 100, 200);
+	lab_progresion_ = new gui::Label(this, "", 90, 150);
 
 	CosmoButton* but = NULL;
 	but = new CosmoButton(this, I18n::t("menu.story.play"), 210, 240);
@@ -32,7 +32,7 @@ void LevelMenu::OnFocus()
 	int current = levels_.GetCurrent();
 	int last_unlocked = levels_.GetLastUnlocked();
 
-	lab_progresion_->SetText(str_sprintf("Progression : %d / %d", last_unlocked, last));
+	lab_progresion_->SetText(str_sprintf(I18n::t("menu.story.progression").c_str(), last_unlocked, last));
 	opt_levels_->Clear();
 	for (int i = 1; i <= last; ++i)
 	{

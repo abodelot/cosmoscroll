@@ -9,18 +9,18 @@ JoystickMenu::JoystickMenu()
 {
 	SetTitle(I18n::t("menu.joystick.title"));
 
-	but_weapon1_ = new gui::Button(this, GetButtonLabel(Input::USE_WEAPON_1), 150, 120);
+	but_weapon1_ = new gui::Button(this, GetButtonLabel(Input::USE_WEAPON_1), 125, 120);
 	but_weapon1_->SetCallbackID(Input::USE_WEAPON_1);
-	but_weapon2_ = new gui::Button(this, GetButtonLabel(Input::USE_WEAPON_2), 150, 160);
+	but_weapon2_ = new gui::Button(this, GetButtonLabel(Input::USE_WEAPON_2), 125, 160);
 	but_weapon2_->SetCallbackID(Input::USE_WEAPON_2);
-	but_missile_ = new gui::Button(this, GetButtonLabel(Input::USE_MISSILE), 150, 200);
+	but_missile_ = new gui::Button(this, GetButtonLabel(Input::USE_MISSILE), 125, 200);
 	but_missile_->SetCallbackID(Input::USE_MISSILE);
-	but_cooler_ =  new gui::Button(this, GetButtonLabel(Input::USE_COOLER), 150, 240);
+	but_cooler_ =  new gui::Button(this, GetButtonLabel(Input::USE_COOLER), 125, 240);
 	but_cooler_->SetCallbackID(Input::USE_COOLER);
-	but_pause_ =   new gui::Button(this, GetButtonLabel(Input::PAUSE), 150, 280);
+	but_pause_ =   new gui::Button(this, GetButtonLabel(Input::PAUSE), 125, 280);
 	but_pause_->SetCallbackID(Input::PAUSE);
 
-	new gui::Label(this, I18n::t("menu.joystick.sensitivity"), 120, 340);
+	new gui::Label(this, I18n::t("menu.joystick.sensitivity"), 125, 340);
 	sl_joystick_ = new gui::Slider(this, 340, 340, 160);
 	sl_joystick_->SetCallbackID(9000);
 

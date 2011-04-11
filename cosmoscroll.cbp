@@ -35,6 +35,7 @@
 			<Add option="-pedantic" />
 			<Add option="-Wall" />
 			<Add option="-ansi" />
+			<Add directory="src/" />
 		</Compiler>
 		<Linker>
 			<Add library="sfml-graphics" />
@@ -44,6 +45,7 @@
 			<Add library="sfml-network" />
 			<Add library="dumb" />
 		</Linker>
+		<Unit filename="bin/data/levels/levels.xml" />
 		<Unit filename="src/core/ControlPanel.cpp" />
 		<Unit filename="src/core/ControlPanel.hpp" />
 		<Unit filename="src/core/Game.cpp" />
@@ -120,12 +122,8 @@
 		<Unit filename="src/scenes/EndGameScene.hpp" />
 		<Unit filename="src/scenes/InGameScene.cpp" />
 		<Unit filename="src/scenes/InGameScene.hpp" />
-		<Unit filename="src/scenes/IntroLevelScene.cpp" />
-		<Unit filename="src/scenes/IntroLevelScene.hpp" />
 		<Unit filename="src/scenes/IntroScene.cpp" />
 		<Unit filename="src/scenes/IntroScene.hpp" />
-		<Unit filename="src/scenes/LevelMenu.cpp" />
-		<Unit filename="src/scenes/LevelMenu.hpp" />
 		<Unit filename="src/scenes/MainMenu.cpp" />
 		<Unit filename="src/scenes/MainMenu.hpp" />
 		<Unit filename="src/scenes/PauseMenu.cpp" />
@@ -147,6 +145,10 @@
 		<Unit filename="src/scenes/options/SettingsMenu.cpp" />
 		<Unit filename="src/scenes/options/SettingsMenu.hpp" />
 		<Unit filename="src/scenes/scenes.hpp" />
+		<Unit filename="src/scenes/story/IntroLevelScene.cpp" />
+		<Unit filename="src/scenes/story/IntroLevelScene.hpp" />
+		<Unit filename="src/scenes/story/LevelMenu.cpp" />
+		<Unit filename="src/scenes/story/LevelMenu.hpp" />
 		<Unit filename="src/tinyxml/tinyxml.cpp" />
 		<Unit filename="src/tinyxml/tinyxml.h" />
 		<Unit filename="src/tinyxml/tinyxmlerror.cpp" />

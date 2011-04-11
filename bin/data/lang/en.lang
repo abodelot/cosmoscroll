@@ -12,7 +12,8 @@ menu.main.quit = Quit
 
 # Level menu
 menu.story.title = Story mode
-menu.story.choice = Level choice
+menu.story.select = Select a level
+menu.story.progression = Progression: %d/%d
 menu.story.level = Level %d
 menu.story.intro = Level %d\n\nEnemies: %d
 menu.story.play = Play
