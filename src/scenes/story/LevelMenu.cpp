@@ -13,7 +13,7 @@ LevelMenu::LevelMenu():
 	SetTitle(I18n::t("menu.story.title"));
 
 	new gui::Label(this, I18n::t("menu.story.select"), 90, 120);
-	opt_levels_ = new gui::OptionList(this, 300, 120);
+	opt_levels_ = new gui::OptionList(this, 315, 120);
 
 	lab_progresion_ = new gui::Label(this, "", 90, 150);
 
@@ -39,7 +39,7 @@ void LevelMenu::OnFocus()
 		bool activable = i <= last_unlocked;
 		if (activable)
 		{
-			opt_levels_->AddOption(str_sprintf(I18n::t("menu.story.level").c_str(), i));
+			opt_levels_->AddOption(str_sprintf(" %d ", i));
 		}
 	}
 	opt_levels_->Select(current - 1);

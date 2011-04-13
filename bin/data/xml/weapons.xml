@@ -1,10 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <weapons>
-	<weapon id="2" name="Hellfire"    image="ammo/hellfire"    heat_cost="1.7" fire_rate="16"  damage="1"  speed="480" sound="blaster-shot-2" />
-	<weapon id="1" name="Blue Laser"  image="ammo/laser-blue"  heat_cost="3"   fire_rate="8"   damage="2"  speed="380" sound="blaster-shot-1" />
-	<weapon id="0" name="Green Laser" image="ammo/laser-green" heat_cost="5"   fire_rate="2.8"   damage="1"  speed="380" />
-	<weapon id="4" name="Pink Laser"  image="ammo/laser-pink"  heat_cost="5"   fire_rate="1"   damage="2"  speed="440" />
-	<weapin id="6" name="Red Laser"   image="ammo/laser-red"   heat_cost="0"   fire_rate="2"   damage="2"  speed="400" />
-	<weapon id="3" name="Devil Eyes"  image="ammo/devil-eyes"  heat_cost="1"   fire_rate="0.7" damage="6"  speed="430" />
-	<weapon id="5" name="Missile"     image="ammo/missile"     heat_cost="0"   fire_rate="0.4" damage="15" speed="300" sound="missile-gasfire" />
+	<weapon id="2"
+	        name="Canon"
+	        image="ammo/hellfire"
+	        heat_cost="1.7"
+	        fire_rate="16"
+	        damage="1"
+	        speed="480"
+	        sound="canon" />
+	<weapon id="1"
+	        name="Blue Laser"
+	        image="ammo/laser-blue"
+	        heat_cost="2.8"
+	        fire_rate="8"
+	        damage="2"
+	        speed="380"
+	        sound="laser-blue" />
+	<weapon id="0"
+	        name="Green Laser"
+	        image="ammo/laser-green"
+	        heat_cost="5"
+	        fire_rate="2.8"
+	        damage="1"
+	        speed="380"
+	        sound="laser-green" />
+	<weapon id="4"
+	        name="Pink Laser"
+	        image="ammo/laser-pink"
+	        heat_cost="5"
+	        fire_rate="1"
+	        damage="2"
+	        speed="440"
+	        sound="laser-pink" />
+	<weapon id="6"
+	        name="Red Laser"
+	        image="ammo/laser-red"
+	        heat_cost="0"
+	        fire_rate="2"
+	        damage="2"
+	        speed="400"
+	        sound="laser-pink"/>
+	<weapon id="3"
+	        name="Devil Eyes"
+	        image="ammo/devil-eyes"
+	        heat_cost="1"
+	        fire_rate="0.7"
+	        damage="6"
+	        speed="430" />
+	<weapon id="5"
+	        name="Missile"
+	        image="ammo/missile"
+	        heat_cost="0"
+	        fire_rate="0.4"
+	        damage="15"
+	        speed="300"
+	        sound="missile-gasfire" />
 </weapons>

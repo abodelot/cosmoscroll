@@ -20,7 +20,7 @@ AboutMenu::AboutMenu()
 	str += I18n::t("menu.about.licence") + L" " + COSMOSCROLL_LICENCE;
 
 	info_text_.SetText(str);
-	info_text_.SetPosition(120, 120);
+	info_text_.SetPosition(120, 100);
 	info_text_.SetFont(GET_FONT());
 
 	logos_.SetImage(GET_IMG("gui/libs-logo"));

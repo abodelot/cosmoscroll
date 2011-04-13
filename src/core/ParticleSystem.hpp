@@ -211,6 +211,7 @@ private:
 		float angle_;
 		sf::Sprite sprite_;
 		const sf::Sprite* handle_;
+		int y_offset_;
 		float timer_;
 	};
 

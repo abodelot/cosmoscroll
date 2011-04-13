@@ -16,7 +16,8 @@ public:
 	}
 	void operator()(Entity& e)
 	{
-		if (math::distance(e.GetPosition(), hit_.GetPosition()) < radius_)
+		if (e.GetTeam() != hit_.GetTeam()
+			&& math::distance(e.GetPosition(), hit_.GetPosition()) < radius_)
 		{
 			e.TakeDamage(hit_.GetCollideDamage());
 			if (e.IsDead())
@@ -29,7 +30,7 @@ private:
 	int radius_;
 };
 
-#define PARTICLES_PER_HIT 64
+#define PARTICLES_PER_HIT 128
 
 ImpactHit::ImpactHit(Entity::Team team, const sf::Vector2f& position, float angle,
 		const sf::Image* image, int speed, int damage):

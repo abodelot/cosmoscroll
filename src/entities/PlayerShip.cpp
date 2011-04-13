@@ -21,7 +21,7 @@
 #define COOLER_DEFAULT              0
 #define COOLER_MAX                  3
 
-#define MISSILES_DEFAULT            0
+#define MISSILES_DEFAULT            10
 #define MISSILES_MAX                3
 
 #define HEAT_MAX                    100
@@ -351,6 +351,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 				weapon1_.SetMultiply(2);
 				weapon2_.SetMultiply(2);
 			}
+			bonus_[T_TRISHOT] = 0;
 			bonus_[T_DOUBLESHOT] += TIMED_BONUS_DURATION;
 			break;
 		case Bonus::TRIPLE_SHOT:
@@ -359,6 +360,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 				weapon1_.SetMultiply(3);
 				weapon2_.SetMultiply(3);
 			}
+			bonus_[T_DOUBLESHOT] = 0;
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
 			break;
 		case Bonus::SPEED:

@@ -290,7 +290,7 @@ bool ParticleSystem::TextParticle::OnUpdate(float frametime)
 }
 
 
-// SmokeParticle
+
 // distance vaisseau <-> particule (plus elle est éloignée, plus elle va vite)
 #define SHIELD_RADIUS 42
 
@@ -312,14 +312,16 @@ bool ParticleSystem::ShieldParticle::OnUpdate(float frametime)
 	angle_ += (2 * PI * frametime); // rotation de 2 * PI par seconde
 	offset.x += handle_->GetSize().x / 2;
 	offset.y += handle_->GetSize().y / 2;
-	offset.x = offset.x + SHIELD_RADIUS * math::cos(angle_);
-	offset.y = offset.y - SHIELD_RADIUS * math::sin(angle_);
+	offset.x = offset.x + (SHIELD_RADIUS) * math::cos(angle_) + frametime;
+	offset.y = offset.y - (SHIELD_RADIUS) * math::sin(angle_) + frametime;
 	sprite_.SetPosition(offset);
 	sprite_.SetRotation(math::rad_to_deg(angle_ + (0.5 * PI)));
 	return false;
 }
 
-#define SMOKE_MAX_LIFETIME 3.f
+
+// SmokeParticle
+#define SMOKE_MAX_LIFETIME 4.f
 #define SMOKE_BASE_SPEED   1100
 #define SMOKE_MIN_SIZE     0.5f
 #define SMOKE_MAX_SIZE     1.2f
@@ -339,6 +341,7 @@ ParticleSystem::Smoke::Smoke(const sf::Sprite* handle)
 	sprite_.SetScale(size, size);
 	angle_ = sf::Randomizer::Random(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
 	timer_ = sf::Randomizer::Random(0.0f, SMOKE_MAX_LIFETIME);
+	y_offset_ = (handle_->GetSize().y - sprite_.GetSize().y) / 2;
 }
 
 
@@ -352,7 +355,7 @@ bool ParticleSystem::Smoke::OnUpdate(float frametime)
 			return true;
 		}
 		timer_ = 0;
-		sprite_.SetPosition(handle_->GetPosition().x, handle_->GetPosition().y + handle_->GetSize().y / 2);
+		sprite_.SetPosition(handle_->GetPosition().x, handle_->GetPosition().y + y_offset_);
 		angle_ = sf::Randomizer::Random(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
 	}
 

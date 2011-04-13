@@ -12,11 +12,11 @@ IntroLevelScene::IntroLevelScene()
 
 	description_.SetColor(sf::Color::White);
 	description_.SetFont(GET_FONT());
-	description_.SetSize(30);
+	description_.SetSize(40);
 
 	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
 	title_.SetCenter(title_.GetSize().x / 2, 0);
-	title_.SetPosition(Game::WIDTH / 2, 12);
+	title_.SetPosition(Game::WIDTH / 2, 20);
 }
 
 
@@ -48,11 +48,14 @@ void IntroLevelScene::OnFocus()
 	LevelManager& levels = LevelManager::GetInstance();
 	int current_level = levels.GetCurrent();
 
-	std::wstring content = str_sprintf(
-		I18n::t("menu.story.intro").c_str(),
-		current_level,
-		levels.RemainingEntities()
-	);
+
+	std::wstring format = I18n::t("menu.story.intro");
+	std::string content;
+	wstr_to_utf8(content, format);
+
+	content = str_sprintf(content.c_str(), current_level, levels.GetDescription(current_level), levels.RemainingEntities());
+	str_replace(content, "\\n", "\n");
+
 	description_.SetText(content);
 	// centered on screen
 	sf::FloatRect rect = description_.GetRect();

@@ -1,5 +1,8 @@
-blaster-shot-1.ogg
-blaster-shot-2.ogg
+laser-green.wav
+laser-blue.ogg
+laser-pink.ogg
+canon.wav
+missile-gasfire.ogg
 bonus.ogg
 boom.ogg
 end-level.ogg
@@ -8,4 +11,3 @@ menu-select.wav
 menu-valid.ogg
 title.ogg
 warp.ogg
-missile-gasfire.ogg
