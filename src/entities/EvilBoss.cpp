@@ -1,19 +1,15 @@
 #include "EvilBoss.hpp"
-#include "EntityManager.hpp"
-#include "../core/ParticleSystem.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/Math.hpp"
+
+#include "core/ParticleSystem.hpp"
+#include "utils/MediaManager.hpp"
+
 
 #define SPEED_Y 25
 #define SPEED_X 100
-#define CHILDS 8
 
-#define L_EYE_OFFSET    sf::Vector2f(105, 55)
-#define R_EYE_OFFSET    sf::Vector2f(190, 55)
-
-#define L_MOUTH_X_OFFSET 85
-#define R_MOUTH_X_OFFSET 201
-#define MOUTH_Y_OFFSET   128
+#define EYE_OFFSET_LEFT   sf::Vector2f(105, 55)
+#define EYE_OFFSET_RIGHT  sf::Vector2f(190, 55)
+#define MOUTH_OFFSET      sf::Vector2f(143, 128)
 
 #define POS_X 360
 
@@ -23,14 +19,17 @@ EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	SetImage(GET_IMG("entities/evil-boss"));
 	SetSubRect(sf::IntRect(0, 0, 242, 160));
 	SetTeam(Entity::BAD);
+
 	// init weapons
-	EntityManager& mgr = EntityManager::GetInstance();
-	mgr.InitWeapon(3, &eye_left_);
-	mgr.InitWeapon(3, &eye_right_);
-	// (init canon later)
+	eye_left_.Init("devil-eyes");
 	eye_left_.SetOwner(this);
+	eye_left_.SetOffset(EYE_OFFSET_LEFT);
+	eye_right_.Init("devil-eyes");
 	eye_right_.SetOwner(this);
-	canon_.SetOwner(this);
+	eye_right_.SetOffset(EYE_OFFSET_RIGHT);
+
+	canon_.SetOwner(this); // (init canon later)
+	canon_.SetOffset(MOUTH_OFFSET);
 
 	target_ = NULL;
 	left_ = true;
@@ -51,17 +50,12 @@ void EvilBoss::Update(float frametime)
 	target_pos.x += target_->GetSize().x / 2;
 	target_pos.y += target_->GetSize().y / 2;
 
-	float radians_left = math::angle(target_pos, GetPosition() + L_EYE_OFFSET);
-	float radians_right = math::angle(target_pos, GetPosition() + R_EYE_OFFSET);
-	eye_left_.Shoot(GetPosition() + L_EYE_OFFSET, radians_left);
-	eye_right_.Shoot(GetPosition() + R_EYE_OFFSET, radians_right);
+	eye_left_.ShootAt(target_pos);
+	eye_right_.ShootAt(target_pos);
 
 	if (canon_.IsInited())
 	{
-		sf::Vector2f randV2f, my = GetPosition();
-		randV2f.x = my.x + sf::Randomizer::Random(L_MOUTH_X_OFFSET, R_MOUTH_X_OFFSET);
-		randV2f.y = my.y + MOUTH_Y_OFFSET;
-		canon_.Shoot(randV2f, math::angle(target_pos, randV2f));
+		canon_.ShootAt(target_pos);
 	}
 
 	bool left = true;
@@ -113,7 +107,7 @@ void EvilBoss::TakeDamage(int damage)
 		{
 			case MORE_EVIL:
 				SetSubRect(sf::IntRect(242, 0, 242 * 2, 160));
-				EntityManager::GetInstance().InitWeapon(6, &canon_);
+				canon_.Init("laser-red");
 				next_ = DAMN_EVIL;
 				break;
 			case DAMN_EVIL:

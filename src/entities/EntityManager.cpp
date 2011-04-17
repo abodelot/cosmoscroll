@@ -242,7 +242,6 @@ void EntityManager::Render(sf::RenderTarget& target) const
 	{
 		target.Draw(**it);
 	}
-
 }
 
 
@@ -259,19 +258,12 @@ void EntityManager::LoadWeapons(const char* filename)
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	while (elem != NULL)
 	{
-		int id;
-		if (elem->QueryIntAttribute("id", &id) != TIXML_SUCCESS)
+		const char* p = elem->Attribute("id");
+		if (p == NULL)
 		{
 			DIE("weapon id is missing");
 		}
-		WeaponDefinition* weapon = &weapon_defs_[id];
-
-		const char* p = elem->Attribute("name");
-		if (p == NULL)
-		{
-			DIE("weapon name is missing");
-		}
-		weapon->name = p;
+		WeaponDefinition* weapon = &weapon_defs_[p];
 
 		p = elem->Attribute("image");
 		if (p == NULL)
@@ -404,8 +396,9 @@ void EntityManager::LoadSpaceShips(const char* filename)
 		TiXmlElement* weapon = elem->FirstChildElement();
 		if (weapon != NULL)
 		{
-			int w_id, w_x, w_y;
-			if (weapon->QueryIntAttribute("id", &w_id) != TIXML_SUCCESS)
+			int w_x, w_y;
+			const char* weapon_id = weapon->Attribute("id");
+			if (weapon_id == NULL)
 			{
 				DIE("ship weapon id not found");
 			}
@@ -419,9 +412,8 @@ void EntityManager::LoadSpaceShips(const char* filename)
 			{
 				DIE("ship weapon offset y not found");
 			}
-			Weapon* weapon = ship->GetWeapon();
-			InitWeapon(w_id, weapon);
-			weapon->SetOffset(w_x, w_y);
+			ship->GetWeapon()->Init(weapon_id);
+			ship->GetWeapon()->SetOffset(w_x, w_y);
 		}
 
 		spaceships_defs_[id] = ship;
@@ -456,14 +448,17 @@ Entity* EntityManager::CreateRandomEntity() const
 }
 
 
-void EntityManager::InitWeapon(int id, Weapon* weapon) const
+void EntityManager::InitWeapon(const char* id, Weapon* weapon) const
 {
 	WeaponMap::const_iterator it = weapon_defs_.find(id);
 	if (it != weapon_defs_.end())
 	{
 		const WeaponDefinition& def = it->second;
-		weapon->Init(*def.image, def.fire_rate, def.heat_cost, def.damage,
-			def.speed);
+		weapon->SetImage(def.image);
+		weapon->SetFireRate(def.fire_rate);
+		weapon->SetHeatCost(def.heat_cost);
+		weapon->SetDamage(def.damage);
+		weapon->SetVelociy(def.speed);
 		if (!def.sound.empty())
 		{
 			weapon->SetSoundName(def.sound.c_str());
@@ -471,7 +466,7 @@ void EntityManager::InitWeapon(int id, Weapon* weapon) const
 	}
 	else
 	{
-		DIE("weapon id '%d' is not implemented", id);
+		DIE("weapon id '%s' is not implemented", id);
 	}
 }
 

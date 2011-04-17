@@ -22,6 +22,8 @@ private:
 	LevelManager& levels_;
 	gui::OptionList* opt_levels_;
 	gui::Label* lab_progresion_;
+	gui::Label* lab_hardcore_;
+	gui::CheckBox* cbx_hardcore_;
 };
 
 #endif // LEVELMENU_HPP

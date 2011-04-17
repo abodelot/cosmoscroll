@@ -1,12 +1,14 @@
 #include <cstring>
 
 #include "SpaceShip.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/Math.hpp"
-#include "../utils/StringUtils.hpp"
-#include "../core/ParticleSystem.hpp"
 #include "EntityManager.hpp"
 #include "Bonus.hpp"
+
+#include "utils/Math.hpp"
+#include "utils/MediaManager.hpp"
+#include "utils/StringUtils.hpp"
+#include "core/ParticleSystem.hpp"
+
 
 // bonus freq = 1 / DROP_LUCK
 #define DROP_LUCK 8
@@ -200,18 +202,7 @@ void SpaceShip::move_sinus(float frametime)
 
 void SpaceShip::attack_auto_aim()
 {
-	float radians = math::angle(target_->GetPosition(), GetPosition());
-
-	if (IsFlipped())
-	{
-		sf::Vector2f pos = GetPosition();
-		pos.x += GetSize().x;
-		weapon_.Shoot(pos, radians);
-	}
-	else
-	{
-		weapon_.Shoot(GetPosition(), radians);
-	}
+	weapon_.ShootAt(target_->GetPosition());
 }
 
 
@@ -222,7 +213,7 @@ void SpaceShip::attack_on_sight()
 	// Doit on tirer ?
 	if (std::abs(player_y - my_y) < 30)
 	{
-		weapon_.Shoot(GetPosition(), -PI);
+		weapon_.Shoot(-PI);
 	}
 }
 

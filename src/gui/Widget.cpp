@@ -7,6 +7,7 @@ Widget::Widget(Menu* owner, bool focusable)
 {
 	focusable_ = focusable;
 	state_ = State::DEFAULT;
+	visible_ = true;
 	callback_id_ = -1;
 	owner_ = owner;
 	owner->AddWidget(this);
@@ -49,7 +50,7 @@ int Widget::GetHeight() const
 
 bool Widget::CanGrabFocus() const
 {
-	return focusable_ && state_ != State::HIDDEN && state_ != State::DISABLED;
+	return focusable_ && visible_ && state_ != State::DISABLED;
 }
 
 

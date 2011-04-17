@@ -19,6 +19,7 @@ LevelManager::LevelManager()
 {
 	last_insert_time_ = 0.f;
 	current_level_ = last_unlocked_level_ = 1;
+	hardcore_ = false;
 }
 
 
@@ -30,7 +31,7 @@ LevelManager::~LevelManager()
 
 LevelManager::Error LevelManager::LoadCurrent()
 {
-	return ParseLevel(GetLevelElement(current_level_));
+	return ParseLevel(GetLevelElement(GetCurrent()));
 }
 
 
@@ -59,6 +60,10 @@ LevelManager::Error LevelManager::SetCurrent(int level)
 		//std::cerr << "level " << level << " is undefined" << std::endl;
 		//return UNDEF;
 	}
+	if (hardcore_)
+	{
+		level += levels_.size();
+	}
 	current_level_ = level;
 	return SUCCESS;
 }
@@ -66,46 +71,49 @@ LevelManager::Error LevelManager::SetCurrent(int level)
 
 int LevelManager::GetCurrent() const
 {
-	return current_level_;
+	return hardcore_ ? current_level_ - levels_.size() : current_level_;
 }
 
 
-void LevelManager::SetLastUnlocked(int level_num)
+int LevelManager::UnlockNextLevel()
 {
-	if (level_num > 0 && level_num <= (int) levels_.size())
+	if (last_unlocked_level_ < (int) levels_.size() * 2)
 	{
-		last_unlocked_level_ = level_num;
+		++last_unlocked_level_;
+		if (last_unlocked_level_ > levels_.size())
+		{
+			hardcore_ = true;
+		}
+		current_level_ = last_unlocked_level_;
 	}
-	else
-	{
-		printf("warning: level %d is out of bounds, "
-			"last unlocked level is now 1\n", level_num);
-	}
+	return GetCurrent();
 }
 
 
 int LevelManager::GetLastUnlocked() const
 {
-	return last_unlocked_level_;
+	if (hardcore_)
+		return last_unlocked_level_ - levels_.size();
+	return AllLevelsCompleted() ? levels_.size() : last_unlocked_level_;
 }
 
 
-const char* LevelManager::GetDescription(int level) const
+const char* LevelManager::GetDescription() const
 {
-	return GetLevelElement(level)->Attribute("desc");
+	return GetLevelElement(GetCurrent())->Attribute("desc");
 }
 
 
-sf::Color LevelManager::GetTopColor(int level) const
+sf::Color LevelManager::GetTopColor() const
 {
-	const char* p = GetLevelElement(level)->Attribute("bg_top");
+	const char* p = GetLevelElement(GetCurrent())->Attribute("bg_top");
 	return p != NULL ? HexaToColor(p) : sf::Color::Black;
 }
 
 
-sf::Color LevelManager::GetBottomColor(int level) const
+sf::Color LevelManager::GetBottomColor() const
 {
-	const char* p = GetLevelElement(level)->Attribute("bg_bottom");
+	const char* p = GetLevelElement(GetCurrent())->Attribute("bg_bottom");
 	return p != NULL ? HexaToColor(p) : sf::Color::Black;
 }
 
@@ -113,7 +121,7 @@ sf::Color LevelManager::GetBottomColor(int level) const
 int LevelManager::GetStarsCount() const
 {
 	int nb_stars = DEFAULT_STARS_COUNT;
-	GetLevelElement(current_level_)->QueryIntAttribute("stars", &nb_stars);
+	GetLevelElement(GetCurrent())->QueryIntAttribute("stars", &nb_stars);
 	return nb_stars;
 }
 
@@ -131,6 +139,28 @@ int LevelManager::GetDuration() const
 int LevelManager::CountLevel() const
 {
 	return levels_.size();
+}
+
+
+bool LevelManager::AllLevelsCompleted() const
+{
+	return last_unlocked_level_ > levels_.size();
+}
+
+
+void LevelManager::EnableHardcore(bool hardcore)
+{
+	if (AllLevelsCompleted())
+	{
+		hardcore_ = hardcore;
+		current_level_ = hardcore_ ? last_unlocked_level_ : levels_.size();
+	}
+}
+
+
+bool LevelManager::IsHardcoreEnabled()
+{
+	return hardcore_;
 }
 
 
@@ -265,6 +295,10 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 void LevelManager::AppendToWaitingLine(Entity* entity, float time)
 {
 	EntitySlot slot;
+	if (hardcore_)
+	{
+		entity->SetHP(entity->GetHP() * 2);
+	}
 	slot.entity = entity;
 	last_insert_time_ += time;
 	slot.spawntime = last_insert_time_;
@@ -307,3 +341,31 @@ sf::Color LevelManager::HexaToColor(const std::string& hexcolor)
 	return color;
 }
 
+
+
+void LevelManager::LoadFromConfig(ConfigParser& config)
+{
+	config.SeekSection("Story");
+	config.ReadItem("last_unlocked_level", last_unlocked_level_);
+	if (last_unlocked_level_ < 1 || last_unlocked_level_ > levels_.size() * 2)
+	{
+		last_unlocked_level_ = 1;
+	}
+	config.ReadItem("current_level", current_level_);
+	if (current_level_ < 1 || current_level_ > last_unlocked_level_)
+	{
+		current_level_ = 1;
+	}
+	else if (current_level_ > levels_.size())
+	{
+		hardcore_ = true;
+	}
+}
+
+
+void LevelManager::SaveToConfig(ConfigParser& config) const
+{
+	config.SeekSection("Story");
+	config.WriteItem("current_level", current_level_);
+	config.WriteItem("last_unlocked_level", last_unlocked_level_);
+}

@@ -23,7 +23,6 @@ namespace State
 		DEFAULT,
 		HOVERED,
 		FOCUSED,
-		HIDDEN,
 		DISABLED // TODO
 	};
 }
@@ -47,6 +46,9 @@ public:
 	 */
 	void SetState(State::EState state);
 	State::EState GetState() const;
+
+	inline void SetVisible(bool visible) { visible_ = visible; }
+	inline bool IsVisible() const { return visible_; }
 
 	/**
 	 * Mise à jour du widget
@@ -147,6 +149,7 @@ private:
 	int callback_id_;
 	sf::FloatRect rect_;
 	bool focusable_;
+	bool visible_;
 	State::EState state_;
 };
 

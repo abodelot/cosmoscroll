@@ -208,7 +208,7 @@ void Menu::Show(sf::RenderTarget& target) const
 	target.Draw(background_);
 	for (WidgetList::const_iterator it = widgets_.begin(); it != widgets_.end(); ++it)
 	{
-		if ((**it).GetState() != State::HIDDEN)
+		if ((**it).IsVisible())
 		{
 			target.Draw(**it);
 		}
@@ -218,6 +218,12 @@ void Menu::Show(sf::RenderTarget& target) const
 
 void Menu::AddWidget(Widget* widget)
 {
+	/*WidgetList::iterator it = widgets_.begin();
+	while (it != widgets_.end() && (**it).GetPosition().y < widget->GetPosition().y)
+	{
+		++it;
+	}
+	widgets_.insert(it, widget);*/
 	widgets_.push_back(widget);
 	if (focus_index_ == -1)
 	{

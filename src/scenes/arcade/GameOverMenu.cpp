@@ -26,7 +26,6 @@ GameOverMenu::GameOverMenu()
 	(new CosmoButton(this, I18n::t("menu.back_main_menu"), 210, 340))->SetCallbackID(2);
 
 	lab_pseudo_ = new gui::Label(this, I18n::t("menu.gameover.pseudo"), 100, 250);
-	lab_pseudo_->SetState(gui::State::HIDDEN);
 	txt_pseudo_ = new gui::TextBox(this, 210, 250, 30);
 	txt_pseudo_->SetCallbackID(3);
 }
@@ -52,10 +51,10 @@ void GameOverMenu::OnFocus()
 	}
 	lab_result_->SetText(text);
 
-	but_send_score_->SetState(gui::State::DEFAULT);
+	but_send_score_->SetVisible(true);
 	FocusWidget(but_send_score_);
-	lab_pseudo_->SetState(gui::State::HIDDEN);
-	txt_pseudo_->SetState(gui::State::HIDDEN);
+	lab_pseudo_->SetVisible(false);
+	txt_pseudo_->SetVisible(false);
 }
 
 
@@ -64,10 +63,10 @@ void GameOverMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 0:
-			txt_pseudo_->SetState(gui::State::DEFAULT);
-			lab_pseudo_->SetState(gui::State::DEFAULT);
+			txt_pseudo_->SetVisible(true);
+			lab_pseudo_->SetVisible(true);
 			FocusWidget(txt_pseudo_);
-			but_send_score_->SetState(gui::State::HIDDEN);
+			but_send_score_->SetVisible(false);
 			break;
 		case 1:
 			EntityManager::GetInstance().InitMode(EntityManager::MODE_ARCADE);

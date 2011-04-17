@@ -62,6 +62,7 @@ public:
 	 * @return entity remaining health points
 	 */
 	int GetHP() const;
+	void SetHP(int hp);
 
 	/**
 	 * Supprime l'unité si elle est hors de l'univers
@@ -109,7 +110,7 @@ protected:
 	void SetTeam(Team team);
 
 	int UpdateHP(int diff);
-	void SetHP(int hp);
+
 
 
 

@@ -15,19 +15,50 @@ public:
 	Weapon();
 
 	/**
-	 * @param image: image du projectile
-	 * @param fire_rate: nombre de tirs par seconde
-	 * @param heat_cost: chaleur dégagée par tir
-	 * @param damage: dégâts infligés par tir
-	 * @param speed: vitesse du tir en pixels par seconde
+	 * Initialiser une arme
+	 * @param weapon_id: identifiant de l'arme (cf. weapons.xml)
 	 */
-	void Init(const sf::Image& image, float fire_rate, float heat_cost,
-		int damage, int speed);
+	void Init(const char* weapon_id);
 
 	/**
 	 * @return true si l'arme peut être utilisée, sinon false
 	 */
 	bool IsInited() const;
+
+	/**
+	 * Utiliser l'arme
+	 * @param angle: angle de tir en radians
+	 * @param pos: position cible (trajectoire auto-calculée)
+	 */
+	float Shoot(float angle);
+	float ShootAt(const sf::Vector2f& pos);
+
+	void Update(float frametime);
+
+	/**
+	 * @param image: image du projectile
+	 */
+	void SetImage(const sf::Image* image);
+
+	/**
+	 * @param fire_rate: nombre de tirs par seconde
+	 */
+	void SetFireRate(float shot_per_sec);
+
+	/**
+	 * @param heat_cost: chaleur dégagée par tir
+	 */
+	void SetHeatCost(float heat_cost);
+
+	/**
+	 * @param damage: dégâts infligés par tir
+	 */
+	void SetDamage(int damage);
+
+	/**
+	 * @param velocity: vitesse du tir en pixels par seconde
+	 */
+	void SetVelociy(int velocity);
 
 	/**
 	 * @param sound: son joué lors d'un tir (NULL si pas de son)
@@ -38,7 +69,11 @@ public:
 	 * Position de l'arme relative à la position de son propriétaire
 	 */
 	void SetOffset(int x, int y);
+	void SetOffset(const sf::Vector2f& offset);
 
+	/**
+	 * @param owner: entité propriétaire de l'arme
+	 */
 	void SetOwner(Entity* owner);
 
 	/**
@@ -46,13 +81,7 @@ public:
 	 */
 	bool IsReady() const;
 
-	/**
-	 * @param offset: position du tireur
-	 * @param angle: angle de tir en radians
-	 */
-	float Shoot(sf::Vector2f offset, float angle);
 
-	void Update(float frametime);
 
 	void SetMultiply(int n);
 
@@ -66,9 +95,9 @@ protected:
 		return image_;
 	}
 
-	int GetSpeed() const
+	int GetVelocity() const
 	{
-		return speed_;
+		return velocity_;
 	}
 
 	int GetDamage() const
@@ -80,7 +109,7 @@ private:
 	// cadence de tir
 	float fire_rate_;
 	float heat_cost_;
-	int speed_;
+	int velocity_;
 	int damage_;
 	const sf::Image* image_;
 

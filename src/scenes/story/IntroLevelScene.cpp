@@ -12,7 +12,7 @@ IntroLevelScene::IntroLevelScene()
 
 	description_.SetColor(sf::Color::White);
 	description_.SetFont(GET_FONT());
-	description_.SetSize(40);
+	description_.SetSize(35);
 
 	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
 	title_.SetCenter(title_.GetSize().x / 2, 0);
@@ -53,7 +53,7 @@ void IntroLevelScene::OnFocus()
 	std::string content;
 	wstr_to_utf8(content, format);
 
-	content = str_sprintf(content.c_str(), current_level, levels.GetDescription(current_level), levels.RemainingEntities());
+	content = str_sprintf(content.c_str(), current_level, levels.GetDescription(), levels.RemainingEntities());
 	str_replace(content, "\\n", "\n");
 
 	description_.SetText(content);

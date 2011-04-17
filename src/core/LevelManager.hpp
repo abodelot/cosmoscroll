@@ -6,7 +6,9 @@
 #include <string>
 #include <SFML/Graphics/Color.hpp>
 
-#include "../tinyxml/tinyxml.h"
+#include "utils/ConfigParser.hpp"
+#include "tinyxml/tinyxml.h"
+
 class Entity;
 
 /**
@@ -60,29 +62,27 @@ public:
 
 	int GetCurrent() const;
 
-	/**
-	 * Définir le dernier niveau débloqué
-	 */
-	void SetLastUnlocked(int level_num);
+	int UnlockNextLevel();
 
 	int GetLastUnlocked() const;
 
+	// attributs du niveau courant
+
 	/**
 	 * Obtenir la description d'un niveau
-	 * @param level: numéro du niveau
 	 * @return chaîne de description
 	 */
-	const char* GetDescription(int level) const;
+	const char* GetDescription() const;
 
 	/**
 	 * Obtenir la couleur de fond haut
 	 */
-	sf::Color GetTopColor(int level) const;
+	sf::Color GetTopColor() const;
 
 	/**
 	 * Obtenir la couleur de fond bas
 	 */
-	sf::Color GetBottomColor(int level) const;
+	sf::Color GetBottomColor() const;
 
 	int GetStarsCount() const;
 
@@ -91,10 +91,30 @@ public:
 	 */
 	int GetDuration() const;
 
+
 	/**
 	 * Obtenir le nombre de niveaux chargés
 	 */
 	int CountLevel() const;
+
+	/**
+	 * @return true si tous les niveaux sont terminés
+	 */
+	bool AllLevelsCompleted() const;
+
+	/**
+	 * Activer/désactiver le mode hardcore
+	 */
+	void EnableHardcore(bool hardcore);
+
+	/**
+	 * @return true si le mode hardcore est activé
+	 */
+	bool IsHardcoreEnabled();
+
+	void LoadFromConfig(ConfigParser& config);
+	void SaveToConfig(ConfigParser& config) const;
+
 
 private:
 	LevelManager();
@@ -151,6 +171,7 @@ private:
 	std::queue<EntitySlot> waiting_line_;
 	int current_level_;
 	int last_unlocked_level_;
+	bool hardcore_;
 };
 
 #endif // LEVELMANAGER_HPP

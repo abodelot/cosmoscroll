@@ -103,7 +103,7 @@ public:
 	 * @param id: type de l'arme demandé
 	 * @param weapon: arme à initialiser
 	 */
-	void InitWeapon(int id, Weapon* weapon) const;
+	void InitWeapon(const char* id, Weapon* weapon) const;
 
 	/**
 	 * Allouer un vaisseau
@@ -185,7 +185,6 @@ private:
 
 	struct WeaponDefinition
 	{
-		std::string name;       // generic name
 		float heat_cost;        // cost per shot
 		float fire_rate;        // shot per second
 		int speed;              // bullet speed (pixels per second)
@@ -201,7 +200,7 @@ private:
 	typedef std::map<std::string, Animation> AnimationMap;
 	AnimationMap animations_;
 
-	typedef std::map<int, WeaponDefinition> WeaponMap;
+	typedef std::map<std::string, WeaponDefinition> WeaponMap;
 	WeaponMap weapon_defs_;
 
 	typedef std::list<Entity*> EntityList;

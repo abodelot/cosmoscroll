@@ -4,12 +4,13 @@
 
 #include "PlayerShip.hpp"
 #include "EntityManager.hpp"
-#include "../core/ParticleSystem.hpp"
-#include "../core/SoundSystem.hpp"
-#include "../utils/I18n.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/Math.hpp"
-#include "../utils/DIE.hpp"
+
+#include "core/ParticleSystem.hpp"
+#include "core/SoundSystem.hpp"
+#include "utils/I18n.hpp"
+#include "utils/MediaManager.hpp"
+#include "utils/Math.hpp"
+#include "utils/DIE.hpp"
 
 #define WEAPON1_OFFSET              52, 22
 #define WEAPON2_OFFSET              50, 24
@@ -21,14 +22,14 @@
 #define COOLER_DEFAULT              0
 #define COOLER_MAX                  3
 
-#define MISSILES_DEFAULT            10
+#define MISSILES_DEFAULT            0
 #define MISSILES_MAX                3
 
 #define HEAT_MAX                    100
 #define HEAT_RECOVERY_RATE          13
 
-#define HP_DEFAULT                  3
-#define HP_MAX                      5
+#define HP_DEFAULT                  6
+#define HP_MAX                      6
 
 #define SHIELD_DEFAULT              0 // shield points at start
 #define SHIELD_MAX                  6 // max shield points
@@ -46,16 +47,15 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	SetTeam(Entity::GOOD);
 	SetSubRect(GetAnimation().GetFrame(0)); // WTF
 	// init weapons
-	EntityManager& mgr = EntityManager::GetInstance();
-	mgr.InitWeapon(2, &weapon1_);
+	weapon1_.Init("laser-blue");
 	weapon1_.SetOwner(this);
 	weapon1_.SetOffset(WEAPON1_OFFSET);
 
-	mgr.InitWeapon(1, &weapon2_);
+	weapon2_.Init("canon");
 	weapon2_.SetOwner(this);
 	weapon2_.SetOffset(WEAPON2_OFFSET);
 
-	mgr.InitWeapon(5, &missile_launcher_);
+	missile_launcher_.Init("missile");
 	missile_launcher_.SetOwner(this);
 	missile_launcher_.SetOffset(WEAPON2_OFFSET);
 
@@ -135,7 +135,7 @@ void PlayerShip::HandleAction(Input::Action action)
 			{
 				--missiles_;
 				panel_.SetMissiles(missiles_);
-				missile_launcher_.Shoot(GetPosition(), 0);
+				missile_launcher_.Shoot(0);
 			}
 			break;
 		case Input::COUNT: // filter non-events
@@ -174,11 +174,11 @@ void PlayerShip::Update(float frametime)
 		float h = 0.0f;
 		if (input_.HasInput(Input::USE_WEAPON_1))
 		{
-			h += weapon1_.Shoot(GetPosition(), 0);
+			h += weapon1_.Shoot(0);
 		}
 		if (input_.HasInput(Input::USE_WEAPON_2))
 		{
-			h += weapon2_.Shoot(GetPosition(), 0);
+			h += weapon2_.Shoot(0);
 		}
 
 		heat_ += h;

@@ -67,30 +67,25 @@ void EndGameScene::OnFocus()
 	}
 	else
 	{
+		// niveau terminé
 		LevelManager& levels = LevelManager::GetInstance();
+		SoundSystem::GetInstance().PlaySound("end-level");
 		int current = levels.GetCurrent();
 		if (current < levels.CountLevel())
 		{
-			SoundSystem::GetInstance().PlaySound("end-level");
-
 			info_.SetText(str_sprintf(I18n::t("endgame.end_level").c_str(), current));
-			levels.SetCurrent(++current);
-
-			if (current > levels.GetLastUnlocked())
-			{
-				levels.SetLastUnlocked(current);
-#ifdef DEBUG
-				printf("level %d unlocked\n", current);
-#endif
-			}
 		}
 		else // si dernier niveau du jeu
 		{
-			SoundSystem::GetInstance().PlaySound("end-level");
-
 			std::wstring epic_win = str_sprintf(I18n::t("endgame.end_last_level").c_str(), current);
 			info_.SetText(epic_win);
 			info_.SetSize(30);
+		}
+
+		if (current == levels.GetLastUnlocked())
+		{
+			// nouveau niveau débloqué
+			current = levels.UnlockNextLevel();
 		}
 	}
 

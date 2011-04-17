@@ -5,7 +5,8 @@
 #include "EntityManager.hpp"
 #include "Hit.hpp"
 
-#include "../core/SoundSystem.hpp"
+#include "core/SoundSystem.hpp"
+#include "utils/Math.hpp"
 
 #define ANGLE_VARIATION 0.15f
 
@@ -19,7 +20,7 @@ Weapon::Weapon()
 	image_ = NULL;
 	heat_cost_ = 0;
 	damage_ = 0;
-	speed_ = 0;
+	velocity_ = 0;
 	sound_name_ = NULL;
 	x_ = 0;
 	y_ = 0;
@@ -28,15 +29,9 @@ Weapon::Weapon()
 }
 
 
-void Weapon::Init(const sf::Image& image, float fire_rate, float heat_cost,
-	int damage, int speed)
+void Weapon::Init(const char* weapon_id)
 {
-	fire_rate_ = 1 / fire_rate;
-	image_ = &image;
-	heat_cost_ = heat_cost;
-	damage_ = damage;
-	speed_ = speed;
-
+	EntityManager::GetInstance().InitWeapon(weapon_id, this);
 	inited_ = true;
 }
 
@@ -47,38 +42,7 @@ bool Weapon::IsInited() const
 }
 
 
-void Weapon::SetSoundName(const char* sound)
-{
-	sound_name_ = sound;
-}
-
-
-void Weapon::SetOffset(int x, int y)
-{
-	x_ = x;
-	y_ = y;
-}
-
-
-void Weapon::SetOwner(Entity* owner)
-{
-	owner_ = owner;
-}
-
-
-void Weapon::Update(float frametime)
-{
-	fire_timer_ -= frametime;
-}
-
-
-bool Weapon::IsReady() const
-{
-	return fire_timer_ <= 0;
-}
-
-
-float Weapon::Shoot(sf::Vector2f offset, float angle)
+float Weapon::Shoot(float angle)
 {
 	assert(inited_);
 	static SoundSystem& sound_sys = SoundSystem::GetInstance();
@@ -86,6 +50,7 @@ float Weapon::Shoot(sf::Vector2f offset, float angle)
 	// peut-on tirer ?
 	if (fire_timer_ <= 0.f)
 	{
+		sf::Vector2f offset = owner_->GetPosition();
 		offset.x += x_;
 		offset.y += y_;
 
@@ -118,6 +83,77 @@ float Weapon::Shoot(sf::Vector2f offset, float angle)
 }
 
 
+float Weapon::ShootAt(const sf::Vector2f& target)
+{
+	sf::Vector2f my_pos = owner_->GetPosition();
+	my_pos.x += x_;
+	my_pos.y += y_;
+	Shoot(math::angle(target, my_pos));
+}
+
+
+void Weapon::Update(float frametime)
+{
+	fire_timer_ -= frametime;
+}
+
+
+void Weapon::SetImage(const sf::Image* image)
+{
+	image_ = image;
+}
+
+void Weapon::SetFireRate(float shot_per_sec)
+{
+	fire_rate_ = 1 / shot_per_sec;
+}
+
+void Weapon::SetHeatCost(float heat_cost)
+{
+	heat_cost_ = heat_cost;
+}
+
+void Weapon::SetDamage(int damage)
+{
+	damage_ = damage;
+}
+
+void Weapon::SetVelociy(int velocity)
+{
+	velocity_ = velocity;
+}
+
+void Weapon::SetSoundName(const char* sound)
+{
+	sound_name_ = sound;
+}
+
+
+void Weapon::SetOffset(int x, int y)
+{
+	x_ = x;
+	y_ = y;
+}
+
+
+void Weapon::SetOffset(const sf::Vector2f& offset)
+{
+	SetOffset(offset.x, offset.y);
+}
+
+
+void Weapon::SetOwner(Entity* owner)
+{
+	owner_ = owner;
+}
+
+
+bool Weapon::IsReady() const
+{
+	return fire_timer_ <= 0;
+}
+
+
 void Weapon::SetMultiply(int n)
 {
 	multiply_ = n;
@@ -127,7 +163,7 @@ void Weapon::SetMultiply(int n)
 void Weapon::ThrowHit(const sf::Vector2f& offset, float angle)
 {
 	static EntityManager& entitymanager = EntityManager::GetInstance();
-	entitymanager.AddEntity(new Hit(owner_->GetTeam(), offset, angle, image_, speed_, damage_));
+	entitymanager.AddEntity(new Hit(owner_->GetTeam(), offset, angle, image_, velocity_, damage_));
 }
 
 

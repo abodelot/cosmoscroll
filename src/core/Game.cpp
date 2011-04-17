@@ -103,12 +103,6 @@ bool Game::LoadConfig(const char* filename)
 	{
 		// reading settings
 		config.SeekSection("Settings");
-		int current_level = 1, last_unlocked_level = 1;
-		config.ReadItem("current_level", current_level);
-		levels_.SetCurrent(current_level);
-		config.ReadItem("last_unlocked_level", last_unlocked_level);
-		levels_.SetLastUnlocked(last_unlocked_level);
-
 		std::string str;
 		if (!config.ReadItem("language", str) || !I18n::GetInstance().LoadFromCode(str))
 		{
@@ -146,7 +140,8 @@ bool Game::LoadConfig(const char* filename)
 			SoundSystem::GetInstance().SetSoundVolume(volume);
 		// reading keyboard and joystick bindings
 		input_.LoadFromConfig(config);
-
+		// reading story progression
+		levels_.LoadFromConfig(config);
 		return true;
 	}
 	return false;
@@ -161,10 +156,11 @@ void Game::WriteConfig(const char* filename) const
 	config.SeekSection("Settings");
 	config.WriteItem("fullscreen", (int) fullscreen_);
 	config.WriteItem("panel_on_top", (int) ControlPanel::GetInstance().IsOnTop());
-	config.WriteItem("last_unlocked_level", levels_.GetLastUnlocked());
-	config.WriteItem("current_level", levels_.GetCurrent());
 	config.WriteItem("best_arcade_time", entitymanager_.GetArcadeRecord());
 	config.WriteItem("language", I18n::GetInstance().GetCurrentCode());
+	// story mode progression
+	config.WriteItem("last_unlocked_level", levels_.GetLastUnlocked());
+	config.WriteItem("current_level", levels_.GetCurrent());
 
 	// Audio settings
 	const SoundSystem& snd = SoundSystem::GetInstance();
@@ -178,6 +174,8 @@ void Game::WriteConfig(const char* filename) const
 	// writing keyboard and joystick bindings
 	input_.SaveToConfig(config);
 
+	// levels
+	levels_.SaveToConfig(config);
 	// saving configuration to file
 	config.SaveToFile(filename);
 }

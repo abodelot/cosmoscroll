@@ -266,17 +266,23 @@
 			</loop>
 
 			<loop count="3">
+				<ship id="4" y="70" t="2"/>
 				<ship id="4" y="70" t="1"/>
 				<ship id="4" y="150" t="1"/>
+				<ship id="4" y="150" t="1"/>
+				<ship id="4" y="230" t="1"/>
 				<ship id="4" y="230" t="1"/>
 				<ship id="4" y="310" t="1"/>
+				<ship id="4" y="310" t="1"/>
 				<ship id="4" y="230" t="1"/>
+				<ship id="4" y="230" t="1"/>
+				<ship id="4" y="150" t="1"/>
 				<ship id="4" y="150" t="1"/>
 			</loop>
 
 
 			<loop count="2">
-				<ship id="3" y="300" t="1"/>
+				<ship id="3" y="100" t="4"/>
 				<asteroid y="100" t="1"/>
 				<ship id="5" y="250" t="2"/>
 				<ship id="3" y="70"/>
@@ -284,7 +290,7 @@
 			<loop count="2">
 				<ship id="4" y="340" t="2"/>
 				<ship id="3" y="290" t="0.5"/>
-				<ship id="3" y="390" t="0.5"/>
+				<ship id="3" y="50" t="0.5"/>
 			</loop>
 			<ship id="3" y="300" t="1"/>
 			<ship id="3" y="70" t="0"/>
