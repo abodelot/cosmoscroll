@@ -23,6 +23,8 @@ public:
 	 */
 	void SetGameInfo(const sf::Unicode::Text& text);
 
+	void SetPoints(int points);
+
 	/**
 	 * @param seconds: nombre de secondes écoulées
 	 */
@@ -110,10 +112,12 @@ private:
 	sf::Sprite panel_;
 
 	EntityManager::Mode game_mode_;
-	// -----------
+	// story -----------
 	int level_duration_;
 	sf::Sprite level_cursor_;
 	sf::Sprite level_bar_;
+	// arcade
+	sf::String str_points_;
 };
 
 #endif // CONTROLPANEL_HPP

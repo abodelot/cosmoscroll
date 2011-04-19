@@ -2,15 +2,28 @@
 #include "Asteroid.hpp"
 #include "PlayerShip.hpp"
 
-#include "../core/Game.hpp"
-#include "../core/LevelManager.hpp"
-#include "../core/ControlPanel.hpp"
-#include "../core/ParticleSystem.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/StringUtils.hpp"
-#include "../utils/DIE.hpp"
-#include "../utils/I18n.hpp"
-#include "../tinyxml/tinyxml.h"
+#include "core/Game.hpp"
+#include "core/LevelManager.hpp"
+#include "core/ControlPanel.hpp"
+#include "core/ParticleSystem.hpp"
+#include "utils/MediaManager.hpp"
+#include "utils/StringUtils.hpp"
+#include "utils/DIE.hpp"
+#include "utils/I18n.hpp"
+#include "tinyxml/tinyxml.h"
+
+/*
+En mode arcade, la difficulté est progressive
+Cette constante est le temps, en secondes, avant l'apparition d'entitées de valeur max N + 1
+
+valeur max :  	apparait à partir de :
+1 point       	0
+2 points      	DROPPABLE_STEP
+3 points      	DROPPABLE_STEP * 2
+4 points      	DROPPABLE_STEP * 3
+...
+*/
+#define DROPPABLE_STEP 20
 
 
 EntityManager& EntityManager::GetInstance()
@@ -49,9 +62,11 @@ void EntityManager::InitMode(Mode mode)
 	// re-init particles
 	particles_.Clear();
 
+	ControlPanel::GetInstance().Init(mode);
 	switch (mode)
 	{
 		case MODE_STORY:
+			ControlPanel::GetInstance().SetLevelDuration(levels_.GetDuration());
 			more_bad_guys_ = &EntityManager::MoreBadGuys_STORY;
 			// le vaisseau du joueur est conservé d'un niveau à l'autre
 			if (mode_ != MODE_STORY || player_ == NULL || player_->IsDead())
@@ -89,11 +104,13 @@ void EntityManager::InitMode(Mode mode)
 				(int) arcade_record_ / 60,
 				(int) arcade_record_ % 60));
 			particles_.AddStars();
+
+			max_droppable_index_ = 1;
+			max_droppable_points_ = 0;
 			break;
 	}
 	mode_ = mode;
-	ControlPanel::GetInstance().Init(mode);
-	ControlPanel::GetInstance().SetLevelDuration(levels_.GetDuration());
+
 	// initialisation avant une nouvelle partie
 	game_over_ = false;
 	timer_ = 0.f;
@@ -211,7 +228,7 @@ void EntityManager::TerminateGame()
 }
 
 
-bool EntityManager::CheckGameOver()
+bool EntityManager::IsGameOver()
 {
 	return (this->*more_bad_guys_)() || game_over_;
 }
@@ -386,7 +403,12 @@ void EntityManager::LoadSpaceShips(const char* filename)
 			DIE("space ship speed is missing");
 		}
 
+		int points = 0;
+		elem->QueryIntAttribute("points", &points);
+
+
 		SpaceShip* ship = new SpaceShip(animation, hp, speed);
+		ship->SetPoints(points);
 
 		const char* move_pattern = elem->Attribute("move");
 		const char* attack_pattern = elem->Attribute("attack");
@@ -417,11 +439,11 @@ void EntityManager::LoadSpaceShips(const char* filename)
 		}
 
 		spaceships_defs_[id] = ship;
-		uniques_.push_back(ship);
+		RegisterUniqueEntity(ship);
 		elem = elem->NextSiblingElement();
 	}
 
-	uniques_.push_back(new Asteroid(sf::Vector2f(0, 0), Asteroid::BIG));
+	RegisterUniqueEntity(new Asteroid(sf::Vector2f(0, 0), Asteroid::BIG));
 }
 
 
@@ -438,13 +460,6 @@ SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 	}
 	DIE("space ship id '%d' is not implemented", id);
 	return NULL;
-}
-
-
-Entity* EntityManager::CreateRandomEntity() const
-{
-	Entity* entity = uniques_[sf::Randomizer::Random(0, uniques_.size() - 1)];
-	return entity->Clone();
 }
 
 
@@ -490,6 +505,42 @@ Entity* EntityManager::GetPlayerShip() const
 }
 
 
+void EntityManager::SpawnRandomEntity()
+{
+	// update index of the most valuable spwanable entity
+	max_droppable_points_ = timer_ / DROPPABLE_STEP;
+
+	for (size_t i = max_droppable_index_; i < uniques_.size(); ++i)
+	{
+		Entity* entity = uniques_[i];
+		if (entity->GetPoints() <= max_droppable_points_)
+		{
+			max_droppable_index_ = i;
+		}
+		else
+		{
+			break;
+		}
+	}
+	Entity* entity = uniques_[sf::Randomizer::Random(0, max_droppable_index_)]->Clone();
+
+	entity->SetX(Game::WIDTH);
+	entity->SetY(sf::Randomizer::Random(0, height_ - (int) entity->GetSize().y));
+	AddEntity(entity);
+}
+
+
+void EntityManager::RegisterUniqueEntity(Entity* entity)
+{
+	std::vector<Entity*>::iterator it = uniques_.begin();
+	while (it != uniques_.end() && (**it).GetPoints() < entity->GetPoints())
+	{
+		++it;
+	}
+	uniques_.insert(it, entity);
+}
+
+
 bool EntityManager::MoreBadGuys_ARCADE()
 {
 	// number of max bad guys = time / STEP + START
@@ -497,13 +548,7 @@ bool EntityManager::MoreBadGuys_ARCADE()
 	const int START = 1;
 	if (Count() < timer_ / STEP + START)
 	{
-		Entity* entity = CreateRandomEntity();
-		sf::Vector2f pos;
-		pos.x = Game::WIDTH;
-		pos.y = sf::Randomizer::Random(0,
-			height_ - (int) entity->GetSize().y);
-		entity->SetPosition(pos);
-		AddEntity(entity);
+		SpawnRandomEntity();
 	}
 	// always false, spawn bad guys till you die
 	return false;

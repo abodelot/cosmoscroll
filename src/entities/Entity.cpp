@@ -10,6 +10,7 @@ Entity::Entity(const sf::Vector2f& position, int hp, int collide_damage)
 	hp_ = hp;
 	flipped_ = false;
 	collide_damage_ = collide_damage;
+	points_ = 0;
 }
 
 
@@ -159,4 +160,21 @@ void Entity::SetHP(int hp)
 }
 
 
+void Entity::SetPoints(int points)
+{
+	points_ = points;
+}
 
+
+int Entity::GetPoints() const
+{
+	return points_;
+}
+
+
+int Entity::ConsumePoints()
+{
+	int r = points_;
+	points_ = 0;
+	return r;
+}

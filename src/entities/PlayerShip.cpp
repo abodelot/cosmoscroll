@@ -10,14 +10,12 @@
 #include "utils/I18n.hpp"
 #include "utils/MediaManager.hpp"
 #include "utils/Math.hpp"
-#include "utils/DIE.hpp"
 
 #define WEAPON1_OFFSET              52, 22
 #define WEAPON2_OFFSET              50, 24
 
 #define MAX_SPEED                   200.f
 #define BONUS_MAX_SPEED             350.f
-#define ACCELERATION_DELAY_ON_DRUGS 0.4f // time to reach MAX_SPEED from 0 (or 0 from MAX_SPEED)
 
 #define COOLER_DEFAULT              0
 #define COOLER_MAX                  3
@@ -65,6 +63,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	overheated_ = false;
 	shield_timer_ = 0;
 	heat_ = 0.0f;
+	earned_points_ = 0;
 
 	max_speed_ = MAX_SPEED;
 	speed_x_ = speed_y_ = 0.f;
@@ -302,6 +301,7 @@ void PlayerShip::OnCollide(Entity& entity)
 	{
 		HandleBonus(bonus->GetType());
 		ParticleSystem::GetInstance().AddMessage(bonus->GetPosition(), bonus->GetDescription());
+		SoundSystem::GetInstance().PlaySound("bonus");
 		entity.Kill();
 	}
 	else
@@ -412,7 +412,6 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 			}
 			break;
 		default:
-			DIE("can't handle unknown bonus");
 			break;
 	}
 }
@@ -432,7 +431,6 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 			ParticleSystem::GetInstance().ClearSmoke(this);
 			break;
 		default:
-			DIE("can't disable unknown bonus");
 			break;
 	}
 	bonus_[tbonus] = 0;

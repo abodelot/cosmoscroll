@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <spaceships>
-	<ship id="1" name="Capsule" animation="capsule" hp="3" speed="75" move="straight" />
-	<ship id="2" name="Scoot" animation="scoot" hp="4" speed="180" move="sinus" attack="on_sight">
-		<weapon id="laser-green" x="0" y="16" />
+	<ship id="1" name="Capsule" animation="capsule" hp="3" speed="75" move="straight" points="1" />
+	<ship id="2" name="Scoot" animation="scoot" hp="4" speed="180" move="sinus" attack="on_sight" points="2">
+		<weapon id="laser-green" x="0" y="16"/>
 	</ship>
-	<ship id="3" name="Interceptor" animation="interceptor" hp="8" speed="35" move="straight" attack="auto_aim">
-		<weapon id="laser-green" x="0" y="32" />
+	<ship id="5" name="Mine" animation="mine" hp="14" move="magnet" speed="50" points="2"/>
+	<ship id="3" name="Interceptor" animation="interceptor" hp="8" speed="35" move="straight" attack="auto_aim" points="3">
+		<weapon id="laser-green" x="0" y="32"/>
 	</ship>
-	<ship id="4" name="UFO" animation="saucer" hp="6" speed="80" move="sinus" attack="auto_aim">
-		<weapon id="laser-pink" x="0" y="24" />
+	<ship id="4" name="UFO" animation="saucer" hp="6" speed="80" move="sinus" attack="auto_aim" points="4">
+		<weapon id="laser-pink" x="0" y="24"/>
 	</ship>
-	<ship id="5" name="Mine" animation="mine" hp="14" move="magnet" speed="50" />
 </spaceships>

@@ -38,7 +38,7 @@ void InGameScene::OnEvent(const sf::Event& event)
 
 void InGameScene::Update(float frametime)
 {
-	if (entities_.CheckGameOver())
+	if (entities_.IsGameOver())
 	{
 		Game::GetInstance().SetNextScene(Game::SC_EndGameScene);
 	}

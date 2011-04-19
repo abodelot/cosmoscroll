@@ -91,7 +91,7 @@ void OptionList::AddOption(const sf::Unicode::Text& option, const std::string& v
 	}
 	// resize widget if needed
 	int width = str.GetRect().GetWidth();
-	if (width > max_opt_width_)
+	if (width > (int) max_opt_width_)
 	{
 		max_opt_width_ = width;
 		BuildBoxes();
@@ -122,7 +122,7 @@ int OptionList::GetSelectedOptionIndex() const
 
 void OptionList::Select(int index)
 {
-	if (index >= 0 && index < options_.size() && index != current_opt_)
+	if (index >= 0 && index < (int) options_.size() && index != current_opt_)
 	{
 		current_opt_ = index;
 		CallTheCallback();

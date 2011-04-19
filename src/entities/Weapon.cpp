@@ -88,7 +88,7 @@ float Weapon::ShootAt(const sf::Vector2f& target)
 	sf::Vector2f my_pos = owner_->GetPosition();
 	my_pos.x += x_;
 	my_pos.y += y_;
-	Shoot(math::angle(target, my_pos));
+	return Shoot(math::angle(target, my_pos));
 }
 
 

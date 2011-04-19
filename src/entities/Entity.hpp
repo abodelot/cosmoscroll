@@ -103,6 +103,13 @@ public:
 
 	int GetCollideDamage() const;
 
+	/**
+	 * Valeur de l'entité
+	 */
+	void SetPoints(int points);
+	int GetPoints() const;
+	int ConsumePoints();
+
 protected:
 	/**
 	 * Attribuer une équipe à l'entité (défaut: NEUTRAL)
@@ -117,6 +124,7 @@ protected:
 private:
 	bool flipped_;
 	int hp_;
+	int points_;
 	int collide_damage_;
 	Team team_;
 };

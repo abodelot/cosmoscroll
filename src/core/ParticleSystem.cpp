@@ -73,7 +73,6 @@ void ParticleSystem::AddCenteredStars(int count)
 void ParticleSystem::AddMessage(const sf::Vector2f& offset, const wchar_t* text)
 {
 	particles_.push_front(new TextParticle(offset, text));
-	SoundSystem::GetInstance().PlaySound("bonus");
 }
 
 

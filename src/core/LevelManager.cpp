@@ -80,7 +80,7 @@ int LevelManager::UnlockNextLevel()
 	if (last_unlocked_level_ < (int) levels_.size() * 2)
 	{
 		++last_unlocked_level_;
-		if (last_unlocked_level_ > levels_.size())
+		if (last_unlocked_level_ > (int) levels_.size())
 		{
 			hardcore_ = true;
 		}
@@ -144,7 +144,7 @@ int LevelManager::CountLevel() const
 
 bool LevelManager::AllLevelsCompleted() const
 {
-	return last_unlocked_level_ > levels_.size();
+	return last_unlocked_level_ > (int) levels_.size();
 }
 
 
@@ -347,7 +347,7 @@ void LevelManager::LoadFromConfig(ConfigParser& config)
 {
 	config.SeekSection("Story");
 	config.ReadItem("last_unlocked_level", last_unlocked_level_);
-	if (last_unlocked_level_ < 1 || last_unlocked_level_ > levels_.size() * 2)
+	if (last_unlocked_level_ < 1 || last_unlocked_level_ > (int) levels_.size() * 2)
 	{
 		last_unlocked_level_ = 1;
 	}
@@ -356,7 +356,7 @@ void LevelManager::LoadFromConfig(ConfigParser& config)
 	{
 		current_level_ = 1;
 	}
-	else if (current_level_ > levels_.size())
+	else if (current_level_ > (int) levels_.size())
 	{
 		hardcore_ = true;
 	}

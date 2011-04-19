@@ -88,15 +88,13 @@ public:
 	 * Tester si le jeu est terminé
 	 * @return true si game over
 	 */
-	bool CheckGameOver();
+	bool IsGameOver();
 
 	/**
 	 * @param top: couleur du haut du dégradé
 	 * @param bottom: couleur du bas du dégradé
 	 */
 	void SetBackgroundColor(const sf::Color& top, const sf::Color& bottom);
-
-	Entity* CreateRandomEntity() const;
 
 	/**
 	 * Initialiser une arme
@@ -162,6 +160,9 @@ private:
 	EntityManager();
 	EntityManager(const EntityManager&);
 	~EntityManager();
+
+	void SpawnRandomEntity();
+	void RegisterUniqueEntity(Entity* entity);
 
 	// inherited
 	void Render(sf::RenderTarget& target) const;
@@ -238,6 +239,9 @@ private:
 	float timer_;
 	float arcade_record_;
 	LevelManager& levels_;
+
+	int max_droppable_index_;
+	int max_droppable_points_;
 };
 
 

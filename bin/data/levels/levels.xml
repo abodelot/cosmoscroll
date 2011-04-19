@@ -185,7 +185,7 @@
 				<ship id="2" y="270" t="2"/>
 			</loop>
 		</level>
-		<level desc="Where did I put those keys again?" bg_top="#003060" bg_bottom="#001000" stars="35">
+		<level desc="Where did I put those keys again?" bg_top="#000000" bg_bottom="#801245" stars="35">
 			<!-- level 4 -->
 			<wait t="4"/>
 			<ship id="5" y="120"/>
@@ -245,8 +245,9 @@
 				<ship id="3" y="40"/>
 			</loop>
 		</level>
-		<level desc="I'll bet my badge that we haven't\nseen the last of those weirdies.">
+		<level desc="I'll bet my badge that we haven't\nseen the last of those weirdies." bg_top="#200020" bg_bottom="#000010" stars="50">
 			<!-- level 5 -->
+			<ship id="2" y="400" t="2" />
 			<loop count="3">
 				<loop count="2">
 					<call func="caps_x5"/>

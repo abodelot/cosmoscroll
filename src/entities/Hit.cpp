@@ -2,8 +2,9 @@
 
 #include "Hit.hpp"
 #include "Bonus.hpp"
-#include "../utils/Math.hpp"
-#include "../core/ParticleSystem.hpp"
+#include "utils/Math.hpp"
+#include "utils/StringUtils.hpp"
+#include "core/ParticleSystem.hpp"
 
 
 Hit::Hit(Entity::Team team, const sf::Vector2f& position, float angle,
@@ -64,6 +65,15 @@ void Hit::OnCollide(Entity& entity)
 		}
 		Entity::OnCollide(entity);
 		ParticleSystem::GetInstance().AddImpact(GetPosition(), 10);
+		if (GetTeam() == Entity::GOOD && entity.IsDead())
+		{
+			int points = entity.ConsumePoints();
+			if (points != 0)
+			{
+				std::wstring s = str_sprintf(L" +%d", points);
+				ParticleSystem::GetInstance().AddMessage(GetPosition(), s.c_str());
+			}
+		}
 		Kill();
 	}
 }

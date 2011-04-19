@@ -49,12 +49,12 @@ ControlPanel::ControlPanel()
 	missiles_.Init(Bonus::GetSubRect(Bonus::MISSILE), 300, Y_LINE_2);
 	missiles_.count.SetFont(font);
 
-	timer_.SetPosition(430, 17);
+	timer_.SetPosition(430, 12);
 	timer_.SetFont(font);
 	timer_.SetSize(TEXT_SIZE);
 	timer_.SetColor(sf::Color::White);
 
-	game_info_.SetPosition(530, 17);
+	game_info_.SetPosition(530, 12);
 	game_info_.SetFont(font);
 	game_info_.SetSize(TEXT_SIZE);
 	game_info_.SetColor(sf::Color::White);
@@ -66,6 +66,10 @@ ControlPanel::ControlPanel()
 	level_cursor_.SetPosition(LEVEL_BAR_X, LEVEL_BAR_Y - 2);
 	level_duration_ = 0;
 
+	// arcade
+	str_points_.SetPosition(500, 30);
+	str_points_.SetFont(font);
+	str_points_.SetSize(TEXT_SIZE);
 
 }
 
@@ -78,12 +82,22 @@ void ControlPanel::Init(EntityManager::Mode mode)
 		case EntityManager::MODE_STORY:
 			level_cursor_.SetX(LEVEL_BAR_X);
 			break;
-
+		case EntityManager::MODE_ARCADE:
+			SetPoints(0);
+			break;
 	}
 }
+
+
 void ControlPanel::SetGameInfo(const sf::Unicode::Text& text)
 {
 	game_info_.SetText(text);
+}
+
+
+void ControlPanel::SetPoints(int points)
+{
+	str_points_.SetText(str_sprintf("score : %d", points));
 }
 
 
@@ -196,10 +210,15 @@ void ControlPanel::Render(sf::RenderTarget& target) const
 	target.Draw(coolers_.count);
 	target.Draw(missiles_.icon);
 	target.Draw(missiles_.count);
-	if (game_mode_ == EntityManager::MODE_STORY)
+	switch (game_mode_)
 	{
-		target.Draw(level_bar_);
-		target.Draw(level_cursor_);
+		case EntityManager::MODE_STORY:
+			target.Draw(level_bar_);
+			target.Draw(level_cursor_);
+			break;
+		case EntityManager::MODE_ARCADE:
+			target.Draw(str_points_);
+			break;
 	}
 }
 

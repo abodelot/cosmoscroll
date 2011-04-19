@@ -89,6 +89,7 @@ Weapon* SpaceShip::GetWeapon()
 SpaceShip* SpaceShip::Clone() const
 {
 	SpaceShip* ship = new SpaceShip(*this);
+	ship->SetPoints(GetPoints());
 	ship->GetWeapon()->SetOwner(ship);
 	return ship;
 }
@@ -175,15 +176,16 @@ void SpaceShip::move_sinus(float frametime)
 	pos.x += -speed_ * frametime;
 	if (base_y_ == -1)
 	{
+		int y_max = EntityManager::GetInstance().GetHeight() - SINUS_AMPLITUDE - GetSize().y;
 		// calcul de l'ordonnée à l'origine base_y_ de la fonction sinus
 		// l'amplitude de la courbe ne doit pas sortir de la zone de jeu
 		if (pos.y < SINUS_AMPLITUDE)
 		{
 			base_y_ = SINUS_AMPLITUDE;
 		}
-		else if (base_y_ > EntityManager::GetInstance().GetHeight() - SINUS_AMPLITUDE)
+		else if (pos.y > y_max)
 		{
-			base_y_ = EntityManager::GetInstance().GetHeight() - SINUS_AMPLITUDE;
+			base_y_ = y_max;
 		}
 		else
 		{
