@@ -46,6 +46,7 @@
 			<Add library="dumb" />
 		</Linker>
 		<Unit filename="bin/data/levels/levels.xml" />
+		<Unit filename="src/core/Constants.hpp" />
 		<Unit filename="src/core/ControlPanel.cpp" />
 		<Unit filename="src/core/ControlPanel.hpp" />
 		<Unit filename="src/core/Game.cpp" />
@@ -59,7 +60,6 @@
 		<Unit filename="src/core/ParticleSystem.hpp" />
 		<Unit filename="src/core/SoundSystem.cpp" />
 		<Unit filename="src/core/SoundSystem.hpp" />
-		<Unit filename="src/core/data_check.hpp" />
 		<Unit filename="src/entities/Animated.cpp" />
 		<Unit filename="src/entities/Animated.hpp" />
 		<Unit filename="src/entities/Animation.cpp" />

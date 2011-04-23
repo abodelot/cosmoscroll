@@ -2,13 +2,13 @@
 
 #include "GameOverMenu.hpp"
 #include "core/Game.hpp"
+#include "core/Constants.hpp"
 #include "entities/EntityManager.hpp"
 #include "utils/MediaManager.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "md5/md5.hpp"
 
-#define COSMO_KEY "not published"
 
 GameOverMenu::GameOverMenu()
 {
@@ -94,18 +94,21 @@ void GameOverMenu::UploadScore()
 	std::string str_name = txt_pseudo_->GetText();
 	std::string str_score = str_sprintf("%d", score_);
 
-	// COSMO_KEY is a salt, producing a different salted key for each couple (name, score)
-	MD5 key(str_name + str_score + COSMO_KEY);
+	// COSMO_SERVER_KEY is a salt, producing a different salted key for each couple (name, score)
+	MD5 key(str_name + str_score + COSMO_SERVER_KEY);
 
 	// Connect to cosmoscroll scores server
 	sf::Http server;
-	server.SetHost(COSMO_HOSTNAME);
+	server.SetHost(COSMO_SERVER_HOSTNAME);
 
 	// Submit the score
 	sf::Http::Request request;
 	request.SetMethod(sf::Http::Request::Post);
-	request.SetURI(COSMO_URI);
-	std::string body = "name=" + str_name + "&score=" + str_score + "&key=" + key.GetHash();
+	request.SetURI(COSMO_SERVER_URI);
+	std::string body = "name=" + str_name
+	                 + "&score=" + str_score
+	                 + "&key=" + key.GetHash()
+	                 + "&version=" + COSMOSCROLL_VERSION;
 	request.SetBody(body);
 
 	// Send it and get the response returned by the server

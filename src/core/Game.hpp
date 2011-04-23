@@ -10,10 +10,6 @@ class EntityManager;
 class LevelManager;
 
 
-#define COSMO_HOSTNAME "http://perkypenguin.free.fr"
-#define COSMO_URI      "cosmoscroll.php"
-
-
 /**
  * Gestion du déroulement du jeu
  */

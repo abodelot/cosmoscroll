@@ -2,6 +2,7 @@
 
 #include "BestScoresMenu.hpp"
 #include "core/Game.hpp"
+#include "core/Constants.hpp"
 #include "utils/I18n.hpp"
 #include "utils/MediaManager.hpp"
 
@@ -40,12 +41,15 @@ void BestScoresMenu::OnFocus()
 {
 	// Connect to cosmoscroll scores server
 	sf::Http server;
-	server.SetHost(COSMO_HOSTNAME);
+	server.SetHost(COSMO_SERVER_HOSTNAME);
 
 	// Prepare a request to retrieve the scores
 	sf::Http::Request request;
 	request.SetMethod(sf::Http::Request::Get);
-	request.SetURI(COSMO_URI);
+	std::string uri = COSMO_SERVER_URI;
+	uri += "?version=";
+	uri += COSMOSCROLL_VERSION;
+	request.SetURI(uri);
 
 	// Send it and get the response returned by the server
 	sf::Http::Response response = server.SendRequest(request);

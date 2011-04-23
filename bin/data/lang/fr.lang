@@ -25,10 +25,10 @@ menu.pause.quit = Quitter le jeu
 # Arcade menu
 menu.arcade.title = Mode Arcade
 menu.arcade.play = Jouer
-menu.arcade.best_scores = Voir les meilleurs temps
+menu.arcade.best_scores = Meilleurs scores
 
 # Best scores menu
-menu.best_scores.title = Meilleurs temps
+menu.best_scores.title = Meilleurs scores
 
 # Menu game over
 menu.gameover.title = Game Over

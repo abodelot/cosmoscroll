@@ -1,13 +1,13 @@
 #include "AboutMenu.hpp"
 #include "core/Game.hpp"
+#include "core/Constants.hpp"
 #include "utils/MediaManager.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
-#define COSMOSCROLL_VERSION L"0.3-devel"
+
 #define COSMOSCROLL_LICENCE L"GPL"
-#define COSMOSCROLL_AUTHORS L"\n" \
-							 "    Alexandre Bodelot\n" \
+#define COSMOSCROLL_AUTHORS L"    Alexandre Bodelot\n" \
 							 "    Arnaud Wolff\n\n"
 
 
@@ -15,8 +15,10 @@ AboutMenu::AboutMenu()
 {
 	SetTitle(I18n::t("menu.about.title"));
 
-	std::wstring str = I18n::t("menu.about.version") + L" " + COSMOSCROLL_VERSION + L"\n\n";
-	str += I18n::t("menu.about.authors") + L" " + COSMOSCROLL_AUTHORS;
+	std::wstring version;
+	utf8_to_wstr(version, COSMOSCROLL_VERSION);
+	std::wstring str = I18n::t("menu.about.version") + L" " + version + L"\n\n";
+	str += I18n::t("menu.about.authors") + L" \n" + COSMOSCROLL_AUTHORS;
 	str += I18n::t("menu.about.licence") + L" " + COSMOSCROLL_LICENCE;
 
 	info_text_.SetText(str);
