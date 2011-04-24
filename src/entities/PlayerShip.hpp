@@ -26,6 +26,8 @@ public:
 	 */
 	inline int GetShield() const { return shield_; }
 
+	void UpdateScoreCounter(int diff);
+
 	// inherited
 	PlayerShip* Clone() const;
 
@@ -90,7 +92,7 @@ private:
 	int coolers_, shield_, missiles_;
 	float speed_x_, speed_y_;
 	int max_speed_;
-	int earned_points_; // points gagnés en abattant les ennemis
+
 	Input& input_;
 	ControlPanel& panel_;
 	Weapon weapon1_;

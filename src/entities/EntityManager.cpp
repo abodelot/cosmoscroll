@@ -99,10 +99,7 @@ void EntityManager::InitMode(Mode mode)
 			// on démarre toujours le mode arcade avec un nouveau vaisseau
 			RespawnPlayer();
 			SetBackgroundColor(sf::Color::Black, sf::Color::Black);
-			ControlPanel::GetInstance().SetGameInfo(
-				str_sprintf(I18n::t("panel.record").c_str(),
-				(int) arcade_record_ / 60,
-				(int) arcade_record_ % 60));
+			ControlPanel::GetInstance().SetGameInfo(str_sprintf(I18n::t("panel.record").c_str(), arcade_record_));
 			particles_.AddStars();
 
 			max_droppable_index_ = 1;
@@ -245,8 +242,8 @@ void EntityManager::SetBackgroundColor(const sf::Color& top, const sf::Color& bo
 
 void EntityManager::UpdateArcadeRecord()
 {
-	assert(timer_ > arcade_record_);
-	arcade_record_ = timer_;
+	assert(player_->GetPoints() > arcade_record_);
+	arcade_record_ = player_->GetPoints();
 }
 
 
@@ -498,7 +495,7 @@ const Animation& EntityManager::GetAnimation(const char* key) const
 }
 
 
-Entity* EntityManager::GetPlayerShip() const
+PlayerShip* EntityManager::GetPlayerShip() const
 {
 	assert(player_ != NULL);
 	return player_;

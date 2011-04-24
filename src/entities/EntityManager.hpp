@@ -139,7 +139,7 @@ public:
 	/**
 	 * Obtenir le vaisseau du joueur
 	 */
-	Entity* GetPlayerShip() const;
+	PlayerShip* GetPlayerShip() const;
 
 	/**
 	 * Appliquer un foncteur sur chaque entité
@@ -237,7 +237,7 @@ private:
 	bool (EntityManager::*more_bad_guys_)();
 	bool game_over_;
 	float timer_;
-	float arcade_record_;
+	int arcade_record_;
 	LevelManager& levels_;
 
 	int max_droppable_index_;

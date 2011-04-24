@@ -63,7 +63,6 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	overheated_ = false;
 	shield_timer_ = 0;
 	heat_ = 0.0f;
-	earned_points_ = 0;
 
 	max_speed_ = MAX_SPEED;
 	speed_x_ = speed_y_ = 0.f;
@@ -106,6 +105,14 @@ PlayerShip::~PlayerShip()
 {
 	ParticleSystem::GetInstance().RemoveShield(this);
 	ParticleSystem::GetInstance().ClearSmoke(this);
+}
+
+
+void PlayerShip::UpdateScoreCounter(int diff)
+{
+	int points = GetPoints() + diff;
+	panel_.SetPoints(points);
+	SetPoints(points);
 }
 
 

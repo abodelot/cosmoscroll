@@ -4,6 +4,7 @@
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "entities/EntityManager.hpp"
+#include "entities/PlayerShip.hpp"
 #include "utils/MediaManager.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
@@ -17,7 +18,7 @@ GameOverMenu::GameOverMenu()
 	SetTitle(I18n::t("menu.gameover.title"));
 
 	score_ = 0;
-	lab_result_ = new gui::Label(this, "", 120, 150);
+	lab_result_ = new gui::Label(this, "", 120, 120);
 	lab_result_->SetSize(30);
 
 	but_send_score_ = new CosmoButton(this, I18n::t("menu.gameover.send_score"), 210, 240);
@@ -36,18 +37,17 @@ void GameOverMenu::OnFocus()
 	BaseMenu::OnFocus();
 	EntityManager& entities = EntityManager::GetInstance();
 
-	score_ = (int) entities.GetTimer();
-	int min = score_ / 60;
-	int sec = score_ % 60;
+	score_ = entities.GetPlayerShip()->GetPoints();
+
 	std::wstring text;
-	if (entities.GetTimer() > entities.GetArcadeRecord())
+	if (score_ > entities.GetArcadeRecord())
 	{
 		entities.UpdateArcadeRecord();
-		text = str_sprintf(I18n::t("menu.gameover.record").c_str(), min, sec);
+		text = str_sprintf(I18n::t("menu.gameover.new_record").c_str(), score_);
 	}
 	else
 	{
-		text = str_sprintf(I18n::t("menu.gameover.no_record").c_str(), min, sec);
+		text = str_sprintf(I18n::t("menu.gameover.no_record").c_str(), score_);
 	}
 	lab_result_->SetText(text);
 

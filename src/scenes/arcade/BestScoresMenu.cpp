@@ -5,6 +5,7 @@
 #include "core/Constants.hpp"
 #include "utils/I18n.hpp"
 #include "utils/MediaManager.hpp"
+#include "utils/StringUtils.hpp"
 
 
 BestScoresMenu::BestScoresMenu()
@@ -16,6 +17,8 @@ BestScoresMenu::BestScoresMenu()
 	LoadBitmapFont("data/images/gui/mono12-white.png", 10, 10);
 	lab_content_ = new gui::BitmapString(*GetBitmapFont());
 	lab_content_->SetPosition(120, 100);
+
+	querying_ = NOT_STARTED;
 }
 
 
@@ -30,15 +33,18 @@ void BestScoresMenu::EventCallback(int id)
 }
 
 
-void BestScoresMenu::Show(sf::RenderTarget& target) const
+void BestScoresMenu::Update(float frametime)
 {
-	BaseMenu::Show(target);
-	target.Draw(*lab_content_);
-}
-
-
-void BestScoresMenu::OnFocus()
-{
+	if (querying_ == DONE)
+	{
+		BaseMenu::Update(frametime);
+		return;
+	}
+	if (querying_ == NOT_STARTED)
+	{
+		querying_ = IN_PROGRESS;
+		return;
+	}
 	// Connect to cosmoscroll scores server
 	sf::Http server;
 	server.SetHost(COSMO_SERVER_HOSTNAME);
@@ -57,13 +63,27 @@ void BestScoresMenu::OnFocus()
 	{
 		case sf::Http::Response::Ok:
 			lab_content_->SetText(response.GetBody());
-			std::cout << response.GetBody() << std::endl;
 			break;
 		case sf::Http::Response::ConnectionFailed:
-			lab_content_->SetText("Couldn't connect to CosmoScroll server");
+			lab_content_->SetText("Error: couldn't connect to CosmoScroll server");
 			break;
 		default:
-			lab_content_->SetText(response.GetBody());
+			lab_content_->SetText(str_sprintf("Error: server did not properly respond (%d)", response.GetStatus()));
 			break;
 	}
+	querying_ = DONE;
+}
+
+
+void BestScoresMenu::Show(sf::RenderTarget& target) const
+{
+	BaseMenu::Show(target);
+	target.Draw(*lab_content_);
+}
+
+
+void BestScoresMenu::OnFocus()
+{
+	lab_content_->SetText("Please wait...");
+	querying_ = NOT_STARTED;
 }

@@ -100,7 +100,7 @@ bool Game::LoadConfig(const char* filename)
 	fullscreen_ = false;
 	if (config.LoadFromFile(filename))
 	{
-		// reading settings
+		// General settings
 		config.SeekSection("Settings");
 		std::string str;
 		if (!config.ReadItem("language", str) || !I18n::GetInstance().LoadFromCode(str))
@@ -108,8 +108,8 @@ bool Game::LoadConfig(const char* filename)
 			I18n::GetInstance().LoadSystemLanguage();
 		}
 
-		float record = 0;
-		config.ReadItem("best_arcade_time", record);
+		int record = 0;
+		config.ReadItem("arcade_high_score", record);
 		entitymanager_.SetArcadeRecord(record);
 		config.ReadItem("fullscreen", fullscreen_);
 
@@ -120,7 +120,9 @@ bool Game::LoadConfig(const char* filename)
 			ControlPanel::GetInstance().SetY(Game::HEIGHT - ControlPanel::HEIGHT);
 			entitymanager_.SetY(0);
 		}
+
 		// Audio settings
+		config.SeekSection("Audio");
 		int enabled = 1;
 		config.ReadItem("enable_music", enabled);
 		SoundSystem::GetInstance().EnableMusic(enabled);
@@ -137,8 +139,10 @@ bool Game::LoadConfig(const char* filename)
 			SoundSystem::GetInstance().SetMusicVolume(volume);
 		if (config.ReadItem("sound_volume", volume))
 			SoundSystem::GetInstance().SetSoundVolume(volume);
+
 		// reading keyboard and joystick bindings
 		input_.LoadFromConfig(config);
+
 		// reading story progression
 		levels_.LoadFromConfig(config);
 		return true;
@@ -155,26 +159,24 @@ void Game::WriteConfig(const char* filename) const
 	config.SeekSection("Settings");
 	config.WriteItem("fullscreen", (int) fullscreen_);
 	config.WriteItem("panel_on_top", (int) ControlPanel::GetInstance().IsOnTop());
-	config.WriteItem("best_arcade_time", entitymanager_.GetArcadeRecord());
+	config.WriteItem("arcade_high_score", entitymanager_.GetArcadeRecord());
 	config.WriteItem("language", I18n::GetInstance().GetCurrentCode());
-	// story mode progression
-	config.WriteItem("last_unlocked_level", levels_.GetLastUnlocked());
-	config.WriteItem("current_level", levels_.GetCurrent());
 
 	// Audio settings
 	const SoundSystem& snd = SoundSystem::GetInstance();
+	config.SeekSection("Audio");
 	config.WriteItem("music_name",   snd.GetMusicName());
 	config.WriteItem("enable_music", (int) snd.IsMusicEnabled());
 	config.WriteItem("music_volume", snd.GetMusicVolume());
 	config.WriteItem("enable_sound", (int) snd.IsSoundEnabled());
 	config.WriteItem("sound_volume", snd.GetSoundVolume());
 
-
 	// writing keyboard and joystick bindings
 	input_.SaveToConfig(config);
 
 	// levels
 	levels_.SaveToConfig(config);
+
 	// saving configuration to file
 	config.SaveToFile(filename);
 }

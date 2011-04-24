@@ -28,15 +28,15 @@ menu.arcade.play = Jouer
 menu.arcade.best_scores = Meilleurs scores
 
 # Best scores menu
-menu.best_scores.title = Meilleurs scores
+menu.best_scores.title = Records en ligne
 
 # Menu game over
 menu.gameover.title = Game Over
 menu.gameover.pseudo = Votre nom :
 menu.gameover.send_score = Envoyer mon score
 menu.gameover.play_again = Rejouer
-menu.gameover.record = Nouveau record !\n    Vous avez survécu %d" %02d' !
-menu.gameover.no_record = Vous avez survécu seulement\n%2d" %02d' ...
+menu.gameover.new_record = Votre score : %d\n    Nouveau record !
+menu.gameover.no_record = Votre score : %d\n    Essayez encore...
 
 # Menu options
 menu.options.title = Options
@@ -83,7 +83,7 @@ panel.bar_shield = Bouclier
 panel.bar_heat = Chaleur
 panel.overheat = Surchauffe !
 panel.level = Niveau %d
-panel.record = Record : %02d:%02d
+panel.record = Record : %d
 panel.timer = Temps : %02d:%02d
 
 # Bonus

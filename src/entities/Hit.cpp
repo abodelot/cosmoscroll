@@ -2,6 +2,7 @@
 
 #include "Hit.hpp"
 #include "Bonus.hpp"
+#include "PlayerShip.hpp"
 #include "utils/Math.hpp"
 #include "utils/StringUtils.hpp"
 #include "core/ParticleSystem.hpp"
@@ -71,7 +72,12 @@ void Hit::OnCollide(Entity& entity)
 			if (points != 0)
 			{
 				std::wstring s = str_sprintf(L" +%d", points);
-				ParticleSystem::GetInstance().AddMessage(GetPosition(), s.c_str());
+				EntityManager& e = EntityManager::GetInstance();
+				if (e.GetMode() == EntityManager::MODE_ARCADE)
+				{
+					e.GetPlayerShip()->UpdateScoreCounter(points);
+					ParticleSystem::GetInstance().AddMessage(GetPosition(), s.c_str());
+				}
 			}
 		}
 		Kill();

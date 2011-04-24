@@ -67,7 +67,7 @@ ControlPanel::ControlPanel()
 	level_duration_ = 0;
 
 	// arcade
-	str_points_.SetPosition(500, 30);
+	str_points_.SetPosition(530, 30);
 	str_points_.SetFont(font);
 	str_points_.SetSize(TEXT_SIZE);
 
@@ -97,7 +97,7 @@ void ControlPanel::SetGameInfo(const sf::Unicode::Text& text)
 
 void ControlPanel::SetPoints(int points)
 {
-	str_points_.SetText(str_sprintf("score : %d", points));
+	str_points_.SetText(str_sprintf("points: %d", points));
 }
 
 

@@ -35,7 +35,6 @@ void LevelMenu::OnFocus()
 	BaseMenu::OnFocus();
 	int last = levels_.CountLevel();
 	int current = levels_.GetCurrent();
-	printf("current is %d\n", current);
 	int last_unlocked = levels_.GetLastUnlocked();
 
 	if (levels_.AllLevelsCompleted())

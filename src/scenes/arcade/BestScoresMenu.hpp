@@ -10,6 +10,7 @@ public:
 	// inherited
 	void OnFocus();
 
+	void Update(float frametime);
 	void Show(sf::RenderTarget& target) const;
 
 private:
@@ -17,6 +18,13 @@ private:
 	void EventCallback(int id);
 
 	gui::BitmapString* lab_content_;
+	enum QueryStatus
+	{
+		NOT_STARTED,
+		IN_PROGRESS,
+		DONE
+	};
+	QueryStatus querying_;
 };
 
 #endif // BESTSCORESMENU_HPP

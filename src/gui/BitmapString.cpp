@@ -45,19 +45,17 @@ const char* BitmapString::GetText() const
 
 void BitmapString::AppendChar(char character)
 {
-	sf::Sprite sprite;
-	sprite.SetImage(font_->GetImage());
-	sprite.SetSubRect(font_->GetCharRect(character));
-	sprite.SetColor(GetColor());
-
 	if (character == '\n')
 	{
 		last_x_ = 0;
 		last_y_ += font_->GetCharHeight();
-		sprite.SetPosition(0, last_y_);
 	}
 	else
 	{
+		sf::Sprite sprite;
+		sprite.SetImage(font_->GetImage());
+		sprite.SetSubRect(font_->GetCharRect(character));
+		sprite.SetColor(GetColor());
 		last_x_ += char_width_;
 		sprite.SetPosition(last_x_, last_y_);
 		bitmaps_.push_back(sprite);
