@@ -26,6 +26,8 @@ public:
 	 */
 	inline int GetShield() const { return shield_; }
 
+	inline bool HasCheated() const { return konami_code_activated_; }
+
 	void UpdateScoreCounter(int diff);
 
 	// inherited
@@ -85,6 +87,7 @@ private:
 	// la séquence du Code Konami
 	Input::Action konami_code_[KONAMI_CODE_LENGTH];
 	int current_konami_event_;
+	bool konami_code_activated_;
 
 	float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
 	bool overheated_;

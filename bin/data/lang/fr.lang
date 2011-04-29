@@ -2,6 +2,7 @@
 
 menu.back = Retour
 menu.back_main_menu = Retour menu principal
+menu.submit = Envoyer
 
 # Menu principal
 menu.main.story = Mode Histoire
@@ -37,6 +38,8 @@ menu.gameover.send_score = Envoyer mon score
 menu.gameover.play_again = Rejouer
 menu.gameover.new_record = Votre score : %d\n    Nouveau record !
 menu.gameover.no_record = Votre score : %d\n    Essayez encore...
+menu.gameover.error_cheat = Envoi interdit pour les tricheurs !
+menu.gameover.error_altered_res = Envoi interdit, version du jeu modifiée
 
 # Menu options
 menu.options.title = Options

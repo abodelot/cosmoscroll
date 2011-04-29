@@ -72,26 +72,29 @@ private:
 	// inherited
 	void Render(sf::RenderTarget& target) const;
 
-	enum
-	{
-		SHIELD, HP, HEAT, PBAR_COUNT
-	};
+
 	struct ProgressBar
 	{
-		sf::String label;
-		sf::Shape background;
-		sf::Sprite bar;
-		int max_value;
+		enum
+		{
+			SHIELD, HP, HEAT, _PBAR_COUNT
+		};
 
 		ProgressBar();
 
 		void Init(const sf::Unicode::Text& text, const sf::Font& font, const sf::Image& img);
 
 		// redimensionne la barre
-		void SetPercent(int value);
+		void SetValue(int value);
 
+		// position de l'ensemble label/bar
 		void SetPosition(int x, int y);
 
+		sf::String label_;
+		sf::Shape background_;
+		sf::Sprite bar_;
+		int max_value_;
+		int initial_x_;
 	};
 
 	struct BonusCount
@@ -102,7 +105,7 @@ private:
 		void Init(const sf::IntRect& subrect, int x, int y);
 	};
 
-	ProgressBar pbars_[PBAR_COUNT];
+	ProgressBar pbars_[ProgressBar::_PBAR_COUNT];
 	BonusCount coolers_;
 	BonusCount missiles_;
 
@@ -112,7 +115,7 @@ private:
 	sf::Sprite panel_;
 
 	EntityManager::Mode game_mode_;
-	// story -----------
+	// story
 	int level_duration_;
 	sf::Sprite level_cursor_;
 	sf::Sprite level_bar_;

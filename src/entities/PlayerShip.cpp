@@ -98,6 +98,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	konami_code_[8] = Input::USE_WEAPON_2;
 	konami_code_[9] = Input::USE_WEAPON_1;
 	current_konami_event_ = 0;
+	konami_code_activated_ = false;
 }
 
 
@@ -458,6 +459,7 @@ void PlayerShip::IncreaseShield(int count)
 
 void PlayerShip::KonamiCodeOn()
 {
+	konami_code_activated_ = true;
 	HandleBonus(Bonus::SUPER_BANANA);
 	HandleBonus(Bonus::SPEED);
 	coolers_ = 42;

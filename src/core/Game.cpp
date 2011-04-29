@@ -147,6 +147,7 @@ bool Game::LoadConfig(const char* filename)
 		levels_.LoadFromConfig(config);
 		return true;
 	}
+	I18n::GetInstance().LoadSystemLanguage();
 	return false;
 }
 

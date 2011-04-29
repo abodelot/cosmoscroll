@@ -2,6 +2,7 @@
 
 menu.back = Back
 menu.back_main_menu = Back to main menu
+menu.submit = Submit
 
 # Main menu
 menu.main.story = Story mode
@@ -37,6 +38,8 @@ menu.gameover.pseudo = Your name:
 menu.gameover.play_again = Play again
 menu.gameover.new_record = Your score: %d\n    New High Score!
 menu.gameover.no_record = Your score: %d\n    Try harder!
+menu.gameover.error_cheat = Upload denied: you've cheated!
+menu.gameover.error_altered_res = Upload denied: game resources have been modified
 
 # Options menu
 menu.options.title = Options

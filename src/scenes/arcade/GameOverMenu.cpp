@@ -14,21 +14,24 @@
 GameOverMenu::GameOverMenu()
 {
 	LoadBitmapFont("data/images/gui/mono12-black.png", 10, 10);
-
 	SetTitle(I18n::t("menu.gameover.title"));
 
 	score_ = 0;
 	lab_result_ = new gui::Label(this, "", 120, 120);
 	lab_result_->SetSize(30);
 
+	lab_pseudo_ = new gui::Label(this, I18n::t("menu.gameover.pseudo"), 100, 200);
+	txt_pseudo_ = new gui::TextBox(this, 210, 200, 30);
+	txt_pseudo_->SetCallbackID(3);
+
+	but_commit_ = new CosmoButton(this, I18n::t("menu.submit"), 210, 240);
+	but_commit_->SetCallbackID(3);
+
 	but_send_score_ = new CosmoButton(this, I18n::t("menu.gameover.send_score"), 210, 240);
 	but_send_score_->SetCallbackID(0);
+
 	(new CosmoButton(this, I18n::t("menu.gameover.play_again"), 210, 290))->SetCallbackID(1);
 	(new CosmoButton(this, I18n::t("menu.back_main_menu"), 210, 340))->SetCallbackID(2);
-
-	lab_pseudo_ = new gui::Label(this, I18n::t("menu.gameover.pseudo"), 100, 250);
-	txt_pseudo_ = new gui::TextBox(this, 210, 250, 30);
-	txt_pseudo_->SetCallbackID(3);
 }
 
 
@@ -49,12 +52,14 @@ void GameOverMenu::OnFocus()
 	{
 		text = str_sprintf(I18n::t("menu.gameover.no_record").c_str(), score_);
 	}
+	lab_result_->SetSize(30);
 	lab_result_->SetText(text);
 
 	but_send_score_->SetVisible(true);
 	FocusWidget(but_send_score_);
 	lab_pseudo_->SetVisible(false);
 	txt_pseudo_->SetVisible(false);
+	but_commit_->SetVisible(false);
 }
 
 
@@ -63,6 +68,7 @@ void GameOverMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 0:
+			but_commit_->SetVisible(true);
 			txt_pseudo_->SetVisible(true);
 			lab_pseudo_->SetVisible(true);
 			FocusWidget(txt_pseudo_);
@@ -76,13 +82,19 @@ void GameOverMenu::EventCallback(int id)
 			Game::GetInstance().SetNextScene(Game::SC_MainMenu);
 			break;
 		case 3:
-			if (Game::GetInstance().IsPure())
+			if (EntityManager::GetInstance().GetPlayerShip()->HasCheated())
 			{
-				UploadScore();
+				lab_result_->SetSize(20);
+				lab_result_->SetText(I18n::t("menu.gameover.error_cheat"));
+			}
+			else if (!Game::GetInstance().IsPure())
+			{
+				lab_result_->SetSize(20);
+				lab_result_->SetText(I18n::t("menu.gameover.error_altered_res"));
 			}
 			else
 			{
-				lab_result_->SetText("Petit malin...");
+				UploadScore();
 			}
 			break;
 	}

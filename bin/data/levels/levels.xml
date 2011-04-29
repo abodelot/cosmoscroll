@@ -189,6 +189,7 @@
 			<!-- level 4 -->
 			<wait t="4"/>
 			<ship id="5" y="120"/>
+			<ship id="5" y="220" t="2"/>
 			<loop count="2">
 				<asteroid y="200" t="4.0"/>
 				<asteroid y="360"/>
@@ -258,7 +259,7 @@
 			</loop>
 		</level>
 		<level desc="The saucers are up there.\nThe graveyard is out there."
-		bg_bottom="#000000" bg_top="#106020" stars="35">
+		bg_bottom="#000000" bg_top="#007050" stars="35">
 			<!-- level 6 -->
 			<wait t="2"/>
 			<loop count="8">
@@ -280,8 +281,6 @@
 				<ship id="4" y="150" t="1"/>
 				<ship id="4" y="150" t="1"/>
 			</loop>
-
-
 			<loop count="2">
 				<ship id="3" y="100" t="4"/>
 				<asteroid y="100" t="1"/>

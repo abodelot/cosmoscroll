@@ -4,10 +4,13 @@
 #include "../utils/StringUtils.hpp"
 #include "../utils/I18n.hpp"
 
-#define LABEL_LENGTH 60   // longueur du texte des progress bars
+
 #define BONUS_LENGTH 25   // longueur des icones bonus
-#define BAR_HEIGHT   15   // hauteur progress bar
-#define BAR_COLOR    sf::Color(64, 64, 64) // couleur fond progress bar
+
+#define PROG_BAR_WIDTH       100
+#define PROG_BAR_HEIGHT      15
+#define PROG_BAR_BG          sf::Color(64, 64, 64) // couleur de fond
+#define PROG_BAR_TEXT_LENGTH 60   // longueur du texte
 
 #define Y_LINE_1       10 // Y première ligne
 #define Y_LINE_2       30 // Y deuxième ligne
@@ -29,16 +32,16 @@ ControlPanel::ControlPanel()
 	panel_.SetImage(GET_IMG("gui/score-board"));
 
 	const sf::Font& font = MediaManager::GetInstance().GetFixedFont();
-	pbars_[HP].Init(I18n::t("panel.bar_hp"), font, GET_IMG("gui/bar-hp"));
-	pbars_[HP].SetPosition(45, Y_LINE_1);
+	pbars_[ProgressBar::HP].Init(I18n::t("panel.bar_hp"), font, GET_IMG("gui/bar-hp"));
+	pbars_[ProgressBar::HP].SetPosition(45, Y_LINE_1);
 
-	pbars_[SHIELD].Init(I18n::t("panel.bar_shield"), font, GET_IMG("gui/bar-shield"));
-	pbars_[SHIELD].SetPosition(45, Y_LINE_2);
+	pbars_[ProgressBar::SHIELD].Init(I18n::t("panel.bar_shield"), font, GET_IMG("gui/bar-shield"));
+	pbars_[ProgressBar::SHIELD].SetPosition(45, Y_LINE_2);
 
-	pbars_[HEAT].Init(I18n::t("panel.bar_heat"), font, GET_IMG("gui/bar-heat"));
-	pbars_[HEAT].SetPosition(220, Y_LINE_1);
+	pbars_[ProgressBar::HEAT].Init(I18n::t("panel.bar_heat"), font, GET_IMG("gui/bar-heat"));
+	pbars_[ProgressBar::HEAT].SetPosition(220, Y_LINE_1);
 
-	sf::Vector2f pos = pbars_[HEAT].bar.GetPosition();
+	sf::Vector2f pos = pbars_[ProgressBar::HEAT].bar_.GetPosition();
 	info_.SetPosition(pos.x + 8, pos.y - TEXT_PADDING_Y);
 	info_.SetFont(font);
 	info_.SetSize(TEXT_SIZE);
@@ -116,37 +119,37 @@ void ControlPanel::SetOverheat(bool overheat)
 
 void ControlPanel::SetShipHP(int value)
 {
-	pbars_[HP].SetPercent(value);
+	pbars_[ProgressBar::HP].SetValue(value);
 }
 
 
 void ControlPanel::SetMaxShipHP(int max)
 {
-	pbars_[HP].max_value = max;
+	pbars_[ProgressBar::HP].max_value_ = max;
 }
 
 
 void ControlPanel::SetShield(int value)
 {
-	pbars_[SHIELD].SetPercent(value);
+	pbars_[ProgressBar::SHIELD].SetValue(value);
 }
 
 
 void ControlPanel::SetMaxShield(int max)
 {
-	pbars_[SHIELD].max_value = max;
+	pbars_[ProgressBar::SHIELD].max_value_ = max;
 }
 
 
 void ControlPanel::SetHeat(int value)
 {
-	pbars_[HEAT].SetPercent(value);
+	pbars_[ProgressBar::HEAT].SetValue(value);
 }
 
 
 void ControlPanel::SetMaxHeat(int max)
 {
-	pbars_[HEAT].max_value = max;
+	pbars_[ProgressBar::HEAT].max_value_ = max;
 }
 
 
@@ -193,14 +196,15 @@ void ControlPanel::SetLevelDuration(int seconds)
 	printf("duration: %d\" %d'\n", seconds / 60, seconds % 60);
 }
 
+
 void ControlPanel::Render(sf::RenderTarget& target) const
 {
 	target.Draw(panel_);
-	for (int i = 0; i < PBAR_COUNT; ++i)
+	for (int i = 0; i < ProgressBar::_PBAR_COUNT; ++i)
 	{
-		target.Draw(pbars_[i].label);
-		target.Draw(pbars_[i].background);
-		target.Draw(pbars_[i].bar);
+		target.Draw(pbars_[i].label_);
+		target.Draw(pbars_[i].background_);
+		target.Draw(pbars_[i].bar_);
 	}
 	target.Draw(game_info_);
 	target.Draw(info_);
@@ -225,38 +229,44 @@ void ControlPanel::Render(sf::RenderTarget& target) const
 
 ControlPanel::ProgressBar::ProgressBar()
 {
-	background = sf::Shape::Rectangle(0, 0, 100, BAR_HEIGHT, BAR_COLOR, 1.f);
+	background_ = sf::Shape::Rectangle(0, 0, PROG_BAR_WIDTH, PROG_BAR_HEIGHT, PROG_BAR_BG, 1.f);
+	initial_x_ = 0;
 }
 
 
 void ControlPanel::ProgressBar::Init(const sf::Unicode::Text& text, const sf::Font& font, const sf::Image& img)
 {
-	label.SetFont(font);
-	label.SetText(text);
-	label.SetSize(TEXT_SIZE);
-	label.SetColor(sf::Color::White);
-	bar.SetImage(img);
+	label_.SetFont(font);
+	label_.SetText(text);
+	label_.SetSize(TEXT_SIZE);
+	label_.SetColor(sf::Color::White);
+	bar_.SetImage(img);
 
 }
 
 
 void ControlPanel::ProgressBar::SetPosition(int x, int y)
 {
-	label.SetPosition(x, y - TEXT_PADDING_Y);
-	background.SetPosition(x + LABEL_LENGTH, y);
-	bar.SetPosition(x + LABEL_LENGTH, y);
+	label_.SetPosition(x, y - TEXT_PADDING_Y);
+	int x_bar = x + PROG_BAR_TEXT_LENGTH;
+	background_.SetPosition(x_bar, y);
+	bar_.SetPosition(x_bar, y);
+	initial_x_ = x_bar;
 }
 
 
-void ControlPanel::ProgressBar::SetPercent(int value)
+void ControlPanel::ProgressBar::SetValue(int value)
 {
 	value = value > 0 ? value : 0;
-	float length = (float) value / max_value * 100;
+	float length = (float) value / max_value_ * PROG_BAR_WIDTH;
 	if (length == 0.0f)
 	{
 		length = 0.1f;
 	}
-	bar.Resize(length, BAR_HEIGHT);
+
+	bar_.Resize(length, PROG_BAR_HEIGHT);
+	// It's magic, I ain't gonna explain shit.
+	bar_.SetX(initial_x_ - length / 2.68);
 }
 
 
