@@ -68,6 +68,8 @@
 		<Unit filename="src/entities/Asteroid.hpp" />
 		<Unit filename="src/entities/Bonus.cpp" />
 		<Unit filename="src/entities/Bonus.hpp" />
+		<Unit filename="src/entities/BossTentacles.cpp" />
+		<Unit filename="src/entities/BossTentacles.hpp" />
 		<Unit filename="src/entities/Entity.cpp" />
 		<Unit filename="src/entities/Entity.hpp" />
 		<Unit filename="src/entities/EntityManager.cpp" />

@@ -136,6 +136,10 @@ void PlayerShip::HandleAction(Input::Action action)
 				overheated_ = false;
 				panel_.SetOverheat(false);
 			}
+			else
+			{
+				SoundSystem::GetInstance().PlaySound("disabled");
+			}
 			break;
 		case Input::USE_MISSILE:
 			if (missiles_ > 0 && missile_launcher_.IsReady())
@@ -143,6 +147,10 @@ void PlayerShip::HandleAction(Input::Action action)
 				--missiles_;
 				panel_.SetMissiles(missiles_);
 				missile_launcher_.Shoot(0);
+			}
+			else
+			{
+				SoundSystem::GetInstance().PlaySound("disabled");
 			}
 			break;
 		case Input::COUNT: // filter non-events
@@ -196,6 +204,11 @@ void PlayerShip::Update(float frametime)
 			ParticleSystem::GetInstance().AddMessage(GetPosition(), I18n::t("panel.overheat").c_str());
 		}
 	}
+	else if (input_.HasInput(Input::USE_WEAPON_1) || input_.HasInput(Input::USE_WEAPON_2))
+	{
+		SoundSystem::GetInstance().PlaySound("disabled");
+	}
+
 	// déplacement
 	ComputeMove(frametime);
 	sf::Vector2f pos = GetPosition();

@@ -9,6 +9,7 @@ particles/smoke.png
 particles/star.png
 particles/shield.png
 particles/impact.png
+particles/impact-green.png
 particles/fiery.png
 gui/background.png
 gui/bar-heat.png
@@ -32,5 +33,6 @@ entities/asteroid-big.png
 entities/asteroid-medium.png
 entities/asteroid-small.png
 entities/bonus.png
+entities/boss-tentacles.png
 entities/evil-boss.png
 entities/explosion.png

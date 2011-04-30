@@ -1,9 +1,10 @@
 #include <iostream>
 
 #include "LevelManager.hpp"
-#include "../entities/EntityManager.hpp"
-#include "../entities/Asteroid.hpp"
-#include "../entities/EvilBoss.hpp"
+#include "entities/EntityManager.hpp"
+#include "entities/Asteroid.hpp"
+#include "entities/EvilBoss.hpp"
+#include "entities/BossTentacles.hpp"
 
 #define DEFAULT_STARS_COUNT 33
 
@@ -282,6 +283,10 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		else if (strcmp(tag_name, "evilboss") == 0)
 		{
 			entity = new EvilBoss(position);
+		}
+		else if (strcmp(tag_name, "boss_tentacles") == 0)
+		{
+			entity = new BossTentacles(position);
 		}
 		else
 		{

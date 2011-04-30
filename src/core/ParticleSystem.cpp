@@ -52,6 +52,14 @@ void ParticleSystem::AddImpact(const sf::Vector2f& offset, int count)
 }
 
 
+void ParticleSystem::AddGreenImpact(const sf::Vector2f& pos, int count)
+{
+	static const sf::Image& img = GET_IMG("particles/impact-green");
+	for (;count > 0; --count)
+		particles_.push_front(new Fiery(pos, img));
+}
+
+
 void ParticleSystem::AddStars(int count)
 {
 	for (; count > 0; --count)
@@ -194,7 +202,7 @@ ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset, const sf::Image& img)
 bool ParticleSystem::Fiery::OnUpdate(float frametime)
 {
 	timer_ += frametime;
-	int speed = (int) ((lifetime_ - timer_) * FIERY_VELOCITY * frametime);
+	float speed = (lifetime_ - timer_) * FIERY_VELOCITY * frametime;
 	sprite_.Move(speed * math::cos(angle_), -speed * math::sin(angle_));
 	// transparence
 	sprite_.SetColor(sf::Color(255, 255, 255, (int) (255 - 255 * timer_ / lifetime_)));

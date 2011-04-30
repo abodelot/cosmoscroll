@@ -8,7 +8,7 @@
 	<ship id="3" name="Interceptor" animation="interceptor" hp="8" speed="35" move="straight" attack="auto_aim" points="3">
 		<weapon id="laser-green" x="0" y="32"/>
 	</ship>
-	<ship id="4" name="UFO" animation="saucer" hp="6" speed="80" move="sinus" attack="auto_aim" points="4">
+	<ship id="4" name="Saucer" animation="saucer" hp="6" speed="80" move="sinus" attack="auto_aim" points="4">
 		<weapon id="laser-pink" x="0" y="24"/>
 	</ship>
 </spaceships>

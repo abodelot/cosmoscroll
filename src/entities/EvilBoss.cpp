@@ -1,6 +1,7 @@
 #include "EvilBoss.hpp"
 
 #include "core/ParticleSystem.hpp"
+#include "core/SoundSystem.hpp"
 #include "utils/MediaManager.hpp"
 
 
@@ -120,16 +121,13 @@ void EvilBoss::TakeDamage(int damage)
 				break;
 		}
 	}
-	else if (GetHP() <= 0)
+	else if (IsDead())
 	{
-
-		for (int i = 0; i < 10; ++i)
-		{
-			sf::Vector2f pos = GetPosition();
-			pos.x += GetSize().x / 2 + sf::Randomizer::Random(-100, 100);
-			pos.y += GetSize().y / 2 + sf::Randomizer::Random(-100, 100);
-			ParticleSystem::GetInstance().AddExplosion(pos);
-		}
+		sf::Vector2f pos = GetPosition();
+		pos.x += GetSize().x / 2;
+		pos.y += GetSize().y / 2;
+		ParticleSystem::GetInstance().AddGreenImpact(pos, 200);
+		SoundSystem::GetInstance().PlaySound("boom");
 	}
 }
 

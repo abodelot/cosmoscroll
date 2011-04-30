@@ -5,6 +5,7 @@ canon.wav
 missile-gasfire.ogg
 bonus.ogg
 boom.ogg
+disabled.ogg
 end-level.ogg
 game-over.ogg
 menu-select.wav

@@ -32,6 +32,7 @@ public:
 	 * @param count: nombre d'étincelles
 	 */
 	void AddImpact(const sf::Vector2f& offset, int count);
+	void AddGreenImpact(const sf::Vector2f& pos, int count);
 
 	/**
 	 * Ajouter des étoiles défilantes dans la scène

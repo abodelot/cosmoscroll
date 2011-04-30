@@ -2,14 +2,14 @@
 <weapons>
 	<weapon id="canon"
 	        image="ammo/hellfire"
-	        heat_cost="1.7"
+	        heat_cost="1.5"
 	        fire_rate="16"
 	        damage="1"
 	        speed="490"
 	        sound="canon" />
 	<weapon id="laser-blue"
 	        image="ammo/laser-blue"
-	        heat_cost="2.8"
+	        heat_cost="2.5"
 	        fire_rate="8"
 	        damage="2"
 	        speed="380"
@@ -26,7 +26,7 @@
 	        heat_cost="5"
 	        fire_rate="1"
 	        damage="2"
-	        speed="440"
+	        speed="400"
 	        sound="laser-pink" />
 	<weapon id="laser-red"
 	        image="ammo/laser-red"

@@ -187,7 +187,6 @@
 		</level>
 		<level desc="Where did I put those keys again?" bg_top="#000000" bg_bottom="#801245" stars="35">
 			<!-- level 4 -->
-			<wait t="4"/>
 			<ship id="5" y="120"/>
 			<ship id="5" y="220" t="2"/>
 			<loop count="2">
@@ -245,17 +244,27 @@
 				<ship id="3" y="360" t="1.0"/>
 				<ship id="3" y="40"/>
 			</loop>
+			<boss_tentacles y="210" t="4"/>
 		</level>
 		<level desc="I'll bet my badge that we haven't\nseen the last of those weirdies." bg_top="#200020" bg_bottom="#000010" stars="50">
 			<!-- level 5 -->
-			<ship id="2" y="400" t="2" />
+			<wait t="3"/>
+			<call func="caps_x5"/>
+			<loop count="4">
+				<ship id="2" y="340" t="2" />
+				<ship id="2" y="140" t="0.5" />
+			</loop>
 			<loop count="3">
+				<asteroid y="200" t="1"/>
+				<ship id="3" y="300" t="1.5"/>
+				<ship id="3" y="350"/>
 				<loop count="2">
-					<call func="caps_x5"/>
+					<ship id="2" y="80" t="1"/>
+					<ship id="1" y="280" t="2"/>
+					<ship id="2" y="100" t="1"/>
 				</loop>
-				<ship id="2" y="80" t="1"/>
-				<ship id="2" y="280" t="2"/>
-				<ship id="2" y="100" t="1"/>
+				<ship id="3" y="50" t="1.5"/>
+				<ship id="3" y="100"/>
 			</loop>
 		</level>
 		<level desc="The saucers are up there.\nThe graveyard is out there."
@@ -266,9 +275,9 @@
 				<ship id="2" y="100" t="0.5" />
 				<ship id="2" y="300" t="0.5" />
 			</loop>
-
+			<wait t="3.5"/>
 			<loop count="3">
-				<ship id="4" y="70" t="2"/>
+				<ship id="4" y="70" t="1"/>
 				<ship id="4" y="70" t="1"/>
 				<ship id="4" y="150" t="1"/>
 				<ship id="4" y="150" t="1"/>
@@ -282,32 +291,31 @@
 				<ship id="4" y="150" t="1"/>
 			</loop>
 			<loop count="2">
-				<ship id="3" y="100" t="4"/>
-				<asteroid y="100" t="1"/>
-				<ship id="5" y="250" t="2"/>
-				<ship id="3" y="70"/>
+				<ship id="5" y="200" t="4"/>
+				<asteroid y="120"/>
+				<asteroid y="350" t="1"/>
+				<asteroid y="200" t="1"/>
+				<ship id="5" y="280" t="2"/>
+				<ship id="5" y="70"/>
 			</loop>
 			<loop count="2">
-				<ship id="4" y="340" t="2"/>
+				<ship id="3" y="340" t="4"/>
 				<ship id="3" y="290" t="0.5"/>
 				<ship id="3" y="50" t="0.5"/>
+				<ship id="3" y="100" t="0.5"/>
+				<ship id="3" y="270" t="0.5"/>
+				<ship id="3" y="70" t="0.5"/>
+				<ship id="3" y="300" t="0.5"/>
 			</loop>
-			<ship id="3" y="300" t="1"/>
-			<ship id="3" y="70" t="0"/>
-			<loop count="3">
+			<wait t="2"/>
+			<loop count="4">
+				<ship id="4" y="70" t="1"/>
 				<ship id="4" y="100" t="1"/>
 				<ship id="4" y="130" t="1"/>
 				<ship id="4" y="160" t="1"/>
 			</loop>
-			<loop count="4">
-				<ship id="3" y="390" t="0.5"/>
-				<ship id="4" y="300" t="2"/>
-			</loop>
-			<loop count="3">
-				<ship id="4" y="70" t="1"/>
-				<ship id="4" y="100" t="1"/>
-				<ship id="4" y="130" t="1"/>
-			</loop>
+			<boss_tentacles y="120" t="5"/>
+			<boss_tentacles y="290" t="10"/>
 		</level>
 		<level desc="Now toddle off and fly\nyour flying machine!" stars="40">
 			<!-- level 7 -->
