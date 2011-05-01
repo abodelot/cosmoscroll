@@ -43,9 +43,10 @@ OptionList::OptionList(Menu* owner, int x, int y) :
 	right_arrow_.SetPointOutlineColor(1, owner->GetWidgetStyle().global_border_color);
 	right_arrow_.SetPointOutlineColor(2, owner->GetWidgetStyle().global_border_color);
 
-	// SetRect sera exécuté quand on ajoutera une option, la largeur et la largeur
-	// du widget seront alors connus. On mémorie juste la position en attendant.
+	// SetRect sera exécuté quand on ajoutera une option, la hauteur et la largeur
+	// du widget seront alors connus. On mémorise juste la position en attendant.
 	SetPosition(x, y);
+	OnStateChanged(GetState());
 }
 
 

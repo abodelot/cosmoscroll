@@ -1,8 +1,9 @@
 #include "SoundSystem.hpp"
-#include "../utils/MediaManager.hpp"
+#include "utils/MediaManager.hpp"
+
 
 #define DEFAULT_MUSIC  "space"
-#define DEFAULT_VOLUME 50
+#define DEFAULT_VOLUME 40
 
 template <class T>
 static inline void ensure_range(T& value, T min, T max)
@@ -88,15 +89,11 @@ void SoundSystem::PlayMusic(const std::string& music_name)
 		music_name_ = DEFAULT_MUSIC;
 	}
 
-	if (music != music_)
+	if (enable_music_ && music != music_)
 	{
 		StopMusic();
 		music_ = music;
 		music_->SetVolume(music_volume_);
-	}
-	if (enable_music_)
-	{
-		StopMusic();
 		music_->Play();
 	}
 }

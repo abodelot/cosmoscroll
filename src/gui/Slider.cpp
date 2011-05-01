@@ -21,6 +21,7 @@ Slider::Slider(Menu* owner, int x, int y, int w, int h) :
 	quantum_ = 10;
 
 	SetRect(x, y, x + w, y + h);
+	OnStateChanged(GetState());
 }
 
 

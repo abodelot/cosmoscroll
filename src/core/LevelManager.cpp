@@ -167,14 +167,12 @@ bool LevelManager::IsHardcoreEnabled()
 
 LevelManager::Error LevelManager::ParseFile(const char* file)
 {
-#ifdef DEBUG
 	printf("* loading levels... ");
-#endif
+
 	if (!doc_.LoadFile(file))
 	{
-		std::cerr << "erreur lors du chargement de " << file << std::endl;
-		std::cerr << "erreur #" << doc_.ErrorId() << " (" << doc_.ErrorDesc()
-			<< ')' << std::endl;
+		std::cerr << "cannot load file " << file << std::endl;
+		std::cerr << "error #" << doc_.ErrorId() << ": " << doc_.ErrorDesc() << std::endl;
 		return FILE;
 	}
 
@@ -198,9 +196,8 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 		levels_.push_back(node->ToElement());
 		node = node->NextSibling();
 	}
-#ifdef DEBUG
 	printf("%d levels found\n", (int) levels_.size());
-#endif
+
 	return SUCCESS;
 }
 
@@ -243,16 +240,24 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		const char* func_name = elem->Attribute("func");
 		if (func_name != NULL)
 		{
-			TiXmlElement* child = functions_[func_name]->FirstChildElement();
-			while (child != NULL)
+			std::map<std::string, TiXmlElement*>::iterator it = functions_.find(func_name);
+			if (it != functions_.end())
 			{
-				ParseEntity(child);
-				child = child->NextSiblingElement();
+				TiXmlElement* child	= it->second->FirstChildElement();
+				while (child != NULL)
+				{
+					ParseEntity(child);
+					child = child->NextSiblingElement();
+				}
+			}
+			else
+			{
+				std::cerr << "[levels] invalid function '" << func_name << "' in 'call' tag" << std::endl;
 			}
 		}
 		else
 		{
-			puts("missing func attribute");
+			std::cerr << "[levels] 'func' attribute missing in 'call' tag" << std::endl;
 		}
 	}
 	else if (strcmp(tag_name, "wait") == 0)

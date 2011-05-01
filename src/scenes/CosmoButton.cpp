@@ -1,6 +1,6 @@
 #include "CosmoButton.hpp"
-#include "../core/SoundSystem.hpp"
-#include "../utils/MediaManager.hpp"
+#include "core/SoundSystem.hpp"
+#include "utils/MediaManager.hpp"
 
 #define BUT_W 220
 #define BUT_H 40
@@ -14,7 +14,6 @@ CosmoButton::CosmoButton(gui::Menu* owner, const sf::Unicode::Text& text, int x,
 	{
 		img_ = &GET_IMG("gui/button");
 	}
-
 
 	background_.SetImage(*img_);
 	background_.SetSubRect(sf::IntRect(0, 0, BUT_W, BUT_H));

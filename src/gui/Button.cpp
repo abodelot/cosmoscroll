@@ -1,7 +1,8 @@
 #include "Button.hpp"
 #include "Menu.hpp"
 
-#define PADDING 10
+#define PADDING_Y 8
+#define PADDING_X 0
 
 using namespace gui;
 
@@ -10,11 +11,11 @@ Button::Button(Menu* owner, const sf::Unicode::Text& text, int x, int y, int w, 
 	Widget(owner, true)
 {
 	text_.SetText(text);
-	text_.SetPosition(PADDING, PADDING);
+	text_.SetPosition(PADDING_X, PADDING_Y);
 
 	// calcul du coin inférieur droit
-	int width = w == -1 ? text_.GetRect().GetWidth() + PADDING * 2 : w;
-	int height = h == -1 ? text_.GetRect().GetHeight() + PADDING * 2 : h;
+	int width = w == -1 ? text_.GetRect().GetWidth() + PADDING_X * 2 : w;
+	int height = h == -1 ? text_.GetRect().GetHeight() + PADDING_Y * 2 : h;
 
 	SetRect(x, y, x + width, y + height);
 	SetAlign(Align::CENTER);
@@ -23,6 +24,7 @@ Button::Button(Menu* owner, const sf::Unicode::Text& text, int x, int y, int w, 
 	text_.SetSize(style.global_text_size);
 	text_.SetFont(*style.global_font);
 	text_.SetColor(style.button_text_color);
+	OnStateChanged(GetState());
 }
 
 
@@ -37,7 +39,7 @@ void Button::SetAlign(Align::EAlign align)
 	switch (align)
 	{
 		case Align::LEFT:
-			text_.SetX(PADDING);
+			text_.SetX(PADDING_X);
 			break;
 		case Align::RIGHT:
 			text_.SetX(GetWidth() - text_.GetRect().GetWidth());

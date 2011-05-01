@@ -21,7 +21,7 @@ JoystickMenu::JoystickMenu()
 	but_pause_->SetCallbackID(Input::PAUSE);
 
 	new gui::Label(this, I18n::t("menu.joystick.sensitivity"), 125, 340);
-	sl_joystick_ = new gui::Slider(this, 340, 340, 160);
+	sl_joystick_ = new gui::Slider(this, 340, 344, 160);
 	sl_joystick_->SetCallbackID(9000);
 
 	(new CosmoButton(this, I18n::t("menu.back"), 210, 410))->SetCallbackID(9001);

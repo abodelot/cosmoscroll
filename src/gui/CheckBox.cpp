@@ -17,17 +17,20 @@ CheckBox::CheckBox(Menu* owner, int x, int y) :
 
 	box_ = sf::Shape::Rectangle(0, 0, SIZE, SIZE, sf::Color::White,
 		1, style.global_border_color);
-	v1_ = sf::Shape::Line(PADDING, SIZE / 2, SIZE / 2, SIZE - PADDING,
+	/*v1_ = sf::Shape::Line(PADDING, SIZE / 2, SIZE / 2, SIZE - PADDING,
 		V_WIDTH, sf::Color::White);
 	v2_ = sf::Shape::Line(SIZE / 2, SIZE - PADDING, SIZE - PADDING, PADDING,
+		V_WIDTH, sf::Color::White);*/
+	v1_ = sf::Shape::Line(PADDING, PADDING, SIZE - PADDING, SIZE - PADDING,
 		V_WIDTH, sf::Color::White);
-
+	v2_ = sf::Shape::Line(SIZE - PADDING, PADDING, PADDING, SIZE - PADDING,
+		V_WIDTH, sf::Color::White);
 	box_.SetColor(style.ckbox_bg_color);
 	v1_.SetColor(style.ckbox_v_color);
 	v2_.SetColor(style.ckbox_v_color);
 
 	SetRect(x, y, x + SIZE, y + SIZE);
-	SetState(State::DEFAULT);
+	OnStateChanged(GetState());
 }
 
 

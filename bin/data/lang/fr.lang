@@ -15,7 +15,7 @@ menu.main.quit = Quitter
 menu.story.title = Mode Histoire
 menu.story.select = Sélectionnez un niveau :
 menu.story.progression = Avancement : %d/%d
-menu.story.intro = Niveau %d\n\n%s\n\nEnnemis : %d
+menu.story.intro = Niveau %d\n\n"%s"\n\nEnnemis : %d
 menu.story.play = Jouer
 
 # Menu pause

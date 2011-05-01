@@ -1,9 +1,8 @@
 #include "ControlPanel.hpp"
-#include "../entities/Bonus.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/StringUtils.hpp"
-#include "../utils/I18n.hpp"
-
+#include "entities/Bonus.hpp"
+#include "utils/MediaManager.hpp"
+#include "utils/StringUtils.hpp"
+#include "utils/I18n.hpp"
 
 #define BONUS_LENGTH 25   // longueur des icones bonus
 
@@ -19,6 +18,7 @@
 
 #define LEVEL_BAR_X 425
 #define LEVEL_BAR_Y 41
+
 
 ControlPanel& ControlPanel::GetInstance()
 {
@@ -193,7 +193,6 @@ bool ControlPanel::IsOnTop() const
 void ControlPanel::SetLevelDuration(int seconds)
 {
 	level_duration_ = seconds;
-	printf("duration: %d\" %d'\n", seconds / 60, seconds % 60);
 }
 
 

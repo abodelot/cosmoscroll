@@ -27,9 +27,11 @@ Asteroid::Asteroid(const sf::Vector2f& position, Size size, float angle) :
 	speed_.x = std::cos(angle) * BASE_SPEED;
 	speed_.y = -std::sin(angle) * BASE_SPEED;
 
-	// origin is located at sprite center to allow rotation
+	// origin is located at sprite center to enable centered rotation
 	const sf::IntRect& rect = GetSubRect();
 	SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
+	// hack: décalage de la position car l'origine du sprite est le centre et non le coin top-left
+	sf::Sprite::Move(sf::Sprite::GetCenter());
 }
 
 
@@ -71,19 +73,19 @@ void Asteroid::TakeDamage(int damage)
 	Entity::TakeDamage(damage);
 	if (IsDead())
 	{
-		static EntityManager& entitymanager = EntityManager::GetInstance();
+		static EntityManager& manager = EntityManager::GetInstance();
 		switch (size_)
 		{
 			case BIG:
 				for (int i = 0; i < BIG_SPLIT_INTO; ++i)
 				{
-					entitymanager.AddEntity(new Asteroid(pos, MEDIUM, sf::Randomizer::Random(0, 360)));
-				};
+					manager.AddEntity(new Asteroid(pos, MEDIUM, sf::Randomizer::Random(0, 360)));
+				}
 				break;
 			case MEDIUM:
 				for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
 				{
-					entitymanager.AddEntity(new Asteroid(pos, SMALL, sf::Randomizer::Random(0, 360)));
+					manager.AddEntity(new Asteroid(pos, SMALL, sf::Randomizer::Random(0, 360)));
 				}
 				break;
 			default:
@@ -101,17 +103,17 @@ void Asteroid::SetRandomImage()
 	{
 		case SMALL:
 			SetImage(GET_IMG("entities/asteroid-small"));
-			x = sf::Randomizer::Random(0, 3) * 16; // 4 small images
+			x = sf::Randomizer::Random(0, 3) * 16; // 4 sprites
 			SetSubRect(sf::IntRect(x, 0, x + 16, 16));
 			break;
 		case MEDIUM:
 			SetImage(GET_IMG("entities/asteroid-medium"));
-			x = sf::Randomizer::Random(0, 2) * 32; // 3 small images
+			x = sf::Randomizer::Random(0, 2) * 32; // 3 sprites
 			SetSubRect(sf::IntRect(x, 0, x + 32, 32));
 			break;
 		case BIG:
 			SetImage(GET_IMG("entities/asteroid-big"));
-			x = sf::Randomizer::Random(0, 2) * 48; // 3 small images
+			x = sf::Randomizer::Random(0, 2) * 48; // 3 sprites
 			SetSubRect(sf::IntRect(x, 0, x + 48, 48));
 			break;
 	}

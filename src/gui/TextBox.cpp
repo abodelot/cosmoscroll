@@ -30,10 +30,10 @@ TextBox::TextBox(Menu* owner, int x, int y, int visible_chars, int max_length):
 
 	cursor_ = sf::Shape::Line(PADDING, PADDING, PADDING, height - PADDING,
 		CURSOR_WIDTH, sf::Color::White);
-	SetState(State::DEFAULT);
 	SetCursor(0);
 
 	SetRect(x, y, x + width, y + height);
+	OnStateChanged(GetState());
 }
 
 

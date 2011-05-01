@@ -1,6 +1,9 @@
 #include "Menu.hpp"
 
 #define JOY_DEADZONE	50.f
+#define DEFAULT_COLOR   sf::Color(0, 0x53, 0x9f)
+#define FOCUS_COLOR     sf::Color(0, 0x6c, 0xcf)
+#define FOCUS_BG_COLOR  sf::Color(0xf6, 0xe7, 0xa0)
 
 using namespace gui;
 
@@ -22,24 +25,24 @@ Menu::Menu()
 	theme_.button_text_color = sf::Color::White;
 	theme_.button_text_color_focus = sf::Color::Green;
 
-	theme_.ckbox_v_color = sf::Color(0, 128, 0);
-	theme_.ckbox_v_color_focus = sf::Color(0, 192, 0);
+	theme_.ckbox_v_color = DEFAULT_COLOR;
+	theme_.ckbox_v_color_focus = FOCUS_COLOR;
 	theme_.ckbox_bg_color = sf::Color::White;
-	theme_.ckbox_bg_color_focus = sf::Color(239, 228, 176);
+	theme_.ckbox_bg_color_focus = FOCUS_BG_COLOR;
 	theme_.ckbox_size = 20; // todo
 
-	theme_.slider_handle_color = sf::Color(0x37, 0x73, 0xB3);
-	theme_.slider_handle_color_focus = sf::Color(0, 128, 255);
+	theme_.slider_handle_color = DEFAULT_COLOR;
+	theme_.slider_handle_color_focus = FOCUS_COLOR;
 	theme_.slider_bg_color = sf::Color::White;
-	theme_.slider_bg_color_focus = sf::Color(239, 228, 176);
+	theme_.slider_bg_color_focus = FOCUS_BG_COLOR;
 
-	theme_.optlist_arrow_color = sf::Color(0x37, 0x73, 0xB3);
-	theme_.optlist_arrow_color_focus = sf::Color(0, 128, 255);
+	theme_.optlist_arrow_color = DEFAULT_COLOR;
+	theme_.optlist_arrow_color_focus = FOCUS_COLOR;
 	theme_.optlist_bg_color = sf::Color::White;
-	theme_.optlist_bg_color_focus = sf::Color(239, 228, 176);
+	theme_.optlist_bg_color_focus = FOCUS_BG_COLOR;
 
 	theme_.textbox_bg_color = sf::Color::White;
-	theme_.textbox_bg_color_focus = sf::Color(239, 228, 176);
+	theme_.textbox_bg_color_focus = FOCUS_BG_COLOR;
 }
 
 
