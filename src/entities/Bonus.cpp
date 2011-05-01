@@ -2,8 +2,8 @@
 #include <SFML/System/Randomizer.hpp>
 
 #include "Bonus.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/I18n.hpp"
+#include "utils/MediaManager.hpp"
+#include "utils/I18n.hpp"
 
 #define BONUS_SPEED 100
 #define SIZE        16

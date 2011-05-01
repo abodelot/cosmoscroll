@@ -82,7 +82,8 @@ void Menu::OnEvent(const sf::Event& event)
 
 		case sf::Event::JoyButtonPressed:
 			if (event.JoyButton.Button == 0 && focus_ != NULL)
-			{	// map to "return" key
+			{
+				// first joystick button is mapped to "return" key
 				focus_->OnKeyPressed(sf::Key::Return);
 			}
 			break;
@@ -138,6 +139,8 @@ void Menu::OnEvent(const sf::Event& event)
 				}
 				hovered_widget_ = new_hovered;
 				hovered_widget_->SetState(State::HOVERED);
+
+				OnWidgetHovered();
 			}
 			else if (new_hovered == NULL && hovered_widget_ != NULL)
 			{
@@ -160,6 +163,8 @@ void Menu::OnEvent(const sf::Event& event)
 				}
 				focus_ = new_focus;
 				focus_->SetState(State::FOCUSED);
+
+				OnWidgetFocused();
 			}
 			else if (new_focus == NULL && focus_ != NULL)
 			{
@@ -284,6 +289,8 @@ bool Menu::FocusWidget(int index)
 		}
 		focus_ = widgets_[index];
 		focus_->SetState(State::FOCUSED);
+
+		OnWidgetFocused();
 		return true;
 	}
 	return false;

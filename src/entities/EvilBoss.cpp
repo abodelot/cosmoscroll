@@ -4,15 +4,12 @@
 #include "core/SoundSystem.hpp"
 #include "utils/MediaManager.hpp"
 
-
-#define SPEED_Y 25
-#define SPEED_X 100
-
 #define EYE_OFFSET_LEFT   sf::Vector2f(105, 55)
 #define EYE_OFFSET_RIGHT  sf::Vector2f(190, 55)
 #define MOUTH_OFFSET      sf::Vector2f(143, 128)
 
-#define POS_X 360
+#define MAX_X 350
+#define MAX_Y (EntityManager::GetInstance().GetHeight() - GetSize().y)
 
 EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	Entity(position, EVIL)
@@ -33,9 +30,10 @@ EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	canon_.SetOffset(MOUTH_OFFSET);
 
 	target_ = NULL;
-	left_ = true;
 	phase_ = EVIL;
 	next_ = MORE_EVIL;
+	speed_x_ = -100;
+	speed_y_ = 70;
 }
 
 
@@ -59,38 +57,24 @@ void EvilBoss::Update(float frametime)
 		canon_.ShootAt(target_pos);
 	}
 
-	bool left = true;
-	static bool direction_ = false;
-	static float mover_ = 10.0;
-	float moving = SPEED_Y * frametime;
-	mover_ -= moving;
-	if (mover_ < 1 && mover_ > -1)
+	const sf::Vector2f& pos = GetPosition();
+	if ((int) pos.y < 60 || (int) pos.y > MAX_Y - 60)
 	{
-		mover_ = 30.0;
-		direction_ ^= 1;
+		if      ((int) pos.y < 60)         SetY(60);
+		else if ((int) pos.y > MAX_Y - 60) SetY(MAX_Y - 60);
+		speed_y_ *= -1;
 	}
-	if (direction_)
+	sf::Sprite::Move(0, speed_y_ * frametime);
+
+	bool flipped = pos.x < target_->GetPosition().x;
+	if (flipped != IsFlipped())
 	{
-		sf::Sprite::Move(0, -moving);
-	}
-	else
-	{
-		sf::Sprite::Move(0, moving);
+		Flip(flipped);
 	}
 
-	if (GetPosition().x < target_->GetPosition().x)
+	if (pos.x > MAX_X)
 	{
-		left = false;
-	}
-
-	if (left != left_)
-	{
-		FlipX(!left);
-		left_ = left;
-	}
-	if (GetPosition().x > POS_X)
-	{
-		sf::Sprite::Move(-SPEED_X * frametime, 0);
+		sf::Sprite::Move(speed_x_ * frametime, 0);
 	}
 	eye_left_.Update(frametime);
 	eye_right_.Update(frametime);

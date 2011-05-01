@@ -70,7 +70,8 @@ void Slider::OnKeyPressed(sf::Key::Code key)
 
 void Slider::OnMouseClicked(int x, int y)
 {
-	UpdateHandle(x);
+	(void) y;
+	UpdateHandle(100 * x / GetWidth());
 }
 
 
@@ -108,7 +109,6 @@ void Slider::Render(sf::RenderTarget& target) const
 
 void Slider::UpdateHandle(int value)
 {
-	// round value to a quantum multiple
 	if (value < 0)
 	{
 		value = 0;
@@ -119,6 +119,7 @@ void Slider::UpdateHandle(int value)
 	}
 	else
 	{
+		// round value to a quantum multiple
 		int temp = value + quantum_ / 2;
 		value = temp - temp % quantum_;
 	}

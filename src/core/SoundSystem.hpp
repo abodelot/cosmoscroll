@@ -10,24 +10,16 @@ public:
 	static SoundSystem& GetInstance();
 
 	/**
-	 * Jouer un son
-	 */
-	void PlaySound(const char* sound_name);
-
-	/**
-	 * Indiquer le volume du son
-	 */
-	void SetSoundVolume(int volume);
-	inline int GetSoundVolume() const { return sound_volume_; }
-
-	const std::string& GetMusicName() const;
-	void SetMusicName(const std::string& music_name);
-
-	/**
 	 * Jouer une musique (une musique à la fois)
 	 * @param music: musique à jouer
 	 */
 	void PlayMusic(const std::string& music_name);
+
+	/**
+	 * Charger une musique
+	 */
+	void SetMusic(const std::string& music_name);
+	const std::string& GetMusicName() const;
 
 	/**
 	 * Stopper la lecture de la musique
@@ -35,21 +27,36 @@ public:
 	void StopMusic();
 
 	/**
-	 * Indiquer le volume de la musique
+	 * Jouer un son
+	 */
+	void PlaySound(const char* sound_name);
+
+	/**
+	 * Volume de la musique
 	 */
 	void SetMusicVolume(int volume);
 	inline int GetMusicVolume() const { return music_volume_; }
 
 	/**
-	 * Activer/Desactiver la musique
+	 * Volume des sons
+	 */
+	void SetSoundVolume(int volume);
+	inline int GetSoundVolume() const { return sound_volume_; }
+
+	/**
+	 * Activer/désactiver la musique
 	 */
 	void EnableMusic(bool enabled);
-	void EnableSound(bool enabled);
 	bool IsMusicEnabled() const;
+
+	/**
+	 * Activer/désactiver les sons
+	 */
+	void EnableSound(bool enabled);
 	bool IsSoundEnabled() const;
 
 	/**
-	 * Arrêter la lecture de tous les fichier en cours
+	 * Arrêter la lecture de tous les ressources utilisées
 	 */
 	void StopAll();
 

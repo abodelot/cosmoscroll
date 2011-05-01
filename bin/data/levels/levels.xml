@@ -54,10 +54,19 @@
 		</def>
 		<def name="interceptors_5">
 			<ship id="3" y="200"/>
-			<ship id="3" y="280" t="1.0"/>
+			<ship id="3" y="280" t="1"/>
 			<ship id="3" y="120"/>
-			<ship id="3" y="360" t="1.0"/>
+			<ship id="3" y="360" t="1"/>
 			<ship id="3" y="40"/>
+		</def>
+		<def name="interceptors_7">
+			<ship id="3" y="200"/>
+			<ship id="3" y="260" t="1"/>
+			<ship id="3" y="140"/>
+			<ship id="3" y="320" t="1"/>
+			<ship id="3" y="80"/>
+			<ship id="3" y="380" t="1"/>
+			<ship id="3" y="20"/>
 		</def>
 	</functions>
 	<levels>
@@ -212,30 +221,26 @@
 				<ship id="3" y="100" t="0.5"/>
 			</loop>
 		</level>
-		<level desc="Where did I put those keys again?" bg_top="#000000" bg_bottom="#801245" stars="35">
+		<level desc="Where did I put those keys again?" bg_top="#000000" bg_bottom="#601030" stars="35">
 <!-- LVL4: way more interceptors + miniboss x1 -->
 			<ship id="5" y="120"/>
 			<ship id="5" y="220" t="2"/>
 			<loop count="2">
-				<asteroid y="200" t="4.0"/>
-				<asteroid y="360"/>
-				<asteroid y="300" t="1.0"/>
-				<asteroid y="150" t="0.5"/>
-				<asteroid y="350" t="0.5"/>
-				<asteroid y="390" t="0.5"/>
-				<asteroid y="100" t="0.5"/>
-				<asteroid y="175" t="0.5"/>
+				<asteroid y="140" t="4.0"/>
+				<asteroid y="300" t="0.5"/>
+				<asteroid y="240" t="0.5"/>
+				<asteroid y="90" t="0.5"/>
+				<asteroid y="290" t="0.5"/>
+				<asteroid y="330" t="0.5"/>
+				<asteroid y="40" t="0.5"/>
+				<asteroid y="110" t="0.5"/>
 				<ship id="5" y="55" t="1"/>
-				<asteroid y="342" t="0.5"/>
+				<asteroid y="300" t="0.5"/>
 				<ship id="5" y="300" t="0.5"/>
 			</loop>
 			<loop count="2">
 				<wait t="4"/>
-				<ship id="3" y="250"/>
-				<ship id="3" y="315" t="1.0"/>
-				<ship id="3" y="185"/>
-				<ship id="3" y="380" t="1.0"/>
-				<ship id="3" y="120"/>
+				<call func="interceptors_5"/>
 			</loop>
 			<asteroid y="150" t="4"/>
 			<asteroid y="220" t="0.5"/>
@@ -341,12 +346,14 @@
 		<level desc="Now toddle off and fly\nyour flying machine!" stars="40">
 <!-- LVL7: saucers + interceptors -->
 			<wait t="3"/>
-			<call func="caps_x5"/>
+			<call func="interceptors_5"/>
+			<call func="interceptors_7"/>
 			<loop count="4">
 				<ship id="2" y="340" t="2" />
 				<ship id="2" y="140" t="0.5" />
+				<call func="saucers_12"/>
 			</loop>
-			<loop count="3">
+			<loop count="2">
 				<asteroid y="200" t="1"/>
 				<ship id="3" y="300" t="1.5"/>
 				<ship id="3" y="350"/>
@@ -355,15 +362,18 @@
 					<ship id="1" y="280" t="2"/>
 					<ship id="2" y="100" t="1"/>
 				</loop>
+				<call func="interceptors_5"/>
 				<ship id="3" y="50" t="1.5"/>
 				<ship id="3" y="100"/>
 			</loop>
+			<wait t="2"/>
+			<call func="interceptors_7"/>
 		</level>
-		<level desc="Take me to your leader." bg_top="#000000" bg_bottom="#771100" stars="70">
+		<level desc="Take me to your leader." bg_top="#000000" bg_bottom="#501005" stars="70">
 <!-- LVL8: a bit of everything + evilboss -->
-			<ship id="1" y="300" t="2"/>
 			<wait t="1"/>
 			<call func="caps_x3"/>
+			<call func="caps_x5"/>
 			<ship id="3" y="270" t="4"/>
 			<ship id="2" y="170" t="2"/>
 			<ship id="3" y="370" t="1"/>

@@ -1,9 +1,11 @@
+#include <iostream>
+
 #include "SoundSystem.hpp"
 #include "utils/MediaManager.hpp"
 
-
 #define DEFAULT_MUSIC  "space"
 #define DEFAULT_VOLUME 40
+
 
 template <class T>
 static inline void ensure_range(T& value, T min, T max)
@@ -43,6 +45,57 @@ SoundSystem::~SoundSystem()
 }
 
 
+
+void SoundSystem::PlayMusic(const std::string& music_name)
+{
+	SetMusic(music_name);
+
+	if (enable_music_)
+	{
+		music_->Play();
+	}
+}
+
+
+const std::string& SoundSystem::GetMusicName() const
+{
+	return music_name_;
+}
+
+
+void SoundSystem::SetMusic(const std::string& music_name)
+{
+	sf::SoundStream* music = NULL;
+	try
+	{
+		music = GET_DUMB_MUSIC(music_name.c_str());
+		music_name_ = music_name;
+	}
+	catch (MediaNotFoundException& e)
+	{
+		std::cerr << "[sound] music '" << music_name << "' not found"  << std::endl;
+		music = GET_DUMB_MUSIC(DEFAULT_MUSIC);
+		music_name_ = DEFAULT_MUSIC;
+	}
+
+	if (music != music_)
+	{
+		StopMusic();
+		music_ = music;
+		music_->SetVolume(music_volume_);
+	}
+}
+
+
+void SoundSystem::StopMusic()
+{
+	if (music_ != NULL && music_->GetStatus() == sf::Sound::Playing)
+	{
+		music_->Stop();
+	}
+}
+
+
 void SoundSystem::PlaySound(const char* sound_name)
 {
 	if (enable_sound_)
@@ -64,62 +117,6 @@ void SoundSystem::PlaySound(const char* sound_name)
 }
 
 
-void SoundSystem::SetSoundVolume(int volume)
-{
-	ensure_range(volume, 0, 100);
-	sound_volume_ = volume;
-	for (int i = 0; i < MAX_SOUNDS; ++i)
-	{
-		sounds_[i].SetVolume(volume);
-	}
-}
-
-
-void SoundSystem::PlayMusic(const std::string& music_name)
-{
-	sf::SoundStream* music = NULL;
-	try
-	{
-		music = GET_DUMB_MUSIC(music_name.c_str());
-		music_name_ = music_name;
-	}
-	catch (MediaNotFoundException& e)
-	{
-		music = GET_DUMB_MUSIC(DEFAULT_MUSIC);
-		music_name_ = DEFAULT_MUSIC;
-	}
-
-	if (enable_music_ && music != music_)
-	{
-		StopMusic();
-		music_ = music;
-		music_->SetVolume(music_volume_);
-		music_->Play();
-	}
-}
-
-
-const std::string& SoundSystem::GetMusicName() const
-{
-	return music_name_;
-}
-
-
-void SoundSystem::SetMusicName(const std::string& music_name)
-{
-	music_name_ = music_name;
-}
-
-
-void SoundSystem::StopMusic()
-{
-	if (music_ != NULL && music_->GetStatus() == sf::Sound::Playing)
-	{
-		music_->Stop();
-	}
-}
-
-
 void SoundSystem::SetMusicVolume(int volume)
 {
 	ensure_range(volume, 0, 100);
@@ -130,6 +127,16 @@ void SoundSystem::SetMusicVolume(int volume)
 	}
 }
 
+
+void SoundSystem::SetSoundVolume(int volume)
+{
+	ensure_range(volume, 0, 100);
+	sound_volume_ = volume;
+	for (int i = 0; i < MAX_SOUNDS; ++i)
+	{
+		sounds_[i].SetVolume(volume);
+	}
+}
 
 void SoundSystem::EnableMusic(bool enabled)
 {

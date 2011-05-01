@@ -34,8 +34,7 @@ private:
 	};
 
 	Phase phase_, next_;
-
-	bool left_;
+	int speed_x_, speed_y_;
 	Weapon eye_left_;
 	Weapon eye_right_;
 	Weapon canon_;

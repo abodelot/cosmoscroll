@@ -37,10 +37,6 @@ void CosmoButton::OnStateChanged(gui::State::EState state)
 			break;
 		case gui::State::FOCUSED:
 			background_.SetSubRect(sf::IntRect(0, 80, BUT_W, 80 + BUT_H));
-			if (GetState() == gui::State::DEFAULT)
-			{
-				SoundSystem::GetInstance().PlaySound("menu-select");
-			}
 			break;
 		default:
 			break;

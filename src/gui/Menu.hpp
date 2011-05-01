@@ -53,6 +53,10 @@ public:
 protected:
 	bool FocusWidget(const Widget* widget);
 
+	// callbacks
+	virtual void OnWidgetHovered() {};
+	virtual void OnWidgetFocused() {};
+
 private:
 
 	/**

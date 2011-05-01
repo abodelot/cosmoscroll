@@ -133,7 +133,7 @@ bool Game::LoadConfig(const char* filename)
 
 		std::string music;
 		if (config.ReadItem("music_name", music))
-			SoundSystem::GetInstance().SetMusicName(music);
+			SoundSystem::GetInstance().SetMusic(music);
 		int volume;
 		if (config.ReadItem("music_volume", volume))
 			SoundSystem::GetInstance().SetMusicVolume(volume);

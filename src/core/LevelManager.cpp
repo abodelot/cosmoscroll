@@ -55,10 +55,8 @@ LevelManager::Error LevelManager::SetCurrent(int level)
 {
 	if (level <= 0 || level > (int) levels_.size())
 	{
-		printf("warning: level %d is out of bounds, current level is now 1\n",
-			level);
 		level = 1;
-		//std::cerr << "level " << level << " is undefined" << std::endl;
+		std::cerr << " [levels] level " << level << " is undefined, using level 1" << std::endl;
 		//return UNDEF;
 	}
 	if (hardcore_)
@@ -295,7 +293,7 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		}
 		else
 		{
-			printf("warning: undefined element '%s' while parsing level (ignored)\n", tag_name);
+			std::cerr << "[levels] unsupported tag '" << tag_name << "' ignored" << std::endl;
 		}
 		AppendToWaitingLine(entity, time);
 	}
@@ -307,7 +305,7 @@ void LevelManager::AppendToWaitingLine(Entity* entity, float time)
 	EntitySlot slot;
 	if (hardcore_)
 	{
-		entity->SetHP(entity->GetHP() * 2);
+		entity->SetHP(entity->GetHP() * 1.5);
 	}
 	slot.entity = entity;
 	last_insert_time_ += time;
@@ -332,7 +330,7 @@ TiXmlElement* LevelManager::GetLevelElement(int level) const
 	--level; // first level is index 0
 	if (level < 0 || level >= (int) levels_.size())
 	{
-		printf("info: level %d is not a valid level, using first level instead\n", level + 1);
+		std::cerr << "[levels] index " << level << " is not a valid level, using index 0" << std::endl;
 		level = 0;
 	}
 	return levels_[level];

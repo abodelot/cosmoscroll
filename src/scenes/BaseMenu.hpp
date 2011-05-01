@@ -17,16 +17,16 @@ class BaseMenu: public BaseScene, public gui::Menu
 public:
 	BaseMenu();
 
-	// inherited
+	// override
 	void OnEvent(const sf::Event& event);
 
-	// inherited
+	// override
 	void Update(float frametime);
 
-	// inherited
+	// override
 	void Show(sf::RenderTarget& target) const;
 
-	// inherited
+	// override
 	void OnFocus();
 
 protected:
@@ -37,6 +37,9 @@ protected:
 	 */
 	void SetTitle(const sf::Unicode::Text& text, int y = 20);
 	const sf::String& GetTitle() const;
+
+	// override
+	void OnWidgetFocused();
 
 private:
 	sf::String title_;
