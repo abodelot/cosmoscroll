@@ -60,4 +60,5 @@ void InGameScene::Show(sf::RenderTarget& target) const
 void InGameScene::OnFocus()
 {
 	Game::GetInstance().GetApp().ShowMouseCursor(false);
+	Game::GetInstance().GetApp().EnableKeyRepeat(false);
 }

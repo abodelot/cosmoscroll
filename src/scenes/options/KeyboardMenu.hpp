@@ -20,7 +20,8 @@ private:
 	// inherited
 	void EventCallback(int id);
 
-	std::wstring GetKeyLabel(Input::Action action) const;
+	void AddRow(Input::Action action, gui::Button** button, int y);
+	const char* GetKeyLabel(Input::Action action) const;
 
 	gui::Button* but_up_;
 	gui::Button* but_down_;

@@ -54,7 +54,9 @@ void BaseMenu::Show(sf::RenderTarget& target) const
 
 void BaseMenu::OnFocus()
 {
+	// for user-friendly menus
 	Game::GetInstance().GetApp().ShowMouseCursor(true);
+	Game::GetInstance().GetApp().EnableKeyRepeat(true);
 }
 
 

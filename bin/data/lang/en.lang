@@ -53,7 +53,7 @@ menu.keyboard.title = Keyboard configuration
 
 # Joystick menu
 menu.joystick.title = Joystick configuration
-menu.joystick.button_bind = %ls: Button %d
+menu.joystick.button = Button
 menu.joystick.sensitivity = Joystick sensitivity:
 
 # Audio menu
@@ -111,6 +111,6 @@ action.cooler = Use Cooler bonus
 action.missile = Use Missile bonus
 
 # Ask input
-input.press_key = Press a key to define\nthis action
-input.press_button = Press a joystick button to define\nthis action
+input.press_key = Press a key to define action
+input.press_button = Press a joystick button to define action
 input.cancel = (press Escape to cancel)

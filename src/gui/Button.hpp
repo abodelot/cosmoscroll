@@ -28,24 +28,27 @@ public:
 	 */
 	virtual void SetText(const sf::Unicode::Text& text);
 
+	void SetTextPadding(int x, int y);
+
 	/**
 	 * Indiquer l'alignement du texte
 	 */
 	virtual void SetAlign(Align::EAlign align);
 
-	// inherited callbacks
+	// callbacks
 	virtual void OnKeyPressed(sf::Key::Code code);
 	virtual void OnMouseClicked(int, int);
 
 protected:
-	// inherited
+	// override
 	virtual void OnStateChanged(State::EState state);
 
-	// inherited
+	// override
 	virtual void Render(sf::RenderTarget& target) const;
 
 private:
 	sf::String text_;
+	Align::EAlign align_;
 };
 
 }

@@ -53,7 +53,7 @@ menu.keyboard.title = Configuration clavier
 
 # Menu joystick
 menu.joystick.title = Configuration joystick
-menu.joystick.button_bind = %ls : Bouton %d
+menu.joystick.button = Bouton
 menu.joystick.sensitivity = Sensibilité du joystick :
 
 # Menu sons
@@ -111,6 +111,6 @@ action.cooler = Utiliser bonus Glaçon
 action.missile = Utiliser bonus Missile
 
 # Ask input
-input.press_key = Appuyez sur une touche du clavier\npour définir cette action
-input.press_button = Appuyez sur un bouton du contrôleur\npour définir cette action
+input.press_key = Appuyez sur une touche du clavier\npour définir l'action
+input.press_button = Appuyez sur un bouton du contrôleur\npour définir l'action
 input.cancel = (Échap pour annuler)

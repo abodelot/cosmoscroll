@@ -19,6 +19,7 @@ CosmoButton::CosmoButton(gui::Menu* owner, const sf::Unicode::Text& text, int x,
 	background_.SetSubRect(sf::IntRect(0, 0, BUT_W, BUT_H));
 	background_.Resize(BUT_W, BUT_H);
 
+	SetTextPadding(0, 8);
 	SetAlign(gui::Align::CENTER);
 	OnStateChanged(GetState());
 }
