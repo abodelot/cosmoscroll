@@ -2,6 +2,11 @@
 #define I18N_HPP
 
 #include <map>
+#include <SFML/System.hpp>
+
+
+// shortcut _t(key) => I18n::GetInstance().Translate(key)
+#define _t(key) (I18n::GetInstance().Translate(key))
 
 /**
  * Singleton dédié à l'intertionalisation (dit i18n)
@@ -12,14 +17,10 @@ public:
 	static I18n& GetInstance();
 
 	/**
-	 * Obtenir un text localisé
-	 * @param key: identifiant du texte
+	 * Get translated text
+	 * @param key: text identifier
 	 */
-	const std::wstring& Translate(const char* key) const;
-
-	// raccourci syntaxique I18n::t
-	inline static const std::wstring& t(const char* key)
-	{ return I18n::GetInstance().Translate(key); }
+	const sf::Unicode::Text& Translate(const char* key) const;
 
 	/**
 	 * Tente de charger le fichier de traduction de la langue du système
@@ -28,8 +29,8 @@ public:
 	bool LoadSystemLanguage();
 
 	/**
-	 * Obtenir le code de la langue du système
-	 * @return 2 caractères minuscules
+	 * Get system language identifier
+	 * @return 2 lower-case characters
 	 */
 	std::string GetLocaleCode() const;
 
@@ -46,14 +47,15 @@ public:
 
 	bool LoadFromCode(const std::string& code);
 
-
 private:
 	I18n();
 	I18n(const I18n&);
 
+	void DecodeUTF8(const std::string& src, std::wstring& dest);
+
 	mutable char code_[3];
-	std::map<std::string, std::wstring> content_;
+	typedef std::map<std::string, sf::Unicode::Text> TextMap;
+	TextMap content_;
 };
 
 #endif // I18N_HPP
-

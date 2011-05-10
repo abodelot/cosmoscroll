@@ -44,30 +44,29 @@ void Bonus::Update(float frametime)
 }
 
 
-const wchar_t* Bonus::GetDescription() const
+const sf::Unicode::Text& Bonus::GetDescription() const
 {
 	switch (type_)
 	{
 		case HEALTH:
-			return I18n::t("bonus.hp").c_str();
+			return _t("bonus.hp");
 		case SHIELD:
-			return I18n::t("bonus.shield").c_str();
+			return _t("bonus.shield");
 		case COOLER:
-			return I18n::t("bonus.cooler").c_str();
+			return _t("bonus.cooler");
 		case MISSILE:
-			return I18n::t("bonus.missile").c_str();
+			return _t("bonus.missile");
 		case DOUBLE_SHOT:
-			return I18n::t("bonus.double_shot").c_str();
+			return _t("bonus.double_shot");
 		case TRIPLE_SHOT:
-			return I18n::t("bonus.triple_shot").c_str();
+			return _t("bonus.triple_shot");
 		case SPEED:
-			return I18n::t("bonus.speed").c_str();
+			return _t("bonus.speed");
 		case SUPER_BANANA:
-			return I18n::t("bonus.banana").c_str();
+			return _t("bonus.banana");
 		default:
 			break;
 	}
-	return L"<unknow bonus>";
 }
 
 

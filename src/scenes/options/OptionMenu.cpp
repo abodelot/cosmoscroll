@@ -5,13 +5,13 @@
 
 OptionMenu::OptionMenu()
 {
-	SetTitle(I18n::t("menu.options.title"));
+	SetTitle(_t("menu.options.title"));
 
-	(new CosmoButton(this, I18n::t("menu.options.keyboard"), 210, 120))->SetCallbackID(1);
-	(new CosmoButton(this, I18n::t("menu.options.joystick"), 210, 170))->SetCallbackID(2);
-	(new CosmoButton(this, I18n::t("menu.options.audio"),    210, 220))->SetCallbackID(3);
-	(new CosmoButton(this, I18n::t("menu.options.settings"),  210, 270))->SetCallbackID(4);
-	(new CosmoButton(this, I18n::t("menu.back"), 210, 320))->SetCallbackID(5);
+	(new CosmoButton(this, _t("menu.options.keyboard"), 210, 120))->SetCallbackID(1);
+	(new CosmoButton(this, _t("menu.options.joystick"), 210, 170))->SetCallbackID(2);
+	(new CosmoButton(this, _t("menu.options.audio"),    210, 220))->SetCallbackID(3);
+	(new CosmoButton(this, _t("menu.options.settings"),  210, 270))->SetCallbackID(4);
+	(new CosmoButton(this, _t("menu.back"), 210, 320))->SetCallbackID(5);
 }
 
 

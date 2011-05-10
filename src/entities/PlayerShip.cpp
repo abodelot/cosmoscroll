@@ -31,7 +31,7 @@
 
 #define SHIELD_DEFAULT              0 // shield points at start
 #define SHIELD_MAX                  6 // max shield points
-#define SHIELD_RECOVERY_RATE        0.2 // shield point per second
+#define SHIELD_RECOVERY_DELAY       6 // time to wait before earning another shield point
 
 #define TIMED_BONUS_DURATION        10 // seconds
 
@@ -201,7 +201,7 @@ void PlayerShip::Update(float frametime)
 		{
 			overheated_ = true;
 			panel_.SetOverheat(true);
-			ParticleSystem::GetInstance().AddMessage(GetPosition(), I18n::t("panel.overheat").c_str());
+			ParticleSystem::GetInstance().AddMessage(GetPosition(), _t("panel.overheat"));
 		}
 	}
 	else if (input_.HasInput(Input::USE_WEAPON_1) || input_.HasInput(Input::USE_WEAPON_2))
@@ -240,11 +240,11 @@ void PlayerShip::Update(float frametime)
 	// regénération bouclier
 	if (shield_ < SHIELD_MAX)
 	{
-		shield_timer_ -= frametime;
-		if (shield_timer_ <= 0.f)
+		shield_timer_ += frametime;
+		if (shield_timer_ >= SHIELD_RECOVERY_DELAY)
 		{
 			IncreaseShield();
-			shield_timer_ = 1 / SHIELD_RECOVERY_RATE;
+			shield_timer_ = 0.f;
 		}
 	}
 

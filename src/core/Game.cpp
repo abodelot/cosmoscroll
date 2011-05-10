@@ -283,7 +283,7 @@ void Game::TakeScreenshot(const char* directory)
 	time_t t = time(NULL);
 	strftime(current_time, sizeof current_time, "%d-%m-%Y_%H-%M-%S", localtime(&t));
 
-	std::string filename = str_sprintf("%s/%s.png", directory, current_time, t);
+	std::string filename = std::string(directory) + "/" + current_time + ".png";
 
 	printf("screenshot saved to %s\n", filename.c_str());
 	app_.Capture().SaveToFile(filename);

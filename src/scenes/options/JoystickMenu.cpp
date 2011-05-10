@@ -12,7 +12,7 @@
 
 JoystickMenu::JoystickMenu()
 {
-	SetTitle(I18n::t("menu.joystick.title"));
+	SetTitle(_t("menu.joystick.title"));
 
 	AddRow(Input::USE_WEAPON_1, &but_weapon1_, 120);
 	AddRow(Input::USE_WEAPON_2, &but_weapon2_, 160);
@@ -20,11 +20,11 @@ JoystickMenu::JoystickMenu()
 	AddRow(Input::USE_COOLER, &but_cooler_, 240);
 	AddRow(Input::PAUSE, &but_pause_, 280);
 
-	new gui::Label(this, I18n::t("menu.joystick.sensitivity"), COL_1, 340);
+	new gui::Label(this, _t("menu.joystick.sensitivity"), COL_1, 340);
 	sl_joystick_ = new gui::Slider(this, COL_2, 344, 160);
 	sl_joystick_->SetCallbackID(9000);
 
-	(new CosmoButton(this, I18n::t("menu.back"), 210, 410))->SetCallbackID(9001);
+	(new CosmoButton(this, _t("menu.back"), 210, 410))->SetCallbackID(9001);
 }
 
 
@@ -52,10 +52,10 @@ void JoystickMenu::AddRow(Input::Action action, gui::Button** button, int y)
 }
 
 
-std::wstring JoystickMenu::GetButtonLabel(Input::Action action) const
+std::string JoystickMenu::GetButtonLabel(Input::Action action) const
 {
-	std::wostringstream oss;
-	oss << I18n::t("menu.joystick.button") << " " << Input::GetInstance().GetJoystickBind(action);
+	std::ostringstream oss;
+	oss << std::string(_t("menu.joystick.button")) << " " << Input::GetInstance().GetJoystickBind(action);
 	return oss.str();
 }
 

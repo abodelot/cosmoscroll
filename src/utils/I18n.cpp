@@ -10,6 +10,8 @@
 #define TOKEN_COMMENT     '#'
 #define DEFAULT_LANG_CODE "en"
 
+#define DIR_LANG "data/lang/"
+
 
 I18n& I18n::GetInstance()
 {
@@ -24,15 +26,13 @@ I18n::I18n()
 }
 
 
-const std::wstring& I18n::Translate(const char* key) const
+const sf::Unicode::Text& I18n::Translate(const char* key) const
 {
-	std::map<std::string, std::wstring>::const_iterator it = content_.find(key);
+	TextMap::const_iterator it = content_.find(key);
 	if (it == content_.end())
 	{
-		printf("i18n: no translation found for identifier '%s'\n", key);
-		static std::wstring error;
-
-		utf8_to_wstr(error, str_sprintf("<text '%s' missing>", key));
+		std::cerr << "[I18n] no translation found for key " << key << std::endl;
+		static sf::Unicode::Text error("key not found");
 		return error;
 	}
 	return it->second;
@@ -43,15 +43,15 @@ bool I18n::LoadSystemLanguage()
 {
 	if (LoadFromCode(GetLocaleCode()))
 	{
-		printf("i18n: language  '%s' loaded\n", code_);
+		std::cout << "[I18n] language '" << code_ << "' loaded" << std::endl;
 		return true;
 	}
 	if (LoadFromCode(DEFAULT_LANG_CODE))
 	{
-		printf("i18n: language '%s' not found, using default language : '%s'\n", code_, DEFAULT_LANG_CODE);
+		std::cout << "[I18n] language '" << code_ << "' not found, using default language: " << DEFAULT_LANG_CODE << std::endl;
 		return true;
 	}
-	puts("i18n: warning, couldn't load any language file!");
+	std::cerr <<  "[I18n] warning: couldn't load any language!" << std::endl;
 	return false;
 }
 
@@ -60,7 +60,7 @@ std::string I18n::GetLocaleCode() const
 {
 	std::string locale(setlocale(LC_ALL, ""));
 	locale = locale.substr(0, 2);
-	str_lower(locale);
+	str_self_lower(locale);
 	strcpy(code_, locale.c_str());
 	return locale;
 }
@@ -76,7 +76,7 @@ bool I18n::LoadFromCode(const std::string& code)
 {
 	if (code.size() == 2)
 	{
-		std::string filename = "data/lang/" + code + ".lang";
+		std::string filename = DIR_LANG + code + ".lang";
 		if (LoadFromFile(filename.c_str()))
 		{
 			strcpy(code_, code.c_str());
@@ -89,7 +89,6 @@ bool I18n::LoadFromCode(const std::string& code)
 
 bool I18n::LoadFromFile(const char* filename)
 {
-	printf("i18n: loading %s...\n", filename);
 	std::ifstream file(filename);
 	if (file)
 	{
@@ -104,20 +103,71 @@ bool I18n::LoadFromFile(const char* filename)
 				continue;
 			}
 			size_t pos = line.find(TOKEN_SEPARATOR);
-			if (pos == std::string::npos)
-			{
-				printf("i18n: parse error at line %d (%s)\n", line_number, line.c_str());
-			}
-			else
+			if (pos != std::string::npos)
 			{
 				std::string key = str_trim(line.substr(0, pos));
 				std::string text = str_trim(line.substr(pos + 1));
-				str_replace(text, "\\n", "\n");
-				// register wstring translation
-				utf8_to_wstr(content_[key], text);
+				str_self_replace(text, "\\n", "\n");
+
+				// convert to wide string
+				std::wstring temp;
+				DecodeUTF8(text, temp);
+
+				content_[key] = temp;
+			}
+			else
+			{
+				std::cerr << "[I18n] error at line " << line_number << ": " << line << std::endl;
 			}
 		}
 		return true;
 	}
 	return false;
+}
+
+
+void I18n::DecodeUTF8(const std::string& src, std::wstring& dest)
+{
+	dest.clear();
+	wchar_t w = 0;
+	int bytes = 0;
+	wchar_t err = L'�';
+	for (size_t i = 0; i < src.size(); ++i) {
+		unsigned char c = (unsigned char) src[i];
+		if (c <= 0x7f) {//first byte
+			if (bytes) {
+				dest.push_back(err);
+				bytes = 0;
+			}
+			dest.push_back((wchar_t)c);
+		}
+		else if (c <= 0xbf) {//second/third/etc byte
+			if (bytes) {
+				w = ((w << 6)|(c & 0x3f));
+				bytes--;
+				if (bytes == 0)
+					dest.push_back(w);
+			}
+			else
+				dest.push_back(err);
+		}
+		else if (c <= 0xdf) {//2byte sequence start
+			bytes = 1;
+			w = c & 0x1f;
+		}
+		else if (c <= 0xef) {//3byte sequence start
+			bytes = 2;
+			w = c & 0x0f;
+		}
+		else if (c <= 0xf7) {//3byte sequence start
+			bytes = 3;
+			w = c & 0x07;
+		}
+		else {
+			dest.push_back(err);
+			bytes = 0;
+		}
+	}
+	if (bytes)
+		dest.push_back(err);
 }

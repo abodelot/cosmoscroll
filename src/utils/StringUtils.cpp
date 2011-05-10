@@ -52,9 +52,15 @@ std::wstring str_sprintf(const wchar_t format[], ...)
 	return str;
 }
 
+std::string str_replace(const std::string& str, const std::string& look_for, const std::string& replace_by)
+{
+	std::string result = str;
+	str_self_replace(result, look_for, replace_by);
+	return result;
+}
 
-int str_replace(std::string& target, const std::string& look_for,
-	const std::string& replace_by)
+
+int str_self_replace(std::string& target, const std::string& look_for, const std::string& replace_by)
 {
 	int cpt = 0;
 	size_t pos = 0;
@@ -72,22 +78,6 @@ int str_replace(std::string& target, const std::string& look_for,
 }
 
 
-int str_replace(std::string& target, char look_for, char replace_by)
-{
-	int count = 0;
-	size_t pos = 0;
-
-	pos = target.find(look_for, pos);
-	while (pos != std::string::npos)
-	{
-		target.replace(pos, 1, 1, replace_by);
-		pos = target.find(look_for, pos);
-		++count;
-	}
-	return count;
-}
-
-
 std::string str_trim(const std::string& str)
 {
 	const char* WHITESPACES = " \t\n\r\0xb";
@@ -101,14 +91,15 @@ std::string str_trim(const std::string& str)
 }
 
 
-std::string str_extract(const std::string& str, int from, int to)
+std::string str_lower(const std::string& str)
 {
-	assert(from < to);
-	return str.substr(from, to - from);
+	std::string result = str;
+	str_self_lower(result);
+	return result;
 }
 
 
-void str_lower(std::string& str)
+void str_self_lower(std::string& str)
 {
 	for (size_t i = 0; i < str.length(); ++i)
 	{
@@ -117,7 +108,15 @@ void str_lower(std::string& str)
 }
 
 
-void str_upper(std::string& str)
+std::string str_upper(const std::string& str)
+{
+	std::string result = str;
+	str_self_upper(result);
+	return result;
+}
+
+
+void str_self_upper(std::string& str)
 {
 	for (size_t i = 0; i < str.length(); ++i)
 	{
@@ -146,76 +145,4 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-void utf8_to_wstr(std::wstring& dest, const std::string& src)
-{
-	dest.clear();
-	wchar_t w = 0;
-	int bytes = 0;
-	wchar_t err = L'�';
-	for (size_t i = 0; i < src.size(); i++){
-		unsigned char c = (unsigned char)src[i];
-		if (c <= 0x7f){//first byte
-			if (bytes){
-				dest.push_back(err);
-				bytes = 0;
-			}
-			dest.push_back((wchar_t)c);
-		}
-		else if (c <= 0xbf){//second/third/etc byte
-			if (bytes){
-				w = ((w << 6)|(c & 0x3f));
-				bytes--;
-				if (bytes == 0)
-					dest.push_back(w);
-			}
-			else
-				dest.push_back(err);
-		}
-		else if (c <= 0xdf){//2byte sequence start
-			bytes = 1;
-			w = c & 0x1f;
-		}
-		else if (c <= 0xef){//3byte sequence start
-			bytes = 2;
-			w = c & 0x0f;
-		}
-		else if (c <= 0xf7){//3byte sequence start
-			bytes = 3;
-			w = c & 0x07;
-		}
-		else{
-			dest.push_back(err);
-			bytes = 0;
-		}
-	}
-	if (bytes)
-		dest.push_back(err);
-}
 
-
-void wstr_to_utf8(std::string& dest, const std::wstring& src)
-{
-	dest.clear();
-	for (size_t i = 0; i < src.size(); i++){
-		wchar_t w = src[i];
-		if (w <= 0x7f)
-			dest.push_back((char)w);
-		else if (w <= 0x7ff){
-			dest.push_back(0xc0 | ((w >> 6)& 0x1f));
-			dest.push_back(0x80| (w & 0x3f));
-		}
-		else if (w <= 0xffff){
-			dest.push_back(0xe0 | ((w >> 12)& 0x0f));
-		dest.push_back(0x80| ((w >> 6) & 0x3f));
-		dest.push_back(0x80| (w & 0x3f));
-		}
-		else if (w <= 0x10ffff){
-			dest.push_back(0xf0 | ((w >> 18)& 0x07));
-			dest.push_back(0x80| ((w >> 12) & 0x3f));
-			dest.push_back(0x80| ((w >> 6) & 0x3f));
-			dest.push_back(0x80| (w & 0x3f));
-		}
-		else
-			dest.push_back('?');
-	}
-}

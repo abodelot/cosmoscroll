@@ -10,11 +10,11 @@ MainMenu::MainMenu()
 	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
 	title_.SetPosition((Game::WIDTH - title_.GetSize().x) / 2, 12);
 
-	(new CosmoButton(this, I18n::t("menu.main.story"),   210, 120))->SetCallbackID(1);
-	(new CosmoButton(this, I18n::t("menu.main.arcade"),  210, 170))->SetCallbackID(2);
-	(new CosmoButton(this, I18n::t("menu.main.options"), 210, 220))->SetCallbackID(3);
-	(new CosmoButton(this, I18n::t("menu.main.about"),   210, 270))->SetCallbackID(4);
-	(new CosmoButton(this, I18n::t("menu.main.quit"),    210, 320))->SetCallbackID(5);
+	(new CosmoButton(this, _t("menu.main.story"),   210, 120))->SetCallbackID(1);
+	(new CosmoButton(this, _t("menu.main.arcade"),  210, 170))->SetCallbackID(2);
+	(new CosmoButton(this, _t("menu.main.options"), 210, 220))->SetCallbackID(3);
+	(new CosmoButton(this, _t("menu.main.about"),   210, 270))->SetCallbackID(4);
+	(new CosmoButton(this, _t("menu.main.quit"),    210, 320))->SetCallbackID(5);
 
 	// init background music at first launch of main menu
 	SoundSystem& sound = SoundSystem::GetInstance();

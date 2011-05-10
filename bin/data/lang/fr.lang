@@ -14,8 +14,8 @@ menu.main.quit = Quitter
 # Menu niveaux
 menu.story.title = Mode Histoire
 menu.story.select = Sélectionnez un niveau :
-menu.story.progression = Avancement : %d/%d
-menu.story.intro = Niveau %d\n\n"%s"\n\nEnnemis : %d
+menu.story.progression = Avancement : {unlocked}/{total}
+menu.story.intro = Niveau {level}\n\n"{description}"\n\nEnnemis : {count}
 menu.story.play = Jouer
 
 # Menu pause
@@ -36,8 +36,8 @@ menu.gameover.title = Game Over
 menu.gameover.pseudo = Votre nom :
 menu.gameover.send_score = Envoyer mon score
 menu.gameover.play_again = Rejouer
-menu.gameover.new_record = Votre score : %d\n    Nouveau record !
-menu.gameover.no_record = Votre score : %d\n    Essayez encore...
+menu.gameover.new_record = Votre score : {score}\n    Nouveau record !
+menu.gameover.no_record = Votre score : {score}\n    Essayez encore...
 menu.gameover.error_cheat = Envoi interdit pour les tricheurs !
 menu.gameover.error_altered_res = Envoi interdit, version du jeu modifiée
 
@@ -58,11 +58,11 @@ menu.joystick.sensitivity = Sensibilité du joystick :
 
 # Menu sons
 menu.audio.title = Son et musique
-menu.audio.no_music = Pas de musique
-menu.audio.music_volume_up = Augmenter le volume de la musique
-menu.audio.music_volume_down = Diminuer le volume de la musique
-menu.audio.sound_volume_up = Augmenter le volume du son
-menu.audio.sound_volume_down = Diminuer le volume du son
+menu.audio.music = Musique :
+menu.audio.enable_music = Activer la musique :
+menu.audio.music_volume = Volume de la musique :
+menu.audio.enable_sound = Activer les sons :
+menu.audio.sound_volume = Volume du son :
 
 # Menu préférences
 menu.settings.title = Préférences
@@ -77,17 +77,17 @@ menu.about.licence = Licence :
 
 # Fin de jeu
 endgame.game_over = Game Over
-endgame.end_level = Niveau %d terminé
-endgame.end_last_level = Félicitations !\n\nVous avez fini les %d niveaux du jeu\net battu le boss de fin !
+endgame.end_level = Niveau {level} terminé
+endgame.end_last_level = Félicitations !\n\nVous avez fini les {count} niveaux du jeu\net battu le boss de fin !
 
 # Panneau de contrôle
 panel.bar_hp = Coque
 panel.bar_shield = Bouclier
 panel.bar_heat = Chaleur
 panel.overheat = Surchauffe !
-panel.level = Niveau %d
-panel.record = Record : %d
-panel.timer = Temps : %02d:%02d
+panel.level = Niveau {level}
+panel.record = Record : {record}
+panel.timer = Temps : {min}:{sec}
 
 # Bonus
 bonus.hp = Point de vie

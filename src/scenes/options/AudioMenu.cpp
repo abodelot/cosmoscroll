@@ -6,10 +6,10 @@
 
 AudioMenu::AudioMenu()
 {
-	SetTitle(I18n::t("menu.audio.title"));
+	SetTitle(_t("menu.audio.title"));
 	SoundSystem& sound = SoundSystem::GetInstance();
 
-	new gui::Label(this, L"Musique :", 100, 120);
+	new gui::Label(this, _t("menu.audio.music"), 100, 120);
 
 	opt_music_ = new gui::OptionList(this, 345, 120);
 	opt_music_->AddOption("Space", "space");
@@ -24,27 +24,27 @@ AudioMenu::AudioMenu()
 	else if (music_name == "escape_for_assault")
 		opt_music_->Select(2);
 
-	new gui::Label(this, L"Activer la musique :", 100, 170);
+	new gui::Label(this, _t("menu.audio.enable_music"), 100, 170);
 	cb_music_ = new gui::CheckBox(this, 345, 170);
 	cb_music_->Check(sound.IsMusicEnabled());
 	cb_music_->SetCallbackID(2);
 
-	new gui::Label(this, L"Volume de la musique :", 100, 200);
+	new gui::Label(this, _t("menu.audio.music_volume"), 100, 200);
 	sl_music_vol_ = new gui::Slider(this, 345, 200, 200);
 	sl_music_vol_->SetValue(sound.GetMusicVolume());
 	sl_music_vol_->SetCallbackID(3);
 
-	new gui::Label(this, L"Activer les sons :", 100, 260);
+	new gui::Label(this, _t("menu.audio.enable_sound"), 100, 260);
 	cb_sound_ = new gui::CheckBox(this, 345, 260);
 	cb_sound_->Check(sound.IsSoundEnabled());
 	cb_sound_->SetCallbackID(4);
 
-	new gui::Label(this, L"Volume des sons :", 100, 290);
+	new gui::Label(this, _t("menu.audio.sound_volume"), 100, 290);
 	sl_sound_vol_ = new gui::Slider(this, 345, 290, 200);
 	sl_sound_vol_->SetValue(sound.GetSoundVolume());
 	sl_sound_vol_->SetCallbackID(5);
 
-	(new CosmoButton(this, I18n::t("menu.back"), 210, 335))->SetCallbackID(0);
+	(new CosmoButton(this, _t("menu.back"), 210, 335))->SetCallbackID(0);
 }
 
 

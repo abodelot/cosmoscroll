@@ -47,7 +47,7 @@ public:
 	 * @param offset: position
 	 * @param text: contenu du message
 	 */
-	void AddMessage(const sf::Vector2f& offset, const wchar_t* text);
+	void AddMessage(const sf::Vector2f& offset, const sf::Unicode::Text& text);
 
 	void AddShield(int count, const sf::Sprite* handle);
 	void RemoveShield(const sf::Sprite* handle);
@@ -151,7 +151,7 @@ private:
 	class TextParticle: public Particle
 	{
 	public:
-		TextParticle(const sf::Vector2f& offset, const wchar_t* text);
+		TextParticle(const sf::Vector2f& offset, const sf::Unicode::Text& text);
 		~TextParticle() {};
 		bool OnUpdate(float frametime);
 

@@ -1,59 +1,68 @@
 #ifndef STRINGUTILS_HPP
 #define STRINGUTILS_HPP
 
-#include <string>
 #include <cstdarg>
-
+#include <string>
+#include <sstream>
+#include <iomanip>
 /**
  * Construire une std::string formatée "à la printf"
  * @param format: formatage de la chaîne
  * @param ...: arguments
  * @return string formée
  */
-std::string str_sprintf(const char format[], ...);
-std::wstring str_sprintf(const wchar_t format[], ...);
+//std::string str_sprintf(const char format[], ...);
+//std::wstring str_sprintf(const wchar_t format[], ...);
+
+template <typename T>
+inline std::string to_string(const T& t, int width = 0, char fill = '0')
+{
+	std::ostringstream oss;
+	if (width > 0)
+		oss << std::setw(width) << std::setfill(fill);
+	oss  << t;
+	return oss.str();
+}
+
 
 /**
- * Remplacer un motif par un autre
- * @param target: chaîne cible
- * @param look_for: sous-chaîne recherchée
- * @param replace_by: sous-chaîne à caser
- * @return nombre d'occurences remplacées
+ * Return a copy of the string with all occurrences of a substring replaced
  */
-int str_replace(std::string& target, const std::string& look_for, const std::string& replace_by);
-int str_replace(std::string& target, char look_for, char replace_by);
+std::string str_replace(const std::string& str, const std::string& look_for, const std::string& replace_by);
 
 /**
- * Supprimer les blancs en début et fin de chaîne
- * @param str: chaînée à tronquer
- * @return chaîne tronquée
+ * Replace all occurrences of a substring (in-place)
+ * @return occurrences count
+ */
+int str_self_replace(std::string& str, const std::string& look_for, const std::string& replace_by);
+
+
+/**
+ * Return a copy of the string with leading and trailing whitespace removed
  */
 std::string str_trim(const std::string& str);
 
-/**
- * Extraire une sous-chaîne
- * @param str: chaîne cible
- * @param from: indice de début d'extraction
- * @param to: indice de fin d'extraction
- * @return chaîne extraite
- * @pre from < to
- */
-std::string str_extract(const std::string& str, int from, int to);
 
 /**
- * Convertir une chaîne en minuscules
+ * Return a copy of the string converted to lowercase
  */
-void str_lower(std::string& str);
+std::string str_lower(const std::string& str);
 
 /**
- * Convertir une chaîne en majuscules
+ * Convert string to lowercase (in-place)
  */
-void str_upper(std::string& str);
+void str_self_lower(std::string& str);
+
 
 /**
- * Convertion UTF-8 <-> wstring
+ * Return a copy of the string converted to uppercase
  */
-void utf8_to_wstr(std::wstring& dest, const std::string& src);
-void wstr_to_utf8(std::string& dest, const std::wstring& src);
+std::string str_upper(const std::string& str);
+
+/**
+ * Convert string to uppercase (in-place)
+ */
+void str_self_upper(std::string& str);
+
 
 #endif // STRINGUTILS_HPP

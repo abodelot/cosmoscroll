@@ -6,20 +6,18 @@
 #include "utils/I18n.hpp"
 
 
-#define COSMOSCROLL_LICENCE L"GPL"
-#define COSMOSCROLL_AUTHORS L"    Alexandre Bodelot\n" \
-							 "    Arnaud Wolff\n\n"
+#define COSMOSCROLL_LICENCE "GPL"
+#define COSMOSCROLL_AUTHORS "    Alexandre Bodelot\n" \
+							"    Arnaud Wolff\n\n"
 
 
 AboutMenu::AboutMenu()
 {
-	SetTitle(I18n::t("menu.about.title"));
+	SetTitle(_t("menu.about.title"));
 
-	std::wstring version;
-	utf8_to_wstr(version, COSMOSCROLL_VERSION);
-	std::wstring str = I18n::t("menu.about.version") + L" " + version + L"\n\n";
-	str += I18n::t("menu.about.authors") + L" \n" + COSMOSCROLL_AUTHORS;
-	str += I18n::t("menu.about.licence") + L" " + COSMOSCROLL_LICENCE;
+	std::string str = std::string(_t("menu.about.version")) + " " + COSMOSCROLL_VERSION + "\n\n";
+	str += std::string(_t("menu.about.authors")) + " \n" + COSMOSCROLL_AUTHORS;
+	str += std::string(_t("menu.about.licence")) + " " + COSMOSCROLL_LICENCE;
 
 	info_text_.SetText(str);
 	info_text_.SetPosition(120, 100);
@@ -29,7 +27,7 @@ AboutMenu::AboutMenu()
 	logos_.SetY(Game::HEIGHT - logos_.GetSize().y);
 	logos_.SetX((Game::WIDTH - logos_.GetSize().x) / 2);
 
-	(new CosmoButton(this, I18n::t("menu.back"), 210, 340))->SetCallbackID(1);
+	(new CosmoButton(this, _t("menu.back"), 210, 340))->SetCallbackID(1);
 }
 
 

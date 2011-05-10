@@ -99,7 +99,8 @@ void EntityManager::InitMode(Mode mode)
 			// on démarre toujours le mode arcade avec un nouveau vaisseau
 			RespawnPlayer();
 			SetBackgroundColor(sf::Color::Black, sf::Color::Black);
-			ControlPanel::GetInstance().SetGameInfo(str_sprintf(I18n::t("panel.record").c_str(), arcade_record_));
+			std::string game_info = str_replace(_t("panel.record"), "{record}", to_string(arcade_record_));
+			ControlPanel::GetInstance().SetGameInfo(game_info);
 			particles_.AddStars();
 
 			max_droppable_index_ = 1;

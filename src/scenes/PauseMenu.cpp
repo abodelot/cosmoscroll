@@ -8,12 +8,12 @@
 
 PauseMenu::PauseMenu()
 {
-	SetTitle(I18n::t("menu.pause.title"), 120);
+	SetTitle(_t("menu.pause.title"), 120);
 	SetBackground(sf::Sprite());
 
-	(new CosmoButton(this, I18n::t("menu.pause.resume"), 210, 200))->SetCallbackID(1);
-	(new CosmoButton(this, I18n::t("menu.back_main_menu"), 210, 250))->SetCallbackID(2);
-	(new CosmoButton(this, I18n::t("menu.pause.quit"), 210, 300))->SetCallbackID(3);
+	(new CosmoButton(this, _t("menu.pause.resume"), 210, 200))->SetCallbackID(1);
+	(new CosmoButton(this, _t("menu.back_main_menu"), 210, 250))->SetCallbackID(2);
+	(new CosmoButton(this, _t("menu.pause.quit"), 210, 300))->SetCallbackID(3);
 }
 
 

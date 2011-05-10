@@ -85,7 +85,7 @@ public:
 	/**
 	 * Obtenir le nom d'une action
 	 */
-	static const wchar_t* ActionToString(Action action);
+	static const sf::Unicode::Text& ActionToString(Action action);
 
 	/**
 	 * Obtenir le nom d'une touche

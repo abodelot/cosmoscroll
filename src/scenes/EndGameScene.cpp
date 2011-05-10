@@ -63,7 +63,7 @@ void EndGameScene::OnFocus()
 	if (mode == EntityManager::MODE_ARCADE || entities_.Count() > 1)
 	{
 		SoundSystem::GetInstance().PlaySound("game-over");
-		info_.SetText(I18n::t("endgame.game_over"));
+		info_.SetText(_t("endgame.game_over"));
 	}
 	else
 	{
@@ -73,12 +73,13 @@ void EndGameScene::OnFocus()
 		int current = levels.GetCurrent();
 		if (current < levels.CountLevel())
 		{
-			info_.SetText(str_sprintf(I18n::t("endgame.end_level").c_str(), current));
+			std::string s = str_replace(_t("endgame.end_level"), "{level}", to_string(current));
+			info_.SetText(s);
 		}
 		else // si dernier niveau du jeu
 		{
-			std::wstring epic_win = str_sprintf(I18n::t("endgame.end_last_level").c_str(), current);
-			info_.SetText(epic_win);
+			std::string s = str_replace(_t("endgame.end_last_level"), "{count}", to_string(current));
+			info_.SetText(s);
 			info_.SetSize(30);
 		}
 

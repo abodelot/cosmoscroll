@@ -355,27 +355,31 @@
 		</level>
 		<level desc="Now toddle off and fly\nyour flying machine!" stars="40">
 <!-- LVL7: saucers + interceptors -->
-			<wait t="3"/>
+			<wait t="4"/>
 			<call func="interceptors_5"/>
+			<wait t="2"/>
 			<call func="interceptors_7"/>
-			<loop count="4">
-				<ship id="2" y="340" t="2" />
-				<ship id="2" y="140" t="0.5" />
-				<call func="saucers_12"/>
+			<loop count="2">
+				<ship id="5" y="290" t="2.5" />
+				<ship id="5" y="120" t="0.5" />
+				<ship id="5" y="210" t="0.5"/>
+				<ship id="5" y="30" t="0.5"/>
+				<ship id="5" y="360" t="0.5"/>
+			</loop>
+			<asteroid y="200" t="1"/>
+			<loop count="2">
+				<ship id="2" y="80" t="1"/>
+				<ship id="2" y="280" t="2"/>
+				<ship id="4" y="100" t="1"/>
 			</loop>
 			<loop count="2">
-				<asteroid y="200" t="1"/>
-				<ship id="3" y="300" t="1.5"/>
+				<ship id="2" y="300" t="1.5"/>
 				<ship id="3" y="350"/>
-				<loop count="2">
-					<ship id="2" y="80" t="1"/>
-					<ship id="1" y="280" t="2"/>
-					<ship id="2" y="100" t="1"/>
-				</loop>
 				<call func="interceptors_5"/>
-				<ship id="3" y="50" t="1.5"/>
+				<ship id="4" y="50" t="1.5"/>
 				<ship id="3" y="100"/>
 			</loop>
+			<call func="saucers_12"/>
 			<wait t="2"/>
 			<call func="interceptors_7"/>
 		</level>
@@ -388,11 +392,8 @@
 			<ship id="2" y="170" t="2"/>
 			<ship id="3" y="370" t="1"/>
 			<call func="scoot_line_3"/>
-			<ship id="4" y="20" t="1"/>
-			<ship id="4" y="300"/>
-			<ship id="4" y="100" t="1"/>
-			<ship id="4" y="180"/>
-			<ship id="4" y="250" t="1"/>
+			<call func="scoot_line_5"/>
+			<call func="saucers_12"/>
 			<asteroid y="120" t="2"/>
 			<asteroid y="310" t="0.5"/>
 			<asteroid y="205" t="0.5"/>
@@ -403,6 +404,7 @@
 			<ship id="4" y="300" t="1"/>
 			<ship id="4" y="200" t="1"/>
 			<ship id="5" y="70"/>
+			<call func="interceptors_7"/>
 			<ship id="2" y="170" t="2"/>
 			<ship id="3" y="40" t="1"/>
 			<ship id="3" y="370" t="2"/>

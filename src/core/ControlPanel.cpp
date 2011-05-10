@@ -32,13 +32,13 @@ ControlPanel::ControlPanel()
 	panel_.SetImage(GET_IMG("gui/score-board"));
 
 	const sf::Font& font = MediaManager::GetInstance().GetFixedFont();
-	pbars_[ProgressBar::HP].Init(I18n::t("panel.bar_hp"), font, GET_IMG("gui/bar-hp"));
+	pbars_[ProgressBar::HP].Init(_t("panel.bar_hp"), font, GET_IMG("gui/bar-hp"));
 	pbars_[ProgressBar::HP].SetPosition(45, Y_LINE_1);
 
-	pbars_[ProgressBar::SHIELD].Init(I18n::t("panel.bar_shield"), font, GET_IMG("gui/bar-shield"));
+	pbars_[ProgressBar::SHIELD].Init(_t("panel.bar_shield"), font, GET_IMG("gui/bar-shield"));
 	pbars_[ProgressBar::SHIELD].SetPosition(45, Y_LINE_2);
 
-	pbars_[ProgressBar::HEAT].Init(I18n::t("panel.bar_heat"), font, GET_IMG("gui/bar-heat"));
+	pbars_[ProgressBar::HEAT].Init(_t("panel.bar_heat"), font, GET_IMG("gui/bar-heat"));
 	pbars_[ProgressBar::HEAT].SetPosition(220, Y_LINE_1);
 
 	sf::Vector2f pos = pbars_[ProgressBar::HEAT].bar_.GetPosition();
@@ -100,7 +100,9 @@ void ControlPanel::SetGameInfo(const sf::Unicode::Text& text)
 
 void ControlPanel::SetPoints(int points)
 {
-	str_points_.SetText(str_sprintf("points: %d", points));
+	char text[32];
+	sprintf(text, "points: %d", points);
+	str_points_.SetText(text);
 }
 
 
@@ -108,7 +110,7 @@ void ControlPanel::SetOverheat(bool overheat)
 {
 	if (overheat)
 	{
-		info_.SetText(I18n::t("panel.overheat"));
+		info_.SetText(_t("panel.overheat"));
 	}
 	else
 	{
@@ -155,13 +157,13 @@ void ControlPanel::SetMaxHeat(int max)
 
 void ControlPanel::SetCoolers(int coolers)
 {
-	coolers_.count.SetText(str_sprintf("x %d", coolers));
+	coolers_.count.SetText("x " + to_string(coolers));
 }
 
 
 void ControlPanel::SetMissiles(int count)
 {
-	missiles_.count.SetText(str_sprintf("x %d", count));
+	missiles_.count.SetText("x " + to_string(count));
 }
 
 
@@ -171,7 +173,10 @@ void ControlPanel::SetTimer(float seconds)
 	int rounded = (int) seconds;
 	if (rounded != previous)
 	{
-		timer_.SetText(str_sprintf(I18n::t("panel.timer").c_str(), rounded / 60, rounded % 60));
+		std::string text = _t("panel.timer");
+		str_self_replace(text, "{min}", to_string(rounded / 60, 2));
+		str_self_replace(text, "{sec}", to_string(rounded % 60, 2));
+		timer_.SetText(text);
 		previous = rounded;
 		if (game_mode_ == EntityManager::MODE_STORY)
 		{

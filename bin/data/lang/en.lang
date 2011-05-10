@@ -14,8 +14,8 @@ menu.main.quit = Quit
 # Level menu
 menu.story.title = Story mode
 menu.story.select = Select a level:
-menu.story.progression = Progression: %d/%d
-menu.story.intro = Level %d\n\n"%s"\n\nBad guys: %d
+menu.story.progression = Progression: {unlocked}/{total}
+menu.story.intro = Level {level}\n\n"{description}"\n\nBad guys: {count}
 menu.story.play = Play
 
 # Pause menu
@@ -36,8 +36,8 @@ menu.gameover.title = Game Over
 menu.gameover.send_score = Send my score
 menu.gameover.pseudo = Your name:
 menu.gameover.play_again = Play again
-menu.gameover.new_record = Your score: %d\n    New High Score!
-menu.gameover.no_record = Your score: %d\n    Try harder!
+menu.gameover.new_record = Your score: {score}\n    New High Score!
+menu.gameover.no_record = Your score: {score}\n    Try harder!
 menu.gameover.error_cheat = Upload denied: you've cheated!
 menu.gameover.error_altered_res = Upload denied: game resources have been modified
 
@@ -58,11 +58,11 @@ menu.joystick.sensitivity = Joystick sensitivity:
 
 # Audio menu
 menu.audio.title = Sound and music
-menu.audio.no_music = No music
-menu.audio.music_volume_up = Increase music volume
-menu.audio.music_volume_down = Decrease music volume
-menu.audio.sound_volume_up = Increase sound volume
-menu.audio.sound_volume_down = Decrease sound volume
+menu.audio.music = Music:
+menu.audio.enable_music = Enable music:
+menu.audio.music_volume = Music volume:
+menu.audio.enable_sound = Enable sound:
+menu.audio.sound_volume = Sound volume:
 
 # Settings menu
 menu.settings.title = Settings
@@ -77,17 +77,17 @@ menu.about.licence = License:
 
 # End game
 endgame.game_over = Game Over
-endgame.end_level = Level %d cleared
-endgame.end_last_level = Congratulations!\n\nYou've cleared the %d levels of the game\nand beat the evil boss!
+endgame.end_level = Level {level} cleared
+endgame.end_last_level = Congratulations!\n\nYou've cleared the {count} levels of the game\nand beat the evil boss!
 
 # Control panel
 panel.bar_hp = Ship
 panel.bar_shield = Shield
 panel.bar_heat = Heat
 panel.overheat = Overheat!
-panel.level = Level %d
-panel.record = Record: %d
-panel.timer = Time: %02d:%02d
+panel.level = Level {level}
+panel.record = Record: {record}
+panel.timer = Time: {min}:{sec}
 
 # Bonus
 bonus.hp = Health point

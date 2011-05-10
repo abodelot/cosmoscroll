@@ -78,7 +78,7 @@ void ParticleSystem::AddCenteredStars(int count)
 }
 
 
-void ParticleSystem::AddMessage(const sf::Vector2f& offset, const wchar_t* text)
+void ParticleSystem::AddMessage(const sf::Vector2f& offset, const sf::Unicode::Text& text)
 {
 	particles_.push_front(new TextParticle(offset, text));
 }
@@ -277,7 +277,7 @@ bool ParticleSystem::CenteredStar::OnUpdate(float frametime)
 #define MESSAGE_LIFETIME   5.0
 #define MESSAGE_SPEED      50
 
-ParticleSystem::TextParticle::TextParticle(const sf::Vector2f& offset, const wchar_t* text)
+ParticleSystem::TextParticle::TextParticle(const sf::Vector2f& offset, const sf::Unicode::Text& text)
 {
 	text_.SetText(text);
 	text_.SetSize(12);

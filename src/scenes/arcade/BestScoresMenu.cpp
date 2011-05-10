@@ -10,8 +10,8 @@
 
 BestScoresMenu::BestScoresMenu()
 {
-	SetTitle(I18n::t("menu.best_scores.title"));
-	gui::Button* b = new CosmoButton(this, I18n::t("menu.back"), 210, 420);
+	SetTitle(_t("menu.best_scores.title"));
+	gui::Button* b = new CosmoButton(this, _t("menu.back"), 210, 420);
 	b->SetCallbackID(1);
 
 	LoadBitmapFont("data/images/gui/mono12-white.png", 10, 10);
@@ -68,7 +68,7 @@ void BestScoresMenu::Update(float frametime)
 			lab_content_->SetText("Error: couldn't connect to CosmoScroll server");
 			break;
 		default:
-			lab_content_->SetText(str_sprintf("Error: server did not properly respond (%d)", response.GetStatus()));
+			lab_content_->SetText("Error: server did not properly respond (" + to_string(response.GetStatus()) + ")");
 			break;
 	}
 	querying_ = DONE;

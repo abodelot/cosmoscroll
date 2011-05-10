@@ -10,9 +10,9 @@
 LevelMenu::LevelMenu():
 	levels_(LevelManager::GetInstance())
 {
-	SetTitle(I18n::t("menu.story.title"));
+	SetTitle(_t("menu.story.title"));
 
-	new gui::Label(this, I18n::t("menu.story.select"), 90, 120);
+	new gui::Label(this, _t("menu.story.select"), 90, 120);
 	opt_levels_ = new gui::OptionList(this, 315, 120);
 
 	lab_progresion_ = new gui::Label(this, "", 90, 150);
@@ -23,9 +23,9 @@ LevelMenu::LevelMenu():
 	cbx_hardcore_->SetVisible(false);
 
 	CosmoButton* but = NULL;
-	but = new CosmoButton(this, I18n::t("menu.story.play"), 210, 240);
+	but = new CosmoButton(this, _t("menu.story.play"), 210, 240);
 	but->SetCallbackID(1);
-	but = new CosmoButton(this, I18n::t("menu.back_main_menu"), 210, 300);
+	but = new CosmoButton(this, _t("menu.back_main_menu"), 210, 300);
 	but->SetCallbackID(0);
 }
 
@@ -48,14 +48,17 @@ void LevelMenu::OnFocus()
 		cbx_hardcore_->Check(levels_.IsHardcoreEnabled());
 	}
 
-	lab_progresion_->SetText(str_sprintf(I18n::t("menu.story.progression").c_str(), last_unlocked, last));
+	std::string progression = _t("menu.story.progression");
+	str_self_replace(progression, "{unlocked}", to_string(last_unlocked));
+	str_self_replace(progression, "{total}", to_string(last));
+	lab_progresion_->SetText(progression);
 	opt_levels_->Clear();
 	for (int i = 1; i <= last; ++i)
 	{
 		bool activable = i <= last_unlocked;
 		if (activable)
 		{
-			opt_levels_->AddOption(str_sprintf("  %d  ", i));
+			opt_levels_->AddOption(to_string(i, 4, ' '));
 		}
 	}
 	opt_levels_->Select(current - 1);
@@ -81,7 +84,8 @@ void LevelMenu::EventCallback(int id)
 
 			entities.InitMode(EntityManager::MODE_STORY);
 
-			ControlPanel::GetInstance().SetGameInfo(str_sprintf(I18n::t("panel.level").c_str(), level_select));
+			std::string s = str_replace(_t("panel.level"), "{level}", to_string(level_select));
+			ControlPanel::GetInstance().SetGameInfo(s);
 			Game::GetInstance().SetNextScene(Game::SC_IntroLevelScene);
 			}
 			break;

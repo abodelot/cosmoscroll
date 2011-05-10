@@ -5,13 +5,13 @@
 
 SettingsMenu::SettingsMenu()
 {
-	SetTitle(I18n::t("menu.settings.title"));
-	new gui::Label(this, I18n::t("menu.settings.fullscreen"), 100, 180);
+	SetTitle(_t("menu.settings.title"));
+	new gui::Label(this, _t("menu.settings.fullscreen"), 100, 180);
 	cb_fullscreen_ = new gui::CheckBox(this, 300, 180);
 	cb_fullscreen_->SetCallbackID(1);
 	cb_fullscreen_->Check(Game::GetInstance().IsFullscreen());
 
-	new gui::Label(this, I18n::t("menu.settings.language"), 100, 250);
+	new gui::Label(this, _t("menu.settings.language"), 100, 250);
 
 	opt_languages_ = new gui::OptionList(this, 300, 250);
 	opt_languages_->AddOption(L"English", "en");
@@ -19,7 +19,7 @@ SettingsMenu::SettingsMenu()
 	opt_languages_->SetCallbackID(2);
 	new gui::Label(this, "(Game must be restarted)", 300, 280);
 
-	(new CosmoButton(this, I18n::t("menu.back"), 210, 340))->SetCallbackID(0);
+	(new CosmoButton(this, _t("menu.back"), 210, 340))->SetCallbackID(0);
 }
 
 

@@ -90,7 +90,7 @@ void ConfigParser::Parse(const std::string& content)
 			token = content.find(TOKEN_OPEN, i);
 			if (token != std::string::npos)
 			{
-				std::string section_name = str_trim(str_extract(content, i, token));
+				std::string section_name = str_trim(content.substr(i, token - i));
 				cursor_ = &sections_[section_name];
 				inside_section = true;
 				i = token;
@@ -105,7 +105,7 @@ void ConfigParser::Parse(const std::string& content)
 			token = content.find(TOKEN_CLOSE, i);
 			if (token != std::string::npos)
 			{
-				ParseProperties(str_trim(str_extract(content, i, token)), *cursor_);
+				ParseProperties(str_trim(content.substr(i, token - i)), *cursor_);
 				i = token;
 			}
 			else
@@ -136,7 +136,7 @@ void ConfigParser::ParseProperties(const std::string& content, Properties& props
 			token = content.find(TOKEN_SEPARATOR, i);
 			if (token != std::string::npos)
 			{
-				current_prop = str_trim(str_extract(content, i, token));
+				current_prop = str_trim(content.substr(i, token - i));
 				at_end = false;
 				i = token;
 			}
@@ -150,7 +150,7 @@ void ConfigParser::ParseProperties(const std::string& content, Properties& props
 			token = content.find(TOKEN_END, i);
 			if (token != std::string::npos)
 			{
-				std::string prop_value = str_trim(str_extract(content, i, token));
+				std::string prop_value = str_trim(content.substr(i, token - i));
 				// nouvelle paire clef: valeur enregistrée
 				props[current_prop] = prop_value;
 				at_end = true;

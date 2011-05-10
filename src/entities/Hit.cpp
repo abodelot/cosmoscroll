@@ -71,12 +71,12 @@ void Hit::OnCollide(Entity& entity)
 			int points = entity.ConsumePoints();
 			if (points != 0)
 			{
-				std::wstring s = str_sprintf(L" +%d", points);
+				std::string s = "+" + to_string(points);
 				EntityManager& e = EntityManager::GetInstance();
 				if (e.GetMode() == EntityManager::MODE_ARCADE)
 				{
 					e.GetPlayerShip()->UpdateScoreCounter(points);
-					ParticleSystem::GetInstance().AddMessage(GetPosition(), s.c_str());
+					ParticleSystem::GetInstance().AddMessage(GetPosition(), s);
 				}
 			}
 		}

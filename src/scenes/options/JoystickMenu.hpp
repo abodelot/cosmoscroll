@@ -18,7 +18,7 @@ public:
 private:
 
 	void AddRow(Input::Action action, gui::Button** button, int y);
-	std::wstring GetButtonLabel(Input::Action action) const;
+	std::string GetButtonLabel(Input::Action action) const;
 
 	// inherited
 	void EventCallback(int id);

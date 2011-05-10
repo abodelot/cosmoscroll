@@ -169,32 +169,32 @@ unsigned int Input::GetJoystickBind(Action action)
 }
 
 
-const wchar_t* Input::ActionToString(Action action)
+const sf::Unicode::Text& Input::ActionToString(Action action)
 {
 	switch (action)
 	{
 		case PAUSE:
-			return I18n::t("action.pause").c_str();
+			return _t("action.pause");
 		case MOVE_UP:
-			return I18n::t("action.up").c_str();
+			return _t("action.up");
 		case MOVE_DOWN:
-			return I18n::t("action.down").c_str();
+			return _t("action.down");
 		case MOVE_LEFT:
-			return I18n::t("action.left").c_str();
+			return _t("action.left");
 		case MOVE_RIGHT:
-			return I18n::t("action.right").c_str();
+			return _t("action.right");
 		case USE_WEAPON_1:
-			return I18n::t("action.weapon_1").c_str();
+			return _t("action.weapon_1");
 		case USE_WEAPON_2:
-			return I18n::t("action.weapon_2").c_str();
+			return _t("action.weapon_2");
 		case USE_COOLER:
-			return I18n::t("action.cooler").c_str();
+			return _t("action.cooler");
 		case USE_MISSILE:
-			return I18n::t("action.missile").c_str();
+			return _t("action.missile");
 		default:
 			break;
 	}
-	return L"<Unknown action>";
+	return "<Unknown action>";
 }
 
 
@@ -316,22 +316,19 @@ void Input::SetDevices(unsigned int flag)
 
 void Input::AskUserInput(Device device, Action action)
 {
-	std::wstring str(L"");
+	std::wostringstream oss;
 	if (device == Input::KEYBOARD)
 	{
-		str += I18n::t("input.press_key");
+		oss << std::wstring(_t("input.press_key"));
 	}
 	else if (device == Input::JOYSTICK)
 	{
-		str += I18n::t("input.press_button");
+		oss << std::wstring(_t("input.press_button"));
 	}
-	str += L" '";
-	str += Input::ActionToString(action);
-	str += L"'\n\n";
-	str += I18n::t("input.cancel");
+	oss << L" '" << std::wstring(Input::ActionToString(action)) << L"'\n\n" << std::wstring(_t("input.cancel"));
 
 	sf::String prompt;
-	prompt.SetText(str);
+	prompt.SetText(oss.str());
 	prompt.SetColor(sf::Color::White);
 	sf::FloatRect rect = prompt.GetRect();
 	prompt.SetPosition(

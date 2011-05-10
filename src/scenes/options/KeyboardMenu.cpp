@@ -7,7 +7,7 @@
 
 KeyboardMenu::KeyboardMenu()
 {
-	SetTitle(I18n::t("menu.keyboard.title"));
+	SetTitle(_t("menu.keyboard.title"));
 
 	AddRow(Input::MOVE_UP,      &but_up_, 100);
 	AddRow(Input::MOVE_DOWN,    &but_down_, 130);
@@ -19,7 +19,7 @@ KeyboardMenu::KeyboardMenu()
 	AddRow(Input::USE_MISSILE,  &but_missile_, 310);
 	AddRow(Input::PAUSE,        &but_pause_, 340);
 
-	(new CosmoButton(this, I18n::t("menu.back"), 210, 410))->SetCallbackID(9000);
+	(new CosmoButton(this, _t("menu.back"), 210, 410))->SetCallbackID(9000);
 }
 
 
