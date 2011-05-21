@@ -44,7 +44,7 @@ void Bonus::Update(float frametime)
 }
 
 
-const sf::Unicode::Text& Bonus::GetDescription() const
+const std::wstring& Bonus::GetDescription() const
 {
 	switch (type_)
 	{
@@ -67,6 +67,7 @@ const sf::Unicode::Text& Bonus::GetDescription() const
 		default:
 			break;
 	}
+	return _t("bonus.unknown");
 }
 
 

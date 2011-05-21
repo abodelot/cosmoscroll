@@ -1,7 +1,7 @@
 #include "ConfigButton.hpp"
 #include "utils/MediaManager.hpp"
 
-#define BUT_W 100
+#define BUT_W 120
 #define BUT_H 25
 
 const sf::Image* ConfigButton::img_ = NULL;

@@ -26,13 +26,13 @@ I18n::I18n()
 }
 
 
-const sf::Unicode::Text& I18n::Translate(const char* key) const
+const std::wstring& I18n::Translate(const char* key) const
 {
 	TextMap::const_iterator it = content_.find(key);
 	if (it == content_.end())
 	{
 		std::cerr << "[I18n] no translation found for key " << key << std::endl;
-		static sf::Unicode::Text error("key not found");
+		static std::wstring error(L"key not found");
 		return error;
 	}
 	return it->second;
@@ -107,13 +107,10 @@ bool I18n::LoadFromFile(const char* filename)
 			{
 				std::string key = str_trim(line.substr(0, pos));
 				std::string text = str_trim(line.substr(pos + 1));
-				str_self_replace(text, "\\n", "\n");
+				str_self_replace<std::string>(text, "\\n", "\n");
 
 				// convert to wide string
-				std::wstring temp;
-				DecodeUTF8(text, temp);
-
-				content_[key] = temp;
+				content_[key] = I18n::DecodeUTF8(text);
 			}
 			else
 			{
@@ -125,10 +122,58 @@ bool I18n::LoadFromFile(const char* filename)
 	return false;
 }
 
+/*
+Copyright (c) 2009 SegFault aka "ErV" (altctrlbackspace.blogspot.com)
 
-void I18n::DecodeUTF8(const std::string& src, std::wstring& dest)
+Redistribution and use of this source code, with or without modification, is
+permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright
+ notice, this list of conditions and the following disclaimer.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
+EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+void I18n::EncodeUTF8(const std::wstring& src, std::string& dest)
 {
 	dest.clear();
+	for (size_t i = 0; i < src.size(); i++){
+		wchar_t w = src[i];
+		if (w <= 0x7f)
+			dest.push_back((char)w);
+		else if (w <= 0x7ff){
+			dest.push_back(0xc0 | ((w >> 6)& 0x1f));
+			dest.push_back(0x80| (w & 0x3f));
+		}
+		else if (w <= 0xffff){
+			dest.push_back(0xe0 | ((w >> 12)& 0x0f));
+		dest.push_back(0x80| ((w >> 6) & 0x3f));
+		dest.push_back(0x80| (w & 0x3f));
+		}
+		else if (w <= 0x10ffff){
+			dest.push_back(0xf0 | ((w >> 18)& 0x07));
+			dest.push_back(0x80| ((w >> 12) & 0x3f));
+			dest.push_back(0x80| ((w >> 6) & 0x3f));
+			dest.push_back(0x80| (w & 0x3f));
+		}
+		else
+			dest.push_back('?');
+	}
+}
+
+
+std::wstring I18n::DecodeUTF8(const std::string& src)
+{
+	std::wstring dest;
 	wchar_t w = 0;
 	int bytes = 0;
 	wchar_t err = L'�';
@@ -170,4 +215,5 @@ void I18n::DecodeUTF8(const std::string& src, std::wstring& dest)
 	}
 	if (bytes)
 		dest.push_back(err);
+	return dest;
 }

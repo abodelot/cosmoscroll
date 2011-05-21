@@ -6,20 +6,21 @@
 #include "utils/I18n.hpp"
 
 
-#define COSMOSCROLL_LICENCE "GPL"
-#define COSMOSCROLL_AUTHORS "    Alexandre Bodelot\n" \
-							"    Arnaud Wolff\n\n"
+#define COSMOSCROLL_LICENCE L"GPL"
+#define COSMOSCROLL_AUTHORS L"    Alexandre Bodelot\n" \
+							 "    Arnaud Wolff\n\n"
 
 
 AboutMenu::AboutMenu()
 {
 	SetTitle(_t("menu.about.title"));
 
-	std::string str = std::string(_t("menu.about.version")) + " " + COSMOSCROLL_VERSION + "\n\n";
-	str += std::string(_t("menu.about.authors")) + " \n" + COSMOSCROLL_AUTHORS;
-	str += std::string(_t("menu.about.licence")) + " " + COSMOSCROLL_LICENCE;
+	std::wostringstream oss;
+	oss << _t("menu.about.version") << L" " << COSMOSCROLL_VERSION << L"\n\n"
+	    << _t("menu.about.authors") << L" \n" << COSMOSCROLL_AUTHORS
+	    << _t("menu.about.licence") << L" " << COSMOSCROLL_LICENCE;
 
-	info_text_.SetText(str);
+	info_text_.SetText(oss.str());
 	info_text_.SetPosition(120, 100);
 	info_text_.SetFont(GET_FONT());
 

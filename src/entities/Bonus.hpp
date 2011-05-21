@@ -36,7 +36,7 @@ public:
 	/**
 	 * Description textuelle du bonus
 	 */
-	const sf::Unicode::Text& GetDescription() const;
+	const std::wstring& GetDescription() const;
 
 	Type GetType() const;
 

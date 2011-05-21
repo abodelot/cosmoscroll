@@ -42,15 +42,15 @@ void GameOverMenu::OnFocus()
 
 	score_ = entities.GetPlayerShip()->GetPoints();
 
-	std::string text;
+	std::wstring text;
 	if (score_ > entities.GetArcadeRecord())
 	{
 		entities.UpdateArcadeRecord();
-		text = str_replace(_t("menu.gameover.new_record"), "{score}", to_string(score_));
+		text = wstr_replace(_t("menu.gameover.new_record"), L"{score}", to_wstring(score_));
 	}
 	else
 	{
-		text = str_replace(_t("menu.gameover.no_record"), "{score}", to_string(score_));
+		text = wstr_replace(_t("menu.gameover.no_record"), L"{score}", to_wstring(score_));
 	}
 	lab_result_->SetSize(30);
 	lab_result_->SetText(text);

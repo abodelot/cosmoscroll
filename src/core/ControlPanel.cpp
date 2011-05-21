@@ -173,9 +173,9 @@ void ControlPanel::SetTimer(float seconds)
 	int rounded = (int) seconds;
 	if (rounded != previous)
 	{
-		std::string text = _t("panel.timer");
-		str_self_replace(text, "{min}", to_string(rounded / 60, 2));
-		str_self_replace(text, "{sec}", to_string(rounded % 60, 2));
+		std::wstring text = _t("panel.timer");
+		wstr_self_replace(text, L"{min}", to_wstring(rounded / 60, 2));
+		wstr_self_replace(text, L"{sec}", to_wstring(rounded % 60, 2));
 		timer_.SetText(text);
 		previous = rounded;
 		if (game_mode_ == EntityManager::MODE_STORY)

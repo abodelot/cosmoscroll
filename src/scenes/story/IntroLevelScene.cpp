@@ -51,11 +51,11 @@ void IntroLevelScene::OnFocus()
 	printf("level %d (%d entities, duration: %d\" %02d')\n",
 		current_level, levels.RemainingEntities(), levels.GetDuration() / 60, levels.GetDuration() % 60);
 
-	std::string intro = _t("menu.story.intro");
-	str_self_replace(intro, "{level}", to_string(current_level));
-	str_self_replace(intro, "{description}", levels.GetDescription());
-	str_self_replace(intro, "{count}", to_string(levels.RemainingEntities()));
-	str_self_replace(intro, "\\n", "\n");
+	std::wstring intro = _t("menu.story.intro");
+	wstr_self_replace(intro, L"{level}", to_wstring(current_level));
+	wstr_self_replace(intro, L"{description}", I18n::DecodeUTF8(levels.GetDescription()));
+	wstr_self_replace(intro, L"{count}", to_wstring(levels.RemainingEntities()));
+	wstr_self_replace(intro, L"\\n", L"\n");
 	description_.SetText(intro);
 
 	// centered on screen

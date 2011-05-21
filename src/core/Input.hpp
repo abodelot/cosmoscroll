@@ -85,7 +85,7 @@ public:
 	/**
 	 * Obtenir le nom d'une action
 	 */
-	static const sf::Unicode::Text& ActionToString(Action action);
+	static const std::wstring& ActionToString(Action action);
 
 	/**
 	 * Obtenir le nom d'une touche

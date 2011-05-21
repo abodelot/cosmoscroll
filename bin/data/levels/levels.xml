@@ -357,7 +357,7 @@
 <!-- LVL7: saucers + interceptors -->
 			<wait t="4"/>
 			<call func="interceptors_5"/>
-			<wait t="2"/>
+			<wait t="3"/>
 			<call func="interceptors_7"/>
 			<loop count="2">
 				<ship id="5" y="290" t="2.5" />
@@ -373,15 +373,23 @@
 				<ship id="4" y="100" t="1"/>
 			</loop>
 			<loop count="2">
-				<ship id="2" y="300" t="1.5"/>
-				<ship id="3" y="350"/>
+				<ship id="2" y="300" t="4"/>
+				<ship id="2" y="350"/>
 				<call func="interceptors_5"/>
 				<ship id="4" y="50" t="1.5"/>
-				<ship id="3" y="100"/>
+				<ship id="2" y="100"/>
 			</loop>
 			<call func="saucers_12"/>
-			<wait t="2"/>
+			<wait t="3"/>
 			<call func="interceptors_7"/>
+			<ship id="2" y="200" t="2"/>
+			<ship id="3" y="320" t="0.5"/>
+			<ship id="4" y="20" t="0.5"/>
+			<ship id="5" y="180" />
+			<ship id="2" y="250" t="2"/>
+			<ship id="3" y="100" t="1"/>
+			<ship id="4" y="300" t="0.5"/>
+			<ship id="5" y="90" t="0.5"/>
 		</level>
 		<level desc="Take me to your leader." bg_top="#000000" bg_bottom="#501005" stars="70">
 <!-- LVL8: a bit of everything + evilboss -->

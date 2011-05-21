@@ -131,6 +131,19 @@ void OptionList::Select(int index)
 }
 
 
+void OptionList::SelectByValue(const std::string& value)
+{
+	for (size_t i = 0; i < options_.size(); ++i)
+	{
+		if (options_[i].second == value)
+		{
+			Select(i);
+			return;
+		}
+	}
+}
+
+
 void OptionList::Clear()
 {
 	current_opt_ = -1;

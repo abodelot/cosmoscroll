@@ -20,7 +20,7 @@ public:
 	 * Get translated text
 	 * @param key: text identifier
 	 */
-	const sf::Unicode::Text& Translate(const char* key) const;
+	const std::wstring& Translate(const char* key) const;
 
 	/**
 	 * Tente de charger le fichier de traduction de la langue du système
@@ -47,14 +47,16 @@ public:
 
 	bool LoadFromCode(const std::string& code);
 
+	static std::wstring DecodeUTF8(const std::string& src);
+
 private:
 	I18n();
 	I18n(const I18n&);
 
-	void DecodeUTF8(const std::string& src, std::wstring& dest);
+		void EncodeUTF8(const std::wstring& src, std::string& dest);
 
 	mutable char code_[3];
-	typedef std::map<std::string, sf::Unicode::Text> TextMap;
+	typedef std::map<std::string, std::wstring> TextMap;
 	TextMap content_;
 };
 

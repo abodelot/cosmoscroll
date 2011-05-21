@@ -29,7 +29,12 @@ public:
 	 */
 	std::string GetSelectedOption() const;
 	int GetSelectedOptionIndex() const;
+
+	/**
+	 * Set the current displayed item
+	 */
 	void Select(int index);
+	void SelectByValue(const std::string& value);
 
 	// supprimer toutes les options
 	void Clear();
@@ -71,7 +76,8 @@ private:
 	sf::Shape inside_box_;
 	sf::Shape left_arrow_;
 	sf::Shape right_arrow_;
-	std::vector<std::pair<sf::String, std::string> > options_;
+	typedef std::pair<sf::String, std::string> Item;
+	std::vector<Item> options_;
 	int current_opt_;
 	size_t max_opt_width_;
 	int dir_;

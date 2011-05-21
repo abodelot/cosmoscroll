@@ -52,10 +52,10 @@ void JoystickMenu::AddRow(Input::Action action, gui::Button** button, int y)
 }
 
 
-std::string JoystickMenu::GetButtonLabel(Input::Action action) const
+std::wstring JoystickMenu::GetButtonLabel(Input::Action action) const
 {
-	std::ostringstream oss;
-	oss << std::string(_t("menu.joystick.button")) << " " << Input::GetInstance().GetJoystickBind(action);
+	std::wostringstream oss;
+	oss << _t("menu.joystick.button") << L" " << Input::GetInstance().GetJoystickBind(action);
 	return oss.str();
 }
 

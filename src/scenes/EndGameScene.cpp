@@ -73,12 +73,12 @@ void EndGameScene::OnFocus()
 		int current = levels.GetCurrent();
 		if (current < levels.CountLevel())
 		{
-			std::string s = str_replace(_t("endgame.end_level"), "{level}", to_string(current));
+			std::wstring s = wstr_replace(_t("endgame.end_level"), L"{level}", to_wstring(current));
 			info_.SetText(s);
 		}
 		else // si dernier niveau du jeu
 		{
-			std::string s = str_replace(_t("endgame.end_last_level"), "{count}", to_string(current));
+			std::wstring s = wstr_replace(_t("endgame.end_last_level"), L"{count}", to_wstring(current));
 			info_.SetText(s);
 			info_.SetSize(30);
 		}

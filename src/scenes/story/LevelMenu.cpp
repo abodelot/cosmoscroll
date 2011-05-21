@@ -48,9 +48,9 @@ void LevelMenu::OnFocus()
 		cbx_hardcore_->Check(levels_.IsHardcoreEnabled());
 	}
 
-	std::string progression = _t("menu.story.progression");
-	str_self_replace(progression, "{unlocked}", to_string(last_unlocked));
-	str_self_replace(progression, "{total}", to_string(last));
+	std::wstring progression = _t("menu.story.progression");
+	wstr_self_replace(progression, L"{unlocked}", to_wstring(last_unlocked));
+	wstr_self_replace(progression, L"{total}", to_wstring(last));
 	lab_progresion_->SetText(progression);
 	opt_levels_->Clear();
 	for (int i = 1; i <= last; ++i)
@@ -84,7 +84,7 @@ void LevelMenu::EventCallback(int id)
 
 			entities.InitMode(EntityManager::MODE_STORY);
 
-			std::string s = str_replace(_t("panel.level"), "{level}", to_string(level_select));
+			std::wstring s = wstr_replace(_t("panel.level"), L"{level}", to_wstring(level_select));
 			ControlPanel::GetInstance().SetGameInfo(s);
 			Game::GetInstance().SetNextScene(Game::SC_IntroLevelScene);
 			}

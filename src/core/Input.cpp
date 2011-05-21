@@ -169,7 +169,7 @@ unsigned int Input::GetJoystickBind(Action action)
 }
 
 
-const sf::Unicode::Text& Input::ActionToString(Action action)
+const std::wstring& Input::ActionToString(Action action)
 {
 	switch (action)
 	{
@@ -194,7 +194,7 @@ const sf::Unicode::Text& Input::ActionToString(Action action)
 		default:
 			break;
 	}
-	return "<Unknown action>";
+	return _t("action.unknown");
 }
 
 
@@ -228,34 +228,34 @@ const char* Input::KeyToString(int key)
 		case sf::Key::X: return "X";
 		case sf::Key::Y: return "Y";
 		case sf::Key::Z: return "Z";
-		case sf::Key::Num0: return "Num0";
-		case sf::Key::Num1: return "Num1";
-		case sf::Key::Num2: return "Num2";
-		case sf::Key::Num3: return "Num3";
-		case sf::Key::Num4: return "Num4";
-		case sf::Key::Num5: return "Num5";
-		case sf::Key::Num6: return "Num6";
-		case sf::Key::Num7: return "Num7";
-		case sf::Key::Num8: return "Num8";
-		case sf::Key::Num9: return "Num9";
+		case sf::Key::Num0: return "Num 0";
+		case sf::Key::Num1: return "Num 1";
+		case sf::Key::Num2: return "Num 2";
+		case sf::Key::Num3: return "Num 3";
+		case sf::Key::Num4: return "Num 4";
+		case sf::Key::Num5: return "Num 5";
+		case sf::Key::Num6: return "Num 6";
+		case sf::Key::Num7: return "Num 7";
+		case sf::Key::Num8: return "Num 8";
+		case sf::Key::Num9: return "Num 9";
 		case sf::Key::Escape: return "Escape";
-		case sf::Key::LControl: return "LControl";
-		case sf::Key::LShift: return "LShift";
-		case sf::Key::LAlt: return "LAlt";
-		case sf::Key::LSystem: return "LSystem";
-		case sf::Key::RControl: return "RControl";
-		case sf::Key::RShift: return "RShift";
+		case sf::Key::LControl: return "Left Control";
+		case sf::Key::LShift: return "Left Shift";
+		case sf::Key::LAlt: return "Left Alt";
+		case sf::Key::LSystem: return "Left System";
+		case sf::Key::RControl: return "Right Control";
+		case sf::Key::RShift: return "Right Shift";
 		case sf::Key::RAlt: return "RAlt";
-		case sf::Key::RSystem: return "RSystem";
+		case sf::Key::RSystem: return "Right System";
 		case sf::Key::Menu: return "Menu";
-		case sf::Key::LBracket: return "LBracket";
-		case sf::Key::RBracket: return "RBracket";
-		case sf::Key::SemiColon: return "SemiColon";
+		case sf::Key::LBracket: return "Left Bracket";
+		case sf::Key::RBracket: return "Right Bracket";
+		case sf::Key::SemiColon: return "Semi Colon";
 		case sf::Key::Comma: return "Comma";
 		case sf::Key::Period: return "Period";
 		case sf::Key::Quote: return "Quote";
 		case sf::Key::Slash: return "Slash";
-		case sf::Key::BackSlash: return "BackSlash";
+		case sf::Key::BackSlash: return "Back Slash";
 		case sf::Key::Tilde: return "Tilde";
 		case sf::Key::Equal: return "Equal";
 		case sf::Key::Dash: return "Dash";
@@ -263,8 +263,8 @@ const char* Input::KeyToString(int key)
 		case sf::Key::Return: return "Return";
 		case sf::Key::Back: return "Back";
 		case sf::Key::Tab: return "Tab";
-		case sf::Key::PageUp: return "PageUp";
-		case sf::Key::PageDown: return "PageDown";
+		case sf::Key::PageUp: return "Page Up";
+		case sf::Key::PageDown: return "Page Down";
 		case sf::Key::End: return "End";
 		case sf::Key::Home: return "Home";
 		case sf::Key::Insert: return "Insert";
@@ -277,16 +277,16 @@ const char* Input::KeyToString(int key)
 		case sf::Key::Right: return "Right";
 		case sf::Key::Up: return "Up";
 		case sf::Key::Down: return "Down";
-		case sf::Key::Numpad0: return "Numpad0";
-		case sf::Key::Numpad1: return "Numpad1";
-		case sf::Key::Numpad2: return "Numpad2";
-		case sf::Key::Numpad3: return "Numpad3";
-		case sf::Key::Numpad4: return "Numpad4";
-		case sf::Key::Numpad5: return "Numpad5";
-		case sf::Key::Numpad6: return "Numpad6";
-		case sf::Key::Numpad7: return "Numpad7";
-		case sf::Key::Numpad8: return "Numpad8";
-		case sf::Key::Numpad9: return "Numpad9";
+		case sf::Key::Numpad0: return "Numpad 0";
+		case sf::Key::Numpad1: return "Numpad 1";
+		case sf::Key::Numpad2: return "Numpad 2";
+		case sf::Key::Numpad3: return "Numpad 3";
+		case sf::Key::Numpad4: return "Numpad 4";
+		case sf::Key::Numpad5: return "Numpad 5";
+		case sf::Key::Numpad6: return "Numpad 6";
+		case sf::Key::Numpad7: return "Numpad 7";
+		case sf::Key::Numpad8: return "Numpad 8";
+		case sf::Key::Numpad9: return "Numpad 9";
 		case sf::Key::F1: return "F1";
 		case sf::Key::F2: return "F2";
 		case sf::Key::F3: return "F3";
@@ -316,19 +316,19 @@ void Input::SetDevices(unsigned int flag)
 
 void Input::AskUserInput(Device device, Action action)
 {
-	std::wostringstream oss;
+	std::wstring s;
 	if (device == Input::KEYBOARD)
 	{
-		oss << std::wstring(_t("input.press_key"));
+		s = _t("input.press_key");
 	}
 	else if (device == Input::JOYSTICK)
 	{
-		oss << std::wstring(_t("input.press_button"));
+		s = _t("input.press_button");
 	}
-	oss << L" '" << std::wstring(Input::ActionToString(action)) << L"'\n\n" << std::wstring(_t("input.cancel"));
+	s += L" '" + Input::ActionToString(action) + L"'\n\n" + _t("input.cancel");
 
 	sf::String prompt;
-	prompt.SetText(oss.str());
+	prompt.SetText(s);
 	prompt.SetColor(sf::Color::White);
 	sf::FloatRect rect = prompt.GetRect();
 	prompt.SetPosition(
