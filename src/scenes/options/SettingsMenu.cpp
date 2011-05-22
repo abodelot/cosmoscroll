@@ -6,21 +6,20 @@
 SettingsMenu::SettingsMenu()
 {
 	SetTitle(_t("menu.settings.title"));
-	new gui::Label(this, _t("menu.settings.fullscreen"), 100, 180);
+	lab_fullscreen_ = new gui::Label(this, _t("menu.settings.fullscreen"), 100, 180);
 	cb_fullscreen_ = new gui::CheckBox(this, 300, 180);
 	cb_fullscreen_->SetCallbackID(1);
 	cb_fullscreen_->Check(Game::GetInstance().IsFullscreen());
 
-	new gui::Label(this, _t("menu.settings.language"), 100, 250);
-
+	lab_language_ = new gui::Label(this, _t("menu.settings.language"), 100, 250);
 	opt_languages_ = new gui::OptionList(this, 300, 250);
 	opt_languages_->AddOption(L"English", "en");
 	opt_languages_->AddOption(L"Français", "fr");
 	opt_languages_->SelectByValue(I18n::GetInstance().GetCurrentCode());
 	opt_languages_->SetCallbackID(2);
-	new gui::Label(this, "(Game must be restarted)", 300, 280);
 
-	(new CosmoButton(this, _t("menu.back"), 210, 340))->SetCallbackID(0);
+	but_back_ = new CosmoButton(this, _t("menu.back"), 210, 340);
+	but_back_->SetCallbackID(0);
 }
 
 
@@ -36,6 +35,13 @@ void SettingsMenu::EventCallback(int id)
 			break;
 		case 2:
 			I18n::GetInstance().LoadFromCode(opt_languages_->GetSelectedOption());
+			// delete other scenes
+			Game::GetInstance().ReloadScenes();
+			// re-load i18ned texts
+			SetTitle(_t("menu.settings.title"));
+			lab_fullscreen_->SetText(_t("menu.settings.fullscreen"));
+			lab_language_->SetText(_t("menu.settings.language"));
+			but_back_->SetText(_t("menu.back"));
 			break;
 	}
 }

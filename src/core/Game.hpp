@@ -75,6 +75,8 @@ public:
 	void SetFullscreen(bool full);
 	bool IsFullscreen() const;
 
+	void ReloadScenes();
+
 	bool IsPure() const { return pure_; }
 private:
 	Game();

@@ -311,6 +311,20 @@ bool Game::IsFullscreen() const
 }
 
 
+void Game::ReloadScenes()
+{
+	// delete allocated scenes, except the current one
+	for (int i = 0; i < SC_COUNT; ++i)
+	{
+		if (scenes_[i] != NULL && scenes_[i] != current_scene_)
+		{
+			delete scenes_[i];
+			scenes_[i] = NULL;
+		}
+	}
+}
+
+
 void Game::CheckPurity()
 {
 	printf("* checking resources purity... ");

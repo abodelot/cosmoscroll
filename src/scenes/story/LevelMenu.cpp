@@ -58,7 +58,7 @@ void LevelMenu::OnFocus()
 		bool activable = i <= last_unlocked;
 		if (activable)
 		{
-			opt_levels_->AddOption(to_string(i, 4, ' '));
+			opt_levels_->AddOption(to_string(i, 4, ' ') + "   ");
 		}
 	}
 	opt_levels_->Select(current - 1);
