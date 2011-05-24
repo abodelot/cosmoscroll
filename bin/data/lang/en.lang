@@ -78,7 +78,7 @@ menu.about.licence = License:
 # End game
 endgame.game_over = Game Over
 endgame.end_level = Level {level} cleared
-endgame.end_last_level = Congratulations!\n\nYou've cleared the {count} levels of the game\nand beat the evil boss!
+endgame.end_last_level = Congratulations!\n\nYou've cleared the {count} levels\nand beat the evil boss!
 
 # Control panel
 panel.bar_hp = Ship

@@ -1,12 +1,12 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-#define COSMOSCROLL_VERSION "0.3-devel"
+#define COSMOSCROLL_VERSION "0.3"
 
 // score server
 #define COSMO_SERVER_HOSTNAME "http://perkypenguin.free.fr"
 #define COSMO_SERVER_URI      "cosmoscroll.php"
-#define COSMO_SERVER_KEY      "551ab704c84d1f8c896b014c9e6e512f"
+#define COSMO_SERVER_KEY      "secret"
 
 // resources checksums
 #define MD5SUM_ANIMATIONS "fe92e99e42e6cc9d7c8199b9f8bb7254"

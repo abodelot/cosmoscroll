@@ -1,5 +1,36 @@
 CHANGELOG
 
+CosmoScroll 0.3  (2011-05-24)
+-----------------------------
+
+Gameplay
+* Possibilité d'envoyer son score en ligne en mode Arcade
+* Consultation des meilleurs scores en ligne depuis le jeu
+* Difficulté progressive en mode Arcade : plus le temps avance, plus de puissants ennemis apparaissent
+* Le score en mode Arcade est basé sur les points (à la place du temps du jeu)
+* Ajout du mode hardcore : une fois tous les niveaux terminés, vous pouvez les recommencer avec des ennemis plus puissants
+* Ennemis avec déplacement en courbe sinusoïdale
+* Le joueur est immunisé contre ses propres missiles
+* Ajout du bonus "double tir", suppression des malus
+* 8 niveaux dans le mode Histoire
+* Ajout d'un mini-boss dans les niveaux
+* Correction du bug de la sensibilité du joystick/manette
+* Correction du bug sur les collisions des tirs du boss de fin
+
+Affichage
+* Les astéroïdes tournent sur eux-mêmes
+* Barre de progression du niveau courant en mode Histoire
+* Mode plein écran
+
+Autres
+* Sons pour les armes des vaisseaux ennemis
+* Interface utilisateur plus ergonomique et utilisable à la souris (boutons, sliders, cases à cocher, listes)
+* Choix de la langue
+* Activer/désactiver et régler le volume du son
+* Activer/désactiver et régler le volume de la musique
+* Régler la sensibilité du joystick/manette
+
+
 CosmoScroll 0.2  (2010-03-13)
 -----------------------------
 
@@ -33,4 +64,3 @@ CosmoScroll 0.1  (2008-12-17)
 -----------------------------
 
 Première version.
-

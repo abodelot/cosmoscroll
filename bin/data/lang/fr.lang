@@ -78,7 +78,7 @@ menu.about.licence = Licence :
 # Fin de jeu
 endgame.game_over = Game Over
 endgame.end_level = Niveau {level} terminé
-endgame.end_last_level = Félicitations !\n\nVous avez fini les {count} niveaux du jeu\net battu le boss de fin !
+endgame.end_last_level = Félicitations !\n\nVous avez terminé les {count} niveaux\net battu le boss de fin !
 
 # Panneau de contrôle
 panel.bar_hp = Coque
