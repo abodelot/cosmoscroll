@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-#define COSMOSCROLL_VERSION "0.3"
+#define COSMOSCROLL_VERSION "0.4-devel"
 
 // score server
 #define COSMO_SERVER_HOSTNAME "http://perkypenguin.free.fr"

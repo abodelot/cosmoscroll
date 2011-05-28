@@ -15,6 +15,7 @@ gui/background.png
 gui/bar-heat.png
 gui/bar-hp.png
 gui/bar-shield.png
+gui/bonus-glow.png
 gui/button.png
 gui/button-config.png
 gui/cosmoscroll-logo.png
@@ -22,6 +23,7 @@ gui/icon.bmp
 gui/libs-logo.png
 gui/main-screen.png
 gui/score-board.png
+gui/score-board-bar-mask.png
 gui/level-bar.png
 gui/level-cursor.png
 entities/capsule.png

@@ -18,6 +18,8 @@ public:
 
 	void Init(EntityManager::Mode mode);
 
+	void Update(float frametime);
+
 	/**
 	 * @param text: texte d'information
 	 */
@@ -82,7 +84,7 @@ private:
 
 		ProgressBar();
 
-		void Init(const sf::Unicode::Text& text, const sf::Font& font, const sf::Image& img);
+		void Init(const sf::Unicode::Text& text, const sf::Font& font, const sf::Color& color);
 
 		// redimensionne la barre
 		void SetValue(int value);
@@ -91,23 +93,34 @@ private:
 		void SetPosition(int x, int y);
 
 		sf::String label_;
-		sf::Shape background_;
+
 		sf::Sprite bar_;
 		int max_value_;
 		int initial_x_;
 	};
 
-	struct BonusCount
+	class BonusCounter
 	{
-		sf::Sprite icon;
-		sf::String count;
-
+	public:
 		void Init(const sf::IntRect& subrect, int x, int y);
+
+		void SetValue(int value);
+
+		void Update(float frametime);
+
+		void Show(sf::RenderTarget& target) const;
+
+	private:
+		sf::Sprite icon_;
+		sf::String count_;
+		sf::Sprite glow_;
+		float timer_;
+		enum GlowingStatus { UP, DOWN, STOP } glowing_;
 	};
 
 	ProgressBar pbars_[ProgressBar::_PBAR_COUNT];
-	BonusCount coolers_;
-	BonusCount missiles_;
+	BonusCounter coolers_;
+	BonusCounter missiles_;
 
 	sf::String timer_;
 	sf::String info_;
@@ -121,6 +134,7 @@ private:
 	sf::Sprite level_bar_;
 	// arcade
 	sf::String str_points_;
+	sf::Sprite bar_mask_;
 };
 
 #endif // CONTROLPANEL_HPP

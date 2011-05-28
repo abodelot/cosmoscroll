@@ -14,8 +14,8 @@
 
 #define FONT_FILENAME       "data/font/hemi-head.ttf"
 #define FONT_SIZE           40
-#define FIXED_FONT_FILENAME "data/font/digital-7.ttf"
-#define FIXED_FONT_SIZE     15
+#define FIXED_FONT_FILENAME "data/font/Ubuntu-R.ttf"
+#define FIXED_FONT_SIZE     12
 
 
 

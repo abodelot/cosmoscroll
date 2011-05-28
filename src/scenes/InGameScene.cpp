@@ -45,6 +45,7 @@ void InGameScene::Update(float frametime)
 	else
 	{
 		entities_.Update(frametime);
+		panel_.Update(frametime);
 		panel_.SetTimer(entities_.GetTimer());
 	}
 }

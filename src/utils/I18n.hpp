@@ -49,6 +49,14 @@ public:
 
 	static std::wstring DecodeUTF8(const std::string& src);
 
+	/*template <typename T>
+	static std::wstring Templatize(const char* key, const char* search, const T& value)
+	{
+		std::wstring s = I18n::GetInstance().Translate(key);
+		str_self_replace(s, search, to_wstring(value));
+		return s;
+	}*/
+
 private:
 	I18n();
 	I18n(const I18n&);
