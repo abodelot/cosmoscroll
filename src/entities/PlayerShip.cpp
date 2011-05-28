@@ -85,6 +85,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	panel_.SetCoolers(coolers_);
 	panel_.SetMissiles(missiles_);
 	panel_.SetOverheat(false);
+	panel_.ActiveSpeedBonus(0);
+	panel_.ActiveAttackBonus(0, Bonus::DOUBLE_SHOT);
 
 	// init Konami code
 	konami_code_[0] = Input::MOVE_UP;
@@ -374,6 +376,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 			}
 			bonus_[T_TRISHOT] = 0;
 			bonus_[T_DOUBLESHOT] += TIMED_BONUS_DURATION;
+			panel_.ActiveAttackBonus(bonus_[T_DOUBLESHOT], bonus_t);
 			break;
 		case Bonus::TRIPLE_SHOT:
 			if (bonus_[T_TRISHOT] == 0)
@@ -383,6 +386,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 			}
 			bonus_[T_DOUBLESHOT] = 0;
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
+			panel_.ActiveAttackBonus(bonus_[T_TRISHOT], bonus_t);
 			break;
 		case Bonus::SPEED:
 			if (bonus_[T_SPEED] == 0)
@@ -391,6 +395,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 				ParticleSystem::GetInstance().AddSmoke(96, this);
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
+			panel_.ActiveSpeedBonus(bonus_[T_SPEED]);
 			break;
 		// immediate bonus
 		case Bonus::SUPER_BANANA:
@@ -477,6 +482,8 @@ void PlayerShip::KonamiCodeOn()
 	HandleBonus(Bonus::SPEED);
 	coolers_ = 42;
 	panel_.SetCoolers(42);
+	SetHP(9000);
+	panel_.SetShipHP(9000);
 	missiles_ = 42;
 	panel_.SetMissiles(42);
 	weapon1_.SetMultiply(3);

@@ -12,9 +12,6 @@ particles/impact.png
 particles/impact-green.png
 particles/fiery.png
 gui/background.png
-gui/bar-heat.png
-gui/bar-hp.png
-gui/bar-shield.png
 gui/bonus-glow.png
 gui/button.png
 gui/button-config.png

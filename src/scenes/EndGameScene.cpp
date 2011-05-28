@@ -1,14 +1,13 @@
 #include "EndGameScene.hpp"
-#include "../core/Game.hpp"
-#include "../core/Input.hpp"
-#include "../core/SoundSystem.hpp"
-#include "../core/LevelManager.hpp"
-#include "../core/ControlPanel.hpp"
-#include "../entities/EntityManager.hpp"
-#include "../core/ParticleSystem.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/StringUtils.hpp"
-#include "../utils/I18n.hpp"
+#include "core/Game.hpp"
+#include "core/Input.hpp"
+#include "core/SoundSystem.hpp"
+#include "core/LevelManager.hpp"
+#include "core/ControlPanel.hpp"
+#include "entities/EntityManager.hpp"
+#include "core/ParticleSystem.hpp"
+#include "utils/StringUtils.hpp"
+#include "utils/I18n.hpp"
 
 #define DURATION 7
 
@@ -19,7 +18,7 @@ EndGameScene::EndGameScene():
 	timer_ = 0.f;
 	info_.SetSize(70);
 	info_.SetColor(sf::Color::White);
-	info_.SetFont(GET_FONT());
+	info_.SetFont(GetMenuFont());
 }
 
 

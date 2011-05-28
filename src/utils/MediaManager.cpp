@@ -12,11 +12,7 @@
 #define MUSIC_LIST "data/music/music.txt"
 #define MUSIC_PATH "data/music/"
 
-#define FONT_FILENAME       "data/font/hemi-head.ttf"
-#define FONT_SIZE           40
-#define FIXED_FONT_FILENAME "data/font/Ubuntu-R.ttf"
-#define FIXED_FONT_SIZE     12
-
+#define FONT_PATH  "data/fonts/"
 
 
 // charger une image
@@ -122,16 +118,6 @@ MediaManager::MediaManager()
 		exit(EXIT_FAILURE);
 	}
 #endif
-	// chargement des fontes
-	puts("* loading fonts...");
-	if (!font_.LoadFromFile(FONT_FILENAME, FONT_SIZE))
-	{
-		exit(EXIT_FAILURE);
-	}
-	if (!fixed_font_.LoadFromFile(FIXED_FONT_FILENAME, FIXED_FONT_SIZE))
-	{
-		exit(EXIT_FAILURE);
-	}
 }
 
 
@@ -139,6 +125,23 @@ MediaManager::~MediaManager()
 {
 	Unload();
 	DumbMusic::Exit();
+}
+
+
+const sf::Font& MediaManager::GetFont(const char* key, int size)
+{
+	MediaManager& self = MediaManager::GetInstance();
+	std::map<std::string, sf::Font>::iterator it = self.fonts_.find(key);
+	if (it == self.fonts_.end())
+	{
+		std::string path(FONT_PATH);
+		path += key;
+		if (!self.fonts_[key].LoadFromFile(path, size))
+			self.fonts_[key] = sf::Font::GetDefaultFont();
+
+		return self.fonts_[key];
+	}
+	return it->second;
 }
 
 

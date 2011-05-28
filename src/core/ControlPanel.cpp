@@ -1,14 +1,12 @@
 #include "ControlPanel.hpp"
-#include "entities/Bonus.hpp"
 #include "utils/MediaManager.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
-#define BONUS_LENGTH 25   // longueur des icones bonus
+#define BONUS_LENGTH 25   // offset label bonus slot
 
 #define PROG_BAR_WIDTH       110
 #define PROG_BAR_HEIGHT      10
-#define PROG_BAR_BG          sf::Color(64, 64, 64) // couleur de fond
 #define PROG_BAR_TEXT_LENGTH 60   // longueur du texte
 
 #define Y_LINE_1       10 // Y première ligne
@@ -21,7 +19,7 @@
 
 
 #define BAR_SHIP   sf::Color(0xc6, 0x00, 0x00)
-#define BAR_SHIELD sf::Color(0x06, 0xb1, 0xf1)
+#define BAR_SHIELD sf::Color(0x00, 0x80, 0xe0)
 #define BAR_HEAT   sf::Color(0x88, 0xff, 0x00)
 
 
@@ -35,8 +33,9 @@ ControlPanel& ControlPanel::GetInstance()
 ControlPanel::ControlPanel()
 {
 	panel_.SetImage(GET_IMG("gui/score-board"));
+	const sf::Font& font = MediaManager::GetFont("Ubuntu-R.ttf", TEXT_SIZE);
 
-	const sf::Font& font = MediaManager::GetInstance().GetFixedFont();
+	// init progress bar
 	pbars_[ProgressBar::HP].Init(_t("panel.bar_hp"), font, BAR_SHIP);
 	pbars_[ProgressBar::HP].SetPosition(42, 7);
 
@@ -53,8 +52,17 @@ ControlPanel::ControlPanel()
 	info_.SetColor(sf::Color::Red);
 
 	// init bonus counters
-	coolers_.Init(Bonus::GetSubRect(Bonus::COOLER), 328, 8);
-	missiles_.Init(Bonus::GetSubRect(Bonus::MISSILE), 328, 31);
+	bs_coolers_.Init(Bonus::COOLER, BonusSlot::COUNTER);
+	bs_coolers_.SetPosition(256, 8);
+
+	bs_missiles_.Init(Bonus::MISSILE, BonusSlot::COUNTER);
+	bs_missiles_.SetPosition(256, 31);
+
+	bs_attack_.Init(Bonus::DOUBLE_SHOT, BonusSlot::TIMER);
+	bs_attack_.SetPosition(334, 8);
+
+	bs_speed_.Init(Bonus::SPEED, BonusSlot::TIMER);
+	bs_speed_.SetPosition(334, 31);
 
 	timer_.SetPosition(430, 12);
 	timer_.SetFont(font);
@@ -100,8 +108,10 @@ void ControlPanel::Init(EntityManager::Mode mode)
 
 void ControlPanel::Update(float frametime)
 {
-	missiles_.Update(frametime);
-	coolers_.Update(frametime);
+	bs_missiles_.Update(frametime);
+	bs_coolers_.Update(frametime);
+	bs_speed_.Update(frametime);
+	bs_attack_.Update(frametime);
 }
 
 
@@ -114,8 +124,42 @@ void ControlPanel::SetGameInfo(const sf::Unicode::Text& text)
 void ControlPanel::SetPoints(int points)
 {
 	char text[32];
-	sprintf(text, "points: %d", points);
+	sprintf(text, "Points: %d", points);
 	str_points_.SetText(text);
+}
+
+
+void ControlPanel::SetTimer(float seconds)
+{
+	static int previous = -1; // negative, to force update at first call
+	int rounded = (int) seconds;
+	if (rounded != previous)
+	{
+		std::wstring text = _t("panel.timer");
+		wstr_self_replace(text, L"{min}", to_wstring(rounded / 60, 2));
+		wstr_self_replace(text, L"{sec}", to_wstring(rounded % 60, 2));
+		timer_.SetText(text);
+		previous = rounded;
+		if (game_mode_ == EntityManager::MODE_STORY)
+		{
+			int max_progress = level_bar_.GetSize().x - level_cursor_.GetSize().x;
+			int progress = max_progress * rounded / level_duration_;
+			int x = LEVEL_BAR_X + (progress > max_progress ? max_progress : progress);
+			level_cursor_.SetX(x);
+		}
+	}
+}
+
+
+bool ControlPanel::IsOnTop() const
+{
+	return (int) GetPosition().y == 0;
+}
+
+
+void ControlPanel::SetLevelDuration(int seconds)
+{
+	level_duration_ = seconds;
 }
 
 
@@ -170,47 +214,26 @@ void ControlPanel::SetMaxHeat(int max)
 
 void ControlPanel::SetCoolers(int count)
 {
-	coolers_.SetValue(count);
+	bs_coolers_.SetValue(count);
 }
 
 
 void ControlPanel::SetMissiles(int count)
 {
-	missiles_.SetValue(count);
+	bs_missiles_.SetValue(count);
 }
 
 
-void ControlPanel::SetTimer(float seconds)
+void ControlPanel::ActiveSpeedBonus(int seconds)
 {
-	static int previous = -1; // negative, to force update at first call
-	int rounded = (int) seconds;
-	if (rounded != previous)
-	{
-		std::wstring text = _t("panel.timer");
-		wstr_self_replace(text, L"{min}", to_wstring(rounded / 60, 2));
-		wstr_self_replace(text, L"{sec}", to_wstring(rounded % 60, 2));
-		timer_.SetText(text);
-		previous = rounded;
-		if (game_mode_ == EntityManager::MODE_STORY)
-		{
-			int max_progress = level_bar_.GetSize().x - level_cursor_.GetSize().x;
-			int progress = max_progress * rounded / level_duration_;
-			int x = LEVEL_BAR_X + (progress > max_progress ? max_progress : progress);
-			level_cursor_.SetX(x);
-		}
-	}
+	bs_speed_.SetValue(seconds);
 }
 
 
-bool ControlPanel::IsOnTop() const
+void ControlPanel::ActiveAttackBonus(int seconds, Bonus::Type bonus_type)
 {
-	return (int) GetPosition().y == 0;
-}
-
-
-void ControlPanel::SetLevelDuration(int seconds)
-{
-	level_duration_ = seconds;
+	bs_attack_.Init(bonus_type, BonusSlot::TIMER);
+	bs_attack_.SetValue(seconds);
 }
 
 
@@ -219,9 +242,11 @@ void ControlPanel::Render(sf::RenderTarget& target) const
 	// background
 	target.Draw(panel_);
 
-	// draw bonus counters
-	coolers_.Show(target);
-	missiles_.Show(target);
+	// draw bonus slots
+	bs_coolers_.Show(target);
+	bs_missiles_.Show(target);
+	bs_attack_.Show(target);
+	bs_speed_.Show(target);
 
 	// progress bars
 	for (int i = 0; i < ProgressBar::_PBAR_COUNT; ++i)
@@ -247,10 +272,10 @@ void ControlPanel::Render(sf::RenderTarget& target) const
 	}
 }
 
+// ProgessBar -----------------------------------------------------------------
 
 ControlPanel::ProgressBar::ProgressBar()
 {
-	//background_ = sf::Shape::Rectangle(0, 0, PROG_BAR_WIDTH, PROG_BAR_HEIGHT, PROG_BAR_BG, 1.f);
 	initial_x_ = 0;
 }
 
@@ -270,7 +295,6 @@ void ControlPanel::ProgressBar::SetPosition(int x, int y)
 {
 	label_.SetPosition(x, y - TEXT_PADDING_Y);
 	int x_bar = x + PROG_BAR_TEXT_LENGTH;
-	//background_.SetPosition(x_bar, y);
 	bar_.SetPosition(x_bar, y);
 	initial_x_ = x_bar;
 }
@@ -290,69 +314,110 @@ void ControlPanel::ProgressBar::SetValue(int value)
 	//bar_.SetX(initial_x_ - length / 2.68);
 }
 
+// BonusSlot ------------------------------------------------------------------
 
-void ControlPanel::BonusCounter::Init(const sf::IntRect& subrect, int x, int y)
+void ControlPanel::BonusSlot::Init(Bonus::Type bonus_type, Type type)
 {
-	icon_.SetPosition(x, y);
 	icon_.SetImage(GET_IMG("entities/bonus"));
-	icon_.SetSubRect(subrect);
+	icon_.SetSubRect(Bonus::GetSubRect(bonus_type));
 
-	count_.SetPosition(x + BONUS_LENGTH, y);
-	count_.SetSize(TEXT_SIZE);
-	count_.SetColor(sf::Color::White);
-	count_.SetText("x 0");
-	count_.SetFont(MediaManager::GetInstance().GetFixedFont());
+	label_.SetSize(TEXT_SIZE);
+	label_.SetColor(sf::Color::White);
+	label_.SetText(type == COUNTER ? "x 0" : "-");
+	label_.SetFont(MediaManager::GetFont("Ubuntu-R.ttf", 12));
 
-	// glow is 64x64, centered on bonus sprite
-	glow_.SetPosition(x - 24, y - 24);
 	glow_.SetImage(GET_IMG("gui/bonus-glow"));
 	glow_.SetColor(sf::Color(255, 255, 255, 0));
 	timer_ = -1.f;
 	glowing_ = STOP;
+	type_ = type;
 }
 
 
-void ControlPanel::BonusCounter::SetValue(int count)
+void ControlPanel::BonusSlot::SetPosition(int x, int y)
 {
-	count_.SetText("x " + to_string(count));
-	timer_ = 0.f;
-	glowing_ = UP;
+	icon_.SetPosition(x, y);
+	label_.SetPosition(x + BONUS_LENGTH, y);
+	// glow is 64x64, centered on bonus sprite
+	glow_.SetPosition(x - 24, y - 24);
 }
 
 
-void ControlPanel::BonusCounter::Update(float frametime)
+void ControlPanel::BonusSlot::SetValue(int count)
 {
-	if (glowing_ != STOP)
+	switch (type_)
 	{
-		const float DELAY = 1.f;
-		timer_ += frametime;
-		int alpha = 255 * timer_ / DELAY;
-		if (glowing_ == UP && timer_ >= DELAY)
-		{
-			glowing_ = DOWN;
+		case COUNTER:
+			label_.SetText("x " + to_string(count));
 			timer_ = 0.f;
-			alpha = 255;
-		}
-		else if (glowing_ == DOWN)
-		{
-			alpha = 255 - alpha;
-			if (timer_ >= DELAY)
-			{
-				glowing_ = STOP;
-				glow_.SetColor(sf::Color(255, 255, 255, 0));
-				return;
-			}
-
-		}
-		glow_.SetColor(sf::Color(255, 255, 255, alpha));
+			glowing_ = UP;
+			break;
+		case TIMER:
+			timer_ = count;
+			label_.SetText(to_string(count) + "s");
+			glowing_ = UP;
+			glow_.SetColor(sf::Color::White);
+			break;
 	}
 }
 
 
-void ControlPanel::BonusCounter::Show(sf::RenderTarget& target) const
+void ControlPanel::BonusSlot::Update(float frametime)
+{
+	switch (type_)
+	{
+		case COUNTER:
+			if (glowing_ != STOP)
+			{
+				const float DELAY = 1.5f;
+				timer_ += frametime;
+				int alpha = 255 * timer_ / DELAY;
+				if (glowing_ == UP && timer_ >= DELAY)
+				{
+					glowing_ = DOWN;
+					timer_ = 0.f;
+					alpha = 255;
+				}
+				else if (glowing_ == DOWN)
+				{
+					alpha = 255 - alpha;
+					if (timer_ >= DELAY)
+					{
+						glowing_ = STOP;
+						glow_.SetColor(sf::Color(255, 255, 255, 0));
+						return;
+					}
+
+				}
+				glow_.SetColor(sf::Color(255, 255, 255, alpha));
+			}
+			break;
+		case TIMER:
+			if (glowing_ == UP)
+			{
+				int old_timer = (int) (timer_ + 0.5f);
+				timer_ -= frametime;
+				int new_timer = (int) (timer_ + 0.5f);
+				if (new_timer != old_timer)
+				{
+					label_.SetText(to_string(new_timer) + "s");
+				}
+				else if (timer_ <= 0.f)
+				{
+					glow_.SetColor(sf::Color(255, 255, 255, 0));
+					glowing_ = STOP;
+					label_.SetText("-");
+				}
+			}
+			break;
+	}
+}
+
+
+void ControlPanel::BonusSlot::Show(sf::RenderTarget& target) const
 {
 	target.Draw(glow_);
 	target.Draw(icon_);
-	target.Draw(count_);
+	target.Draw(label_);
 }
 

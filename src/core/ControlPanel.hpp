@@ -2,7 +2,8 @@
 #define CONTROLPANEL_HPP
 
 #include <SFML/Graphics.hpp>
-#include "../entities/EntityManager.hpp"
+#include "entities/EntityManager.hpp"
+#include "entities/Bonus.hpp"
 
 
 /**
@@ -32,6 +33,14 @@ public:
 	 */
 	void SetTimer(float seconds);
 
+	/// @return true si le panel est en haut de l'écran
+	bool IsOnTop() const;
+
+	// Set durée du niveau courant, en secondes
+	void SetLevelDuration(int seconds);
+
+	// setters progress bars --------------------------------------------------
+
 	/// nb points de vie
 	void SetShipHP(int value);
 
@@ -55,17 +64,18 @@ public:
 	 */
 	void SetOverheat(bool overheat);
 
-	/// nb bonus coolers
+	// setters bonus slots ----------------------------------------------------
+
+	// Set coolers count
 	void SetCoolers(int coolers);
 
-	/// nb bonus missiles
+	// Set missiles count
 	void SetMissiles(int count);
 
-	/// @return true si le panel est en haut de l'écran
-	bool IsOnTop() const;
+	void ActiveSpeedBonus(int seconds);
 
-	// *-----
-	void SetLevelDuration(int seconds);
+	void ActiveAttackBonus(int seconds, Bonus::Type bonus_type);
+
 
 private:
 	ControlPanel();
@@ -99,10 +109,14 @@ private:
 		int initial_x_;
 	};
 
-	class BonusCounter
+	class BonusSlot
 	{
 	public:
-		void Init(const sf::IntRect& subrect, int x, int y);
+		enum Type { COUNTER, TIMER };
+
+		void Init(Bonus::Type bonus_type, Type type);
+		// set widget position
+		void SetPosition(int x, int y);
 
 		void SetValue(int value);
 
@@ -112,15 +126,18 @@ private:
 
 	private:
 		sf::Sprite icon_;
-		sf::String count_;
+		sf::String label_;
 		sf::Sprite glow_;
 		float timer_;
 		enum GlowingStatus { UP, DOWN, STOP } glowing_;
+		Type type_;
 	};
 
 	ProgressBar pbars_[ProgressBar::_PBAR_COUNT];
-	BonusCounter coolers_;
-	BonusCounter missiles_;
+	BonusSlot bs_coolers_;
+	BonusSlot bs_missiles_;
+	BonusSlot bs_attack_;
+	BonusSlot bs_speed_;
 
 	sf::String timer_;
 	sf::String info_;

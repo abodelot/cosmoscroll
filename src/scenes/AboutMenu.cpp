@@ -22,7 +22,7 @@ AboutMenu::AboutMenu()
 
 	info_text_.SetText(oss.str());
 	info_text_.SetPosition(120, 100);
-	info_text_.SetFont(GET_FONT());
+	info_text_.SetFont(GetMenuFont());
 
 	logos_.SetImage(GET_IMG("gui/libs-logo"));
 	logos_.SetY(Game::HEIGHT - logos_.GetSize().y);

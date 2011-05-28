@@ -1,9 +1,9 @@
 #include <cassert>
 
 #include "BaseMenu.hpp"
-#include "../core/Game.hpp"
-#include "../core/SoundSystem.hpp"
-#include "../utils/MediaManager.hpp"
+#include "core/Game.hpp"
+#include "core/SoundSystem.hpp"
+#include "utils/MediaManager.hpp"
 
 
 BaseMenu::BaseMenu()
@@ -11,7 +11,7 @@ BaseMenu::BaseMenu()
 	SetBackground(sf::Sprite(GET_IMG("gui/main-screen")));
 	scrolling_background_.SetImage(GET_IMG("gui/background"));
 
-	GetWidgetStyle().global_font = &GET_FONT();
+	GetWidgetStyle().global_font = &GetMenuFont();
 }
 
 
@@ -62,7 +62,7 @@ void BaseMenu::OnFocus()
 
 void BaseMenu::SetTitle(const sf::Unicode::Text& text, int y)
 {
-	title_.SetFont(GET_FONT());
+	title_.SetFont(GetMenuFont());
 	title_.SetSize(40);
 	title_.SetText(text);
 	title_.SetX((Game::WIDTH - title_.GetRect().GetWidth()) / 2);
@@ -80,3 +80,5 @@ void BaseMenu::OnWidgetFocused()
 {
 	SoundSystem::GetInstance().PlaySound("menu-select");
 }
+
+

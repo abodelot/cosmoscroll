@@ -11,7 +11,7 @@ IntroLevelScene::IntroLevelScene()
 	background_.SetImage(GET_IMG("gui/background"));
 
 	description_.SetColor(sf::Color::White);
-	description_.SetFont(GET_FONT());
+	description_.SetFont(GetMenuFont());
 	description_.SetSize(35);
 
 	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
