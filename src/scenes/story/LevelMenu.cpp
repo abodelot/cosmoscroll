@@ -27,6 +27,13 @@ LevelMenu::LevelMenu():
 	but->SetCallbackID(1);
 	but = new CosmoButton(this, _t("menu.back_main_menu"), 210, 300);
 	but->SetCallbackID(0);
+
+	credit_counter_bg_.SetPosition(444, 90);
+	credit_counter_bg_.SetImage(GET_IMG("gui/credit-counter"));
+
+	credit_counter_.SetPosition(460, 100);
+	credit_counter_.SetFont(GetMenuFont());
+	credit_counter_.SetSize(18);
 }
 
 
@@ -37,6 +44,7 @@ void LevelMenu::OnFocus()
 	int current = levels_.GetCurrent();
 	int last_unlocked = levels_.GetLastUnlocked();
 
+	// enable/disable hardcore
 	if (levels_.AllLevelsCompleted())
 	{
 		if (!lab_hardcore_->IsVisible())
@@ -52,6 +60,8 @@ void LevelMenu::OnFocus()
 	wstr_self_replace(progression, L"{unlocked}", to_wstring(last_unlocked));
 	wstr_self_replace(progression, L"{total}", to_wstring(last));
 	lab_progresion_->SetText(progression);
+
+	// option widget
 	opt_levels_->Clear();
 	for (int i = 1; i <= last; ++i)
 	{
@@ -62,6 +72,18 @@ void LevelMenu::OnFocus()
 		}
 	}
 	opt_levels_->Select(current - 1);
+
+	// credit counter
+	int credits = levels_.GetCredits();
+	credit_counter_.SetText(wstr_replace(_t("menu.story.credits"), L"{credits}", to_wstring(credits)));
+}
+
+
+void LevelMenu::Show(sf::RenderTarget& target) const
+{
+	BaseMenu::Show(target);
+	target.Draw(credit_counter_bg_);
+	target.Draw(credit_counter_);
 }
 
 

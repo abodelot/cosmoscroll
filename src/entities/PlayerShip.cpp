@@ -87,6 +87,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	panel_.SetOverheat(false);
 	panel_.ActiveSpeedBonus(0);
 	panel_.ActiveAttackBonus(0, Bonus::DOUBLE_SHOT);
+	panel_.SetPoints(0);
 
 	// init Konami code
 	konami_code_[0] = Input::MOVE_UP;

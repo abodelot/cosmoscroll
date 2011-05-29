@@ -13,6 +13,7 @@ menu.main.quit = Quitter
 
 # Menu niveaux
 menu.story.title = Mode Histoire
+menu.story.credits = Crédits :\n{credits}
 menu.story.select = Sélectionnez un niveau :
 menu.story.progression = Avancement : {unlocked}/{total}
 menu.story.intro = Niveau {level}\n\n"{description}"\n\nEnnemis : {count}
@@ -88,6 +89,7 @@ panel.overheat = Surchauffe !
 panel.level = Niveau {level}
 panel.record = Record : {record}
 panel.timer = Temps : {min}:{sec}
+panel.points = Points : {points}
 
 # Bonus
 bonus.hp = Point de vie

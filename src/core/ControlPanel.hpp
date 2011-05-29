@@ -140,7 +140,7 @@ private:
 	BonusSlot bs_speed_;
 
 	sf::String timer_;
-	sf::String info_;
+	sf::String overheat_label_;
 	sf::String game_info_;
 	sf::Sprite panel_;
 

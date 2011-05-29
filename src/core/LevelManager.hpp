@@ -112,9 +112,17 @@ public:
 	 */
 	bool IsHardcoreEnabled();
 
+	/**
+	 * Sauvegarde de la progression en mode Histoire
+	 */
 	void LoadFromConfig(ConfigParser& config);
 	void SaveToConfig(ConfigParser& config) const;
 
+	/**
+	 * Score du joueur en mode Histoire
+	 */
+	inline int GetCredits() const { return earned_points_; }
+	inline void SetCredits(int credits) { earned_points_ = credits; }
 
 private:
 	LevelManager();
@@ -171,6 +179,7 @@ private:
 	std::queue<EntitySlot> waiting_line_;
 	int current_level_;
 	int last_unlocked_level_;
+	int earned_points_;
 	bool hardcore_;
 };
 

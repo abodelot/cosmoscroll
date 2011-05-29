@@ -46,10 +46,13 @@ ControlPanel::ControlPanel()
 	pbars_[ProgressBar::HEAT].SetPosition(42, 37);
 
 	sf::Vector2f pos = pbars_[ProgressBar::HEAT].bar_.GetPosition();
-	info_.SetPosition(pos.x + 8, pos.y - TEXT_PADDING_Y);
-	info_.SetFont(font);
-	info_.SetSize(TEXT_SIZE);
-	info_.SetColor(sf::Color::Red);
+	overheat_label_.SetPosition(pos.x + 12, pos.y - TEXT_PADDING_Y);
+	overheat_label_.SetFont(font);
+	overheat_label_.SetSize(TEXT_SIZE);
+	overheat_label_.SetColor(sf::Color::Red);
+
+	bar_mask_.SetImage(GET_IMG("gui/score-board-bar-mask"));
+	bar_mask_.SetPosition(101, 6);
 
 	// init bonus counters
 	bs_coolers_.Init(Bonus::COOLER, BonusSlot::COUNTER);
@@ -64,15 +67,19 @@ ControlPanel::ControlPanel()
 	bs_speed_.Init(Bonus::SPEED, BonusSlot::TIMER);
 	bs_speed_.SetPosition(334, 31);
 
+	// right container
 	timer_.SetPosition(430, 12);
 	timer_.SetFont(font);
 	timer_.SetSize(TEXT_SIZE);
-	timer_.SetColor(sf::Color::White);
 
 	game_info_.SetPosition(530, 12);
 	game_info_.SetFont(font);
 	game_info_.SetSize(TEXT_SIZE);
-	game_info_.SetColor(sf::Color::White);
+
+	str_points_.SetPosition(530, 26);
+	str_points_.SetSize(TEXT_SIZE);
+	str_points_.SetFont(font);
+
 
 	// story mode
 	level_bar_.SetImage(GET_IMG("gui/level-bar"));
@@ -80,14 +87,6 @@ ControlPanel::ControlPanel()
 	level_cursor_.SetImage(GET_IMG("gui/level-cursor"));
 	level_cursor_.SetPosition(LEVEL_BAR_X, LEVEL_BAR_Y - 2);
 	level_duration_ = 0;
-
-	// arcade
-	str_points_.SetPosition(530, 30);
-	str_points_.SetFont(font);
-	str_points_.SetSize(TEXT_SIZE);
-
-	bar_mask_.SetImage(GET_IMG("gui/score-board-bar-mask"));
-	bar_mask_.SetPosition(101, 6);
 }
 
 
@@ -99,10 +98,8 @@ void ControlPanel::Init(EntityManager::Mode mode)
 		case EntityManager::MODE_STORY:
 			level_cursor_.SetX(LEVEL_BAR_X);
 			break;
-		case EntityManager::MODE_ARCADE:
-			SetPoints(0);
-			break;
 	}
+	SetPoints(0);
 }
 
 
@@ -123,9 +120,7 @@ void ControlPanel::SetGameInfo(const sf::Unicode::Text& text)
 
 void ControlPanel::SetPoints(int points)
 {
-	char text[32];
-	sprintf(text, "Points: %d", points);
-	str_points_.SetText(text);
+	str_points_.SetText(wstr_replace(_t("panel.points"), L"{points}", to_wstring(points)));
 }
 
 
@@ -167,11 +162,11 @@ void ControlPanel::SetOverheat(bool overheat)
 {
 	if (overheat)
 	{
-		info_.SetText(_t("panel.overheat"));
+		overheat_label_.SetText(_t("panel.overheat"));
 	}
 	else
 	{
-		info_.SetText("");
+		overheat_label_.SetText("");
 	}
 }
 
@@ -242,32 +237,30 @@ void ControlPanel::Render(sf::RenderTarget& target) const
 	// background
 	target.Draw(panel_);
 
-	// draw bonus slots
-	bs_coolers_.Show(target);
-	bs_missiles_.Show(target);
-	bs_attack_.Show(target);
-	bs_speed_.Show(target);
-
-	// progress bars
+	// draw progress bars
 	for (int i = 0; i < ProgressBar::_PBAR_COUNT; ++i)
 	{
 		target.Draw(pbars_[i].label_);
 		target.Draw(pbars_[i].bar_);
 	}
 	target.Draw(bar_mask_);
-	target.Draw(game_info_);
-	target.Draw(info_);
-	target.Draw(timer_);
 
+	// draw bonus slots
+	bs_coolers_.Show(target);
+	bs_missiles_.Show(target);
+	bs_attack_.Show(target);
+	bs_speed_.Show(target);
+
+	target.Draw(game_info_);
+	target.Draw(overheat_label_);
+	target.Draw(timer_);
+	target.Draw(str_points_);
 
 	switch (game_mode_)
 	{
 		case EntityManager::MODE_STORY:
 			target.Draw(level_bar_);
 			target.Draw(level_cursor_);
-			break;
-		case EntityManager::MODE_ARCADE:
-			target.Draw(str_points_);
 			break;
 	}
 }

@@ -13,6 +13,7 @@ menu.main.quit = Quit
 
 # Level menu
 menu.story.title = Story mode
+menu.story.credits = Credits:\n{credits}
 menu.story.select = Select a level:
 menu.story.progression = Progression: {unlocked}/{total}
 menu.story.intro = Level {level}\n\n"{description}"\n\nBad guys: {count}
@@ -88,6 +89,7 @@ panel.overheat = Overheat!
 panel.level = Level {level}
 panel.record = Record: {record}
 panel.timer = Time: {min}:{sec}
+panel.points = Points: {points}
 
 # Bonus
 bonus.hp = Health point

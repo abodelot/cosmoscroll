@@ -4,8 +4,9 @@
 #include "core/SoundSystem.hpp"
 #include "core/LevelManager.hpp"
 #include "core/ControlPanel.hpp"
-#include "entities/EntityManager.hpp"
 #include "core/ParticleSystem.hpp"
+#include "entities/EntityManager.hpp"
+#include "entities/PlayerShip.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
@@ -81,6 +82,9 @@ void EndGameScene::OnFocus()
 			info_.SetText(s);
 			info_.SetSize(30);
 		}
+
+		int total_credits = levels.GetCredits() + entities_.GetPlayerShip()->GetPoints();
+		levels.SetCredits(total_credits);
 
 		if (current == levels.GetLastUnlocked())
 		{

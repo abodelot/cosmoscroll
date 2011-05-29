@@ -90,6 +90,7 @@ void EntityManager::InitMode(Mode mode)
 					}
 				}
 				player_->SetPosition(0, height_ / 2);
+				player_->SetPoints(0);
 			}
 			particles_.AddStars(LevelManager::GetInstance().GetStarsCount());
 			break;

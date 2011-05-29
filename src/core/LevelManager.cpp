@@ -21,6 +21,7 @@ LevelManager::LevelManager()
 	last_insert_time_ = 0.f;
 	current_level_ = last_unlocked_level_ = 1;
 	hardcore_ = false;
+	earned_points_ = 0;
 }
 
 
@@ -368,6 +369,7 @@ void LevelManager::LoadFromConfig(ConfigParser& config)
 	{
 		hardcore_ = true;
 	}
+	config.ReadItem("credits", earned_points_);
 }
 
 
@@ -376,4 +378,5 @@ void LevelManager::SaveToConfig(ConfigParser& config) const
 	config.SeekSection("Story");
 	config.WriteItem("current_level", current_level_);
 	config.WriteItem("last_unlocked_level", last_unlocked_level_);
+	config.WriteItem("credits", earned_points_);
 }

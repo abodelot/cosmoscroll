@@ -11,11 +11,14 @@ class LevelMenu: public BaseMenu
 public:
 	LevelMenu();
 
-	// inherited
+	// override
 	void OnFocus();
 
+	// override
+	void Show(sf::RenderTarget& target) const;
+
 private:
-	// inherited
+	// override
 	void EventCallback(int id);
 
 	sf::String title_;
@@ -24,6 +27,9 @@ private:
 	gui::Label* lab_progresion_;
 	gui::Label* lab_hardcore_;
 	gui::CheckBox* cbx_hardcore_;
+
+	sf::Sprite credit_counter_bg_;
+	sf::String credit_counter_;
 };
 
 #endif // LEVELMENU_HPP
