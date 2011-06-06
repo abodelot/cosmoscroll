@@ -113,6 +113,12 @@ public:
 	bool IsHardcoreEnabled();
 
 	/**
+	 * Total des points disponibles dans le niveau courant
+	 * @return points
+	 */
+	int GetTotalPoints() const;
+
+	/**
 	 * Sauvegarde de la progression en mode Histoire
 	 */
 	void LoadFromConfig(ConfigParser& config);

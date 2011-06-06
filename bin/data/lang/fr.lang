@@ -11,13 +11,14 @@ menu.main.options = Options
 menu.main.about = À propos
 menu.main.quit = Quitter
 
-# Menu niveaux
+# Menu Histoire
 menu.story.title = Mode Histoire
 menu.story.credits = Crédits :\n{credits}
 menu.story.select = Sélectionnez un niveau :
 menu.story.progression = Avancement : {unlocked}/{total}
 menu.story.intro = Niveau {level}\n\n"{description}"\n\nEnnemis : {count}
 menu.story.play = Jouer
+menu.story.armory = Armurerie
 
 # Menu pause
 menu.pause.title = Pause
@@ -78,8 +79,8 @@ menu.about.licence = Licence :
 
 # Fin de jeu
 endgame.game_over = Game Over
-endgame.end_level = Niveau {level} terminé
-endgame.end_last_level = Félicitations !\n\nVous avez terminé les {count} niveaux\net battu le boss de fin !
+endgame.end_level = Niveau {level} terminé !\nCrédits gagnés: +{credits}
+endgame.end_last_level = Félicitations !\n\nVous avez terminé le jeu!\nCrédit gagnés: +{credits}
 
 # Panneau de contrôle
 panel.bar_hp = Coque

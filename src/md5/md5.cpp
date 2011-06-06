@@ -1,10 +1,28 @@
 #include <cstdlib>
 #include <cstdio>
+#include <climits>
 #include "md5.hpp"
 
 typedef unsigned char *POINTER;
-typedef unsigned short int UINT2;
-typedef unsigned long int UINT4;
+
+// 16 bits integer
+#if USHRT_MAX == 0xFFFF
+	typedef unsigned short UINT2;
+#elif UINT_MAX == 0xFFFF
+	typedef unsigned int UINT2;
+#elif ULONG_MAX == 0xFFFF
+	typedef unsigned long UINT2;
+#endif
+
+// 32 bits integer
+#if USHRT_MAX == 0xFFFFFFFF
+	typedef unsigned short UINT4;
+#elif UINT_MAX == 0xFFFFFFFF
+	typedef unsigned int UINT4;
+#elif ULONG_MAX == 0xFFFFFFFF
+	typedef unsigned long UINT4;
+#endif
+
 
 typedef struct {
   UINT4 state[4];
@@ -43,9 +61,7 @@ std::string MD5::Calculate(const std::string& source)
 std::string MD5::Calculate(std::ifstream& file)
 {
 	file.seekg(0, std::ios::end);
-
 	int length = file.tellg();
-
 	file.seekg(0, std::ios::beg);
 
 	char* buffer = new char [length];

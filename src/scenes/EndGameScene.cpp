@@ -17,7 +17,7 @@ EndGameScene::EndGameScene():
 	entities_(EntityManager::GetInstance())
 {
 	timer_ = 0.f;
-	info_.SetSize(70);
+	info_.SetSize(40);
 	info_.SetColor(sf::Color::White);
 	info_.SetFont(GetMenuFont());
 }
@@ -70,21 +70,22 @@ void EndGameScene::OnFocus()
 		// niveau terminé
 		LevelManager& levels = LevelManager::GetInstance();
 		SoundSystem::GetInstance().PlaySound("end-level");
+		int earned_credits = entities_.GetPlayerShip()->GetPoints();
 		int current = levels.GetCurrent();
 		if (current < levels.CountLevel())
 		{
 			std::wstring s = wstr_replace(_t("endgame.end_level"), L"{level}", to_wstring(current));
+			wstr_self_replace(s, L"{credits}", to_wstring(earned_credits));
 			info_.SetText(s);
 		}
 		else // si dernier niveau du jeu
 		{
 			std::wstring s = wstr_replace(_t("endgame.end_last_level"), L"{count}", to_wstring(current));
+			wstr_self_replace(s, L"{credits}", to_wstring(earned_credits));
 			info_.SetText(s);
-			info_.SetSize(30);
 		}
 
-		int total_credits = levels.GetCredits() + entities_.GetPlayerShip()->GetPoints();
-		levels.SetCredits(total_credits);
+		levels.SetCredits(levels.GetCredits() + earned_credits);
 
 		if (current == levels.GetLastUnlocked())
 		{

@@ -52,18 +52,9 @@ Game::Game() :
 
 	// loading config
 	LoadConfig(CONFIG_FILE);
-
-	if (!fullscreen_)
-	{
-		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE);
-	}
-	else
-	{
-		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE,
-			sf::Style::Fullscreen);
-	}
+	SetFullscreen(fullscreen_);
 	app_.SetFramerateLimit(WIN_FPS);
-	//app_.ShowMouseCursor(false);
+	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
 
 	const sf::Image& icon = GET_IMG("gui/icon");
@@ -292,15 +283,11 @@ void Game::TakeScreenshot(const char* directory)
 
 void Game::SetFullscreen(bool full)
 {
-	app_.Close();
-	if (full)
-	{
-		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, sf::Style::Fullscreen);
-	}
-	else
-	{
-		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE);
-	}
+	if (app_.IsOpened())
+		app_.Close();
+
+	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
+	app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
 	fullscreen_ = full;
 }
 

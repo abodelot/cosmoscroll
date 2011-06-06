@@ -11,13 +11,14 @@ menu.main.options = Options
 menu.main.about = About
 menu.main.quit = Quit
 
-# Level menu
+# Story menu
 menu.story.title = Story mode
 menu.story.credits = Credits:\n{credits}
 menu.story.select = Select a level:
 menu.story.progression = Progression: {unlocked}/{total}
 menu.story.intro = Level {level}\n\n"{description}"\n\nBad guys: {count}
 menu.story.play = Play
+menu.story.armory = Armory
 
 # Pause menu
 menu.pause.title = Paused
@@ -78,8 +79,8 @@ menu.about.licence = License:
 
 # End game
 endgame.game_over = Game Over
-endgame.end_level = Level {level} cleared
-endgame.end_last_level = Congratulations!\n\nYou've cleared the {count} levels\nand beat the evil boss!
+endgame.end_level = Level {level} cleared!\nCredits earned: +{credits}
+endgame.end_last_level = Congratulations!\n\nYou've finished the game!\nCredits earned: +{credits}
 
 # Control panel
 panel.bar_hp = Ship

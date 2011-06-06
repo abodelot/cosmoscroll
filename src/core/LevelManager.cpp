@@ -136,6 +136,13 @@ int LevelManager::GetDuration() const
 }
 
 
+int LevelManager::GetTotalPoints() const
+{
+	// TODO (itérer sur waiting line ? précalculer ?)
+	return 0;
+}
+
+
 int LevelManager::CountLevel() const
 {
 	return levels_.size();
@@ -349,7 +356,6 @@ sf::Color LevelManager::HexaToColor(const std::string& hexcolor)
 	}
 	return color;
 }
-
 
 
 void LevelManager::LoadFromConfig(ConfigParser& config)

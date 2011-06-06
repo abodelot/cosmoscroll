@@ -48,8 +48,10 @@ void IntroLevelScene::OnFocus()
 	LevelManager& levels = LevelManager::GetInstance();
 	int current_level = levels.GetCurrent();
 
-	printf("level %d (%d entities, duration: %d\" %02d')\n",
-		current_level, levels.RemainingEntities(), levels.GetDuration() / 60, levels.GetDuration() % 60);
+	printf("level %d\n", current_level);
+	printf("  - entities: %d\n", levels.RemainingEntities());
+	printf("  - total points: %d\n", levels.GetTotalPoints());
+	printf("  - duration: %d\" %02d'\n", levels.GetDuration() / 60, levels.GetDuration() % 60);
 
 	std::wstring intro = _t("menu.story.intro");
 	wstr_self_replace(intro, L"{level}", to_wstring(current_level));

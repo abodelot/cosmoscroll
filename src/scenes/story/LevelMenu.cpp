@@ -25,7 +25,9 @@ LevelMenu::LevelMenu():
 	CosmoButton* but = NULL;
 	but = new CosmoButton(this, _t("menu.story.play"), 210, 240);
 	but->SetCallbackID(1);
-	but = new CosmoButton(this, _t("menu.back_main_menu"), 210, 300);
+	but = new CosmoButton(this, _t("menu.story.armory"), 210, 290);
+	but->SetCallbackID(2);
+	but = new CosmoButton(this, _t("menu.back_main_menu"), 210, 340);
 	but->SetCallbackID(0);
 
 	credit_counter_bg_.SetPosition(444, 90);
