@@ -242,6 +242,7 @@ void Game::SetNextScene(Scene enum_scene)
 			CASE_SCENE(PauseMenu, new_scene);
 			CASE_SCENE(AboutMenu, new_scene);
 			CASE_SCENE(LevelMenu, new_scene);
+			CASE_SCENE(ArmoryMenu, new_scene);
 			CASE_SCENE(IntroLevelScene, new_scene);
 			CASE_SCENE(OptionMenu, new_scene);
 			CASE_SCENE(KeyboardMenu, new_scene);
@@ -288,6 +289,7 @@ void Game::SetFullscreen(bool full)
 
 	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
 	app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
+	app_.UseVerticalSync(true);
 	fullscreen_ = full;
 }
 

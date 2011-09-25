@@ -29,19 +29,12 @@ LevelMenu::LevelMenu():
 	but->SetCallbackID(2);
 	but = new CosmoButton(this, _t("menu.back_main_menu"), 210, 340);
 	but->SetCallbackID(0);
-
-	credit_counter_bg_.SetPosition(444, 90);
-	credit_counter_bg_.SetImage(GET_IMG("gui/credit-counter"));
-
-	credit_counter_.SetPosition(460, 100);
-	credit_counter_.SetFont(GetMenuFont());
-	credit_counter_.SetSize(18);
 }
 
 
 void LevelMenu::OnFocus()
 {
-	BaseMenu::OnFocus();
+	CreditCounterBase::OnFocus();
 	int last = levels_.CountLevel();
 	int current = levels_.GetCurrent();
 	int last_unlocked = levels_.GetLastUnlocked();
@@ -53,7 +46,7 @@ void LevelMenu::OnFocus()
 		{
 			lab_hardcore_->SetVisible(true);
 			cbx_hardcore_->SetVisible(true);
-			cbx_hardcore_->SetCallbackID(2);
+			cbx_hardcore_->SetCallbackID(3);
 		}
 		cbx_hardcore_->Check(levels_.IsHardcoreEnabled());
 	}
@@ -74,18 +67,6 @@ void LevelMenu::OnFocus()
 		}
 	}
 	opt_levels_->Select(current - 1);
-
-	// credit counter
-	int credits = levels_.GetCredits();
-	credit_counter_.SetText(wstr_replace(_t("menu.story.credits"), L"{credits}", to_wstring(credits)));
-}
-
-
-void LevelMenu::Show(sf::RenderTarget& target) const
-{
-	BaseMenu::Show(target);
-	target.Draw(credit_counter_bg_);
-	target.Draw(credit_counter_);
 }
 
 
@@ -114,6 +95,9 @@ void LevelMenu::EventCallback(int id)
 			}
 			break;
 		case 2:
+			Game::GetInstance().SetNextScene(Game::SC_ArmoryMenu);
+			break;
+		case 3:
 			levels_.EnableHardcore(cbx_hardcore_->Checked());
 			// rebuild level list widget
 			OnFocus();

@@ -4,12 +4,12 @@
 #include "gui/Button.hpp"
 
 /**
- * Bouton avec un style avancé
+ * Bouton avec un style avancé (120px * 40px)
  */
 class CosmoButton: public gui::Button
 {
 public:
-	CosmoButton(gui::Menu* owner, const sf::Unicode::Text& text, int x, int y);
+	CosmoButton(gui::Menu* owner, const sf::Unicode::Text& text, int x=0, int y=0);
 
 protected:
 	// override

@@ -20,6 +20,15 @@ menu.story.intro = Niveau {level}\n\n"{description}"\n\nEnnemis : {count}
 menu.story.play = Jouer
 menu.story.armory = Armurerie
 
+# Menu armurerie
+armory.title = Armurerie
+armory.shield = Bouclier énergétique
+armory.laser1 = Laser 1
+armory.laser2 = Laser 2
+armory.engine = Moteur
+armory.heatsink = Dissipateur thermique
+armory.armor = Blindage de coque
+
 # Menu pause
 menu.pause.title = Pause
 menu.pause.resume = Reprendre la partie

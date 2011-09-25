@@ -41,6 +41,9 @@ public:
 	 */
 	Widget(Menu* owner, bool focusable);
 
+	void SetPosition(float x, float y);
+	void SetPosition(const sf::Vector2f& position);
+
 	/**
 	 * Changer l'état du widget (affichage uniqement)
 	 */

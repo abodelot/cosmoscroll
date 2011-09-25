@@ -24,6 +24,13 @@ gui/score-board.png
 gui/score-board-bar-mask.png
 gui/level-bar.png
 gui/level-cursor.png
+gui/armory-ship-view.png
+gui/halo-heatsink.png
+gui/halo-shield.png
+gui/halo-laser1.png
+gui/halo-laser2.png
+gui/halo-armor.png
+gui/halo-engine.png
 entities/capsule.png
 entities/scoot.png
 entities/interceptor.png

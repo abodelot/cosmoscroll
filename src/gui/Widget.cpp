@@ -14,6 +14,24 @@ Widget::Widget(Menu* owner, bool focusable)
 }
 
 
+void Widget::SetPosition(float x, float y)
+{
+	sf::Drawable::SetPosition(x, y);
+	int w = rect_.GetWidth();
+	int h = rect_.GetHeight();
+	rect_.Left = x;
+	rect_.Top = y;
+	rect_.Right = x + w;
+	rect_.Bottom = y + h;
+}
+
+
+void Widget::SetPosition(const sf::Vector2f& position)
+{
+	this->SetPosition(position.x, position.y);
+}
+
+
 void Widget::SetState(State::EState state)
 {
 	OnStateChanged(state);

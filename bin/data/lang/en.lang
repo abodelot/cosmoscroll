@@ -20,6 +20,15 @@ menu.story.intro = Level {level}\n\n"{description}"\n\nBad guys: {count}
 menu.story.play = Play
 menu.story.armory = Armory
 
+# Armory menu
+armory.title = Armory
+armory.shield = Force shield
+armory.laser1 = Laser 1
+armory.laser2 = Laser 2
+armory.engine = Engine
+armory.heatsink = Heat sink
+armory.armor = Ship armor
+
 # Pause menu
 menu.pause.title = Paused
 menu.pause.resume = Resume game

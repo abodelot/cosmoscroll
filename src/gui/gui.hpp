@@ -8,13 +8,16 @@
  */
 
 #include "Menu.hpp"
-
+// widgets
 #include "Button.hpp"
 #include "CheckBox.hpp"
 #include "Label.hpp"
+#include "Image.hpp"
 #include "OptionList.hpp"
 #include "ProgressBar.hpp"
 #include "Slider.hpp"
 #include "TextBox.hpp"
+
+#include "VBoxLayout.hpp"
 
 #endif // GUI_GUI_HPP
