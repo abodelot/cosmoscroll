@@ -103,7 +103,10 @@ void GameOverMenu::EventCallback(int id)
 
 void GameOverMenu::UploadScore()
 {
-	std::string str_name = txt_pseudo_->GetText();
+	std::string str_name = str_trim(txt_pseudo_->GetText());
+	if (str_name.empty())
+		return;
+
 	std::string str_score = to_string(score_);
 
 	// COSMO_SERVER_KEY is a salt, producing a different salted key for each couple (name, score)

@@ -64,7 +64,7 @@ std::string str_trim(const std::string& str)
 		std::string::size_type last = str.find_last_not_of(WHITESPACES);
 		return str.substr(first, last - first + 1);
 	}
-	return str;
+	return std::string();
 }
 
 
