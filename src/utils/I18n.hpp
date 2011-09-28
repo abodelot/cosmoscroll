@@ -21,6 +21,7 @@ public:
 	 * @param key: text identifier
 	 */
 	const std::wstring& Translate(const char* key) const;
+	const std::wstring& Translate(const std::string& key) const;
 
 	/**
 	 * Tente de charger le fichier de traduction de la langue du système

@@ -5,7 +5,6 @@
 Entity::Entity(const sf::Vector2f& position, int hp, int collide_damage)
 {
 	SetPosition(position);
-
 	team_ = NEUTRAL;
 	hp_ = hp;
 	flipped_ = false;

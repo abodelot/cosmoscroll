@@ -333,8 +333,8 @@ bool ParticleSystem::ShieldParticle::OnUpdate(float frametime)
 #define SMOKE_BASE_SPEED   1100
 #define SMOKE_MIN_SIZE     0.5f
 #define SMOKE_MAX_SIZE     1.2f
-#define SMOKE_MIN_ANGLE    (PI - 1.f)
-#define SMOKE_MAX_ANGLE    (PI + 1.f)
+#define SMOKE_MIN_ANGLE    (PI - 0.7f)
+#define SMOKE_MAX_ANGLE    (PI + 0.7f)
 
 
 ParticleSystem::Smoke::Smoke(const sf::Sprite* handle)

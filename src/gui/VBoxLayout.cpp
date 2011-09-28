@@ -8,6 +8,7 @@ VBoxLayout::VBoxLayout(int x, int y)
 {
 	x_ = x;
 	y_ = y;
+	vertical_spacing_ = 0;
 }
 
 void VBoxLayout::SetSpacing(int vertical_spacing)

@@ -18,12 +18,21 @@ public:
 	};
 	UpgradeItem(gui::Menu* parent, Type type);
 
+	// inherited callbacks
+	void OnKeyPressed(sf::Key::Code code);
+	void OnMouseClicked(int x, int y);
+
+	static const char* TypeToString(Type type);
+
+
 private:
 	void Render(sf::RenderTarget& target) const;
+
 
 	Type type_;
 	sf::String label_;
 	sf::Sprite halo_;
+	sf::Sprite label_bg_;
 };
 
 #endif // UPGRADEITEM_HPP

@@ -9,7 +9,7 @@ namespace gui
 class Label: public Widget
 {
 public:
-	Label(Menu* owner, const sf::Unicode::Text& text, int x, int y);
+	Label(Menu* owner, const sf::Unicode::Text& text, int x=0, int y=0);
 
 	// texte du label
 	void SetText(const sf::Unicode::Text& text) { text_.SetText(text); }
@@ -19,9 +19,13 @@ public:
 	void SetSize(int size) { text_.SetSize(size); }
 	int GetSize() const { return text_.GetSize(); }
 
-	// fonte du texte
+	// text font
 	void SetFont(const sf::Font& font) { text_.SetFont(font); }
 	const sf::Font& GetFont() const { return text_.GetFont(); }
+
+	// text color
+	void SetColor(const sf::Color& color) { text_.SetColor(color); }
+	const sf::Color& GetColor() const { return text_.GetColor(); }
 
 private:
 	// inherited

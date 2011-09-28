@@ -1,6 +1,8 @@
 #include "UpgradeItem.hpp"
+#include "core/Game.hpp"
 #include "utils/MediaManager.hpp"
 #include "utils/I18n.hpp"
+#include "utils/StringUtils.hpp"
 
 
 UpgradeItem::UpgradeItem(gui::Menu* parent, Type type):
@@ -48,11 +50,63 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, Type type):
 		default:
 			break;
 	}
-	label_.SetPosition(0, -16);
-	label_.SetSize(14);
-	label_.SetColor(sf::Color::Yellow);
+	std::wstring content = label_.GetText();
+	content += L"\n";
+	content += _t("armory.item_level");
+	wstr_self_replace(content, L"{level}", to_wstring(Game::GetInstance().GetPlayerSave().LevelOf(type)));
+
+	label_.SetText(content);
+
+	label_.SetPosition(0, -20);
+	label_.SetFont(MediaManager::GetFont("Ubuntu-R.ttf"));
+	label_.SetSize(12);
+	label_.SetColor(sf::Color::White);
+
+	label_bg_.Resize(label_.GetRect().GetWidth() + 8, label_.GetRect().GetHeight() + 8);
+	label_bg_.SetPosition(label_.GetPosition().x - 4, label_.GetPosition().y - 4);
+	label_bg_.SetColor(sf::Color(0, 0, 0, 128));
+
 	SetRect(x, y, x + halo_.GetSize().x, y + halo_.GetSize().y);
+	SetCallbackID(type);
 }
+
+
+const char* UpgradeItem::TypeToString(Type type)
+{
+	switch (type)
+	{
+		case UP_LASER1:
+			return "armory.laser1";
+		case UP_LASER2:
+			return "armory.laser2";
+		case UP_ENGINE:
+			return "armory.engine";
+		case UP_ARMOR:
+			return "armory.armor";
+		case UP_SHIELD:
+			return "armory.shield";
+		case UP_HEATSINK:
+			return "armory.heatsink";
+		default:
+			break;
+	}
+	return NULL;
+}
+
+void UpgradeItem::OnKeyPressed(sf::Key::Code code)
+{
+	if (code == sf::Key::Return)
+	{
+		CallTheCallback();
+	}
+}
+
+
+void UpgradeItem::OnMouseClicked(int, int)
+{
+	CallTheCallback();
+}
+
 
 void UpgradeItem::Render(sf::RenderTarget& target) const
 {
@@ -60,10 +114,9 @@ void UpgradeItem::Render(sf::RenderTarget& target) const
 	switch (GetState())
 	{
 		case gui::State::HOVERED:
-			target.Draw(halo_);
-			break;
 		case gui::State::FOCUSED:
 			target.Draw(halo_);
+			target.Draw(label_bg_);
 			target.Draw(label_);
 			break;
 	}

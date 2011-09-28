@@ -58,6 +58,8 @@
 		<Unit filename="src/core/Main.cpp" />
 		<Unit filename="src/core/ParticleSystem.cpp" />
 		<Unit filename="src/core/ParticleSystem.hpp" />
+		<Unit filename="src/core/PlayerSave.cpp" />
+		<Unit filename="src/core/PlayerSave.hpp" />
 		<Unit filename="src/core/SoundSystem.cpp" />
 		<Unit filename="src/core/SoundSystem.hpp" />
 		<Unit filename="src/entities/Animated.cpp" />
@@ -96,6 +98,8 @@
 		<Unit filename="src/gui/Button.hpp" />
 		<Unit filename="src/gui/CheckBox.cpp" />
 		<Unit filename="src/gui/CheckBox.hpp" />
+		<Unit filename="src/gui/Image.cpp" />
+		<Unit filename="src/gui/Image.hpp" />
 		<Unit filename="src/gui/Label.cpp" />
 		<Unit filename="src/gui/Label.hpp" />
 		<Unit filename="src/gui/Menu.cpp" />
@@ -108,6 +112,8 @@
 		<Unit filename="src/gui/Slider.hpp" />
 		<Unit filename="src/gui/TextBox.cpp" />
 		<Unit filename="src/gui/TextBox.hpp" />
+		<Unit filename="src/gui/VBoxLayout.cpp" />
+		<Unit filename="src/gui/VBoxLayout.hpp" />
 		<Unit filename="src/gui/Widget.cpp" />
 		<Unit filename="src/gui/Widget.hpp" />
 		<Unit filename="src/gui/gui.hpp" />
@@ -149,10 +155,16 @@
 		<Unit filename="src/scenes/options/SettingsMenu.cpp" />
 		<Unit filename="src/scenes/options/SettingsMenu.hpp" />
 		<Unit filename="src/scenes/scenes.hpp" />
+		<Unit filename="src/scenes/story/ArmoryMenu.cpp" />
+		<Unit filename="src/scenes/story/ArmoryMenu.hpp" />
+		<Unit filename="src/scenes/story/CreditCounterBase.cpp" />
+		<Unit filename="src/scenes/story/CreditCounterBase.hpp" />
 		<Unit filename="src/scenes/story/IntroLevelScene.cpp" />
 		<Unit filename="src/scenes/story/IntroLevelScene.hpp" />
 		<Unit filename="src/scenes/story/LevelMenu.cpp" />
 		<Unit filename="src/scenes/story/LevelMenu.hpp" />
+		<Unit filename="src/scenes/story/UpgradeItem.cpp" />
+		<Unit filename="src/scenes/story/UpgradeItem.hpp" />
 		<Unit filename="src/tinyxml/tinyxml.cpp" />
 		<Unit filename="src/tinyxml/tinyxml.h" />
 		<Unit filename="src/tinyxml/tinyxmlerror.cpp" />

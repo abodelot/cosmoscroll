@@ -39,6 +39,12 @@ const std::wstring& I18n::Translate(const char* key) const
 }
 
 
+const std::wstring& I18n::Translate(const std::string& key) const
+{
+	return Translate(key.c_str());
+}
+
+
 bool I18n::LoadSystemLanguage()
 {
 	if (LoadFromCode(GetLocaleCode()))

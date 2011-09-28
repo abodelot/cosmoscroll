@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Input.hpp"
+#include "PlayerSave.hpp"
 
 class BaseScene;
 class EntityManager;
@@ -18,8 +19,8 @@ class Game
 public:
 	enum Size
 	{
-		WIDTH =    640,
-		HEIGHT =   480
+		WIDTH =  640,
+		HEIGHT = 480
 	};
 
 	enum Scene
@@ -78,7 +79,9 @@ public:
 
 	void ReloadScenes();
 
-	bool IsPure() const { return pure_; }
+	inline bool IsPure() const { return pure_; }
+	inline PlayerSave& GetPlayerSave() { return playersave_; }
+
 private:
 	Game();
 	~Game();
@@ -115,6 +118,7 @@ private:
 	// scènes
 	BaseScene* scenes_[SC_COUNT];
 	BaseScene* current_scene_;
+	PlayerSave playersave_;
 };
 
 #endif // GAME_HPP
