@@ -80,7 +80,7 @@ public:
 	void ReloadScenes();
 
 	inline bool IsPure() const { return pure_; }
-	inline PlayerSave& GetPlayerSave() { return playersave_; }
+	inline static PlayerSave& GetPlayerSave() { return GetInstance().playersave_; }
 
 private:
 	Game();

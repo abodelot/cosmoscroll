@@ -185,6 +185,12 @@ void MediaManager::SmoothImage(const char* key, bool smooth)
 }
 
 
+void MediaManager::CreateImageMask(const char* key, const sf::Color& color)
+{
+	images_[key].CreateMaskFromColor(color);
+}
+
+
 void MediaManager::Unload()
 {
 #ifndef NO_DUMB_MUSIC

@@ -1,7 +1,7 @@
 #include "CreditCounterBase.hpp"
 #include "utils/I18n.hpp"
 #include "utils/StringUtils.hpp"
-#include "core/LevelManager.hpp"
+#include "core/Game.hpp"
 
 CreditCounterBase::CreditCounterBase()
 {
@@ -18,7 +18,7 @@ void CreditCounterBase::OnFocus()
 {
 	BaseMenu::OnFocus();
 
-	int credits = LevelManager::GetInstance().GetCredits();
+	int credits = Game::GetPlayerSave().GetCredits();
 	credit_counter_.SetText(wstr_replace(_t("menu.story.credits"), L"{credits}", to_wstring(credits)));
 }
 

@@ -20,8 +20,6 @@ LevelManager::LevelManager()
 {
 	last_insert_time_ = 0.f;
 	current_level_ = last_unlocked_level_ = 1;
-	hardcore_ = false;
-	earned_points_ = 0;
 }
 
 
@@ -31,9 +29,9 @@ LevelManager::~LevelManager()
 }
 
 
-LevelManager::Error LevelManager::LoadCurrent()
+void LevelManager::LoadCurrent()
 {
-	return ParseLevel(GetLevelElement(GetCurrent()));
+	ParseLevel(GetLevelElement(current_level_));
 }
 
 
@@ -52,26 +50,21 @@ Entity* LevelManager::GiveNextEntity(float timer)
 }
 
 
-LevelManager::Error LevelManager::SetCurrent(int level)
+void LevelManager::SetCurrent(int level)
 {
-	if (level <= 0 || level > (int) levels_.size())
+	if (level < 1 || level > last_unlocked_level_ || level > (int) levels_.size() * 2)
 	{
-		level = 1;
 		std::cerr << " [levels] level " << level << " is undefined, using level 1" << std::endl;
-		//return UNDEF;
+		level = 1;
 	}
-	if (hardcore_)
-	{
-		level += levels_.size();
-	}
+
 	current_level_ = level;
-	return SUCCESS;
 }
 
 
 int LevelManager::GetCurrent() const
 {
-	return hardcore_ ? current_level_ - levels_.size() : current_level_;
+	return current_level_;
 }
 
 
@@ -80,40 +73,44 @@ int LevelManager::UnlockNextLevel()
 	if (last_unlocked_level_ < (int) levels_.size() * 2)
 	{
 		++last_unlocked_level_;
-		if (last_unlocked_level_ > (int) levels_.size())
-		{
-			hardcore_ = true;
-		}
 		current_level_ = last_unlocked_level_;
 	}
-	return GetCurrent();
+	return current_level_;
 }
 
 
 int LevelManager::GetLastUnlocked() const
 {
-	if (hardcore_)
-		return last_unlocked_level_ - levels_.size();
-	return AllLevelsCompleted() ? levels_.size() : last_unlocked_level_;
+	return last_unlocked_level_;
+}
+
+
+void LevelManager::SetLastUnlocked(int level)
+{
+	if (level < 1 || level > (int) levels_.size() * 2)
+	{
+		level = 1;
+	}
+	last_unlocked_level_ = level;
 }
 
 
 const char* LevelManager::GetDescription() const
 {
-	return GetLevelElement(GetCurrent())->Attribute("desc");
+	return GetLevelElement(current_level_)->Attribute("desc");
 }
 
 
 sf::Color LevelManager::GetTopColor() const
 {
-	const char* p = GetLevelElement(GetCurrent())->Attribute("bg_top");
+	const char* p = GetLevelElement(current_level_)->Attribute("bg_top");
 	return p != NULL ? HexaToColor(p) : sf::Color::Black;
 }
 
 
 sf::Color LevelManager::GetBottomColor() const
 {
-	const char* p = GetLevelElement(GetCurrent())->Attribute("bg_bottom");
+	const char* p = GetLevelElement(current_level_)->Attribute("bg_bottom");
 	return p != NULL ? HexaToColor(p) : sf::Color::Black;
 }
 
@@ -121,7 +118,7 @@ sf::Color LevelManager::GetBottomColor() const
 int LevelManager::GetStarsCount() const
 {
 	int nb_stars = DEFAULT_STARS_COUNT;
-	GetLevelElement(GetCurrent())->QueryIntAttribute("stars", &nb_stars);
+	GetLevelElement(current_level_)->QueryIntAttribute("stars", &nb_stars);
 	return nb_stars;
 }
 
@@ -155,23 +152,22 @@ bool LevelManager::AllLevelsCompleted() const
 }
 
 
+bool LevelManager::IsHardcoreEnabled() const
+{
+	return current_level_ > (int) levels_.size();
+}
+
+
 void LevelManager::EnableHardcore(bool hardcore)
 {
-	if (AllLevelsCompleted())
-	{
-		hardcore_ = hardcore;
-		current_level_ = hardcore_ ? last_unlocked_level_ : levels_.size();
-	}
+	if (hardcore)
+		current_level_ = last_unlocked_level_;
+	else
+		current_level_ = AllLevelsCompleted() ? (int) levels_.size() : last_unlocked_level_;
 }
 
 
-bool LevelManager::IsHardcoreEnabled()
-{
-	return hardcore_;
-}
-
-
-LevelManager::Error LevelManager::ParseFile(const char* file)
+void LevelManager::ParseFile(const char* file)
 {
 	printf("* loading levels... ");
 
@@ -179,7 +175,6 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 	{
 		std::cerr << "cannot load file " << file << std::endl;
 		std::cerr << "error #" << doc_.ErrorId() << ": " << doc_.ErrorDesc() << std::endl;
-		return FILE;
 	}
 
 	// Constitution de la map de pointeurs vers les fonctions
@@ -203,12 +198,10 @@ LevelManager::Error LevelManager::ParseFile(const char* file)
 		node = node->NextSibling();
 	}
 	printf("%d levels found\n", (int) levels_.size());
-
-	return SUCCESS;
 }
 
 
-LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
+void LevelManager::ParseLevel(TiXmlElement* elem)
 {
 	ClearWaitingLine();
 	last_insert_time_ = 0.f;
@@ -218,7 +211,6 @@ LevelManager::Error LevelManager::ParseLevel(TiXmlElement* elem)
 		ParseEntity(elem);
 		elem = elem->NextSiblingElement();
 	}
-	return SUCCESS;
 }
 
 
@@ -311,9 +303,9 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 void LevelManager::AppendToWaitingLine(Entity* entity, float time)
 {
 	EntitySlot slot;
-	if (hardcore_)
+	if (IsHardcoreEnabled())
 	{
-		entity->SetHP(entity->GetHP() * 1.5);
+		entity->SetHP(entity->GetHP() * 2);
 	}
 	slot.entity = entity;
 	last_insert_time_ += time;
@@ -335,7 +327,9 @@ void LevelManager::ClearWaitingLine()
 
 TiXmlElement* LevelManager::GetLevelElement(int level) const
 {
-	--level; // first level is index 0
+	if (level > (int) levels_.size())
+		level -= levels_.size();
+	--level; // index starts at 0
 	if (level < 0 || level >= (int) levels_.size())
 	{
 		std::cerr << "[levels] index " << level << " is not a valid level, using index 0" << std::endl;
@@ -355,34 +349,4 @@ sf::Color LevelManager::HexaToColor(const std::string& hexcolor)
 		color.b = strtoul(hexcolor.substr(5, 2).c_str(), NULL, 16);
 	}
 	return color;
-}
-
-
-void LevelManager::LoadFromConfig(ConfigParser& config)
-{
-	config.SeekSection("Story");
-	config.ReadItem("last_unlocked_level", last_unlocked_level_);
-	if (last_unlocked_level_ < 1 || last_unlocked_level_ > (int) levels_.size() * 2)
-	{
-		last_unlocked_level_ = 1;
-	}
-	config.ReadItem("current_level", current_level_);
-	if (current_level_ < 1 || current_level_ > last_unlocked_level_)
-	{
-		current_level_ = 1;
-	}
-	else if (current_level_ > (int) levels_.size())
-	{
-		hardcore_ = true;
-	}
-	config.ReadItem("credits", earned_points_);
-}
-
-
-void LevelManager::SaveToConfig(ConfigParser& config) const
-{
-	config.SeekSection("Story");
-	config.WriteItem("current_level", current_level_);
-	config.WriteItem("last_unlocked_level", last_unlocked_level_);
-	config.WriteItem("credits", earned_points_);
 }

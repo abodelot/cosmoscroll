@@ -37,11 +37,16 @@ void LevelMenu::OnFocus()
 	CreditCounterBase::OnFocus();
 	int last = levels_.CountLevel();
 	int current = levels_.GetCurrent();
-	int last_unlocked = levels_.GetLastUnlocked();
+	if (levels_.IsHardcoreEnabled())
+		current -= last;
 
-	// enable/disable hardcore
+	int last_unlocked = levels_.GetLastUnlocked();
 	if (levels_.AllLevelsCompleted())
 	{
+		if (levels_.IsHardcoreEnabled())
+			last_unlocked -= last;
+
+		// enable/disable hardcore
 		if (!lab_hardcore_->IsVisible())
 		{
 			lab_hardcore_->SetVisible(true);
@@ -49,6 +54,11 @@ void LevelMenu::OnFocus()
 			cbx_hardcore_->SetCallbackID(3);
 		}
 		cbx_hardcore_->Check(levels_.IsHardcoreEnabled());
+	}
+
+	if (last_unlocked > levels_.CountLevel())
+	{
+		last_unlocked = levels_.CountLevel();
 	}
 
 	std::wstring progression = _t("menu.story.progression");
@@ -78,8 +88,12 @@ void LevelMenu::EventCallback(int id)
 			Game::GetInstance().SetNextScene(Game::SC_MainMenu);
 			break;
 		case 1: {
-			int level_select = opt_levels_->GetSelectedOptionIndex() + 1;
-			levels_.SetCurrent(level_select);
+			int selected_level = opt_levels_->GetSelectedOptionIndex() + 1;
+			if (cbx_hardcore_->Checked())
+				levels_.SetCurrent(selected_level + levels_.CountLevel());
+			else
+				levels_.SetCurrent(selected_level);
+
 			levels_.LoadCurrent();
 			EntityManager& entities = EntityManager::GetInstance();
 			entities.SetBackgroundColor(
@@ -89,7 +103,7 @@ void LevelMenu::EventCallback(int id)
 
 			entities.InitMode(EntityManager::MODE_STORY);
 
-			std::wstring s = wstr_replace(_t("panel.level"), L"{level}", to_wstring(level_select));
+			std::wstring s = wstr_replace(_t("panel.level"), L"{level}", to_wstring(selected_level));
 			ControlPanel::GetInstance().SetGameInfo(s);
 			Game::GetInstance().SetNextScene(Game::SC_IntroLevelScene);
 			}

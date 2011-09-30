@@ -54,6 +54,10 @@ void IntroLevelScene::OnFocus()
 	printf("  - duration: %d\" %02d'\n", levels.GetDuration() / 60, levels.GetDuration() % 60);
 
 	std::wstring intro = _t("menu.story.intro");
+	if (current_level > levels.CountLevel())
+	{
+		current_level -= levels.CountLevel();
+	}
 	wstr_self_replace(intro, L"{level}", to_wstring(current_level));
 	wstr_self_replace(intro, L"{description}", I18n::DecodeUTF8(levels.GetDescription()));
 	wstr_self_replace(intro, L"{count}", to_wstring(levels.RemainingEntities()));

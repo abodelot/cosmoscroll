@@ -57,6 +57,7 @@ Game::Game() :
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
 
+	MediaManager::GetInstance().CreateImageMask("gui/icon", sf::Color(0xff, 0, 0xff));
 	const sf::Image& icon = GET_IMG("gui/icon");
 	app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
 
@@ -135,7 +136,7 @@ bool Game::LoadConfig(const char* filename)
 		input_.LoadFromConfig(config);
 
 		// reading story progression
-		levels_.LoadFromConfig(config);
+		playersave_.LoadFromConfig(config);
 		return true;
 	}
 	I18n::GetInstance().LoadSystemLanguage();
@@ -167,7 +168,7 @@ void Game::WriteConfig(const char* filename) const
 	input_.SaveToConfig(config);
 
 	// levels
-	levels_.SaveToConfig(config);
+	playersave_.SaveToConfig(config);
 
 	// saving configuration to file
 	config.SaveToFile(filename);

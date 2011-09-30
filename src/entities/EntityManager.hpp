@@ -216,24 +216,7 @@ private:
 	sf::Shape background_;
 	ParticleSystem& particles_;
 
-	struct PlayerSave
-	{
-		PlayerSave()
-		{
-			hp = 3;
-			shield = 3;
-			missiles = 1;
-			coolers = 0;
-		}
-
-		int hp;
-		int shield;
-		int missiles;
-		int coolers;
-	};
-
 	PlayerShip* player_;
-	PlayerSave player_save_;
 	bool (EntityManager::*more_bad_guys_)();
 	bool game_over_;
 	float timer_;

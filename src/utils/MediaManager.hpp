@@ -55,6 +55,8 @@ public:
 	 */
 	void SmoothImage(const char* key, bool smooth);
 
+	void CreateImageMask(const char* key, const sf::Color& color);
+
 	void Unload();
 
 private:

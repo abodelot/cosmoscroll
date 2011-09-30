@@ -6,7 +6,6 @@
 #include <string>
 #include <SFML/Graphics/Color.hpp>
 
-#include "utils/ConfigParser.hpp"
 #include "tinyxml/tinyxml.h"
 
 class Entity;
@@ -17,14 +16,6 @@ class Entity;
 class LevelManager
 {
 public:
-	enum Error
-	{
-		SUCCESS,
-		FILE,   // Erreur d'e-s
-		UNDEF,  // Niveau non défini
-		PARSE   // Erreur de parsing
-	};
-
 	/**
 	 * Récupérer l'instance unique
 	 * @return référence sur le gestionnaire de niveaux
@@ -34,9 +25,9 @@ public:
 	/**
 	 * Parser un fichier de niveaux
 	 */
-	Error ParseFile(const char* file);
+	void ParseFile(const char* file);
 
-	Error LoadCurrent();
+	void LoadCurrent();
 
 	/**
 	 * Obtenir la prochaine unité du niveau
@@ -58,12 +49,15 @@ public:
 	 * Définir le niveau courant
 	 * @param level_num: numéro du niveau
 	 */
-	Error SetCurrent(int level_num);
-
+	void SetCurrent(int level_num);
 	int GetCurrent() const;
 
-	int UnlockNextLevel();
 
+	/**
+	 * Last reached level
+	 */
+	int UnlockNextLevel();
+	void SetLastUnlocked(int level);
 	int GetLastUnlocked() const;
 
 	// attributs du niveau courant
@@ -110,25 +104,13 @@ public:
 	/**
 	 * @return true si le mode hardcore est activé
 	 */
-	bool IsHardcoreEnabled();
+	bool IsHardcoreEnabled() const;
 
 	/**
 	 * Total des points disponibles dans le niveau courant
 	 * @return points
 	 */
 	int GetTotalPoints() const;
-
-	/**
-	 * Sauvegarde de la progression en mode Histoire
-	 */
-	void LoadFromConfig(ConfigParser& config);
-	void SaveToConfig(ConfigParser& config) const;
-
-	/**
-	 * Score du joueur en mode Histoire
-	 */
-	inline int GetCredits() const { return earned_points_; }
-	inline void SetCredits(int credits) { earned_points_ = credits; }
 
 private:
 	LevelManager();
@@ -139,7 +121,7 @@ private:
 	 * Parser un niveau
 	 * @param elem: noeud XML contenant le niveau
 	 */
-	Error ParseLevel(TiXmlElement* elem);
+	void ParseLevel(TiXmlElement* elem);
 
 	/**
 	 * Parser un élément de niveau
@@ -185,8 +167,6 @@ private:
 	std::queue<EntitySlot> waiting_line_;
 	int current_level_;
 	int last_unlocked_level_;
-	int earned_points_;
-	bool hardcore_;
 };
 
 #endif // LEVELMANAGER_HPP

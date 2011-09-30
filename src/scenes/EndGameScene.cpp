@@ -72,26 +72,22 @@ void EndGameScene::OnFocus()
 		SoundSystem::GetInstance().PlaySound("end-level");
 		int earned_credits = entities_.GetPlayerShip()->GetPoints();
 		int current = levels.GetCurrent();
-		if (current < levels.CountLevel())
+		// si dernier niveau du jeu
+		if (current % levels.CountLevel() == 0)
 		{
-			std::wstring s = wstr_replace(_t("endgame.end_level"), L"{level}", to_wstring(current));
-			wstr_self_replace(s, L"{credits}", to_wstring(earned_credits));
+			std::wstring s = wstr_replace(_t("endgame.end_last_level"), L"{credits}", to_wstring(earned_credits));
 			info_.SetText(s);
 		}
-		else // si dernier niveau du jeu
+		else
 		{
-			std::wstring s = wstr_replace(_t("endgame.end_last_level"), L"{count}", to_wstring(current));
+			std::wstring s = wstr_replace(_t("endgame.end_level"), L"{level}", to_wstring(current % levels.CountLevel()));
 			wstr_self_replace(s, L"{credits}", to_wstring(earned_credits));
 			info_.SetText(s);
 		}
 
-		levels.SetCredits(levels.GetCredits() + earned_credits);
-
-		if (current == levels.GetLastUnlocked())
-		{
-			// nouveau niveau débloqué
-			current = levels.UnlockNextLevel();
-		}
+		Game::GetPlayerSave().UpdateCredits(earned_credits);
+		// nouveau niveau débloqué (si possible)
+		levels.UnlockNextLevel();
 	}
 
 	sf::FloatRect rect = info_.GetRect();
@@ -99,7 +95,4 @@ void EndGameScene::OnFocus()
 		(Game::WIDTH - rect.GetWidth()) / 2,
 		(Game::HEIGHT - rect.GetHeight()) / 2
 	);
-
-	// entitymanager_.Count() > 1 && mode_ != STORY2X) ||
-	//	(entitymanager_.Count() > 2 && mode_ == STORY2X))
 }
