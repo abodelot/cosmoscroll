@@ -18,6 +18,13 @@ Label::Label(Menu* owner, const sf::Unicode::Text& text, int x, int y) :
 }
 
 
+void Label::SetText(const sf::Unicode::Text& text)
+{
+	text_.SetText(text);
+	Resize(text_.GetRect().GetWidth(), text_.GetRect().GetHeight());
+}
+
+
 void Label::Render(sf::RenderTarget& target) const
 {
 	target.Draw(text_);

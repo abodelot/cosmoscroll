@@ -131,6 +131,7 @@ public:
 protected:
 	void SetRect(int x, int y, int x2, int y2);
 	void SetRect(const sf::FloatRect& rect);
+	void Resize(int width, int height);
 
 	Menu* GetOwner() const;
 

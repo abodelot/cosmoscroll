@@ -91,6 +91,12 @@ void Widget::SetRect(const sf::FloatRect& rect)
 }
 
 
+void Widget::Resize(int width, int height)
+{
+	rect_.Right = rect_.Left + width;
+	rect_.Bottom = rect_.Top + height;
+}
+
 Menu* Widget::GetOwner() const
 {
 	return owner_;

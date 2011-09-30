@@ -20,6 +20,9 @@ private:
 
 	struct Dialog
 	{
+		static const int WIDTH = 360;
+		static const int HEIGHT = 180;
+		int x, y;
 		gui::Image* background;
 		gui::Label* lab_item;
 		gui::Label* current_level;
@@ -62,6 +65,8 @@ private:
 	};
 
 	//ItemData* item_data_[UpgradeItem::_UP_COUNT];
+
+	UpgradeItem* items_[UpgradeItem::_UP_COUNT];
 
 };
 

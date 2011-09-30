@@ -12,7 +12,7 @@ public:
 	Label(Menu* owner, const sf::Unicode::Text& text, int x=0, int y=0);
 
 	// texte du label
-	void SetText(const sf::Unicode::Text& text) { text_.SetText(text); }
+	void SetText(const sf::Unicode::Text& text);
 	std::string GetText() const { return text_.GetText(); }
 
 	// taille du texte

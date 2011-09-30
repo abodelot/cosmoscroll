@@ -14,26 +14,26 @@ ArmoryMenu::ArmoryMenu()
 	new gui::Image(this, GET_IMG("gui/armory-ship-view"));
 	for (int i = 0; i < UpgradeItem::_UP_COUNT; ++i)
 	{
-		new UpgradeItem(this, (UpgradeItem::Type) i);
+		items_[i] = new UpgradeItem(this, (UpgradeItem::Type) i);
 	}
+
 	// init dialog
 	dialog_.background = new gui::Image(this, GET_IMG("gui/armory-dialog"));
-	int x = 120;
-	int y = 180;
+	int x = dialog_.x = (Game::WIDTH - Dialog::WIDTH) / 2;
+	int y = dialog_.y = (Game::HEIGHT - Dialog::HEIGHT) / 2;
 	dialog_.background->SetPosition(x, y);
 
 
 	dialog_.lab_item = new gui::Label(this, "\n");
-	dialog_.lab_item->SetPosition(x + 30, y + 10);
+	dialog_.lab_item->SetPosition(x, y + 6);
 	// left side
-	gui::VBoxLayout layout_left(x + 10, y + 50);
+	gui::VBoxLayout layout_left(x + 20, y + 40);
 	layout_left.SetSpacing(5);
 	const sf::Font& font = MediaManager::GetFont("Ubuntu-R.ttf");
 
 	dialog_.current_level = new gui::Label(this, "\n");
-	dialog_.current_level->SetFont(font);
 	dialog_.current_level->SetColor(sf::Color::Green);
-	dialog_.current_level->SetSize(16);
+	dialog_.current_level->SetSize(18);
 	layout_left.Add(dialog_.current_level);
 
 	dialog_.current_level_details = new gui::Label(this, "\n");
@@ -43,8 +43,7 @@ ArmoryMenu::ArmoryMenu()
 
 	dialog_.next_level = new gui::Label(this, "\n");
 	dialog_.next_level->SetColor(sf::Color::Green);
-	dialog_.next_level->SetFont(font);
-	dialog_.next_level->SetSize(16);
+	dialog_.next_level->SetSize(18);
 	layout_left.Add(dialog_.next_level);
 
 	dialog_.next_level_details = new gui::Label(this, "\n");
@@ -52,7 +51,7 @@ ArmoryMenu::ArmoryMenu()
 	dialog_.next_level_details->SetSize(12);
 	layout_left.Add(dialog_.next_level_details);
 
-	gui::VBoxLayout layout_right(x + 200, y + 50);
+	gui::VBoxLayout layout_right(x + 220, y + 55);
 	layout_right.SetSpacing(10);
 
 	dialog_.but_buy = new ConfigButton(this, _t("armory.buy"));
@@ -101,6 +100,11 @@ void ArmoryMenu::ShowDialog(bool visible)
 	dialog_.next_level_details->SetVisible(visible);
 	dialog_.but_buy->SetVisible(visible);
 	dialog_.but_back->SetVisible(visible);
+
+	for (int i = 0; i < UpgradeItem::_UP_COUNT; ++i)
+	{
+		items_[i]->SetVisible(!visible);
+	}
 }
 
 
@@ -108,6 +112,8 @@ void ArmoryMenu::LoadItem(UpgradeItem::Type type)
 {
 	std::wstring text = _t(UpgradeItem::TypeToString(type));
 	dialog_.lab_item->SetText(text);
+	int x = (Dialog::WIDTH - dialog_.lab_item->GetRect().GetWidth()) / 2;
+	dialog_.lab_item->SetX(dialog_.x + x);
 
 	int level = Game::GetInstance().GetPlayerSave().LevelOf(type);
 	text = _t("armory.item_current_level");
