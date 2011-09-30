@@ -1,6 +1,6 @@
 #include "MissileLauncher.hpp"
-#include "EntityManager.hpp"
-#include "ImpactHit.hpp"
+#include "entities/EntityManager.hpp"
+#include "entities/ImpactHit.hpp"
 
 
 

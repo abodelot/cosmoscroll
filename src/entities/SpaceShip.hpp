@@ -2,7 +2,7 @@
 #define SPACESHIP_HPP
 
 #include "Entity.hpp"
-#include "Weapon.hpp"
+#include "items/Weapon.hpp"
 #include "Animated.hpp"
 
 class SpaceShip: public Entity, public Animated

@@ -3,7 +3,7 @@
 
 #include "Entity.hpp"
 #include "Animated.hpp"
-#include "Weapon.hpp"
+#include "items/Weapon.hpp"
 
 
 class BossTentacles: public Entity, public Animated

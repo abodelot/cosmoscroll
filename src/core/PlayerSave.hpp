@@ -11,6 +11,8 @@ public:
 
 	int AvailableCredits() const;
 	int LevelOf(UpgradeItem::Type type) const;
+	void SetItemLevel(UpgradeItem::Type type, int level);
+
 
 	void LoadFromConfig(ConfigParser& config);
 	void SaveToConfig(ConfigParser& config) const;

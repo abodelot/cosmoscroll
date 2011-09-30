@@ -4,6 +4,7 @@
 #include "LevelManager.hpp"
 #include "ControlPanel.hpp"
 #include "entities/EntityManager.hpp"
+#include "items/ItemManager.hpp"
 #include "utils/MediaManager.hpp"
 #include "utils/ConfigParser.hpp"
 #include "utils/StringUtils.hpp"
@@ -15,7 +16,7 @@
 // config and data files
 #define CONFIG_FILE    "config/config.cfg"
 #define LEVEL_FILE     "data/levels/levels.xml"
-#define XML_WEAPONS    "data/xml/weapons.xml"
+#define XML_ITEMS      "data/xml/items.xml"
 #define XML_ANIMATIONS "data/xml/animations.xml"
 #define XML_SPACESHIPS "data/xml/spaceships.xml"
 
@@ -45,7 +46,7 @@ Game::Game() :
 	levels_.ParseFile(LEVEL_FILE);
 
 	// init entity manager
-	entitymanager_.LoadWeapons(XML_WEAPONS);
+	ItemManager::GetInstance().LoadItems(XML_ITEMS);
 	entitymanager_.LoadAnimations(XML_ANIMATIONS);
 	entitymanager_.LoadSpaceShips(XML_SPACESHIPS);
 	entitymanager_.SetPosition(0, ControlPanel::HEIGHT);
@@ -322,15 +323,15 @@ void Game::CheckPurity()
 	std::ifstream file;
 	MD5 md5sum;
 
-	file.open("data/xml/weapons.xml");
+	file.open(XML_ITEMS);
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_WEAPONS);
 	file.close();
 
-	file.open("data/xml/spaceships.xml");
+	file.open(XML_SPACESHIPS);
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_SPACESHIPS);
 	file.close();
 
-	file.open("data/xml/animations.xml");
+	file.open(XML_ANIMATIONS);
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_ANIMATIONS);
 	file.close();
 	puts(pure_ ? "[OK]" : "[FAILED]");

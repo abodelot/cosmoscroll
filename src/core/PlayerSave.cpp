@@ -7,7 +7,7 @@ PlayerSave::PlayerSave()
 	available_credits_ = 0;
 	for (int i = 0; i < UpgradeItem::_UP_COUNT; ++i)
 	{
-		items_[i] = 0;
+		items_[i] = 1;
 	}
 }
 
@@ -15,6 +15,16 @@ PlayerSave::PlayerSave()
 int PlayerSave::LevelOf(UpgradeItem::Type type) const
 {
 	return items_[type];
+}
+
+
+void PlayerSave::SetItemLevel(UpgradeItem::Type type, int level)
+{
+	if (level < 1)
+		level = 1;
+	else if (level > 3)
+		level = 3;
+	items_[type] = level;
 }
 
 
@@ -48,6 +58,10 @@ void PlayerSave::LoadFromConfig(ConfigParser& config)
 	config.ReadItem("lvl_armor", items_[UpgradeItem::UP_ARMOR]);
 	config.ReadItem("lvl_engine", items_[UpgradeItem::UP_ENGINE]);
 	config.ReadItem("lvl_heatsink", items_[UpgradeItem::UP_HEATSINK]);
+	for (int i = 0; i < UpgradeItem::_UP_COUNT; ++i)
+	{
+		SetItemLevel((UpgradeItem::Type) i, items_[i]);
+	}
 }
 
 

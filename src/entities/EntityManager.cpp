@@ -261,62 +261,6 @@ void EntityManager::Render(sf::RenderTarget& target) const
 }
 
 
-void EntityManager::LoadWeapons(const char* filename)
-{
-	const MediaManager& media = MediaManager::GetInstance();
-
-	TiXmlDocument doc;
-	if (!doc.LoadFile(filename))
-	{
-		DIE("can't load weapon definitions: '%s' (%s)", filename, doc.ErrorDesc());
-	}
-	puts("* loading weapons...");
-	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
-	while (elem != NULL)
-	{
-		const char* p = elem->Attribute("id");
-		if (p == NULL)
-		{
-			DIE("weapon id is missing");
-		}
-		WeaponDefinition* weapon = &weapon_defs_[p];
-
-		p = elem->Attribute("image");
-		if (p == NULL)
-		{
-			DIE("weapon image is missing")
-		}
-		weapon->image = &media.GetImage(p);
-
-		// sound (optional)
-		p = elem->Attribute("sound");
-		weapon->sound = p == NULL ? "" : p;
-
-		if (elem->QueryFloatAttribute("heat_cost", &weapon->heat_cost) != TIXML_SUCCESS)
-		{
-			DIE("weapon heat cost is missing");
-		}
-
-		if (elem->QueryFloatAttribute("fire_rate", &weapon->fire_rate) != TIXML_SUCCESS)
-		{
-			DIE("weapon fire rate is missing");
-		}
-
-		if (elem->QueryIntAttribute("damage", &weapon->damage) != TIXML_SUCCESS)
-		{
-			DIE("weapon damage is missing");
-		}
-
-		if (elem->QueryIntAttribute("speed", &weapon->speed) != TIXML_SUCCESS)
-		{
-			DIE("weapon speed is missing");
-		}
-
-		elem = elem->NextSiblingElement();
-	}
-}
-
-
 void EntityManager::LoadAnimations(const char* filename)
 {
 	// chargement des animations
@@ -459,29 +403,6 @@ SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 	}
 	DIE("space ship id '%d' is not implemented", id);
 	return NULL;
-}
-
-
-void EntityManager::InitWeapon(const char* id, Weapon* weapon) const
-{
-	WeaponMap::const_iterator it = weapon_defs_.find(id);
-	if (it != weapon_defs_.end())
-	{
-		const WeaponDefinition& def = it->second;
-		weapon->SetImage(def.image);
-		weapon->SetFireRate(def.fire_rate);
-		weapon->SetHeatCost(def.heat_cost);
-		weapon->SetDamage(def.damage);
-		weapon->SetVelociy(def.speed);
-		if (!def.sound.empty())
-		{
-			weapon->SetSoundName(def.sound.c_str());
-		}
-	}
-	else
-	{
-		DIE("weapon id '%s' is not implemented", id);
-	}
 }
 
 

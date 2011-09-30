@@ -3,13 +3,13 @@
 
 #include <SFML/System/Vector2.hpp>
 
-#include "Entity.hpp"
-
+#include "entities/Entity.hpp"
+#include "Item.hpp"
 
 /**
  * Une arme associée à une entité
  */
-class Weapon
+class Weapon: public Item
 {
 public:
 	Weapon();

@@ -49,7 +49,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	weapon1_.SetOwner(this);
 	weapon1_.SetOffset(WEAPON1_OFFSET);
 
-	weapon2_.Init("canon");
+	weapon2_.Init("hellfire");
 	weapon2_.SetOwner(this);
 	weapon2_.SetOffset(WEAPON2_OFFSET);
 

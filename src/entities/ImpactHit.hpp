@@ -3,6 +3,9 @@
 
 #include "Hit.hpp"
 
+/**
+ * Bullet entity with damage zone
+ */
 class ImpactHit: public Hit
 {
 public:

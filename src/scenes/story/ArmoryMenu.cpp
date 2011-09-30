@@ -63,6 +63,7 @@ ArmoryMenu::ArmoryMenu()
 	layout_right.Add(dialog_.but_back);
 
 	ShowDialog(false);
+
 }
 
 

@@ -2,7 +2,7 @@
 #define EVILBOSS_HPP
 
 #include "Entity.hpp"
-#include "Weapon.hpp"
+#include "items/Weapon.hpp"
 
 
 /**

@@ -64,7 +64,7 @@ private:
 		float speed;
 	};
 
-	//ItemData* item_data_[UpgradeItem::_UP_COUNT];
+	//ItemData* item_data_[UpgradeItem::_UP_COUNT][UpgradeItem::MAX_LEVEL];
 
 	UpgradeItem* items_[UpgradeItem::_UP_COUNT];
 

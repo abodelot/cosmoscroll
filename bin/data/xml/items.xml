@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items>
+	<weapons>
+		<weapon id="hellfire" image="ammo/hellfire" heat_cost="1.5" fire_rate="16" damage="1" speed="490" sound="canon"/>
+		<weapon id="laser-blue" image="ammo/laser-blue" heat_cost="2.5" fire_rate="8" damage="2" speed="380" sound="laser-blue"/>
+		<weapon id="laser-green" image="ammo/laser-green" heat_cost="5" fire_rate="2.8" damage="1" speed="340" sound="laser-green"/>
+		<weapon id="laser-pink" image="ammo/laser-pink" heat_cost="5" fire_rate="1" damage="2" speed="400" sound="laser-pink"/>
+		<weapon id="laser-red" image="ammo/laser-red" heat_cost="0" fire_rate="2" damage="2" speed="400" sound="laser-pink"/>
+		<weapon id="devil-eyes" image="ammo/devil-eyes" heat_cost="1" fire_rate="0.7" damage="6" speed="430"/>
+		<weapon id="missile" image="ammo/missile" heat_cost="0" fire_rate="0.4" damage="15" speed="300" sound="missile-gasfire"/>
+	</weapons>
+	<shields>
+		<shield level="1" points="4" />
+		<shield level="2" points="4" price="50" />
+		<shield level="3" points="4" price="200" />
+	</shields>
+	<engines>
+		<engine level="1" speed="140" />
+		<engine level="2" speed="180" price="50" />
+		<engine level="3" speed="220" price="200" />
+	</engines>
+	<heatsinks>
+		<heatsink level="1" heat="80" />
+		<heatsink level="2" heat="100" price="100" />
+		<heatsink level="3" heat="120" price="250" />
+	</heatsinks>
+	<armors>
+		<armor level="1" hp="3" />
+		<armor level="2" hp="4" price="100" />
+		<armor level="3" hp="6" price="250" />
+	</armors>
+</items>

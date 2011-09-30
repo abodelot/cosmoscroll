@@ -7,10 +7,11 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "../core/Input.hpp"
+#include "core/Input.hpp"
 #include "Entity.hpp"
-#include "Weapon.hpp"
 #include "SpaceShip.hpp"
+#include "items/Weapon.hpp"
+
 
 class ParticleSystem;
 class PlayerShip;
@@ -97,13 +98,6 @@ public:
 	void SetBackgroundColor(const sf::Color& top, const sf::Color& bottom);
 
 	/**
-	 * Initialiser une arme
-	 * @param id: type de l'arme demandé
-	 * @param weapon: arme à initialiser
-	 */
-	void InitWeapon(const char* id, Weapon* weapon) const;
-
-	/**
 	 * Allouer un vaisseau
 	 * @param id: type du vaisseau demandé
 	 * @param x: position x (pixels)
@@ -117,12 +111,6 @@ public:
 	 * @param key: identifiant de l'animation
 	 */
 	const Animation& GetAnimation(const char* key) const;
-
-	/**
-	 * Charger les définitions des XML armes
-	 * @param filename: fichier XML des armes
-	 */
-	void LoadWeapons(const char* filename);
 
 	/**
 	 * Charger les définitions XML des animations
@@ -184,25 +172,12 @@ private:
 	 */
 	void RespawnPlayer();
 
-	struct WeaponDefinition
-	{
-		float heat_cost;        // cost per shot
-		float fire_rate;        // shot per second
-		int speed;              // bullet speed (pixels per second)
-		int damage;             // inflicted damage
-		const sf::Image* image; // hit image
-		std::string sound;      // sound name
-	};
-
 
 	typedef std::map<int, SpaceShip*> SpaceShipMap;
 	SpaceShipMap spaceships_defs_;
 
 	typedef std::map<std::string, Animation> AnimationMap;
 	AnimationMap animations_;
-
-	typedef std::map<std::string, WeaponDefinition> WeaponMap;
-	WeaponMap weapon_defs_;
 
 	typedef std::list<Entity*> EntityList;
 	EntityList entities_;

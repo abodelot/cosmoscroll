@@ -4,8 +4,7 @@
 #include "Entity.hpp"
 
 /**
- * Projectile tiré par une arme
- * (voir classe Weapon)
+ * Bullet entity, emitted by Weapon class
  */
 class Hit: public Entity
 {

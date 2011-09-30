@@ -16,6 +16,8 @@ public:
 		UP_LASER2,
 		_UP_COUNT
 	};
+	static const int MAX_LEVEL = 3;
+
 	UpgradeItem(gui::Menu* parent, Type type);
 
 	// inherited callbacks

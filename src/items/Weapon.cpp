@@ -2,9 +2,9 @@
 #include <cmath>
 
 #include "Weapon.hpp"
-#include "EntityManager.hpp"
-#include "Hit.hpp"
-
+#include "entities/EntityManager.hpp"
+#include "entities/Hit.hpp"
+#include "items/ItemManager.hpp"
 #include "core/SoundSystem.hpp"
 #include "utils/Math.hpp"
 
@@ -31,7 +31,7 @@ Weapon::Weapon()
 
 void Weapon::Init(const char* weapon_id)
 {
-	EntityManager::GetInstance().InitWeapon(weapon_id, this);
+	ItemManager::GetInstance().InitWeapon(weapon_id, this);
 	inited_ = true;
 }
 
