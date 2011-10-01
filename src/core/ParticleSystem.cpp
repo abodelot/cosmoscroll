@@ -78,9 +78,9 @@ void ParticleSystem::AddCenteredStars(int count)
 }
 
 
-void ParticleSystem::AddMessage(const sf::Vector2f& offset, const sf::Unicode::Text& text)
+void ParticleSystem::AddMessage(const sf::Vector2f& offset, const sf::Unicode::Text& text, const sf::Color& color)
 {
-	particles_.push_front(new TextParticle(offset, text));
+	particles_.push_front(new TextParticle(offset, text, color));
 }
 
 
@@ -277,13 +277,13 @@ bool ParticleSystem::CenteredStar::OnUpdate(float frametime)
 #define MESSAGE_LIFETIME   5.0
 #define MESSAGE_SPEED      50
 
-ParticleSystem::TextParticle::TextParticle(const sf::Vector2f& offset, const sf::Unicode::Text& text)
+ParticleSystem::TextParticle::TextParticle(const sf::Vector2f& offset, const sf::Unicode::Text& text, const sf::Color& color)
 {
 	text_.SetText(text);
 	text_.SetSize(12);
-	text_.SetColor(sf::Color::White);
+	text_.SetColor(color);
 	text_.SetPosition(offset);
-	text_.SetFont(MediaManager::GetFont("Ubuntu-R.ttf", 12));
+	//text_.SetFont(MediaManager::GetFont("Ubuntu-R.ttf", 12));
 	timer_ = 0.f;
 }
 
@@ -293,7 +293,9 @@ bool ParticleSystem::TextParticle::OnUpdate(float frametime)
 	timer_ += frametime;
 	text_.Move(0, -MESSAGE_SPEED * frametime);
 	// transparence
-	text_.SetColor(sf::Color(255, 255, 255, static_cast<sf::Uint8> (255 - 255 * timer_ / MESSAGE_LIFETIME)));
+	sf::Color color = text_.GetColor();
+	color.a = static_cast<sf::Uint8> (255 - 255 * timer_ / MESSAGE_LIFETIME);
+	text_.SetColor(color);
 	return timer_ >= MESSAGE_LIFETIME;
 }
 

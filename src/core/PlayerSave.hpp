@@ -1,7 +1,7 @@
 #ifndef PLAYERSAVE_HPP
 #define PLAYERSAVE_HPP
 
-#include "scenes/story/UpgradeItem.hpp"
+#include "items/ItemData.hpp"
 #include "utils/ConfigParser.hpp"
 
 class PlayerSave
@@ -10,8 +10,8 @@ public:
 	PlayerSave();
 
 	int AvailableCredits() const;
-	int LevelOf(UpgradeItem::Type type) const;
-	void SetItemLevel(UpgradeItem::Type type, int level);
+	int LevelOf(ItemData::Type type) const;
+	void SetItemLevel(ItemData::Type type, int level);
 
 
 	void LoadFromConfig(ConfigParser& config);
@@ -22,7 +22,7 @@ public:
 
 private:
 	int available_credits_;
-	int items_[UpgradeItem::_UP_COUNT];
+	int items_[ItemData::_COUNT];
 };
 
 #endif // PLAYERSAVE_HPP

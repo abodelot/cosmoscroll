@@ -16,7 +16,9 @@ private:
 
 	void ShowDialog(bool visible);
 
-	void LoadItem(UpgradeItem::Type type);
+	bool BuyItem(ItemData::Type type);
+
+	void LoadItem(ItemData::Type type);
 
 	struct Dialog
 	{
@@ -33,40 +35,7 @@ private:
 		gui::Button* but_buy;
 	} dialog_;
 
-	struct ItemData
-	{
-		int price;
-	};
-
-	struct ArmorData: public ItemData
-	{
-		int armor_points;
-	};
-
-	struct EngineData: public ItemData
-	{
-		float speed;
-	};
-
-	struct ShieldData: public ItemData
-	{
-		int shield_points;
-	};
-
-	struct HeatSinkData: public ItemData
-	{
-		int max_heat;
-	};
-
-	struct LaserData: public ItemData
-	{
-		int damage;
-		float speed;
-	};
-
-	//ItemData* item_data_[UpgradeItem::_UP_COUNT][UpgradeItem::MAX_LEVEL];
-
-	UpgradeItem* items_[UpgradeItem::_UP_COUNT];
+	UpgradeItem* items_[ItemData::_COUNT];
 
 };
 

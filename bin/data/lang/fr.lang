@@ -38,6 +38,7 @@ armory.armor_info = points de vie : {hp}
 armory.item_level = Niveau {level}
 armory.item_current_level = Niveau actuel : {level}
 armory.item_next_level = Prochain niveau : {level}
+armory.max_level = (Niveau max atteint)
 armory.price = Prix : {price} crédits
 armory.buy = Acheter
 

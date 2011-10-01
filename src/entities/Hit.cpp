@@ -74,7 +74,7 @@ void Hit::OnCollide(Entity& entity)
 				std::string s = "+" + to_string(points);
 				EntityManager& e = EntityManager::GetInstance();
 				e.GetPlayerShip()->UpdateScoreCounter(points);
-				ParticleSystem::GetInstance().AddMessage(GetPosition(), s);
+				ParticleSystem::GetInstance().AddMessage(GetPosition(), s, sf::Color::Red);
 			}
 		}
 		Kill();
