@@ -11,11 +11,17 @@ class WeaponData: public ItemData
 public:
 	WeaponData();
 
+	// override
 	bool LoadFromXml(TiXmlElement* elem);
 
+	// override
+	std::wstring BuildDescriptionString(bool include_price=false) const;
+
+	const std::string& GetID() const;
 	void InitWeapon(Weapon* weapon) const;
 
 private:
+	std::string id_;         // weapon name
 	float heat_cost_;        // cost per shot
 	float fire_rate_;        // shot per second
 	int speed_;              // bullet speed (pixels per second)

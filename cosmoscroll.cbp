@@ -113,6 +113,8 @@
 		<Unit filename="src/gui/Widget.cpp" />
 		<Unit filename="src/gui/Widget.hpp" />
 		<Unit filename="src/gui/gui.hpp" />
+		<Unit filename="src/items/GenericItemData.cpp" />
+		<Unit filename="src/items/GenericItemData.hpp" />
 		<Unit filename="src/items/ItemData.cpp" />
 		<Unit filename="src/items/ItemData.hpp" />
 		<Unit filename="src/items/ItemManager.cpp" />

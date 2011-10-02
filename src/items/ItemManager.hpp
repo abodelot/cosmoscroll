@@ -2,11 +2,13 @@
 #define ITEMMANAGER_HPP
 
 #include <string>
-#include <map>
-
+#include <list>
 
 #include "WeaponData.hpp"
+#include "GenericItemData.hpp"
+
 class Weapon;
+
 class ItemManager
 {
 public:
@@ -25,20 +27,23 @@ public:
 	 * @param weapon: weapon to initialize
 	 */
 	void InitWeapon(const char* id, Weapon* weapon) const;
-	const WeaponData& GetWeaponData(const char* id) const;
+
+	const WeaponData* GetWeaponData(const char* id) const;
+
+	const ItemData* GetItemData(ItemData::Type, int level) const;
 
 private:
 	ItemManager();
 	~ItemManager();
 
-	/**
-	 * Parse a weapon entry from an XML element
-	 */
-	void ParseWeapon(TiXmlElement* elem);
 
-	typedef std::map<std::string, WeaponData> WeaponMap;
-	WeaponMap weapon_defs_;
+	void ParseGenericItems(TiXmlElement* elem, const char* tagname, ItemData::Type type);
 
+	typedef std::list<WeaponData> WeaponList;
+	WeaponList weapons_;
+
+	typedef std::list<GenericItemData> GenericItemList;
+	GenericItemList items_;
 };
 
 #endif // ITEMMANAGER_HPP

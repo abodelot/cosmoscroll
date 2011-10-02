@@ -23,23 +23,10 @@ menu.story.armory = Armurerie
 
 # Menu armurerie
 armory.title = Armurerie
-armory.shield = Bouclier énergétique
-armory.shield_info = points de protection : {points}
-armory.laser1 = Laser 1
-armory.laser1_info = dégâts : {dmg}, vitesse : {speed}
-armory.laser2 = Laser 2
-armory.laser2_info = dégâts : {dmg}, vitesse : {speed}
-armory.engine = Moteur
-armory.engine_info = vitesse : {speed}
-armory.heatsink = Dissipateur thermique
-armory.heatsink_info = Chaleur max : {heat}
-armory.armor = Blindage de coque
-armory.armor_info = points de vie : {hp}
 armory.item_level = Niveau {level}
 armory.item_current_level = Niveau actuel : {level}
 armory.item_next_level = Prochain niveau : {level}
 armory.max_level = (Niveau max atteint)
-armory.price = Prix : {price} crédits
 armory.buy = Acheter
 
 # Menu pause
@@ -139,3 +126,18 @@ action.missile = Utiliser bonus Missile
 input.press_key = Appuyez sur une touche du clavier\npour définir l'action
 input.press_button = Appuyez sur un bouton du contrôleur\npour définir l'action
 input.cancel = (Échap pour annuler)
+
+# Items
+item.shield = Bouclier énergétique
+item.shield_info = Points de protection : {points}
+item.laser1 = Laser 1
+item.laser1_info = Dégâts : {dmg}, vitesse : {speed}\ncadence : {rate} coup/s
+item.laser2 = Laser 2
+item.laser2_info = Dégâts : {dmg}, vitesse : {speed}\ncadence : {rate} coup/s
+item.engine = Moteur
+item.engine_info = Vitesse : {speed}
+item.heatsink = Dissipateur thermique
+item.heatsink_info = Chaleur max : {heat}
+item.armor = Blindage de coque
+item.armor_info = Points de vie : {hp}
+item.price = Prix : {price} crédits

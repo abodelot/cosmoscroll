@@ -23,23 +23,10 @@ menu.story.armory = Armory
 
 # Armory menu
 armory.title = Armory
-armory.shield = Force shield
-armory.shield_info = protection points: {points}
-armory.laser1 = Laser 1
-armory.laser1_info = damage: {dmg}, speed: {speed}
-armory.laser2 = Laser 2
-armory.laser2_info = damage: {dmg}, speed: {speed}
-armory.engine = Engine
-armory.engine_info = speed: {speed}
-armory.heatsink = Heat sink
-armory.heatsink_info = max heat: {heat}
-armory.armor = Ship armor
-armory.armor_info = health points: {hp}
 armory.item_level = Level {level}
 armory.item_current_level = Current level: {level}
 armory.item_next_level = Next level: {level}
 armory.max_level = (Max level reached)
-armory.price = Price: {price} credits
 armory.buy = Buy
 
 # Pause menu
@@ -137,5 +124,20 @@ action.missile = Use Missile bonus
 
 # Ask input
 input.press_key = Press a key to define action
-input.press_button = Press a joystick button to define action
+input.press_button = Press a joystick button to define\naction
 input.cancel = (press Escape to cancel)
+
+# Items
+item.shield = Force shield
+item.shield_info = Protection points: {points}
+item.laser1 = Laser 1
+item.laser1_info = Damage: {dmg}, speed: {speed}\nrate of fire: {rate} round/s
+item.laser2 = Laser 2
+item.laser2_info = Damage: {dmg}, speed: {speed}\nrate of fire: {rate} round/s
+item.engine = Engine
+item.engine_info = Speed: {speed}
+item.heatsink = Heat sink
+item.heatsink_info = Max heat: {heat}
+item.armor = Ship armor
+item.armor_info = Health points: {hp}
+item.price = Price: {price} credits

@@ -3,7 +3,7 @@
 #include "utils/I18n.hpp"
 #include "utils/StringUtils.hpp"
 #include "scenes/ConfigButton.hpp"
-
+#include "items/ItemManager.hpp"
 
 ArmoryMenu::ArmoryMenu()
 {
@@ -131,23 +131,25 @@ void ArmoryMenu::ShowDialog(bool visible)
 
 void ArmoryMenu::LoadItem(ItemData::Type type)
 {
-	std::wstring text = _t(UpgradeItem::TypeToString(type));
+	int level = Game::GetInstance().GetPlayerSave().LevelOf(type);
+	const ItemData* data = ItemManager::GetInstance().GetItemData(type, level);
+
+	// dialog title
+	std::wstring text = _t(data->TypeToString());
 	dialog_.lab_item->SetText(text);
 	int x = (Dialog::WIDTH - dialog_.lab_item->GetRect().GetWidth()) / 2;
 	dialog_.lab_item->SetX(dialog_.x + x);
 
-	// current item
-
-	int level = Game::GetInstance().GetPlayerSave().LevelOf(type);
+	// current item level
 	text = _t("armory.item_current_level");
 	wstr_self_replace(text, L"{level}", to_wstring(level));
 	dialog_.current_level->SetText(text);
 
-	text = _t(std::string(UpgradeItem::TypeToString(type)) + "_info");
-	dialog_.current_level_details->SetText(text);
+	// current item description
+	dialog_.current_level_details->SetText(data->BuildDescriptionString());
 
 	// if last level already reached
-	if (Game::GetInstance().GetPlayerSave().LevelOf(type) == ItemData::MAX_ITEM_LEVEL)
+	if (level == ItemData::MAX_ITEM_LEVEL)
 	{
 		text = _t("armory.max_level");
 		dialog_.next_level->SetText(text);
@@ -156,13 +158,15 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 	}
 	else
 	{
+		// next item level
+		++level;
+		data = ItemManager::GetInstance().GetItemData(type, level);
+
 		text = _t("armory.item_next_level");
-		wstr_self_replace(text, L"{level}", to_wstring(level + 1));
+		wstr_self_replace(text, L"{level}", to_wstring(level));
 		dialog_.next_level->SetText(text);
 
-		text = _t("armory.price") + L"\n";
-		text += _t(std::string(UpgradeItem::TypeToString(type)) + "_info");
-		dialog_.next_level_details->SetText(text);
+		// next item description
+		dialog_.next_level_details->SetText(data->BuildDescriptionString(true));
 	}
 }
-

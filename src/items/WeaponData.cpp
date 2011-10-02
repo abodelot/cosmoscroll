@@ -1,6 +1,9 @@
 #include "WeaponData.hpp"
 #include "Weapon.hpp"
 #include "utils/MediaManager.hpp"
+#include "utils/StringUtils.hpp"
+#include "utils/I18n.hpp"
+
 
 WeaponData::WeaponData()
 {
@@ -29,7 +32,23 @@ void WeaponData::InitWeapon(Weapon* weapon) const
 
 bool WeaponData::LoadFromXml(TiXmlElement* elem)
 {
-	const char* p = elem->Attribute("image");
+	ItemData::LoadFromXml(elem);
+
+	const char* p = elem->Attribute("id");
+	if (p == NULL)
+	{
+		std::cerr << "weapon id is missing (ignored)" << std::endl;
+		return false;
+	}
+
+	id_ = p;
+	// TODO: torcheballe
+	if (id_ == "hellfire")
+		SetType(ItemData::LASER1);
+	else if (id_ == "laser-blue")
+		SetType(ItemData::LASER2);
+
+	p = elem->Attribute("image");
 	if (p == NULL)
 	{
 		std::cerr << "weapon ammo image is missing" << std::endl;
@@ -61,3 +80,25 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 	}
 	return true;
 }
+
+
+std::wstring WeaponData::BuildDescriptionString(bool include_price) const
+{
+	std::wstring s = _t(std::string(TypeToString()) + "_info");
+	if (include_price)
+	{
+		s = s + L"\n" + _t("item.price");
+	}
+	wstr_self_replace(s, L"{speed}", to_wstring(speed_));
+	wstr_self_replace(s, L"{dmg}", to_wstring(damage_));
+	wstr_self_replace(s, L"{rate}", to_wstring(fire_rate_));
+	wstr_self_replace(s, L"{price}", to_wstring(GetPrice()));
+	return s;
+}
+
+
+const std::string& WeaponData::GetID() const
+{
+	return id_;
+}
+

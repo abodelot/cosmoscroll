@@ -13,44 +13,38 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 	{
 		case ItemData::LASER1:
 			halo_.SetImage(GET_IMG("gui/halo-laser1"));
-			label_.SetText(_t("armory.laser1"));
 			x = 496;
 			y = 249;
 			break;
 		case ItemData::LASER2:
 			halo_.SetImage(GET_IMG("gui/halo-laser2"));
-			label_.SetText(_t("armory.laser2"));
 			x = 494;
 			y = 263;
 			break;
 		case ItemData::ENGINE:
 			halo_.SetImage(GET_IMG("gui/halo-engine"));
-			label_.SetText(_t("armory.engine"));
 			x = 143;
 			y = 224;
 			break;
 		case ItemData::ARMOR:
 			halo_.SetImage(GET_IMG("gui/halo-armor"));
-			label_.SetText(_t("armory.armor"));
 			x = 419;
 			y = 176;
 			break;
 		case ItemData::SHIELD:
 			halo_.SetImage(GET_IMG("gui/halo-shield"));
-			label_.SetText(_t("armory.shield"));
 			x = 207;
 			y = 244;
 			break;
 		case ItemData::HEATSINK:
 			halo_.SetImage(GET_IMG("gui/halo-heatsink"));
-			label_.SetText(_t("armory.heatsink"));
 			x = 361;
 			y = 255;
 			break;
 		default:
 			break;
 	}
-	std::wstring content = label_.GetText();
+	std::wstring content = _t(ItemData::TypeToString(type));
 	content += L"\n";
 	content += _t("armory.item_level");
 	wstr_self_replace(content, L"{level}", to_wstring(Game::GetInstance().GetPlayerSave().LevelOf(type)));
@@ -70,28 +64,6 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 	SetCallbackID(type);
 }
 
-
-const char* UpgradeItem::TypeToString(ItemData::Type type)
-{
-	switch (type)
-	{
-		case ItemData::LASER1:
-			return "armory.laser1";
-		case ItemData::LASER2:
-			return "armory.laser2";
-		case ItemData::ENGINE:
-			return "armory.engine";
-		case ItemData::ARMOR:
-			return "armory.armor";
-		case ItemData::SHIELD:
-			return "armory.shield";
-		case ItemData::HEATSINK:
-			return "armory.heatsink";
-		default:
-			break;
-	}
-	return NULL;
-}
 
 void UpgradeItem::OnKeyPressed(sf::Key::Code code)
 {

@@ -7,17 +7,11 @@
 class UpgradeItem: public gui::Widget
 {
 public:
-
-
 	UpgradeItem(gui::Menu* parent, ItemData::Type type);
 
 	// inherited callbacks
 	void OnKeyPressed(sf::Key::Code code);
 	void OnMouseClicked(int x, int y);
-
-	static const char* TypeToString(ItemData::Type type);
-
-
 private:
 	void Render(sf::RenderTarget& target) const;
 

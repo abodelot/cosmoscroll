@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <items>
 	<weapons>
-		<weapon id="hellfire" image="ammo/hellfire" heat_cost="1.5" fire_rate="16" damage="1" speed="490" sound="canon"/>
-		<weapon id="laser-blue" image="ammo/laser-blue" heat_cost="2.5" fire_rate="8" damage="2" speed="380" sound="laser-blue"/>
+		<weapon id="hellfire" image="ammo/hellfire" heat_cost="1.5" fire_rate="4" damage="1" speed="440" sound="canon"
+			level="1"/>
+		<weapon id="hellfire" image="ammo/hellfire" heat_cost="1.5" fire_rate="10" damage="1" speed="450" sound="canon"
+			level="2" price="50"/>
+		<weapon id="hellfire" image="ammo/hellfire" heat_cost="1.5" fire_rate="16" damage="1" speed="490" sound="canon"
+			level="3" price="100"/>
+		<weapon id="laser-blue" image="ammo/laser-blue" heat_cost="2.5" fire_rate="2" damage="2" speed="340" sound="laser-blue"
+			level="1"/>
+		<weapon id="laser-blue" image="ammo/laser-blue" heat_cost="2.5" fire_rate="4" damage="2" speed="360" sound="laser-blue"
+			level="2" price="40"/>
+		<weapon id="laser-blue" image="ammo/laser-blue" heat_cost="2.5" fire_rate="6" damage="3" speed="380" sound="laser-blue"
+			level="3" price="180"/>
 		<weapon id="laser-green" image="ammo/laser-green" heat_cost="5" fire_rate="2.8" damage="1" speed="340" sound="laser-green"/>
 		<weapon id="laser-pink" image="ammo/laser-pink" heat_cost="5" fire_rate="1" damage="2" speed="400" sound="laser-pink"/>
 		<weapon id="laser-red" image="ammo/laser-red" heat_cost="0" fire_rate="2" damage="2" speed="400" sound="laser-pink"/>
@@ -10,9 +20,9 @@
 		<weapon id="missile" image="ammo/missile" heat_cost="0" fire_rate="0.4" damage="15" speed="300" sound="missile-gasfire"/>
 	</weapons>
 	<shields>
-		<shield level="1" points="4" />
-		<shield level="2" points="4" price="50" />
-		<shield level="3" points="4" price="200" />
+		<shield level="1" points="3" />
+		<shield level="2" points="6" price="50" />
+		<shield level="3" points="8" price="200" />
 	</shields>
 	<engines>
 		<engine level="1" speed="140" />
