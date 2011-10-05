@@ -21,6 +21,8 @@ public:
 
 	~PlayerShip();
 
+	void Initialize();
+
 	/**
 	 * @return points de bouclier
 	 */
@@ -91,10 +93,13 @@ private:
 
 	float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
 	bool overheated_;
-	float heat_, shield_timer_;
-	int coolers_, shield_, missiles_;
+	float heat_, heat_max_;
+	float shield_timer_;
+	int coolers_, missiles_;
+	int shield_, shield_max_;
+	int hp_max_;
 	float speed_x_, speed_y_;
-	int max_speed_;
+	int speed_max_;
 
 	Input& input_;
 	ControlPanel& panel_;

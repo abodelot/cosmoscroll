@@ -104,7 +104,7 @@ private:
 
 		sf::String label_;
 
-		sf::Sprite bar_;
+		sf::Shape bar_;
 		int max_value_;
 		int initial_x_;
 	};

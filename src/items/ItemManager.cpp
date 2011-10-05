@@ -58,35 +58,25 @@ bool ItemManager::LoadItems(const char* filename)
 void ItemManager::InitWeapon(const char* id, Weapon* weapon) const
 {
 	const WeaponData* data = GetWeaponData(id);
-	data->InitWeapon(weapon);
-}
-
-
-const WeaponData* ItemManager::GetWeaponData(const char* id) const
-{
-	for (WeaponList::const_iterator it = weapons_.begin(); it != weapons_.end(); ++it)
+	if (data == NULL)
 	{
-		if (it->GetID() == id)
-		{
-			return &(*it);
-		}
+		std::cerr << "can't initialize weapon " << id << " (unknown id)" << std::endl;
 	}
-	std::cerr << "can't initialize weapon " << id << " (unknown id)" << std::endl;
-	return NULL;
+	else
+	{
+		data->InitWeapon(weapon);
+	}
 }
 
 
 const ItemData* ItemManager::GetItemData(ItemData::Type type, int level) const
 {
-	const ItemData* data = NULL;
-	for (GenericItemList::const_iterator it = items_.begin(); it != items_.end(); ++it)
+	const ItemData* data = GetGenericItemData(type, level);
+	if (data != NULL)
 	{
-		data = &(*it);
-		if (data->GetType() == type && data->GetLevel() == level)
-		{
-			return data;
-		}
+		return data;
 	}
+
 	for (WeaponList::const_iterator it = weapons_.begin(); it != weapons_.end(); ++it)
 	{
 		data = &(*it);
@@ -97,6 +87,33 @@ const ItemData* ItemManager::GetItemData(ItemData::Type type, int level) const
 	}
 	std::cerr << "[ItemManager] item not found: " << ItemData::TypeToString(type)
 		<< " (level " << level << ")" << std::endl;
+	return NULL;
+}
+
+
+const WeaponData* ItemManager::GetWeaponData(const char* id, int level) const
+{
+	for (WeaponList::const_iterator it = weapons_.begin(); it != weapons_.end(); ++it)
+	{
+		if (it->GetID() == id && (level == 0 || level == it->GetLevel()))
+		{
+			return &(*it);
+		}
+	}
+	return NULL;
+}
+
+
+const GenericItemData* ItemManager::GetGenericItemData(ItemData::Type type, int level) const
+{
+	for (GenericItemList::const_iterator it = items_.begin(); it != items_.end(); ++it)
+	{
+		const GenericItemData* data = &(*it);
+		if (data->GetType() == type && data->GetLevel() == level)
+		{
+			return data;
+		}
+	}
 	return NULL;
 }
 

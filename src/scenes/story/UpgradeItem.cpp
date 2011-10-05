@@ -8,6 +8,7 @@
 UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 	gui::Widget(parent, true)
 {
+	type_ = type;
 	int x = 0, y = 0;
 	switch (type)
 	{
@@ -44,17 +45,11 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 		default:
 			break;
 	}
-	std::wstring content = _t(ItemData::TypeToString(type));
-	content += L"\n";
-	content += _t("armory.item_level");
-	wstr_self_replace(content, L"{level}", to_wstring(Game::GetInstance().GetPlayerSave().LevelOf(type)));
-
-	label_.SetText(content);
-
 	label_.SetPosition(0, -20);
 	label_.SetFont(MediaManager::GetFont("Ubuntu-R.ttf"));
 	label_.SetSize(12);
 	label_.SetColor(sf::Color::White);
+	RefreshLabel();
 
 	label_bg_.Resize(label_.GetRect().GetWidth() + 8, label_.GetRect().GetHeight() + 8);
 	label_bg_.SetPosition(label_.GetPosition().x - 4, label_.GetPosition().y - 4);
@@ -77,6 +72,17 @@ void UpgradeItem::OnKeyPressed(sf::Key::Code code)
 void UpgradeItem::OnMouseClicked(int, int)
 {
 	CallTheCallback();
+}
+
+
+void UpgradeItem::RefreshLabel()
+{
+	std::wstring content = _t(ItemData::TypeToString(type_));
+	content += L"\n";
+	content += _t("armory.item_level");
+	wstr_self_replace(content, L"{level}", to_wstring(Game::GetInstance().GetPlayerSave().LevelOf(type_)));
+
+	label_.SetText(content);
 }
 
 

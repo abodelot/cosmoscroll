@@ -86,8 +86,11 @@ void EndGameScene::OnFocus()
 		}
 
 		Game::GetPlayerSave().UpdateCredits(earned_credits);
-		// nouveau niveau débloqué (si possible)
-		levels.UnlockNextLevel();
+		if (current == levels.GetLastUnlocked())
+		{
+			// nouveau niveau débloqué (si possible)
+			levels.UnlockNextLevel();
+		}
 	}
 
 	sf::FloatRect rect = info_.GetRect();

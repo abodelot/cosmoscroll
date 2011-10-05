@@ -1,13 +1,16 @@
 #include "ArmoryMenu.hpp"
 #include "core/Game.hpp"
+#include "core/SoundSystem.hpp"
 #include "utils/I18n.hpp"
 #include "utils/StringUtils.hpp"
 #include "scenes/ConfigButton.hpp"
 #include "items/ItemManager.hpp"
 
+
 ArmoryMenu::ArmoryMenu()
 {
 	SetTitle(_t("armory.title"));
+	current_type_ = ItemData::_UNSET;
 
 	// ship GUI
 	new gui::Image(this, GET_IMG("gui/armory-ship-view"));
@@ -82,7 +85,7 @@ void ArmoryMenu::EventCallback(int id)
 			LoadItem((ItemData::Type) id);
 			break;
 		case 100:
-			if (BuyItem((ItemData::Type) id))
+			if (BuyItem())
 			{
 				ShowDialog(false);
 			}
@@ -97,17 +100,25 @@ void ArmoryMenu::EventCallback(int id)
 }
 
 
-bool ArmoryMenu::BuyItem(ItemData::Type type)
+bool ArmoryMenu::BuyItem()
 {
-	/*switch (type)
+	PlayerSave& playersave = Game::GetInstance().GetPlayerSave();
+	int level = playersave.LevelOf(current_type_) + 1;
+	const ItemData* data = ItemManager::GetInstance().GetItemData(current_type_, level);
+
+	if (playersave.GetCredits() >= data->GetPrice())
 	{
-		case ItemData::UP_HEATSINK:
-			ItemManager::GetInstance().GetHeatSink(dialog_.next_item_level);
-			break;
-		default:
-			break;
-	}*/
-	return true;
+		playersave.UpdateCredits(-data->GetPrice());
+		playersave.SetItemLevel(current_type_, level);
+
+		items_[current_type_]->RefreshLabel(); // refresh item widget
+		CreditCounterBase::OnFocus(); // refresh credit counter
+
+		SoundSystem::GetInstance().PlaySound("cash-register");
+		return true;
+	}
+	SoundSystem::GetInstance().PlaySound("disabled");
+	return false;
 }
 
 
@@ -133,6 +144,7 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 {
 	int level = Game::GetInstance().GetPlayerSave().LevelOf(type);
 	const ItemData* data = ItemManager::GetInstance().GetItemData(type, level);
+	current_type_ = type;
 
 	// dialog title
 	std::wstring text = _t(data->TypeToString());

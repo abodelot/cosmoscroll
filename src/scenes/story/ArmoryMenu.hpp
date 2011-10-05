@@ -16,7 +16,7 @@ private:
 
 	void ShowDialog(bool visible);
 
-	bool BuyItem(ItemData::Type type);
+	bool BuyItem();
 
 	void LoadItem(ItemData::Type type);
 
@@ -36,7 +36,7 @@ private:
 	} dialog_;
 
 	UpgradeItem* items_[ItemData::_COUNT];
-
+	ItemData::Type current_type_;
 };
 
 #endif // ARMORY_HPP

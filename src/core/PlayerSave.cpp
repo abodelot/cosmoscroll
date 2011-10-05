@@ -18,6 +18,7 @@ int PlayerSave::LevelOf(ItemData::Type type) const
 }
 
 
+
 void PlayerSave::SetItemLevel(ItemData::Type type, int level)
 {
 	if (level < 1)

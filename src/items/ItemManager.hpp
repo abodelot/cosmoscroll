@@ -28,9 +28,20 @@ public:
 	 */
 	void InitWeapon(const char* id, Weapon* weapon) const;
 
-	const WeaponData* GetWeaponData(const char* id) const;
-
+	/**
+	 * Get item data from any item type
+	 */
 	const ItemData* GetItemData(ItemData::Type, int level) const;
+
+	/**
+	 * Get item data from a weapon
+	 */
+	const WeaponData* GetWeaponData(const char* id, int level=0) const;
+
+	/**
+	 * Get item data from a generic item
+	 */
+	const GenericItemData* GetGenericItemData(ItemData::Type, int level) const;
 
 private:
 	ItemManager();

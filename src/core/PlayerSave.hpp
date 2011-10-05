@@ -11,6 +11,7 @@ public:
 
 	int AvailableCredits() const;
 	int LevelOf(ItemData::Type type) const;
+
 	void SetItemLevel(ItemData::Type type, int level);
 
 

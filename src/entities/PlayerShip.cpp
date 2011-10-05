@@ -4,9 +4,11 @@
 
 #include "PlayerShip.hpp"
 #include "EntityManager.hpp"
-
+#include "core/Game.hpp"
 #include "core/ParticleSystem.hpp"
 #include "core/SoundSystem.hpp"
+#include "core/PlayerSave.hpp"
+#include "items/ItemManager.hpp"
 #include "utils/I18n.hpp"
 #include "utils/MediaManager.hpp"
 #include "utils/Math.hpp"
@@ -14,36 +16,29 @@
 #define WEAPON1_OFFSET              52, 22
 #define WEAPON2_OFFSET              50, 24
 
-#define MAX_SPEED                   200.f
-#define BONUS_MAX_SPEED             350.f
-
+#define BONUS_SPEED_FACTOR 1.5
 #define COOLER_DEFAULT              0
 #define COOLER_MAX                  3
 
 #define MISSILES_DEFAULT            0
 #define MISSILES_MAX                3
 
-#define HEAT_MAX                    100
 #define HEAT_RECOVERY_RATE          13
 
-#define HP_DEFAULT                  6
-#define HP_MAX                      6
-
-#define SHIELD_DEFAULT              0 // shield points at start
-#define SHIELD_MAX                  6 // max shield points
 #define SHIELD_RECOVERY_DELAY       6 // time to wait before earning another shield point
 
 #define TIMED_BONUS_DURATION        10 // seconds
 
 
 PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
-	Entity(position, HP_DEFAULT),
+	Entity(position, -1), // hack, init HP later (we must load items first)
 	Animated(EntityManager::GetInstance().GetAnimation(animation), *this),
 	input_(Input::GetInstance()),
 	panel_(ControlPanel::GetInstance())
 {
 	SetTeam(Entity::GOOD);
 	SetSubRect(GetAnimation().GetFrame(0)); // WTF
+
 	// init weapons
 	weapon1_.Init("laser-blue");
 	weapon1_.SetOwner(this);
@@ -57,17 +52,14 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	missile_launcher_.SetOwner(this);
 	missile_launcher_.SetOffset(WEAPON2_OFFSET);
 
-	shield_ = SHIELD_DEFAULT;
 	coolers_ = COOLER_DEFAULT;
 	missiles_ = MISSILES_DEFAULT;
 	overheated_ = false;
 	shield_timer_ = 0;
-	heat_ = 0.0f;
+	shield_ = 0;
+	heat_ = -1;
 
-	max_speed_ = MAX_SPEED;
 	speed_x_ = speed_y_ = 0.f;
-
-	ParticleSystem::GetInstance().AddShield(SHIELD_DEFAULT, this);
 
 	// init timed bonus
 	for (int i = 0; i < TIMED_BONUS_COUNT; ++i)
@@ -76,18 +68,10 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	}
 
 	// init control panel
-	panel_.SetMaxShipHP(HP_MAX);
-	panel_.SetMaxShield(SHIELD_MAX);
-	panel_.SetMaxHeat(HEAT_MAX);
-	panel_.SetShipHP(GetHP());
-	panel_.SetShield(shield_);
-	panel_.SetHeat((int) heat_);
 	panel_.SetCoolers(coolers_);
 	panel_.SetMissiles(missiles_);
-	panel_.SetOverheat(false);
 	panel_.ActiveSpeedBonus(0);
 	panel_.ActiveAttackBonus(0, Bonus::DOUBLE_SHOT);
-	panel_.SetPoints(0);
 
 	// init Konami code
 	konami_code_[0] = Input::MOVE_UP;
@@ -102,6 +86,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	konami_code_[9] = Input::USE_WEAPON_1;
 	current_konami_event_ = 0;
 	konami_code_activated_ = false;
+
+	Initialize();
 }
 
 
@@ -109,6 +95,56 @@ PlayerShip::~PlayerShip()
 {
 	ParticleSystem::GetInstance().RemoveShield(this);
 	ParticleSystem::GetInstance().ClearSmoke(this);
+}
+
+
+void PlayerShip::Initialize()
+{
+	const PlayerSave& save = Game::GetInstance().GetPlayerSave();
+	const ItemManager& items = ItemManager::GetInstance();
+
+	// points
+	SetPoints(0);
+	panel_.SetPoints(0);
+
+	// shield
+	shield_max_ = items.GetGenericItemData(ItemData::SHIELD, save.LevelOf(ItemData::SHIELD))->GetValue();
+	panel_.SetMaxShield(shield_max_);
+	panel_.SetShield(shield_);
+
+	// ship armor
+	int hp = items.GetGenericItemData(ItemData::ARMOR, save.LevelOf(ItemData::ARMOR))->GetValue();
+	if (GetHP() == -1)
+	{
+		puts("respawn at full HP"); // DEBUG
+		SetHP(hp);
+	}
+	hp_max_ = hp;
+	panel_.SetMaxShipHP(hp);
+	panel_.SetShipHP(GetHP());
+
+	// engine
+	speed_max_ = items.GetGenericItemData(ItemData::ENGINE, save.LevelOf(ItemData::ENGINE))->GetValue();
+
+	// heat sink
+	heat_max_ = items.GetGenericItemData(ItemData::HEATSINK, save.LevelOf(ItemData::HEATSINK))->GetValue();
+	if (heat_ == -1)
+	{
+		puts("respawn at 0 heat");
+		heat_ = 0.f;
+	}
+	panel_.SetMaxHeat(heat_max_);
+	panel_.SetHeat(heat_);
+
+	// weapon1
+	int weapon1_lvl = save.LevelOf(ItemData::LASER1);
+	const WeaponData* weapon1_data = items.GetWeaponData("laser-blue", weapon1_lvl);
+	weapon1_data->InitWeapon(&weapon1_);
+
+	// weapon2
+	int weapon2_lvl = save.LevelOf(ItemData::LASER2);
+	const WeaponData* weapon2_data = items.GetWeaponData("hellfire", weapon2_lvl);
+	weapon2_data->InitWeapon(&weapon2_);
 }
 
 
@@ -200,7 +236,7 @@ void PlayerShip::Update(float frametime)
 		}
 
 		heat_ += h;
-		if (heat_ >= HEAT_MAX)
+		if (heat_ >= heat_max_)
 		{
 			overheated_ = true;
 			panel_.SetOverheat(true);
@@ -241,7 +277,7 @@ void PlayerShip::Update(float frametime)
 	SetPosition(pos);
 
 	// regénération bouclier
-	if (shield_ < SHIELD_MAX)
+	if (shield_ < shield_max_)
 	{
 		shield_timer_ += frametime;
 		if (shield_timer_ >= SHIELD_RECOVERY_DELAY)
@@ -347,19 +383,19 @@ void PlayerShip::ComputeMove(float)
 	speed_x_ = speed_y_ = 0;
 	if (input_.HasInput(Input::MOVE_UP))
 	{
-		speed_y_ = -max_speed_;
+		speed_y_ = -speed_max_;
 	}
 	else if (input_.HasInput(Input::MOVE_DOWN))
 	{
-		speed_y_ = max_speed_;
+		speed_y_ = speed_max_;
 	}
 	if (input_.HasInput(Input::MOVE_LEFT))
 	{
-		speed_x_ = -max_speed_;
+		speed_x_ = -speed_max_;
 	}
 	else if (input_.HasInput(Input::MOVE_RIGHT))
 	{
-		speed_x_ = max_speed_;
+		speed_x_ = speed_max_;
 	}
 }
 
@@ -392,7 +428,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 		case Bonus::SPEED:
 			if (bonus_[T_SPEED] == 0)
 			{
-				max_speed_ = BONUS_MAX_SPEED;
+				speed_max_ *= BONUS_SPEED_FACTOR;
 				ParticleSystem::GetInstance().AddSmoke(96, this);
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
@@ -404,22 +440,22 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 				GetPosition().x + GetSize().x / 2,
 				GetPosition().y + GetSize().y / 2);
 			// max hp
-			SetHP(HP_MAX);
-			panel_.SetShipHP(HP_MAX);
+			SetHP(hp_max_);
+			panel_.SetShipHP(hp_max_);
 			// max shield
-			IncreaseShield(SHIELD_MAX - shield_);
+			IncreaseShield(shield_max_ - shield_);
 			// +1 missile, +1 cooler
 			HandleBonus(Bonus::MISSILE);
 			HandleBonus(Bonus::COOLER);
 			break;
 		case Bonus::HEALTH:
-			if (GetHP() < HP_MAX)
+			if (GetHP() < hp_max_)
 			{
 				panel_.SetShipHP(UpdateHP(1));
 			}
 			break;
 		case Bonus::SHIELD:
-			if (shield_ < SHIELD_MAX)
+			if (shield_ < shield_max_)
 			{
 				IncreaseShield();
 			}
@@ -454,7 +490,7 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 			weapon2_.SetMultiply(1);
 			break;
 		case T_SPEED:
-			max_speed_ = MAX_SPEED;
+			speed_max_ /= BONUS_SPEED_FACTOR;
 			ParticleSystem::GetInstance().ClearSmoke(this);
 			break;
 		default:

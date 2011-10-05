@@ -59,6 +59,7 @@ EntityManager::~EntityManager()
 
 void EntityManager::InitMode(Mode mode)
 {
+	puts("re init");
 	// re-init particles
 	particles_.Clear();
 
@@ -90,7 +91,7 @@ void EntityManager::InitMode(Mode mode)
 					}
 				}
 				player_->SetPosition(0, height_ / 2);
-				player_->SetPoints(0);
+				player_->Initialize();
 			}
 			particles_.AddStars(LevelManager::GetInstance().GetStarsCount());
 			break;

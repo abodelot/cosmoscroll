@@ -279,8 +279,9 @@ void ControlPanel::ProgressBar::Init(const sf::Unicode::Text& text, const sf::Fo
 	label_.SetText(text);
 	label_.SetSize(TEXT_SIZE);
 	label_.SetColor(sf::Color::White);
-	bar_.Resize(0, PROG_BAR_HEIGHT);
-	bar_.SetColor(color);
+	bar_ = sf::Shape::Rectangle(0, 0, 0, PROG_BAR_HEIGHT, color);
+	//bar_.Resize(0, PROG_BAR_HEIGHT);
+	//bar_.SetColor(color);
 }
 
 
@@ -301,10 +302,9 @@ void ControlPanel::ProgressBar::SetValue(int value)
 	{
 		length = 0.1f;
 	}
-
-	bar_.Resize(length, PROG_BAR_HEIGHT);
-	// It's magic, I ain't gonna explain shit.
-	//bar_.SetX(initial_x_ - length / 2.68);
+	bar_.SetPointPosition(1, length, 0);
+	bar_.SetPointPosition(2, length, PROG_BAR_HEIGHT);
+	//bar_.Resize(length, PROG_BAR_HEIGHT);
 }
 
 // BonusSlot ------------------------------------------------------------------

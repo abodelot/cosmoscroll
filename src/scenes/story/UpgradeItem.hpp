@@ -12,6 +12,12 @@ public:
 	// inherited callbacks
 	void OnKeyPressed(sf::Key::Code code);
 	void OnMouseClicked(int x, int y);
+
+	/**
+	 * Refresh label content (name and level)
+	 */
+	void RefreshLabel();
+
 private:
 	void Render(sf::RenderTarget& target) const;
 

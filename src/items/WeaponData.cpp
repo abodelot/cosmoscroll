@@ -84,7 +84,7 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 
 std::wstring WeaponData::BuildDescriptionString(bool include_price) const
 {
-	std::wstring s = _t(std::string(TypeToString()) + "_info");
+	std::wstring s = _t("item.weapon_info");
 	if (include_price)
 	{
 		s = s + L"\n" + _t("item.price");
