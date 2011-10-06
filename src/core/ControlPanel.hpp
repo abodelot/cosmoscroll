@@ -7,12 +7,12 @@
 
 
 /**
- * Panel d'affichage des informations du joueur et de la partie en cours
+ * HUD: panel displaying various data about player status, current level, ...
  */
 class ControlPanel: public sf::Drawable
 {
 public:
-	// hauteur en pixels
+	// height in pixels, width is Game::WIDTH
 	enum { HEIGHT = 56 };
 
 	static ControlPanel& GetInstance();
@@ -41,26 +41,26 @@ public:
 
 	// setters progress bars --------------------------------------------------
 
-	/// nb points de vie
+	/**
+	 * Set current player HP and max HP
+	 */
 	void SetShipHP(int value);
-
-	/// maximum points de vie
 	void SetMaxShipHP(int max);
 
-	/// nb points de bouclier
+	/**
+	 * Set current shield points and max shield points
+	 */
 	void SetShield(int value);
-
-	/// maximum points de bouclier
 	void SetMaxShield(int max);
 
-	/// chaleur courante
+	/**
+	 * Set current heat and max heat
+	 */
 	void SetHeat(int value);
-
-	/// chaleur maximum
 	void SetMaxHeat(int max);
 
 	/**
-	 * Enable/disable overheat label on overheat bar
+	 * Enable/disable overheat effect on heat progress bar
 	 */
 	void SetOverheat(bool overheat);
 
@@ -105,8 +105,8 @@ private:
 		sf::String label_;
 
 		sf::Shape bar_;
+		sf::String value_;
 		int max_value_;
-		int initial_x_;
 	};
 
 	class BonusSlot
@@ -140,7 +140,6 @@ private:
 	BonusSlot bs_speed_;
 
 	sf::String timer_;
-	sf::String overheat_label_;
 	sf::String game_info_;
 	sf::Sprite panel_;
 

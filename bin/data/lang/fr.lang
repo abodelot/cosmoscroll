@@ -28,6 +28,8 @@ armory.item_current_level = Niveau actuel : {level}
 armory.item_next_level = Prochain niveau : {level}
 armory.max_level = (Niveau max atteint)
 armory.buy = Acheter
+armory.info = Sélectionnez un composant à améliorer
+armory.item_upgraded = {item} niveau {level} acheté
 
 # Menu pause
 menu.pause.title = Pause

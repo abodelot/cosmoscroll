@@ -11,6 +11,7 @@ ArmoryMenu::ArmoryMenu()
 {
 	SetTitle(_t("armory.title"));
 	current_type_ = ItemData::_UNSET;
+	lab_info_ = new gui::Label(this, "");
 
 	// ship GUI
 	new gui::Image(this, GET_IMG("gui/armory-ship-view"));
@@ -71,6 +72,14 @@ ArmoryMenu::ArmoryMenu()
 }
 
 
+void ArmoryMenu::OnFocus()
+{
+	CreditCounterBase::OnFocus();
+	lab_info_->SetText(_t("armory.info"));
+	lab_info_->SetPosition((Game::WIDTH - lab_info_->GetWidth()) / 2, 366);
+}
+
+
 void ArmoryMenu::EventCallback(int id)
 {
 	switch (id)
@@ -88,6 +97,12 @@ void ArmoryMenu::EventCallback(int id)
 			if (BuyItem())
 			{
 				ShowDialog(false);
+				std::wstring content = _t("armory.item_upgraded");
+				int item_level = Game::GetInstance().GetPlayerSave().LevelOf(current_type_);
+				wstr_self_replace(content, L"{item}", _t(ItemData::TypeToString(current_type_)));
+				wstr_self_replace(content, L"{level}", to_wstring(item_level));
+				lab_info_->SetText(content);
+				lab_info_->SetX((Game::WIDTH - lab_info_->GetWidth()) / 2);
 			}
 			break;
 		case 101:

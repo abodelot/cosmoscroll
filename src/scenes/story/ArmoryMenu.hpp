@@ -10,6 +10,8 @@ class ArmoryMenu: public CreditCounterBase
 public:
 	ArmoryMenu();
 
+	void OnFocus();
+
 private:
 	// override
 	void EventCallback(int id);
@@ -36,6 +38,7 @@ private:
 	} dialog_;
 
 	UpgradeItem* items_[ItemData::_COUNT];
+	gui::Label* lab_info_;
 	ItemData::Type current_type_;
 };
 

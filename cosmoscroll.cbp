@@ -46,6 +46,9 @@
 			<Add library="dumb" />
 		</Linker>
 		<Unit filename="bin/data/levels/levels.xml" />
+		<Unit filename="bin/data/xml/animations.xml" />
+		<Unit filename="bin/data/xml/items.xml" />
+		<Unit filename="bin/data/xml/spaceships.xml" />
 		<Unit filename="src/core/Constants.hpp" />
 		<Unit filename="src/core/ControlPanel.cpp" />
 		<Unit filename="src/core/ControlPanel.hpp" />

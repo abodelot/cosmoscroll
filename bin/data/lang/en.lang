@@ -28,6 +28,8 @@ armory.item_current_level = Current level: {level}
 armory.item_next_level = Next level: {level}
 armory.max_level = (Max level reached)
 armory.buy = Buy
+armory.info = Select a component to upgrade
+armory.item_upgraded = {item} level {level} acquired
 
 # Pause menu
 menu.pause.title = Paused

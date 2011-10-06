@@ -17,11 +17,10 @@
 #define LEVEL_BAR_X 425
 #define LEVEL_BAR_Y 41
 
-
 #define BAR_SHIP   sf::Color(0xc6, 0x00, 0x00)
 #define BAR_SHIELD sf::Color(0x00, 0x80, 0xe0)
-#define BAR_HEAT   sf::Color(0x88, 0xff, 0x00)
-
+#define BAR_HEAT   sf::Color(0x44, 0xc0, 0x00)
+#define BAR_OVERHEAT sf::Color(0xff, 0x88, 0x00)
 
 ControlPanel& ControlPanel::GetInstance()
 {
@@ -44,12 +43,6 @@ ControlPanel::ControlPanel()
 
 	pbars_[ProgressBar::HEAT].Init(_t("panel.bar_heat"), font, BAR_HEAT);
 	pbars_[ProgressBar::HEAT].SetPosition(42, 37);
-
-	sf::Vector2f pos = pbars_[ProgressBar::HEAT].bar_.GetPosition();
-	overheat_label_.SetPosition(pos.x + 12, pos.y - TEXT_PADDING_Y);
-	overheat_label_.SetFont(font);
-	overheat_label_.SetSize(TEXT_SIZE);
-	overheat_label_.SetColor(sf::Color::Red);
 
 	bar_mask_.SetImage(GET_IMG("gui/score-board-bar-mask"));
 	bar_mask_.SetPosition(101, 6);
@@ -162,11 +155,13 @@ void ControlPanel::SetOverheat(bool overheat)
 {
 	if (overheat)
 	{
-		overheat_label_.SetText(_t("panel.overheat"));
+		pbars_[ProgressBar::HEAT].bar_.SetColor(BAR_OVERHEAT);
+		pbars_[ProgressBar::HEAT].label_.SetColor(BAR_OVERHEAT);
 	}
 	else
 	{
-		overheat_label_.SetText("");
+		pbars_[ProgressBar::HEAT].bar_.SetColor(BAR_HEAT);
+		pbars_[ProgressBar::HEAT].label_.SetColor(sf::Color::White);
 	}
 }
 
@@ -242,6 +237,7 @@ void ControlPanel::Render(sf::RenderTarget& target) const
 	{
 		target.Draw(pbars_[i].label_);
 		target.Draw(pbars_[i].bar_);
+		target.Draw(pbars_[i].value_);
 	}
 	target.Draw(bar_mask_);
 
@@ -252,7 +248,6 @@ void ControlPanel::Render(sf::RenderTarget& target) const
 	bs_speed_.Show(target);
 
 	target.Draw(game_info_);
-	target.Draw(overheat_label_);
 	target.Draw(timer_);
 	target.Draw(str_points_);
 
@@ -269,7 +264,6 @@ void ControlPanel::Render(sf::RenderTarget& target) const
 
 ControlPanel::ProgressBar::ProgressBar()
 {
-	initial_x_ = 0;
 }
 
 
@@ -279,9 +273,10 @@ void ControlPanel::ProgressBar::Init(const sf::Unicode::Text& text, const sf::Fo
 	label_.SetText(text);
 	label_.SetSize(TEXT_SIZE);
 	label_.SetColor(sf::Color::White);
-	bar_ = sf::Shape::Rectangle(0, 0, 0, PROG_BAR_HEIGHT, color);
-	//bar_.Resize(0, PROG_BAR_HEIGHT);
-	//bar_.SetColor(color);
+	bar_ = sf::Shape::Rectangle(0, 0, 0, PROG_BAR_HEIGHT, sf::Color::White);
+	bar_.SetColor(color);
+	value_.SetFont(font);
+	value_.SetSize(TEXT_SIZE);
 }
 
 
@@ -290,12 +285,13 @@ void ControlPanel::ProgressBar::SetPosition(int x, int y)
 	label_.SetPosition(x, y - TEXT_PADDING_Y);
 	int x_bar = x + PROG_BAR_TEXT_LENGTH;
 	bar_.SetPosition(x_bar, y);
-	initial_x_ = x_bar;
+	value_.SetPosition(x_bar + 40, y - TEXT_PADDING_Y);
 }
 
 
 void ControlPanel::ProgressBar::SetValue(int value)
 {
+	// resize progress bar
 	value = value > 0 ? value : 0;
 	float length = (float) value / max_value_ * (PROG_BAR_WIDTH - 1);
 	if (length == 0.0f)
@@ -304,7 +300,11 @@ void ControlPanel::ProgressBar::SetValue(int value)
 	}
 	bar_.SetPointPosition(1, length, 0);
 	bar_.SetPointPosition(2, length, PROG_BAR_HEIGHT);
-	//bar_.Resize(length, PROG_BAR_HEIGHT);
+
+	// display {value}/{max_value}
+	value_.SetText(to_string(value) + "/" + to_string(max_value_));
+	// center text on progress bar
+	value_.SetX(bar_.GetPosition().x + (int) (PROG_BAR_WIDTH - value_.GetRect().GetWidth()) / 2);
 }
 
 // BonusSlot ------------------------------------------------------------------

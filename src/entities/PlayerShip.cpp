@@ -40,11 +40,11 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	SetSubRect(GetAnimation().GetFrame(0)); // WTF
 
 	// init weapons
-	weapon1_.Init("laser-blue");
+	weapon1_.Init("hellfire");
 	weapon1_.SetOwner(this);
 	weapon1_.SetOffset(WEAPON1_OFFSET);
 
-	weapon2_.Init("hellfire");
+	weapon2_.Init("laser-blue");
 	weapon2_.SetOwner(this);
 	weapon2_.SetOffset(WEAPON2_OFFSET);
 
@@ -138,12 +138,12 @@ void PlayerShip::Initialize()
 
 	// weapon1
 	int weapon1_lvl = save.LevelOf(ItemData::LASER1);
-	const WeaponData* weapon1_data = items.GetWeaponData("laser-blue", weapon1_lvl);
+	const WeaponData* weapon1_data = items.GetWeaponData("hellfire", weapon1_lvl);
 	weapon1_data->InitWeapon(&weapon1_);
 
 	// weapon2
 	int weapon2_lvl = save.LevelOf(ItemData::LASER2);
-	const WeaponData* weapon2_data = items.GetWeaponData("hellfire", weapon2_lvl);
+	const WeaponData* weapon2_data = items.GetWeaponData("laser-blue", weapon2_lvl);
 	weapon2_data->InitWeapon(&weapon2_);
 }
 

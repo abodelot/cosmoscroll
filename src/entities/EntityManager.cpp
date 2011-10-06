@@ -59,7 +59,6 @@ EntityManager::~EntityManager()
 
 void EntityManager::InitMode(Mode mode)
 {
-	puts("re init");
 	// re-init particles
 	particles_.Clear();
 
