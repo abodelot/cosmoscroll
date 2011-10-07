@@ -25,6 +25,11 @@ public:
 
 	virtual Entity* Clone() const = 0;
 
+	/**
+	 * @return sprite center
+	 */
+	sf::Vector2f GetCenter() const;
+
 	virtual void SetTarget(Entity* target);
 
 	/**

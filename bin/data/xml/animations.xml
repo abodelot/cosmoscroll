@@ -4,8 +4,10 @@
 	<anim name="capsule"     img="entities/capsule"       width="32" height="32" count="8" delay="0.1" />
 	<anim name="scoot"       img="entities/scoot"         width="48" height="32" count="2" delay="0.1" />
 	<anim name="interceptor" img="entities/interceptor"   width="56" height="48" count="2" delay="0.1" />
+	<anim name="h-interceptor" img="entities/heavy-interceptor" width="64" height="48" count="2" delay="0.1" />
 	<anim name="saucer"      img="entities/flying-saucer" width="48" height="48" count="3" delay="0.1" />
-	<anim name="mine"        img="entities/mine"          width="22" height="22" count="12" delay="0.1" />
+	<anim name="mine"        img="entities/mine"          width="16" height="16" count="12" delay="0.1" />
+	<anim name="h-mine"      img="entities/heavy-mine"    width="24" height="24" count="12" delay="0.1" />
 	<anim name="explosion"   img="entities/explosion"     width="64" height="64" count="11" delay="0.12" />
 	<anim name="boss-tentacles" img="entities/boss-tentacles" width="140" height="100" count="6" delay="0.12"/>
 </animations>

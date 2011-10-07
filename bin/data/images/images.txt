@@ -35,8 +35,10 @@ gui/armory-dialog.png
 entities/capsule.png
 entities/scoot.png
 entities/interceptor.png
+entities/heavy-interceptor.png
 entities/flying-saucer.png
 entities/mine.png
+entities/heavy-mine.png
 entities/player.png
 entities/asteroid-big.png
 entities/asteroid-medium.png

@@ -394,6 +394,13 @@
 		<level desc="Take me to your leader." bg_top="#000000" bg_bottom="#501005" stars="70">
 <!-- LVL8: a bit of everything + evilboss -->
 			<wait t="1"/>
+			<loop count="3">
+				<ship id="5" y="270" t="1" />
+			</loop>
+			<wait t="3" />
+			<loop count="3">
+				<ship id="7" y="300" t="1" />
+			</loop>
 			<call func="caps_x3"/>
 			<call func="caps_x5"/>
 			<ship id="3" y="270" t="4"/>
@@ -416,6 +423,10 @@
 			<ship id="2" y="170" t="2"/>
 			<ship id="3" y="40" t="1"/>
 			<ship id="3" y="370" t="2"/>
+			<ship id="6" y="240" t="1" />
+			<ship id="6" y="240" t="2.5" />
+			<ship id="6" y="240" t="2.5" />
+			<ship id="6" y="240" t="2.5" />
 			<evilboss y="170" t="8"/>
 		</level>
 	</levels>

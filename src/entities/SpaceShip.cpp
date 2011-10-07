@@ -134,8 +134,8 @@ void SpaceShip::move_magnet(float frametime)
 	float velocity = speed_ * frametime;
 	float vy = 0;
 	float vx = 0;
-	sf::Vector2f player_pos = target_->GetPosition();
-	sf::Vector2f my_pos = GetPosition();
+	sf::Vector2f player_pos = target_->GetCenter();
+	sf::Vector2f my_pos = GetCenter();
 
 	bool flipped = false;
 	if (my_pos.x > player_pos.x)

@@ -18,6 +18,15 @@ Entity::~Entity()
 }
 
 
+sf::Vector2f Entity::GetCenter() const
+{
+	sf::Vector2f pos = GetPosition();
+	pos.x += GetSubRect().GetWidth() / 2;
+	pos.y += GetSubRect().GetHeight() / 2;
+	return pos;
+}
+
+
 void Entity::SetTarget(Entity*)
 {
 }

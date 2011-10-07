@@ -519,10 +519,13 @@ void PlayerShip::KonamiCodeOn()
 	HandleBonus(Bonus::SPEED);
 	coolers_ = 42;
 	panel_.SetCoolers(42);
-	SetHP(9000);
-	panel_.SetShipHP(9000);
 	missiles_ = 42;
 	panel_.SetMissiles(42);
+	hp_max_ = 9000;
+	SetHP(hp_max_);
+	panel_.SetMaxShipHP(hp_max_);
+	panel_.SetShipHP(hp_max_);
+
 	weapon1_.SetMultiply(3);
 	weapon2_.SetMultiply(2);
 	missile_launcher_.SetMultiply(3);
