@@ -13,7 +13,8 @@ ParticleSystem& ParticleSystem::GetInstance()
 }
 
 
-ParticleSystem::ParticleSystem()
+ParticleSystem::ParticleSystem():
+	media_(MediaManager::GetInstance())
 {
 }
 
@@ -27,13 +28,13 @@ ParticleSystem::~ParticleSystem()
 void ParticleSystem::AddExplosion(const sf::Vector2f& offset)
 {
 	particles_.push_front(new Explosion(offset));
-	SoundSystem::GetInstance().PlaySound("boom");
+	SoundSystem::GetInstance().PlaySound(media_.GetSoundBuffer("boom"));
 }
 
 
 void ParticleSystem::AddFiery(int x, int y)
 {
-	static const sf::Image& fiery = GET_IMG("particles/fiery");
+	static const sf::Image& fiery = media_.GetImage("particles/fiery");
 	sf::Vector2f pos(x, y);
 	for (int i = 0; i < 42; ++i)
 	{
@@ -44,7 +45,7 @@ void ParticleSystem::AddFiery(int x, int y)
 
 void ParticleSystem::AddImpact(const sf::Vector2f& offset, int count)
 {
-	static const sf::Image& img = GET_IMG("particles/impact");
+	static const sf::Image& img = media_.GetImage("particles/impact");
 	for (; count > 0; --count)
 	{
 		particles_.push_front(new Fiery(offset, img));
@@ -54,7 +55,7 @@ void ParticleSystem::AddImpact(const sf::Vector2f& offset, int count)
 
 void ParticleSystem::AddGreenImpact(const sf::Vector2f& pos, int count)
 {
-	static const sf::Image& img = GET_IMG("particles/impact-green");
+	static const sf::Image& img = media_.GetImage("particles/impact-green");
 	for (;count > 0; --count)
 		particles_.push_front(new Fiery(pos, img));
 }
@@ -62,18 +63,20 @@ void ParticleSystem::AddGreenImpact(const sf::Vector2f& pos, int count)
 
 void ParticleSystem::AddStars(int count)
 {
+	const sf::Image& img = media_.GetImage("particles/star");
 	for (; count > 0; --count)
 	{
-		particles_.push_front(new Star());
+		particles_.push_front(new Star(img));
 	}
 }
 
 
 void ParticleSystem::AddCenteredStars(int count)
 {
+	const sf::Image& img = media_.GetImage("particles/star");
 	for (; count > 0; --count)
 	{
-		particles_.push_front(new CenteredStar());
+		particles_.push_front(new CenteredStar(img));
 	}
 }
 
@@ -96,9 +99,10 @@ void ParticleSystem::AddShield(int count, const sf::Sprite* handle)
 
 void ParticleSystem::AddSmoke(int count, const sf::Sprite* handle)
 {
+	const sf::Image& img = media_.GetImage("particles/smoke");
 	for (int i = 0; i < count; ++i)
 	{
-		particles_.push_front(new Smoke(handle));
+		particles_.push_front(new Smoke(img, handle));
 	}
 }
 
@@ -214,9 +218,9 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 #define STAR_MIN_SPEED       30.0f
 #define STAR_MAX_SPEED       1000.0f
 
-ParticleSystem::Star::Star()
+ParticleSystem::Star::Star(const sf::Image& img)
 {
-	sprite_.SetImage(GET_IMG("particles/star"));
+	sprite_.SetImage(img);
 	float x = sf::Randomizer::Random(0, Game::WIDTH);
 	float y = sf::Randomizer::Random(0, Game::HEIGHT);
 	sprite_.SetPosition(x, y);
@@ -241,9 +245,9 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 }
 
 
-ParticleSystem::CenteredStar::CenteredStar()
+ParticleSystem::CenteredStar::CenteredStar(const sf::Image& img):
+	ParticleSystem::Star(img)
 {
-	sprite_.SetImage(GET_IMG("particles/star"));
 	float x = Game::WIDTH / 2;
 	float y = Game::HEIGHT / 2;
 	sprite_.SetPosition(x, y);
@@ -331,18 +335,16 @@ bool ParticleSystem::ShieldParticle::OnUpdate(float frametime)
 
 
 // SmokeParticle
-#define SMOKE_MAX_LIFETIME 4.f
-#define SMOKE_BASE_SPEED   1100
+#define SMOKE_MAX_LIFETIME 3.f
+#define SMOKE_BASE_SPEED   1200
 #define SMOKE_MIN_SIZE     0.5f
 #define SMOKE_MAX_SIZE     1.2f
-#define SMOKE_MIN_ANGLE    (PI - 0.7f)
-#define SMOKE_MAX_ANGLE    (PI + 0.7f)
+#define SMOKE_MIN_ANGLE    (PI - 0.5f)
+#define SMOKE_MAX_ANGLE    (PI + 0.5f)
 
 
-ParticleSystem::Smoke::Smoke(const sf::Sprite* handle)
+ParticleSystem::Smoke::Smoke(const sf::Image& img, const sf::Sprite* handle)
 {
-	static const sf::Image& img = GET_IMG("particles/smoke");
-
 	handle_ = handle;
 	const sf::Vector2f& pos = handle->GetPosition();
 	sprite_.SetPosition(pos.x, pos.y);

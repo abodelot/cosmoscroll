@@ -1,8 +1,9 @@
 #include <cstdio>
+#include <SFML/Graphics/String.hpp>
 #include "Input.hpp"
 #include "Game.hpp"
-#include "../utils/StringUtils.hpp"
-#include "../utils/I18n.hpp"
+#include "utils/StringUtils.hpp"
+#include "utils/I18n.hpp"
 
 #define JOY_ID			 0
 

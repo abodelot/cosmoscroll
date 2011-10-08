@@ -1,5 +1,4 @@
 #include "Animation.hpp"
-#include "../utils/MediaManager.hpp"
 
 
 Animation::Animation()

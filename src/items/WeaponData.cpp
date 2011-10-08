@@ -8,7 +8,7 @@
 WeaponData::WeaponData()
 {
 	image_ = NULL;
-	sound_ = "";
+	sound_ = NULL;
 	heat_cost_ = 0.f;
 	fire_rate_ = 1.f;
 	damage_ = 1;
@@ -23,10 +23,7 @@ void WeaponData::InitWeapon(Weapon* weapon) const
 	weapon->SetHeatCost(heat_cost_);
 	weapon->SetDamage(damage_);
 	weapon->SetVelociy(speed_);
-	if (!sound_.empty())
-	{
-		weapon->SetSoundName(sound_.c_str());
-	}
+	weapon->SetSound(sound_);
 }
 
 
@@ -48,6 +45,7 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 	else if (id_ == "laser-blue")
 		SetType(ItemData::LASER2);
 
+	// image
 	p = elem->Attribute("image");
 	if (p == NULL)
 	{
@@ -57,7 +55,10 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 
 	// sound (optional)
 	p = elem->Attribute("sound");
-	sound_ = p == NULL ? "" : p;
+	if (p != NULL)
+	{
+		sound_ = &MediaManager::GetInstance().GetSoundBuffer(p);
+	}
 
 	if (elem->QueryFloatAttribute("heat_cost", &heat_cost_) != TIXML_SUCCESS)
 	{

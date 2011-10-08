@@ -129,10 +129,10 @@ bool ArmoryMenu::BuyItem()
 		items_[current_type_]->RefreshLabel(); // refresh item widget
 		CreditCounterBase::OnFocus(); // refresh credit counter
 
-		SoundSystem::GetInstance().PlaySound("cash-register");
+		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("cash-register"));
 		return true;
 	}
-	SoundSystem::GetInstance().PlaySound("disabled");
+	SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("disabled"));
 	return false;
 }
 

@@ -1,15 +1,12 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 #include "Input.hpp"
 #include "PlayerSave.hpp"
 
 class BaseScene;
-class EntityManager;
-class LevelManager;
-
 
 /**
  * Gestion du déroulement du jeu
@@ -82,6 +79,8 @@ public:
 	inline bool IsPure() const { return pure_; }
 	inline static PlayerSave& GetPlayerSave() { return GetInstance().playersave_; }
 
+	void PanelOnTop(bool top);
+
 private:
 	Game();
 	~Game();
@@ -111,10 +110,9 @@ private:
 	bool running_;
     bool pure_;
 
-	// singletons
+	// event manager
 	Input& input_;
-	LevelManager& levels_;
-	EntityManager& entitymanager_;
+
 	// scènes
 	BaseScene* scenes_[SC_COUNT];
 	BaseScene* current_scene_;

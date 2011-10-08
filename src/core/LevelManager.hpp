@@ -167,6 +167,7 @@ private:
 	std::queue<EntitySlot> waiting_line_;
 	int current_level_;
 	int last_unlocked_level_;
+	int total_points_;
 };
 
 #endif // LEVELMANAGER_HPP

@@ -78,7 +78,7 @@ const sf::String& BaseMenu::GetTitle() const
 
 void BaseMenu::OnWidgetFocused()
 {
-	SoundSystem::GetInstance().PlaySound("menu-select");
+	SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("menu-select"));
 }
 
 

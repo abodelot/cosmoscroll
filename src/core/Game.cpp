@@ -15,7 +15,7 @@
 
 // config and data files
 #define CONFIG_FILE    "config/config.cfg"
-#define LEVEL_FILE     "data/levels/levels.xml"
+#define XML_LEVELS     "data/xml/levels.xml"
 #define XML_ITEMS      "data/xml/items.xml"
 #define XML_ANIMATIONS "data/xml/animations.xml"
 #define XML_SPACESHIPS "data/xml/spaceships.xml"
@@ -34,33 +34,29 @@ Game& Game::GetInstance()
 
 
 Game::Game() :
-	input_	      (Input::GetInstance()),
-	levels_		  (LevelManager::GetInstance()),
-	entitymanager_(EntityManager::GetInstance())
+	app_(sf::VideoMode(WIDTH, HEIGHT, WIN_BPP), WIN_TITLE),
+	input_	      (Input::GetInstance())
 {
+	// HACK: display loading screen as early as possible
+	sf::String temp("loading..."); app_.Draw(temp); app_.Display();
+
 	CheckPurity();
 
 	input_.Init(app_.GetInput());
 
-	// init level manager
-	levels_.ParseFile(LEVEL_FILE);
-
-	// init entity manager
+	// load XML resources
+	LevelManager::GetInstance().ParseFile(XML_LEVELS);
 	ItemManager::GetInstance().LoadItems(XML_ITEMS);
-	entitymanager_.LoadAnimations(XML_ANIMATIONS);
-	entitymanager_.LoadSpaceShips(XML_SPACESHIPS);
-	entitymanager_.SetPosition(0, ControlPanel::HEIGHT);
+	EntityManager& entities = EntityManager::GetInstance();
+	entities.LoadAnimations(XML_ANIMATIONS);
+	entities.LoadSpaceShips(XML_SPACESHIPS);
 
-	// loading config
+	// load config
 	LoadConfig(CONFIG_FILE);
 	SetFullscreen(fullscreen_);
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
-
-	MediaManager::GetInstance().CreateImageMask("gui/icon", sf::Color(0xff, 0, 0xff));
-	const sf::Image& icon = GET_IMG("gui/icon");
-	app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
 
 	// scenes will be allocated only if requested
 	for (int i = 0; i < SC_COUNT; ++i)
@@ -103,16 +99,12 @@ bool Game::LoadConfig(const char* filename)
 
 		int record = 0;
 		config.ReadItem("arcade_high_score", record);
-		entitymanager_.SetArcadeRecord(record);
+		EntityManager::GetInstance().SetArcadeRecord(record);
 		config.ReadItem("fullscreen", fullscreen_);
 
 		int top = 1;
 		config.ReadItem("panel_on_top", top);
-		if (top == 0)
-		{
-			ControlPanel::GetInstance().SetY(Game::HEIGHT - ControlPanel::HEIGHT);
-			entitymanager_.SetY(0);
-		}
+		PanelOnTop(top);
 
 		// Audio settings
 		config.SeekSection("Audio");
@@ -153,7 +145,7 @@ void Game::WriteConfig(const char* filename) const
 	config.SeekSection("Settings");
 	config.WriteItem("fullscreen", (int) fullscreen_);
 	config.WriteItem("panel_on_top", (int) ControlPanel::GetInstance().IsOnTop());
-	config.WriteItem("arcade_high_score", entitymanager_.GetArcadeRecord());
+	config.WriteItem("arcade_high_score", EntityManager::GetInstance().GetArcadeRecord());
 	config.WriteItem("language", I18n::GetInstance().GetCurrentCode());
 
 	// Audio settings
@@ -286,12 +278,22 @@ void Game::TakeScreenshot(const char* directory)
 
 void Game::SetFullscreen(bool full)
 {
+	if (full == fullscreen_)
+		return;
+
 	if (app_.IsOpened())
 		app_.Close();
 
 	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
 	app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
 	app_.UseVerticalSync(true);
+	if (!full)
+	{
+		// set window icon
+		MediaManager::GetInstance().CreateImageMask("gui/icon", sf::Color(0xff, 0, 0xff));
+		const sf::Image& icon = GET_IMG("gui/icon");
+		app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
+	}
 	fullscreen_ = full;
 }
 
@@ -335,4 +337,19 @@ void Game::CheckPurity()
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_ANIMATIONS);
 	file.close();
 	puts(pure_ ? "[OK]" : "[FAILED]");
+}
+
+
+void Game::PanelOnTop(bool top)
+{
+	if (top)
+	{
+		ControlPanel::GetInstance().SetY(0);
+		EntityManager::GetInstance().SetY(ControlPanel::HEIGHT);
+	}
+	else
+	{
+		ControlPanel::GetInstance().SetY(Game::HEIGHT - ControlPanel::HEIGHT);
+		EntityManager::GetInstance().SetY(0);
+	}
 }

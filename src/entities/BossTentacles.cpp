@@ -117,7 +117,7 @@ void BossTentacles::TakeDamage(int damage)
 	center.y += GetSize().y / 2;
 	if (IsDead())
 	{
-		SoundSystem::GetInstance().PlaySound("boom");
+		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("boom"));
 		ParticleSystem::GetInstance().AddGreenImpact(center, 100);
 	}
 }

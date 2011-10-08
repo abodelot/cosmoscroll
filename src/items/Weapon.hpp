@@ -2,8 +2,10 @@
 #define WEAPON_HPP
 
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Image.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 
-#include "entities/Entity.hpp"
+class Entity;
 
 
 /**
@@ -63,7 +65,7 @@ public:
 	/**
 	 * @param sound: son joué lors d'un tir (NULL si pas de son)
 	 */
-	void SetSoundName(const char* sound);
+	void SetSound(const sf::SoundBuffer* sound);
 
 	/**
 	 * Position de l'arme relative à la position de son propriétaire
@@ -118,7 +120,7 @@ private:
 	// le timer est mis à jour à chaque frame dans Update
 	float fire_timer_;
 
-	const char* sound_name_;
+	const sf::SoundBuffer* sound_;
 	int multiply_;
 	Entity* owner_;
 

@@ -1,7 +1,7 @@
 #ifndef PLAYERSHIP_HPP
 #define PLAYERSHIP_HPP
 
-#include <SFML/System.hpp>
+#include <SFML/Audio.hpp>
 
 #include "Entity.hpp"
 #include "Animated.hpp"
@@ -106,6 +106,7 @@ private:
 	Weapon weapon1_;
 	Weapon weapon2_;
 	MissileLauncher missile_launcher_;
+	const sf::SoundBuffer* snd_disabled_;
 };
 
 #endif // PLAYERSHIP_HPP

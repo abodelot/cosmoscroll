@@ -109,7 +109,7 @@ void EvilBoss::TakeDamage(int damage)
 		pos.x += GetSize().x / 2;
 		pos.y += GetSize().y / 2;
 		ParticleSystem::GetInstance().AddGreenImpact(pos, 200);
-		SoundSystem::GetInstance().PlaySound("boom");
+		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("boom"));
 	}
 }
 

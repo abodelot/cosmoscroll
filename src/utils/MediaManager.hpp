@@ -4,8 +4,9 @@
 #include <map>
 #include <string>
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
+#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #ifndef NO_DUMB_MUSIC
 #include "DumbMusic.hpp"
 #endif
@@ -38,7 +39,7 @@ public:
 	 * @param key: identifiant du buffer
 	 * @return référence sur le buffer
 	 */
-	const sf::SoundBuffer& GetSoundBuf(const char* key) const;
+	const sf::SoundBuffer& GetSoundBuffer(const char* key) const;
 
 #ifndef NO_DUMB_MUSIC
 	/**
@@ -68,9 +69,15 @@ private:
 	MediaManager(const MediaManager&);
 	MediaManager& operator=(const MediaManager&);
 
-	std::map<std::string, sf::Image> images_;
-	std::map<std::string, sf::SoundBuffer> sounds_;
-	std::map<std::string, sf::Font> fonts_;
+
+	typedef std::map<std::string, sf::Image> ImageMap;
+	ImageMap images_;
+
+	typedef std::map<std::string, sf::SoundBuffer> SoundMap;
+	SoundMap sounds_;
+
+	typedef std::map<std::string, sf::Font> FontMap;
+	FontMap fonts_;
 
 #ifndef NO_DUMB_MUSIC
 	typedef std::map<std::string, DumbMusic*> DumbMusicMap;
@@ -86,10 +93,6 @@ inline const sf::Image& GET_IMG(const char* key)
 	return MediaManager::GetInstance().GetImage(key);
 }
 
-inline const sf::SoundBuffer& GET_SOUNDBUF(const char* key)
-{
-	return MediaManager::GetInstance().GetSoundBuf(key);
-}
 
 #ifndef NO_DUMB_MUSIC
 inline DumbMusic* GET_DUMB_MUSIC(const char* key)

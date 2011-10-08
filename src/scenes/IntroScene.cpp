@@ -13,10 +13,11 @@
 IntroScene::IntroScene() :
 	entity_mgr_(EntityManager::GetInstance())
 {
-	background_.SetImage(GET_IMG("gui/background"));
+	MediaManager& media = MediaManager::GetInstance();
+	background_.SetImage(media.GetImage("gui/background"));
 
-	MediaManager::GetInstance().SmoothImage("gui/cosmoscroll-logo", true);
-	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
+	media.SmoothImage("gui/cosmoscroll-logo", true);
+	title_.SetImage(media.GetImage("gui/cosmoscroll-logo"));
 	title_.SetCenter(title_.GetSize().x / 2, title_.GetSize().y / 2);
 	title_.SetPosition(Game::WIDTH / 2, Game::HEIGHT / 2);
 	title_.Resize(title_.GetSize().x * ZOOM_FACTOR, title_.GetSize().y * ZOOM_FACTOR);
@@ -55,7 +56,7 @@ void IntroScene::Update(float frametime)
 	if (!jingle_played && elapsed_ >= JINGLE_TIME)
 	{
 		jingle_played = true;
-		SoundSystem::GetInstance().PlaySound("title");
+		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("title"));
 	}
 
 	entity_mgr_.Update(frametime);

@@ -29,7 +29,7 @@ public:
 	/**
 	 * Jouer un son
 	 */
-	void PlaySound(const char* sound_name);
+	void PlaySound(const sf::SoundBuffer& soundbuffer);
 
 	/**
 	 * Volume de la musique

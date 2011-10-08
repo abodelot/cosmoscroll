@@ -21,7 +21,7 @@ Weapon::Weapon()
 	heat_cost_ = 0;
 	damage_ = 0;
 	velocity_ = 0;
-	sound_name_ = NULL;
+	sound_ = NULL;
 	x_ = 0;
 	y_ = 0;
 
@@ -72,9 +72,9 @@ float Weapon::Shoot(float angle)
 				break;
 		}
 
-		if (sound_name_ != NULL)
+		if (sound_ != NULL)
 		{
-			sound_sys.PlaySound(sound_name_);
+			sound_sys.PlaySound(*sound_);
 		}
 		fire_timer_ = fire_rate_;
 		return heat_cost_;
@@ -123,9 +123,9 @@ void Weapon::SetVelociy(int velocity)
 	velocity_ = velocity;
 }
 
-void Weapon::SetSoundName(const char* sound)
+void Weapon::SetSound(const sf::SoundBuffer* sound)
 {
-	sound_name_ = sound;
+	sound_ = sound;
 }
 
 

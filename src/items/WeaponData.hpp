@@ -2,6 +2,7 @@
 #define WEAPONDATA_HPP
 
 #include <SFML/Graphics/Image.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #include "ItemData.hpp"
 
 class Weapon;
@@ -27,7 +28,7 @@ private:
 	int speed_;              // bullet speed (pixels per second)
 	int damage_;             // inflicted damage
 	const sf::Image* image_; // hit image
-	std::string sound_;      // sound name
+	const sf::SoundBuffer* sound_; // sfx
 };
 
 #endif // WEAPONDATA_HPP

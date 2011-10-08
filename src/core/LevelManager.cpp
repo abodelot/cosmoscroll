@@ -20,6 +20,7 @@ LevelManager::LevelManager()
 {
 	last_insert_time_ = 0.f;
 	current_level_ = last_unlocked_level_ = 1;
+	total_points_ = 0;
 }
 
 
@@ -135,8 +136,7 @@ int LevelManager::GetDuration() const
 
 int LevelManager::GetTotalPoints() const
 {
-	// TODO (itérer sur waiting line ? précalculer ?)
-	return 0;
+	return total_points_;
 }
 
 
@@ -205,6 +205,7 @@ void LevelManager::ParseLevel(TiXmlElement* elem)
 {
 	ClearWaitingLine();
 	last_insert_time_ = 0.f;
+	total_points_ = 0;
 	elem = elem->FirstChildElement();
 	while (elem)
 	{
@@ -278,6 +279,7 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 			int id = 0;
 			elem->QueryIntAttribute("id", &id);
 			entity = entity_mgr.CreateSpaceShip(id, position.x, position.y);
+			total_points_ += entity->GetPoints();
 		}
 		else if (strcmp(tag_name, "asteroid") == 0)
 		{

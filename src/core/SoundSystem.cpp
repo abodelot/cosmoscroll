@@ -96,11 +96,10 @@ void SoundSystem::StopMusic()
 }
 
 
-void SoundSystem::PlaySound(const char* sound_name)
+void SoundSystem::PlaySound(const sf::SoundBuffer& soundbuffer)
 {
 	if (enable_sound_)
 	{
-		static MediaManager& media = MediaManager::GetInstance();
 		if (last_used_ == MAX_SOUNDS)
 		{
 			last_used_ = 0;
@@ -110,7 +109,7 @@ void SoundSystem::PlaySound(const char* sound_name)
 		{
 			sound.Stop();
 		}
-		sound.SetBuffer(media.GetSoundBuf(sound_name));
+		sound.SetBuffer(soundbuffer);
 		sound.Play();
 		++last_used_;
 	}

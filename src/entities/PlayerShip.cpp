@@ -39,6 +39,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	SetTeam(Entity::GOOD);
 	SetSubRect(GetAnimation().GetFrame(0)); // WTF
 
+	snd_disabled_ = &MediaManager::GetInstance().GetSoundBuffer("disabled");
+
 	// init weapons
 	weapon1_.Init("hellfire");
 	weapon1_.SetOwner(this);
@@ -177,7 +179,7 @@ void PlayerShip::HandleAction(Input::Action action)
 			}
 			else
 			{
-				SoundSystem::GetInstance().PlaySound("disabled");
+				SoundSystem::GetInstance().PlaySound(*snd_disabled_);
 			}
 			break;
 		case Input::USE_MISSILE:
@@ -189,7 +191,7 @@ void PlayerShip::HandleAction(Input::Action action)
 			}
 			else
 			{
-				SoundSystem::GetInstance().PlaySound("disabled");
+				SoundSystem::GetInstance().PlaySound(*snd_disabled_);
 			}
 			break;
 		case Input::COUNT: // filter non-events
@@ -245,7 +247,7 @@ void PlayerShip::Update(float frametime)
 	}
 	else if (input_.HasInput(Input::USE_WEAPON_1) || input_.HasInput(Input::USE_WEAPON_2))
 	{
-		SoundSystem::GetInstance().PlaySound("disabled");
+		SoundSystem::GetInstance().PlaySound(*snd_disabled_);
 	}
 
 	// déplacement
@@ -336,7 +338,7 @@ void PlayerShip::TakeDamage(int damage)
 		}
 		else
 		{
-			SoundSystem::GetInstance().PlaySound("warp");
+			SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("warp"));
 			shield_ = 0;
 		}
 		panel_.SetShield(shield_);
@@ -361,7 +363,7 @@ void PlayerShip::OnCollide(Entity& entity)
 	{
 		HandleBonus(bonus->GetType());
 		ParticleSystem::GetInstance().AddMessage(bonus->GetPosition(), bonus->GetDescription());
-		SoundSystem::GetInstance().PlaySound("bonus");
+		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("bonus"));
 		entity.Kill();
 	}
 	else

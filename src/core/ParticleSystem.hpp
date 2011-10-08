@@ -4,9 +4,9 @@
 #include <list>
 #include <SFML/Graphics.hpp>
 
-#include "../entities/Animated.hpp"
-#include "../entities/EntityManager.hpp"
-#include "../utils/MediaManager.hpp"
+#include "entities/Animated.hpp"
+#include "entities/EntityManager.hpp"
+#include "utils/MediaManager.hpp"
 
 /**
  * Moteur de particules pour gérer des effets graphiques (singleton)
@@ -121,7 +121,7 @@ private:
 	class Star: public Particle
 	{
 	public:
-		Star();
+		Star(const sf::Image& img);
 		~Star() {};
 		bool OnUpdate(float frametime);
 
@@ -137,7 +137,7 @@ private:
 	class CenteredStar: public Star
 	{
 	public:
-		CenteredStar();
+		CenteredStar(const sf::Image& img);
 		~CenteredStar() {};
 		bool OnUpdate(float frametime);
 
@@ -193,7 +193,7 @@ private:
 	class Smoke: public Particle
 	{
 	public:
-		Smoke(const sf::Sprite* handle);
+		Smoke(const sf::Image& img, const sf::Sprite* handle);
 		~Smoke() { }
 		bool OnUpdate(float frametime);
 		inline void Show(sf::RenderTarget& target) const
@@ -248,6 +248,7 @@ private:
 	typedef std::list<Particle*> ParticleList;
 
 	ParticleList particles_;
+	const MediaManager& media_;
 };
 
 #endif // PARTICLESYSTEM_HPP

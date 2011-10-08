@@ -63,6 +63,8 @@ std::wstring GenericItemData::BuildDescriptionString(bool include_price) const
 		case ItemData::SHIELD:
 			keyword = L"{points}";
 			break;
+		default:
+			break;
 	}
 	if (keyword != NULL)
 	{

@@ -131,7 +131,7 @@ MediaManager::~MediaManager()
 const sf::Font& MediaManager::GetFont(const char* key, int size)
 {
 	MediaManager& self = MediaManager::GetInstance();
-	std::map<std::string, sf::Font>::iterator it = self.fonts_.find(key);
+	FontMap::iterator it = self.fonts_.find(key);
 	if (it == self.fonts_.end())
 	{
 		std::string path(FONT_PATH);
@@ -147,7 +147,7 @@ const sf::Font& MediaManager::GetFont(const char* key, int size)
 
 const sf::Image& MediaManager::GetImage(const char* key) const
 {
-	std::map<std::string, sf::Image>::const_iterator it = images_.find(key);
+	ImageMap::const_iterator it = images_.find(key);
 	if (it == images_.end())
 	{
 		throw MediaNotFoundException(key);
@@ -156,9 +156,9 @@ const sf::Image& MediaManager::GetImage(const char* key) const
 }
 
 
-const sf::SoundBuffer& MediaManager::GetSoundBuf(const char* key) const
+const sf::SoundBuffer& MediaManager::GetSoundBuffer(const char* key) const
 {
-	std::map<std::string, sf::SoundBuffer>::const_iterator it = sounds_.find(key);
+	SoundMap::const_iterator it = sounds_.find(key);
 	if (it == sounds_.end())
 	{
 		throw MediaNotFoundException(key);
