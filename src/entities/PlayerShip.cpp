@@ -116,9 +116,8 @@ void PlayerShip::Initialize()
 
 	// ship armor
 	int hp = items.GetGenericItemData(ItemData::ARMOR, save.LevelOf(ItemData::ARMOR))->GetValue();
-	if (GetHP() == -1)
+	if (GetHP() == -1) // keep previous HP value unless HP wasn't initialized yet
 	{
-		puts("respawn at full HP"); // DEBUG
 		SetHP(hp);
 	}
 	hp_max_ = hp;
@@ -130,9 +129,8 @@ void PlayerShip::Initialize()
 
 	// heat sink
 	heat_max_ = items.GetGenericItemData(ItemData::HEATSINK, save.LevelOf(ItemData::HEATSINK))->GetValue();
-	if (heat_ == -1)
+	if (heat_ == -1) // keep previous heat value unless heat wasn't initialized yet
 	{
-		puts("respawn at 0 heat");
 		heat_ = 0.f;
 	}
 	panel_.SetMaxHeat(heat_max_);

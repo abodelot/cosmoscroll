@@ -73,7 +73,6 @@ ControlPanel::ControlPanel()
 	str_points_.SetSize(TEXT_SIZE);
 	str_points_.SetFont(font);
 
-
 	// story mode
 	level_bar_.SetImage(GET_IMG("gui/level-bar"));
 	level_bar_.SetPosition(LEVEL_BAR_X, LEVEL_BAR_Y);

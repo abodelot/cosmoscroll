@@ -50,6 +50,7 @@ Game::Game() :
 	EntityManager& entities = EntityManager::GetInstance();
 	entities.LoadAnimations(XML_ANIMATIONS);
 	entities.LoadSpaceShips(XML_SPACESHIPS);
+	entities.SetY(ControlPanel::HEIGHT);
 
 	// load config
 	LoadConfig(CONFIG_FILE);
@@ -160,7 +161,7 @@ void Game::WriteConfig(const char* filename) const
 	// writing keyboard and joystick bindings
 	input_.SaveToConfig(config);
 
-	// levels
+	// Player data
 	playersave_.SaveToConfig(config);
 
 	// saving configuration to file
@@ -278,15 +279,16 @@ void Game::TakeScreenshot(const char* directory)
 
 void Game::SetFullscreen(bool full)
 {
-	if (full == fullscreen_)
-		return;
+	if (full != fullscreen_)
+	{
+		if (app_.IsOpened())
+			app_.Close();
 
-	if (app_.IsOpened())
-		app_.Close();
-
-	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
-	app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
-	app_.UseVerticalSync(true);
+		int style = full ? sf::Style::Fullscreen : sf::Style::Close;
+		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
+		app_.UseVerticalSync(true);
+		fullscreen_ = full;
+	}
 	if (!full)
 	{
 		// set window icon
@@ -294,7 +296,7 @@ void Game::SetFullscreen(bool full)
 		const sf::Image& icon = GET_IMG("gui/icon");
 		app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
 	}
-	fullscreen_ = full;
+
 }
 
 
