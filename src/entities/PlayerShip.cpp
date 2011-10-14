@@ -72,6 +72,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	// init control panel
 	panel_.SetCoolers(coolers_);
 	panel_.SetMissiles(missiles_);
+	panel_.SetOverheat(false);
 	panel_.ActiveSpeedBonus(0);
 	panel_.ActiveAttackBonus(0, Bonus::DOUBLE_SHOT);
 

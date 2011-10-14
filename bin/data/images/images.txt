@@ -47,3 +47,6 @@ entities/bonus.png
 entities/boss-tentacles.png
 entities/evil-boss.png
 entities/explosion.png
+entities/decor-base.png
+entities/decor-energy-cell.png
+entities/decor-door.png

@@ -1,9 +1,11 @@
 #include "Game.hpp"
 
 
-int main()
+int main(int argc, char* argv[])
 {
-	Game::GetInstance().Run();
+	Game& game = Game::GetInstance();
+	game.Init(argv[0]);
+	game.Run();
 	return 0;
 }
 

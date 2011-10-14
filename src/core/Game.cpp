@@ -84,6 +84,12 @@ Game::~Game()
 }
 
 
+void Game::Init(const std::string& path)
+{
+
+}
+
+
 bool Game::LoadConfig(const char* filename)
 {
 	ConfigParser config;

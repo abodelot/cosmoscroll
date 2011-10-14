@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "LevelManager.hpp"
+#include "Game.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Asteroid.hpp"
 #include "entities/EvilBoss.hpp"
@@ -269,9 +270,10 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 	}
 	else
 	{
-		sf::Vector2f position;
-		position.x = 640; // default: screen right side
-		float time = 0.f; // default: instant
+		// common attributes
+		sf::Vector2f position(0, 0);
+		position.x = Game::WIDTH - 1; // default x: screen right side
+		float time = 0.f; // default: no delay
 		elem->QueryFloatAttribute("x", &position.x);
 		elem->QueryFloatAttribute("y", &position.y);
 		elem->QueryFloatAttribute("t", &time);
@@ -294,6 +296,11 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		else if (strcmp(tag_name, "boss_tentacles") == 0)
 		{
 			entity = new BossTentacles(position);
+		}
+		else if (strcmp(tag_name, "decor") == 0)
+		{
+			puts("spawn decor");
+			entity = new Gate(position);
 		}
 		else
 		{

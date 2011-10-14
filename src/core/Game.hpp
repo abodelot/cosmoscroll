@@ -49,6 +49,11 @@ public:
 	static Game& GetInstance();
 
 	/**
+	 * @param path: name by which the program was called
+	 */
+	void Init(const std::string& path);
+
+	/**
 	 * Lancer une partie de CosmoScroll
 	 */
 	void Run();
@@ -59,7 +64,7 @@ public:
 	sf::RenderWindow& GetApp();
 
 	/**
-	 * Quitter CosmoScroll
+	 * Quit CosmoScroll
 	 */
 	void Quit();
 
@@ -109,6 +114,7 @@ private:
 	bool fullscreen_;
 	bool running_;
     bool pure_;
+	std::string directory_;
 
 	// event manager
 	Input& input_;

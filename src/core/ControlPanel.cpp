@@ -35,10 +35,10 @@ ControlPanel::ControlPanel()
 	const sf::Font& font = MediaManager::GetFont("Ubuntu-R.ttf", TEXT_SIZE);
 
 	// init progress bar
-	pbars_[ProgressBar::HP].Init("Éléphant"/*_t("panel.bar_hp")*/, font, BAR_SHIP);
+	pbars_[ProgressBar::HP].Init(_t("panel.bar_hp"), font, BAR_SHIP);
 	pbars_[ProgressBar::HP].SetPosition(42, 7);
 
-	pbars_[ProgressBar::SHIELD].Init(L"Éléphant"/*_t("panel.bar_shield")*/, font, BAR_SHIELD);
+	pbars_[ProgressBar::SHIELD].Init(_t("panel.bar_shield"), font, BAR_SHIELD);
 	pbars_[ProgressBar::SHIELD].SetPosition(42, 22);
 
 	pbars_[ProgressBar::HEAT].Init(_t("panel.bar_heat"), font, BAR_HEAT);

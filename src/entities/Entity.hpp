@@ -116,6 +116,8 @@ public:
 
 	inline bool IsDamageable() const { return damageable_; }
 
+	void SetDamageable(bool damageable);
+
 protected:
 	/**
 	 * Attribuer une équipe à l'entité (défaut: NEUTRAL)
@@ -123,8 +125,6 @@ protected:
 	void SetTeam(Team team);
 
 	int UpdateHP(int diff);
-
-	void SetDamageable(bool damageable);
 
 private:
 	bool flipped_;
