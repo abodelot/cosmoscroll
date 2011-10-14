@@ -28,9 +28,6 @@ public:
 	static Bonus* MakeRandom(const sf::Vector2f& offset);
 
 	// inherited
-	void TakeDamage(int damage);
-
-	// inherited
 	void Update(float frametime);
 
 	/**

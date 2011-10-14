@@ -89,6 +89,12 @@
 		<Unit filename="src/entities/PlayerShip.hpp" />
 		<Unit filename="src/entities/SpaceShip.cpp" />
 		<Unit filename="src/entities/SpaceShip.hpp" />
+		<Unit filename="src/entities/complex/ComplexEntity.cpp" />
+		<Unit filename="src/entities/complex/ComplexEntity.hpp" />
+		<Unit filename="src/entities/complex/Gate.cpp" />
+		<Unit filename="src/entities/complex/Gate.hpp" />
+		<Unit filename="src/entities/complex/Part.cpp" />
+		<Unit filename="src/entities/complex/Part.hpp" />
 		<Unit filename="src/gui/BitmapFont.cpp" />
 		<Unit filename="src/gui/BitmapFont.hpp" />
 		<Unit filename="src/gui/BitmapString.cpp" />

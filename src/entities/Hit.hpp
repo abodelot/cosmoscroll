@@ -27,13 +27,7 @@ public:
 	void Update(float frametime);
 
 	// inherited
-	void GetCollideRect(sf::FloatRect& rect) const;
-
-	// inherited
 	void OnCollide(Entity& entity);
-
-	// inherited
-	void TakeDamage(int);
 
 private:
 	sf::Vector2f speed_;

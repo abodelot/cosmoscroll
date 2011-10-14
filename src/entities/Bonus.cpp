@@ -14,6 +14,7 @@ Bonus::Bonus(Type type, const sf::Vector2f& offset) :
 {
 	SetImage(GET_IMG("entities/bonus"));
 	SetSubRect(GetSubRect(type));
+	SetDamageable(false);
 	type_ = type;
 }
 
@@ -28,12 +29,6 @@ Bonus* Bonus::MakeRandom(const sf::Vector2f& offset)
 {
 	Type type = (Type) sf::Randomizer::Random(0, BONUS_COUNT - 1);
 	return new Bonus((Type) type, offset);
-}
-
-
-void Bonus::TakeDamage(int)
-{
-	// un bonus ne peut être détruit
 }
 
 

@@ -9,42 +9,22 @@
 namespace math
 {
 
-inline float quick_bound(float x)
-{
-	if (x < - PI)
-		x += 2 * PI;
-	else if (x > PI)
-		x -= 2 * PI;
+// misc helpers
 
-	return x;
+template <class T>
+inline T max(T a, T b)
+{
+	return a > b ? a : b;
 }
 
-inline float sin(float x)
+template <class T>
+inline T min(T a, T b)
 {
-	/*x = quick_bound(x);
-	float Sin = 1.27323954 * x;
-	if (x < 0)
-	{
-		Sin += .405284735 * x * x;
-	}
-	else
-	{
-		Sin -= .405284735 * x * x;
-	}
-	x = (Sin * Sin);
-	if (Sin >= 0) x = -x;
-
-	return Sin + .255 * (x - Sin);*/
-	return std::sin(x);
+	return a < b ? a : b;
 }
 
 
-inline float cos(float x)
-{
-	//return math::sin(x + PI / 2);
-	return std::cos(x);
-}
-
+// 2D helpers
 
 inline float deg_to_rad(float degres)
 {
@@ -60,8 +40,8 @@ inline float rad_to_deg(float radians)
 
 inline void translate(sf::Vector2f& offset, float angle, float speed)
 {
-	offset.x = offset.x + speed * math::cos(angle);
-	offset.y = offset.y - speed * math::sin(angle);
+	offset.x = offset.x + speed * std::cos(angle);
+	offset.y = offset.y - speed * std::sin(angle);
 }
 
 
@@ -79,21 +59,7 @@ inline float distance(const sf::Vector2f& p1, const sf::Vector2f& p2 = sf::Vecto
 }
 
 
-inline float angle(const sf::Vector2f& p1, const sf::Vector2f& p2)
-{
-	float x = p1.x - p2.x;
-	if (x == 0.f)
-	{
-		return 0.f;
-	}
-	float y = p1.y - p2.y;
-	float radians = atan(-y / x);
-	if (p2.x > p1.x)
-	{
-		radians += PI;
-	}
-	return radians;
-}
+float angle(const sf::Vector2f& p1, const sf::Vector2f& p2);
 
 }
 

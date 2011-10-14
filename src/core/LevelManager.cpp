@@ -5,6 +5,7 @@
 #include "entities/Asteroid.hpp"
 #include "entities/EvilBoss.hpp"
 #include "entities/BossTentacles.hpp"
+#include "entities/complex/Gate.hpp"
 
 #define DEFAULT_STARS_COUNT 33
 
@@ -206,6 +207,7 @@ void LevelManager::ParseLevel(TiXmlElement* elem)
 	ClearWaitingLine();
 	last_insert_time_ = 0.f;
 	total_points_ = 0;
+
 	elem = elem->FirstChildElement();
 	while (elem)
 	{

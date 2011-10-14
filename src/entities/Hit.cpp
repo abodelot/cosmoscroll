@@ -1,5 +1,3 @@
-#include <typeinfo>
-
 #include "Hit.hpp"
 #include "Bonus.hpp"
 #include "PlayerShip.hpp"
@@ -14,7 +12,9 @@ Hit::Hit(Entity::Team team, const sf::Vector2f& position, float angle,
 {
 	SetImage(*image);
 	SetTeam(team);
+	SetDamageable(false); // hit objects die by themselves on collide
 	SetRotation(math::rad_to_deg(angle));
+
 	// calcul du vecteur vitesse à partir de l'angle et de la vitesse
 	speed_.x = std::cos(angle) * speed;
 	speed_.y = -std::sin(angle) * speed;
@@ -41,26 +41,12 @@ void Hit::Update(float frametime)
 }
 
 
-void Hit::GetCollideRect(sf::FloatRect& rect) const
-{
-	// origin is centered
-	int width = GetSize().x;
-	int height = GetSize().y;
-	rect.Left = GetPosition().x - width / 2;
-	rect.Top = GetPosition().y - height / 2;
-	rect.Right = rect.Left + width;
-	rect.Bottom = rect.Top + height;
-}
-
-
 void Hit::OnCollide(Entity& entity)
 {
 	if (!IsDead())
 	{
 		// ignore friend entities, hit and bonuses
-		if (entity.GetTeam() == GetTeam()
-			|| typeid (entity) == typeid (Hit)
-			|| typeid (entity) == typeid (Bonus))
+		if (entity.GetTeam() == GetTeam() || !entity.IsDamageable())
 		{
 			return;
 		}
@@ -79,9 +65,4 @@ void Hit::OnCollide(Entity& entity)
 		}
 		Kill();
 	}
-}
-
-
-void Hit::TakeDamage(int)
-{
 }

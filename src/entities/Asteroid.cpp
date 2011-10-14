@@ -54,18 +54,6 @@ void Asteroid::Update(float frametime)
 }
 
 
-void Asteroid::GetCollideRect(sf::FloatRect& rect) const
-{
-	// origin is centered
-	int width = GetSize().x;
-	int height = GetSize().y;
-	rect.Left = GetPosition().x - width / 2;
-	rect.Top = GetPosition().y - height / 2;
-	rect.Right = rect.Left + width;
-	rect.Bottom = rect.Top + height;
-}
-
-
 void Asteroid::TakeDamage(int damage)
 {
 	sf::Vector2f pos = GetPosition();

@@ -45,7 +45,7 @@ EvilBoss* EvilBoss::Clone() const
 
 void EvilBoss::Update(float frametime)
 {
-	sf::Vector2f target_pos = target_->GetCenter();
+	sf::Vector2f target_pos = target_->GetCenter_();
 
 	eye_left_.ShootAt(target_pos);
 	eye_right_.ShootAt(target_pos);

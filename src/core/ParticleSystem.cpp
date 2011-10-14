@@ -1,9 +1,11 @@
+#include <SFML/System.hpp>
+
 #include "ParticleSystem.hpp"
 #include "Game.hpp"
 #include "SoundSystem.hpp"
-#include "../utils/Math.hpp"
+#include "utils/Math.hpp"
 
-#include <SFML/System.hpp>
+
 
 
 ParticleSystem& ParticleSystem::GetInstance()
@@ -207,7 +209,7 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 {
 	timer_ += frametime;
 	float speed = (lifetime_ - timer_) * FIERY_VELOCITY * frametime;
-	sprite_.Move(speed * math::cos(angle_), -speed * math::sin(angle_));
+	sprite_.Move(speed * std::cos(angle_), -speed * std::sin(angle_));
 	// transparence
 	sprite_.SetColor(sf::Color(255, 255, 255, (int) (255 - 255 * timer_ / lifetime_)));
 	return timer_ >= lifetime_;
@@ -326,8 +328,8 @@ bool ParticleSystem::ShieldParticle::OnUpdate(float frametime)
 	angle_ += (2 * PI * frametime); // rotation de 2 * PI par seconde
 	offset.x += handle_->GetSize().x / 2;
 	offset.y += handle_->GetSize().y / 2;
-	offset.x = offset.x + (SHIELD_RADIUS) * math::cos(angle_) + frametime;
-	offset.y = offset.y - (SHIELD_RADIUS) * math::sin(angle_) + frametime;
+	offset.x = offset.x + (SHIELD_RADIUS) * std::cos(angle_) + frametime;
+	offset.y = offset.y - (SHIELD_RADIUS) * std::sin(angle_) + frametime;
 	sprite_.SetPosition(offset);
 	sprite_.SetRotation(math::rad_to_deg(angle_ + (0.5 * PI)));
 	return false;

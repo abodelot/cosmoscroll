@@ -31,9 +31,6 @@ public:
 	void Update(float frametime);
 
 	// inherited
-	void GetCollideRect(sf::FloatRect& rect) const;
-
-	// inherited
 	void TakeDamage(int damage);
 
 private:

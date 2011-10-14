@@ -28,7 +28,7 @@ public:
 	/**
 	 * @return sprite center
 	 */
-	sf::Vector2f GetCenter() const;
+	sf::Vector2f GetCenter_() const;
 
 	virtual void SetTarget(Entity* target);
 
@@ -89,7 +89,6 @@ public:
 	 * Obtenir la surface de collision du vaisseau
 	 */
 	sf::FloatRect GetCollideRect() const;
-	virtual void GetCollideRect(sf::FloatRect& rect) const;
 
 	/**
 	 * Indique si l'entité utilise une détection de collision pixel perfect
@@ -115,6 +114,8 @@ public:
 	int GetPoints() const;
 	int ConsumePoints();
 
+	inline bool IsDamageable() const { return damageable_; }
+
 protected:
 	/**
 	 * Attribuer une équipe à l'entité (défaut: NEUTRAL)
@@ -123,8 +124,7 @@ protected:
 
 	int UpdateHP(int diff);
 
-
-
+	void SetDamageable(bool damageable);
 
 private:
 	bool flipped_;
@@ -132,6 +132,7 @@ private:
 	int points_;
 	int collide_damage_;
 	Team team_;
+	bool damageable_;
 };
 
 #endif // ENTITY_HPP
