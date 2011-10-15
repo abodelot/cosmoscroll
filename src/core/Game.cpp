@@ -12,6 +12,7 @@
 #include "utils/DIE.hpp"
 #include "md5/md5.hpp"
 #include "scenes/scenes.hpp"
+#include "BigScrollingMessagingAppliance.hpp"
 
 // config and data files
 #define CONFIG_FILE    "config/config.cfg"
@@ -182,6 +183,11 @@ void Game::Run()
 	SetNextScene(SC_IntroScene);
 	app_.Display();
 
+	// <HACK>
+	BSMA *screen_ = &BSMA::GetInstance();
+	static bool to = false;
+	// </HACK>
+
 	// game main loop which handle the current scene
 	sf::Event event;
 	Input::Action action;
@@ -200,6 +206,9 @@ void Game::Run()
 				case Input::TAKE_SCREENSHOT:
 					TakeScreenshot("screenshot");
 					break;
+				case Input::DEBUG_ACTION:
+					to = true;
+					break;
 				// other events are send to the current scene
 				default:
 					current_scene_->OnEvent(event);
@@ -209,8 +218,23 @@ void Game::Run()
 		app_.Clear();
 		// 2. updating the current scene
 		current_scene_->Update(app_.GetFrameTime());
+
+		// <HACK>
+		if (to)
+		{
+			BSMA::text_message t;
+			t.str = sf::Unicode::Text(L"Téstàge xD xD   ...:<3:<3:<3:<3:<3:<3:<3:...");
+			t.delay = 1.f;
+			screen_->Push(t);
+			to = false;
+		}
+		screen_->Update(app_.GetFrameTime());
+		// </HACK>
 		// 3. displaying the current scene
 		current_scene_->Show(app_);
+		// <HACK>
+		screen_->Show(app_);
+		// </HACK>
 		app_.Display();
 	}
 }
