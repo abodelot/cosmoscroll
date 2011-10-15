@@ -126,21 +126,29 @@ bool Entity::IsCollidingWith(const Entity& other)
 			otherPix = other.GetImage()->GetPixelsPtr();
 			int myWidth = this->GetImage()->GetWidth();
 			int otherWidth = other.GetImage()->GetWidth();
-			for (int y = 0; y < height; ++y)
-			{
-				for (int x = 0; x < width; ++x)
+			if (this->IsFlippedX || other.IsFlippedX || this->IsFlippedY || other.IsFlippedY)
+				for (int y = 0; y < height; ++y)
 				{
-					if (ALPHACOMP(myPix, myWidth, (x + left1), (y + top1)) > ALPHA &&
-						ALPHACOMP(otherPix, otherWidth, (x + left2), (y + top2)) > ALPHA)
+					for (int x = 0; x < width; ++x)
 					{
-						return true;
+						if (GetPixel(x + left1, y + top1).a > ALPHA
+							&& other.GetPixel(x + left2, y + top2).a > ALPHA)
+						{
+							return true;								
+						}
 					}
-					/*if (GetPixel(x + left1, y + top1).a > ALPHA
-						&& other.GetPixel(x + left2, y + top2).a > ALPHA)
-					{
-						return true;								
-					}*/
 				}
+			else
+				for (int y = 0; y < height; ++y)
+				{
+					for (int x = 0; x < width; ++x)
+					{
+						if (ALPHACOMP(myPix, myWidth, (x + left1), (y + top1)) > ALPHA &&
+							ALPHACOMP(otherPix, otherWidth, (x + left2), (y + top2)) > ALPHA)
+						{
+							return true;
+						}
+					}
 			}
 		}
 		return false;
