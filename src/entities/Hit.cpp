@@ -37,7 +37,6 @@ void Hit::Update(float frametime)
 	pos.x = pos.x + speed_.x * frametime;
 	pos.y = pos.y + speed_.y * frametime;
 	SetPosition(pos);
-	KillIfOut();
 }
 
 

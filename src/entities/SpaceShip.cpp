@@ -153,20 +153,18 @@ void SpaceShip::move_magnet(float frametime)
 	else if (my_pos.y < player_pos.y)
 		vy = velocity;
 
-	if (flipped != IsFlipped())
+	if (flipped != IsFlippedX())
 	{
-		Flip(flipped);
+		FlipX(flipped);
 	}
 
 	sf::Sprite::Move(vx, vy);
-	KillIfOut();
 }
 
 
 void SpaceShip::move_straight(float frametime)
 {
 	sf::Sprite::Move(-speed_ * frametime, 0);
-	KillIfOut();
 }
 
 
@@ -194,24 +192,20 @@ void SpaceShip::move_sinus(float frametime)
 	}
 	pos.y = std::sin(pos.x * SINUS_FREQUENCE) * SINUS_AMPLITUDE + base_y_;
 	SetPosition(pos);
-	if (pos.x < -GetSize().x)
-	{
-		Kill();
-	}
 }
 
 // attack patterns -------------------------------------------------------------
 
 void SpaceShip::attack_auto_aim()
 {
-	weapon_.ShootAt(target_->GetCenter());
+	weapon_.ShootAt(target_->GetCenter_());
 }
 
 
 void SpaceShip::attack_on_sight()
 {
-	float my_y = GetPosition().y;
-	float player_y = target_->GetCenter().y;
+	float my_y = GetCenter_().y;
+	float player_y = target_->GetCenter_().y;
 	// Doit on tirer ?
 	if (std::abs(player_y - my_y) < 30)
 	{

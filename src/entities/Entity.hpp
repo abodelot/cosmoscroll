@@ -69,21 +69,14 @@ public:
 	int GetHP() const;
 	void SetHP(int hp);
 
-	/**
-	 * Supprime l'unité si elle est hors de l'univers
-	 */
-	void KillIfOut();
 
-	inline bool IsFlipped() const
-	{
-		return flipped_;
-	}
+	void FlipX(bool flip);
+	void FlipY(bool flip);
 
-	virtual inline void Flip(bool it)
-	{
-		FlipX(it);
-		flipped_ = it;
-	}
+
+	inline bool IsFlippedX() const { return flipped_x_; }
+	inline bool IsFlippedY() const { return flipped_y_; }
+
 
 	/**
 	 * Obtenir la surface de collision du vaisseau
@@ -93,12 +86,15 @@ public:
 	/**
 	 * Indique si l'entité utilise une détection de collision pixel perfect
 	 */
-	virtual bool PixelPerfectCollide() const;
+	bool PixelPerfectCollide() const;
 
 	/**
-	 * Indique si l'entité est en collision avec une autre entité
+	 * Test if entity is colliding with another entity
+	 * @param other: other colliding entity
+	 * @param r1: pre-computed entity collide rect
+	 * @param r2: pre-computed other entity collide rec
 	 */
-	bool IsCollidingWith(const Entity& other);
+	bool IsCollidingWith(const Entity& other, const sf::FloatRect& r1, const sf::FloatRect& r2);
 
 	/**
 	 * Obtenir l'équipe de l'entité
@@ -126,8 +122,14 @@ protected:
 
 	int UpdateHP(int diff);
 
+	/**
+	 * Set inflicted damage on collision
+	 */
+	void SetCollideDamage(int damage);
+
 private:
-	bool flipped_;
+	bool flipped_x_;
+	bool flipped_y_;
 	int hp_;
 	int points_;
 	int collide_damage_;

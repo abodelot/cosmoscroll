@@ -150,8 +150,8 @@ void EntityManager::Update(float frametime)
 {
 	EntityList::iterator it, it2;
 
-	// removing dead entities
-	for (it = entities_.begin(); it != entities_.end();)
+
+	/*for (it = entities_.begin(); it != entities_.end();)
 	{
 		if ((**it).IsDead())
 		{
@@ -162,22 +162,45 @@ void EntityManager::Update(float frametime)
 		{
 			++it;
 		}
-	}
+	}*/
 
 	// update and collision
-	for (it = entities_.begin(); it != entities_.end(); ++it)
+	sf::FloatRect r1, r2;
+	for (it = entities_.begin(); it != entities_.end();)
 	{
-		(**it).Update(frametime);
+		Entity& entity = **it;
+		entity.Update(frametime);
 
-		it2 = it;
-		for (++it2; it2 != entities_.end(); ++it2)
+		r1 = entity.GetCollideRect();
+
+		if (entity.IsDead())
 		{
-			if ((**it).IsCollidingWith(**it2))
-			{
-				(**it).OnCollide(**it2);
-				(**it2).OnCollide(**it);
-			}
+			// removing dead entities
+			delete *it;
+			it = entities_.erase(it);
 		}
+		else if (r1.Bottom < 0 || r1.Top > height_ || r1.Right < 0 || r1.Left > width_)
+		{
+			// removing entities outside the entity manager
+			delete *it;
+			it = entities_.erase(it);
+		}
+		else
+		{
+			it2 = it;
+			for (++it2; it2 != entities_.end(); ++it2)
+			{
+				// collision dectection it1 <-> it2
+				r2 = (**it2).GetCollideRect();
+				if (entity.IsCollidingWith(**it2, r1, r2))
+				{
+					entity.OnCollide(**it2);
+					(**it2).OnCollide(entity);
+				}
+			}
+			++it;
+		}
+
 	}
 	particles_.Update(frametime);
 	timer_ += frametime;

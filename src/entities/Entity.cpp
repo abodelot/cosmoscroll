@@ -7,7 +7,8 @@ Entity::Entity(const sf::Vector2f& position, int hp, int collide_damage)
 	SetPosition(position);
 	team_ = NEUTRAL;
 	hp_ = hp;
-	flipped_ = false;
+	flipped_x_ = false;
+	flipped_y_ = false;
 	collide_damage_ = collide_damage;
 	points_ = 0;
 	damageable_ = true;
@@ -60,17 +61,18 @@ int Entity::GetHP() const
 	return hp_;
 }
 
-void Entity::KillIfOut()
+
+void Entity::FlipX(bool flip)
 {
-	static EntityManager& entity_mgr = EntityManager::GetInstance();
-	sf::FloatRect rect = GetCollideRect();
-	if (rect.Bottom < 0
-	 || rect.Top    > entity_mgr.GetHeight()
-	 || rect.Right  < 0
-	 || rect.Left   > entity_mgr.GetWidth())
-	{
-		hp_ = 0;
-	}
+	sf::Sprite::FlipX(flip);
+	flipped_x_ = flip;
+}
+
+
+void Entity::FlipY(bool flip)
+{
+	sf::Sprite::FlipY(flip);
+	flipped_y_ = flip;
 }
 
 
@@ -97,64 +99,63 @@ bool Entity::PixelPerfectCollide() const
 #define ALPHACOMP(buf, width, x, y) (buf[((x) + (y) * (width)) * 4 + 3])
 /* gets to the alpha component of pixelsPtr[x,y] (Picture width being provided)*/
 
-bool Entity::IsCollidingWith(const Entity& other)
+bool Entity::IsCollidingWith(const Entity& other, const sf::FloatRect& r1, const sf::FloatRect& r2)
 {
-	if (((this->GetImage() && other.GetImage()))
-		&& (PixelPerfectCollide() || other.PixelPerfectCollide()))
+	sf::FloatRect overlap;
+
+	// if overlapping rectangles
+	if (r1.Intersects(r2, &overlap))
 	{
-		sf::FloatRect r1 = GetCollideRect();
-		sf::FloatRect r2 = other.GetCollideRect();
-		sf::FloatRect overlap;
-
-		// if overlapping rectangles
-		if (r1.Intersects(r2, &overlap))
+		if (!this->GetImage() || !other.GetImage())
 		{
-			
-			const int ALPHA = 0;
+			return true;
+		}
+		const int ALPHA = 0;
 
-			int left1 = (int) overlap.Left - r1.Left;
-			int top1 = (int) overlap.Top - r1.Top;
+		int left1 = (int) overlap.Left - r1.Left;
+		int top1 = (int) overlap.Top - r1.Top;
 
-			int left2 = (int) overlap.Left - r2.Left;
-			int top2 = (int) overlap.Top - r2.Top;
+		int left2 = (int) overlap.Left - r2.Left;
+		int top2 = (int) overlap.Top - r2.Top;
 
-			int width = (int) overlap.GetWidth();
-			int height = (int) overlap.GetHeight();
+		int width = (int) overlap.GetWidth();
+		int height = (int) overlap.GetHeight();
 
-			const sf::Uint8 *myPix, *otherPix;
-			myPix = this->GetImage()->GetPixelsPtr();
-			otherPix = other.GetImage()->GetPixelsPtr();
-			int myWidth = this->GetImage()->GetWidth();
-			int otherWidth = other.GetImage()->GetWidth();
-			if (this->IsFlippedX || other.IsFlippedX || this->IsFlippedY || other.IsFlippedY)
-				for (int y = 0; y < height; ++y)
+		const sf::Uint8 *myPix, *otherPix;
+		myPix = this->GetImage()->GetPixelsPtr();
+		otherPix = other.GetImage()->GetPixelsPtr();
+		int myWidth = this->GetImage()->GetWidth();
+		int otherWidth = other.GetImage()->GetWidth();
+		if (this->flipped_x_|| other.flipped_x_ || this->flipped_y_ || other.flipped_y_)
+		{
+			for (int y = 0; y < height; ++y)
+			{
+				for (int x = 0; x < width; ++x)
 				{
-					for (int x = 0; x < width; ++x)
+					if (GetPixel(x + left1, y + top1).a > ALPHA
+						&& other.GetPixel(x + left2, y + top2).a > ALPHA)
 					{
-						if (GetPixel(x + left1, y + top1).a > ALPHA
-							&& other.GetPixel(x + left2, y + top2).a > ALPHA)
-						{
-							return true;								
-						}
+						return true;
 					}
 				}
-			else
-				for (int y = 0; y < height; ++y)
-				{
-					for (int x = 0; x < width; ++x)
-					{
-						if (ALPHACOMP(myPix, myWidth, (x + left1), (y + top1)) > ALPHA &&
-							ALPHACOMP(otherPix, otherWidth, (x + left2), (y + top2)) > ALPHA)
-						{
-							return true;
-						}
-					}
 			}
 		}
-		return false;
+		else
+		{
+			for (int y = 0; y < height; ++y)
+			{
+				for (int x = 0; x < width; ++x)
+				{
+					if (ALPHACOMP(myPix, myWidth, (x + left1), (y + top1)) > ALPHA &&
+						ALPHACOMP(otherPix, otherWidth, (x + left2), (y + top2)) > ALPHA)
+					{
+						return true;
+					}
+				}
+			}
+		}
 	}
-	// simple overlapping rectangles collision
-	return GetCollideRect().Intersects(other.GetCollideRect());
+	return false;
 }
 
 
@@ -212,4 +213,10 @@ int Entity::ConsumePoints()
 void Entity::SetDamageable(bool damageable)
 {
 	damageable_ = damageable;
+}
+
+
+void Entity::SetCollideDamage(int damage)
+{
+	collide_damage_ = damage;
 }

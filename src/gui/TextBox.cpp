@@ -190,6 +190,7 @@ void TextBox::OnKeyPressed(sf::Key::Code key)
 
 void TextBox::OnMouseClicked(int x, int y)
 {
+	(void) y;
 	// todo: semble marcher, vérifier sous valgrind
 	int letter_width = display_text_.GetFont().GetCharWidth();
 	int pos = x / letter_width;

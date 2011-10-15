@@ -196,6 +196,7 @@ void OptionList::OnKeyPressed(sf::Key::Code key)
 
 void OptionList::OnMouseClicked(int x, int y)
 {
+	(void) y;
 	int trigger_width = text_size_ + BOX_PADDING * 2;
 	int opt = current_opt_;
 	if (x > 0 && x < trigger_width)

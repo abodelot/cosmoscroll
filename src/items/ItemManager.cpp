@@ -52,6 +52,7 @@ bool ItemManager::LoadItems(const char* filename)
 	ParseGenericItems(root, "heatsinks", ItemData::HEATSINK);
 	ParseGenericItems(root, "armors", ItemData::ARMOR);
 	ParseGenericItems(root, "engines", ItemData::ENGINE);
+	return true;
 }
 
 

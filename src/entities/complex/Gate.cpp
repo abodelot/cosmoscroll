@@ -13,7 +13,7 @@ Gate::Gate(const sf::Vector2f& pos):
 
 	Part cell(1);
 	cell.SetImage(media.GetImage("entities/decor-energy-cell"));
-	cell.SetHP(20);
+	cell.SetHP(10);
 	AddPart(cell, 0, 4);
 	AddPart(cell, 0, GetSize().y);
 	AddPart(cell, 0, GetSize().y);

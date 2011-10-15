@@ -4,18 +4,31 @@
 ##
 # Générateur de makefile
 # usage: ./make_make.py [makefile_name]
-# @author alexandre.bodelot@gmail.com
-# @date 2011-04-11
+# @author Alexandre Bodelot <alexandre.bodelot@gmail.com>
+# @date 2011-10-15
 #
 
 import sys
 import os
 import time
 
+TARGET = "bin/cosmoscroll"
+LIBS = ("sfml-graphics", "sfml-window", "sfml-system", "sfml-audio", "sfml-network")
+
+
 class MakeMake:
-	def __init__(self, makefile_name):
+
+	def __init__(self, target, makefile_name):
 		self.sources = []
+		self.target = target
 		self.makefile_name = makefile_name
+		self.libs = ()
+
+	##
+	# Indiquer les bibliothèques à utiliser lors de l'édition des liens
+	#
+	def add_libs(self, libs):
+		self.libs = libs
 
 	##
 	# Récupérer toutes les unités de compilation dans parent et ses sous-dossiers
@@ -33,11 +46,23 @@ class MakeMake:
 	#
 	def write_makefile(self):
 		f = open(self.makefile_name, "w")
-		f.write("# Makefile generated on " + time.ctime() + "\n"
+		f.write(
+		"# Makefile generated on " + time.ctime() + "\n\n"
 		"CC=g++\n"
-		"CFLAGS= -Wall -Wextra -Wwrite-strings -ansi -pedantic -Isrc -DSFML_DYNAMIC\n"
-		"LDFLAGS= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network -ldumb\n"
-		"EXEC=cosmoscroll\n"
+		"CFLAGS= -Wall -Wextra -Wwrite-strings -ansi -pedantic -Isrc -DSFML_DYNAMIC\n")
+
+		# libs
+		libs_linux = " ".join("-l" + lib for lib in self.libs)
+		libs_mac = " ".join("-framework " + lib for lib in self.libs)
+
+		f.write(
+		"MAC := $(shell uname)\n"
+		'ifeq (MAC, "Darwin")\n'
+		"\tLDFLAGS= " + libs_mac + " -ldumb\n"
+		"else\n"
+		"\tLDFLAGS= " + libs_linux + " -ldumb\n"
+		"endif\n"
+		"EXEC=" + TARGET + "\n"
 		"\n"
 		"# debug/release mode\n"
 		"DEBUG=yes\n"
@@ -55,7 +80,7 @@ class MakeMake:
 		for source in self.sources:
 			f.write(
 			source + ".o:" + source + ".cpp\n"
-			"	@echo $<\n"
+			"	@echo '*' $<\n"
 			"	@$(CC) -o $@ $< -c $(CFLAGS)\n\n")
 
 		# clean
@@ -87,7 +112,8 @@ class MakeMake:
 if __name__ == "__main__":
 	makefile_name = sys.argv[1] if len(sys.argv) > 1 else "Makefile"
 
-	m = MakeMake(makefile_name)
+	m = MakeMake(TARGET, makefile_name)
 	m.add_sources("src")
+	m.add_libs(LIBS)
 	m.write_makefile()
 	m.invoke_makefile()

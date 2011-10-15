@@ -1,28 +1,28 @@
-## FRENCH
+## DEUTSCH
 
 menu.back = Zurück
 menu.back_main_menu = zum Hauptmenü
 menu.submit = Senden
 menu.cancel = Abbrechen
 
-# Menu principal
+# Main menu
 menu.main.story = Story-Modus
 menu.main.arcade = Arcade-Modus
 menu.main.options = Optionen
 menu.main.about = Über
 menu.main.quit = Beenden
 
-# Menu Histoire
+# Story menu
 menu.story.title = Story-Modus
 menu.story.credits = Credits :\n{credits}
 menu.story.select = Select einer Ebene :
 menu.story.progression = Fortschritt : {unlocked}/{total}
 menu.story.intro = Ebene {level}\n\n"{description}"\n\nEnemeis : {count}
 menu.story.play = Spielen
-menu.story.armory = Armory
+menu.story.armory = Zeughaus
 
-# Menu armurerie
-armory.title = Armory
+# Armory menu
+armory.title = Zeughaus
 armory.item_level = Ebene {level}
 armory.item_current_level = Aktuelle Ebene : {level}
 armory.item_next_level = Nächste Ebene : {level}
@@ -31,7 +31,7 @@ armory.buy = Kaufen
 armory.info = Select eine Komponente am verbessern
 armory.item_upgraded = {item} Ebene {level} gekauft
 
-# Menu pause
+# Pause menu
 menu.pause.title = Pause
 menu.pause.resume = Spiel fortsetzen
 menu.pause.quit = Spiel beenden
@@ -44,7 +44,7 @@ menu.arcade.best_scores = Besten scoren
 # Best scores menu
 menu.best_scores.title = Online Rekorden
 
-# Menu game over
+# Game over menu
 menu.gameover.title = Game Over
 menu.gameover.pseudo = Ihr Name :
 menu.gameover.send_score = Meine Ergebnis senden
@@ -54,22 +54,22 @@ menu.gameover.no_record = Ihr Ergebnis : {score}\n    Versuchen Sie es erneut...
 menu.gameover.error_cheat = Cheats verboten!
 menu.gameover.error_altered_res = Senden verbotene, geändert Version des Spiels
 
-# Menu options
+# Options menu
 menu.options.title = Optionen
 menu.options.keyboard = Tastatur-Layout
 menu.options.joystick = Joystick-Layout
 menu.options.audio = Sound und Musik
 menu.options.settings = Preferenzen
 
-# Menu clavier
+# Keyboard menu
 menu.keyboard.title = Tastatur-Layout
 
-# Menu joystick
+# Joystick menu
 menu.joystick.title = Joystick-Layout
 menu.joystick.button = Button
 menu.joystick.sensitivity = Empfindlichkeit des Joysticks:
 
-# Menu sons
+# Audio menu
 menu.audio.title = Sound und Musik
 menu.audio.music = Musik:
 menu.audio.enable_music = Musik ON:
@@ -77,23 +77,23 @@ menu.audio.music_volume = Volumen der Musik:
 menu.audio.enable_sound = Sound ON:
 menu.audio.sound_volume = Volumen des Sound:
 
-# Menu pr√©f√©rences
+# Settings menu
 menu.settings.title = Preferenzen
 menu.settings.fullscreen = Full Screen:
 menu.settings.language = Sprache:
 
-# Menu √† propos
+# About menu
 menu.about.title = Über CosmoScroll
 menu.about.version = Version :
 menu.about.authors = Autoren :
 menu.about.licence = Lizenz :
 
-# Fin de jeu
+# End of game
 endgame.game_over = Game Over
 endgame.end_level = Ebene {level} fertig !\nKredits genannt : +{credits}
 endgame.end_last_level = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\ngennant Kredits : +{credits}
 
-# Panneau de contr√¥le
+# Control panel
 panel.bar_hp = Shell
 panel.bar_shield = Schirm
 panel.bar_heat = Wärme
@@ -114,22 +114,23 @@ bonus.speed = Speed
 bonus.banana = Super Banana!
 
 # Actions
-action.up = Haut
-action.down = Bas
-action.left = Gauche
-action.right = Droite
-action.weapon_1 = Weapon 1
-action.weapon_2 = Weapon 2
+action.up = Hoch
+action.down = Runter
+action.left = Links
+action.right = Rechts
+action.weapon_1 = Waffe 1
+action.weapon_2 = Waffe 2
 action.pause = Pause
 action.cooler = Bonus Eiscube verwenden
 action.missile = Bonus Missile verwenden
 
 # Ask input
-input.press_key = Drücken Sie eine beliebige Taste auf der Tastatur, um die Aktion eingestellt input.press_button = Drücken Sie eine Taste auf dem Controller, um die Aktion eingestellt 
+input.press_key = Drücken Sie eine beliebige Taste auf der\nTastatur, um die Aktion eingestellt
+input.press_button = Drücken Sie eine Taste auf dem Controller,\num die Aktion eingestellt
 input.cancel = (esc abbrechen)
 
 # Items
-item.shield = Energie Schild 
+item.shield = Energie Schild
 item.shield_info = Schutzpunkte : {points}
 item.laser1 = Laser 1
 item.laser2 = Laser 2
@@ -140,4 +141,4 @@ item.heatsink = Heatsink
 item.heatsink_info = max Hitze : {heat}
 item.armor = Panzerung
 item.armor_info = Lebenspunkte : {hp}
-item.price = Prix : {price} Kredits
+item.price = Preis : {price} Kredits

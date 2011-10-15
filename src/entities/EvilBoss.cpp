@@ -65,9 +65,9 @@ void EvilBoss::Update(float frametime)
 	sf::Sprite::Move(0, speed_y_ * frametime);
 
 	bool flipped = pos.x < target_->GetPosition().x;
-	if (flipped != IsFlipped())
+	if (flipped != IsFlippedX())
 	{
-		Flip(flipped);
+		FlipX(flipped);
 	}
 
 	if (pos.x > MAX_X)

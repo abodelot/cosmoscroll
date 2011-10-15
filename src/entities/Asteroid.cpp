@@ -50,7 +50,6 @@ void Asteroid::Update(float frametime)
 	pos.y += speed_.y * frametime;
 	SetPosition(pos);
 	Rotate(rotation_speed_ * frametime);
-	KillIfOut();
 }
 
 

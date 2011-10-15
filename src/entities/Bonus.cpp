@@ -35,7 +35,6 @@ Bonus* Bonus::MakeRandom(const sf::Vector2f& offset)
 void Bonus::Update(float frametime)
 {
 	sf::Sprite::Move(-BONUS_SPEED * frametime, 0);
-	KillIfOut();
 }
 
 

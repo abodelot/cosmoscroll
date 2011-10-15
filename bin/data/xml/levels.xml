@@ -72,6 +72,11 @@
 	<levels>
 		<level desc="This is piece of cake." stars="30">
 <!-- LVL1:  a bunch of caps and scoots -->
+			<loop count="3">
+				<decor id="gate" y="0"/>
+				<ship id="2" y="250" t="6"/>
+				<ship id="1" y="350" t="2"/>
+			</loop>
 			<loop count="2">
 				<call func="caps_x3"/>
 			</loop>
@@ -438,10 +443,9 @@
 	</functions>
 	<levels>
 		<level desc="Let me see your goods! ;-)" bg_top="#FFFFFF" bg_bottom="#501005" stars="70">
-<!-- LVL0: a bit of everythin + evilboss -->
 			<loop count="128">
 				<evilboss y="170" t="0.1"/>
-            </loop>
+			</loop>
 		</level>
 	</levels>
 </levelset>

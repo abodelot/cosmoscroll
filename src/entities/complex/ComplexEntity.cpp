@@ -7,6 +7,7 @@ ComplexEntity::ComplexEntity(const sf::Vector2f& pos):
 {
 	SetTeam(Entity::NEUTRAL);
 	SetDamageable(false);
+	SetCollideDamage(0);
 }
 
 
@@ -14,6 +15,7 @@ void ComplexEntity::OnCollide(Entity& entity)
 {
 	for (PartVector::iterator it = parts_.begin(); it != parts_.end(); ++it)
 	{
+		sf::FloatRect entity_rect = entity.GetCollideRect();
 		Part& p = *it;
 		if (!p.IsDead())
 		{
@@ -21,7 +23,7 @@ void ComplexEntity::OnCollide(Entity& entity)
 			// thus, compute part actual position, and then set back relative position
 			sf::Vector2f pos = p.GetPosition();
 			p.Move(GetPosition());
-			if (p.IsCollidingWith(entity))
+			if (p.IsCollidingWith(entity, p.GetCollideRect(), entity_rect))
 			{
 				entity.OnCollide(p);
 				p.OnCollide(entity);
