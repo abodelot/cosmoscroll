@@ -169,7 +169,7 @@ void LevelManager::EnableHardcore(bool hardcore)
 }
 
 
-void LevelManager::ParseFile(const char* file)
+void LevelManager::ParseFile(const char* file, unsigned int offset)
 {
 	printf("* loading levels... ");
 
@@ -179,8 +179,19 @@ void LevelManager::ParseFile(const char* file)
 		std::cerr << "error #" << doc_.ErrorId() << ": " << doc_.ErrorDesc() << std::endl;
 	}
 
+	TiXmlNode* set = doc_.RootElement();
+	for (unsigned int i = 0; set != NULL && i < offset; ++i)
+	{
+		set = set->NextSibling();
+	}
+	if (!set)
+	{
+		puts("warning: invalid level id");
+		exit(1);
+	}
+	
 	// Constitution de la map de pointeurs vers les fonctions
-	TiXmlNode* node = doc_.RootElement()->FirstChild("functions")->FirstChild();
+	TiXmlNode* node = set->FirstChild("functions")->FirstChild();
 	while (node != NULL)
 	{
 		TiXmlElement* element = node->ToElement();
@@ -193,7 +204,7 @@ void LevelManager::ParseFile(const char* file)
 	}
 
 	// Constitution de la liste de pointeurs vers les niveaux
-	node = doc_.RootElement()->FirstChild("levels")->FirstChild();
+	node = set->FirstChild("levels")->FirstChild();
 	while (node != NULL)
 	{
 		levels_.push_back(node->ToElement());

@@ -3,9 +3,11 @@
 
 int main(int argc, char* argv[])
 {
-	Game& game = Game::GetInstance();
-	game.Init(argv[0]);
-	game.Run();
+	short int ls = 0;
+	if (argc > 1)
+		++ls;
+	Game::GetInstance(ls).Run();
+//	game.Init(argv[0]);
 	return 0;
 }
 

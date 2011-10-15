@@ -204,14 +204,14 @@ void SpaceShip::move_sinus(float frametime)
 
 void SpaceShip::attack_auto_aim()
 {
-	weapon_.ShootAt(target_->GetPosition());
+	weapon_.ShootAt(target_->GetCenter());
 }
 
 
 void SpaceShip::attack_on_sight()
 {
 	float my_y = GetPosition().y;
-	float player_y = target_->GetPosition().y;
+	float player_y = target_->GetCenter().y;
 	// Doit on tirer ?
 	if (std::abs(player_y - my_y) < 30)
 	{

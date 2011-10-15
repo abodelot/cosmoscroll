@@ -15,6 +15,8 @@ SettingsMenu::SettingsMenu()
 	opt_languages_ = new gui::OptionList(this, 300, 250);
 	opt_languages_->AddOption(L"English", "en");
 	opt_languages_->AddOption(L"Français", "fr");
+	opt_languages_->AddOption(L"Deutsch", "de");
+	opt_languages_->AddOption(L"Pусский", "ru");
 	opt_languages_->SelectByValue(I18n::GetInstance().GetCurrentCode());
 	opt_languages_->SetCallbackID(2);
 

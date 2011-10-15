@@ -436,3 +436,17 @@
 		</level>
 	</levels>
 </levelset>
+
+<levelset>
+<!-- Here to experiment with props -->
+	<functions>
+	</functions>
+	<levels>
+		<level desc="Let me see your goods! ;-)" bg_top="#FFFFFF" bg_bottom="#501005" stars="70">
+<!-- LVL0: a bit of everythin + evilboss -->
+			
+				<evilboss y="170" t="1"/>
+        
+		</level>
+	</levels>
+</levelset>

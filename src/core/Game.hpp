@@ -46,7 +46,7 @@ public:
 	/**
 	 * @return instance unique
 	 */
-	static Game& GetInstance();
+	static Game& GetInstance(unsigned int level_set = 0);
 
 	/**
 	 * @param path: name by which the program was called
@@ -87,7 +87,7 @@ public:
 	void PanelOnTop(bool top);
 
 private:
-	Game();
+	Game(unsigned int level_set = 0);
 	~Game();
 
 	/**
@@ -123,6 +123,9 @@ private:
 	BaseScene* scenes_[SC_COUNT];
 	BaseScene* current_scene_;
 	PlayerSave playersave_;
+
+	// groupe de niveaux
+	unsigned int level_set_;
 };
 
 #endif // GAME_HPP

@@ -26,26 +26,27 @@
 #define WIN_TITLE   "CosmoScroll"
 
 
-Game& Game::GetInstance()
+Game& Game::GetInstance(unsigned int level_set)
 {
-	static Game self;
+	static Game self(level_set);
 	return self;
 }
 
 
-Game::Game() :
+Game::Game(unsigned int level_set) :
 	app_(sf::VideoMode(WIDTH, HEIGHT, WIN_BPP), WIN_TITLE),
 	input_	      (Input::GetInstance())
 {
 	// HACK: display loading screen as early as possible
-	sf::String temp("loading..."); app_.Draw(temp); app_.Display();
+	sf::Shape tr = sf::Shape::Rectangle(0., 0., 1024., 1024., sf::Color::Black);
+	sf::String temp("loading..."); app_.Draw(tr);app_.Draw(temp); app_.Display();
 
 	CheckPurity();
 
 	input_.Init(app_.GetInput());
 
 	// load XML resources
-	LevelManager::GetInstance().ParseFile(XML_LEVELS);
+	LevelManager::GetInstance().ParseFile(XML_LEVELS, level_set);
 	ItemManager::GetInstance().LoadItems(XML_ITEMS);
 	EntityManager& entities = EntityManager::GetInstance();
 	entities.LoadAnimations(XML_ANIMATIONS);

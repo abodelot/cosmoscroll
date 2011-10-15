@@ -94,9 +94,13 @@ bool Entity::PixelPerfectCollide() const
 }
 
 
+#define ALPHACOMP(buf, width, x, y) (buf[((x) + (y) * (width)) * 4 + 3])
+/* gets to the alpha component of pixelsPtr[x,y] (Picture width being provided)*/
+
 bool Entity::IsCollidingWith(const Entity& other)
 {
-	if (PixelPerfectCollide() || other.PixelPerfectCollide())
+	if (((this->GetImage() && other.GetImage()))
+		&& (PixelPerfectCollide() || other.PixelPerfectCollide()))
 	{
 		sf::FloatRect r1 = GetCollideRect();
 		sf::FloatRect r2 = other.GetCollideRect();
@@ -105,6 +109,7 @@ bool Entity::IsCollidingWith(const Entity& other)
 		// if overlapping rectangles
 		if (r1.Intersects(r2, &overlap))
 		{
+			
 			const int ALPHA = 0;
 
 			int left1 = (int) overlap.Left - r1.Left;
@@ -116,15 +121,25 @@ bool Entity::IsCollidingWith(const Entity& other)
 			int width = (int) overlap.GetWidth();
 			int height = (int) overlap.GetHeight();
 
+			const sf::Uint8 *myPix, *otherPix;
+			myPix = this->GetImage()->GetPixelsPtr();
+			otherPix = other.GetImage()->GetPixelsPtr();
+			int myWidth = this->GetImage()->GetWidth();
+			int otherWidth = other.GetImage()->GetWidth();
 			for (int y = 0; y < height; ++y)
 			{
 				for (int x = 0; x < width; ++x)
 				{
-					if (GetPixel(x + left1, y + top1).a > ALPHA
-						&& other.GetPixel(x + left2, y + top2).a > ALPHA)
+					if (ALPHACOMP(myPix, myWidth, (x + left1), (y + top1)) > ALPHA &&
+						ALPHACOMP(otherPix, otherWidth, (x + left2), (y + top2)) > ALPHA)
 					{
 						return true;
 					}
+					/*if (GetPixel(x + left1, y + top1).a > ALPHA
+						&& other.GetPixel(x + left2, y + top2).a > ALPHA)
+					{
+						return true;								
+					}*/
 				}
 			}
 		}
