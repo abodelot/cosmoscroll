@@ -1,0 +1,143 @@
+## FRENCH
+
+menu.back = Zurück
+menu.back_main_menu = zum Hauptmenü
+menu.submit = Senden
+menu.cancel = Abbrechen
+
+# Menu principal
+menu.main.story = Story-Modus
+menu.main.arcade = Arcade-Modus
+menu.main.options = Optionen
+menu.main.about = Über
+menu.main.quit = Beenden
+
+# Menu Histoire
+menu.story.title = Story-Modus
+menu.story.credits = Credits :\n{credits}
+menu.story.select = Select einer Ebene :
+menu.story.progression = Fortschritt : {unlocked}/{total}
+menu.story.intro = Ebene {level}\n\n"{description}"\n\nEnemeis : {count}
+menu.story.play = Spielen
+menu.story.armory = Armory
+
+# Menu armurerie
+armory.title = Armory
+armory.item_level = Ebene {level}
+armory.item_current_level = Aktuelle Ebene : {level}
+armory.item_next_level = Nächste Ebene : {level}
+armory.max_level = (Max Ebene erreicht)
+armory.buy = Kaufen
+armory.info = Select eine Komponente am verbessern
+armory.item_upgraded = {item} Ebene {level} gekauft
+
+# Menu pause
+menu.pause.title = Pause
+menu.pause.resume = Spiel fortsetzen
+menu.pause.quit = Spiel beenden
+
+# Arcade menu
+menu.arcade.title = Arcade-Modus
+menu.arcade.play = Spielen
+menu.arcade.best_scores = Besten scoren
+
+# Best scores menu
+menu.best_scores.title = Online Rekorden
+
+# Menu game over
+menu.gameover.title = Game Over
+menu.gameover.pseudo = Ihr Name :
+menu.gameover.send_score = Meine Ergebnis senden
+menu.gameover.play_again = Neustarten
+menu.gameover.new_record = Ihr Ergebnis : {score}\n    Neuer Rekord !
+menu.gameover.no_record = Ihr Ergebnis : {score}\n    Versuchen Sie es erneut...
+menu.gameover.error_cheat = Cheats verboten!
+menu.gameover.error_altered_res = Senden verbotene, geändert Version des Spiels
+
+# Menu options
+menu.options.title = Optionen
+menu.options.keyboard = Tastatur-Layout
+menu.options.joystick = Joystick-Layout
+menu.options.audio = Sound und Musik
+menu.options.settings = Preferenzen
+
+# Menu clavier
+menu.keyboard.title = Tastatur-Layout
+
+# Menu joystick
+menu.joystick.title = Joystick-Layout
+menu.joystick.button = Button
+menu.joystick.sensitivity = Empfindlichkeit des Joysticks:
+
+# Menu sons
+menu.audio.title = Sound und Musik
+menu.audio.music = Musik:
+menu.audio.enable_music = Musik ON:
+menu.audio.music_volume = Volumen der Musik:
+menu.audio.enable_sound = Sound ON:
+menu.audio.sound_volume = Volumen des Sound:
+
+# Menu pr√©f√©rences
+menu.settings.title = Preferenzen
+menu.settings.fullscreen = Full Screen:
+menu.settings.language = Sprache:
+
+# Menu √† propos
+menu.about.title = Über CosmoScroll
+menu.about.version = Version :
+menu.about.authors = Autoren :
+menu.about.licence = Lizenz :
+
+# Fin de jeu
+endgame.game_over = Game Over
+endgame.end_level = Ebene {level} fertig !\nKredits genannt : +{credits}
+endgame.end_last_level = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\ngennant Kredits : +{credits}
+
+# Panneau de contr√¥le
+panel.bar_hp = Shell
+panel.bar_shield = Schirm
+panel.bar_heat = Wärme
+panel.overheat = Überhitzung!
+panel.level = Ebene {level}
+panel.record = Rekord: {record}
+panel.timer = Zeit: {min}:{sec}
+panel.points = Punkte: {points}
+
+# Bonus
+bonus.hp = Lebenspunkte
+bonus.shield = Schirm
+bonus.cooler = Eiscube
+bonus.missile = Missile
+bonus.double_shot = Double-Schiessen
+bonus.triple_shot = Triple-Schiessen
+bonus.speed = Speed
+bonus.banana = Super Banana!
+
+# Actions
+action.up = Haut
+action.down = Bas
+action.left = Gauche
+action.right = Droite
+action.weapon_1 = Weapon 1
+action.weapon_2 = Weapon 2
+action.pause = Pause
+action.cooler = Bonus Eiscube verwenden
+action.missile = Bonus Missile verwenden
+
+# Ask input
+input.press_key = Drücken Sie eine beliebige Taste auf der Tastatur, um die Aktion eingestellt input.press_button = Drücken Sie eine Taste auf dem Controller, um die Aktion eingestellt 
+input.cancel = (esc abbrechen)
+
+# Items
+item.shield = Energie Schild 
+item.shield_info = Schutzpunkte : {points}
+item.laser1 = Laser 1
+item.laser2 = Laser 2
+item.weapon_info = Damage : {dmg}, Geschwindigkeit : {speed}\nrate : {rate} Schuss/s
+item.engine = Motor
+item.engine_info = Geschwindigkeit : {speed}
+item.heatsink = Heatsink
+item.heatsink_info = max Hitze : {heat}
+item.armor = Panzerung
+item.armor_info = Lebenspunkte : {hp}
+item.price = Prix : {price} Kredits
