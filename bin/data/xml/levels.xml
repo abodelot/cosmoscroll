@@ -71,11 +71,6 @@
 	</functions>
 	<levels>
 		<level desc="This is piece of cake." stars="30">
-			<decor id="gate" y="0" t="0" />
-			<wait t="10"/>
-			<decor id="gate" y="0" t="0" />
-			<wait t="10"/>
-
 <!-- LVL1:  a bunch of caps and scoots -->
 			<loop count="2">
 				<call func="caps_x3"/>
@@ -444,9 +439,9 @@
 	<levels>
 		<level desc="Let me see your goods! ;-)" bg_top="#FFFFFF" bg_bottom="#501005" stars="70">
 <!-- LVL0: a bit of everythin + evilboss -->
-			
-				<evilboss y="170" t="1"/>
-        
+			<loop count="128">
+				<evilboss y="170" t="0.1"/>
+            </loop>
 		</level>
 	</levels>
 </levelset>

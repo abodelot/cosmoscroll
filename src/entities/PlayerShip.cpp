@@ -40,7 +40,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	SetSubRect(GetAnimation().GetFrame(0)); // WTF
 
 	snd_disabled_ = &MediaManager::GetInstance().GetSoundBuffer("disabled");
-
+	snd_overheat_ = &MediaManager::GetInstance().GetSoundBuffer("overheat");
 	// init weapons
 	weapon1_.Init("hellfire");
 	weapon1_.SetOwner(this);
@@ -215,6 +215,35 @@ void PlayerShip::HandleAction(Input::Action action)
 	}
 }
 
+#define H30DELTA 3.f
+#define H50DELTA 2.f
+#define H70DELTA 1.f
+#define H85DELTA .6f
+
+void PlayerShip::AudibleHeatingCue(float frametime)
+{
+	static bool playing = false;
+	static float hdelta = 0.f;
+	float heat_pct_ = heat_ / heat_max_;
+	
+	hdelta += frametime;
+	if (playing)
+	{
+		if ((heat_pct_ > .85f && hdelta > H85DELTA) ||
+			(heat_pct_ > .7f && hdelta > H70DELTA) ||
+			(heat_pct_ > .5f && hdelta > H50DELTA) ||
+			(heat_pct_ > .3f && hdelta > H30DELTA))
+		{
+			hdelta = 0.f;
+			playing = false;
+		}
+	}
+	else
+	{
+		SoundSystem::GetInstance().PlaySound(*snd_overheat_);	
+		playing = true;
+	}
+}	
 
 void PlayerShip::Update(float frametime)
 {
@@ -243,10 +272,14 @@ void PlayerShip::Update(float frametime)
 			panel_.SetOverheat(true);
 			ParticleSystem::GetInstance().AddMessage(GetPosition(), _t("panel.overheat"));
 		}
+		AudibleHeatingCue(frametime);
 	}
-	else if (input_.HasInput(Input::USE_WEAPON_1) || input_.HasInput(Input::USE_WEAPON_2))
-	{
-		SoundSystem::GetInstance().PlaySound(*snd_disabled_);
+	else {
+		//SoundSystem::GetInstance().PlaySound(*snd_disabled_);
+		if (input_.HasInput(Input::USE_WEAPON_1) || input_.HasInput(Input::USE_WEAPON_2))
+		{
+			SoundSystem::GetInstance().PlaySound(*snd_disabled_);
+		}
 	}
 
 	// déplacement

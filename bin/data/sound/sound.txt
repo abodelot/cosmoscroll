@@ -13,3 +13,4 @@ menu-valid.ogg
 title.ogg
 warp.ogg
 cash-register.wav
+overheat.ogg

@@ -38,7 +38,7 @@ Game::Game(unsigned int level_set) :
 	input_	      (Input::GetInstance())
 {
 	// HACK: display loading screen as early as possible
-	sf::Shape tr = sf::Shape::Rectangle(0., 0., 1024., 1024., sf::Color::Black);
+	sf::Shape tr = sf::Shape::Rectangle(0, 0, WIDTH, HEIGHT, sf::Color::Black);
 	sf::String temp("loading..."); app_.Draw(tr);app_.Draw(temp); app_.Display();
 
 	CheckPurity();

@@ -49,12 +49,13 @@ public:
 	/**
 	 * @return largeur de l'univers
 	 */
-	int GetWidth() const;
+	inline int GetWidth() const {return width_;};
 
 	/**
 	 * @return hauteur de l'univers
 	 */
-	int GetHeight() const;
+	inline int GetHeight() const{return height_;};
+	
 
 	void HandleAction(Input::Action action);
 

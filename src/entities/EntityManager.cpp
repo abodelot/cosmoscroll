@@ -140,18 +140,6 @@ void EntityManager::SetSize(int width, int height)
 }
 
 
-int EntityManager::GetWidth() const
-{
-	return width_;
-}
-
-
-int EntityManager::GetHeight() const
-{
-	return height_;
-}
-
-
 void EntityManager::HandleAction(Input::Action action)
 {
 	player_->HandleAction(action);

@@ -81,6 +81,12 @@ private:
 	 */
 	void IncreaseShield(int count = 1);
 
+	/**
+	 * Faire beeper l'indicateur de surchauffe
+	 * @param frametime
+	 */
+	void AudibleHeatingCue(float frametime);
+
 	enum
 	{
 		KONAMI_CODE_LENGTH = 10
@@ -106,7 +112,7 @@ private:
 	Weapon weapon1_;
 	Weapon weapon2_;
 	MissileLauncher missile_launcher_;
-	const sf::SoundBuffer* snd_disabled_;
+	const sf::SoundBuffer* snd_disabled_, *snd_overheat_;
 };
 
 #endif // PLAYERSHIP_HPP
