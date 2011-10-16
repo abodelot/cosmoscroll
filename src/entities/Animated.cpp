@@ -1,43 +1,51 @@
 #include "Animated.hpp"
 
 
-Animated::Animated(const Animation& animation) :
-	animation_(animation)
+Animated::Animated(const Animation& animation)
 {
-	timer_ = animation_.GetDelay();
+	SetAnimation(animation);
+}
+
+
+Animated::Animated()
+{
+	animation_ = NULL;
+	timer_ = 0.f;
 	frame_ = 0;
 }
 
 
-Animated::Animated(const Animation& animation, sf::Sprite& sprite) :
-	animation_(animation)
+void Animated::Reset(sf::Sprite& sprite)
 {
-	timer_ = animation_.GetDelay();
-	frame_ = 0;
-	InitSprite(sprite);
-}
-
-
-void Animated::InitSprite(sf::Sprite& sprite)
-{
-	sprite.SetImage(animation_.GetImage());
-	sprite.SetSubRect(animation_.GetFrame(0));
-}
-
-
-void Animated::Update(float frametime, sf::Sprite& sprite)
-{
-	timer_ -= frametime;
-	if (timer_ <= 0)
+	if (animation_ != NULL)
 	{
-		timer_ = animation_.GetDelay();
-		frame_ = (frame_ + 1) % animation_.GetSize();
-		sprite.SetSubRect(animation_.GetFrame(frame_));
+		sprite.SetImage(animation_->GetImage());
+		sprite.SetSubRect(animation_->GetFrame(0));
 	}
 }
 
 
-const Animation& Animated::GetAnimation() const
+void Animated::UpdateSubRect(sf::Sprite& sprite, float frametime)
+{
+	timer_ -= frametime;
+	if (timer_ <= 0)
+	{
+		timer_ = animation_->GetDelay();
+		frame_ = (frame_ + 1) % animation_->GetSize();
+		sprite.SetSubRect(animation_->GetFrame(frame_));
+	}
+}
+
+
+void Animated::SetAnimation(const Animation& animation)
+{
+	animation_ = &animation;
+	timer_ = animation.GetDelay();
+	frame_ = 0;
+}
+
+
+const Animation* Animated::GetAnimation() const
 {
 	return animation_;
 }

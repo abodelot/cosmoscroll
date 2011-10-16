@@ -6,30 +6,31 @@
 #include "Animation.hpp"
 
 /**
- * Interface de sprite animé
+ * Base class for animated class
  */
 class Animated
 {
 public:
 	Animated(const Animation& animation);
+	Animated();
 
-	// initialiser le sprite dès le constructeur
-	Animated(const Animation& animation, sf::Sprite& sprite);
+	void Reset(sf::Sprite& sprite);
 
-	// initialiser le sprite plus tard
-	void InitSprite(sf::Sprite& sprite);
+
 
 	/**
 	 * Mettre à jour le subrect d'un sprite animé
-	 * @param framtime: temps de la frame courante
 	 * @param sprite: sprite à mettre à jour
+	 * @param framtime: temps de la frame courante
 	 */
-	void Update(float frametime, sf::Sprite& sprite);
+	void UpdateSubRect(sf::Sprite& sprite, float frametime);
 
-	const Animation& GetAnimation() const;
+
+	void SetAnimation(const Animation& animation);
+	const Animation* GetAnimation() const;
 
 private:
-	const Animation& animation_;
+	const Animation* animation_;
 	int frame_; // indice de la frame courante
 	float timer_;
 };

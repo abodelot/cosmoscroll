@@ -11,9 +11,10 @@
 
 BossTentacles::BossTentacles(const sf::Vector2f& position) :
 	Entity(position, 300),
-	Animated(EntityManager::GetInstance().GetAnimation("boss-tentacles"), *this)
+	Animated(EntityManager::GetInstance().GetAnimation("boss-tentacles"))
 {
 	SetTeam(Entity::BAD);
+	Reset(*this);
 
 	// init weapons
 	weapon_.Init("laser-pink");
@@ -38,7 +39,7 @@ BossTentacles* BossTentacles::Clone() const
 
 void BossTentacles::Update(float frametime)
 {
-	Animated::Update(frametime, *this);
+	Animated::UpdateSubRect(*this, frametime);
 	timer_ += frametime;
 
 	sf::Vector2f target_pos = target_->GetPosition();

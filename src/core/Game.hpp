@@ -46,12 +46,12 @@ public:
 	/**
 	 * @return instance unique
 	 */
-	static Game& GetInstance(unsigned int level_set = 0);
+	static Game& GetInstance();
 
 	/**
 	 * @param path: name by which the program was called
 	 */
-	void Init(const std::string& path);
+	void Init(const std::string& path, int level_set);
 
 	/**
 	 * Lancer une partie de CosmoScroll
@@ -87,7 +87,7 @@ public:
 	void PanelOnTop(bool top);
 
 private:
-	Game(unsigned int level_set = 0);
+	Game();
 	~Game();
 
 	/**

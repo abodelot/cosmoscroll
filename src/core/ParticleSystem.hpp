@@ -222,16 +222,16 @@ private:
 		Explosion(const sf::Vector2f& pos) :
 			Animated(EntityManager::GetInstance().GetAnimation("explosion"))
 		{
-			Animated::InitSprite(sprite_);
+			Animated::Reset(sprite_);
 			sprite_.SetPosition(pos);
-			sprite_.SetSubRect(Animated::GetAnimation().GetFrame(0));
+			sprite_.SetCenter(sprite_.GetSize().x / 2, sprite_.GetSize().y / 2);
 			timer_ = 0;
 		}
 		bool OnUpdate(float frametime)
 		{
-			Animated::Update(frametime, sprite_);
+			Animated::UpdateSubRect(sprite_, frametime);
 			timer_ += frametime;
-			if (timer_ > Animated::GetAnimation().GetDuration())
+			if (timer_ > Animated::GetAnimation()->GetDuration())
 			{
 				return true;
 			}

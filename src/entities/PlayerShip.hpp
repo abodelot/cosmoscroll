@@ -38,10 +38,13 @@ public:
 	void HandleAction(Input::Action action);
 
 	// override
+	void Update(float frametime);
+
+	// override
 	void OnCollide(Entity& entity);
 
 	// override
-	void Update(float frametime);
+	void OnDestroy();
 
 	// override
 	void TakeDamage(int damage);

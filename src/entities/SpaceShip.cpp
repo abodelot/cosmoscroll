@@ -37,9 +37,10 @@
 
 SpaceShip::SpaceShip(const char* animation, int hp, int speed) :
 	Entity(sf::Vector2f(0, 0), hp),
-	Animated(EntityManager::GetInstance().GetAnimation(animation), *this)
+	Animated(EntityManager::GetInstance().GetAnimation(animation))
 {
 	SetTeam(Entity::BAD);
+	Reset(*this);
 
 	move_pattern_ = DEFAULT_MOVE_PATTERN;
 	attack_pattern_ = DEFAULT_ATTACK_PATTERN;
@@ -106,7 +107,7 @@ void SpaceShip::Update(float frametime)
 	(this->*move_pattern_)(frametime);
 	(this->*attack_pattern_)();
 
-	Animated::Update(frametime, *this);
+	Animated::UpdateSubRect(*this, frametime);
 	weapon_.Update(frametime);
 }
 

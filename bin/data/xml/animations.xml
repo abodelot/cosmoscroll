@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <animations>
 	<anim name="player"      img="entities/player"        width="64" height="40" count="2" delay="0.1" />
+	<anim name="player-destroyed" img="entities/player"   y="80" width="64" height="40" count="2" delay="0.1" />
 	<anim name="capsule"     img="entities/capsule"       width="32" height="32" count="8" delay="0.1" />
 	<anim name="scoot"       img="entities/scoot"         width="48" height="32" count="2" delay="0.1" />
 	<anim name="interceptor" img="entities/interceptor"   width="56" height="48" count="2" delay="0.1" />

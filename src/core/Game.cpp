@@ -27,21 +27,43 @@
 #define WIN_TITLE   "CosmoScroll"
 
 
-Game& Game::GetInstance(unsigned int level_set)
+Game& Game::GetInstance()
 {
-	static Game self(level_set);
+	static Game self;
 	return self;
 }
 
 
-Game::Game(unsigned int level_set) :
+Game::Game():
 	app_(sf::VideoMode(WIDTH, HEIGHT, WIN_BPP), WIN_TITLE),
-	input_	      (Input::GetInstance())
+	input_(Input::GetInstance())
 {
-	// HACK: display loading screen as early as possible
-	sf::Shape tr = sf::Shape::Rectangle(0, 0, WIDTH, HEIGHT, sf::Color::Black);
-	sf::String temp("loading..."); app_.Draw(tr);app_.Draw(temp); app_.Display();
+	// center window on desktop
+	sf::VideoMode desktop = sf::VideoMode::GetDesktopMode();
+	app_.SetPosition((desktop.Width - WIDTH) / 2, (desktop.Height - HEIGHT) / 2);
 
+	// HACK: display loading screen as early as possible
+	sf::String temp("loading..."); app_.Clear() ;app_.Draw(temp); app_.Display();
+}
+
+
+Game::~Game()
+{
+	app_.Close();
+
+	// delete allocated scenes
+	for (int i = 0; i < SC_COUNT; ++i)
+	{
+		if (scenes_[i] != NULL)
+		{
+			delete scenes_[i];
+		}
+	}
+}
+
+
+void Game::Init(const std::string& path, int level_set)
+{
 	CheckPurity();
 
 	input_.Init(app_.GetInput());
@@ -68,27 +90,6 @@ Game::Game(unsigned int level_set) :
 	}
 	current_scene_ = NULL;
 	running_ = true;
-}
-
-
-Game::~Game()
-{
-	app_.Close();
-
-	// delete allocated scenes
-	for (int i = 0; i < SC_COUNT; ++i)
-	{
-		if (scenes_[i] != NULL)
-		{
-			delete scenes_[i];
-		}
-	}
-}
-
-
-void Game::Init(const std::string& path)
-{
-
 }
 
 

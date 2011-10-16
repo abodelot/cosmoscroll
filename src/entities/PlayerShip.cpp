@@ -32,12 +32,12 @@
 
 PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	Entity(position, -1), // hack, init HP later (we must load items first)
-	Animated(EntityManager::GetInstance().GetAnimation(animation), *this),
+	Animated(EntityManager::GetInstance().GetAnimation(animation)),
 	input_(Input::GetInstance()),
 	panel_(ControlPanel::GetInstance())
 {
 	SetTeam(Entity::GOOD);
-	SetSubRect(GetAnimation().GetFrame(0)); // WTF
+	Reset(*this);
 
 	snd_disabled_ = &MediaManager::GetInstance().GetSoundBuffer("disabled");
 	snd_overheat_ = &MediaManager::GetInstance().GetSoundBuffer("overheat");
@@ -250,7 +250,7 @@ void PlayerShip::Update(float frametime)
 	static const EntityManager& manager = EntityManager::GetInstance();
 
 	// animation
-	Animated::Update(frametime, *this);
+	Animated::UpdateSubRect(*this, frametime);
 
 	// tirs
 	if (!overheated_)
@@ -379,11 +379,6 @@ void PlayerShip::TakeDamage(int damage)
 	{
 		Entity::TakeDamage(damage);
 		panel_.SetShipHP(GetHP());
-		if (IsDead())
-		{
-			p.AddExplosion(GetPosition());
-			EntityManager::GetInstance().TerminateGame();
-		}
 	}
 }
 
@@ -402,6 +397,16 @@ void PlayerShip::OnCollide(Entity& entity)
 	{
 		Entity::OnCollide(entity);
 	}
+}
+
+
+void PlayerShip::OnDestroy()
+{
+	EntityManager& manager = EntityManager::GetInstance();
+	SetAnimation(manager.GetAnimation("player-destroyed"));
+	Reset(*this);
+	manager.TerminateGame();
+	ParticleSystem::GetInstance().AddExplosion(GetCenter_());
 }
 
 
