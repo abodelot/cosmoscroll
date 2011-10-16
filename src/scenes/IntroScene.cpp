@@ -1,9 +1,9 @@
 #include "IntroScene.hpp"
-#include "../core/Game.hpp"
-#include "../core/SoundSystem.hpp"
-#include "../entities/EntityManager.hpp"
-#include "../entities/PlayerShip.hpp"
-#include "../utils/MediaManager.hpp"
+#include "core/Game.hpp"
+#include "core/SoundSystem.hpp"
+#include "entities/EntityManager.hpp"
+#include "entities/PlayerShip.hpp"
+#include "utils/MediaManager.hpp"
 
 #define DURATION    6.f
 #define JINGLE_TIME 2.f
@@ -24,6 +24,7 @@ IntroScene::IntroScene() :
 
 	// show a tempory player ship during the scene
 	ship_ = new PlayerShip(sf::Vector2f(-200, 100), "player");
+	entity_mgr_.SetSize(Game::WIDTH, Game::HEIGHT);
 	entity_mgr_.AddEntity(ship_);
 
 	// allow the player ship to go beyond screen limits during the intro scene

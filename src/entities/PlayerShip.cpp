@@ -225,7 +225,7 @@ void PlayerShip::AudibleHeatingCue(float frametime)
 	static bool playing = false;
 	static float hdelta = 0.f;
 	float heat_pct_ = heat_ / heat_max_;
-	
+
 	hdelta += frametime;
 	if (playing)
 	{
@@ -240,10 +240,10 @@ void PlayerShip::AudibleHeatingCue(float frametime)
 	}
 	else
 	{
-		SoundSystem::GetInstance().PlaySound(*snd_overheat_);	
+		SoundSystem::GetInstance().PlaySound(*snd_overheat_);
 		playing = true;
 	}
-}	
+}
 
 void PlayerShip::Update(float frametime)
 {
@@ -403,13 +403,6 @@ void PlayerShip::OnCollide(Entity& entity)
 		Entity::OnCollide(entity);
 	}
 }
-
-
-bool PlayerShip::PixelPerfectCollide() const
-{
-	return true;
-}
-
 
 
 void PlayerShip::ComputeMove(float)

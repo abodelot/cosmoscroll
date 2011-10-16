@@ -1,5 +1,4 @@
 #include "Entity.hpp"
-#include "EntityManager.hpp"
 
 
 Entity::Entity(const sf::Vector2f& position, int hp, int collide_damage)
@@ -10,8 +9,8 @@ Entity::Entity(const sf::Vector2f& position, int hp, int collide_damage)
 	flipped_x_ = false;
 	flipped_y_ = false;
 	collide_damage_ = collide_damage;
+	collide_flag_ = 0;
 	points_ = 0;
-	damageable_ = true;
 }
 
 
@@ -36,14 +35,17 @@ void Entity::SetTarget(Entity*)
 
 void Entity::TakeDamage(int damage)
 {
-	if (damageable_)
-		hp_ -= damage;
+	hp_ -= damage;
+	if (hp_ <= 0)
+	{
+		OnDestroy();
+	}
 }
 
 
 void Entity::OnCollide(Entity& entity)
 {
-	if (team_ != entity.team_)
+	if (team_ != entity.team_ && !(entity.collide_flag_ & C_IGNORE_DAMAGE))
 	{
 		entity.TakeDamage(collide_damage_);
 	}
@@ -87,12 +89,6 @@ sf::FloatRect Entity::GetCollideRect() const
 	rect.Right = rect.Left + GetSize().x;
 	rect.Bottom = rect.Top + GetSize().y;
 	return rect;
-}
-
-
-bool Entity::PixelPerfectCollide() const
-{
-	return false;
 }
 
 
@@ -210,13 +206,19 @@ int Entity::ConsumePoints()
 }
 
 
-void Entity::SetDamageable(bool damageable)
-{
-	damageable_ = damageable;
-}
-
-
 void Entity::SetCollideDamage(int damage)
 {
 	collide_damage_ = damage;
+}
+
+
+void Entity::SetCollideFlag(int collide_flag)
+{
+	collide_flag_ = collide_flag;
+}
+
+
+int Entity::GetCollideFlag() const
+{
+	return collide_flag_;
 }

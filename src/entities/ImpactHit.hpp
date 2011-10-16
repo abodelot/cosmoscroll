@@ -14,7 +14,7 @@ public:
 
 	~ImpactHit();
 
-	// inherited
+	// override
 	void OnCollide(Entity& entity);
 };
 

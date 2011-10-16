@@ -111,20 +111,13 @@ void SpaceShip::Update(float frametime)
 }
 
 
-void SpaceShip::TakeDamage(int damage)
+void SpaceShip::OnDestroy()
 {
-	if (!IsDead())
+	if (sf::Randomizer::Random(1, DROP_LUCK) == 1)
 	{
-		Entity::TakeDamage(damage);
-		if (IsDead())
-		{
-			if (sf::Randomizer::Random(1, DROP_LUCK) == 1)
-			{
-				EntityManager::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
-			}
-			ParticleSystem::GetInstance().AddExplosion(GetPosition());
-		}
+		EntityManager::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
 	}
+	ParticleSystem::GetInstance().AddExplosion(GetCenter_());
 }
 
 // movement patterns -----------------------------------------------------------

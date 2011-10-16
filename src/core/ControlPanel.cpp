@@ -90,6 +90,8 @@ void ControlPanel::Init(EntityManager::Mode mode)
 		case EntityManager::MODE_STORY:
 			level_cursor_.SetX(LEVEL_BAR_X);
 			break;
+		default:
+			break;
 	}
 	SetPoints(0);
 }
@@ -250,12 +252,10 @@ void ControlPanel::Render(sf::RenderTarget& target) const
 	target.Draw(timer_);
 	target.Draw(str_points_);
 
-	switch (game_mode_)
+	if (game_mode_ == EntityManager::MODE_STORY)
 	{
-		case EntityManager::MODE_STORY:
-			target.Draw(level_bar_);
-			target.Draw(level_cursor_);
-			break;
+		target.Draw(level_bar_);
+		target.Draw(level_cursor_);
 	}
 }
 

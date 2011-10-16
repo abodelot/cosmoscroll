@@ -13,6 +13,9 @@ public:
 	ComplexEntity(const sf::Vector2f& pos);
 
 	// override
+	void Update(float frametime);
+
+	// override
 	void OnCollide(Entity& entity);
 
 protected:

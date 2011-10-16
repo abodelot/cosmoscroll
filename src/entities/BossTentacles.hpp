@@ -17,10 +17,7 @@ public:
 	void Update(float frametime);
 
 	// inherited
-	void TakeDamage(int damage);
-
-	// inherited
-	bool PixelPerfectCollide() const;
+	void OnDestroy();
 
 	// inherited
 	void SetTarget(Entity* target);

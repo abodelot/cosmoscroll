@@ -15,17 +15,17 @@ public:
 
 	EvilBoss* Clone() const;
 
-	// inherited
+	// override
 	void Update(float frametime);
 
-	// inherited
+	// override
 	void TakeDamage(int damage);
 
-	// inherited
-	bool PixelPerfectCollide() const;
-
-	// inherited
+	// override
 	void SetTarget(Entity* target);
+
+	// override
+	void OnDestroy();
 
 private:
 	enum Phase

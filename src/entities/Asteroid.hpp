@@ -24,14 +24,14 @@ public:
 	 */
 	Asteroid(const sf::Vector2f& offset, Size size, float angle=180);
 
-	// inherited
+	// override
 	Asteroid* Clone() const;
 
-	// inherited
+	// override
 	void Update(float frametime);
 
-	// inherited
-	void TakeDamage(int damage);
+	// override
+	void OnDestroy();
 
 private:
 	/**

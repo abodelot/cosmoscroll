@@ -3,6 +3,12 @@
 
 #include <SFML/Graphics.hpp>
 
+enum CollisionBehavior
+{
+	C_IGNORE_DAMAGE = 1 << 0,
+	C_IGNORE_HITS   = 1 << 1
+};
+
 /**
  * Base de toute entité du jeu (classe abstraite)
  */
@@ -49,6 +55,8 @@ public:
 	 */
 	virtual void OnCollide(Entity& entity);
 
+	virtual void OnDestroy() {};
+
 	/**
 	 * Détermine si l'entité est encore en vie
 	 * @return true si l'entité doit être supprimée
@@ -84,11 +92,6 @@ public:
 	sf::FloatRect GetCollideRect() const;
 
 	/**
-	 * Indique si l'entité utilise une détection de collision pixel perfect
-	 */
-	bool PixelPerfectCollide() const;
-
-	/**
 	 * Test if entity is colliding with another entity
 	 * @param other: other colliding entity
 	 * @param r1: pre-computed entity collide rect
@@ -103,16 +106,17 @@ public:
 
 	int GetCollideDamage() const;
 
+
+	void SetCollideFlag(int collision_flag);
+	int GetCollideFlag() const;
+
+
 	/**
 	 * Valeur de l'entité
 	 */
 	void SetPoints(int points);
 	int GetPoints() const;
 	int ConsumePoints();
-
-	inline bool IsDamageable() const { return damageable_; }
-
-	void SetDamageable(bool damageable);
 
 protected:
 	/**
@@ -133,8 +137,8 @@ private:
 	int hp_;
 	int points_;
 	int collide_damage_;
+	int collide_flag_;
 	Team team_;
-	bool damageable_;
 };
 
 #endif // ENTITY_HPP

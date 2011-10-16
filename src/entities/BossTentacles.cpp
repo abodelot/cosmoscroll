@@ -107,25 +107,11 @@ void BossTentacles::Update(float frametime)
 }
 
 
-
-
-void BossTentacles::TakeDamage(int damage)
+void BossTentacles::OnDestroy()
 {
-	Entity::TakeDamage(damage);
-	sf::Vector2f center = GetPosition();
-	center.x += GetSize().x / 2;
-	center.y += GetSize().y / 2;
-	if (IsDead())
-	{
-		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("boom"));
-		ParticleSystem::GetInstance().AddGreenImpact(center, 100);
-	}
-}
-
-
-bool BossTentacles::PixelPerfectCollide() const
-{
-	return true;
+	sf::Vector2f pos = GetCenter_();
+	ParticleSystem::GetInstance().AddGreenImpact(pos, 100);
+	SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("boom"));
 }
 
 

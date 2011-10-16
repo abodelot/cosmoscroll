@@ -21,18 +21,18 @@ Gate::Gate(const sf::Vector2f& pos):
 	Part base_top(2);
 	base_top.SetImage(media.GetImage("entities/decor-base"));
 	base_top.FlipY(true);
-	base_top.SetHP(9000);
+	base_top.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(base_top, 32);
 
 	Part door(3);
 	door.SetImage(media.GetImage("entities/decor-door"));
-	door.SetHP(9000);
+	door.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(door, 32 + 48, GetSize().y);
 	door_full_height_ = door.GetSize().y;
 
 	Part base_bottom(2);
 	base_bottom.SetImage(media.GetImage("entities/decor-base"));
-	base_bottom.SetHP(9000);
+	base_bottom.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(base_bottom, 32, GetSize().y);
 
 	energy_cells_ = 3;
@@ -42,6 +42,7 @@ Gate::Gate(const sf::Vector2f& pos):
 
 void Gate::Update(float frametime)
 {
+	ComplexEntity::Update(frametime);
 	sf::Sprite::Move(-60 * frametime, 0);
 	if (door_timer_ > 0)
 	{

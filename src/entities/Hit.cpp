@@ -12,7 +12,7 @@ Hit::Hit(Entity::Team team, const sf::Vector2f& position, float angle,
 {
 	SetImage(*image);
 	SetTeam(team);
-	SetDamageable(false); // hit objects die by themselves on collide
+	SetCollideFlag(C_IGNORE_HITS | C_IGNORE_DAMAGE); // hit objects die by themselves on collide
 	SetRotation(math::rad_to_deg(angle));
 
 	// calcul du vecteur vitesse à partir de l'angle et de la vitesse
@@ -20,8 +20,7 @@ Hit::Hit(Entity::Team team, const sf::Vector2f& position, float angle,
 	speed_.y = -std::sin(angle) * speed;
 
 	// origin is located at sprite center to allow rotation
-	const sf::IntRect& rect = GetSubRect();
-	SetCenter(rect.GetWidth() / 2, rect.GetHeight() / 2);
+	SetCenter(GetSize().x / 2, GetSize().y / 2);
 }
 
 
@@ -33,10 +32,7 @@ Hit* Hit::Clone() const
 
 void Hit::Update(float frametime)
 {
-	sf::Vector2f pos = GetPosition();
-	pos.x = pos.x + speed_.x * frametime;
-	pos.y = pos.y + speed_.y * frametime;
-	SetPosition(pos);
+	Move(speed_.x * frametime, speed_.y * frametime);
 }
 
 
@@ -45,7 +41,7 @@ void Hit::OnCollide(Entity& entity)
 	if (!IsDead())
 	{
 		// ignore friend entities, hit and bonuses
-		if (entity.GetTeam() == GetTeam() || !entity.IsDamageable())
+		if (entity.GetTeam() == GetTeam() || entity.GetCollideFlag() & C_IGNORE_HITS)
 		{
 			return;
 		}

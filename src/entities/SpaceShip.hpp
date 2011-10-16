@@ -20,17 +20,17 @@ public:
 	 */
 	Weapon* GetWeapon();
 
-	// inherited
+	// override
 	SpaceShip* Clone() const;
 
-	// inherited
+	// override
 	void SetTarget(Entity* target);
 
-	// inherited
+	// override
 	void Update(float frametime);
 
-	// inherited
-	void TakeDamage(int damage);
+	// override
+	void OnDestroy();
 
 private:
 	// MOVEMENT PATTERN

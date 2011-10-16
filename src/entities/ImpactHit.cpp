@@ -14,8 +14,14 @@ public:
 	{
 		radius_ = IMPACT_RADIUS;
 	}
+
 	void operator()(Entity& e)
 	{
+		if (e.GetCollideFlag() & C_IGNORE_HITS)
+		{
+			return;
+		}
+
 		if (e.GetTeam() != hit_.GetTeam()
 			&& math::distance(e.GetPosition(), hit_.GetPosition()) < radius_)
 		{

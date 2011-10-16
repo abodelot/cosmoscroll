@@ -18,8 +18,11 @@ public:
 
 	int GetID() const;
 
+	void TakeDamage(int damage);
+
 private:
 	int id_;
+	float timer_;
 };
 
 

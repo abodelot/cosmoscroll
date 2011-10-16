@@ -103,20 +103,14 @@ void EvilBoss::TakeDamage(int damage)
 				break;
 		}
 	}
-	else if (IsDead())
-	{
-		sf::Vector2f pos = GetPosition();
-		pos.x += GetSize().x / 2;
-		pos.y += GetSize().y / 2;
-		ParticleSystem::GetInstance().AddGreenImpact(pos, 200);
-		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("boom"));
-	}
 }
 
 
-bool EvilBoss::PixelPerfectCollide() const
+void EvilBoss::OnDestroy()
 {
-	return true;
+	sf::Vector2f pos = GetCenter_();
+	ParticleSystem::GetInstance().AddGreenImpact(pos, 200);
+	SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("boom"));
 }
 
 

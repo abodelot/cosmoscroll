@@ -2,7 +2,6 @@
 #include "Asteroid.hpp"
 #include "PlayerShip.hpp"
 
-#include "core/Game.hpp"
 #include "core/LevelManager.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
@@ -37,7 +36,7 @@ EntityManager::EntityManager():
 	particles_(ParticleSystem::GetInstance()),
 	levels_(LevelManager::GetInstance())
 {
-	SetSize(Game::WIDTH, Game::HEIGHT);
+	SetSize(0, 0);
 
 	player_ = NULL;
 	more_bad_guys_ = &EntityManager::MoreBadGuys_ARCADE;
@@ -455,7 +454,7 @@ void EntityManager::SpawnRandomEntity()
 	}
 	Entity* entity = uniques_[sf::Randomizer::Random(0, max_droppable_index_)]->Clone();
 
-	entity->SetX(Game::WIDTH);
+	entity->SetX(width_ - 1);
 	entity->SetY(sf::Randomizer::Random(0, height_ - (int) entity->GetSize().y));
 	AddEntity(entity);
 }

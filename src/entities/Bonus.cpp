@@ -14,7 +14,7 @@ Bonus::Bonus(Type type, const sf::Vector2f& offset) :
 {
 	SetImage(GET_IMG("entities/bonus"));
 	SetSubRect(GetSubRect(type));
-	SetDamageable(false);
+	SetCollideFlag(C_IGNORE_HITS | C_IGNORE_DAMAGE); // non-damageable, power-ups will be removed by player
 	type_ = type;
 }
 

@@ -53,31 +53,27 @@ void Asteroid::Update(float frametime)
 }
 
 
-void Asteroid::TakeDamage(int damage)
+void Asteroid::OnDestroy()
 {
 	sf::Vector2f pos = GetPosition();
 
-	Entity::TakeDamage(damage);
-	if (IsDead())
+	static EntityManager& manager = EntityManager::GetInstance();
+	switch (size_)
 	{
-		static EntityManager& manager = EntityManager::GetInstance();
-		switch (size_)
-		{
-			case BIG:
-				for (int i = 0; i < BIG_SPLIT_INTO; ++i)
-				{
-					manager.AddEntity(new Asteroid(pos, MEDIUM, sf::Randomizer::Random(0, 360)));
-				}
-				break;
-			case MEDIUM:
-				for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
-				{
-					manager.AddEntity(new Asteroid(pos, SMALL, sf::Randomizer::Random(0, 360)));
-				}
-				break;
-			default:
-				break;
-		}
+		case BIG:
+			for (int i = 0; i < BIG_SPLIT_INTO; ++i)
+			{
+				manager.AddEntity(new Asteroid(pos, MEDIUM, sf::Randomizer::Random(0, 360)));
+			}
+			break;
+		case MEDIUM:
+			for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
+			{
+				manager.AddEntity(new Asteroid(pos, SMALL, sf::Randomizer::Random(0, 360)));
+			}
+			break;
+		default:
+			break;
 	}
 	ParticleSystem::GetInstance().AddImpact(GetPosition(), 10);
 }

@@ -49,6 +49,8 @@
 		<Unit filename="bin/data/xml/items.xml" />
 		<Unit filename="bin/data/xml/levels.xml" />
 		<Unit filename="bin/data/xml/spaceships.xml" />
+		<Unit filename="src/core/BigScrollingMessagingAppliance.cpp" />
+		<Unit filename="src/core/BigScrollingMessagingAppliance.hpp" />
 		<Unit filename="src/core/Constants.hpp" />
 		<Unit filename="src/core/ControlPanel.cpp" />
 		<Unit filename="src/core/ControlPanel.hpp" />

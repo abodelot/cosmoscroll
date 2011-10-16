@@ -189,7 +189,7 @@ void LevelManager::ParseFile(const char* file, unsigned int offset)
 		puts("warning: invalid level id");
 		exit(1);
 	}
-	
+
 	// Constitution de la map de pointeurs vers les fonctions
 	TiXmlNode* node = set->FirstChild("functions")->FirstChild();
 	while (node != NULL)
@@ -310,7 +310,6 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		}
 		else if (strcmp(tag_name, "decor") == 0)
 		{
-			puts("spawn decor");
 			entity = new Gate(position);
 		}
 		else

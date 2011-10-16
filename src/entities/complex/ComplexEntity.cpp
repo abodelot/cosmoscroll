@@ -6,8 +6,17 @@ ComplexEntity::ComplexEntity(const sf::Vector2f& pos):
 	Entity(pos, 1)
 {
 	SetTeam(Entity::NEUTRAL);
-	SetDamageable(false);
+	SetCollideFlag(C_IGNORE_HITS | C_IGNORE_DAMAGE);
 	SetCollideDamage(0);
+}
+
+
+void ComplexEntity::Update(float frametime)
+{
+	for (size_t i = 0; i < parts_.size(); ++i)
+	{
+		parts_[i].Update(frametime);
+	}
 }
 
 

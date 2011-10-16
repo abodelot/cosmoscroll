@@ -32,22 +32,19 @@ public:
 
 	void UpdateScoreCounter(int diff);
 
-	// inherited
+	// override
 	PlayerShip* Clone() const;
 
 	void HandleAction(Input::Action action);
 
-	// inherited
+	// override
 	void OnCollide(Entity& entity);
 
-	// inherited
+	// override
 	void Update(float frametime);
 
-	// inherited
+	// override
 	void TakeDamage(int damage);
-
-	// inherited
-	bool PixelPerfectCollide() const;
 
 private:
 	enum TimedBonus
