@@ -5,7 +5,6 @@
 #include "core/Constants.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/PlayerShip.hpp"
-#include "utils/MediaManager.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "md5/md5.hpp"

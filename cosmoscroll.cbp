@@ -197,10 +197,8 @@
 		<Unit filename="src/utils/I18n.hpp" />
 		<Unit filename="src/utils/Math.cpp" />
 		<Unit filename="src/utils/Math.hpp" />
-		<Unit filename="src/utils/MediaManager.cpp" />
-		<Unit filename="src/utils/MediaManager.hpp" />
-		<Unit filename="src/utils/MediaNotFoundException.cpp" />
-		<Unit filename="src/utils/MediaNotFoundException.hpp" />
+		<Unit filename="src/utils/Resources.cpp" />
+		<Unit filename="src/utils/Resources.hpp" />
 		<Unit filename="src/utils/StringUtils.cpp" />
 		<Unit filename="src/utils/StringUtils.hpp" />
 		<Extensions>

@@ -1,11 +1,11 @@
 #include <cstring>
+#include <cstdio>
 
 #include "SpaceShip.hpp"
 #include "EntityManager.hpp"
 #include "Bonus.hpp"
 
 #include "utils/Math.hpp"
-#include "utils/MediaManager.hpp"
 #include "utils/StringUtils.hpp"
 #include "core/ParticleSystem.hpp"
 

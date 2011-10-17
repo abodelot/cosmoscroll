@@ -2,7 +2,7 @@
 #include <SFML/System/Randomizer.hpp>
 
 #include "Bonus.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 #include "utils/I18n.hpp"
 
 #define BONUS_SPEED 100
@@ -12,7 +12,7 @@
 Bonus::Bonus(Type type, const sf::Vector2f& offset) :
 	Entity(offset, 1, 0)
 {
-	SetImage(GET_IMG("entities/bonus"));
+	SetImage(Resources::GetImage("entities/bonus.png"));
 	SetSubRect(GetSubRect(type));
 	SetCollideFlag(C_IGNORE_HITS | C_IGNORE_DAMAGE); // non-damageable, power-ups will be removed by player
 	type_ = type;

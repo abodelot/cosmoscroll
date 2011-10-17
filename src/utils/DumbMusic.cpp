@@ -1,36 +1,43 @@
-#ifndef NO_DUMB_MUSIC
-
-
-#include <cassert>
 #include "DumbMusic.hpp"
 
 #define DELTA          65536.0f / SAMPLING_RATE
 
+bool DumbMusic::inited_ = false;
 
-DumbMusic::DumbMusic(const char* name)
+
+void DumbMusic::Exit()
 {
-	Initialize(N_CHANNELS, SAMPLING_RATE);
-	module_ = dumb_load_mod_quick(name);
+	dumb_exit();
+}
+
+
+DumbMusic::DumbMusic()
+{
+	if (!inited_)
+	{
+		dumb_register_stdfiles();
+		inited_ = true;
+	}
+
+	module_ = NULL;
 	player_ = NULL;
 }
 
 
 DumbMusic::~DumbMusic()
 {
-	duh_end_sigrenderer(player_);
-	unload_duh(module_);
+	if (player_ != NULL)
+		duh_end_sigrenderer(player_);
+	if (module_ != NULL)
+		unload_duh(module_);
 }
 
 
-void DumbMusic::Init()
+bool DumbMusic::OpenFromFile(const std::string& filename)
 {
-	dumb_register_stdfiles();
-}
-
-
-void DumbMusic::Exit()
-{
-	dumb_exit();
+	Initialize(N_CHANNELS, SAMPLING_RATE);
+	module_ = dumb_load_mod_quick(filename.c_str());
+	return module_ != NULL;
 }
 
 
@@ -53,4 +60,4 @@ bool DumbMusic::OnGetData(Chunk& data)
 	return true;
 }
 
-#endif // NO_DUMB_MUSIC
+

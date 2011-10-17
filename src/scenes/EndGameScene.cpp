@@ -62,14 +62,14 @@ void EndGameScene::OnFocus()
 	EntityManager::Mode mode = entities_.GetMode();
 	if (mode == EntityManager::MODE_ARCADE || entities_.Count() > 1)
 	{
-		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("game-over"));
+		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("game-over.ogg"));
 		info_.SetText(_t("endgame.game_over"));
 	}
 	else
 	{
 		// niveau terminé
 		LevelManager& levels = LevelManager::GetInstance();
-		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("end-level"));
+		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("end-level.ogg"));
 		int earned_credits = entities_.GetPlayerShip()->GetPoints();
 		int current = levels.GetCurrent();
 		// si dernier niveau du jeu

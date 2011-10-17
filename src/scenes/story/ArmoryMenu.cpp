@@ -14,14 +14,14 @@ ArmoryMenu::ArmoryMenu()
 	lab_info_ = new gui::Label(this, "");
 
 	// ship GUI
-	new gui::Image(this, GET_IMG("gui/armory-ship-view"));
+	new gui::Image(this, Resources::GetImage("gui/armory-ship-view.png"));
 	for (int i = 0; i < ItemData::_COUNT; ++i)
 	{
 		items_[i] = new UpgradeItem(this, (ItemData::Type) i);
 	}
 
 	// init dialog
-	dialog_.background = new gui::Image(this, GET_IMG("gui/armory-dialog"));
+	dialog_.background = new gui::Image(this, Resources::GetImage("gui/armory-dialog.png"));
 	int x = dialog_.x = (Game::WIDTH - Dialog::WIDTH) / 2;
 	int y = dialog_.y = (Game::HEIGHT - Dialog::HEIGHT) / 2;
 	dialog_.background->SetPosition(x, y);
@@ -32,7 +32,7 @@ ArmoryMenu::ArmoryMenu()
 	// left side
 	gui::VBoxLayout layout_left(x + 20, y + 40);
 	layout_left.SetSpacing(5);
-	const sf::Font& font = MediaManager::GetFont("Ubuntu-R.ttf");
+	const sf::Font& font = Resources::GetFont("Ubuntu-R.ttf");
 
 	dialog_.current_level = new gui::Label(this, "\n");
 	dialog_.current_level->SetColor(sf::Color::Green);
@@ -129,10 +129,10 @@ bool ArmoryMenu::BuyItem()
 		items_[current_type_]->RefreshLabel(); // refresh item widget
 		CreditCounterBase::OnFocus(); // refresh credit counter
 
-		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("cash-register"));
+		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("cash-register.ogg"));
 		return true;
 	}
-	SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("disabled"));
+	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("disabled.ogg"));
 	return false;
 }
 

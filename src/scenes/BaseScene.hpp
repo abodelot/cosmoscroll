@@ -2,7 +2,7 @@
 #define BASESCENE_HPP
 
 #include <SFML/Graphics.hpp>
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 
 /**
  * Base de toutes les scènes affichées à l'écran
@@ -35,7 +35,7 @@ public:
 	virtual ~BaseScene() {}
 
 protected:
-	inline const sf::Font& GetMenuFont() const {return MediaManager::GetFont("hemi-head.ttf", 40);}
+	inline const sf::Font& GetMenuFont() const {return Resources::GetFont("hemi-head.ttf", 40);}
 };
 
 #endif // BASESCENE_HPP

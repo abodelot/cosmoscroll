@@ -2,9 +2,9 @@
 
 #include "Asteroid.hpp"
 #include "EntityManager.hpp"
-#include "../core/ParticleSystem.hpp"
-#include "../utils/MediaManager.hpp"
-#include "../utils/Math.hpp"
+#include "core/ParticleSystem.hpp"
+#include "utils/Resources.hpp"
+#include "utils/Math.hpp"
 
 // division en morceaux de taille moindre
 #define BIG_SPLIT_INTO     2
@@ -85,17 +85,17 @@ void Asteroid::SetRandomImage()
 	switch (size_)
 	{
 		case SMALL:
-			SetImage(GET_IMG("entities/asteroid-small"));
+			SetImage(Resources::GetImage("entities/asteroid-small.png"));
 			x = sf::Randomizer::Random(0, 3) * 16; // 4 sprites
 			SetSubRect(sf::IntRect(x, 0, x + 16, 16));
 			break;
 		case MEDIUM:
-			SetImage(GET_IMG("entities/asteroid-medium"));
+			SetImage(Resources::GetImage("entities/asteroid-medium.png"));
 			x = sf::Randomizer::Random(0, 2) * 32; // 3 sprites
 			SetSubRect(sf::IntRect(x, 0, x + 32, 32));
 			break;
 		case BIG:
-			SetImage(GET_IMG("entities/asteroid-big"));
+			SetImage(Resources::GetImage("entities/asteroid-big.png"));
 			x = sf::Randomizer::Random(0, 2) * 48; // 3 sprites
 			SetSubRect(sf::IntRect(x, 0, x + 48, 48));
 			break;

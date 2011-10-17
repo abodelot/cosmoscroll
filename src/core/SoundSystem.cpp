@@ -1,9 +1,10 @@
 #include <iostream>
 
 #include "SoundSystem.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
+#include "utils/DumbMusic.hpp"
 
-#define DEFAULT_MUSIC  "space"
+#define DEFAULT_MUSIC  "space.mod"
 #define DEFAULT_VOLUME 40
 
 
@@ -65,18 +66,8 @@ const std::string& SoundSystem::GetMusicName() const
 
 void SoundSystem::SetMusic(const std::string& music_name)
 {
-	sf::SoundStream* music = NULL;
-	try
-	{
-		music = GET_DUMB_MUSIC(music_name.c_str());
-		music_name_ = music_name;
-	}
-	catch (MediaNotFoundException& e)
-	{
-		std::cerr << "[sound] music '" << music_name << "' not found"  << std::endl;
-		music = GET_DUMB_MUSIC(DEFAULT_MUSIC);
-		music_name_ = DEFAULT_MUSIC;
-	}
+	sf::SoundStream* music = Resources::GetDumbMusic(music_name);
+	music_name_ = music_name;
 
 	if (music != music_)
 	{

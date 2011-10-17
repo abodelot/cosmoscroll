@@ -1,13 +1,13 @@
 #include "MainMenu.hpp"
 #include "core/Game.hpp"
 #include "core/SoundSystem.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 #include "utils/I18n.hpp"
 
 
 MainMenu::MainMenu()
 {
-	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
+	title_.SetImage(Resources::GetImage("gui/cosmoscroll-logo.png"));
 	title_.SetPosition((Game::WIDTH - title_.GetSize().x) / 2, 12);
 
 	gui::VBoxLayout layout(210, 120);

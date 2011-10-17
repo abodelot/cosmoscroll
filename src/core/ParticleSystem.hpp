@@ -6,7 +6,6 @@
 
 #include "entities/Animated.hpp"
 #include "entities/EntityManager.hpp"
-#include "utils/MediaManager.hpp"
 
 /**
  * Moteur de particules pour gérer des effets graphiques (singleton)
@@ -248,7 +247,6 @@ private:
 	typedef std::list<Particle*> ParticleList;
 
 	ParticleList particles_;
-	const MediaManager& media_;
 };
 
 #endif // PARTICLESYSTEM_HPP

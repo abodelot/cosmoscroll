@@ -1,6 +1,6 @@
 #include "Gate.hpp"
 #include "Part.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 
 #define DOOR_DELAY 2.f
 
@@ -9,29 +9,27 @@
 Gate::Gate(const sf::Vector2f& pos):
 	ComplexEntity(pos)
 {
-	const MediaManager& media = MediaManager::GetInstance();
-
 	Part cell(1);
-	cell.SetImage(media.GetImage("entities/decor-energy-cell"));
+	cell.SetImage(Resources::GetImage("entities/decor-energy-cell.png"));
 	cell.SetHP(10);
 	AddPart(cell, 0, 4);
 	AddPart(cell, 0, GetSize().y);
 	AddPart(cell, 0, GetSize().y);
 
 	Part base_top(2);
-	base_top.SetImage(media.GetImage("entities/decor-base"));
+	base_top.SetImage(Resources::GetImage("entities/decor-base.png"));
 	base_top.FlipY(true);
 	base_top.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(base_top, 32);
 
 	Part door(3);
-	door.SetImage(media.GetImage("entities/decor-door"));
+	door.SetImage(Resources::GetImage("entities/decor-door.png"));
 	door.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(door, 32 + 48, GetSize().y);
 	door_full_height_ = door.GetSize().y;
 
 	Part base_bottom(2);
-	base_bottom.SetImage(media.GetImage("entities/decor-base"));
+	base_bottom.SetImage(Resources::GetImage("entities/decor-base.png"));
 	base_bottom.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(base_bottom, 32, GetSize().y);
 

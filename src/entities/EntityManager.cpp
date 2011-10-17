@@ -5,7 +5,7 @@
 #include "core/LevelManager.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/DIE.hpp"
 #include "utils/I18n.hpp"
@@ -308,7 +308,7 @@ void EntityManager::LoadAnimations(const std::string& filename)
 				p->AddFrame(x + i * width, y, width, height);
 			}
 			p->SetDelay(delay);
-			p->SetImage(GET_IMG(img));
+			p->SetImage(Resources::GetImage(img));
 		}
 		elem = elem->NextSiblingElement();
 	}

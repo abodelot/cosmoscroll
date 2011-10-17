@@ -1,6 +1,6 @@
 #include "CosmoButton.hpp"
 #include "core/SoundSystem.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 
 #define BUT_W 220
 #define BUT_H 40
@@ -12,7 +12,7 @@ CosmoButton::CosmoButton(gui::Menu* owner, const sf::Unicode::Text& text, int x,
 {
 	if (img_ == NULL)
 	{
-		img_ = &GET_IMG("gui/button");
+		img_ = &Resources::GetImage("gui/button.png");
 	}
 
 	background_.SetImage(*img_);
@@ -34,7 +34,7 @@ void CosmoButton::OnStateChanged(gui::State::EState state)
 			break;
 		case gui::State::HOVERED:
 			background_.SetSubRect(sf::IntRect(0, 40, BUT_W, 40 + BUT_H));
-			SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("menu-select"));
+			SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("menu-select.wav"));
 			break;
 		case gui::State::FOCUSED:
 			background_.SetSubRect(sf::IntRect(0, 80, BUT_W, 80 + BUT_H));
@@ -48,7 +48,7 @@ void CosmoButton::OnStateChanged(gui::State::EState state)
 
 void CosmoButton::OnCallbackTriggered()
 {
-	SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("menu-valid"));
+	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("menu-valid.ogg"));
 }
 
 

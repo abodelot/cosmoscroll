@@ -1,5 +1,5 @@
 #include "ControlPanel.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
@@ -31,8 +31,8 @@ ControlPanel& ControlPanel::GetInstance()
 
 ControlPanel::ControlPanel()
 {
-	panel_.SetImage(GET_IMG("gui/score-board"));
-	const sf::Font& font = MediaManager::GetFont("Ubuntu-R.ttf", TEXT_SIZE);
+	panel_.SetImage(Resources::GetImage("gui/score-board.png"));
+	const sf::Font& font = Resources::GetFont("Ubuntu-R.ttf", TEXT_SIZE);
 
 	// init progress bar
 	pbars_[ProgressBar::HP].Init(_t("panel.bar_hp"), font, BAR_SHIP);
@@ -44,7 +44,7 @@ ControlPanel::ControlPanel()
 	pbars_[ProgressBar::HEAT].Init(_t("panel.bar_heat"), font, BAR_HEAT);
 	pbars_[ProgressBar::HEAT].SetPosition(42, 37);
 
-	bar_mask_.SetImage(GET_IMG("gui/score-board-bar-mask"));
+	bar_mask_.SetImage(Resources::GetImage("gui/score-board-bar-mask.png"));
 	bar_mask_.SetPosition(101, 6);
 
 	// init bonus counters
@@ -74,9 +74,9 @@ ControlPanel::ControlPanel()
 	str_points_.SetFont(font);
 
 	// story mode
-	level_bar_.SetImage(GET_IMG("gui/level-bar"));
+	level_bar_.SetImage(Resources::GetImage("gui/level-bar.png"));
 	level_bar_.SetPosition(LEVEL_BAR_X, LEVEL_BAR_Y);
-	level_cursor_.SetImage(GET_IMG("gui/level-cursor"));
+	level_cursor_.SetImage(Resources::GetImage("gui/level-cursor.png"));
 	level_cursor_.SetPosition(LEVEL_BAR_X, LEVEL_BAR_Y - 2);
 	level_duration_ = 0;
 }
@@ -310,15 +310,15 @@ void ControlPanel::ProgressBar::SetValue(int value)
 
 void ControlPanel::BonusSlot::Init(Bonus::Type bonus_type, Type type)
 {
-	icon_.SetImage(GET_IMG("entities/bonus"));
+	icon_.SetImage(Resources::GetImage("entities/bonus.png"));
 	icon_.SetSubRect(Bonus::GetSubRect(bonus_type));
 
 	label_.SetSize(TEXT_SIZE);
 	label_.SetColor(sf::Color::White);
 	label_.SetText(type == COUNTER ? "x 0" : "-");
-	label_.SetFont(MediaManager::GetFont("Ubuntu-R.ttf", 12));
+	label_.SetFont(Resources::GetFont("Ubuntu-R.ttf", 12));
 
-	glow_.SetImage(GET_IMG("gui/bonus-glow"));
+	glow_.SetImage(Resources::GetImage("gui/bonus-glow.png"));
 	glow_.SetColor(sf::Color(255, 255, 255, 0));
 	timer_ = -1.f;
 	glowing_ = STOP;

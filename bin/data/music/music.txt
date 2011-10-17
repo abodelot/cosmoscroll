@@ -1,3 +1,0 @@
-aurora.mod
-space.mod
-escape_for_assault.mod

@@ -6,7 +6,7 @@
 CreditCounterBase::CreditCounterBase()
 {
 	credit_counter_bg_.SetPosition(444, 90);
-	credit_counter_bg_.SetImage(GET_IMG("gui/credit-counter"));
+	credit_counter_bg_.SetImage(Resources::GetImage("gui/credit-counter.png"));
 
 	credit_counter_.SetPosition(460, 100);
 	credit_counter_.SetFont(GetMenuFont());

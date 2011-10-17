@@ -4,7 +4,7 @@
 #include "Game.hpp"
 #include "SoundSystem.hpp"
 #include "utils/Math.hpp"
-
+#include "utils/Resources.hpp"
 
 
 
@@ -15,8 +15,7 @@ ParticleSystem& ParticleSystem::GetInstance()
 }
 
 
-ParticleSystem::ParticleSystem():
-	media_(MediaManager::GetInstance())
+ParticleSystem::ParticleSystem()
 {
 }
 
@@ -30,13 +29,13 @@ ParticleSystem::~ParticleSystem()
 void ParticleSystem::AddExplosion(const sf::Vector2f& offset)
 {
 	particles_.push_front(new Explosion(offset));
-	SoundSystem::GetInstance().PlaySound(media_.GetSoundBuffer("boom"));
+	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("boom.ogg"));
 }
 
 
 void ParticleSystem::AddFiery(int x, int y)
 {
-	static const sf::Image& fiery = media_.GetImage("particles/fiery");
+	static const sf::Image& fiery = Resources::GetImage("particles/fiery.png");
 	sf::Vector2f pos(x, y);
 	for (int i = 0; i < 42; ++i)
 	{
@@ -47,7 +46,7 @@ void ParticleSystem::AddFiery(int x, int y)
 
 void ParticleSystem::AddImpact(const sf::Vector2f& offset, int count)
 {
-	static const sf::Image& img = media_.GetImage("particles/impact");
+	static const sf::Image& img = Resources::GetImage("particles/impact.png");
 	for (; count > 0; --count)
 	{
 		particles_.push_front(new Fiery(offset, img));
@@ -57,7 +56,7 @@ void ParticleSystem::AddImpact(const sf::Vector2f& offset, int count)
 
 void ParticleSystem::AddGreenImpact(const sf::Vector2f& pos, int count)
 {
-	static const sf::Image& img = media_.GetImage("particles/impact-green");
+	static const sf::Image& img = Resources::GetImage("particles/impact-green.png");
 	for (;count > 0; --count)
 		particles_.push_front(new Fiery(pos, img));
 }
@@ -65,7 +64,7 @@ void ParticleSystem::AddGreenImpact(const sf::Vector2f& pos, int count)
 
 void ParticleSystem::AddStars(int count)
 {
-	const sf::Image& img = media_.GetImage("particles/star");
+	const sf::Image& img = Resources::GetImage("particles/star.png");
 	for (; count > 0; --count)
 	{
 		particles_.push_front(new Star(img));
@@ -75,7 +74,7 @@ void ParticleSystem::AddStars(int count)
 
 void ParticleSystem::AddCenteredStars(int count)
 {
-	const sf::Image& img = media_.GetImage("particles/star");
+	const sf::Image& img = Resources::GetImage("particles/star.png");
 	for (; count > 0; --count)
 	{
 		particles_.push_front(new CenteredStar(img));
@@ -101,7 +100,7 @@ void ParticleSystem::AddShield(int count, const sf::Sprite* handle)
 
 void ParticleSystem::AddSmoke(int count, const sf::Sprite* handle)
 {
-	const sf::Image& img = media_.GetImage("particles/smoke");
+	const sf::Image& img = Resources::GetImage("particles/smoke.png");
 	for (int i = 0; i < count; ++i)
 	{
 		particles_.push_front(new Smoke(img, handle));
@@ -289,7 +288,6 @@ ParticleSystem::TextParticle::TextParticle(const sf::Vector2f& offset, const sf:
 	text_.SetSize(12);
 	text_.SetColor(color);
 	text_.SetPosition(offset);
-	//text_.SetFont(MediaManager::GetFont("Ubuntu-R.ttf", 12));
 	timer_ = 0.f;
 }
 
@@ -313,7 +311,7 @@ bool ParticleSystem::TextParticle::OnUpdate(float frametime)
 ParticleSystem::ShieldParticle::ShieldParticle(const sf::Sprite* handle,
 	float angle)
 {
-	sprite_.SetImage(GET_IMG("particles/shield"));
+	sprite_.SetImage(Resources::GetImage("particles/shield.png"));
 	sprite_.SetCenter(sprite_.GetSize().x / 2, sprite_.GetSize().y / 2);
 	handle_ = handle;
 

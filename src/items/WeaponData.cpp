@@ -1,6 +1,6 @@
 #include "WeaponData.hpp"
 #include "Weapon.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
@@ -51,13 +51,13 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 	{
 		std::cerr << "weapon ammo image is missing" << std::endl;
 	}
-	image_ = &MediaManager::GetInstance().GetImage(p);
+	image_ = &Resources::GetImage(p);
 
 	// sound (optional)
 	p = elem->Attribute("sound");
 	if (p != NULL)
 	{
-		sound_ = &MediaManager::GetInstance().GetSoundBuffer(p);
+		sound_ = &Resources::GetSoundBuffer(p);
 	}
 
 	if (elem->QueryFloatAttribute("heat_cost", &heat_cost_) != TIXML_SUCCESS)

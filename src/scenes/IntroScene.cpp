@@ -3,7 +3,7 @@
 #include "core/SoundSystem.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/PlayerShip.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 
 #define DURATION    6.f
 #define JINGLE_TIME 2.f
@@ -13,11 +13,11 @@
 IntroScene::IntroScene() :
 	entity_mgr_(EntityManager::GetInstance())
 {
-	MediaManager& media = MediaManager::GetInstance();
-	background_.SetImage(media.GetImage("gui/background"));
+	background_.SetImage(Resources::GetImage("gui/background.png"));
 
-	media.SmoothImage("gui/cosmoscroll-logo", true);
-	title_.SetImage(media.GetImage("gui/cosmoscroll-logo"));
+	sf::Image& logo = Resources::GetImage("gui/cosmoscroll-logo.png");
+	logo.SetSmooth(true);
+	title_.SetImage(logo);
 	title_.SetCenter(title_.GetSize().x / 2, title_.GetSize().y / 2);
 	title_.SetPosition(Game::WIDTH / 2, Game::HEIGHT / 2);
 	title_.Resize(title_.GetSize().x * ZOOM_FACTOR, title_.GetSize().y * ZOOM_FACTOR);
@@ -57,7 +57,7 @@ void IntroScene::Update(float frametime)
 	if (!jingle_played && elapsed_ >= JINGLE_TIME)
 	{
 		jingle_played = true;
-		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("title"));
+		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("title.ogg"));
 	}
 
 	entity_mgr_.Update(frametime);

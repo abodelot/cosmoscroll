@@ -2,19 +2,19 @@
 #include "core/Game.hpp"
 #include "core/LevelManager.hpp"
 #include "utils/StringUtils.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 #include "utils/I18n.hpp"
 
 
 IntroLevelScene::IntroLevelScene()
 {
-	background_.SetImage(GET_IMG("gui/background"));
+	background_.SetImage(Resources::GetImage("gui/background.png"));
 
 	description_.SetColor(sf::Color::White);
 	description_.SetFont(GetMenuFont());
 	description_.SetSize(35);
 
-	title_.SetImage(GET_IMG("gui/cosmoscroll-logo"));
+	title_.SetImage(Resources::GetImage("gui/cosmoscroll-logo.png"));
 	title_.SetCenter(title_.GetSize().x / 2, 0);
 	title_.SetPosition(Game::WIDTH / 2, 20);
 }

@@ -1,7 +1,6 @@
 #ifndef DUMBMUSIC_HPP
 #define DUMBMUSIC_HPP
 
-#ifndef NO_DUMB_MUSIC
 
 #include <dumb.h>
 #include <SFML/System.hpp>
@@ -18,33 +17,28 @@
 class DumbMusic: public sf::SoundStream
 {
 public:
-	DumbMusic(const char* name);
-	~DumbMusic();
-
-	/**
-	 * Initaliser le module DUMB en début de programme
-	 */
-	static void Init();
-
 	/**
 	 * Quitter le module DUMB en fin de programme
 	 */
 	static void Exit();
+
+	DumbMusic();
+	~DumbMusic();
+
+	bool OpenFromFile(const std::string& name);
 
 private:
 	bool OnStart();
 
 	bool OnGetData(Chunk& data);
 
-	float volume_;
-
 	sf::Int16 samples_[BUFFER_SIZE * N_CHANNELS];
 
 	DUH* module_;
 	DUH_SIGRENDERER* player_;
+	static bool inited_;
 };
 
-#endif // NO_DUMB_MUSIC
 
 #endif // DUMBMUSIC_HPP
 

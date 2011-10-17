@@ -1,5 +1,5 @@
 #include "ConfigButton.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 
 #define BUT_W 120
 #define BUT_H 25
@@ -11,7 +11,7 @@ ConfigButton::ConfigButton(gui::Menu* owner, const sf::Unicode::Text& text, int 
 {
 	if (img_ == NULL)
 	{
-		img_ = &GET_IMG("gui/button-config");
+		img_ = &Resources::GetImage("gui/button-config.png");
 	}
 
 	background_.SetImage(*img_);

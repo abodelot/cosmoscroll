@@ -3,13 +3,13 @@
 #include "BaseMenu.hpp"
 #include "core/Game.hpp"
 #include "core/SoundSystem.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 
 
 BaseMenu::BaseMenu()
 {
-	SetBackground(sf::Sprite(GET_IMG("gui/main-screen")));
-	scrolling_background_.SetImage(GET_IMG("gui/background"));
+	SetBackground(sf::Sprite(Resources::GetImage("gui/main-screen.png")));
+	scrolling_background_.SetImage(Resources::GetImage("gui/background.png"));
 
 	GetWidgetStyle().global_font = &GetMenuFont();
 }
@@ -78,7 +78,7 @@ const sf::String& BaseMenu::GetTitle() const
 
 void BaseMenu::OnWidgetFocused()
 {
-	SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("menu-select"));
+	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("menu-select.wav"));
 }
 
 

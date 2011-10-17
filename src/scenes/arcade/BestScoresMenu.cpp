@@ -4,7 +4,6 @@
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "utils/I18n.hpp"
-#include "utils/MediaManager.hpp"
 #include "utils/StringUtils.hpp"
 
 

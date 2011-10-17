@@ -10,7 +10,7 @@
 #include "core/PlayerSave.hpp"
 #include "items/ItemManager.hpp"
 #include "utils/I18n.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 #include "utils/Math.hpp"
 
 #define WEAPON1_OFFSET              52, 22
@@ -39,8 +39,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	SetTeam(Entity::GOOD);
 	Reset(*this);
 
-	snd_disabled_ = &MediaManager::GetInstance().GetSoundBuffer("disabled");
-	snd_overheat_ = &MediaManager::GetInstance().GetSoundBuffer("overheat");
+	snd_disabled_ = &Resources::GetSoundBuffer("disabled.ogg");
+	snd_overheat_ = &Resources::GetSoundBuffer("overheat.ogg");
 	// init weapons
 	weapon1_.Init("hellfire");
 	weapon1_.SetOwner(this);
@@ -235,7 +235,7 @@ void PlayerShip::AudibleHeatingCue(float frametime)
 			}
 		return;
 	}
-	
+
 	float heat_pct_ = heat_ / heat_max_;
 
 	hdelta += frametime;
@@ -382,7 +382,7 @@ void PlayerShip::TakeDamage(int damage)
 		}
 		else
 		{
-			SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("warp"));
+			SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("warp.ogg"));
 			shield_ = 0;
 		}
 		panel_.SetShield(shield_);
@@ -402,7 +402,7 @@ void PlayerShip::OnCollide(Entity& entity)
 	{
 		HandleBonus(bonus->GetType());
 		ParticleSystem::GetInstance().AddMessage(bonus->GetPosition(), bonus->GetDescription());
-		SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("bonus"));
+		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("bonus.ogg"));
 		entity.Kill();
 	}
 	else

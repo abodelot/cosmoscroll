@@ -1,6 +1,6 @@
 #include "UpgradeItem.hpp"
 #include "core/Game.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 #include "utils/I18n.hpp"
 #include "utils/StringUtils.hpp"
 
@@ -13,32 +13,32 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 	switch (type)
 	{
 		case ItemData::LASER1:
-			halo_.SetImage(GET_IMG("gui/halo-laser1"));
+			halo_.SetImage(Resources::GetImage("gui/halo-laser1.png"));
 			x = 496;
 			y = 249;
 			break;
 		case ItemData::LASER2:
-			halo_.SetImage(GET_IMG("gui/halo-laser2"));
+			halo_.SetImage(Resources::GetImage("gui/halo-laser2.png"));
 			x = 494;
 			y = 263;
 			break;
 		case ItemData::ENGINE:
-			halo_.SetImage(GET_IMG("gui/halo-engine"));
+			halo_.SetImage(Resources::GetImage("gui/halo-engine.png"));
 			x = 143;
 			y = 224;
 			break;
 		case ItemData::ARMOR:
-			halo_.SetImage(GET_IMG("gui/halo-armor"));
+			halo_.SetImage(Resources::GetImage("gui/halo-armor.png"));
 			x = 419;
 			y = 176;
 			break;
 		case ItemData::SHIELD:
-			halo_.SetImage(GET_IMG("gui/halo-shield"));
+			halo_.SetImage(Resources::GetImage("gui/halo-shield.png"));
 			x = 207;
 			y = 244;
 			break;
 		case ItemData::HEATSINK:
-			halo_.SetImage(GET_IMG("gui/halo-heatsink"));
+			halo_.SetImage(Resources::GetImage("gui/halo-heatsink.png"));
 			x = 361;
 			y = 255;
 			break;
@@ -46,7 +46,7 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 			break;
 	}
 	label_.SetPosition(0, -20);
-	label_.SetFont(MediaManager::GetFont("Ubuntu-R.ttf"));
+	label_.SetFont(Resources::GetFont("Ubuntu-R.ttf"));
 	label_.SetSize(12);
 	label_.SetColor(sf::Color::White);
 	RefreshLabel();

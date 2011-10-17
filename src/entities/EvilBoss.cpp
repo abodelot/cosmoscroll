@@ -2,7 +2,7 @@
 
 #include "core/ParticleSystem.hpp"
 #include "core/SoundSystem.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 
 #define EYE_OFFSET_LEFT   sf::Vector2f(105, 55)
 #define EYE_OFFSET_RIGHT  sf::Vector2f(190, 55)
@@ -14,7 +14,7 @@
 EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	Entity(position, EVIL)
 {
-	SetImage(GET_IMG("entities/evil-boss"));
+	SetImage(Resources::GetImage("entities/evil-boss.png"));
 	SetSubRect(sf::IntRect(0, 0, 242, 160));
 	SetTeam(Entity::BAD);
 
@@ -110,7 +110,7 @@ void EvilBoss::OnDestroy()
 {
 	sf::Vector2f pos = GetCenter_();
 	ParticleSystem::GetInstance().AddGreenImpact(pos, 200);
-	SoundSystem::GetInstance().PlaySound(MediaManager::GetInstance().GetSoundBuffer("boom"));
+	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("boom.ogg"));
 }
 
 

@@ -1,7 +1,7 @@
 #include "AboutMenu.hpp"
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
@@ -20,7 +20,7 @@ AboutMenu::AboutMenu()
 	info_text_.SetPosition(120, 100);
 	info_text_.SetFont(GetMenuFont());
 
-	logos_.SetImage(GET_IMG("gui/libs-logo"));
+	logos_.SetImage(Resources::GetImage("gui/libs-logo.png"));
 	logos_.SetY(Game::HEIGHT - logos_.GetSize().y);
 	logos_.SetX((Game::WIDTH - logos_.GetSize().x) / 2);
 

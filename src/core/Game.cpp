@@ -5,7 +5,7 @@
 #include "ControlPanel.hpp"
 #include "entities/EntityManager.hpp"
 #include "items/ItemManager.hpp"
-#include "utils/MediaManager.hpp"
+#include "utils/Resources.hpp"
 #include "utils/ConfigParser.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
@@ -64,13 +64,15 @@ Game::~Game()
 			delete scenes_[i];
 		}
 	}
+
+	Resources::Unload();
 }
 
 static const std::string &GetRealConfigFileName(const char *in)
 {
 	struct stat buf;
 	static std::string str(in);
-	
+
 	if (!stat(in, &buf))
 	{
 		if (buf.st_mode & S_IFDIR)
@@ -95,7 +97,7 @@ void Game::Init(const std::string& path, int level_set)
 	// load config
 	LoadConfig(GetRealConfigFileName(path.c_str()));
 	CheckPurity();
-	
+
 	// load XML resources
 	LevelManager::GetInstance().ParseFile(XML_LEVELS, level_set);
 	ItemManager::GetInstance().LoadItems(XML_ITEMS);
@@ -127,9 +129,9 @@ bool Game::LoadConfig(const std::string& filename)
 
 	data_dir_ = DEFAULT_DATA_DIR;
 	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
-	
+
 	if (config.LoadFromFile(filename.c_str()))
-	{	
+	{
 		// Directories
 		config.SeekSection("Directories");
 		config.ReadItem("data", data_dir_);
@@ -296,7 +298,7 @@ void Game::SetNextScene(Scene enum_scene)
 	case Game::SC_ ## __scene__:\
 		new_scene = new __scene__();\
 		break
-	
+
 	if (scenes_[enum_scene] == NULL)
 	{
 		ALLOC_SCENE();
@@ -368,8 +370,8 @@ void Game::SetFullscreen(bool full)
 	if (!full)
 	{
 		// set window icon
-		MediaManager::GetInstance().CreateImageMask("gui/icon", sf::Color(0xff, 0, 0xff));
-		const sf::Image& icon = GET_IMG("gui/icon");
+		sf::Image& icon = Resources::GetImage("gui/icon.bmp");
+		icon.CreateMaskFromColor(sf::Color(0xff, 0, 0xff));
 		app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
 	}
 
