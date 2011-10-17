@@ -72,7 +72,15 @@ public:
 	 * Indiquer la prochaine scène à afficher
 	 */
 	void SetNextScene(Scene scene);
-
+	
+	/**
+	 * Récupérer la scène en cours
+	 */
+	inline Scene &GetCurrentScene(void)
+	{
+		return current_scene_type_;
+	};
+	
 	/**
 	 * Basculer entre les modes fenêtré et plein écran
 	 */
@@ -93,7 +101,7 @@ private:
 	/**
 	 * Load a configuration file
 	 */
-	bool LoadConfig(const char* filename);
+	bool LoadConfig(const std::string& filename);
 
 	/**
 	 * Write the configuration in a file
@@ -122,8 +130,12 @@ private:
 	// scènes
 	BaseScene* scenes_[SC_COUNT];
 	BaseScene* current_scene_;
+	Scene	   current_scene_type_;
 	PlayerSave playersave_;
 
+	// répertoires
+	std::string data_dir_;
+	std::string screenshot_dir_;
 	// groupe de niveaux
 	unsigned int level_set_;
 };

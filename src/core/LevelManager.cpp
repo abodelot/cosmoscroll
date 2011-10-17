@@ -169,7 +169,7 @@ void LevelManager::EnableHardcore(bool hardcore)
 }
 
 
-void LevelManager::ParseFile(const char* file, unsigned int offset)
+void LevelManager::ParseFile(const std::string& file, unsigned int offset)
 {
 	printf("* loading levels... ");
 

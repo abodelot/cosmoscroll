@@ -271,13 +271,13 @@ void EntityManager::Render(sf::RenderTarget& target) const
 }
 
 
-void EntityManager::LoadAnimations(const char* filename)
+void EntityManager::LoadAnimations(const std::string& filename)
 {
 	// chargement des animations
 	TiXmlDocument doc;
 	if (!doc.LoadFile(filename))
 	{
-		DIE("can't open animation definitions: %s (%s)", filename, doc.ErrorDesc());
+		DIE("can't open animation definitions: %s (%s)", filename.c_str(), doc.ErrorDesc());
 	}
 	puts("* loading animations...");
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
@@ -315,12 +315,12 @@ void EntityManager::LoadAnimations(const char* filename)
 }
 
 
-void EntityManager::LoadSpaceShips(const char* filename)
+void EntityManager::LoadSpaceShips(const std::string& filename)
 {
 	TiXmlDocument doc;
 	if (!doc.LoadFile(filename))
 	{
-		DIE("can't load space ships definitions: '%s' (%s)", filename, doc.ErrorDesc());
+		DIE("can't load space ships definitions: '%s' (%s)", filename.c_str(), doc.ErrorDesc());
 	}
 	puts("* loading spaceships...");
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();

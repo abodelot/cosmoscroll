@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 	if (argc > 1)
 		++ls;
 	Game& game = Game::GetInstance();
-	game.Init(argv[0], ls);
+	game.Init("./config", ls);
 	game.Run();
 	return 0;
 }

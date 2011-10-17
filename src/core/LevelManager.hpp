@@ -25,7 +25,7 @@ public:
 	/**
 	 * Parser un fichier de niveaux
 	 */
-	void ParseFile(const char* file, unsigned int offset = 0);
+	void ParseFile(const std::string& file, unsigned int offset = 0);
 
 	void LoadCurrent();
 

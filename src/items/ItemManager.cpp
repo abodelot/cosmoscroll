@@ -24,7 +24,7 @@ ItemManager::~ItemManager()
 }
 
 
-bool ItemManager::LoadItems(const char* filename)
+bool ItemManager::LoadItems(const std::string& filename)
 {
 	TiXmlDocument doc;
 	puts("* loading items...");

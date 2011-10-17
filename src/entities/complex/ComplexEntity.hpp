@@ -22,7 +22,7 @@ protected:
 	void AddPart(Part& part, float x=0.f, float y=0.f);
 
 	// TODO: refactor API
-	Part& GetPart(size_t index);
+	Part* GetPart(size_t index);
 	Part* GetPartByID(int id);
 
 	/**
@@ -33,7 +33,7 @@ protected:
 	int DestroyPart(int id);
 
 	// callbacks
-	virtual void OnPartDestroyed(const Part& p) {};
+	virtual void OnPartDestroyed(const Part&) {};
 
 	// override
 	void Render(sf::RenderTarget& target) const;

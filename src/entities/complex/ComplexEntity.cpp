@@ -70,14 +70,15 @@ void ComplexEntity::AddPart(Part& part, float x, float y)
 }
 
 
-Part& ComplexEntity::GetPart(size_t index)
+//Todo, return NULL on fail (refactor api? ;))
+Part* ComplexEntity::GetPart(size_t index)
 {
-	if (index >= 0 && index < parts_.size())
+	if (index && index < parts_.size())
 	{
-		return parts_[index];
+		return &parts_[index];
 	}
+	return NULL;
 }
-
 
 Part* ComplexEntity::GetPartByID(int id)
 {

@@ -224,6 +224,18 @@ void PlayerShip::AudibleHeatingCue(float frametime)
 {
 	static bool playing = false;
 	static float hdelta = 0.f;
+
+	// Pour ne pas avoir d'AHC lors de l'intro:
+	static bool disable_cue = true;
+	if (disable_cue)
+	{
+		if (Game::GetInstance().GetCurrentScene() != Game::SC_IntroScene)
+			{
+				disable_cue = false;
+			}
+		return;
+	}
+	
 	float heat_pct_ = heat_ / heat_max_;
 
 	hdelta += frametime;
@@ -404,6 +416,8 @@ void PlayerShip::OnDestroy()
 {
 	EntityManager& manager = EntityManager::GetInstance();
 	SetAnimation(manager.GetAnimation("player-destroyed"));
+	//TODO SetMovePattern(Falling)
+	//TODO SetPlayerControlled(False)
 	Reset(*this);
 	manager.TerminateGame();
 	ParticleSystem::GetInstance().AddExplosion(GetCenter_());

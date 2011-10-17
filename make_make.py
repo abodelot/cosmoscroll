@@ -49,7 +49,7 @@ class MakeMake:
 		f.write(
 		"# Makefile generated on " + time.ctime() + "\n\n"
 		"CC=g++\n"
-		"CFLAGS= -Wall -Wextra -Wwrite-strings -ansi -pedantic -Isrc -DSFML_DYNAMIC\n")
+		"CFLAGS= -Wall -Wextra -Wwrite-strings -Wno-variadic-macros -ansi -pedantic -Isrc -DSFML_DYNAMIC\n")
 
 		# libs
 		libs_linux = " ".join("-l" + lib for lib in self.libs)

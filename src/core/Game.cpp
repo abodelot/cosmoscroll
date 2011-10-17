@@ -15,11 +15,13 @@
 #include "BigScrollingMessagingAppliance.hpp"
 
 // config and data files
-#define CONFIG_FILE    "config/config.cfg"
-#define XML_LEVELS     "data/xml/levels.xml"
-#define XML_ITEMS      "data/xml/items.xml"
-#define XML_ANIMATIONS "data/xml/animations.xml"
-#define XML_SPACESHIPS "data/xml/spaceships.xml"
+#define CONFIG_FILE    "config.cfg"
+
+#define DX				data_dir_ + "/xml/" +
+#define XML_LEVELS      (DX "levels.xml")
+#define XML_ITEMS       (DX "items.xml")
+#define XML_ANIMATIONS  (DX "animations.xml")
+#define XML_SPACESHIPS  (DX "spaceships.xml")
 
 // constantes de configuration de la fenêtre
 #define WIN_BPP     32
@@ -64,10 +66,13 @@ Game::~Game()
 
 void Game::Init(const std::string& path, int level_set)
 {
-	CheckPurity();
 
 	input_.Init(app_.GetInput());
 
+	// load config
+	LoadConfig(path + "/" + CONFIG_FILE);
+	CheckPurity();
+	
 	// load XML resources
 	LevelManager::GetInstance().ParseFile(XML_LEVELS, level_set);
 	ItemManager::GetInstance().LoadItems(XML_ITEMS);
@@ -76,8 +81,7 @@ void Game::Init(const std::string& path, int level_set)
 	entities.LoadSpaceShips(XML_SPACESHIPS);
 	entities.SetY(ControlPanel::HEIGHT);
 
-	// load config
-	LoadConfig(CONFIG_FILE);
+
 	SetFullscreen(fullscreen_);
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
@@ -93,15 +97,20 @@ void Game::Init(const std::string& path, int level_set)
 }
 
 
-bool Game::LoadConfig(const char* filename)
+bool Game::LoadConfig(const std::string& filename)
 {
 	ConfigParser config;
 	fullscreen_ = false;
-	if (config.LoadFromFile(filename))
-	{
+	if (config.LoadFromFile(filename.c_str()))
+	{	
+		std::string str;
+		// Directories
+		config.SeekSection("Directories");
+		if(!config.ReadItem("data", str))
+			data_dir_ = "./data";
+		// Todo, screenshot directory
 		// General settings
 		config.SeekSection("Settings");
-		std::string str;
 		if (!config.ReadItem("language", str) || !I18n::GetInstance().LoadFromCode(str))
 		{
 			I18n::GetInstance().LoadSystemLanguage();
@@ -151,6 +160,10 @@ void Game::WriteConfig(const char* filename) const
 {
 	ConfigParser config;
 
+	// Directories
+	config.SeekSection("Directories");
+	config.WriteItem("data", data_dir_);
+	//Todo screenshot directory
 	// General Settings
 	config.SeekSection("Settings");
 	config.WriteItem("fullscreen", (int) fullscreen_);
@@ -249,33 +262,35 @@ sf::RenderWindow& Game::GetApp()
 
 void Game::SetNextScene(Scene enum_scene)
 {
-#define CASE_SCENE(__scene__, scene_ptr) \
+#define ALLOC_SCENE() \
+    BaseScene *new_scene = NULL;
+#define CASE_SCENE(__scene__) \
 	case Game::SC_ ## __scene__:\
-		scene_ptr = new __scene__();\
+		new_scene = new __scene__();\
 		break
-
+	
 	if (scenes_[enum_scene] == NULL)
 	{
-		BaseScene* new_scene = NULL;
+		ALLOC_SCENE();
 		switch (enum_scene)
 		{
-			CASE_SCENE(IntroScene, new_scene);
-			CASE_SCENE(MainMenu, new_scene);
-			CASE_SCENE(InGameScene, new_scene);
-			CASE_SCENE(EndGameScene, new_scene);
-			CASE_SCENE(ArcadeMenu, new_scene);
-			CASE_SCENE(GameOverMenu, new_scene);
-			CASE_SCENE(BestScoresMenu, new_scene);
-			CASE_SCENE(PauseMenu, new_scene);
-			CASE_SCENE(AboutMenu, new_scene);
-			CASE_SCENE(LevelMenu, new_scene);
-			CASE_SCENE(ArmoryMenu, new_scene);
-			CASE_SCENE(IntroLevelScene, new_scene);
-			CASE_SCENE(OptionMenu, new_scene);
-			CASE_SCENE(KeyboardMenu, new_scene);
-			CASE_SCENE(JoystickMenu, new_scene);
-			CASE_SCENE(AudioMenu, new_scene);
-			CASE_SCENE(SettingsMenu, new_scene);
+			CASE_SCENE(IntroScene);
+			CASE_SCENE(MainMenu);
+			CASE_SCENE(InGameScene);
+			CASE_SCENE(EndGameScene);
+			CASE_SCENE(ArcadeMenu);
+			CASE_SCENE(GameOverMenu);
+			CASE_SCENE(BestScoresMenu);
+			CASE_SCENE(PauseMenu);
+			CASE_SCENE(AboutMenu);
+			CASE_SCENE(LevelMenu);
+			CASE_SCENE(ArmoryMenu);
+			CASE_SCENE(IntroLevelScene);
+			CASE_SCENE(OptionMenu);
+			CASE_SCENE(KeyboardMenu);
+			CASE_SCENE(JoystickMenu);
+			CASE_SCENE(AudioMenu);
+			CASE_SCENE(SettingsMenu);
 
 			default:
 				DIE("can't set next requested scene");
@@ -283,6 +298,7 @@ void Game::SetNextScene(Scene enum_scene)
 		}
 		scenes_[enum_scene] = new_scene;
 	}
+	current_scene_type_ = enum_scene;
 	current_scene_ = scenes_[enum_scene];
 	current_scene_->OnFocus();
 }
@@ -359,15 +375,15 @@ void Game::CheckPurity()
 	std::ifstream file;
 	MD5 md5sum;
 
-	file.open(XML_ITEMS);
+	file.open(XML_ITEMS.c_str());
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_WEAPONS);
 	file.close();
 
-	file.open(XML_SPACESHIPS);
+	file.open(XML_SPACESHIPS.c_str());
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_SPACESHIPS);
 	file.close();
 
-	file.open(XML_ANIMATIONS);
+	file.open(XML_ANIMATIONS.c_str());
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_ANIMATIONS);
 	file.close();
 	puts(pure_ ? "[OK]" : "[FAILED]");
