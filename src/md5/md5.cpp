@@ -64,6 +64,11 @@ std::string MD5::Calculate(std::ifstream& file)
 	int length = file.tellg();
 	file.seekg(0, std::ios::beg);
 
+	if (length < 1)
+	{
+		puts("Invalid file in MD5::Calculate()");
+		abort();
+	}
 	char* buffer = new char [length];
 
 	file.read(buffer, length);

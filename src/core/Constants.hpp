@@ -1,7 +1,21 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-#define COSMOSCROLL_VERSION "0.4-devel"
+#define GAME_NAME					"cosmoscroll"
+#define GAME_VERSION				"0.4-devel"
+#define GAME_LICENSE				"GPL"
+#define GAME_AUTHORS				L"    Alexandre Bodelot\n" \
+									 "    Arnaud Wolff"
+#define DISCLAIMER_BLOB				"This is free software; see the source for copying conditions.  There is NO\n\
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+
+#define VERSION_STRING				GAME_NAME " " GAME_VERSION "\nCopyright (C) 2008-2011 project contributors.\n" \
+									DISCLAIMER_BLOB
+
+// fallback file paths
+#define DEFAULT_CONFIGURATION_DIR	"./config"
+#define DEFAULT_DATA_DIR			"./data"
+#define DEFAULT_SCREENSHOT_DIR		"./screenshot"
 
 // score server
 #define COSMO_SERVER_HOSTNAME "http://perkypenguin.free.fr"

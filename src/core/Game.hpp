@@ -55,8 +55,9 @@ public:
 
 	/**
 	 * Lancer une partie de CosmoScroll
+	 * @return error code
 	 */
-	void Run();
+	int Run();
 
 	/**
 	 * @return application rendering window
@@ -109,9 +110,9 @@ private:
 	void WriteConfig(const char* filename) const;
 
 	/**
-	 * Take a screenshot and save the image
+	 * Take a screenshot and save the image to screenshot_dir_
 	 */
-	void TakeScreenshot(const char* directory);
+	void TakeScreenshot(void);
 
 	/**
 	 * Check game data files are unaltered

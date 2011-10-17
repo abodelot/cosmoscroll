@@ -36,6 +36,9 @@ void LevelMenu::OnFocus()
 {
 	CreditCounterBase::OnFocus();
 	int last = levels_.CountLevel();
+	
+	levels_.VerifyCurrent();	// FIX: On charge dorénavant la config avant le levelmanager.
+	
 	int current = levels_.GetCurrent();
 	if (levels_.IsHardcoreEnabled())
 		current -= last;

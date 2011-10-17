@@ -52,16 +52,18 @@ Entity* LevelManager::GiveNextEntity(float timer)
 	return NULL;
 }
 
-
 void LevelManager::SetCurrent(int level)
 {
-	if (level < 1 || level > last_unlocked_level_ || level > (int) levels_.size() * 2)
-	{
-		std::cerr << " [levels] level " << level << " is undefined, using level 1" << std::endl;
-		level = 1;
-	}
-
 	current_level_ = level;
+}
+
+void LevelManager::VerifyCurrent(void)
+{
+	if (current_level_ < 1 || current_level_ > last_unlocked_level_ || current_level_ > (int) levels_.size() * 2)
+	{
+		std::cerr << " [levels] level " << current_level_ << " is undefined, using level 1" << std::endl;
+		current_level_ = 1;
+	}
 }
 
 

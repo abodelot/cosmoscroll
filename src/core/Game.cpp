@@ -14,6 +14,9 @@
 #include "scenes/scenes.hpp"
 #include "BigScrollingMessagingAppliance.hpp"
 
+#include <fcntl.h>
+#include <sys/stat.h>
+
 // config and data files
 #define CONFIG_FILE    "config.cfg"
 
@@ -63,6 +66,28 @@ Game::~Game()
 	}
 }
 
+extern int errno;
+
+static const std::string &GetRealConfigFileName(const char *in)
+{
+	struct stat buf;
+	static std::string str(in);
+	
+	if (!stat(in, &buf))
+	{
+		if (buf.st_mode & S_IFDIR)
+			(str += "/") += CONFIG_FILE;
+		else if (!buf.st_mode & S_IFREG)		// wtf is this file?
+			puts("Error: configuration file is nor a regular file nor a directory");
+	}
+	else
+		puts("Error: couldn't stat configuration file");
+#ifdef DEBUG
+	printf("[config] Configuration file: %s\n", str.c_str());
+#endif
+	return str;
+}
+
 
 void Game::Init(const std::string& path, int level_set)
 {
@@ -70,7 +95,7 @@ void Game::Init(const std::string& path, int level_set)
 	input_.Init(app_.GetInput());
 
 	// load config
-	LoadConfig(path + "/" + CONFIG_FILE);
+	LoadConfig(GetRealConfigFileName(path.c_str()));
 	CheckPurity();
 	
 	// load XML resources
@@ -101,16 +126,20 @@ bool Game::LoadConfig(const std::string& filename)
 {
 	ConfigParser config;
 	fullscreen_ = false;
+
+	data_dir_ = DEFAULT_DATA_DIR;
+	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
+	
 	if (config.LoadFromFile(filename.c_str()))
 	{	
-		std::string str;
 		// Directories
 		config.SeekSection("Directories");
-		if(!config.ReadItem("data", str))
-			data_dir_ = "./data";
+		config.ReadItem("data", data_dir_);
+		config.ReadItem("screenshots", screenshot_dir_);
 		// Todo, screenshot directory
 		// General settings
 		config.SeekSection("Settings");
+		std::string str;
 		if (!config.ReadItem("language", str) || !I18n::GetInstance().LoadFromCode(str))
 		{
 			I18n::GetInstance().LoadSystemLanguage();
@@ -163,7 +192,7 @@ void Game::WriteConfig(const char* filename) const
 	// Directories
 	config.SeekSection("Directories");
 	config.WriteItem("data", data_dir_);
-	//Todo screenshot directory
+	config.WriteItem("screenshots", screenshot_dir_);
 	// General Settings
 	config.SeekSection("Settings");
 	config.WriteItem("fullscreen", (int) fullscreen_);
@@ -191,7 +220,7 @@ void Game::WriteConfig(const char* filename) const
 }
 
 
-void Game::Run()
+int Game::Run()
 {
 	// set the first displayed scene at launch
 	SetNextScene(SC_IntroScene);
@@ -218,7 +247,7 @@ void Game::Run()
 					Quit();
 					break;
 				case Input::TAKE_SCREENSHOT:
-					TakeScreenshot("screenshot");
+					TakeScreenshot();
 					break;
 				case Input::DEBUG_ACTION:
 					to = true;
@@ -251,6 +280,7 @@ void Game::Run()
 		// </HACK>
 		app_.Display();
 	}
+	return (EXIT_SUCCESS);
 }
 
 
@@ -311,14 +341,14 @@ void Game::Quit()
 	WriteConfig(CONFIG_FILE);
 }
 
-
-void Game::TakeScreenshot(const char* directory)
+//Todo verifier si screenshotdir est valide
+void Game::TakeScreenshot(void)
 {
 	char current_time[256];
 	time_t t = time(NULL);
 	strftime(current_time, sizeof current_time, "%d-%m-%Y_%H-%M-%S", localtime(&t));
 
-	std::string filename = std::string(directory) + "/" + current_time + ".png";
+	std::string filename = screenshot_dir_ + "/" + current_time + ".png";
 
 	printf("screenshot saved to %s\n", filename.c_str());
 	app_.Capture().SaveToFile(filename);

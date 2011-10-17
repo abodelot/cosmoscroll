@@ -50,6 +50,7 @@ public:
 	 * @param level_num: numéro du niveau
 	 */
 	void SetCurrent(int level_num);
+	void VerifyCurrent(void);
 	int GetCurrent() const;
 
 

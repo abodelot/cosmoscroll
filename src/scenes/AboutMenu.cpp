@@ -6,19 +6,15 @@
 #include "utils/I18n.hpp"
 
 
-#define COSMOSCROLL_LICENCE L"GPL"
-#define COSMOSCROLL_AUTHORS L"    Alexandre Bodelot\n" \
-							 "    Arnaud Wolff\n\n"
-
 
 AboutMenu::AboutMenu()
 {
 	SetTitle(_t("menu.about.title"));
 
 	std::wostringstream oss;
-	oss << _t("menu.about.version") << L" " << COSMOSCROLL_VERSION << L"\n\n"
-	    << _t("menu.about.authors") << L" \n" << COSMOSCROLL_AUTHORS
-	    << _t("menu.about.licence") << L" " << COSMOSCROLL_LICENCE;
+	oss << _t("menu.about.version") << L" " << GAME_VERSION << L"\n\n"
+	    << _t("menu.about.authors") << L" \n" << GAME_AUTHORS << L"\n\n"
+	    << _t("menu.about.licence") << L" " << GAME_LICENSE;
 
 	info_text_.SetText(oss.str());
 	info_text_.SetPosition(120, 100);

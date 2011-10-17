@@ -54,7 +54,7 @@ void BestScoresMenu::Update(float frametime)
 	request.SetMethod(sf::Http::Request::Get);
 	std::string uri = COSMO_SERVER_URI;
 	uri += "?version=";
-	uri += COSMOSCROLL_VERSION;
+	uri += GAME_VERSION;
 	request.SetURI(uri);
 
 	// Send it and get the response returned by the server
