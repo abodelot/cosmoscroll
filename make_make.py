@@ -13,6 +13,7 @@ import os
 import time
 
 TARGET = "bin/cosmoscroll"
+CFLAGS = "-Wall -Wextra -Wwrite-strings -Wno-variadic-macros -ansi -pedantic -Isrc"
 LIBS = ("sfml-graphics", "sfml-window", "sfml-system", "sfml-audio", "sfml-network")
 
 
@@ -23,11 +24,15 @@ class MakeMake:
 		self.target = target
 		self.makefile_name = makefile_name
 		self.libs = ()
+		self.cflags = ""
+
+	def set_cflags(self, cflags):
+		self.cflags = cflags
 
 	##
 	# Indiquer les bibliothèques à utiliser lors de l'édition des liens
 	#
-	def add_libs(self, libs):
+	def set_libs(self, libs):
 		self.libs = libs
 
 	##
@@ -49,7 +54,7 @@ class MakeMake:
 		f.write(
 		"# Makefile generated on " + time.ctime() + "\n\n"
 		"CC=g++\n"
-		"CFLAGS= -Wall -Wextra -Wwrite-strings -Wno-variadic-macros -ansi -pedantic -Isrc -DSFML_DYNAMIC\n")
+		"CFLAGS= " + self.cflags + "\n")
 
 		# libs
 		libs_linux = " ".join("-l" + lib for lib in self.libs)
@@ -114,6 +119,7 @@ if __name__ == "__main__":
 
 	m = MakeMake(TARGET, makefile_name)
 	m.add_sources("src")
-	m.add_libs(LIBS)
+	m.set_libs(LIBS)
+	m.set_cflags(CFLAGS)
 	m.write_makefile()
 	m.invoke_makefile()

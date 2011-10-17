@@ -12,9 +12,9 @@ AudioMenu::AudioMenu()
 	new gui::Label(this, _t("menu.audio.music"), 100, 120);
 
 	opt_music_ = new gui::OptionList(this, 345, 120);
-	opt_music_->AddOption("Space", "space");
-	opt_music_->AddOption("Aurora", "aurora");
-	opt_music_->AddOption("Escape for assault", "escape_for_assault");
+	opt_music_->AddOption("Space", "space.mod");
+	opt_music_->AddOption("Aurora", "aurora.mod");
+	opt_music_->AddOption("Escape for assault", "escape_for_assault.mod");
 	opt_music_->SetCallbackID(1);
 	const std::string music_name = sound.GetMusicName();
 	if (music_name == "space")
