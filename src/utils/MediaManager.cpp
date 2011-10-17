@@ -3,20 +3,23 @@
 
 #include "MediaManager.hpp"
 
-#define IMG_LIST "data/images/images.txt"
-#define IMG_PATH "data/images/"
+#include "core/Game.hpp"
 
-#define SOUND_LIST "data/sound/sound.txt"
-#define SOUND_PATH "data/sound/"
+#define IMG_LIST __data_dir__ + "/images/images.txt"
+#define IMG_PATH __data_dir__ + "/images/"
 
-#define MUSIC_LIST "data/music/music.txt"
-#define MUSIC_PATH "data/music/"
+#define SOUND_LIST __data_dir__ + "/sound/sound.txt"
+#define SOUND_PATH __data_dir__ + "/sound/"
 
-#define FONT_PATH  "data/fonts/"
+#define MUSIC_LIST __data_dir__ + "/music/music.txt"
+#define MUSIC_PATH __data_dir__ + "/music/"
 
+#define FONT_PATH  __data_dir__ + "/fonts/"
+
+std::string __data_dir__;
 
 // charger une image
-static void load_or_die(sf::Image& image, const char* filename)
+static void load_or_die(sf::Image& image, const std::string filename)
 {
 	std::string path(IMG_PATH);
 	if (!image.LoadFromFile(path + filename))
@@ -27,7 +30,7 @@ static void load_or_die(sf::Image& image, const char* filename)
 }
 
 // charger un buffer audio
-static void load_or_die(sf::SoundBuffer& buffer, const char* filename)
+static void load_or_die(sf::SoundBuffer& buffer, const std::string filename)
 {
 	std::string path(SOUND_PATH);
 	if (!buffer.LoadFromFile(path + filename))
@@ -38,7 +41,7 @@ static void load_or_die(sf::SoundBuffer& buffer, const char* filename)
 
 #ifndef NO_DUMB_MUSIC
 // charger une musique avec la libdumb
-static void load_or_die(DumbMusic*& music, const char* filename)
+static void load_or_die(DumbMusic*& music, const std::string filename)
 {
 	std::string path(MUSIC_PATH);
 	music = new DumbMusic((path + filename).c_str());
@@ -47,9 +50,9 @@ static void load_or_die(DumbMusic*& music, const char* filename)
 
 // charger une liste de ressources depuis un fichier
 template <typename Ressource>
-static bool load_from_list(const char* filelist, std::map<std::string, Ressource>& table)
+static bool load_from_list(const std::string& filelist, std::map<std::string, Ressource>& table)
 {
-	std::ifstream f(filelist);
+	std::ifstream f(filelist.c_str());
 	if (f)
 	{
 		std::string line;
@@ -88,6 +91,7 @@ MediaManager& MediaManager::GetInstance()
 
 MediaManager::MediaManager()
 {
+	__data_dir__ = Game::GetInstance().GetDataDir();
 	// chargement des images
 #ifdef DEBUG
 	puts("* loading images...");

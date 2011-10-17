@@ -68,8 +68,7 @@ private:
 	~MediaManager();
 	MediaManager(const MediaManager&);
 	MediaManager& operator=(const MediaManager&);
-
-
+	
 	typedef std::map<std::string, sf::Image> ImageMap;
 	ImageMap images_;
 

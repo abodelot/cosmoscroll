@@ -66,8 +66,6 @@ Game::~Game()
 	}
 }
 
-extern int errno;
-
 static const std::string &GetRealConfigFileName(const char *in)
 {
 	struct stat buf;

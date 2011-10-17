@@ -95,6 +95,10 @@ public:
 
 	void PanelOnTop(bool top);
 
+	inline const std::string &GetDataDir(void)
+	{
+		return data_dir_;
+	};
 private:
 	Game();
 	~Game();
