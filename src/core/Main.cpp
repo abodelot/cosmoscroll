@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 #include "Game.hpp"
 
 #include "Constants.hpp"
@@ -7,65 +7,64 @@
 int usage(const char *pn)
 {
 	const char *n = rindex(pn, '/') + 1;	// Stick to the program name.
-	printf("usage: %s [-c config_file] [-l level_set] [-h] [-v]\n\n", n);
+	printf("usage: %s [-c config_file] [-d data_path] [-l level_set] [-h] [-v]\n\n", n);
 	puts("if config_file is a directory, the game will look for a configuration file");
-	puts("named \42config.cfg\42. If it is a regularfile, it will use it as an alternate");
+	puts("named \42cosmoscroll.cfg\42. If it is a regularfile, it will use it as an alternate");
 	puts("configuration file.");
 	puts("\nYou can currently override the game's story mode level set (MUST be a number\n");
-	return (0);
+	return EXIT_SUCCESS;
 }
+
 
 int version(void)
 {
-	return (puts(VERSION_STRING));
+	puts(VERSION_STRING);
+	return EXIT_SUCCESS;
 }
 
-char *get_conf(int c, char **v)
-{
-	for (unsigned short i = 1; i < c; ++i)
-		if (!strcmp(v[i], "-c"))
-		{
-			if (i == (c - 1))
-				exit(puts("error: -c takes an argument"));
-			return (v[i + 1]);
-		}
-	return NULL;
-}
 
-int parse_args(int c, char **v)
+const char* get_arg(int index, char** args)
 {
-	bool vers, help;
-	unsigned int ls;
-	vers = help = (ls = 0);
-
-	for (unsigned short i = 1; i < c; ++i)
+	const char* arg_value = args[index + 1];
+	if (arg_value == NULL)
 	{
-		char *p = v[i];
-
-		if		(!strcmp(p, "-v"))	vers = true;
-		else if (!strcmp(p, "-h"))	help = true;
-		else if (!strcmp(p, "-l"))
-		{	// next line is sloppy behaviour.
-			if (i == (c - 1)) exit(puts("error: -l takes an argument"));
-			ls = (int)strtol(v[++i], NULL, 10);
-		}
+		fprintf(stderr, "%s takes an argument\n", args[index]);
+		exit(EXIT_FAILURE);
 	}
-	if (vers) version();
-	if (help) usage(*v);
-	if (vers || help) exit(EXIT_SUCCESS);
-	return (ls);
+	return arg_value;
 }
+
 
 int main(int argc, char* argv[])
 {
-	short int ls;
-	char *conf_dir;
-
-	ls = parse_args(argc, argv);
-	conf_dir = get_conf(argc, argv);
-
 	Game& game = Game::GetInstance();
-	game.Init(conf_dir? conf_dir : DEFAULT_CONFIGURATION_DIR, ls);
-	return (game.Run());
+	game.SetCurrentDirectory(argv[0]);
+
+	// default values
+	int level_set = 0;
+	std::string config_file = DEFAULT_CONFIGURATION_FILE;
+	std::string data_dir = DEFAULT_DATA_DIR;
+
+	// parse args
+	for (int i = 0; i < argc; ++i)
+	{
+		std::string arg = argv[i];
+		if (arg == "-v" || arg == "-version")
+			return version();
+		else if (arg == "-h" || arg == "-help")
+			return usage(argv[0]);
+		else if (arg == "-c" || arg == "-config")
+			config_file = get_arg(i, argv);
+		else if (arg == "-d" || arg == "-data")
+			data_dir = get_arg(i, argv);
+		else if (arg == "-l" || arg == "-level")
+			level_set = (int)strtol(get_arg(i, argv), NULL, 10);
+	}
+
+	game.Init(config_file, data_dir, level_set);
+	return game.Run();
 }
+
+
+
 

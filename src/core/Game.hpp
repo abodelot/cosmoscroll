@@ -48,10 +48,15 @@ public:
 	 */
 	static Game& GetInstance();
 
+
+
 	/**
 	 * @param path: name by which the program was called
 	 */
-	void Init(const std::string& path, int level_set);
+	void SetCurrentDirectory(const std::string& path);
+
+
+	void Init(const std::string& config_file, const std::string& data_dir, int level_set);
 
 	/**
 	 * Lancer une partie de CosmoScroll
@@ -73,7 +78,7 @@ public:
 	 * Indiquer la prochaine scène à afficher
 	 */
 	void SetNextScene(Scene scene);
-	
+
 	/**
 	 * Récupérer la scène en cours
 	 */
@@ -81,7 +86,7 @@ public:
 	{
 		return current_scene_type_;
 	};
-	
+
 	/**
 	 * Basculer entre les modes fenêtré et plein écran
 	 */
@@ -95,10 +100,6 @@ public:
 
 	void PanelOnTop(bool top);
 
-	inline const std::string &GetDataDir(void)
-	{
-		return data_dir_;
-	};
 private:
 	Game();
 	~Game();
@@ -111,7 +112,7 @@ private:
 	/**
 	 * Write the configuration in a file
 	 */
-	void WriteConfig(const char* filename) const;
+	void WriteConfig(const std::string& filename) const;
 
 	/**
 	 * Take a screenshot and save the image to screenshot_dir_
@@ -127,7 +128,6 @@ private:
 	bool fullscreen_;
 	bool running_;
     bool pure_;
-	std::string directory_;
 
 	// event manager
 	Input& input_;
@@ -138,9 +138,13 @@ private:
 	Scene	   current_scene_type_;
 	PlayerSave playersave_;
 
-	// répertoires
+	// directories
+	std::string current_dir_;
 	std::string data_dir_;
 	std::string screenshot_dir_;
+	std::string config_file_;
+
+
 	// groupe de niveaux
 	unsigned int level_set_;
 };

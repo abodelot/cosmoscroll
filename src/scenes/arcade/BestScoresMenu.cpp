@@ -13,7 +13,7 @@ BestScoresMenu::BestScoresMenu()
 	gui::Button* b = new CosmoButton(this, _t("menu.back"), 210, 420);
 	b->SetCallbackID(1);
 
-	LoadBitmapFont("data/images/gui/mono12-white.png", 10, 10);
+	LoadBitmapFont(Resources::GetImage("gui/mono12-white.png"), 10, 10);
 	lab_content_ = new gui::BitmapString(*GetBitmapFont());
 	lab_content_->SetPosition(120, 100);
 

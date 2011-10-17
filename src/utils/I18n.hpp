@@ -16,6 +16,8 @@ class I18n
 public:
 	static I18n& GetInstance();
 
+	void SetDataPath(const std::string& path);
+
 	/**
 	 * Get translated text
 	 * @param key: text identifier
@@ -67,6 +69,7 @@ private:
 	mutable char code_[3];
 	typedef std::map<std::string, std::wstring> TextMap;
 	TextMap content_;
+	std::string path_;
 };
 
 #endif // I18N_HPP

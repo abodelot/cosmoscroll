@@ -18,13 +18,12 @@
 #include <sys/stat.h>
 
 // config and data files
-#define CONFIG_FILE    "config.cfg"
+#define CONFIG_FILE    "cosmoscroll.cfg"
 
-#define DX				data_dir_ + "/xml/" +
-#define XML_LEVELS      (DX "levels.xml")
-#define XML_ITEMS       (DX "items.xml")
-#define XML_ANIMATIONS  (DX "animations.xml")
-#define XML_SPACESHIPS  (DX "spaceships.xml")
+#define XML_LEVELS      "/xml/levels.xml"
+#define XML_ITEMS       "/xml/items.xml"
+#define XML_ANIMATIONS  "/xml/animations.xml"
+#define XML_SPACESHIPS  "/xml/spaceships.xml"
 
 // constantes de configuration de la fenêtre
 #define WIN_BPP     32
@@ -68,6 +67,16 @@ Game::~Game()
 	Resources::Unload();
 }
 
+
+void Game::SetCurrentDirectory(const std::string& path)
+{
+	size_t found = path.find_last_of("/\\");
+	current_dir_ = path.substr(0, found + 1);
+	if (current_dir_.empty())
+		current_dir_ = "./";
+}
+
+
 static const std::string &GetRealConfigFileName(const char *in)
 {
 	struct stat buf;
@@ -89,24 +98,32 @@ static const std::string &GetRealConfigFileName(const char *in)
 }
 
 
-void Game::Init(const std::string& path, int level_set)
+void Game::Init(const std::string& config_file, const std::string& data_path, int level_set)
 {
 
 	input_.Init(app_.GetInput());
 
-	// load config
-	LoadConfig(GetRealConfigFileName(path.c_str()));
+	// init directories
+	data_dir_ = current_dir_ + data_path;
+	config_file_ = GetRealConfigFileName((current_dir_ + config_file).c_str());
+	Resources::SetDataPath(data_dir_);
+	I18n::GetInstance().SetDataPath(data_dir_);
+
 	CheckPurity();
 
 	// load XML resources
-	LevelManager::GetInstance().ParseFile(XML_LEVELS, level_set);
-	ItemManager::GetInstance().LoadItems(XML_ITEMS);
+	LevelManager::GetInstance().ParseFile(data_dir_ + XML_LEVELS, level_set);
+	ItemManager::GetInstance().LoadItems(data_dir_ + XML_ITEMS);
+
 	EntityManager& entities = EntityManager::GetInstance();
-	entities.LoadAnimations(XML_ANIMATIONS);
-	entities.LoadSpaceShips(XML_SPACESHIPS);
+	entities.LoadAnimations(data_dir_ + XML_ANIMATIONS);
+	entities.LoadSpaceShips(data_dir_ + XML_SPACESHIPS);
 	entities.SetY(ControlPanel::HEIGHT);
 
 
+
+	// load config
+	LoadConfig(config_file_);
 	SetFullscreen(fullscreen_);
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
@@ -127,14 +144,12 @@ bool Game::LoadConfig(const std::string& filename)
 	ConfigParser config;
 	fullscreen_ = false;
 
-	data_dir_ = DEFAULT_DATA_DIR;
 	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
 
 	if (config.LoadFromFile(filename.c_str()))
 	{
 		// Directories
 		config.SeekSection("Directories");
-		config.ReadItem("data", data_dir_);
 		config.ReadItem("screenshots", screenshot_dir_);
 		// Todo, screenshot directory
 		// General settings
@@ -185,13 +200,12 @@ bool Game::LoadConfig(const std::string& filename)
 }
 
 
-void Game::WriteConfig(const char* filename) const
+void Game::WriteConfig(const std::string& filename) const
 {
 	ConfigParser config;
 
 	// Directories
 	config.SeekSection("Directories");
-	config.WriteItem("data", data_dir_);
 	config.WriteItem("screenshots", screenshot_dir_);
 	// General Settings
 	config.SeekSection("Settings");
@@ -216,7 +230,7 @@ void Game::WriteConfig(const char* filename) const
 	playersave_.SaveToConfig(config);
 
 	// saving configuration to file
-	config.SaveToFile(filename);
+	config.SaveToFile(filename.c_str());
 }
 
 
@@ -338,7 +352,7 @@ void Game::Quit()
 {
 	running_ = false;
 	SoundSystem::GetInstance().StopAll();
-	WriteConfig(CONFIG_FILE);
+	WriteConfig(config_file_);
 }
 
 //Todo verifier si screenshotdir est valide
@@ -405,15 +419,15 @@ void Game::CheckPurity()
 	std::ifstream file;
 	MD5 md5sum;
 
-	file.open(XML_ITEMS.c_str());
+	file.open((data_dir_ + XML_ITEMS).c_str());
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_WEAPONS);
 	file.close();
 
-	file.open(XML_SPACESHIPS.c_str());
+	file.open((data_dir_ + XML_SPACESHIPS).c_str());
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_SPACESHIPS);
 	file.close();
 
-	file.open(XML_ANIMATIONS.c_str());
+	file.open((data_dir_ + XML_ANIMATIONS).c_str());
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_ANIMATIONS);
 	file.close();
 	puts(pure_ ? "[OK]" : "[FAILED]");

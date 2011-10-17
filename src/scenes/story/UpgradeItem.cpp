@@ -98,8 +98,6 @@ void UpgradeItem::Render(sf::RenderTarget& target) const
 			target.Draw(label_);
 			break;
 		default:
-			puts("Unhandled UpdateItemGUIState");
-			exit(1);
+			break;
 	}
-
 }

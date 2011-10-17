@@ -19,12 +19,12 @@ public:
 	 * @param width: nombre de caractères en largeur
 	 * @param height: nombre de caractère en hauteur
 	 */
-	BitmapFont(const char* imagepath, int width, int height);
+	BitmapFont(const sf::Image& image, int width, int height);
 
 	/**
 	 * Changer l'image de la police
 	 */
-	bool SetImage(const char* imagepath);
+	bool SetImage(const sf::Image& image);
 
 	/**
 	 * Récupérer l'image en cours d'utilisation
@@ -49,7 +49,7 @@ public:
 	int GetCharHeight() const;
 
 private:
-	sf::Image image_;
+	const sf::Image* image_;
 	int width_;
 	int height_;
 	int char_width_;

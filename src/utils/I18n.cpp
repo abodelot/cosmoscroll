@@ -10,8 +10,6 @@
 #define TOKEN_COMMENT     '#'
 #define DEFAULT_LANG_CODE "en"
 
-#define DIR_LANG "data/lang/"
-
 
 I18n& I18n::GetInstance()
 {
@@ -23,6 +21,12 @@ I18n& I18n::GetInstance()
 I18n::I18n()
 {
 	code_[0] = '\0';
+}
+
+
+void I18n::SetDataPath(const std::string& path)
+{
+	path_ = path + "/lang/";
 }
 
 
@@ -82,7 +86,7 @@ bool I18n::LoadFromCode(const std::string& code)
 {
 	if (code.size() == 2)
 	{
-		std::string filename = DIR_LANG + code + ".lang";
+		std::string filename = path_ + code + ".lang";
 		if (LoadFromFile(filename.c_str()))
 		{
 			strcpy(code_, code.c_str());

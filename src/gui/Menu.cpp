@@ -249,13 +249,13 @@ void Menu::SetBackground(const sf::Sprite& sprite)
 void Menu::EventCallback(int) {}
 
 
-void Menu::LoadBitmapFont(const char* fontpath, int width, int height)
+void Menu::LoadBitmapFont(const sf::Image& image, int width, int height)
 {
 	if (bitfont_ != NULL)
 	{
 		delete bitfont_;
 	}
-	bitfont_ = new BitmapFont(fontpath, width, height);
+	bitfont_ = new BitmapFont(image, width, height);
 }
 
 

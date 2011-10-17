@@ -4,31 +4,27 @@
 using namespace gui;
 
 
-BitmapFont::BitmapFont(const char* imagepath, int width, int height)
+BitmapFont::BitmapFont(const sf::Image& image, int width, int height)
 {
 	width_ = width;
 	height_ = height;
 
-	SetImage(imagepath);
+	SetImage(image);
 }
 
 
-bool BitmapFont::SetImage(const char* imagepath)
+bool BitmapFont::SetImage(const sf::Image& image)
 {
-	if (image_.LoadFromFile(imagepath))
-	{
-		image_.SetSmooth(false);
-		char_width_ = image_.GetWidth() / width_;
-		char_height_ = image_.GetHeight() / height_;
-		return true;
-	}
-	return false;
+	image_ = &image;
+	char_width_ = image.GetWidth() / width_;
+	char_height_ = image.GetHeight() / height_;
+	return true;
 }
 
 
 const sf::Image& BitmapFont::GetImage() const
 {
-	return image_;
+	return *image_;
 }
 
 

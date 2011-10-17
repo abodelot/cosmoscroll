@@ -12,7 +12,7 @@
 
 GameOverMenu::GameOverMenu()
 {
-	LoadBitmapFont("data/images/gui/mono12-black.png", 10, 10);
+	LoadBitmapFont(Resources::GetImage("gui/mono12-black.png"), 10, 10);
 	SetTitle(_t("menu.gameover.title"));
 
 	score_ = 0;

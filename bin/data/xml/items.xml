@@ -22,12 +22,12 @@
 	<shields>
 		<shield level="1" points="3" />
 		<shield level="2" points="6" price="1" />
-		<shield level="3" points="8" price="1" />
-        <shield level="4" points="42" price="1" />
+		<shield level="3" points="8" price="50" />
+        <shield level="4" points="42" price="200" />
 	</shields>
 	<engines>
 		<engine level="1" speed="140" />
-		<engine level="2" speed="180" price="-50" />
+		<engine level="2" speed="180" price="50" />
 		<engine level="3" speed="220" price="200" />
 	</engines>
 	<heatsinks>
