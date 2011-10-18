@@ -43,20 +43,21 @@ public:
 		SC_COUNT
 	};
 
-	/**
-	 * @return instance unique
-	 */
 	static Game& GetInstance();
-
-
 
 	/**
 	 * @param path: name by which the program was called
 	 */
 	void SetCurrentDirectory(const std::string& path);
 
+	/**
+	 * Override location of the configuration file
+	 * Must be called before Init
+	 * @param config_file: directory of file
+	 */
+	void OverrideConfigFile(const std::string& config_file);
 
-	void Init(const std::string& config_file, const std::string& data_dir, int level_set);
+	void Init(const std::string& data_dir, int level_set);
 
 	/**
 	 * Lancer une partie de CosmoScroll

@@ -11,7 +11,7 @@ int usage(const char *pn)
 	puts("if config_file is a directory, the game will look for a configuration file");
 	puts("named \42cosmoscroll.cfg\42. If it is a regularfile, it will use it as an alternate");
 	puts("configuration file.");
-	puts("\nYou can currently override the game's story mode level set (MUST be a number\n");
+	puts("\nYou can currently override the game's story mode level set (MUST be a number)\n");
 	return EXIT_SUCCESS;
 }
 
@@ -28,7 +28,7 @@ const char* get_arg(int index, char** args)
 	const char* arg_value = args[index + 1];
 	if (arg_value == NULL)
 	{
-		fprintf(stderr, "%s takes an argument\n", args[index]);
+		fprintf(stderr, "option %s takes an argument\n", args[index]);
 		exit(EXIT_FAILURE);
 	}
 	return arg_value;
@@ -37,12 +37,9 @@ const char* get_arg(int index, char** args)
 
 int main(int argc, char* argv[])
 {
-	Game& game = Game::GetInstance();
-	game.SetCurrentDirectory(argv[0]);
-
 	// default values
 	int level_set = 0;
-	std::string config_file = DEFAULT_CONFIGURATION_FILE;
+	std::string config_file = "";
 	std::string data_dir = DEFAULT_DATA_DIR;
 
 	// parse args
@@ -61,10 +58,12 @@ int main(int argc, char* argv[])
 			level_set = (int)strtol(get_arg(i, argv), NULL, 10);
 	}
 
-	game.Init(config_file, data_dir, level_set);
+	Game& game = Game::GetInstance();
+	game.SetCurrentDirectory(argv[0]);
+	if (!config_file.empty())
+	{
+		game.OverrideConfigFile(config_file);
+	}
+	game.Init(data_dir, level_set);
 	return game.Run();
 }
-
-
-
-

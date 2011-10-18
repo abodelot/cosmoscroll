@@ -9,7 +9,7 @@
 #include "utils/ConfigParser.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
-#include "utils/DIE.hpp"
+#include "utils/FileSystem.hpp"
 #include "md5/md5.hpp"
 #include "scenes/scenes.hpp"
 #include "BigScrollingMessagingAppliance.hpp"
@@ -18,7 +18,7 @@
 #include <sys/stat.h>
 
 // config and data files
-#define CONFIG_FILE    "cosmoscroll.cfg"
+#define CONFIG_FILENAME   "cosmoscroll.cfg"
 
 #define XML_LEVELS      "/xml/levels.xml"
 #define XML_ITEMS       "/xml/items.xml"
@@ -48,6 +48,8 @@ Game::Game():
 
 	// HACK: display loading screen as early as possible
 	sf::String temp("loading..."); app_.Clear() ;app_.Draw(temp); app_.Display();
+
+	config_file_ = FileSystem::InitSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
 }
 
 
@@ -77,35 +79,31 @@ void Game::SetCurrentDirectory(const std::string& path)
 }
 
 
-static const std::string &GetRealConfigFileName(const char *in)
+void Game::OverrideConfigFile(const std::string& config_file)
 {
 	struct stat buf;
-	static std::string str(in);
+	config_file_ = config_file;
 
-	if (!stat(in, &buf))
+	if (!stat(config_file_.c_str(), &buf))
 	{
 		if (buf.st_mode & S_IFDIR)
-			(str += "/") += CONFIG_FILE;
+			(config_file_ += "/") += CONFIG_FILENAME;
 		else if (!buf.st_mode & S_IFREG)		// wtf is this file?
 			puts("Error: configuration file is nor a regular file nor a directory");
 	}
 	else
 		puts("Error: couldn't stat configuration file");
-#ifdef DEBUG
-	printf("[config] Configuration file: %s\n", str.c_str());
-#endif
-	return str;
+
 }
 
 
-void Game::Init(const std::string& config_file, const std::string& data_path, int level_set)
+void Game::Init(const std::string& data_path, int level_set)
 {
 
 	input_.Init(app_.GetInput());
 
-	// init directories
+	// init resources directory
 	data_dir_ = current_dir_ + data_path;
-	config_file_ = GetRealConfigFileName((current_dir_ + config_file).c_str());
 	Resources::SetDataPath(data_dir_);
 	I18n::GetInstance().SetDataPath(data_dir_);
 
@@ -120,10 +118,13 @@ void Game::Init(const std::string& config_file, const std::string& data_path, in
 	entities.LoadSpaceShips(data_dir_ + XML_SPACESHIPS);
 	entities.SetY(ControlPanel::HEIGHT);
 
-
-
 	// load config
+#ifdef DEBUG
+	printf("[config] configuration file is: %s\n", config_file_.c_str());
+#endif
 	LoadConfig(config_file_);
+
+
 	SetFullscreen(fullscreen_);
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
@@ -337,8 +338,7 @@ void Game::SetNextScene(Scene enum_scene)
 			CASE_SCENE(SettingsMenu);
 
 			default:
-				DIE("can't set next requested scene");
-				break;
+				return;
 		}
 		scenes_[enum_scene] = new_scene;
 	}

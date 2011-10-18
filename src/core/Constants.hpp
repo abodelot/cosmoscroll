@@ -13,7 +13,6 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 									DISCLAIMER_BLOB
 
 // fallback file paths
-#define DEFAULT_CONFIGURATION_FILE	"config/cosmoscroll.cfg"
 #define DEFAULT_DATA_DIR			"data"
 #define DEFAULT_SCREENSHOT_DIR		"screenshot"
 
