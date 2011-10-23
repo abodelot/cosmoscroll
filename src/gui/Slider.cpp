@@ -83,7 +83,7 @@ void Slider::OnMouseWheelMoved(int delta)
 
 void Slider::OnStateChanged(State::EState state)
 {
-	WidgetStyle& style = GetOwner()->GetWidgetStyle();
+	const WidgetStyle& style = GetOwner()->GetWidgetStyle();
 	switch (state)
 	{
 		case State::DEFAULT:

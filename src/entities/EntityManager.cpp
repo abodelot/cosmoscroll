@@ -43,6 +43,7 @@ EntityManager::EntityManager():
 	game_over_ = false;
 	mode_ = MODE_ARCADE;
 	timer_ = arcade_record_ = 0.f;
+	bg_image_ = NULL;
 }
 
 
@@ -91,6 +92,13 @@ void EntityManager::InitMode(Mode mode)
 				player_->SetPosition(0, height_ / 2);
 				player_->Initialize();
 			}
+			bg_image_ = LevelManager::GetInstance().GetBackgroundImage();
+			if (bg_image_ != NULL)
+			{
+				background_.SetImage(*bg_image_);
+				background2_ .SetImage(*bg_image_);
+				background2_.SetX(bg_image_->GetWidth());
+			}
 			particles_.AddStars(LevelManager::GetInstance().GetStarsCount());
 			break;
 
@@ -98,7 +106,7 @@ void EntityManager::InitMode(Mode mode)
 			more_bad_guys_ = &EntityManager::MoreBadGuys_ARCADE;
 			// on démarre toujours le mode arcade avec un nouveau vaisseau
 			RespawnPlayer();
-			SetBackgroundColor(sf::Color::Black, sf::Color::Black);
+			bg_image_ = NULL;
 			std::wstring game_info = wstr_replace(_t("panel.record"), L"{record}", to_wstring(arcade_record_));
 			ControlPanel::GetInstance().SetGameInfo(game_info);
 			particles_.AddStars();
@@ -113,6 +121,7 @@ void EntityManager::InitMode(Mode mode)
 	game_over_ = false;
 	timer_ = 0.f;
 	particles_.AddShield(player_->GetShield(), player_);
+
 }
 
 
@@ -132,8 +141,6 @@ void EntityManager::SetSize(int width, int height)
 	{
 		height = 0;
 	}
-	background_ = sf::Shape::Rectangle(0, 0, width, height, sf::Color(255, 255, 255, 0));
-	background_.SetColor(sf::Color::White);
 	width_ = width;
 	height_ = height;
 }
@@ -148,20 +155,6 @@ void EntityManager::HandleAction(Input::Action action)
 void EntityManager::Update(float frametime)
 {
 	EntityList::iterator it, it2;
-
-
-	/*for (it = entities_.begin(); it != entities_.end();)
-	{
-		if ((**it).IsDead())
-		{
-			delete *it;
-			it = entities_.erase(it);
-		}
-		else
-		{
-			++it;
-		}
-	}*/
 
 	// update and collision
 	sf::FloatRect r1, r2;
@@ -202,6 +195,20 @@ void EntityManager::Update(float frametime)
 
 	}
 	particles_.Update(frametime);
+
+	// scrolling background image
+	if (bg_image_ != NULL)
+	{
+		float x = background_.GetPosition().x - 40 * frametime;
+		float width = bg_image_->GetWidth();
+		if (x <= -width)
+		{
+			x = 0;
+		}
+		background_.SetX(x);
+		background2_.SetX(x + width);
+	}
+
 	timer_ += frametime;
 }
 
@@ -243,15 +250,6 @@ bool EntityManager::IsGameOver()
 }
 
 
-void EntityManager::SetBackgroundColor(const sf::Color& top, const sf::Color& bottom)
-{
-	background_.SetPointColor(0, top);    // top left
-	background_.SetPointColor(1, top);    // top right
-	background_.SetPointColor(2, bottom); // bottom left
-	background_.SetPointColor(3, bottom); // bottom right
-}
-
-
 void EntityManager::UpdateArcadeRecord()
 {
 	assert(player_->GetPoints() > arcade_record_);
@@ -261,7 +259,12 @@ void EntityManager::UpdateArcadeRecord()
 
 void EntityManager::Render(sf::RenderTarget& target) const
 {
-	target.Draw(background_);
+	// draw scrolling background image
+	if (bg_image_ != NULL)
+	{
+		target.Draw(background_);
+		target.Draw(background2_);
+	}
 	particles_.Show(target);
 	// draw each managed entity
 	for (EntityList::const_iterator it = entities_.begin(); it != entities_.end(); ++it)

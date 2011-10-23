@@ -5,7 +5,9 @@
 #include <SFML/Graphics.hpp>
 
 #include "Widget.hpp"
+#include "WidgetStyle.hpp"
 #include "BitmapFont.hpp"
+
 
 namespace gui
 {
@@ -17,7 +19,7 @@ namespace gui
 class Menu
 {
 public:
-	Menu();
+	Menu(WidgetStyle& style);
 
 	virtual ~Menu();
 
@@ -48,7 +50,7 @@ public:
 	/**
 	 * Récupérer le thème des widgets
 	 */
-	Widget::WidgetStyle& GetWidgetStyle();
+	WidgetStyle& GetWidgetStyle();
 
 protected:
 	bool FocusWidget(const Widget* widget);
@@ -100,7 +102,7 @@ private:
 	sf::Sprite background_;
 	BitmapFont* bitfont_;
 
-	Widget::WidgetStyle theme_;
+	WidgetStyle* theme_;
 };
 
 }

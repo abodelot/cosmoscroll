@@ -205,7 +205,7 @@ void TextBox::OnMouseClicked(int x, int y)
 
 void TextBox::OnStateChanged(State::EState state)
 {
-	WidgetStyle& style = GetOwner()->GetWidgetStyle();
+	const WidgetStyle& style = GetOwner()->GetWidgetStyle();
 	switch (state)
 	{
 		case State::DEFAULT:

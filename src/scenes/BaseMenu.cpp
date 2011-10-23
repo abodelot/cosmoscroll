@@ -6,7 +6,9 @@
 #include "utils/Resources.hpp"
 
 
-BaseMenu::BaseMenu()
+gui::WidgetStyle BaseMenu::global_style_;
+
+BaseMenu::BaseMenu(): gui::Menu(global_style_)
 {
 	SetBackground(sf::Sprite(Resources::GetImage("gui/main-screen.png")));
 	scrolling_background_.SetImage(Resources::GetImage("gui/background.png"));

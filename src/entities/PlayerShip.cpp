@@ -416,8 +416,7 @@ void PlayerShip::OnDestroy()
 {
 	EntityManager& manager = EntityManager::GetInstance();
 	SetAnimation(manager.GetAnimation("player-destroyed"));
-	//TODO SetMovePattern(Falling)
-	//TODO SetPlayerControlled(False)
+
 	Reset(*this);
 	manager.TerminateGame();
 	ParticleSystem::GetInstance().AddExplosion(GetCenter_());
@@ -567,10 +566,8 @@ void PlayerShip::KonamiCodeOn()
 	panel_.SetCoolers(42);
 	missiles_ = 42;
 	panel_.SetMissiles(42);
-	hp_max_ = 9000;
-	SetHP(hp_max_);
-	panel_.SetMaxShipHP(hp_max_);
-	panel_.SetShipHP(hp_max_);
+
+	SetCollideFlag(C_IGNORE_DAMAGE);
 
 	weapon1_.SetMultiply(3);
 	weapon2_.SetMultiply(2);

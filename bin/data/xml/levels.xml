@@ -108,7 +108,7 @@
 			<ship id="2" y="100" t="1"/>
 			<ship id="2" y="300" t="1"/>
 		</level>
-		<level desc="Ahoi captain of the space!" bg_top="#200030" bg_bottom="#000010" stars="25">
+		<level desc="Ahoi captain of the space!" bg_image="gui/background-blue.jpg" stars="25">
 <!-- LVL2: more scoots but still very easy-->
 			<loop count="2">
 				<call func="caps_x5"/>
@@ -396,7 +396,7 @@
 			<ship id="4" y="300" t="0.5"/>
 			<ship id="5" y="90" t="0.5"/>
 		</level>
-		<level desc="Take me to your leader." bg_top="#000000" bg_bottom="#501005" stars="70">
+		<level desc="Take me to your leader." bg_image="gui/background-red.jpg" stars="70">
 <!-- LVL8: a bit of everything + evilboss -->
 			<wait t="1"/>
 			<loop count="3">

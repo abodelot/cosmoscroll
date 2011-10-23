@@ -4,7 +4,7 @@
 #include <queue>
 #include <map>
 #include <string>
-#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "tinyxml/tinyxml.h"
 
@@ -70,14 +70,10 @@ public:
 	const char* GetDescription() const;
 
 	/**
-	 * Obtenir la couleur de fond haut
+	 * Get scrolling background image used in current level
+	 * @return image, or NULL if none
 	 */
-	sf::Color GetTopColor() const;
-
-	/**
-	 * Obtenir la couleur de fond bas
-	 */
-	sf::Color GetBottomColor() const;
+	const sf::Image* GetBackgroundImage() const;
 
 	int GetStarsCount() const;
 

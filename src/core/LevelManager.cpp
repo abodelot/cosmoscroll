@@ -7,6 +7,7 @@
 #include "entities/EvilBoss.hpp"
 #include "entities/BossTentacles.hpp"
 #include "entities/complex/Gate.hpp"
+#include "utils/Resources.hpp"
 
 #define DEFAULT_STARS_COUNT 33
 
@@ -106,17 +107,10 @@ const char* LevelManager::GetDescription() const
 }
 
 
-sf::Color LevelManager::GetTopColor() const
+const sf::Image* LevelManager::GetBackgroundImage() const
 {
-	const char* p = GetLevelElement(current_level_)->Attribute("bg_top");
-	return p != NULL ? HexaToColor(p) : sf::Color::Black;
-}
-
-
-sf::Color LevelManager::GetBottomColor() const
-{
-	const char* p = GetLevelElement(current_level_)->Attribute("bg_bottom");
-	return p != NULL ? HexaToColor(p) : sf::Color::Black;
+	const char* p = GetLevelElement(current_level_)->Attribute("bg_image");
+	return p != NULL ? &Resources::GetImage(p) : NULL;
 }
 
 

@@ -56,8 +56,6 @@ protected:
 	// inherited
 	void OnStateChanged(State::EState state);
 
-	// inherited
-	void ApplyStyle(const WidgetStyle& style);
 private:
 	// inherited
 	void Render(sf::RenderTarget& target) const;

@@ -36,9 +36,9 @@ void LevelMenu::OnFocus()
 {
 	CreditCounterBase::OnFocus();
 	int last = levels_.CountLevel();
-	
+
 	levels_.VerifyCurrent();	// FIX: On charge dorénavant la config avant le levelmanager.
-	
+
 	int current = levels_.GetCurrent();
 	if (levels_.IsHardcoreEnabled())
 		current -= last;
@@ -98,13 +98,7 @@ void LevelMenu::EventCallback(int id)
 				levels_.SetCurrent(selected_level);
 
 			levels_.LoadCurrent();
-			EntityManager& entities = EntityManager::GetInstance();
-			entities.SetBackgroundColor(
-				levels_.GetTopColor(),
-				levels_.GetBottomColor()
-			);
-
-			entities.InitMode(EntityManager::MODE_STORY);
+			EntityManager::GetInstance().InitMode(EntityManager::MODE_STORY);
 
 			std::wstring s = wstr_replace(_t("panel.level"), L"{level}", to_wstring(selected_level));
 			ControlPanel::GetInstance().SetGameInfo(s);

@@ -1,48 +1,18 @@
 #include "Menu.hpp"
 
 #define JOY_DEADZONE	50.f
-#define DEFAULT_COLOR   sf::Color(0, 0x53, 0x9f)
-#define FOCUS_COLOR     sf::Color(0, 0x6c, 0xcf)
-#define FOCUS_BG_COLOR  sf::Color(0xf6, 0xe7, 0xa0)
 
 using namespace gui;
 
 
-Menu::Menu()
+Menu::Menu(WidgetStyle& style)
 {
 	focus_ = NULL;
 	focus_index_ = -1;
 	bitfont_ = NULL;
 	hovered_widget_ = NULL;
+	theme_ = &style;
 
-	// default theme
-	theme_.global_text_size = 20;
-	theme_.global_font = &sf::Font::GetDefaultFont();
-	theme_.global_border_color = sf::Color(0x80, 0x80, 0x80);
-
-	theme_.label_text_color = sf::Color::White;
-
-	theme_.button_text_color = sf::Color::White;
-	theme_.button_text_color_focus = sf::Color::Green;
-
-	theme_.ckbox_v_color = DEFAULT_COLOR;
-	theme_.ckbox_v_color_focus = FOCUS_COLOR;
-	theme_.ckbox_bg_color = sf::Color::White;
-	theme_.ckbox_bg_color_focus = FOCUS_BG_COLOR;
-	theme_.ckbox_size = 20; // todo
-
-	theme_.slider_handle_color = DEFAULT_COLOR;
-	theme_.slider_handle_color_focus = FOCUS_COLOR;
-	theme_.slider_bg_color = sf::Color::White;
-	theme_.slider_bg_color_focus = FOCUS_BG_COLOR;
-
-	theme_.optlist_arrow_color = DEFAULT_COLOR;
-	theme_.optlist_arrow_color_focus = FOCUS_COLOR;
-	theme_.optlist_bg_color = sf::Color::White;
-	theme_.optlist_bg_color_focus = FOCUS_BG_COLOR;
-
-	theme_.textbox_bg_color = sf::Color::White;
-	theme_.textbox_bg_color_focus = FOCUS_BG_COLOR;
 }
 
 
@@ -265,9 +235,9 @@ BitmapFont* Menu::GetBitmapFont() const
 }
 
 
-Widget::WidgetStyle& Menu::GetWidgetStyle()
+WidgetStyle& Menu::GetWidgetStyle()
 {
-	return theme_;
+	return *theme_;
 }
 
 
@@ -322,7 +292,7 @@ bool Menu::FocusFirstWidget()
 	return false;
 }
 
-// TODO: réécrire ce torcheballe (UNE SEULE boucle avec un ternaire next / previous)
+// TODO: UNE SEULE boucle avec un ternaire next / previous?
 // + gérer les widgets disabled
 // que faire si tous disabled ?
 bool Menu::FocusNextWidget()

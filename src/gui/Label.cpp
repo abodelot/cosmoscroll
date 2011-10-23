@@ -7,7 +7,7 @@ using namespace gui;
 Label::Label(Menu* owner, const sf::Unicode::Text& text, int x, int y) :
 	Widget(owner, false)
 {
-	WidgetStyle& style = owner->GetWidgetStyle();
+	const WidgetStyle& style = owner->GetWidgetStyle();
 	text_.SetText(text);
 	text_.SetColor(style.label_text_color);
 	text_.SetFont(*style.global_font);

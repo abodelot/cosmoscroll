@@ -217,7 +217,7 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 
 // Star
 #define STAR_MIN_SPEED       30.0f
-#define STAR_MAX_SPEED       1000.0f
+#define STAR_MAX_SPEED       900.0f
 
 ParticleSystem::Star::Star(const sf::Image& img)
 {
@@ -225,7 +225,7 @@ ParticleSystem::Star::Star(const sf::Image& img)
 	float x = sf::Randomizer::Random(0, Game::WIDTH);
 	float y = sf::Randomizer::Random(0, Game::HEIGHT);
 	sprite_.SetPosition(x, y);
-	float scale = sf::Randomizer::Random(0.5f, 1.5f);
+	float scale = sf::Randomizer::Random(1.f, 2.f);
 	sprite_.SetScale(scale, scale);
 	speed_ = (int) (sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED));
 }

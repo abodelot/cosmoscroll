@@ -26,6 +26,7 @@ private:
 	float timer_;
 	sf::String info_;
 	EntityManager& entities_;
+	bool player_dead_;
 };
 
 #endif // ENDGAMESCENE_HPP

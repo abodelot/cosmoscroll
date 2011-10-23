@@ -55,7 +55,7 @@ public:
 	 * @return hauteur de l'univers
 	 */
 	inline int GetHeight() const{return height_;};
-	
+
 
 	void HandleAction(Input::Action action);
 
@@ -91,12 +91,6 @@ public:
 	 * @return true si game over
 	 */
 	bool IsGameOver();
-
-	/**
-	 * @param top: couleur du haut du dégradé
-	 * @param bottom: couleur du bas du dégradé
-	 */
-	void SetBackgroundColor(const sf::Color& top, const sf::Color& bottom);
 
 	/**
 	 * Allouer un vaisseau
@@ -189,7 +183,9 @@ private:
 	int height_;
 
 	Mode mode_;
-	sf::Shape background_;
+	const sf::Image* bg_image_;
+	sf::Sprite background_;
+	sf::Sprite background2_;
 	ParticleSystem& particles_;
 
 	PlayerShip* player_;

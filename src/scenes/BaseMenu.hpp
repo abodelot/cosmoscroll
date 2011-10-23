@@ -44,6 +44,7 @@ protected:
 private:
 	sf::String title_;
 	mutable sf::Sprite scrolling_background_;
+	static gui::WidgetStyle global_style_;
 };
 
 #endif // BASEMENU_HPP

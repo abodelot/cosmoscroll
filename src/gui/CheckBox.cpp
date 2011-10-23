@@ -13,7 +13,7 @@ CheckBox::CheckBox(Menu* owner, int x, int y) :
 	Widget(owner, true)
 {
 	checked_ = false;
-	WidgetStyle& style = owner->GetWidgetStyle();
+	const WidgetStyle& style = owner->GetWidgetStyle();
 
 	box_ = sf::Shape::Rectangle(0, 0, SIZE, SIZE, sf::Color::White,
 		1, style.global_border_color);

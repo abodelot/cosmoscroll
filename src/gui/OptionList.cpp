@@ -19,7 +19,8 @@ OptionList::OptionList(Menu* owner, int x, int y) :
 	dir_ = 1;
 	scale_ = 1;
 	align_ = Align::CENTER;
-	text_size_ = owner->GetWidgetStyle().global_text_size;
+	const WidgetStyle& style = owner->GetWidgetStyle();
+	text_size_ = style.global_text_size;
 
 	// left arrow
 	left_arrow_.AddPoint(0, text_size_ / 2);
@@ -28,9 +29,9 @@ OptionList::OptionList(Menu* owner, int x, int y) :
 	left_arrow_.SetCenter(text_size_ / 2, text_size_ / 2);
 	left_arrow_.SetPosition(BOX_PADDING + text_size_ / 2, BOX_PADDING + text_size_ / 2);
 	left_arrow_.SetOutlineWidth(1);
-	left_arrow_.SetPointOutlineColor(0, owner->GetWidgetStyle().global_border_color);
-	left_arrow_.SetPointOutlineColor(1, owner->GetWidgetStyle().global_border_color);
-	left_arrow_.SetPointOutlineColor(2, owner->GetWidgetStyle().global_border_color);
+	left_arrow_.SetPointOutlineColor(0, style.global_border_color);
+	left_arrow_.SetPointOutlineColor(1, style.global_border_color);
+	left_arrow_.SetPointOutlineColor(2, style.global_border_color);
 
 	// right arrow
 	right_arrow_.AddPoint(0, 0);
@@ -39,9 +40,9 @@ OptionList::OptionList(Menu* owner, int x, int y) :
 	right_arrow_.SetCenter(text_size_ / 2, text_size_ / 2);
 	right_arrow_.SetY(BOX_PADDING + text_size_ / 2);
 	right_arrow_.SetOutlineWidth(1);
-	right_arrow_.SetPointOutlineColor(0, owner->GetWidgetStyle().global_border_color);
-	right_arrow_.SetPointOutlineColor(1, owner->GetWidgetStyle().global_border_color);
-	right_arrow_.SetPointOutlineColor(2, owner->GetWidgetStyle().global_border_color);
+	right_arrow_.SetPointOutlineColor(0, style.global_border_color);
+	right_arrow_.SetPointOutlineColor(1, style.global_border_color);
+	right_arrow_.SetPointOutlineColor(2, style.global_border_color);
 
 	// SetRect sera exécuté quand on ajoutera une option, la hauteur et la largeur
 	// du widget seront alors connus. On mémorise juste la position en attendant.
@@ -55,7 +56,7 @@ void OptionList::BuildBoxes()
 	int inside_box_width = max_opt_width_ + BOX_PADDING * 2;
 	int box_width = inside_box_width + BOX_PADDING * 4 + text_size_ * 2;
 	int pad_text_width = text_size_ + BOX_PADDING * 2;
-	WidgetStyle& style = GetOwner()->GetWidgetStyle();
+	const WidgetStyle& style = GetOwner()->GetWidgetStyle();
 
 	inside_box_ = sf::Shape::Rectangle(0, 0,
 		inside_box_width, pad_text_width, sf::Color::White, 1, style.global_border_color);
@@ -282,13 +283,6 @@ void OptionList::OnStateChanged(State::EState state)
 		default:
 			break;
 	}
-}
-
-
-void OptionList::ApplyStyle(const WidgetStyle& style)
-{
-	left_arrow_.SetColor(style.optlist_arrow_color);
-	right_arrow_.SetColor(style.optlist_arrow_color);
 }
 
 

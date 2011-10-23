@@ -20,6 +20,7 @@ EndGameScene::EndGameScene():
 	info_.SetSize(40);
 	info_.SetColor(sf::Color::White);
 	info_.SetFont(GetMenuFont());
+	player_dead_ = false;
 }
 
 
@@ -43,6 +44,14 @@ void EndGameScene::Update(float frametime)
 			Game::SC_LevelMenu : Game::SC_GameOverMenu;
 		Game::GetInstance().SetNextScene(next);
 	}
+
+	if (player_dead_)
+	{
+		PlayerShip* player = EntityManager::GetInstance().GetPlayerShip();
+		player->Move(0, frametime * 100);
+		player->Rotate(10 * frametime);
+		player->UpdateSubRect(*player, frametime);
+	}
 }
 
 
@@ -64,6 +73,7 @@ void EndGameScene::OnFocus()
 	{
 		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("game-over.ogg"));
 		info_.SetText(_t("endgame.game_over"));
+		player_dead_ = true;
 	}
 	else
 	{
@@ -91,6 +101,7 @@ void EndGameScene::OnFocus()
 			// nouveau niveau débloqué (si possible)
 			levels.UnlockNextLevel();
 		}
+		player_dead_ = false;
 	}
 
 	sf::FloatRect rect = info_.GetRect();

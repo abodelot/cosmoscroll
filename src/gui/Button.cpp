@@ -16,7 +16,7 @@ Button::Button(Menu* owner, const sf::Unicode::Text& text, int x, int y, int w, 
 	SetRect(x, y, x + width, y + height);
 	SetAlign(Align::CENTER);
 
-	WidgetStyle& style = owner->GetWidgetStyle();
+	const WidgetStyle& style = owner->GetWidgetStyle();
 	text_.SetSize(style.global_text_size);
 	text_.SetFont(*style.global_font);
 	text_.SetColor(style.button_text_color);
