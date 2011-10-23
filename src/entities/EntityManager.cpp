@@ -95,8 +95,10 @@ void EntityManager::InitMode(Mode mode)
 			bg_image_ = LevelManager::GetInstance().GetBackgroundImage();
 			if (bg_image_ != NULL)
 			{
-				background_.SetImage(*bg_image_);
-				background2_ .SetImage(*bg_image_);
+				sf::Sprite temp(*bg_image_);
+				background_ = temp;
+				background_.SetX(0);
+				background2_ = temp;
 				background2_.SetX(bg_image_->GetWidth());
 			}
 			particles_.AddStars(LevelManager::GetInstance().GetStarsCount());

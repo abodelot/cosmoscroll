@@ -335,8 +335,9 @@ bool ParticleSystem::ShieldParticle::OnUpdate(float frametime)
 
 
 // SmokeParticle
-#define SMOKE_MAX_LIFETIME 3.f
-#define SMOKE_BASE_SPEED   1200
+#define SMOKE_MAX_LIFETIME 2.5f
+#define SMOKE_MIN_SPEED  50
+#define SMOKE_MAX_SPEED  100
 #define SMOKE_MIN_SIZE     0.5f
 #define SMOKE_MAX_SIZE     1.2f
 #define SMOKE_MIN_ANGLE    (PI - 0.5f)
@@ -351,32 +352,40 @@ ParticleSystem::Smoke::Smoke(const sf::Image& img, const sf::Sprite* handle)
 	sprite_.SetImage(img);
 	float size = sf::Randomizer::Random(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
 	sprite_.SetScale(size, size);
-	angle_ = sf::Randomizer::Random(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
-	timer_ = sf::Randomizer::Random(0.0f, SMOKE_MAX_LIFETIME);
+	float angle = sf::Randomizer::Random(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
+	float base_speed = sf::Randomizer::Random(SMOKE_MIN_SPEED, SMOKE_MAX_SPEED);
+	vspeed_.x = std::cos(angle) * base_speed;
+	vspeed_.y = -std::sin(angle) * base_speed;
 	y_offset_ = (handle_->GetSize().y - sprite_.GetSize().y) / 2;
+
+	timer_ = sf::Randomizer::Random(0.f, SMOKE_MAX_LIFETIME);
 }
 
 
 bool ParticleSystem::Smoke::OnUpdate(float frametime)
 {
 	timer_ += frametime;
+	float size = sprite_.GetScale().x;
+	size += frametime * 0.5;
+	sprite_.SetScale(size, size);
 	if (timer_ >= SMOKE_MAX_LIFETIME)
 	{
 		if (handle_ == NULL)
 		{
 			return true;
 		}
-		timer_ = 0;
+		timer_ = sf::Randomizer::Random(0.f, SMOKE_MAX_LIFETIME);
+		float size = sf::Randomizer::Random(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
+		sprite_.SetScale(size, size);
 		sprite_.SetPosition(handle_->GetPosition().x, handle_->GetPosition().y + y_offset_);
-		angle_ = sf::Randomizer::Random(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
 	}
 
 
-	sf::Vector2f pos = sprite_.GetPosition();
-	int speed = (int) ((SMOKE_MAX_LIFETIME - timer_) * SMOKE_BASE_SPEED * frametime);
+	//sf::Vector2f pos = sprite_.GetPosition();
+	//int speed = (int) ((SMOKE_MAX_LIFETIME - timer_) * SMOKE_BASE_SPEED * frametime);
 
-	math::translate(pos, angle_, speed * frametime);
-	sprite_.SetPosition(pos);
+	sprite_.Move(vspeed_.x * frametime, vspeed_.y * frametime);
+	//sprite_.SetPosition(pos);
 	sprite_.SetColor(sf::Color(255, 255, 255, (sf::Uint8) (255 - 255 * timer_ / SMOKE_MAX_LIFETIME)));
 
 	return false;

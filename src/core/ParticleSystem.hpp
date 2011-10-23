@@ -208,11 +208,11 @@ private:
 			handle_ = handle;
 		}
 	private:
-		float angle_;
+		int y_offset_;
 		sf::Sprite sprite_;
 		const sf::Sprite* handle_;
-		int y_offset_;
 		float timer_;
+		sf::Vector2f vspeed_;
 	};
 
 	class Explosion: public Particle, public Animated
