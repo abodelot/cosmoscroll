@@ -420,7 +420,7 @@ void Game::CheckPurity()
 	MD5 md5sum;
 
 	file.open((data_dir_ + XML_ITEMS).c_str());
-	pure_ &= (md5sum.Calculate(file) == MD5SUM_WEAPONS);
+	pure_ &= (md5sum.Calculate(file) == MD5SUM_ITEMS);
 	file.close();
 
 	file.open((data_dir_ + XML_SPACESHIPS).c_str());

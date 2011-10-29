@@ -6,15 +6,39 @@
 		<style type="text/css">
 body {
 	font-family: arial, serif;
-	font-size: 11pt;
+	font-size: 10pt;
 	margin: 0;
-	padding: 2em;
+	padding: 1em 3em;
+}
+#tabs {
+	border-bottom: 1px solid #c0c0c0;
+}
+#tabs a {
+	display: inline-block;
+	background-color: #e0e0e0;
+	border: 1px solid #c0c0c0;
+	padding: 2px 10px;
+	outline: 0;
+	text-decoration: none;
+	margin: 0 0 -1px 10px;
+}
+#tabs a.current
+{
+	background-color: white;
+	border-bottom: 1px solid white;
+}
+h1 {
+	text-align: center;
 }
 h2 {
 	background-color: #36383D;
 	color: white;
+	margin-top: 20px;
 	padding: 2px;
 	text-indent: 1em;
+}
+h3 {
+	font-size: 13px;
 }
 div.part {
 	padding: 0 2em;
@@ -33,36 +57,270 @@ table.infotab th {
 	background-color: silver;
 }
 		</style>
+<script type="text/javascript">
+function show_lang(code)
+{
+	pages = document.getElementsByClassName('page');
+	for (i = 0; i < pages.length; ++i)
+	{
+		pages[i].style.display = 'none';
+	}
+
+	current_page = document.getElementById('page-' + code);
+	current_page.style.display = 'block';
+
+	if (current_tab != -1)
+		current_tab.className = "";
+	current_tab = document.getElementById('tab-' + code);
+	current_tab.className = "current";
+
+}
+var current_tab = -1;
+
+		</script>
 	</head>
 
-	<body>
+	<body onload="show_lang('en')">
 
 <h1><img src="data/images/gui/cosmoscroll-logo.png" alt="CosmoScroll" /></h1>
 
-<p>
-	<b>Version :</b> 0.3<br />
-	<b>Publié le :</b> 24/05/2011<br />
-	<b>Site web :</b> <a href="http://cosmoscroll.googlecode.com">cosmoscroll.googlecode.com</a><br />
-	<b>Licence :</b> GPL (voir le fichier <a href="./COPYING">COPYING</a>)<br />
-	<b>Auteurs :</b> voir le fichier <a href="./AUTHORS">AUTHORS</a>
-</p>
+<div id="tabs">
+	<a href="javascript:show_lang('en')" id="tab-en">English</a>
+	<a href="javascript:show_lang('fr')" id="tab-fr">Français</a>
+</div>
+
+<div class="page" id="page-en">
+	<p>
+		<b>Version:</b> X.X<br />
+		<b>Release date:</b> XXX<br />
+		<b>Website: </b> <a href="http://cosmoscroll.googlecode.com">cosmoscroll.googlecode.com</a><br />
+		<b>Authors:</b> see <a href="./AUTHORS">AUTHORS</a> file<br />
+		<b>License: </b> GPL (see <a href="./COPYING">COPYING</a> file)
+	</p>
 
 
-<h2>Sommaire</h2>
-<div class="part">
+	<h2>Summary</h2>
+
 	<ul>
-		<li><a href="#how-to-play">Comment jouer ?</a></li>
-		<li><a href="#how-to-reset">Comment retrouver la configuration d'origine ?</a></li>
-		<li><a href="#how-to-compile">Comment compiler le jeu depuis les sources ?</a></li>
-		<li><a href="#bug-found">J'ai trouvé un bug / Je veux soumettre une idée</a></li>
-		<li><a href="#credits">Crédits</a></li>
-		<li><a href="#histo">Historique des versions</a></li>
+		<li><a href="#howto-play-en">How to play?</a></li>
+		<li><a href="#configuration-en">Where is the configuration file?</a></li>
+		<li><a href="#command-args-en">Command line arguments</a></li>
+		<li><a href="#bug-found-en">I've found a bug! / I've a feature suggestion!</a></li>
+		<li><a href="#howto-compile-en">How to compile the game from source?</a></li>
+		<li><a href="#credits-en">Credits</a></li>
+		<li><a href="#history-en">Release history</a></li>
 	</ul>
+
+	<h2 id="howto-play-en">How to play?</h2>
+
+	<h3>Game modes</h3>
+	<p>CosmoScroll comes in two flavors:</p>
+	<ul>
+		<li><b>Story Mode:</b><br />Complete all levels, beat the final evil boss and unlock the hardcore version!</li>
+		<li><b>Arcade mode:</b><br />Hold as long as possible against more and more powerful bad guys.<br />
+		Try to establish a new high score share it online to compete against other players!</li>
+	</ul>
+	<h3>Keyboard layout</h3>
+	<table class="infotab">
+		<tr>
+			<th>Action</th>
+			<th>Key</th>
+		</tr>
+		<tr>
+			<td>Move spaceship</td>
+			<td>Directional arrows (up, down, left, right)</td>
+		</tr>
+		<tr>
+			<td>Use Weapon 1</td>
+			<td>Space</td>
+		</tr>
+		<tr>
+			<td>Use Weapon 2</td>
+			<td>A</td>
+		</tr>
+		<tr>
+			<td>Fire a missile</td>
+			<td>Z</td>
+		</tr>
+		<tr>
+			<td>Active a <em>cooler</em> power-up</td>
+			<td>Left Control</td>
+		</tr>
+		<tr>
+			<td>Pause the game/Resume the game</td>
+			<td>P</td>
+		</tr>
+		<tr>
+			<td>Place HUD at the top of the screen</td>
+			<td>Page Up</td>
+		</tr>
+		<tr>
+			<td>Place HUD at the bottom of the screen</td>
+			<td>Page Down</td>
+		</tr>
+		<tr>
+			<td>Take a screenshot (saved in <code>screenshots/</code>)</td>
+			<td>F1</td>
+		</tr>
+	</table>
+	<p>The game can also be played with a pad or a joystick.<br />
+	Keyboard layout and pad/joystick layout can be configured in the <b>Options</b> menu.</p>
+
+
+	<h3>Power-ups</h3>
+	<p>Power-ups are randomly dropped when an enemy is destroyed.</p>
+	<ul>
+		<li><b>HP</b>: restores 1 health point.</li>
+		<li><b>Bouclier</b>: restores 1 shield point.</li>
+		<li><b>Cooler</b>: gives +1 <em>Cooler</em>. Use a cooler to instantly cancel over-heat. You can store up to 3 coolers.</li>
+		<li><b>Missile</b>: gives +1 <em>Missile</em>. A deadly weapon with a large damage zone. You can store up to 3 missiles.</li>
+		<li><b>Double shot</b>: doubles your weapons for 10 seconds (cannot be combined with <em>triple shot</em>)</li>
+		<li><b>Triple shot</b>: triples your weapons for 10 seconds (cannot be combined with <em>double shot</em>).</li>
+		<li><b>Speed</b>: increases your speed for 10 seconds</li>
+		<li><b>Super Banana</b>: restores all your health points and all your shield points, gives 1 <em>cooler</em> and  1 <em>missile</em></li>
+	</ul>
+
+	<h2 id="configuration-en">Where is the configuration file?</h2>
+
+	<p>CosmoScroll saves your configuration in the settings directory, according to your operating system:</p>
+	<ul>
+		<li><b>Windows :</b> Application Data/cosmoscroll/cosmoscroll.cfg</li>
+		<li><b>Linux :</b> ~/.config/cosmoscroll/cosmoscroll.cfg</li>
+		<li><b>Mac OS :</b> ~/Library/Application Support/cosmoscroll/cosmoscroll.cfg</li>
+	</ul>
+	<p>If you don't want ComsoScroll storing your configuration in this directory, you can set another location to save this file, using <code>-config</code> option in command line (see <a href="#command-args-en">command line arguments</a> section for more details).</p>
+	<p>If you want to reset the game, simply delete this file, a new one will be created next time you launch the game.<br />
+	Take note you will lost your entire configuration (scores, level  progression, settings, etc.) by deleting this file.
+	</p>
+
+
+	<h2 id="command-args-en">Command line arguments</h2>
+
+	<table class="infotab">
+		<tr>
+			<th>Option</th>
+			<th>Role</th>
+		</tr>
+		<tr>
+			<td>-config <em>&lt;path&gt;</em></td>
+			<td>Override configuration file default location.<br />
+			If <em>path</em> is a directory, the game will look for a configuration file named <em>cosmoscroll.cfg</em> (or create it if it doesn't exist).<br />
+			If it is a regular file, it will use it as an alternate configuration file.</td>
+		</tr>
+		<tr>
+			<td>-data <em>&lt;path&gt;</em></td>
+			<td>Override resources directory default location.<br />
+			Use this option if you want to install CosmoScroll exectuable in a different directory than the resources one.</td>
+		</tr>
+		<tr>
+			<td>-version</td>
+			<td>Show CosmoScroll version</td>
+		</tr>
+		<tr>
+			<td>-help</td>
+			<td>Show usage</td>
+		</tr>
+	</table>
+
+
+	<h2 id="bug-found-en">I've found a bug! / I've a feature suggestion!</h2>
+
+	<p>If you have encountered a problem while playing CosmoScroll, please report it on the <a href="http://code.google.com/p/cosmoscroll/issues/list">bug tracker</a> (if the issue has not been reported yet).<br />
+	If possible, please clearly mention the steps to reproduce the bug.
+	</p>
+	<p>You can also contact  <a href="./AUTHORS">authors</a> of CosmoScroll if you want to submit a feature suggestion, it will be welcomed!</p>
+
+
+	<h2 id="howto-compile-en">How to compile the game from source?</h2>
+
+	<p>CosmoScroll compiles on <b>GNU/Linux</b> (GCC), <b>Mac OS</b> (GCC) and <b>Windows</b> (mingw32).<br />
+	Other systems and compilers haven't been tested.</p>
+	<p>First, you must install the following libraries:</p>
+	<ul>
+		<li><a href="http://www.sfml-dev.org/">SFML</a>, version 1.6</li>
+		<li><a href="http://dumb.sourceforge.net/">libdumb</a> (for Debian/Ubuntu, simply install <code>libdumb1-dev</code> package)</li>
+	</ul>
+	<p>The easiest way to get the source code is to checkout the project's <a href="http://code.google.com/p/cosmoscroll/source/checkout">SVN server</a> (follow instructions on this page).</p>
+	<p>A project file for Code::Blocks (<code>cosmoscroll.cbp</code>) is provided in order to compile the game from this IDE.<br />
+	A makefile generator written in Python is provided as well (<code>make_make.py</code>)<br />
+	The generated makefile enables compilation on Linux and Mac OS.
+	</p>
+
+
+	<h2 id="credits-en">Credits</h2>
+
+	<ul>
+		<li><b>Images:</b>
+			<ul>
+				<li>asteroid-*.png: images modifiées de <a href="http://www.flyingyogi.com/fun/spritelib.html">SpriteLib GPL</a></li>
+			</ul>
+		</li>
+		<li><b>Sounds:</b>
+			<ul>
+				<li>title.ogg: kindly made by <a href="http://www.sound-of-eien.net/">Tsu</a>!</li>
+				<li>boom.ogg: from <a href="http://www.reptilelabour.com/software/chromium/">Chromium B.S.U.</a></li>
+				<li>warp.ogg: from <a href="http://supertux.lethargik.org/">SuperTux</a></li>
+				<li>cash-register.wav: <a href="http://www.freesound.org/people/atha89/sounds/79063/">atha89 on freesound.org</a></li>
+				<li>laser-green.wav: <a href="http://www.freesound.org/people/CGEffex/sounds/96692/">CGEffex on freesound.org</a></li>
+				<li>bonus.ogg: <a href="http://www.freesound.org/people/flatfly/sounds/17633/">fatfly on freesound.org</a></li>
+				<li>end-level.ogg: <a href="http://www.freesound.org/people/metamorphmuses/sounds/38728/">metamorphmuses on freesound.org</a></li>
+				<li>game-over.ogg: <a href="http://www.freesound.org/people/notchfilter/sounds/43698/">notchfilter on freesound.org</a></li>
+			</ul>
+		</li>
+		<li><b>Musics:</b>
+			<ul>
+				<li>Space Song: <a href="http://modarchive.org/index.php?request=view_by_moduleid&query=65925">modarchive.org</a></li>
+				<li>Aurora: <a href="http://modarchive.org/index.php?request=view_by_moduleid&query=34272">modarhive.org</a></li>
+				<li>Escape for assault!: <a href="http://modarchive.org/index.php?request=view_by_moduleid&query=90581">modarchive.org</a></li>
+			</ul>
+		</li>
+		<li><b>Fonts:</b>
+			<ul>
+				<li>hemi-head.tff: <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
+				<li>Ubuntu-R.tff: <a href="http://font.ubuntu.com/">font.ubuntu.com</a></li>
+			</ul>
+		</li>
+	</ul>
+
+
+	<h2 id="history-en">Release history</h2>
+
+	<ul>
+		<li>0.3: 24 May 2011</li>
+		<li>0.2: 13 March 2010</li>
+		<li>0.1: 17 December 2008</li>
+	</ul>
+	<p>Old versions are still available in the <a href="http://code.google.com/p/cosmoscroll/downloads/list?can=4">deprecated</a> category.</p>
 </div>
 
 
-<h2 id="how-to-play">Comment jouer ?</h2>
-<div class="part">
+
+
+<div class="page" id="page-fr">
+	<p>
+		<b>Version :</b> X.X<br />
+		<b>Publié le :</b> XXXX<br />
+		<b>Site web :</b> <a href="http://cosmoscroll.googlecode.com">cosmoscroll.googlecode.com</a><br />
+		<b>Auteurs :</b> voir le fichier <a href="./AUTHORS">AUTHORS</a><br />
+		<b>Licence :</b> GPL (voir le fichier <a href="./COPYING">COPYING</a>)
+	</p>
+
+
+	<h2>Sommaire</h2>
+
+	<ul>
+		<li><a href="#howto-play-fr">Comment jouer ?</a></li>
+		<li><a href="#configuration-fr">Où se trouve le fichier configuration ?</a></li>
+		<li><a href="#command-args-fr">Paramètres de la ligne de commande</a></li>
+		<li><a href="#bug-found-fr">J'ai trouvé un bug / Je veux soumettre une idée</a></li>
+		<li><a href="#howto-compile-fr">Comment compiler le jeu depuis les sources ?</a></li>
+		<li><a href="#credits-fr">Crédits</a></li>
+		<li><a href="#history-fr">Historique des versions</a></li>
+	</ul>
+
+
+	<h2 id="howto-play-fr">Comment jouer ?</h2>
+
 	<h3>Modes de jeu</h3>
 	<ul>
 		<li><strong>Mode histoire</strong> :<br />
@@ -81,12 +339,8 @@ table.infotab th {
 			<th>Touche</th>
 		</tr>
 		<tr>
-			<td>Déplacer le vaisseau<br />Naviguer dans les menus</td>
+			<td>Déplacer le vaisseau</td>
 			<td>Flèches directionnelles (haut, bas, gauche, droite)</td>
-		</tr>
-		<tr>
-			<td>Valider un choix dans les menus</td>
-			<td>Entrée</td>
 		</tr>
 		<tr>
 			<td>Utiliser arme 1</td>
@@ -101,7 +355,7 @@ table.infotab th {
 			<td>Z</td>
 		</tr>
 		<tr>
-			<td>Utiliser bonus Glaçon</td>
+			<td>Utiliser bonus <em>Glaçon</em></td>
 			<td>Contrôle gauche</td>
 		</tr>
 		<tr>
@@ -117,46 +371,72 @@ table.infotab th {
 			<td>Page Bas</td>
 		</tr>
 		<tr>
-			<td>Prendre une capture d'écran (enregistrée dans <code>screenshot/</code>)</td>
+			<td>Prendre une capture d'écran (enregistrée dans <code>screenshots/</code>)</td>
 			<td>F1</td>
-		</tr>
-		<tr>
-			<td>Quitter <b>immédiatement</b> le jeu !</td>
-			<td>Échap</td>
 		</tr>
 	</table>
 
-	<p>Le jeu peut également être contrôlé avec un joystick ou une manette de jeu.</p>
-	<p>Les touches du clavier et les boutons du contrôleur peuvent être redéfinis dans les options.</p>
+	<p>Le jeu peut également être contrôlé avec un joystick ou une manette de jeu.<br />
+	Les touches du clavier et les boutons du contrôleur peuvent être redéfinis dans le menu <b>Options</b>.</p>
 
 	<h3>Bonus</h3>
 	<ul>
-		<li><b>Point de vie</b> : Donne +1 point de vie au vaisseau.</li>
-		<li><b>Bouclier</b> : Donne 1 point de bouclier.</li>
-		<li><b>Glaçon</b> : Donne +1 <em>Glaçon</em>. Utiliser un glaçon permet d'annuler les effets de la surchauffe, jusqu'à 3 glaçons peuvent être cumulés.</li>
-		<li><b>Missile</b> : Donne +1 <em>Missile</em>. Jusqu'à 3 missiles peuvent être cumulés. À utiliser quand les ennemis sont trop nombreux !</li>
+		<li><b>Point de vie</b> : restaure 1 point de vie du vaisseau.</li>
+		<li><b>Bouclier</b> : restaure 1 point de bouclier.</li>
+		<li><b>Glaçon</b> : donne +1 <em>Glaçon</em>. Utiliser un glaçon permet d'annuler les effets de la surchauffe. Jusqu'à 3 glaçons peuvent être cumulés.</li>
+		<li><b>Missile</b> : donne +1 <em>Missile</em>. Arme très puissante avec une large zone de dégâts. Jusqu'à 3 missiles peuvent être cumulés. </li>
 		<li><b>Double tir</b> : double vos tirs pendant 10 secondes.</li>
 		<li><b>Triple tir</b> : triple vos tirs pendant 10 secondes.</li>
 		<li><b>Vitesse</b> : multiplie par 2 votre vitesse pendant 10 secondes</li>
-		<li><b>Super Banane</b> : max points de vie, max bouclier, chaleur à 0, +1 Glaçon, +1 Missile</li>
+		<li><b>Super Banane</b> : restaure tous les points de vie et de bouclier, +1 Glaçon et +1 Missile</li>
 	</ul>
-</div>
 
 
-<h2 id="how-to-reset">Comment retrouver la configuration d'origine ?</h2>
-<div class="part">
-	<p>
-	Si vous voulez retrouver les paramètres par défaut de l'application, effacez
-	le fichier <code>config/config.cfg</code>, un nouveau fichier sera créé automatiquement à la prochaine utilisation du jeu.<br />
-	Attention, en effaçant ce fichier, votre ancienne configuration (scores, progression dans les niveaux, préférences, etc.) sera perdue.
+	<h2 id="configuration-fr">Où se trouve le fichier de configuration ?</h2>
+
+	<p>CosmoScroll enregistre votre configuration dans le répertoire des préférences de votre système d'exploitation :</p>
+	<ul>
+		<li><b>Windows :</b> Application Data/cosmoscroll/cosmoscroll.cfg</li>
+		<li><b>Linux :</b> ~/.config/cosmoscroll/cosmoscroll.cfg</li>
+		<li><b>Mac OS :</b> ~/Library/Application Support/cosmoscroll/cosmoscroll.cfg</li>
+	</ul>
+	<p>Si vous ne voulez pas que ComsoScroll enregistre votre configuration dans ce dossier, vous pouvez indiquer un autre endroit pour enregistrer ce fichier avec l'option <code>-config</code> en ligne de commande (voir la section <a href="#command-args-fr">paramètres de la ligne de commande</a> pour plus de détails).</p>
+	<p>Si vous voulez retrouver les paramètres par défaut de l'application, effacez
+	ce fichier, un nouveau sera créé automatiquement à la prochaine utilisation du jeu.<br />
+	Attention, en effaçant ce fichier, votre configuration (scores, progression dans les niveaux, préférences, etc.) sera perdue.
 	</p>
-</div>
 
+	<h2 id="command-args-fr">Paramètres de la ligne de commande</h2>
 
-<h2 id="how-to-compile">Comment compiler le jeu depuis les sources ?</h2>
-<div class="part">
-	<p>
-	CosmoScroll compile sous les plateformes <b>GNU/Linux</b> (GCC), <b>Mac OS</b> (GCC) et <b>Windows</b> (mingw32).<br />
+	<table class="infotab">
+		<tr>
+			<th>Option</th>
+			<th>Rôle</th>
+		</tr>
+		<tr>
+			<td>-config <em>&lt;chemin&gt;</em></td>
+			<td>Indiquer l'emplacement du fichier de configuration.<br />
+			Si <em>chemin</em> est un répertoire, le jeu va chercher un fichier un fichier de configuration nommé <em>cosmoscroll.cfg</em> (ou le créer s'il n'existe pas).<br />
+			Si c'est un fichier, le jeu l'utilisera comme fichier de configuration alternatif.</td>
+		</tr>
+		<tr>
+			<td>-data <em>&lt;chemin&gt;</em></td>
+			<td>Indiquer l'emplacement du répertoire des ressources.<br />
+			Utiliser cette option si vous voulez installer l'exécutable de CosmoScroll dans un répertoire différent de celui des ressources.</td>
+		</tr>
+		<tr>
+			<td>-version</td>
+			<td>Affiche la version de CosmoScroll</td>
+		</tr>
+		<tr>
+			<td>-help</td>
+			<td>Affiche l'usage</td>
+		</tr>
+	</table>
+
+	<h2 id="howto-compile-fr">Comment compiler le jeu depuis les sources ?</h2>
+
+	<p>CosmoScroll compile sous les plateformes <b>GNU/Linux</b> (GCC), <b>Mac OS</b> (GCC) et <b>Windows</b> (mingw32).<br />
 	Les autres systèmes et compilateurs n'ont pas été testés.
 	</p>
 	<p>Vous devez tout d'abord installer les bibliothèques suivantes :</p>
@@ -164,62 +444,73 @@ table.infotab th {
 		<li><a href="http://www.sfml-dev.org/">SFML</a>, version 1.6</li>
 		<li><a href="http://dumb.sourceforge.net/">libdumb</a> (pour Debian/Ubuntu, installer le paquet <code>libdumb1-dev</code>)</li>
 	</ul>
-	<p>
-	Le moyen le plus simple de récupérer les sources est de faire un checkout sur le <a href="http://code.google.com/p/cosmoscroll/source/checkout">serveur SVN</a> du projet (reportez-vous aux instructions de la page).</p>
-	<p>
-	Un fichier projet Code::Blocks (<code>cosmoscroll.cbp</code>) est fourni et permet de compiler le jeu depuis cet IDE.<br />
+	<p>Le moyen le plus simple de récupérer les sources est de faire un checkout sur le <a href="http://code.google.com/p/cosmoscroll/source/checkout">serveur SVN</a> du projet (reportez-vous aux instructions de la page).</p>
+	<p>Un fichier projet Code::Blocks (<code>cosmoscroll.cbp</code>) est fourni et permet de compiler le jeu depuis cet IDE.<br />
 	Un générateur de makefile en Python est également fourni avec les sources du projet (<code>make_make.py</code>)<br />
 	Le makefile généré permet de compiler le jeu sous Linux et Mac OS.
 	</p>
-</div>
 
-<h2 id="bug-found">J'ai trouvé un bug / Je veux soumettre une idée</h2>
-<div class="part">
+	<h2 id="bug-found-fr">J'ai trouvé un bug / Je veux soumettre une idée</h2>
+
 	<p>Si vous pensez avoir trouvé un dysfonctionnement dans CosmoScroll, merci de le rapporter à cette <a href="http://code.google.com/p/cosmoscroll/issues/list">adresse</a> (si le bug n'est pas encore répertorié).<br />
 	Une description permettant de reproduire le problème serait également appréciée.
 	</p>
 	<p>Vous pouvez aussi contacter l'un des <a href="./AUTHORS">auteurs</a> de CosmoScroll si vous avez une suggestion d'amélioration, elle sera la bienvenue !</p>
-</div>
 
 
-<h2 id="credits">Crédits</h2>
-<div class="part">
-	<h3>Images</h3>
-	<ul>
-		<li>Astéroïdes : images modifiées de <a href="http://www.flyingyogi.com/fun/spritelib.html">SpriteLib GPL</a></li>
-	</ul>
-	<h3>Sons</h3>
-	<ul>
-		<li>title.ogg : réalisé par <a href="http://www.sound-of-eien.net/">Tsu</a>, merci à lui !</li>
-		<li>cash-register.wav : <a href="http://www.freesound.org/people/atha89/sounds/79063/">atha89</a>
-		<li>boom.ogg : issu de <a href="http://www.reptilelabour.com/software/chromium/">Chromium B.S.U.</a></li>
-		<li>warp.ogg : issu de <a href="http://supertux.lethargik.org/">SuperTux</a></li>
-		<li>bonus.ogg : <a href="http://www.freesound.org/">freesound.org</a> 17633__flatfly__pman8.wav</li>
-		<li>end-level.ogg : <a href="http://www.freesound.org/">freesound.org</a> 38728_metamorphmuses_itsjustgreat.wav</li>
-		<li>game-over.ogg : <a href="http://www.freesound.org/">freesound.org</a> 43698_notchfilter_game_over03.wav</li>
-	</ul>
-	<h3>Polices</h3>
-	<ul>
-		<li>hemi-head.tff : <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
-		<li>Ubuntu-R.tff : <a href="http://font.ubuntu.com/">font.ubuntu.com</a></li>
-	</ul>
-</div>
+	<h2 id="credits-fr">Crédits</h2>
 
-<h2 id="histo">Historique des versions</h2>
-<div class="part">
 	<ul>
-		<li>0.3 : 24/05/2011</li>
-		<li>0.2 : 13/03/2010</li>
-		<li>0.1 : 17/12/2008</li>
+		<li><b>Images :</b>
+			<ul>
+				<li>asteroid-*.png : images modifiées de <a href="http://www.flyingyogi.com/fun/spritelib.html">SpriteLib GPL</a></li>
+			</ul>
+		</li>
+		<li><b>Sons :</b>
+			<ul>
+				<li>title.ogg : réalisé par <a href="http://www.sound-of-eien.net/">Tsu</a>, merci à lui !</li>
+				<li>boom.ogg : issu de <a href="http://www.reptilelabour.com/software/chromium/">Chromium B.S.U.</a></li>
+				<li>warp.ogg : issu de <a href="http://supertux.lethargik.org/">SuperTux</a></li>
+				<li>cash-register.wav : <a href="http://www.freesound.org/people/atha89/sounds/79063/">atha89 sur freesound.org</a></li>
+				<li>laser-green.wav : <a href="http://www.freesound.org/people/CGEffex/sounds/96692/">CGEffex sur freesound.org</a></li>
+				<li>bonus.ogg : <a href="http://www.freesound.org/people/flatfly/sounds/17633/">fatfly sur freesound.org</a></li>
+				<li>end-level.ogg : <a href="http://www.freesound.org/people/metamorphmuses/sounds/38728/">metamorphmuses sur freesound.org</a></li>
+				<li>game-over.ogg : <a href="http://www.freesound.org/people/notchfilter/sounds/43698/">notchfilter sur freesound.org</a></li>
+			</ul>
+		</li>
+		<li><b>Musiques :</b>
+			<ul>
+				<li>Space Song : <a href="http://modarchive.org/index.php?request=view_by_moduleid&query=65925">modarchive.org</a></li>
+				<li>Aurora : <a href="http://modarchive.org/index.php?request=view_by_moduleid&query=34272">modarhive.org</a></li>
+				<li>Escape for assault! : <a href="http://modarchive.org/index.php?request=view_by_moduleid&query=90581">modarchive.org</a></li>
+			</ul>
+		</li>
+		<li><b>Polices :</b>
+			<ul>
+				<li>hemi-head.tff : <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
+				<li>Ubuntu-R.tff : <a href="http://font.ubuntu.com/">font.ubuntu.com</a></li>
+			</ul>
+		</li>
+	</ul>
+
+
+	<h2 id="history-fr">Historique des versions</h2>
+
+	<ul>
+		<li>0.3 : 24 mai 2011</li>
+		<li>0.2 : 13 mars 2010</li>
+		<li>0.1 : 17 décembre 2008</li>
 	</ul>
 	<p>Les anciennes versions restent disponibles dans la section <a href="http://code.google.com/p/cosmoscroll/downloads/list?can=4">Deprecated</a> des téléchargements.</p>
 </div>
+
+
 <p>
-	<em>Note : il n'y a pas de cheat codes dans ce jeu.</em><br />
+	<em>Note: there is NO CHEAT CODE in this game.</em><br />
 	<span style="color: white;">
-	Félicitations, vous avez trouver le Konami Code !
-	Tapez la séquence suivante en cours de jeu pour l'activer :<br />
-	Haut - Haut - Bas - Bas - Gauche - Droite - Gauche - Droite - Arme2 - Arme1</span>
+	Congratulations! You found the mighty <b>KONAMI CODE</b>!<br />
+	Type the following sequence while playing to active it:<br />
+	[Up] - [Up] - [Down] - [Down] - [Left] - [Right] - [Left] - [Right] - [Weapon 2] - [Weapon 1]</span>
 </p>
     </body>
 </html>

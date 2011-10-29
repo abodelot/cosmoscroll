@@ -39,9 +39,9 @@ bool FileSystem::CreateDirectory(const std::string& name)
 	bool success = false;
 
 #ifdef SYS_WINDOWS
-	success _mkdir(name.c_str()) == 0;
+	success = _mkdir(name.c_str()) == 0;
 #elif defined(SYS_LINUX) || defined(SYS_MACOS)
-	success = mkdir(name.c_str(), 0777) == 0;
+	success = mkdir(name.c_str(), 0755) == 0;
 #endif
 
 	if (!success)

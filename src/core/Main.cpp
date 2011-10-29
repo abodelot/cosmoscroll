@@ -8,9 +8,9 @@ int usage(const char *pn)
 {
 	const char *n = rindex(pn, '/') + 1;	// Stick to the program name.
 	printf("usage: %s [-c config_file] [-d data_path] [-l level_set] [-h] [-v]\n\n", n);
-	puts("if config_file is a directory, the game will look for a configuration file");
-	puts("named \42cosmoscroll.cfg\42. If it is a regularfile, it will use it as an alternate");
-	puts("configuration file.");
+	puts("If config_file is a directory, the game will look for a configuration file named");
+	puts("\42cosmoscroll.cfg\42 (or create it if it doesn't exist).");
+	puts("If it is a regular file, it will use it as an alternate configuration file.");
 	puts("\nYou can currently override the game's story mode level set (MUST be a number)\n");
 	return EXIT_SUCCESS;
 }
