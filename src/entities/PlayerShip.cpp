@@ -215,47 +215,25 @@ void PlayerShip::HandleAction(Input::Action action)
 	}
 }
 
-#define H30DELTA 3.f
-#define H50DELTA 2.f
-#define H70DELTA 1.f
-#define H85DELTA .6f
 
 void PlayerShip::AudibleHeatingCue(float frametime)
 {
-	static bool playing = false;
-	static float hdelta = 0.f;
-
-	// Pour ne pas avoir d'AHC lors de l'intro:
-	static bool disable_cue = true;
-	if (disable_cue)
-	{
-		if (Game::GetInstance().GetCurrentScene() != Game::SC_IntroScene)
-			{
-				disable_cue = false;
-			}
-		return;
-	}
+	static float h_steps[] = {.50f, .65f, .80f, .90f};
+	static int nb_steps = sizeof (h_steps) / sizeof (float);
+	static int current_step = 0;
 
 	float heat_pct_ = heat_ / heat_max_;
-
-	hdelta += frametime;
-	if (playing)
-	{
-		if ((heat_pct_ > .85f && hdelta > H85DELTA) ||
-			(heat_pct_ > .7f && hdelta > H70DELTA) ||
-			(heat_pct_ > .5f && hdelta > H50DELTA) ||
-			(heat_pct_ > .3f && hdelta > H30DELTA))
-		{
-			hdelta = 0.f;
-			playing = false;
-		}
-	}
-	else
+	if (current_step < nb_steps && heat_pct_ > h_steps[current_step])
 	{
 		SoundSystem::GetInstance().PlaySound(*snd_overheat_);
-		playing = true;
+		++current_step;
+	}
+	else if (current_step > 0 && heat_pct_ < h_steps[current_step -1])
+	{
+		--current_step;
 	}
 }
+
 
 void PlayerShip::Update(float frametime)
 {
@@ -267,7 +245,7 @@ void PlayerShip::Update(float frametime)
 	// tirs
 	if (!overheated_)
 	{
-		float h = 0.0f;
+		float h = 0.f;
 		if (input_.HasInput(Input::USE_WEAPON_1))
 		{
 			h += weapon1_.Shoot(0);
@@ -284,14 +262,12 @@ void PlayerShip::Update(float frametime)
 			panel_.SetOverheat(true);
 			ParticleSystem::GetInstance().AddMessage(GetPosition(), _t("panel.overheat"));
 		}
-		AudibleHeatingCue(frametime);
+		if (h > 0)
+			AudibleHeatingCue(frametime);
 	}
-	else {
-		//SoundSystem::GetInstance().PlaySound(*snd_disabled_);
-		if (input_.HasInput(Input::USE_WEAPON_1) || input_.HasInput(Input::USE_WEAPON_2))
-		{
-			SoundSystem::GetInstance().PlaySound(*snd_disabled_);
-		}
+	else if (input_.HasInput(Input::USE_WEAPON_1) || input_.HasInput(Input::USE_WEAPON_2))
+	{
+		SoundSystem::GetInstance().PlaySound(*snd_disabled_);
 	}
 
 	// déplacement
@@ -366,6 +342,7 @@ void PlayerShip::Update(float frametime)
 	weapon1_.Update(frametime);
 	weapon2_.Update(frametime);
 	missile_launcher_.Update(frametime);
+	Entity::UpdateFlash(frametime);
 }
 
 
@@ -414,6 +391,7 @@ void PlayerShip::OnCollide(Entity& entity)
 
 void PlayerShip::OnDestroy()
 {
+	SetColor(sf::Color::White); // clear red flash
 	EntityManager& manager = EntityManager::GetInstance();
 	SetAnimation(manager.GetAnimation("player-destroyed"));
 

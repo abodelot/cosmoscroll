@@ -21,11 +21,10 @@ public:
 private:
 	void Render(sf::RenderTarget& target) const;
 
-
 	ItemData::Type type_;
 	sf::String label_;
 	sf::Sprite halo_;
-	sf::Sprite label_bg_;
+	sf::Shape label_bg_;
 };
 
 #endif // UPGRADEITEM_HPP

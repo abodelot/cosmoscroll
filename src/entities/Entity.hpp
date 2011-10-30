@@ -131,6 +131,7 @@ protected:
 	 */
 	void SetCollideDamage(int damage);
 
+	void UpdateFlash(float frametime);
 private:
 	bool flipped_x_;
 	bool flipped_y_;
@@ -139,6 +140,7 @@ private:
 	int collide_damage_;
 	int collide_flag_;
 	Team team_;
+	float flash_timer_;
 };
 
 #endif // ENTITY_HPP

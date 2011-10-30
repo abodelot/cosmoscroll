@@ -109,6 +109,7 @@ void SpaceShip::Update(float frametime)
 
 	Animated::UpdateSubRect(*this, frametime);
 	weapon_.Update(frametime);
+	Entity::UpdateFlash(frametime);
 }
 
 

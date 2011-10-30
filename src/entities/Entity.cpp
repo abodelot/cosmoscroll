@@ -1,4 +1,5 @@
 #include "Entity.hpp"
+#define FLASH_DELAY 0.5f
 
 
 Entity::Entity(const sf::Vector2f& position, int hp, int collide_damage)
@@ -11,6 +12,7 @@ Entity::Entity(const sf::Vector2f& position, int hp, int collide_damage)
 	collide_damage_ = collide_damage;
 	collide_flag_ = 0;
 	points_ = 0;
+	flash_timer_ = 0.f;
 }
 
 
@@ -39,6 +41,10 @@ void Entity::TakeDamage(int damage)
 	if (hp_ <= 0)
 	{
 		OnDestroy();
+	}
+	else if (flash_timer_ <= 0)
+	{
+		flash_timer_ = FLASH_DELAY;
 	}
 }
 
@@ -209,6 +215,21 @@ int Entity::ConsumePoints()
 void Entity::SetCollideDamage(int damage)
 {
 	collide_damage_ = damage;
+}
+
+
+void Entity::UpdateFlash(float frametime)
+{
+	if (flash_timer_ >= 0)
+	{
+		flash_timer_ -= frametime;
+		int value = 255 - (255 * flash_timer_ / FLASH_DELAY);
+		SetColor(sf::Color(255, value, value));
+		if (flash_timer_ <= 0)
+		{
+			SetColor(sf::Color::White);
+		}
+	}
 }
 
 

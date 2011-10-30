@@ -77,6 +77,7 @@ void EvilBoss::Update(float frametime)
 	eye_left_.Update(frametime);
 	eye_right_.Update(frametime);
 	canon_.Update(frametime);
+	Entity::UpdateFlash(frametime);
 }
 
 

@@ -166,8 +166,12 @@ bool Game::LoadConfig(const std::string& filename)
 		int record = 0;
 		config.ReadItem("arcade_high_score", record);
 		EntityManager::GetInstance().SetArcadeRecord(record);
-		config.ReadItem("fullscreen", fullscreen_);
+		bool full = false;
+		config.ReadItem("fullscreen", full);
+		SetFullscreen(full);
+
 		config.ReadItem("vsync", vsync_);
+		SetVerticalSync(vsync_);
 
 		int top = 1;
 		config.ReadItem("panel_on_top", top);
@@ -345,7 +349,6 @@ void Game::SetNextScene(Scene enum_scene)
 		}
 		scenes_[enum_scene] = new_scene;
 	}
-	current_scene_type_ = enum_scene;
 	current_scene_ = scenes_[enum_scene];
 	current_scene_->OnFocus();
 }
@@ -374,14 +377,16 @@ void Game::TakeScreenshot(void)
 
 void Game::SetFullscreen(bool full)
 {
-	if (app_.IsOpened())
-		app_.Close();
+	if (full != fullscreen_)
+	{
+		if (app_.IsOpened())
+			app_.Close();
 
-	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
-	app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
-	app_.UseVerticalSync(vsync_);
-	fullscreen_ = full;
-
+		int style = full ? sf::Style::Fullscreen : sf::Style::Close;
+		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
+		app_.UseVerticalSync(vsync_);
+		fullscreen_ = full;
+	}
 	if (!full)
 	{
 		// set window icon

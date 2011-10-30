@@ -106,6 +106,7 @@ void BossTentacles::Update(float frametime)
 	}
 	sf::Sprite::Move(speed_x_ * frametime, speed_y_ * frametime);
 	weapon_.Update(frametime);
+	Entity::UpdateFlash(frametime);
 }
 
 

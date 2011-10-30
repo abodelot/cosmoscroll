@@ -45,19 +45,21 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 		default:
 			break;
 	}
-	label_.SetPosition(0, -20);
+	SetPosition(x, y);
+	Resize(halo_.GetSize().x, halo_.GetSize().y);
+	SetCallbackID(type);
+
+	// label centered on halo sprite
 	label_.SetFont(Resources::GetFont("Ubuntu-R.ttf"));
 	label_.SetSize(12);
 	label_.SetColor(sf::Color::White);
 	RefreshLabel();
+	x = (GetWidth() - label_.GetRect().GetWidth()) / 2;
+	label_.SetPosition(x, -20);
 
-	label_bg_.Resize(label_.GetRect().GetWidth() + 8, label_.GetRect().GetHeight() + 8);
-	label_bg_.SetPosition(label_.GetPosition().x - 4, label_.GetPosition().y - 4);
-	label_bg_.SetColor(sf::Color(0, 0, 0, 128));
-
-	SetPosition(x, y);
-	Resize(halo_.GetSize().x, halo_.GetSize().y);
-	SetCallbackID(type);
+	// label background
+	label_bg_ = sf::Shape::Rectangle(-4, -4, label_.GetRect().GetWidth() + 4, label_.GetRect().GetHeight() + 4, sf::Color(0, 0, 0, 128), 1, sf::Color::White);
+	label_bg_.SetPosition(label_.GetPosition());
 }
 
 

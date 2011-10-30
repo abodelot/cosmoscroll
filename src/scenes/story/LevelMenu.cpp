@@ -13,7 +13,7 @@ LevelMenu::LevelMenu():
 	SetTitle(_t("menu.story.title"));
 
 	gui::FormLayout form(90, 120);
-	form.SetSpacing(20, 16);
+	form.SetSpacing(10, 16);
 
 	opt_levels_ = new gui::OptionList(this);
 	form.AddRow(_t("menu.story.select"), opt_levels_);

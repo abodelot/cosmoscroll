@@ -81,14 +81,6 @@ public:
 	void SetNextScene(Scene scene);
 
 	/**
-	 * Récupérer la scène en cours
-	 */
-	inline Scene &GetCurrentScene(void)
-	{
-		return current_scene_type_;
-	};
-
-	/**
 	 * Holds windowed/fullscreen display mode
 	 */
 	void SetFullscreen(bool full);
@@ -143,7 +135,7 @@ private:
 	// scènes
 	BaseScene* scenes_[SC_COUNT];
 	BaseScene* current_scene_;
-	Scene	   current_scene_type_;
+
 	PlayerSave playersave_;
 
 	// directories
@@ -151,7 +143,6 @@ private:
 	std::string data_dir_;
 	std::string screenshot_dir_;
 	std::string config_file_;
-
 
 	// groupe de niveaux
 	unsigned int level_set_;
