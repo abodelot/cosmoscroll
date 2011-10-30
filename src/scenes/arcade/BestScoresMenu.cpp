@@ -10,7 +10,8 @@
 BestScoresMenu::BestScoresMenu()
 {
 	SetTitle(_t("menu.best_scores.title"));
-	gui::Button* b = new CosmoButton(this, _t("menu.back"), 210, 420);
+	gui::Button* b = new CosmoButton(this, _t("menu.back"));
+	b->SetPosition(210, 420);
 	b->SetCallbackID(1);
 
 	LoadBitmapFont(Resources::GetImage("gui/mono12-white.png"), 10, 10);

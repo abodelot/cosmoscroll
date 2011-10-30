@@ -7,7 +7,7 @@
 using namespace gui;
 
 
-ProgressBar::ProgressBar(Menu* owner, int x, int y, int w, int h) :
+ProgressBar::ProgressBar(Menu* owner, int w, int h) :
 	Widget(owner, false)
 {
 	value_ = 0;
@@ -18,7 +18,7 @@ ProgressBar::ProgressBar(Menu* owner, int x, int y, int w, int h) :
 	bar_.Resize(0, h);
 	bar_.SetColor(BAR_COLOR);
 
-	SetRect(x, y, x + w, y + h);
+	Resize(w, h);
 }
 
 
@@ -33,8 +33,8 @@ void ProgressBar::SetValue(int value)
 		value = 100;
 	}
 	value_ = value;
-	float length = (float) value * GetRect().GetWidth() / 100;
-	bar_.Resize(length == 0 ? 0.1 : length, GetRect().GetHeight());
+	float length = (float) value * GetWidth() / 100;
+	bar_.Resize(length == 0 ? 0.1 : length, GetHeight());
 }
 
 

@@ -6,8 +6,8 @@
 
 const sf::Image* ConfigButton::img_ = NULL;
 
-ConfigButton::ConfigButton(gui::Menu* owner, const sf::Unicode::Text& text, int x, int y) :
-	gui::Button(owner, text, x, y, BUT_W, BUT_H)
+ConfigButton::ConfigButton(gui::Menu* owner, const sf::Unicode::Text& text) :
+	gui::Button(owner, text, BUT_W, BUT_H)
 {
 	if (img_ == NULL)
 	{

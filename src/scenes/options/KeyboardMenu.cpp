@@ -9,17 +9,21 @@ KeyboardMenu::KeyboardMenu()
 {
 	SetTitle(_t("menu.keyboard.title"));
 
-	AddRow(Input::MOVE_UP,      &but_up_, 100);
-	AddRow(Input::MOVE_DOWN,    &but_down_, 130);
-	AddRow(Input::MOVE_LEFT,    &but_left_, 160);
-	AddRow(Input::MOVE_RIGHT,   &but_right_, 190);
-	AddRow(Input::USE_WEAPON_1, &but_weapon1_, 220);
-	AddRow(Input::USE_WEAPON_2, &but_weapon2_, 250);
-	AddRow(Input::USE_COOLER,   &but_cooler_, 280);
-	AddRow(Input::USE_MISSILE,  &but_missile_, 310);
-	AddRow(Input::PAUSE,        &but_pause_, 340);
+	gui::FormLayout form(100, 100);
+	form.SetSpacing(30, 5);
+	AddRow(form, Input::MOVE_UP,      &but_up_);
+	AddRow(form, Input::MOVE_DOWN,    &but_down_);
+	AddRow(form, Input::MOVE_LEFT,    &but_left_);
+	AddRow(form, Input::MOVE_RIGHT,   &but_right_);
+	AddRow(form, Input::USE_WEAPON_1, &but_weapon1_);
+	AddRow(form, Input::USE_WEAPON_2, &but_weapon2_);
+	AddRow(form, Input::USE_COOLER,   &but_cooler_);
+	AddRow(form, Input::USE_MISSILE,  &but_missile_);
+	AddRow(form, Input::PAUSE,        &but_pause_);
 
-	(new CosmoButton(this, _t("menu.back"), 210, 410))->SetCallbackID(9000);
+	gui::Button* b = new CosmoButton(this, _t("menu.back"));
+	b->SetPosition(210, 410);
+	b->SetCallbackID(9000);
 }
 
 
@@ -55,11 +59,12 @@ void KeyboardMenu::EventCallback(int id)
 }
 
 
-void KeyboardMenu::AddRow(Input::Action action, gui::Button** button, int y)
+void KeyboardMenu::AddRow(gui::FormLayout& form, Input::Action action, gui::Button** button)
 {
-	new gui::Label(this, Input::ActionToString(action), 150, y);
-	*button = new ConfigButton(this, GetKeyLabel(action), 350, y);
+	*button = new ConfigButton(this, GetKeyLabel(action));
 	(*button)->SetCallbackID(action);
+
+	form.AddRow(Input::ActionToString(action), *button);
 }
 
 

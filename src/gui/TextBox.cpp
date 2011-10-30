@@ -32,7 +32,8 @@ TextBox::TextBox(Menu* owner, int x, int y, int visible_chars, int max_length):
 		CURSOR_WIDTH, sf::Color::White);
 	SetCursor(0);
 
-	SetRect(x, y, x + width, y + height);
+	SetPosition(x, y);
+	Resize(width, height);
 	OnStateChanged(GetState());
 }
 

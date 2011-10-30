@@ -4,7 +4,7 @@
 using namespace gui;
 
 
-Button::Button(Menu* owner, const sf::Unicode::Text& text, int x, int y, int w, int h) :
+Button::Button(Menu* owner, const sf::Unicode::Text& text, int w, int h) :
 	Widget(owner, true)
 {
 	text_.SetText(text);
@@ -13,7 +13,7 @@ Button::Button(Menu* owner, const sf::Unicode::Text& text, int x, int y, int w, 
 	int width = w == -1 ? text_.GetRect().GetWidth() : w;
 	int height = h == -1 ? text_.GetRect().GetHeight() : h;
 
-	SetRect(x, y, x + width, y + height);
+	Resize(width, height);
 	SetAlign(Align::CENTER);
 
 	const WidgetStyle& style = owner->GetWidgetStyle();

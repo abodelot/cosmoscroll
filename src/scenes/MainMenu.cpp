@@ -11,7 +11,7 @@ MainMenu::MainMenu()
 	title_.SetPosition((Game::WIDTH - title_.GetSize().x) / 2, 12);
 
 	gui::VBoxLayout layout(210, 120);
-	layout.SetSpacing(10);
+	layout.SetSpacing(0, 10);
 
 	layout.Add(new CosmoButton(this, _t("menu.main.story")))->SetCallbackID(1);
 	layout.Add(new CosmoButton(this, _t("menu.main.arcade")))->SetCallbackID(2);

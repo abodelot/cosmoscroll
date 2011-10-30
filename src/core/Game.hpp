@@ -89,10 +89,16 @@ public:
 	};
 
 	/**
-	 * Basculer entre les modes fenêtré et plein écran
+	 * Holds windowed/fullscreen display mode
 	 */
 	void SetFullscreen(bool full);
 	bool IsFullscreen() const;
+
+	/**
+	 * Holds vertical synchronization property
+	 */
+	void SetVerticalSync(bool vsync);
+	bool IsVerticalSync() const;
 
 	void ReloadScenes();
 
@@ -127,6 +133,7 @@ private:
 
 	sf::RenderWindow app_;
 	bool fullscreen_;
+	bool vsync_;
 	bool running_;
     bool pure_;
 

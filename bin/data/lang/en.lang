@@ -16,7 +16,7 @@ menu.main.quit = Quit
 menu.story.title = Story mode
 menu.story.credits = Credits:\n{credits}
 menu.story.select = Select a level:
-menu.story.progression = Progression: {unlocked}/{total}
+menu.story.progression = Progression:
 menu.story.intro = Level {level}\n\n"{description}"\n\nBad guys: {count}
 menu.story.play = Play
 menu.story.armory = Armory
@@ -79,6 +79,7 @@ menu.audio.sound_volume = Sound volume:
 
 # Settings menu
 menu.settings.title = Settings
+menu.settings.vsync = Vertical synchronization:
 menu.settings.fullscreen = Fullscreen:
 menu.settings.language = Language:
 

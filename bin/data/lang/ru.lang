@@ -16,7 +16,7 @@ menu.main.quit = Выход
 menu.story.title = История режиме
 menu.story.credits = Кредиты:\n{credits}
 menu.story.select = Выбор уровня:
-menu.story.progression = Прогрессия: {unlocked}/{total}
+menu.story.progression = Прогрессия:
 menu.story.intro = Уровень {level}\n\n"{description}"\n\nпарни: {count}
 menu.story.play = Play
 menu.story.armory = Оружейной
@@ -129,7 +129,7 @@ input.press_button = Пресс джойстик для определения �
 input.cancel = (Пресс Побег отменить)
 
 # Items
-item.shield = (Пресс Побег отменить) 
+item.shield = (Пресс Побег отменить)
 item.shield_info = указывает защита: {points}
 item.laser1 = Лазер 1
 item.laser2 = лазерные 2

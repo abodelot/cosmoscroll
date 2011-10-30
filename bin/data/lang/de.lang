@@ -14,18 +14,18 @@ menu.main.quit = Beenden
 
 # Story menu
 menu.story.title = Story-Modus
-menu.story.credits = Credits :\n{credits}
-menu.story.select = Select einer Ebene :
-menu.story.progression = Fortschritt : {unlocked}/{total}
-menu.story.intro = Ebene {level}\n\n"{description}"\n\nEnemeis : {count}
+menu.story.credits = Kredits:\n{credits}
+menu.story.select = Select einer Ebene:
+menu.story.progression = Fortschritt:
+menu.story.intro = Ebene {level}\n\n"{description}"\n\nEnemeis: {count}
 menu.story.play = Spielen
 menu.story.armory = Zeughaus
 
 # Armory menu
 armory.title = Zeughaus
 armory.item_level = Ebene {level}
-armory.item_current_level = Aktuelle Ebene : {level}
-armory.item_next_level = Nächste Ebene : {level}
+armory.item_current_level = Aktuelle Ebene: {level}
+armory.item_next_level = Nächste Ebene: {level}
 armory.max_level = (Max Ebene erreicht)
 armory.buy = Kaufen
 armory.info = Select eine Komponente am verbessern
@@ -46,11 +46,11 @@ menu.best_scores.title = Online Rekorden
 
 # Game over menu
 menu.gameover.title = Game Over
-menu.gameover.pseudo = Ihr Name :
+menu.gameover.pseudo = Ihr Name:
 menu.gameover.send_score = Meine Ergebnis senden
 menu.gameover.play_again = Neustarten
-menu.gameover.new_record = Ihr Ergebnis : {score}\n    Neuer Rekord !
-menu.gameover.no_record = Ihr Ergebnis : {score}\n    Versuchen Sie es erneut...
+menu.gameover.new_record = Ihr Ergebnis: {score}\n    Neuer Rekord !
+menu.gameover.no_record = Ihr Ergebnis: {score}\n    Versuchen Sie es erneut...
 menu.gameover.error_cheat = Cheats verboten!
 menu.gameover.error_altered_res = Senden verbotene, geändert Version des Spiels
 
@@ -79,19 +79,20 @@ menu.audio.sound_volume = Volumen des Sound:
 
 # Settings menu
 menu.settings.title = Preferenzen
+menu.settings.vsync = Vertikale Synchronisation:
 menu.settings.fullscreen = Full Screen:
 menu.settings.language = Sprache:
 
 # About menu
 menu.about.title = Über CosmoScroll
-menu.about.version = Version :
-menu.about.authors = Autoren :
-menu.about.licence = Lizenz :
+menu.about.version = Version:
+menu.about.authors = Autoren:
+menu.about.licence = Lizenz:
 
 # End of game
 endgame.game_over = Game Over
-endgame.end_level = Ebene {level} fertig !\nKredits genannt : +{credits}
-endgame.end_last_level = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\ngennant Kredits : +{credits}
+endgame.end_level = Ebene {level} fertig !\nKredits genannt: +{credits}
+endgame.end_last_level = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\ngennant Kredits: +{credits}
 
 # Control panel
 panel.bar_hp = Shell
@@ -131,14 +132,14 @@ input.cancel = (esc abbrechen)
 
 # Items
 item.shield = Energie Schild
-item.shield_info = Schutzpunkte : {points}
+item.shield_info = Schutzpunkte: {points}
 item.laser1 = Laser 1
 item.laser2 = Laser 2
-item.weapon_info = Damage : {dmg}, Geschwindigkeit : {speed}\nrate : {rate} Schuss/s
+item.weapon_info = Damage: {dmg}, Geschwindigkeit: {speed}\nrate: {rate} Schuss/s
 item.engine = Motor
-item.engine_info = Geschwindigkeit : {speed}
+item.engine_info = Geschwindigkeit: {speed}
 item.heatsink = Heatsink
-item.heatsink_info = max Hitze : {heat}
+item.heatsink_info = max Hitze: {heat}
 item.armor = Panzerung
-item.armor_info = Lebenspunkte : {hp}
-item.price = Preis : {price} Kredits
+item.armor_info = Lebenspunkte: {hp}
+item.price = Preis: {price} Kredits

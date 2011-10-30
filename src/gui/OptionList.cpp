@@ -11,7 +11,7 @@
 using namespace gui;
 
 
-OptionList::OptionList(Menu* owner, int x, int y) :
+OptionList::OptionList(Menu* owner) :
 	Widget(owner, true)
 {
 	current_opt_ = -1;
@@ -44,9 +44,7 @@ OptionList::OptionList(Menu* owner, int x, int y) :
 	right_arrow_.SetPointOutlineColor(1, style.global_border_color);
 	right_arrow_.SetPointOutlineColor(2, style.global_border_color);
 
-	// SetRect sera exécuté quand on ajoutera une option, la hauteur et la largeur
-	// du widget seront alors connus. On mémorise juste la position en attendant.
-	SetPosition(x, y);
+	// call Resize later, boxes aren't builded yet
 	OnStateChanged(GetState());
 }
 
@@ -68,8 +66,7 @@ void OptionList::BuildBoxes()
 	right_arrow_.SetX(pad_text_width + inside_box_width + BOX_PADDING + text_size_ / 2);
 	SetState(IsFocused() ? State::FOCUSED : State::DEFAULT);
 
-	sf::Vector2f pos = GetPosition();
-	SetRect(pos.x, pos.y, pos.x + box_width , pos.y + pad_text_width);
+	Resize(box_width , pad_text_width);
 }
 
 
@@ -204,7 +201,7 @@ void OptionList::OnMouseClicked(int x, int y)
 	{
 		opt = PreviousIndex();
 	}
-	else if (x > (GetRect().GetWidth() - trigger_width) && x < GetRect().GetWidth())
+	else if (x > (GetWidth() - trigger_width) && x < GetWidth())
 	{
 		opt = NextIndex();
 	}

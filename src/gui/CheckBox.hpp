@@ -13,7 +13,7 @@ namespace gui
 class CheckBox: public Widget
 {
 public:
-	CheckBox(Menu* owner, int x, int y);
+	CheckBox(Menu* owner);
 
 	/**
 	 * @return true si la case à cocher est cochée

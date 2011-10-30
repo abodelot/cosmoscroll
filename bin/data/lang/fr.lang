@@ -16,7 +16,7 @@ menu.main.quit = Quitter
 menu.story.title = Mode Histoire
 menu.story.credits = Crédits :\n{credits}
 menu.story.select = Sélectionnez un niveau :
-menu.story.progression = Avancement : {unlocked}/{total}
+menu.story.progression = Avancement :
 menu.story.intro = Niveau {level}\n\n"{description}"\n\nEnnemis : {count}
 menu.story.play = Jouer
 menu.story.armory = Armurerie
@@ -79,6 +79,7 @@ menu.audio.sound_volume = Volume du son :
 
 # Menu préférences
 menu.settings.title = Préférences
+menu.settings.vsync = Synchronisation verticale :
 menu.settings.fullscreen = Plein écran :
 menu.settings.language = Langue :
 

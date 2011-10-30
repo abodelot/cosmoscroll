@@ -17,7 +17,7 @@ public:
 
 private:
 
-	void AddRow(Input::Action action, gui::Button** button, int y);
+	void AddRow(gui::FormLayout& form, Input::Action action, gui::Button** button);
 	std::wstring GetButtonLabel(Input::Action action) const;
 
 	// inherited

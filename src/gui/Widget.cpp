@@ -10,25 +10,9 @@ Widget::Widget(Menu* owner, bool focusable)
 	visible_ = true;
 	callback_id_ = -1;
 	owner_ = owner;
+	width_ = 0;
+	height_ = 0;
 	owner->AddWidget(this);
-}
-
-
-void Widget::SetPosition(float x, float y)
-{
-	sf::Drawable::SetPosition(x, y);
-	int w = rect_.GetWidth();
-	int h = rect_.GetHeight();
-	rect_.Left = x;
-	rect_.Top = y;
-	rect_.Right = x + w;
-	rect_.Bottom = y + h;
-}
-
-
-void Widget::SetPosition(const sf::Vector2f& position)
-{
-	this->SetPosition(position.x, position.y);
 }
 
 
@@ -48,21 +32,29 @@ State::EState Widget::GetState() const
 void Widget::Update(float) {}
 
 
-const sf::FloatRect& Widget::GetRect() const
+
+bool Widget::ContainsPoint(float x, float y)
 {
-	return rect_;
+	return (x >= GetPosition().x) && (x <= GetPosition().x + width_) && (y >= GetPosition().y) && (y <= GetPosition().y + height_);
+}
+
+
+void Widget::Resize(int width, int height)
+{
+	width_ = width;
+	height_ = height;
 }
 
 
 int Widget::GetWidth() const
 {
-	return rect_.GetWidth();
+	return width_;
 }
 
 
 int Widget::GetHeight() const
 {
-	return rect_.GetHeight();
+	return height_;
 }
 
 
@@ -77,25 +69,6 @@ bool Widget::IsFocused() const
 	return this == GetOwner()->GetFocusedWidget();
 }
 
-
-void Widget::SetRect(int x, int y, int x2, int y2)
-{
-	SetRect(sf::FloatRect(x, y, x2, y2));
-}
-
-
-void Widget::SetRect(const sf::FloatRect& rect)
-{
-	rect_ = rect;
-	SetPosition(rect.Left, rect.Top);
-}
-
-
-void Widget::Resize(int width, int height)
-{
-	rect_.Right = rect_.Left + width;
-	rect_.Bottom = rect_.Top + height;
-}
 
 Menu* Widget::GetOwner() const
 {

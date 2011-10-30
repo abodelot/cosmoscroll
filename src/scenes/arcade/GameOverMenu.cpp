@@ -23,14 +23,20 @@ GameOverMenu::GameOverMenu()
 	txt_pseudo_ = new gui::TextBox(this, 210, 200, 30);
 	txt_pseudo_->SetCallbackID(3);
 
-	but_commit_ = new CosmoButton(this, _t("menu.submit"), 210, 240);
+	but_commit_ = new CosmoButton(this, _t("menu.submit"));
+	but_commit_->SetPosition(210, 240);
 	but_commit_->SetCallbackID(3);
 
-	but_send_score_ = new CosmoButton(this, _t("menu.gameover.send_score"), 210, 240);
+	but_send_score_ = new CosmoButton(this, _t("menu.gameover.send_score"));
+	but_send_score_->SetPosition(210, 240);
 	but_send_score_->SetCallbackID(0);
 
-	(new CosmoButton(this, _t("menu.gameover.play_again"), 210, 290))->SetCallbackID(1);
-	(new CosmoButton(this, _t("menu.back_main_menu"), 210, 340))->SetCallbackID(2);
+	gui::Button* b = new CosmoButton(this, _t("menu.gameover.play_again"));
+	b->SetPosition(210, 290);
+	b->SetCallbackID(1);
+	b = new CosmoButton(this, _t("menu.back_main_menu"));
+	b->SetPosition(210, 340);
+	b->SetCallbackID(2);
 }
 
 

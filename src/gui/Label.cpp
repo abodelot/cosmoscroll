@@ -14,7 +14,8 @@ Label::Label(Menu* owner, const sf::Unicode::Text& text, int x, int y) :
 	text_.SetSize(style.global_text_size);
 	text_.SetPosition(0, 0);
 
-	SetRect(x, y, text_.GetRect().GetWidth(), text_.GetRect().GetHeight());
+	SetPosition(x, y);
+	Resize(text_.GetRect().GetWidth(), text_.GetRect().GetHeight());
 }
 
 

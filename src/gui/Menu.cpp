@@ -1,5 +1,5 @@
 #include "Menu.hpp"
-
+#include <cstdio>
 #define JOY_DEADZONE	50.f
 
 using namespace gui;
@@ -12,7 +12,6 @@ Menu::Menu(WidgetStyle& style)
 	bitfont_ = NULL;
 	hovered_widget_ = NULL;
 	theme_ = &style;
-
 }
 
 
@@ -122,25 +121,28 @@ void Menu::OnEvent(const sf::Event& event)
 
 
 		case sf::Event::MouseButtonPressed:
-			// OPTMIZE: utiliser le pointeur hovered_widget_ ?
-			// on vérifie si un widget doit prendre le focus (clic souris)
-			new_focus = GetHoveredWidget(event.MouseButton.X, event.MouseButton.Y);
-			if (new_focus != NULL && new_focus != focus_)
+			if (event.MouseButton.Button == sf::Mouse::Left)
 			{
-				if (focus_ != NULL)
+				// OPTMIZE: utiliser le pointeur hovered_widget_ ?
+				// on vérifie si un widget doit prendre le focus (clic souris)
+				new_focus = GetHoveredWidget(event.MouseButton.X, event.MouseButton.Y);
+				if (new_focus != NULL && new_focus != focus_)
 				{
-					focus_->SetState(State::DEFAULT);
-				}
-				focus_ = new_focus;
-				focus_->SetState(State::FOCUSED);
+					if (focus_ != NULL)
+					{
+						focus_->SetState(State::DEFAULT);
+					}
+					focus_ = new_focus;
+					focus_->SetState(State::FOCUSED);
 
-				OnWidgetFocused();
-			}
-			else if (new_focus == NULL && focus_ != NULL)
-			{
-				// focus_ a perdu le focus
-				focus_->SetState(State::DEFAULT);
-				focus_ = NULL;
+					OnWidgetFocused();
+				}
+				else if (new_focus == NULL && focus_ != NULL)
+				{
+					// focus_ a perdu le focus
+					focus_->SetState(State::DEFAULT);
+					focus_ = NULL;
+				}
 			}
 			break;
 
@@ -343,7 +345,7 @@ Widget* Menu::GetHoveredWidget(int x, int y) const
 	WidgetList::const_iterator it = widgets_.begin();
 	for (; it != widgets_.end(); ++it)
 	{
-		if ((**it).CanGrabFocus() && (**it).GetRect().Contains(x, y))
+		if ((**it).CanGrabFocus() && (**it).ContainsPoint(x, y))
 		{
 			return *it;
 		}

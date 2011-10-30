@@ -12,23 +12,25 @@ LevelMenu::LevelMenu():
 {
 	SetTitle(_t("menu.story.title"));
 
-	new gui::Label(this, _t("menu.story.select"), 90, 120);
-	opt_levels_ = new gui::OptionList(this, 315, 120);
+	gui::FormLayout form(90, 120);
+	form.SetSpacing(20, 16);
 
-	lab_progresion_ = new gui::Label(this, "", 90, 150);
+	opt_levels_ = new gui::OptionList(this);
+	form.AddRow(_t("menu.story.select"), opt_levels_);
 
-	lab_hardcore_ = new gui::Label(this, "Mode hardcore", 90, 180);
-	lab_hardcore_->SetVisible(false);
-	cbx_hardcore_ = new gui::CheckBox(this, 315, 180);
+	lab_progresion_ = new gui::Label(this, "");
+	form.AddRow(_t("menu.story.progression"), lab_progresion_);
+
+	cbx_hardcore_ = new gui::CheckBox(this);
 	cbx_hardcore_->SetVisible(false);
+	form.AddRow("Mode hardcore", cbx_hardcore_);
+	lab_hardcore_ = form.GetLabelAt(2);
+	lab_hardcore_->SetVisible(false);
 
-	CosmoButton* but = NULL;
-	but = new CosmoButton(this, _t("menu.story.play"), 210, 240);
-	but->SetCallbackID(1);
-	but = new CosmoButton(this, _t("menu.story.armory"), 210, 290);
-	but->SetCallbackID(2);
-	but = new CosmoButton(this, _t("menu.back_main_menu"), 210, 340);
-	but->SetCallbackID(0);
+	gui::VBoxLayout layout(210, 240);
+	layout.Add(new CosmoButton(this, _t("menu.story.play")))->SetCallbackID(1);
+	layout.Add(new CosmoButton(this, _t("menu.story.armory")))->SetCallbackID(2);
+	layout.Add(new CosmoButton(this, _t("menu.back_main_menu")))->SetCallbackID(0);
 }
 
 
@@ -50,7 +52,7 @@ void LevelMenu::OnFocus()
 			last_unlocked -= last;
 
 		// enable/disable hardcore
-		if (!lab_hardcore_->IsVisible())
+		if (!cbx_hardcore_->IsVisible())
 		{
 			lab_hardcore_->SetVisible(true);
 			cbx_hardcore_->SetVisible(true);
@@ -64,10 +66,9 @@ void LevelMenu::OnFocus()
 		last_unlocked = levels_.CountLevel();
 	}
 
-	std::wstring progression = _t("menu.story.progression");
-	wstr_self_replace(progression, L"{unlocked}", to_wstring(last_unlocked));
-	wstr_self_replace(progression, L"{total}", to_wstring(last));
-	lab_progresion_->SetText(progression);
+	std::ostringstream progression;
+	progression << last_unlocked << "/" << last;
+	lab_progresion_->SetText(progression.str());
 
 	// option widget
 	opt_levels_->Clear();

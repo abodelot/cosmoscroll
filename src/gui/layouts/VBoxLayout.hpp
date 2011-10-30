@@ -1,25 +1,23 @@
 #ifndef GUI_VBOXLAYOUT_HPP
 #define GUI_VBOXLAYOUT_HPP
 
+#include "Layout.hpp"
 
 namespace gui
 {
 
 class Widget;
 
-class VBoxLayout
+/**
+ * Vertical box layout: lines up widgets vertically
+ */
+class VBoxLayout: public Layout
 {
 public:
-	VBoxLayout(int x, int y);
-
-	void SetSpacing(int vertical_spacing);
+	VBoxLayout(float x, float y);
 
 	Widget* Add(Widget* widget);
 
-private:
-	int x_;
-	int y_;
-	int vertical_spacing_;
 };
 
 }

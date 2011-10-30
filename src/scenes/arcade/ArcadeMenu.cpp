@@ -8,9 +8,10 @@ ArcadeMenu::ArcadeMenu()
 {
 	SetTitle(_t("menu.arcade.title"));
 
-	(new CosmoButton(this, _t("menu.arcade.play"),   210, 120))->SetCallbackID(1);
-	(new CosmoButton(this, _t("menu.arcade.best_scores"),  210, 170))->SetCallbackID(2);
-	(new CosmoButton(this, _t("menu.back_main_menu"), 210, 220))->SetCallbackID(3);
+	gui::VBoxLayout layout(210, 120);
+	layout.Add(new CosmoButton(this, _t("menu.arcade.play")))->SetCallbackID(1);
+	layout.Add(new CosmoButton(this, _t("menu.arcade.best_scores")))->SetCallbackID(2);
+	layout.Add(new CosmoButton(this, _t("menu.back_main_menu")))->SetCallbackID(3);
 }
 
 

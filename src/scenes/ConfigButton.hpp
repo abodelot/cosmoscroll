@@ -7,7 +7,7 @@
 class ConfigButton: public gui::Button
 {
 public:
-	ConfigButton(gui::Menu* owner, const sf::Unicode::Text& text, int x=0, int y=0);
+	ConfigButton(gui::Menu* owner, const sf::Unicode::Text& text);
 
 protected:
 	// override

@@ -14,12 +14,10 @@ class Slider: public Widget
 public:
 	/**
 	 * @param owner: menu propriétaire du slider
-	 * @param x: position x
-	 * @param y: position y
 	 * @param w: largeur
 	 * @param h: hauteur (-1 => taille de texte du menu)
 	 */
-	Slider(Menu* owner, int x, int y, int w, int h=-1);
+	Slider(Menu* owner, int w, int h=-1);
 
 	/**
 	 * Indiquer le pas de variation de la poignée

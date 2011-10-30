@@ -7,24 +7,26 @@
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
-#define COL_1 125
-#define COL_2 340
 
 JoystickMenu::JoystickMenu()
 {
 	SetTitle(_t("menu.joystick.title"));
 
-	AddRow(Input::USE_WEAPON_1, &but_weapon1_, 120);
-	AddRow(Input::USE_WEAPON_2, &but_weapon2_, 160);
-	AddRow(Input::USE_MISSILE, &but_missile_, 200);
-	AddRow(Input::USE_COOLER, &but_cooler_, 240);
-	AddRow(Input::PAUSE, &but_pause_, 280);
+	gui::FormLayout form(110, 110);
+	form.SetSpacing(20, 16);
+	AddRow(form, Input::USE_WEAPON_1, &but_weapon1_);
+	AddRow(form, Input::USE_WEAPON_2, &but_weapon2_);
+	AddRow(form, Input::USE_MISSILE, &but_missile_);
+	AddRow(form, Input::USE_COOLER, &but_cooler_);
+	AddRow(form, Input::PAUSE, &but_pause_);
 
-	new gui::Label(this, _t("menu.joystick.sensitivity"), COL_1, 340);
-	sl_joystick_ = new gui::Slider(this, COL_2, 344, 160);
+	sl_joystick_ = new gui::Slider(this, 160);
 	sl_joystick_->SetCallbackID(9000);
+	form.AddRow(_t("menu.joystick.sensitivity"), sl_joystick_);
 
-	(new CosmoButton(this, _t("menu.back"), 210, 410))->SetCallbackID(9001);
+	gui::Button* b = new CosmoButton(this, _t("menu.back"));
+	b->SetPosition(210, 410);
+	b->SetCallbackID(9001);
 }
 
 
@@ -44,11 +46,12 @@ void JoystickMenu::OnFocus()
 	sl_joystick_->SetValue(100 - Input::GetInstance().GetSensitivity());
 }
 
-void JoystickMenu::AddRow(Input::Action action, gui::Button** button, int y)
+void JoystickMenu::AddRow(gui::FormLayout& form, Input::Action action, gui::Button** button)
 {
-	new gui::Label(this, Input::ActionToString(action), COL_1, y);
-	*button = new ConfigButton(this, GetButtonLabel(action), COL_2, y);
+	*button = new ConfigButton(this, GetButtonLabel(action));
 	(*button)->SetCallbackID(action);
+
+	form.AddRow(Input::ActionToString(action), *button);
 }
 
 

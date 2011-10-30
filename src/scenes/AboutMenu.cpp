@@ -24,7 +24,9 @@ AboutMenu::AboutMenu()
 	logos_.SetY(Game::HEIGHT - logos_.GetSize().y);
 	logos_.SetX((Game::WIDTH - logos_.GetSize().x) / 2);
 
-	(new CosmoButton(this, _t("menu.back"), 210, 340))->SetCallbackID(1);
+	gui::Button* b = new CosmoButton(this, _t("menu.back"));
+	b->SetPosition(210, 340);
+	b->SetCallbackID(1);
 }
 
 

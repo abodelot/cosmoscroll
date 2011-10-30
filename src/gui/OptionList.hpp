@@ -16,7 +16,7 @@ namespace gui
 class OptionList: public Widget
 {
 public:
-	OptionList(Menu* owner, int x, int y);
+	OptionList(Menu* owner);
 
 	/**
 	 * Ajouter une option à la liste

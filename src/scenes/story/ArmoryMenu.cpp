@@ -31,7 +31,7 @@ ArmoryMenu::ArmoryMenu()
 	dialog_.lab_item->SetPosition(x, y + 6);
 	// left side
 	gui::VBoxLayout layout_left(x + 20, y + 40);
-	layout_left.SetSpacing(5);
+	layout_left.SetSpacing(0, 5);
 	const sf::Font& font = Resources::GetFont("Ubuntu-R.ttf");
 
 	dialog_.current_level = new gui::Label(this, "\n");
@@ -55,7 +55,7 @@ ArmoryMenu::ArmoryMenu()
 	layout_left.Add(dialog_.next_level_details);
 	// right side: buttons
 	gui::VBoxLayout layout_right(x + 220, y + 90);
-	layout_right.SetSpacing(10);
+	layout_right.SetSpacing(0, 10);
 
 	dialog_.but_buy = new ConfigButton(this, _t("armory.buy"));
 	dialog_.but_buy->SetCallbackID(100);
@@ -67,7 +67,8 @@ ArmoryMenu::ArmoryMenu()
 
 	ShowDialog(false);
 
-	gui::Button* but_back = new CosmoButton(this, _t("menu.back"), 210, 410);
+	gui::Button* but_back = new CosmoButton(this, _t("menu.back"));
+	but_back->SetPosition(210, 410);
 	but_back->SetCallbackID(102);
 }
 
@@ -164,7 +165,7 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 	// dialog title
 	std::wstring text = _t(data->TypeToString());
 	dialog_.lab_item->SetText(text);
-	int x = (Dialog::WIDTH - dialog_.lab_item->GetRect().GetWidth()) / 2;
+	int x = (Dialog::WIDTH - dialog_.lab_item->GetWidth()) / 2;
 	dialog_.lab_item->SetX(dialog_.x + x);
 
 	// current item level

@@ -129,6 +129,7 @@ void Game::Init(const std::string& data_path, int level_set)
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
+	app_.UseVerticalSync(vsync_);
 
 	// scenes will be allocated only if requested
 	for (int i = 0; i < SC_COUNT; ++i)
@@ -144,6 +145,7 @@ bool Game::LoadConfig(const std::string& filename)
 {
 	ConfigParser config;
 	fullscreen_ = false;
+	vsync_ = true;
 
 	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
 
@@ -165,6 +167,7 @@ bool Game::LoadConfig(const std::string& filename)
 		config.ReadItem("arcade_high_score", record);
 		EntityManager::GetInstance().SetArcadeRecord(record);
 		config.ReadItem("fullscreen", fullscreen_);
+		config.ReadItem("vsync", vsync_);
 
 		int top = 1;
 		config.ReadItem("panel_on_top", top);
@@ -211,6 +214,7 @@ void Game::WriteConfig(const std::string& filename) const
 	// General Settings
 	config.SeekSection("Settings");
 	config.WriteItem("fullscreen", (int) fullscreen_);
+	config.WriteItem("vsync", (int) vsync_);
 	config.WriteItem("panel_on_top", (int) ControlPanel::GetInstance().IsOnTop());
 	config.WriteItem("arcade_high_score", EntityManager::GetInstance().GetArcadeRecord());
 	config.WriteItem("language", I18n::GetInstance().GetCurrentCode());
@@ -292,7 +296,6 @@ int Game::Run()
 		current_scene_->Show(app_);
 		// <HACK>
 		screen_->Show(app_);
-		// </HACK>
 		app_.Display();
 	}
 	return (EXIT_SUCCESS);
@@ -371,16 +374,14 @@ void Game::TakeScreenshot(void)
 
 void Game::SetFullscreen(bool full)
 {
-	if (full != fullscreen_)
-	{
-		if (app_.IsOpened())
-			app_.Close();
+	if (app_.IsOpened())
+		app_.Close();
 
-		int style = full ? sf::Style::Fullscreen : sf::Style::Close;
-		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
-		app_.UseVerticalSync(true);
-		fullscreen_ = full;
-	}
+	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
+	app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
+	app_.UseVerticalSync(vsync_);
+	fullscreen_ = full;
+
 	if (!full)
 	{
 		// set window icon
@@ -388,7 +389,6 @@ void Game::SetFullscreen(bool full)
 		icon.CreateMaskFromColor(sf::Color(0xff, 0, 0xff));
 		app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
 	}
-
 }
 
 
@@ -396,6 +396,20 @@ bool Game::IsFullscreen() const
 {
 	return fullscreen_;
 }
+
+
+void Game::SetVerticalSync(bool vsync)
+{
+	app_.UseVerticalSync(vsync);
+	vsync_ = vsync;
+}
+
+
+bool Game::IsVerticalSync() const
+{
+	return vsync_;
+}
+
 
 
 void Game::ReloadScenes()

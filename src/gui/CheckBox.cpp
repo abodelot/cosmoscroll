@@ -9,7 +9,7 @@ using namespace gui;
 
 // TODO: gérer la taille du carré de la checkbox dans le style
 
-CheckBox::CheckBox(Menu* owner, int x, int y) :
+CheckBox::CheckBox(Menu* owner) :
 	Widget(owner, true)
 {
 	checked_ = false;
@@ -29,7 +29,7 @@ CheckBox::CheckBox(Menu* owner, int x, int y) :
 	v1_.SetColor(style.ckbox_v_color);
 	v2_.SetColor(style.ckbox_v_color);
 
-	SetRect(x, y, x + SIZE, y + SIZE);
+	Resize(SIZE, SIZE);
 	OnStateChanged(GetState());
 }
 

@@ -16,12 +16,10 @@ public:
 	/**
 	 * @param owner: menu propriétaire du bouton
 	 * @param text: contenu affiché
-	 * @param x: position x
-	 * @param y: position y
 	 * @param w: largeur (-1 pour largeur automatiquement adaptée au texte)
 	 * @param h: hauteur (-1 pour hauteur automatiquement adaptée au texte)
 	 */
-	Button(Menu* owner, const sf::Unicode::Text& text, int x=0, int y=0, int w = -1, int h = -1);
+	Button(Menu* owner, const sf::Unicode::Text& text, int w = -1, int h = -1);
 
 	/**
 	 * Indiquer le texte affiché sur le bouton

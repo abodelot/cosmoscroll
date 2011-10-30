@@ -41,11 +41,8 @@ public:
 	 */
 	Widget(Menu* owner, bool focusable);
 
-	void SetPosition(float x, float y);
-	void SetPosition(const sf::Vector2f& position);
-
 	/**
-	 * Changer l'état du widget (affichage uniqement)
+	 * Holds widget state (for display purpose only)
 	 */
 	void SetState(State::EState state);
 	State::EState GetState() const;
@@ -75,10 +72,9 @@ public:
 	}
 
 	/**
-	 * Obtenir la surface du widget
-	 * @return rectangle occupé par la surface
+	 * Holds widget dimension
 	 */
-	const sf::FloatRect& GetRect() const;
+	void Resize(int width, int height);
 	int GetWidth() const;
 	int GetHeight() const;
 
@@ -89,13 +85,11 @@ public:
 
 	bool IsFocused() const;
 
-protected:
-	void SetRect(int x, int y, int x2, int y2);
-	void SetRect(const sf::FloatRect& rect);
-	void Resize(int width, int height);
-
 	Menu* GetOwner() const;
 
+	bool ContainsPoint(float x, float y);
+
+protected:
 	void CallTheCallback();
 
 	/**
@@ -112,7 +106,8 @@ protected:
 private:
 	Menu* owner_;
 	int callback_id_;
-	sf::FloatRect rect_;
+	int width_;
+	int height_;
 	bool focusable_;
 	bool visible_;
 	State::EState state_;

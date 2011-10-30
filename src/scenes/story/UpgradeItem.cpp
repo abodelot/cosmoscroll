@@ -55,7 +55,8 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 	label_bg_.SetPosition(label_.GetPosition().x - 4, label_.GetPosition().y - 4);
 	label_bg_.SetColor(sf::Color(0, 0, 0, 128));
 
-	SetRect(x, y, x + halo_.GetSize().x, y + halo_.GetSize().y);
+	SetPosition(x, y);
+	Resize(halo_.GetSize().x, halo_.GetSize().y);
 	SetCallbackID(type);
 }
 

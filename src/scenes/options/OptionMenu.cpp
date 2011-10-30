@@ -7,11 +7,13 @@ OptionMenu::OptionMenu()
 {
 	SetTitle(_t("menu.options.title"));
 
-	(new CosmoButton(this, _t("menu.options.keyboard"), 210, 120))->SetCallbackID(1);
-	(new CosmoButton(this, _t("menu.options.joystick"), 210, 170))->SetCallbackID(2);
-	(new CosmoButton(this, _t("menu.options.audio"),    210, 220))->SetCallbackID(3);
-	(new CosmoButton(this, _t("menu.options.settings"),  210, 270))->SetCallbackID(4);
-	(new CosmoButton(this, _t("menu.back"), 210, 320))->SetCallbackID(5);
+	gui::VBoxLayout layout(210, 120);
+
+	layout.Add(new CosmoButton(this, _t("menu.options.keyboard")))->SetCallbackID(1);
+	layout.Add(new CosmoButton(this, _t("menu.options.joystick")))->SetCallbackID(2);
+	layout.Add(new CosmoButton(this, _t("menu.options.audio")))->SetCallbackID(3);
+	layout.Add(new CosmoButton(this, _t("menu.options.settings")))->SetCallbackID(4);
+	layout.Add(new CosmoButton(this, _t("menu.back")))->SetCallbackID(5);
 }
 
 

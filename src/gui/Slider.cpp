@@ -4,7 +4,7 @@
 using namespace gui;
 
 
-Slider::Slider(Menu* owner, int x, int y, int w, int h) :
+Slider::Slider(Menu* owner, int w, int h) :
 	Widget(owner, true)
 {
 	if (h == -1)
@@ -20,7 +20,7 @@ Slider::Slider(Menu* owner, int x, int y, int w, int h) :
 	handle_index_ = 0;
 	quantum_ = 10;
 
-	SetRect(x, y, x + w, y + h);
+	Resize(w, h);
 	OnStateChanged(GetState());
 }
 
@@ -130,7 +130,7 @@ void Slider::UpdateHandle(int value)
 		CallTheCallback();
 	}
 	// then update handle sprite (handle is a square, size is Rect.Height)
-	int x = (GetRect().GetWidth() - GetRect().GetHeight()) * handle_index_ / 100;
+	int x = (GetWidth() - GetHeight()) * handle_index_ / 100;
 	handle_.SetX(x);
 }
 

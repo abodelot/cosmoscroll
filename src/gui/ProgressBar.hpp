@@ -14,12 +14,10 @@ class ProgressBar: public Widget
 public:
 	/**
 	 * @param owner: menu propriétaire de la barre de progression
-	 * @param x: position x
-	 * @param y: position y
-	 * @param w: largeur
-	 * @param h: hauteur
+	 * @param w: width
+	 * @param h: height
 	 */
-	ProgressBar(Menu* owner, int x, int y, int w, int h);
+	ProgressBar(Menu* owner, int w, int h);
 
 	void SetValue(int value);
 

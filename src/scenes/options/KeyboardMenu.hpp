@@ -20,7 +20,7 @@ private:
 	// inherited
 	void EventCallback(int id);
 
-	void AddRow(Input::Action action, gui::Button** button, int y);
+	void AddRow(gui::FormLayout& form, Input::Action action, gui::Button** button);
 	const char* GetKeyLabel(Input::Action action) const;
 
 	gui::Button* but_up_;
