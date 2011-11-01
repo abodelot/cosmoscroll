@@ -38,9 +38,9 @@ private:
 
 #define PARTICLES_PER_HIT 128
 
-ImpactHit::ImpactHit(Entity::Team team, const sf::Vector2f& position, float angle,
+ImpactHit::ImpactHit(Entity* emitter, const sf::Vector2f& position, float angle,
 		const sf::Image* image, int speed, int damage):
-	Hit(team, position, angle, image, speed, damage)
+	Hit(emitter, position, angle, image, speed, damage)
 {
 	ParticleSystem::GetInstance().AddSmoke(PARTICLES_PER_HIT, this);
 }
@@ -54,15 +54,13 @@ ImpactHit::~ImpactHit()
 
 void ImpactHit::OnCollide(Entity& entity)
 {
-	if (!IsDead())
+
+	Hit::OnCollide(entity);
+	if (IsDead())
 	{
-		Hit::OnCollide(entity);
-		if (IsDead())
-		{
-			ParticleSystem::GetInstance().AddImpact(GetPosition(), 300);
-			Impact impact(*this);
-			EntityManager::GetInstance().ApplyToEach(impact);
-		}
+		ParticleSystem::GetInstance().AddImpact(GetPosition(), 300);
+		Impact impact(*this);
+		EntityManager::GetInstance().ApplyToEach(impact);
 	}
 }
 

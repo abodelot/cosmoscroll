@@ -7,6 +7,7 @@
 #include "entities/EvilBoss.hpp"
 #include "entities/BossTentacles.hpp"
 #include "entities/complex/Gate.hpp"
+#include "entities/complex/Canon.hpp"
 #include "utils/Resources.hpp"
 
 #define DEFAULT_STARS_COUNT 33
@@ -306,7 +307,12 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		}
 		else if (strcmp(tag_name, "decor") == 0)
 		{
-			entity = new Gate(position);
+			std::string decor_name = "";
+			elem->QueryValueAttribute("id", &decor_name);
+			if (decor_name == "gate")
+				entity = new Gate(position);
+			else if (decor_name == "canon")
+				entity = new Canon(position);
 		}
 		else
 		{

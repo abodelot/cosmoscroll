@@ -41,7 +41,6 @@ Gate::Gate(const sf::Vector2f& pos):
 void Gate::Update(float frametime)
 {
 	ComplexEntity::Update(frametime);
-	sf::Sprite::Move(-60 * frametime, 0);
 	if (door_timer_ > 0)
 	{
 		float door_height = door_full_height_ * door_timer_ / DOOR_DELAY;

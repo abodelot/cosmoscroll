@@ -8,7 +8,7 @@ class ComplexEntity;
 class Part: public Entity
 {
 public:
-	Part(int id);
+	Part(int id=-1);
 
 	// override
 	void Update(float frametime);

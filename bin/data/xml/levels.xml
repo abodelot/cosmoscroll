@@ -158,7 +158,8 @@
 		<level desc="This doesn't smell good." bg_image="gui/background-spacehulk.png" stars="0">
 			<!-- LVL3: we introduce interceptor and mines -->
 			<loop count="2">
-				<decor id="gate" y="0"/>
+				<decor id="gate" y="0" />
+				<decor id="canon" y="261" t="3.5"/>
 				<ship id="2" y="205" t="6"/>
 				<ship id="2" y="210" t="0.5"/>
 				<ship id="3" y="200" t="1"/>
@@ -243,18 +244,21 @@
 			<ship id="2" y="260" t="0.8"/>
 			<ship id="2" y="290" t="0.8"/>
 			<ship id="5" y="150"/>
+			<decor id="canon" y="261" t="3"/>
 			<ship id="2" y="260" t="0.8"/>
 			<ship id="2" y="230" t="0.8"/>
 			<ship id="5" y="100"/>
 			<ship id="2" y="200" t="0.8"/>
 			<ship id="2" y="230" t="0.8"/>
 			<ship id="5" y="269"/>
+			<decor id="canon" y="261" t="3"/>
 			<ship id="2" y="260" t="0.8"/>
 			<ship id="2" y="290" t="0.8"/>
 			<ship id="5" y="120"/>
 			<ship id="2" y="260" t="0.8"/>
 			<ship id="2" y="230" t="0.8"/>
 			<ship id="5" y="230"/>
+			<decor id="canon" y="261" t="3"/>
 			<ship id="2" y="200" t="0.8"/>
 			<ship id="3" y="300" t="1.0"/>
 			<loop count="2">

@@ -86,6 +86,9 @@ public:
 	inline bool IsFlippedY() const { return flipped_y_; }
 
 
+	virtual float GetSpeedX() const { return 0.f; }
+	virtual float GetSpeedY() const { return 0.f; };
+
 	/**
 	 * Obtenir la surface de collision du vaisseau
 	 */

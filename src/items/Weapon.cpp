@@ -162,7 +162,7 @@ void Weapon::SetMultiply(int n)
 
 void Weapon::ThrowHit(const sf::Vector2f& offset, float angle)
 {
-	Hit* hit = new Hit(owner_->GetTeam(), offset, angle, image_, velocity_, damage_);
+	Hit* hit = new Hit(owner_, offset, angle, image_, velocity_, damage_);
 	EntityManager::GetInstance().AddEntity(hit);
 }
 

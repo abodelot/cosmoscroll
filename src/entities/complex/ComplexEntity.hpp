@@ -18,6 +18,9 @@ public:
 	// override
 	void OnCollide(Entity& entity);
 
+	// override
+	float GetSpeedX() const;
+
 protected:
 	void AddPart(Part& part, float x=0.f, float y=0.f);
 

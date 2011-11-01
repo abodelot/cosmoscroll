@@ -2,6 +2,8 @@
 #include "utils/Math.hpp"
 #include "core/ParticleSystem.hpp"
 
+#define DECOR_SPEED -60
+
 ComplexEntity::ComplexEntity(const sf::Vector2f& pos):
 	Entity(pos, 1)
 {
@@ -13,6 +15,7 @@ ComplexEntity::ComplexEntity(const sf::Vector2f& pos):
 
 void ComplexEntity::Update(float frametime)
 {
+	sf::Sprite::Move(DECOR_SPEED * frametime, 0.f);
 	for (size_t i = 0; i < parts_.size(); ++i)
 	{
 		parts_[i].Update(frametime);
@@ -50,6 +53,12 @@ void ComplexEntity::OnCollide(Entity& entity)
 			p.SetPosition(pos);
 		}
 	}
+}
+
+
+float ComplexEntity::GetSpeedX() const
+{
+	return DECOR_SPEED;
 }
 
 

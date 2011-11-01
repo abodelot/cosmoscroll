@@ -9,7 +9,7 @@
 class ImpactHit: public Hit
 {
 public:
-	ImpactHit(Entity::Team team, const sf::Vector2f& offset, float angle,
+	ImpactHit(Entity* emitter, const sf::Vector2f& offset, float angle,
 		const sf::Image* image, int speed, int damage);
 
 	~ImpactHit();

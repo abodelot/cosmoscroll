@@ -103,6 +103,9 @@ sf::FloatRect Entity::GetCollideRect() const
 
 bool Entity::IsCollidingWith(const Entity& other, const sf::FloatRect& r1, const sf::FloatRect& r2)
 {
+	if (hp_ <= 0 || other.hp_ <= 0)
+		return false;
+
 	sf::FloatRect overlap;
 
 	// if overlapping rectangles
