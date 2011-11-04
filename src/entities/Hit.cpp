@@ -44,7 +44,7 @@ void Hit::OnCollide(Entity& entity)
 		return;
 	}
 	Entity::OnCollide(entity);
-	ParticleSystem::GetInstance().AddImpact(GetPosition(), 10);
+	ParticleSystem::GetInstance().ImpactSfx(GetPosition(), 10);
 	if (GetTeam() == Entity::GOOD && entity.IsDead())
 	{
 		int points = entity.ConsumePoints();

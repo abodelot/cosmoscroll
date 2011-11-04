@@ -4,6 +4,8 @@
 #include <string>
 #include <SFML/Audio.hpp>
 
+class IniParser;
+
 class SoundSystem
 {
 public:
@@ -59,6 +61,9 @@ public:
 	 * Arrêter la lecture de tous les ressources utilisées
 	 */
 	void StopAll();
+
+	void LoadFromConfig(IniParser& config);
+	void SaveToConfig(IniParser& config);
 
 private:
 	SoundSystem();

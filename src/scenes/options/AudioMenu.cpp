@@ -13,21 +13,24 @@ AudioMenu::AudioMenu()
 	form.SetSpacing(40, 20);
 	//form.SetLabelAlignment(gui::Align::RIGHT);
 
-
-
 	opt_music_ = new gui::OptionList(this);
+	opt_music_->SetCallbackID(1);
+	// feed with available music files
 	opt_music_->AddOption("Space Song", "space.mod");
 	opt_music_->AddOption("Aurora", "aurora.mod");
 	opt_music_->AddOption("Escape for assault", "escape_for_assault.mod");
-	opt_music_->SetCallbackID(1);
+
+	// current music is default displayed value
 	const std::string music_name = sound.GetMusicName();
-	// ugly!!
-	if (music_name == "space")
-		opt_music_->Select(0);
-	else if (music_name == "aurora")
-		opt_music_->Select(1);
-	else if (music_name == "escape_for_assault")
-		opt_music_->Select(2);
+	for (int i = 0; i < opt_music_->GetNbItems(); ++i)
+	{
+		if (opt_music_->GetOptionAt(i) == music_name)
+		{
+			opt_music_->Select(i);
+			break;
+		}
+	}
+
 	form.AddRow(_t("menu.audio.music"), opt_music_);
 
 	cb_music_ = new gui::CheckBox(this);

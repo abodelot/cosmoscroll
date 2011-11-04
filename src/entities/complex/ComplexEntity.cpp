@@ -46,7 +46,7 @@ void ComplexEntity::OnCollide(Entity& entity)
 					sf::Vector2f pos;
 					pos.x = GetPosition().x + p.GetPosition().x;
 					pos.y = GetPosition().y + p.GetPosition().y;
-					ParticleSystem::GetInstance().AddExplosion(pos);
+					ParticleSystem::GetInstance().ExplosionSfx(pos);
 				}
 				break;
 			}

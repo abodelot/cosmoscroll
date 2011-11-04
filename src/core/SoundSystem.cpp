@@ -3,6 +3,7 @@
 #include "SoundSystem.hpp"
 #include "utils/Resources.hpp"
 #include "utils/DumbMusic.hpp"
+#include "utils/IniParser.hpp"
 
 #define DEFAULT_MUSIC  "space.mod"
 #define DEFAULT_VOLUME 40
@@ -170,4 +171,36 @@ void SoundSystem::StopAll()
 		}
 	}
 	StopMusic();
+}
+
+
+void SoundSystem::LoadFromConfig(IniParser& config)
+{
+	config.SeekSection("Audio");
+
+	if (config.Get("enable_music", enable_music_))
+		EnableMusic(enable_music_);
+
+	if (config.Get("enable_sound", enable_sound_))
+		EnableSound(enable_sound_);
+
+	if (config.Get("music_name", music_name_))
+		SetMusic(music_name_);
+
+	if (config.Get("music_volume", music_volume_))
+		SetMusicVolume(music_volume_);
+
+	if (config.Get("sound_volume", sound_volume_))
+		SetSoundVolume(sound_volume_);
+}
+
+
+void SoundSystem::SaveToConfig(IniParser& config)
+{
+	config.SeekSection("Audio");
+	config.Set("music_name",   music_name_);
+	config.Set("enable_music", enable_music_);
+	config.Set("music_volume", music_volume_);
+	config.Set("enable_sound", enable_sound_);
+	config.Set("sound_volume", sound_volume_);
 }

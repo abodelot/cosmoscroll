@@ -6,7 +6,7 @@
 #include "entities/EntityManager.hpp"
 #include "items/ItemManager.hpp"
 #include "utils/Resources.hpp"
-#include "utils/ConfigParser.hpp"
+#include "utils/IniParser.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "utils/FileSystem.hpp"
@@ -18,7 +18,7 @@
 #include <sys/stat.h>
 
 // config and data files
-#define CONFIG_FILENAME   "cosmoscroll.cfg"
+#define CONFIG_FILENAME   "cosmoscroll.ini"
 
 #define XML_LEVELS      "/xml/levels.xml"
 #define XML_ITEMS       "/xml/items.xml"
@@ -39,12 +39,11 @@ Game& Game::GetInstance()
 
 
 Game::Game():
-	app_(sf::VideoMode(WIDTH, HEIGHT, WIN_BPP), WIN_TITLE),
 	input_(Input::GetInstance())
 {
-	// center window on desktop
-	sf::VideoMode desktop = sf::VideoMode::GetDesktopMode();
-	app_.SetPosition((desktop.Width - WIDTH) / 2, (desktop.Height - HEIGHT) / 2);
+	// create window
+	vsync_ = true;
+	SetFullscreen(false);
 
 	// HACK: display loading screen as early as possible
 	sf::String temp("loading..."); app_.Clear() ;app_.Draw(temp); app_.Display();
@@ -99,7 +98,6 @@ void Game::OverrideConfigFile(const std::string& config_file)
 
 void Game::Init(const std::string& data_path, int level_set)
 {
-
 	input_.Init(app_.GetInput());
 
 	// init resources directory
@@ -124,8 +122,7 @@ void Game::Init(const std::string& data_path, int level_set)
 #endif
 	LoadConfig(config_file_);
 
-
-	SetFullscreen(fullscreen_);
+	app_.UseVerticalSync(vsync_);
 	app_.SetFramerateLimit(WIN_FPS);
 	app_.ShowMouseCursor(false);
 	app_.EnableKeyRepeat(false);
@@ -143,58 +140,43 @@ void Game::Init(const std::string& data_path, int level_set)
 
 bool Game::LoadConfig(const std::string& filename)
 {
-	ConfigParser config;
+	IniParser config;
 	fullscreen_ = false;
 	vsync_ = true;
-
 	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
 
 	if (config.LoadFromFile(filename.c_str()))
 	{
 		// Directories
 		config.SeekSection("Directories");
-		config.ReadItem("screenshots", screenshot_dir_);
-		// Todo, screenshot directory
+		screenshot_dir_ = config.Get("screenshots");
+
 		// General settings
 		config.SeekSection("Settings");
-		std::string str;
-		if (!config.ReadItem("language", str) || !I18n::GetInstance().LoadFromCode(str))
+		// language
+		std::string lang = config.Get("language");
+		if (!lang.empty() || !I18n::GetInstance().LoadFromCode(lang))
 		{
 			I18n::GetInstance().LoadSystemLanguage();
 		}
+		// high-score
+		int high_score = 0;
+		config.Get("arcade_high_score", high_score);
+		EntityManager::GetInstance().SetArcadeRecord(high_score);
 
-		int record = 0;
-		config.ReadItem("arcade_high_score", record);
-		EntityManager::GetInstance().SetArcadeRecord(record);
-		bool full = false;
-		config.ReadItem("fullscreen", full);
-		SetFullscreen(full);
+		// fullscreen & vsync
+		config.Get("vsync", vsync_);
+		config.Get("fullscreen", fullscreen_);
+		if (fullscreen_)
+			SetFullscreen(fullscreen_);
 
-		config.ReadItem("vsync", vsync_);
-		SetVerticalSync(vsync_);
-
-		int top = 1;
-		config.ReadItem("panel_on_top", top);
+		// panel pop
+		bool top = true;
+		config.Get("panel_on_top", top);
 		PanelOnTop(top);
 
 		// Audio settings
-		config.SeekSection("Audio");
-		int enabled = 1;
-		config.ReadItem("enable_music", enabled);
-		SoundSystem::GetInstance().EnableMusic(enabled);
-
-		enabled = 1;
-		config.ReadItem("enable_sound", enabled);
-		SoundSystem::GetInstance().EnableSound(enabled);
-
-		std::string music;
-		if (config.ReadItem("music_name", music))
-			SoundSystem::GetInstance().SetMusic(music);
-		int volume;
-		if (config.ReadItem("music_volume", volume))
-			SoundSystem::GetInstance().SetMusicVolume(volume);
-		if (config.ReadItem("sound_volume", volume))
-			SoundSystem::GetInstance().SetSoundVolume(volume);
+		SoundSystem::GetInstance().LoadFromConfig(config);
 
 		// reading keyboard and joystick bindings
 		input_.LoadFromConfig(config);
@@ -210,27 +192,21 @@ bool Game::LoadConfig(const std::string& filename)
 
 void Game::WriteConfig(const std::string& filename) const
 {
-	ConfigParser config;
+	IniParser config;
 
 	// Directories
 	config.SeekSection("Directories");
-	config.WriteItem("screenshots", screenshot_dir_);
+	config.Set("screenshots", screenshot_dir_);
 	// General Settings
 	config.SeekSection("Settings");
-	config.WriteItem("fullscreen", (int) fullscreen_);
-	config.WriteItem("vsync", (int) vsync_);
-	config.WriteItem("panel_on_top", (int) ControlPanel::GetInstance().IsOnTop());
-	config.WriteItem("arcade_high_score", EntityManager::GetInstance().GetArcadeRecord());
-	config.WriteItem("language", I18n::GetInstance().GetCurrentCode());
+	config.Set("fullscreen", fullscreen_);
+	config.Set("vsync", vsync_);
+	config.Set("panel_on_top", ControlPanel::GetInstance().IsOnTop());
+	config.Set("arcade_high_score", EntityManager::GetInstance().GetArcadeRecord());
+	config.Set("language", I18n::GetInstance().GetCurrentCode());
 
 	// Audio settings
-	const SoundSystem& snd = SoundSystem::GetInstance();
-	config.SeekSection("Audio");
-	config.WriteItem("music_name",   snd.GetMusicName());
-	config.WriteItem("enable_music", (int) snd.IsMusicEnabled());
-	config.WriteItem("music_volume", snd.GetMusicVolume());
-	config.WriteItem("enable_sound", (int) snd.IsSoundEnabled());
-	config.WriteItem("sound_volume", snd.GetSoundVolume());
+	SoundSystem::GetInstance().SaveToConfig(config);
 
 	// writing keyboard and joystick bindings
 	input_.SaveToConfig(config);
@@ -377,22 +353,23 @@ void Game::TakeScreenshot(void)
 
 void Game::SetFullscreen(bool full)
 {
-	if (full != fullscreen_)
-	{
-		if (app_.IsOpened())
-			app_.Close();
+	if (app_.IsOpened())
+		app_.Close();
 
-		int style = full ? sf::Style::Fullscreen : sf::Style::Close;
-		app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
-		app_.UseVerticalSync(vsync_);
-		fullscreen_ = full;
-	}
+	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
+	app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
+	app_.UseVerticalSync(vsync_);
+	fullscreen_ = full;
 	if (!full)
 	{
 		// set window icon
 		sf::Image& icon = Resources::GetImage("gui/icon.bmp");
 		icon.CreateMaskFromColor(sf::Color(0xff, 0, 0xff));
 		app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
+
+		// center window on desktop
+		sf::VideoMode desktop = sf::VideoMode::GetDesktopMode();
+		app_.SetPosition((desktop.Width - WIDTH) / 2, (desktop.Height - HEIGHT) / 2);
 	}
 }
 

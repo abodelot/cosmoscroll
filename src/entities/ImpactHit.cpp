@@ -27,7 +27,7 @@ public:
 		{
 			e.TakeDamage(hit_.GetCollideDamage());
 			if (e.IsDead())
-				ParticleSystem::GetInstance().AddImpact(e.GetPosition(), 10);
+				ParticleSystem::GetInstance().ImpactSfx(e.GetPosition(), 10);
 		}
 	}
 
@@ -58,7 +58,7 @@ void ImpactHit::OnCollide(Entity& entity)
 	Hit::OnCollide(entity);
 	if (IsDead())
 	{
-		ParticleSystem::GetInstance().AddImpact(GetPosition(), 300);
+		ParticleSystem::GetInstance().ImpactSfx(GetPosition(), 300);
 		Impact impact(*this);
 		EntityManager::GetInstance().ApplyToEach(impact);
 	}

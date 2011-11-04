@@ -24,11 +24,23 @@ public:
 	void AddOption(const sf::Unicode::Text& option);
 	void AddOption(const sf::Unicode::Text& display, const std::string& value);
 
+	int GetNbItems() const;
+
+	std::string GetOptionAt(int index) const;
+
+
+
+
 	/**
-	 * Obtenir l'option sélectionnée
+	 * Get option index currently selected (first is 0)
+	 */
+	int GetSelectedOptionIndex() const;
+
+	/**
+	 * Get selected option value
+	 * shortcut for GetOptionAt(GetSelectedOptionIndex())
 	 */
 	std::string GetSelectedOption() const;
-	int GetSelectedOptionIndex() const;
 
 	/**
 	 * Set the current displayed item

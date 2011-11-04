@@ -91,6 +91,8 @@
 		<Unit filename="src/entities/PlayerShip.hpp" />
 		<Unit filename="src/entities/SpaceShip.cpp" />
 		<Unit filename="src/entities/SpaceShip.hpp" />
+		<Unit filename="src/entities/complex/Canon.cpp" />
+		<Unit filename="src/entities/complex/Canon.hpp" />
 		<Unit filename="src/entities/complex/ComplexEntity.cpp" />
 		<Unit filename="src/entities/complex/ComplexEntity.hpp" />
 		<Unit filename="src/entities/complex/Gate.cpp" />
@@ -194,8 +196,6 @@
 		<Unit filename="src/tinyxml/tinyxml.h" />
 		<Unit filename="src/tinyxml/tinyxmlerror.cpp" />
 		<Unit filename="src/tinyxml/tinyxmlparser.cpp" />
-		<Unit filename="src/utils/ConfigParser.cpp" />
-		<Unit filename="src/utils/ConfigParser.hpp" />
 		<Unit filename="src/utils/DIE.hpp" />
 		<Unit filename="src/utils/DumbMusic.cpp" />
 		<Unit filename="src/utils/DumbMusic.hpp" />
@@ -203,6 +203,8 @@
 		<Unit filename="src/utils/FileSystem.hpp" />
 		<Unit filename="src/utils/I18n.cpp" />
 		<Unit filename="src/utils/I18n.hpp" />
+		<Unit filename="src/utils/IniParser.cpp" />
+		<Unit filename="src/utils/IniParser.hpp" />
 		<Unit filename="src/utils/Math.cpp" />
 		<Unit filename="src/utils/Math.hpp" />
 		<Unit filename="src/utils/Resources.cpp" />

@@ -119,7 +119,7 @@ void SpaceShip::OnDestroy()
 	{
 		EntityManager::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
 	}
-	ParticleSystem::GetInstance().AddExplosion(GetCenter_());
+	ParticleSystem::GetInstance().ExplosionSfx(GetCenter_());
 }
 
 // movement patterns -----------------------------------------------------------

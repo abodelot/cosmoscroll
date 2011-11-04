@@ -113,7 +113,7 @@ void BossTentacles::Update(float frametime)
 void BossTentacles::OnDestroy()
 {
 	sf::Vector2f pos = GetCenter_();
-	ParticleSystem::GetInstance().AddGreenImpact(pos, 100);
+	ParticleSystem::GetInstance().GreenImpactSfx(pos, 100);
 	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("boom.ogg"));
 }
 

@@ -19,19 +19,16 @@ public:
 	static ParticleSystem& GetInstance();
 
 	/**
-	 * Ajouter une explosion
-	 * @param offset: position de l'explosion
+	 * Add an effect in the scene
+	 * @param pos: sfx origin
+	 * @param count: number of particles
 	 */
-	void AddExplosion(const sf::Vector2f& offset);
-	void AddFiery(int x, int y);
+	void ExplosionSfx(const sf::Vector2f& pos);
+	void ImpactSfx(const sf::Vector2f& pos, int count);
+	void GreenImpactSfx(const sf::Vector2f& pos, int count);
+	void FierySfx(const sf::Vector2f& pos, int count);
+	void SnowflakeSfx(const sf::Vector2f& pos, int count);
 
-	/**
-	 * Ajouter un effet d'impact
-	 * @param offset: position de l'impact
-	 * @param count: nombre d'étincelles
-	 */
-	void AddImpact(const sf::Vector2f& offset, int count);
-	void AddGreenImpact(const sf::Vector2f& pos, int count);
 
 	/**
 	 * Ajouter des étoiles défilantes dans la scène

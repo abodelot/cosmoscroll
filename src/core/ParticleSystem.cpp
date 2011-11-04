@@ -25,40 +25,42 @@ ParticleSystem::~ParticleSystem()
 	Clear();
 }
 
-
-void ParticleSystem::AddExplosion(const sf::Vector2f& offset)
+void ParticleSystem::ExplosionSfx(const sf::Vector2f& offset)
 {
 	particles_.push_front(new Explosion(offset));
 	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("boom.ogg"));
 }
 
 
-void ParticleSystem::AddFiery(int x, int y)
-{
-	static const sf::Image& fiery = Resources::GetImage("particles/fiery.png");
-	sf::Vector2f pos(x, y);
-	for (int i = 0; i < 42; ++i)
-	{
-		particles_.push_front(new Fiery(pos, fiery));
-	}
-}
-
-
-void ParticleSystem::AddImpact(const sf::Vector2f& offset, int count)
+void ParticleSystem::ImpactSfx(const sf::Vector2f& pos, int count)
 {
 	static const sf::Image& img = Resources::GetImage("particles/impact.png");
 	for (; count > 0; --count)
-	{
-		particles_.push_front(new Fiery(offset, img));
-	}
+		particles_.push_front(new Fiery(pos, img));
 }
 
 
-void ParticleSystem::AddGreenImpact(const sf::Vector2f& pos, int count)
+void ParticleSystem::GreenImpactSfx(const sf::Vector2f& pos, int count)
 {
 	static const sf::Image& img = Resources::GetImage("particles/impact-green.png");
 	for (;count > 0; --count)
 		particles_.push_front(new Fiery(pos, img));
+}
+
+
+void ParticleSystem::FierySfx(const sf::Vector2f& pos, int count)
+{
+	static const sf::Image& fiery = Resources::GetImage("particles/fiery.png");
+	for (; count > 0; --count)
+		particles_.push_front(new Fiery(pos, fiery));
+}
+
+
+void ParticleSystem::SnowflakeSfx(const sf::Vector2f& pos, int count)
+{
+	static const sf::Image& snowflake = Resources::GetImage("particles/snowflake.png");
+	for (; count > 0; --count)
+		particles_.push_front(new Fiery(pos, snowflake));
 }
 
 

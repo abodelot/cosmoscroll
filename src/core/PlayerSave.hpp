@@ -2,7 +2,8 @@
 #define PLAYERSAVE_HPP
 
 #include "items/ItemData.hpp"
-#include "utils/ConfigParser.hpp"
+
+class IniParser;
 
 class PlayerSave
 {
@@ -15,8 +16,8 @@ public:
 	void SetItemLevel(ItemData::Type type, int level);
 
 
-	void LoadFromConfig(ConfigParser& config);
-	void SaveToConfig(ConfigParser& config) const;
+	void LoadFromConfig(IniParser& config);
+	void SaveToConfig(IniParser& config) const;
 
 	int GetCredits() const;
 	void UpdateCredits(int diff);

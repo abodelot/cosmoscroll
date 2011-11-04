@@ -170,6 +170,7 @@ void PlayerShip::HandleAction(Input::Action action)
 		case Input::USE_COOLER:
 			if (coolers_ > 0)
 			{
+				ParticleSystem::GetInstance().SnowflakeSfx(GetCenter_(), 50);
 				--coolers_;
 				panel_.SetCoolers(coolers_);
 				heat_ = 0.f;
@@ -397,7 +398,7 @@ void PlayerShip::OnDestroy()
 
 	Reset(*this);
 	manager.TerminateGame();
-	ParticleSystem::GetInstance().AddExplosion(GetCenter_());
+	ParticleSystem::GetInstance().ExplosionSfx(GetCenter_());
 }
 
 
@@ -459,9 +460,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 			break;
 		// immediate bonus
 		case Bonus::SUPER_BANANA:
-			ParticleSystem::GetInstance().AddFiery(
-				GetPosition().x + GetSize().x / 2,
-				GetPosition().y + GetSize().y / 2);
+			ParticleSystem::GetInstance().FierySfx(GetCenter_(), 50);
 			// max hp
 			SetHP(hp_max_);
 			panel_.SetShipHP(hp_max_);

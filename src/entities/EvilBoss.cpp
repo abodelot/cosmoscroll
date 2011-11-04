@@ -84,6 +84,7 @@ void EvilBoss::Update(float frametime)
 void EvilBoss::TakeDamage(int damage)
 {
 	Entity::TakeDamage(damage);
+	ParticleSystem::GetInstance().GreenImpactSfx(GetCenter_(), 1);
 	if (GetHP() < next_ && GetHP() > 0)
 	{
 		phase_ = next_;
@@ -109,8 +110,7 @@ void EvilBoss::TakeDamage(int damage)
 
 void EvilBoss::OnDestroy()
 {
-	sf::Vector2f pos = GetCenter_();
-	ParticleSystem::GetInstance().AddGreenImpact(pos, 200);
+	ParticleSystem::GetInstance().GreenImpactSfx(GetCenter_(), 200);
 	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("boom.ogg"));
 }
 

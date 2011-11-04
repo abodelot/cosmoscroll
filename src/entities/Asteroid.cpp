@@ -75,7 +75,7 @@ void Asteroid::OnDestroy()
 		default:
 			break;
 	}
-	ParticleSystem::GetInstance().AddImpact(GetPosition(), 10);
+	ParticleSystem::GetInstance().ImpactSfx(GetPosition(), 10);
 }
 
 

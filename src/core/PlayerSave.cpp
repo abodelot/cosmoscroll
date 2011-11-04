@@ -1,5 +1,6 @@
 #include "PlayerSave.hpp"
 #include "LevelManager.hpp"
+#include "utils/IniParser.hpp"
 
 
 PlayerSave::PlayerSave()
@@ -41,24 +42,24 @@ void PlayerSave::UpdateCredits(int diff)
 }
 
 
-void PlayerSave::LoadFromConfig(ConfigParser& config)
+void PlayerSave::LoadFromConfig(IniParser& config)
 {
 	config.SeekSection("Player");
 	int level = 1;
-	config.ReadItem("last_unlocked_level", level);
+	config.Get("last_unlocked_level", level);
 	LevelManager::GetInstance().SetLastUnlocked(level);
 
 	level = 1;
-	config.ReadItem("current_level", level);
+	config.Get("current_level", level);
 	LevelManager::GetInstance().SetCurrent(level);
 
-	config.ReadItem("credits", available_credits_);
-	config.ReadItem("lvl_laser1", items_[ItemData::LASER1]);
-	config.ReadItem("lvl_laser2", items_[ItemData::LASER2]);
-	config.ReadItem("lvl_shield", items_[ItemData::SHIELD]);
-	config.ReadItem("lvl_armor", items_[ItemData::ARMOR]);
-	config.ReadItem("lvl_engine", items_[ItemData::ENGINE]);
-	config.ReadItem("lvl_heatsink", items_[ItemData::HEATSINK]);
+	config.Get("credits",      available_credits_);
+	config.Get("lvl_laser1",   items_[ItemData::LASER1]);
+	config.Get("lvl_laser2",   items_[ItemData::LASER2]);
+	config.Get("lvl_shield",   items_[ItemData::SHIELD]);
+	config.Get("lvl_armor",    items_[ItemData::ARMOR]);
+	config.Get("lvl_engine",   items_[ItemData::ENGINE]);
+	config.Get("lvl_heatsink", items_[ItemData::HEATSINK]);
 	for (int i = 0; i < ItemData::_COUNT; ++i)
 	{
 		SetItemLevel((ItemData::Type) i, items_[i]);
@@ -66,17 +67,17 @@ void PlayerSave::LoadFromConfig(ConfigParser& config)
 }
 
 
-void PlayerSave::SaveToConfig(ConfigParser& config) const
+void PlayerSave::SaveToConfig(IniParser& config) const
 {
 	config.SeekSection("Player");
-	config.WriteItem("current_level", LevelManager::GetInstance().GetCurrent());
-	config.WriteItem("last_unlocked_level", LevelManager::GetInstance().GetLastUnlocked());
-	config.WriteItem("credits", available_credits_);
-	config.WriteItem("lvl_laser1", items_[ItemData::LASER1]);
-	config.WriteItem("lvl_laser2", items_[ItemData::LASER2]);
-	config.WriteItem("lvl_shield", items_[ItemData::SHIELD]);
-	config.WriteItem("lvl_armor", items_[ItemData::ARMOR]);
-	config.WriteItem("lvl_engine", items_[ItemData::ENGINE]);
-	config.WriteItem("lvl_heatsink", items_[ItemData::HEATSINK]);
+	config.Set("current_level", LevelManager::GetInstance().GetCurrent());
+	config.Set("last_unlocked_level", LevelManager::GetInstance().GetLastUnlocked());
+	config.Set("credits", available_credits_);
+	config.Set("lvl_laser1", items_[ItemData::LASER1]);
+	config.Set("lvl_laser2", items_[ItemData::LASER2]);
+	config.Set("lvl_shield", items_[ItemData::SHIELD]);
+	config.Set("lvl_armor", items_[ItemData::ARMOR]);
+	config.Set("lvl_engine", items_[ItemData::ENGINE]);
+	config.Set("lvl_heatsink", items_[ItemData::HEATSINK]);
 }
 

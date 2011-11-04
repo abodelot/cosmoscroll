@@ -18,7 +18,7 @@ OptionList::OptionList(Menu* owner) :
 	max_opt_width_ = 0;
 	dir_ = 1;
 	scale_ = 1;
-	align_ = Align::CENTER;
+	align_ = Align::LEFT;
 	const WidgetStyle& style = owner->GetWidgetStyle();
 	text_size_ = style.global_text_size;
 
@@ -101,15 +101,27 @@ void OptionList::AddOption(const sf::Unicode::Text& option, const std::string& v
 }
 
 
-std::string OptionList::GetSelectedOption() const
+int OptionList::GetNbItems() const
 {
-	assert(current_opt_ >= 0 && current_opt_ < (int) options_.size());
-	const std::pair<sf::String, std::string>& select = options_[current_opt_];
+	return options_.size();
+}
+
+
+std::string OptionList::GetOptionAt(int index) const
+{
+	assert(index >= 0 && index < (int) options_.size());
+	const std::pair<sf::String, std::string>& select = options_[index];
 	if (select.second.size() == 0)
 	{
 		return select.first.GetText();
 	}
 	return select.second;
+}
+
+
+std::string OptionList::GetSelectedOption() const
+{
+	return GetOptionAt(current_opt_);
 }
 
 

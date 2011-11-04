@@ -4,6 +4,7 @@
 #include "Game.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
+#include "utils/IniParser.hpp"
 
 #define JOY_ID			 0
 
@@ -391,66 +392,66 @@ void Input::SetSensitivity(int sensitivity)
 }
 
 
-void Input::LoadFromConfig(ConfigParser& config)
+void Input::LoadFromConfig(IniParser& config)
 {
 	config.SeekSection("Keyboard");
 	sf::Key::Code key;
-	if (config.ReadItem("move_up", key))
+	if (config.Get("move_up", key))
 		SetKeyboardBind(key, MOVE_UP);
-	if (config.ReadItem("move_down", key))
+	if (config.Get("move_down", key))
 		SetKeyboardBind(key, MOVE_DOWN);
-	if (config.ReadItem("move_left", key))
+	if (config.Get("move_left", key))
 		SetKeyboardBind(key, MOVE_LEFT);
-	if (config.ReadItem("move_right", key))
+	if (config.Get("move_right", key))
 		SetKeyboardBind(key, MOVE_RIGHT);
-	if (config.ReadItem("pause", key))
+	if (config.Get("pause", key))
 		SetKeyboardBind(key, PAUSE);
-	if (config.ReadItem("weapon_1", key))
+	if (config.Get("weapon_1", key))
 		SetKeyboardBind(key, USE_WEAPON_1);
-	if (config.ReadItem("weapon_2", key))
+	if (config.Get("weapon_2", key))
 		SetKeyboardBind(key, USE_WEAPON_2);
-	if (config.ReadItem("use_cooler", key))
+	if (config.Get("use_cooler", key))
 		SetKeyboardBind(key, USE_COOLER);
-	if (config.ReadItem("use_missile", key))
+	if (config.Get("use_missile", key))
 		SetKeyboardBind(key, USE_MISSILE);
 
 	config.SeekSection("Joystick");
 	unsigned int button;
-	if (config.ReadItem("pause", button))
+	if (config.Get("pause", button))
 		SetJoystickBind(button, PAUSE);
-	if (config.ReadItem("weapon_1", button))
+	if (config.Get("weapon_1", button))
 		SetJoystickBind(button, USE_WEAPON_1);
-	if (config.ReadItem("weapon_2", button))
+	if (config.Get("weapon_2", button))
 		SetJoystickBind(button, USE_WEAPON_2);
-	if (config.ReadItem("use_cooler", button))
+	if (config.Get("use_cooler", button))
 		SetJoystickBind(button, USE_COOLER);
-	if (config.ReadItem("use_missile", button))
+	if (config.Get("use_missile", button))
 		SetJoystickBind(button, USE_MISSILE);
 
-	config.ReadItem("sensitivity", sensitivity_);
+	config.Get("sensitivity", sensitivity_);
 }
 
 
-void Input::SaveToConfig(ConfigParser& config) const
+void Input::SaveToConfig(IniParser& config) const
 {
 	config.SeekSection("Keyboard");
-	config.WriteItem("move_up",     action_to_key_[MOVE_UP]);
-	config.WriteItem("move_down",   action_to_key_[MOVE_DOWN]);
-	config.WriteItem("move_left",   action_to_key_[MOVE_LEFT]);
-	config.WriteItem("move_right",  action_to_key_[MOVE_RIGHT]);
-	config.WriteItem("pause",       action_to_key_[PAUSE]);
-	config.WriteItem("weapon_1",    action_to_key_[USE_WEAPON_1]);
-	config.WriteItem("weapon_2",    action_to_key_[USE_WEAPON_2]);
-	config.WriteItem("use_cooler",  action_to_key_[USE_COOLER]);
-	config.WriteItem("use_missile", action_to_key_[USE_MISSILE]);
+	config.Set("move_up",     action_to_key_[MOVE_UP]);
+	config.Set("move_down",   action_to_key_[MOVE_DOWN]);
+	config.Set("move_left",   action_to_key_[MOVE_LEFT]);
+	config.Set("move_right",  action_to_key_[MOVE_RIGHT]);
+	config.Set("pause",       action_to_key_[PAUSE]);
+	config.Set("weapon_1",    action_to_key_[USE_WEAPON_1]);
+	config.Set("weapon_2",    action_to_key_[USE_WEAPON_2]);
+	config.Set("use_cooler",  action_to_key_[USE_COOLER]);
+	config.Set("use_missile", action_to_key_[USE_MISSILE]);
 
 	config.SeekSection("Joystick");
-	config.WriteItem("pause",       action_to_joybutton_[PAUSE]);
-	config.WriteItem("weapon_1",    action_to_joybutton_[USE_WEAPON_1]);
-	config.WriteItem("weapon_2",    action_to_joybutton_[USE_WEAPON_2]);
-	config.WriteItem("use_cooler",  action_to_joybutton_[USE_COOLER]);
-	config.WriteItem("use_missile", action_to_joybutton_[USE_MISSILE]);
-	config.WriteItem("sensitivity", sensitivity_);
+	config.Set("pause",       action_to_joybutton_[PAUSE]);
+	config.Set("weapon_1",    action_to_joybutton_[USE_WEAPON_1]);
+	config.Set("weapon_2",    action_to_joybutton_[USE_WEAPON_2]);
+	config.Set("use_cooler",  action_to_joybutton_[USE_COOLER]);
+	config.Set("use_missile", action_to_joybutton_[USE_MISSILE]);
+	config.Set("sensitivity", sensitivity_);
 }
 
 

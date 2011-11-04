@@ -3,7 +3,8 @@
 
 #include <SFML/Window.hpp>
 
-#include "../utils/ConfigParser.hpp"
+
+class IniParser;
 
 /**
  * Association des événements issus des périphériques aux actions du jeu
@@ -117,12 +118,12 @@ public:
 	/**
 	 * Charger une configuration de bindings
 	 */
-	void LoadFromConfig(ConfigParser& config);
+	void LoadFromConfig(IniParser& config);
 
 	/**
 	 * Sauvegarder les bindings dans une configuration
 	 */
-	void SaveToConfig(ConfigParser& config) const;
+	void SaveToConfig(IniParser& config) const;
 
 private:
 	Input() {};
