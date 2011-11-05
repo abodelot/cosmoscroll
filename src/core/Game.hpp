@@ -123,6 +123,8 @@ private:
 	 */
 	void CheckPurity();
 
+	void BSOD(std::string message);
+
 	sf::RenderWindow app_;
 	bool fullscreen_;
 	bool vsync_;

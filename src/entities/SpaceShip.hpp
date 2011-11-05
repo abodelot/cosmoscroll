@@ -8,7 +8,7 @@
 class SpaceShip: public Entity, public Animated
 {
 public:
-	SpaceShip(const char* animation, int hp, int speed);
+	SpaceShip(const Animation& animation, int hp, int speed);
 	~SpaceShip();
 
 	void SetMovePattern(const char* pattern);

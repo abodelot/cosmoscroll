@@ -1,6 +1,7 @@
 #include "PlayerSave.hpp"
 #include "LevelManager.hpp"
 #include "utils/IniParser.hpp"
+#include "items/ItemManager.hpp"
 
 
 PlayerSave::PlayerSave()
@@ -24,8 +25,10 @@ void PlayerSave::SetItemLevel(ItemData::Type type, int level)
 {
 	if (level < 1)
 		level = 1;
-	else if (level > 3)
-		level = 3;
+
+	if (ItemManager::GetInstance().GetItemData(type, level) == NULL)
+		level = 1;
+
 	items_[type] = level;
 }
 

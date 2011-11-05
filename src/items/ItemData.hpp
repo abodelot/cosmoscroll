@@ -17,7 +17,6 @@ public:
 		_COUNT,
 		_UNSET
 	};
-	static int const MAX_ITEM_LEVEL = 3;
 
 	ItemData();
 

@@ -170,7 +170,8 @@ void PlayerShip::HandleAction(Input::Action action)
 		case Input::USE_COOLER:
 			if (coolers_ > 0)
 			{
-				ParticleSystem::GetInstance().SnowflakeSfx(GetCenter_(), 50);
+				SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("cooler.ogg"));
+				ParticleSystem::GetInstance().SnowflakeSfx(GetCenter_(), 40);
 				--coolers_;
 				panel_.SetCoolers(coolers_);
 				heat_ = 0.f;
@@ -544,7 +545,7 @@ void PlayerShip::KonamiCodeOn()
 	missiles_ = 42;
 	panel_.SetMissiles(42);
 
-	SetCollideFlag(C_IGNORE_DAMAGE);
+	SetCollideFlag(C_IGNORE_HITS);
 
 	weapon1_.SetMultiply(3);
 	weapon2_.SetMultiply(2);
@@ -552,6 +553,3 @@ void PlayerShip::KonamiCodeOn()
 
 	ParticleSystem::GetInstance().AddMessage(GetPosition(), L"For great justice!");
 }
-
-
-

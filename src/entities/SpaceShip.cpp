@@ -35,9 +35,9 @@
 #define SINUS_FREQUENCE 0.02
 
 
-SpaceShip::SpaceShip(const char* animation, int hp, int speed) :
+SpaceShip::SpaceShip(const Animation& animation, int hp, int speed) :
 	Entity(sf::Vector2f(0, 0), hp),
-	Animated(EntityManager::GetInstance().GetAnimation(animation))
+	Animated(animation)
 {
 	SetTeam(Entity::BAD);
 	Reset(*this);

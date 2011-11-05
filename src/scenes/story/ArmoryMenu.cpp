@@ -130,7 +130,7 @@ bool ArmoryMenu::BuyItem()
 		items_[current_type_]->RefreshLabel(); // refresh item widget
 		CreditCounterBase::OnFocus(); // refresh credit counter
 
-		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("cash-register.wav"));
+		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("cash-register.ogg"));
 		return true;
 	}
 	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("disabled.ogg"));
@@ -176,8 +176,12 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 	// current item description
 	dialog_.current_level_details->SetText(data->BuildDescriptionString());
 
-	// if last level already reached
-	if (level == ItemData::MAX_ITEM_LEVEL)
+	// next item level
+	++level;
+	data = ItemManager::GetInstance().GetItemData(type, level);
+
+	// last level reached
+	if (data == NULL)
 	{
 		text = _t("armory.max_level");
 		dialog_.next_level->SetText(text);
@@ -186,10 +190,6 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 	}
 	else
 	{
-		// next item level
-		++level;
-		data = ItemManager::GetInstance().GetItemData(type, level);
-
 		text = _t("armory.item_next_level");
 		wstr_self_replace(text, L"{level}", to_wstring(level));
 		dialog_.next_level->SetText(text);

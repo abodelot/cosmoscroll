@@ -1,13 +1,12 @@
 #include "EntityManager.hpp"
 #include "Asteroid.hpp"
 #include "PlayerShip.hpp"
-
 #include "core/LevelManager.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
 #include "utils/Resources.hpp"
 #include "utils/StringUtils.hpp"
-#include "utils/DIE.hpp"
+#include "utils/Error.hpp"
 #include "utils/I18n.hpp"
 #include "tinyxml/tinyxml.h"
 
@@ -282,9 +281,10 @@ void EntityManager::LoadAnimations(const std::string& filename)
 	TiXmlDocument doc;
 	if (!doc.LoadFile(filename))
 	{
-		DIE("can't open animation definitions: %s (%s)", filename.c_str(), doc.ErrorDesc());
+		Error::Log << "Cannot load animations definition:\n" << doc.ErrorDesc() << "\n";
+		throw Error::Exception();
 	}
-	puts("* loading animations...");
+	std::cout << "* loading animations..." << std::endl;
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	// attributs
 	int width, height, count;
@@ -325,47 +325,38 @@ void EntityManager::LoadSpaceShips(const std::string& filename)
 	TiXmlDocument doc;
 	if (!doc.LoadFile(filename))
 	{
-		DIE("can't load space ships definitions: '%s' (%s)", filename.c_str(), doc.ErrorDesc());
+		Error::Log << "Cannot load spaceships definition:\n" << doc.ErrorDesc();
+		throw Error::Exception();
 	}
-	puts("* loading spaceships...");
+	std::cout << "* loading spaceships..." << std::endl;
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	while (elem != NULL)
 	{
 		int id;
 		if (elem->QueryIntAttribute("id", &id) != TIXML_SUCCESS)
-		{
-			DIE("space ship id is missing");
-		}
+			throw Error::Exception("parse error: spaceship[id] is missing");
 
 		const char* name = elem->Attribute("name");
 		if (name == NULL)
-		{
-			DIE("space ship name is missing")
-		}
+			throw Error::Exception("parse error: spaceship[name] is missing");
 
 		const char* animation = elem->Attribute("animation");
 		if (animation == NULL)
-		{
-			DIE("space ship animation is missing");
-		}
+			throw Error::Exception("parse error: spaceship[animation] is missing");
 
 		int hp;
 		if (elem->QueryIntAttribute("hp", &hp) != TIXML_SUCCESS)
-		{
-			DIE("space ship HP is missing")
-		}
+			throw Error::Exception("parse error: spaceship[hp] is missing");
 
 		int speed;
 		if (elem->QueryIntAttribute("speed", &speed) != TIXML_SUCCESS)
-		{
-			DIE("space ship speed is missing");
-		}
+			throw Error::Exception("parse error: spaceship[speed] is missing");
 
 		int points = 0;
 		elem->QueryIntAttribute("points", &points);
 
 
-		SpaceShip* ship = new SpaceShip(animation, hp, speed);
+		SpaceShip* ship = new SpaceShip(GetAnimation(animation), hp, speed);
 		ship->SetPoints(points);
 
 		const char* move_pattern = elem->Attribute("move");
@@ -379,19 +370,14 @@ void EntityManager::LoadSpaceShips(const std::string& filename)
 			int w_x, w_y;
 			const char* weapon_id = weapon->Attribute("id");
 			if (weapon_id == NULL)
-			{
-				DIE("ship weapon id not found");
-			}
+				throw Error::Exception("parse error: spaceship > weapon[id] is missing");
 
 			if (weapon->QueryIntAttribute("x", &w_x) != TIXML_SUCCESS)
-			{
-				DIE("ship weapon offset x not found");
-			}
+				throw Error::Exception("parese error: spaceship > weapon[x] is missing");
 
 			if (weapon->QueryIntAttribute("y", &w_y) != TIXML_SUCCESS)
-			{
-				DIE("ship weapon offset y not found");
-			}
+				throw Error::Exception("parese error: spaceship > weapon[y] is missing");
+
 			ship->GetWeapon()->Init(weapon_id);
 			ship->GetWeapon()->SetOffset(w_x, w_y);
 		}
@@ -416,18 +402,19 @@ SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 		ship->SetPosition(x, y);
 		return ship;
 	}
-	DIE("space ship id '%d' is not implemented", id);
+	std::cerr << "spaceship id:" << id << " is not defined" << std::endl;
 	return NULL;
 }
 
 
-const Animation& EntityManager::GetAnimation(const char* key) const
+const Animation& EntityManager::GetAnimation(const std::string& key) const
 {
 	AnimationMap::const_iterator it;
 	it = animations_.find(key);
 	if (it == animations_.end())
 	{
-		DIE("animation %s not found\n", key);
+		Error::Log << "Animation " << key << " doesn't exist\n";
+		throw Error::Exception();
 	}
 	return it->second;
 }

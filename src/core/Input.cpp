@@ -52,8 +52,8 @@ void Input::Init(const sf::Input& sfinput)
 	SetKeyboardBind(sf::Key::LControl, USE_COOLER);
 	SetKeyboardBind(sf::Key::Z,        USE_MISSILE);
 	SetKeyboardBind(sf::Key::F1,       TAKE_SCREENSHOT);
-	SetKeyboardBind(sf::Key::D,	   DEBUG_ACTION);
-	SetKeyboardBind(sf::Key::Escape,   EXIT_APP);
+	SetKeyboardBind(sf::Key::D,        DEBUG_ACTION);
+	//SetKeyboardBind(sf::Key::Escape,   EXIT_APP);
 
 	// default joystick binding
 	SetJoystickBind(0, ENTER);

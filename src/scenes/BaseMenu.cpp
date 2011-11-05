@@ -80,7 +80,7 @@ const sf::String& BaseMenu::GetTitle() const
 
 void BaseMenu::OnWidgetFocused()
 {
-	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("menu-select.wav"));
+	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("menu-select.ogg"));
 }
 
 

@@ -11,6 +11,7 @@
 #include "utils/I18n.hpp"
 #include "utils/FileSystem.hpp"
 #include "md5/md5.hpp"
+#include <stdexcept>
 #include "scenes/scenes.hpp"
 #include "BigScrollingMessagingAppliance.hpp"
 
@@ -111,11 +112,17 @@ void Game::Init(const std::string& data_path, int level_set)
 	LevelManager::GetInstance().ParseFile(data_dir_ + XML_LEVELS, level_set);
 	ItemManager::GetInstance().LoadItems(data_dir_ + XML_ITEMS);
 
-	EntityManager& entities = EntityManager::GetInstance();
-	entities.LoadAnimations(data_dir_ + XML_ANIMATIONS);
-	entities.LoadSpaceShips(data_dir_ + XML_SPACESHIPS);
-	entities.SetY(ControlPanel::HEIGHT);
-
+	try
+	{
+		EntityManager& entities = EntityManager::GetInstance();
+		entities.LoadAnimations(data_dir_ + XML_ANIMATIONS);
+		entities.LoadSpaceShips(data_dir_ + XML_SPACESHIPS);
+		entities.SetY(ControlPanel::HEIGHT);
+	}
+	catch (std::runtime_error& error)
+	{
+		BSOD(error.what());
+	}
 	// load config
 #ifdef DEBUG
 	printf("[config] configuration file is: %s\n", config_file_.c_str());
@@ -393,7 +400,6 @@ bool Game::IsVerticalSync() const
 }
 
 
-
 void Game::ReloadScenes()
 {
 	// delete allocated scenes, except the current one
@@ -441,5 +447,44 @@ void Game::PanelOnTop(bool top)
 	{
 		ControlPanel::GetInstance().SetY(Game::HEIGHT - ControlPanel::HEIGHT);
 		EntityManager::GetInstance().SetY(0);
+	}
+}
+
+
+void Game::BSOD(std::string message)
+{
+	sf::String title("COSMIC ERROR");
+	title.SetSize(20);
+	title.SetColor(sf::Color(0, 0, 0x88));
+	sf::Shape title_bg = sf::Shape::Rectangle(-10, -10, title.GetRect().GetWidth() + 10, title.GetRect().GetHeight() + 10, sf::Color(0xaa, 0xaa, 0xaa));
+
+	int x = (WIDTH - title.GetRect().GetWidth()) / 2;
+	title.SetPosition(x, 60);
+	title_bg.SetPosition(x, 60);
+
+	sf::String str;
+	message += "\n\nPress any key to exit.";
+	str.SetText(message);
+	str.SetSize(20);
+	str.SetPosition(50, 200);
+
+	while (true)
+	{
+		sf::Event event;
+		while (app_.GetEvent(event))
+		{
+			if (event.Type == sf::Event::KeyPressed)
+			{
+				app_.Close();
+				exit(EXIT_FAILURE);
+			}
+
+		}
+		app_.Clear(sf::Color(0, 0, 0x88));
+		app_.Draw(title_bg);
+		app_.Draw(title);
+		app_.Draw(str);
+
+		app_.Display();
 	}
 }

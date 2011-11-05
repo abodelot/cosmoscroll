@@ -13,7 +13,7 @@ import os
 import time
 
 TARGET = "bin/cosmoscroll"
-CFLAGS = "-Wall -Wextra -Wwrite-strings -Wno-variadic-macros -ansi -pedantic -Isrc"
+CFLAGS = "-Wall -Wextra -Wwrite-strings -ansi -pedantic -Isrc"
 LIBS = ("sfml-graphics", "sfml-window", "sfml-system", "sfml-audio", "sfml-network")
 
 

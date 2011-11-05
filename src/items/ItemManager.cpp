@@ -1,7 +1,7 @@
 #include "ItemManager.hpp"
 #include "Weapon.hpp"
 #include "tinyxml/tinyxml.h"
-
+#include "utils/Error.hpp"
 
 
 ItemManager& ItemManager::GetInstance()
@@ -23,14 +23,14 @@ ItemManager::~ItemManager()
 }
 
 
-bool ItemManager::LoadItems(const std::string& filename)
+void ItemManager::LoadItems(const std::string& filename)
 {
+	std::cout << "* loading items..." << std::endl;
 	TiXmlDocument doc;
-	puts("* loading items...");
 	if (!doc.LoadFile(filename))
 	{
-		std::cerr << "Can't load item definitions: " << filename << ", " << doc.ErrorDesc() << std::endl;
-		return false;
+		Error::Log << "Cannot load items definitions:\n" << doc.ErrorDesc() << "\n";
+		throw Error::Exception();
 	}
 
 	TiXmlElement* root = doc.RootElement();
@@ -51,7 +51,6 @@ bool ItemManager::LoadItems(const std::string& filename)
 	ParseGenericItems(root, "heatsinks", ItemData::HEATSINK);
 	ParseGenericItems(root, "armors", ItemData::ARMOR);
 	ParseGenericItems(root, "engines", ItemData::ENGINE);
-	return true;
 }
 
 

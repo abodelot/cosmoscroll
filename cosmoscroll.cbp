@@ -196,9 +196,10 @@
 		<Unit filename="src/tinyxml/tinyxml.h" />
 		<Unit filename="src/tinyxml/tinyxmlerror.cpp" />
 		<Unit filename="src/tinyxml/tinyxmlparser.cpp" />
-		<Unit filename="src/utils/DIE.hpp" />
 		<Unit filename="src/utils/DumbMusic.cpp" />
 		<Unit filename="src/utils/DumbMusic.hpp" />
+		<Unit filename="src/utils/Error.cpp" />
+		<Unit filename="src/utils/Error.hpp" />
 		<Unit filename="src/utils/FileSystem.cpp" />
 		<Unit filename="src/utils/FileSystem.hpp" />
 		<Unit filename="src/utils/I18n.cpp" />
