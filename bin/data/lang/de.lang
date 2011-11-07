@@ -1,8 +1,9 @@
-## DEUTSCH
+## GERMAN
+## translated by eXpl0it3r
 
 menu.back = Zurück
-menu.back_main_menu = zum Hauptmenü
-menu.submit = Senden
+menu.back_main_menu = Zurück zum Hauptmenü
+menu.submit = Abschicken
 menu.cancel = Abbrechen
 
 # Main menu
@@ -15,9 +16,9 @@ menu.main.quit = Beenden
 # Story menu
 menu.story.title = Story-Modus
 menu.story.credits = Kredits:\n{credits}
-menu.story.select = Select einer Ebene:
+menu.story.select = Wählen Sie ein Level:
 menu.story.progression = Fortschritt:
-menu.story.intro = Ebene {level}\n\n"{description}"\n\nEnemeis: {count}
+menu.story.intro = Level {level}\n\n"{description}"\n\nGegner: {count}
 menu.story.play = Spielen
 menu.story.armory = Zeughaus
 
@@ -39,48 +40,48 @@ menu.pause.quit = Spiel beenden
 # Arcade menu
 menu.arcade.title = Arcade-Modus
 menu.arcade.play = Spielen
-menu.arcade.best_scores = Besten scoren
+menu.arcade.best_scores = Zeige bester Score
 
 # Best scores menu
-menu.best_scores.title = Online Rekorden
+menu.best_scores.title = Online Highscores
 
 # Game over menu
 menu.gameover.title = Game Over
-menu.gameover.pseudo = Ihr Name:
-menu.gameover.send_score = Meine Ergebnis senden
-menu.gameover.play_again = Neustarten
-menu.gameover.new_record = Ihr Ergebnis: {score}\n    Neuer Rekord !
-menu.gameover.no_record = Ihr Ergebnis: {score}\n    Versuchen Sie es erneut...
-menu.gameover.error_cheat = Cheats verboten!
-menu.gameover.error_altered_res = Senden verbotene, geändert Version des Spiels
+menu.gameover.pseudo = Dein Name:
+menu.gameover.send_score = Sende meinen Score
+menu.gameover.play_again = Noch einmal spielen
+menu.gameover.new_record = Dein Score: {score}\n    Neuer Highscore!
+menu.gameover.no_record = Dein Score: {score}\n    Streng dich an!
+menu.gameover.error_cheat = Upload verweigert: Du hast gecheated!
+menu.gameover.error_altered_res = Upload verweigert: Spielressourcen wurden modifiziert!
 
 # Options menu
 menu.options.title = Optionen
-menu.options.keyboard = Tastatur-Layout
-menu.options.joystick = Joystick-Layout
+menu.options.keyboard = Tastatur Einstellungen
+menu.options.joystick = Joystick Einstellungen
 menu.options.audio = Sound und Musik
 menu.options.settings = Preferenzen
 
 # Keyboard menu
-menu.keyboard.title = Tastatur-Layout
+menu.keyboard.title = Tastatur Einstellungen
 
 # Joystick menu
-menu.joystick.title = Joystick-Layout
-menu.joystick.button = Button
-menu.joystick.sensitivity = Empfindlichkeit des Joysticks:
+menu.joystick.title = Joystick Einstellungen
+menu.joystick.button = Knopf
+menu.joystick.sensitivity = Joystick Empfindlichkeit:
 
 # Audio menu
 menu.audio.title = Sound und Musik
 menu.audio.music = Musik:
-menu.audio.enable_music = Musik ON:
-menu.audio.music_volume = Volumen der Musik:
-menu.audio.enable_sound = Sound ON:
-menu.audio.sound_volume = Volumen des Sound:
+menu.audio.enable_music = Aktiviere Musik:
+menu.audio.music_volume = Musik Lautstärke:
+menu.audio.enable_sound = Aktiviere Soundeffekte:
+menu.audio.sound_volume = Soundeffekte Lautstärke:
 
 # Settings menu
 menu.settings.title = Preferenzen
 menu.settings.vsync = Vertikale Synchronisation:
-menu.settings.fullscreen = Full Screen:
+menu.settings.fullscreen = Vollbildmodus:
 menu.settings.language = Sprache:
 
 # About menu
@@ -91,15 +92,15 @@ menu.about.licence = Lizenz:
 
 # End of game
 endgame.game_over = Game Over
-endgame.end_level = Ebene {level} fertig !\nKredits genannt: +{credits}
-endgame.end_last_level = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\ngennant Kredits: +{credits}
+endgame.end_level = Level {level} abgeschlossen!\nKredits genannt: +{credits}
+endgame.end_last_level = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\nKredits genannt: +{credits}
 
 # Control panel
-panel.bar_hp = Shell
+panel.bar_hp = Schiff
 panel.bar_shield = Schirm
-panel.bar_heat = Wärme
+panel.bar_heat = Hitze
 panel.overheat = Überhitzung!
-panel.level = Ebene {level}
+panel.level = Level {level}
 panel.record = Rekord: {record}
 panel.timer = Zeit: {min}:{sec}
 panel.points = Punkte: {points}
@@ -107,10 +108,10 @@ panel.points = Punkte: {points}
 # Bonus
 bonus.hp = Lebenspunkte
 bonus.shield = Schirm
-bonus.cooler = Eiscube
-bonus.missile = Missile
-bonus.double_shot = Double-Schiessen
-bonus.triple_shot = Triple-Schiessen
+bonus.cooler = Kühler
+bonus.missile = Rakete
+bonus.double_shot = Doppelschuss
+bonus.triple_shot = Tripelschuss
 bonus.speed = Speed
 bonus.banana = Super Banana!
 
@@ -122,13 +123,13 @@ action.right = Rechts
 action.weapon_1 = Waffe 1
 action.weapon_2 = Waffe 2
 action.pause = Pause
-action.cooler = Bonus Eiscube verwenden
-action.missile = Bonus Missile verwenden
+action.cooler = Nutze Kühlerbonus
+action.missile = Nutze Raketenbonus
 
 # Ask input
-input.press_key = Drücken Sie eine beliebige Taste auf der\nTastatur, um die Aktion eingestellt
-input.press_button = Drücken Sie eine Taste auf dem Controller,\num die Aktion eingestellt
-input.cancel = (esc abbrechen)
+input.press_key = Drücke eine Taste um eine Aktion\ndafür festzulegen
+input.press_button = Drücke einen Joystickknopf um eine Aktion\ndafür festzulegen
+input.cancel = (drücke Escape um abzubrechen)
 
 # Items
 item.shield = Energie Schild

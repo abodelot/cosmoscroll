@@ -162,7 +162,7 @@ bool Game::LoadConfig(const std::string& filename)
 		config.SeekSection("Settings");
 		// language
 		std::string lang = config.Get("language");
-		if (!lang.empty() || !I18n::GetInstance().LoadFromCode(lang))
+		if (lang.empty() || !I18n::GetInstance().LoadFromCode(lang))
 		{
 			I18n::GetInstance().LoadSystemLanguage();
 		}
