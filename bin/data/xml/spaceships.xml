@@ -6,10 +6,10 @@
 	</ship>
 	<ship id="5" name="Mine" animation="mine" hp="14" move="magnet" speed="50" points="2"/>
 	<ship id="7" name="Heavy-mine" animation="h-mine" hp="22" move="magnet" speed="65" points="5"/>
-	<ship id="3" name="Interceptor" animation="interceptor" hp="8" speed="35" move="straight" attack="auto_aim" points="3">
+	<ship id="3" name="Interceptor" animation="interceptor" hp="8" speed="42" move="straight" attack="auto_aim" points="3">
 		<weapon id="laser-green" x="0" y="32"/>
 	</ship>
-	<ship id="6" name="Heavy-interceptor" animation="h-interceptor" hp="12" speed="25" move="sinus" attack="auto_aim" points="5">
+	<ship id="6" name="Heavy-interceptor" animation="h-interceptor" hp="12" speed="42" move="sinus" attack="auto_aim" points="5">
 		<weapon id="laser-pink" x="0" y="24"/>
 	</ship>
 	<ship id="4" name="Saucer" animation="saucer" hp="6" speed="80" move="sinus" attack="auto_aim" points="4">

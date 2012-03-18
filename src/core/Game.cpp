@@ -478,13 +478,11 @@ void Game::BSOD(std::string message)
 				app_.Close();
 				exit(EXIT_FAILURE);
 			}
-
 		}
 		app_.Clear(sf::Color(0, 0, 0x88));
 		app_.Draw(title_bg);
 		app_.Draw(title);
 		app_.Draw(str);
-
 		app_.Display();
 	}
 }

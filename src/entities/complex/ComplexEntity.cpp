@@ -2,7 +2,7 @@
 #include "utils/Math.hpp"
 #include "core/ParticleSystem.hpp"
 
-#define DECOR_SPEED -60
+#define DECOR_SPEED -45
 
 ComplexEntity::ComplexEntity(const sf::Vector2f& pos):
 	Entity(pos, 1)

@@ -110,8 +110,23 @@ const char* LevelManager::GetDescription() const
 
 const sf::Image* LevelManager::GetBackgroundImage() const
 {
-	const char* p = GetLevelElement(current_level_)->Attribute("bg_image");
+	const char* p = GetLevelElement(current_level_)->Attribute("background_img");
 	return p != NULL ? &Resources::GetImage(p) : NULL;
+}
+
+
+const sf::Image* LevelManager::GetDecorImage() const
+{
+	const char* p = GetLevelElement(current_level_)->Attribute("decor_img");
+	return p != NULL ? &Resources::GetImage(p) : NULL;
+}
+
+
+int LevelManager::GetDecorHeight() const
+{
+	int height = 0;
+	GetLevelElement(current_level_)->QueryIntAttribute("decor_height", &height);
+	return height;
 }
 
 

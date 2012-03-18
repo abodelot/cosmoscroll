@@ -183,9 +183,7 @@ private:
 	int height_;
 
 	Mode mode_;
-	const sf::Image* bg_image_;
-	sf::Sprite background_;
-	sf::Sprite background2_;
+
 	ParticleSystem& particles_;
 
 	PlayerShip* player_;
@@ -197,6 +195,22 @@ private:
 
 	int max_droppable_index_;
 	int max_droppable_points_;
+
+	struct ParallaxLayer
+	{
+		float scrolling_speed_;
+		const sf::Image* image_;
+		sf::Sprite background_;
+		sf::Sprite background2_;
+
+		ParallaxLayer();
+		void OnUpdate(float frametime);
+		void SetScrollingTexture(const sf::Image* image);
+		void Draw(sf::RenderTarget& target) const;
+	};
+
+	ParallaxLayer background_;
+	ParallaxLayer decor_;
 };
 
 

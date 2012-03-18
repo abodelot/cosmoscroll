@@ -16,9 +16,8 @@
 	</weapons>
 	<shields>
 		<shield level="1" points="3" />
-		<shield level="2" points="6" price="1" />
-		<shield level="3" points="8" price="50" />
-        <shield level="4" points="42" price="200" />
+		<shield level="2" points="6" price="50" />
+		<shield level="3" points="8" price="250" />
 	</shields>
 	<engines>
 		<engine level="1" speed="140" />

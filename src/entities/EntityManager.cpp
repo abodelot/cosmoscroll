@@ -23,6 +23,9 @@ valeur max :  	apparait à partir de :
 */
 #define DROPPABLE_STEP 20
 
+// background image scrolling speed (if any)
+#define BACKGROUND_SPEED 20
+#define DECOR_SPEED 45
 
 EntityManager& EntityManager::GetInstance()
 {
@@ -42,7 +45,9 @@ EntityManager::EntityManager():
 	game_over_ = false;
 	mode_ = MODE_ARCADE;
 	timer_ = arcade_record_ = 0.f;
-	bg_image_ = NULL;
+
+	background_.scrolling_speed_ = BACKGROUND_SPEED;
+	decor_.scrolling_speed_ = DECOR_SPEED;
 }
 
 
@@ -91,23 +96,19 @@ void EntityManager::InitMode(Mode mode)
 				player_->SetPosition(0, height_ / 2);
 				player_->Initialize();
 			}
-			bg_image_ = LevelManager::GetInstance().GetBackgroundImage();
-			if (bg_image_ != NULL)
-			{
-				sf::Sprite temp(*bg_image_);
-				background_ = temp;
-				background_.SetX(0);
-				background2_ = temp;
-				background2_.SetX(bg_image_->GetWidth());
-			}
-			particles_.AddStars(LevelManager::GetInstance().GetStarsCount());
+			{LevelManager& levels = LevelManager::GetInstance();
+			background_.SetScrollingTexture(levels.GetBackgroundImage());
+			decor_.SetScrollingTexture(levels.GetDecorImage());
+			//decor_height_ = levels.GetDecorHeight();
+			particles_.AddStars(levels.GetStarsCount());}
 			break;
 
 		case MODE_ARCADE:
 			more_bad_guys_ = &EntityManager::MoreBadGuys_ARCADE;
 			// on démarre toujours le mode arcade avec un nouveau vaisseau
 			RespawnPlayer();
-			bg_image_ = NULL;
+			// disable background image
+			background_.SetScrollingTexture(NULL);
 			std::wstring game_info = wstr_replace(_t("panel.record"), L"{record}", to_wstring(arcade_record_));
 			ControlPanel::GetInstance().SetGameInfo(game_info);
 			particles_.AddStars();
@@ -197,18 +198,9 @@ void EntityManager::Update(float frametime)
 	}
 	particles_.Update(frametime);
 
-	// scrolling background image
-	if (bg_image_ != NULL)
-	{
-		float x = background_.GetPosition().x - 40 * frametime;
-		float width = bg_image_->GetWidth();
-		if (x <= -width)
-		{
-			x = 0;
-		}
-		background_.SetX(x);
-		background2_.SetX(x + width);
-	}
+	// parallax scrolling
+	background_.OnUpdate(frametime);
+	decor_.OnUpdate(frametime);
 
 	timer_ += frametime;
 }
@@ -260,12 +252,10 @@ void EntityManager::UpdateArcadeRecord()
 
 void EntityManager::Render(sf::RenderTarget& target) const
 {
-	// draw scrolling background image
-	if (bg_image_ != NULL)
-	{
-		target.Draw(background_);
-		target.Draw(background2_);
-	}
+	// draw scrolling background images
+	background_.Draw(target);
+	decor_.Draw(target);
+
 	particles_.Show(target);
 	// draw each managed entity
 	for (EntityList::const_iterator it = entities_.begin(); it != entities_.end(); ++it)
@@ -498,4 +488,54 @@ void EntityManager::RespawnPlayer()
 	sf::Vector2f position(50, height_ / 2);
 	player_ = new PlayerShip(position, "player");
 	AddEntity(player_);
+}
+
+
+
+EntityManager::ParallaxLayer::ParallaxLayer()
+{
+	image_ = NULL;
+	scrolling_speed_ = 0.f;
+	background_.SetPosition(0.f, 0.f);
+	background2_.SetPosition(0.f, 0.f);
+}
+
+
+void EntityManager::ParallaxLayer::OnUpdate(float frametime)
+{
+	if (image_ != NULL)
+	{
+		float x = background_.GetPosition().x - scrolling_speed_ * frametime;
+		float width = image_->GetWidth();
+		if (x <= -width)
+		{
+			x = 0;
+		}
+		background_.SetX(x);
+		background2_.SetX(x + width);
+	}
+}
+
+
+void EntityManager::ParallaxLayer::SetScrollingTexture(const sf::Image* image)
+{
+	image_ = image;
+	if (image != NULL)
+	{
+		sf::Sprite temp(*image);
+		background_ = temp;
+		background_.SetX(0);
+		background2_ = temp;
+		background2_.SetX(image->GetWidth());
+	}
+}
+
+
+void EntityManager::ParallaxLayer::Draw(sf::RenderTarget& target) const
+{
+	if (image_ != NULL)
+	{
+		target.Draw(background_);
+		target.Draw(background2_);
+	}
 }

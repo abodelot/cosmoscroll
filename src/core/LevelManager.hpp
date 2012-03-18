@@ -75,6 +75,8 @@ public:
 	 */
 	const sf::Image* GetBackgroundImage() const;
 
+	const sf::Image* GetDecorImage() const;
+	int GetDecorHeight() const;
 	int GetStarsCount() const;
 
 	/**
