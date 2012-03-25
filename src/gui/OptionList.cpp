@@ -56,8 +56,8 @@ void OptionList::BuildBoxes()
 	int pad_text_width = text_size_ + BOX_PADDING * 2;
 	const WidgetStyle& style = GetOwner()->GetWidgetStyle();
 
-	inside_box_ = sf::Shape::Rectangle(0, 0,
-		inside_box_width, pad_text_width, sf::Color::White, 1, style.global_border_color);
+	inside_box_ = sf::Shape::Rectangle(0, 0, inside_box_width, pad_text_width, sf::Color::White, 1, style.global_border_color);
+	inside_box_.SetColor(style.optlist_bg_color);
 	inside_box_.SetX(pad_text_width);
 
 	box_ = sf::Shape::Rectangle(0, 0, box_width, pad_text_width, sf::Color::White, 1, style.global_border_color);
@@ -81,7 +81,7 @@ void OptionList::AddOption(const sf::Unicode::Text& option, const std::string& v
 	sf::String str;
 	str.SetText(option);
 	str.SetSize(text_size_);
-	str.SetColor(sf::Color::Black);
+	str.SetColor(GetOwner()->GetWidgetStyle().label_text_color);
 	str.SetFont(*GetOwner()->GetWidgetStyle().global_font);
 
 	if (current_opt_ == -1)
