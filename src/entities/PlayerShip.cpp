@@ -354,6 +354,7 @@ void PlayerShip::TakeDamage(int damage)
 	if (shield_ > 0)
 	{
 		shield_ -= damage;
+		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("shield-damage.ogg"));
 		p.RemoveShield(this);
 		if (shield_ > 0)
 		{
@@ -361,7 +362,6 @@ void PlayerShip::TakeDamage(int damage)
 		}
 		else
 		{
-			SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("warp.ogg"));
 			shield_ = 0;
 		}
 		panel_.SetShield(shield_);
@@ -369,6 +369,7 @@ void PlayerShip::TakeDamage(int damage)
 	else
 	{
 		Entity::TakeDamage(damage);
+		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("ship-damage.ogg"));
 		panel_.SetShipHP(GetHP());
 	}
 }

@@ -42,14 +42,6 @@ Game& Game::GetInstance()
 Game::Game():
 	input_(Input::GetInstance())
 {
-	// create window
-	vsync_ = true;
-	SetFullscreen(false);
-
-	// HACK: display loading screen as early as possible
-	sf::String temp("loading..."); app_.Clear() ;app_.Draw(temp); app_.Display();
-
-	config_file_ = FileSystem::InitSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
 }
 
 
@@ -99,12 +91,19 @@ void Game::OverrideConfigFile(const std::string& config_file)
 
 void Game::Init(const std::string& data_path, int level_set)
 {
+	config_file_ = FileSystem::InitSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
+
 	input_.Init(app_.GetInput());
 
 	// init resources directory
 	data_dir_ = current_dir_ + data_path;
 	Resources::SetDataPath(data_dir_);
 	I18n::GetInstance().SetDataPath(data_dir_);
+
+	// create window and display loading screen as early as possible
+	vsync_ = true;
+	SetFullscreen(false);
+	sf::String temp("loading..."); app_.Clear() ;app_.Draw(temp); app_.Display();
 
 	CheckPurity();
 

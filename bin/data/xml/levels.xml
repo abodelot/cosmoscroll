@@ -155,11 +155,12 @@
 			<call func="scoot_line_5"/>
 		</level>
 
-		<level desc="This doesn't smell good." background_img="gui/background-spacehulk.png" stars="0">
+		<level desc="This doesn't smell good." background_img="gui/background-spacehulk.png"
+		 decor_img="gui/decor-layer.png" decor_height="28" stars="0">
 			<!-- LVL3: we introduce interceptor and mines -->
 			<loop count="2">
 				<decor id="gate" y="0" />
-				<decor id="canon" y="261" t="5"/>
+				<decor id="canon" y="261" t="6"/>
 				<ship id="2" y="205" t="6"/>
 				<ship id="2" y="210" t="0.5"/>
 				<ship id="3" y="200" t="1"/>
@@ -168,7 +169,7 @@
 			<ship id="2" y="40"/>
 			<call func="scoot_line_3"/>
 			<ship id="3" y="200" t="3"/>
-			<ship id="3" y="20" t="1.2"/>
+			<ship id="3" y="30" t="1.2"/>
 			<ship id="2" y="180" t="1.2"/>
 			<ship id="3" y="260" t="1.2"/>
 			<ship id="2" y="300" t="1.2"/>
@@ -176,11 +177,11 @@
 			<ship id="3" y="100" t="1.2"/>
 			<ship id="2" y="180" t="1.2"/>
 			<ship id="3" y="100" t="1.2"/>
-			<ship id="3" y="10" t="1.2"/>
+			<ship id="3" y="30" t="1.2"/>
 			<ship id="3" y="260" t="1.2"/>
 			<wait t="3"/>
 			<loop count="2">
-				<ship id="1" y="070" t="1.0"/>
+				<ship id="1" y="70" t="1.0"/>
 				<ship id="1" y="100"/>
 				<ship id="1" y="130"/>
 				<ship id="1" y="160"/>
@@ -192,7 +193,7 @@
 				<ship id="1" y="350"/>
 			</loop>
 			<loop count="2">
-				<ship id="1" y="070" t="1.0"/>
+				<ship id="1" y="70" t="1.0"/>
 				<ship id="1" y="100"/>
 				<ship id="1" y="130"/>
 				<ship id="1" y="160"/>
@@ -226,7 +227,8 @@
 			</loop>
 		</level>
 
-		<level desc="Where did I put those keys again?" background_img="gui/background-spacehulk.png" decor_img="gui/decor-layer.png" decor_height="28" stars="0">
+		<level desc="Where did I put those keys again?" background_img="gui/background-spacehulk.png"
+		 decor_img="gui/decor-layer.png" decor_height="28" stars="0">
 			<!-- LVL4: way more interceptors + miniboss x1 -->
 			<ship id="5" y="120"/>
 			<decor id="gate" y="0"/>
@@ -252,7 +254,7 @@
 			<ship id="5" y="123" t="1"/>
 			<ship id="2" y="200" t="4.0"/>
 			<ship id="2" y="230" t="0.8"/>
-			<ship id="5" y="20"/>
+			<ship id="5" y="30"/>
 			<ship id="2" y="260" t="0.8"/>
 			<ship id="2" y="290" t="0.8"/>
 			<ship id="5" y="150"/>

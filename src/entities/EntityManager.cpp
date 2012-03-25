@@ -48,6 +48,7 @@ EntityManager::EntityManager():
 
 	background_.scrolling_speed_ = BACKGROUND_SPEED;
 	decor_.scrolling_speed_ = DECOR_SPEED;
+	decor_height_ = 0;
 }
 
 
@@ -99,7 +100,7 @@ void EntityManager::InitMode(Mode mode)
 			{LevelManager& levels = LevelManager::GetInstance();
 			background_.SetScrollingTexture(levels.GetBackgroundImage());
 			decor_.SetScrollingTexture(levels.GetDecorImage());
-			//decor_height_ = levels.GetDecorHeight();
+			decor_height_ = levels.GetDecorHeight();
 			particles_.AddStars(levels.GetStarsCount());}
 			break;
 
@@ -109,6 +110,7 @@ void EntityManager::InitMode(Mode mode)
 			RespawnPlayer();
 			// disable background image
 			background_.SetScrollingTexture(NULL);
+			decor_height_ = 0;
 			std::wstring game_info = wstr_replace(_t("panel.record"), L"{record}", to_wstring(arcade_record_));
 			ControlPanel::GetInstance().SetGameInfo(game_info);
 			particles_.AddStars();
@@ -158,7 +160,6 @@ void EntityManager::Update(float frametime)
 {
 	EntityList::iterator it, it2;
 
-	// update and collision
 	sf::FloatRect r1, r2;
 	for (it = entities_.begin(); it != entities_.end();)
 	{
@@ -196,6 +197,24 @@ void EntityManager::Update(float frametime)
 		}
 
 	}
+
+	// update and collision
+	if (decor_height_ > 0)
+	{
+		// decor height applies only on player
+		float player_y = player_->GetPosition().y;
+		if (player_y < decor_height_)
+		{
+			player_->SetY(decor_height_ + 1);
+			player_->TakeDamage(1);
+		}
+		else if ((player_y + player_->GetSize().y) > (height_ - decor_height_))
+		{
+			player_->SetY(height_ - decor_height_ - player_->GetSize().y - 1);
+			player_->TakeDamage(1);
+		}
+	}
+
 	particles_.Update(frametime);
 
 	// parallax scrolling

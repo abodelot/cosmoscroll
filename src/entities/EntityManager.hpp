@@ -181,6 +181,7 @@ private:
 
 	int width_;
 	int height_;
+	int decor_height_;
 
 	Mode mode_;
 

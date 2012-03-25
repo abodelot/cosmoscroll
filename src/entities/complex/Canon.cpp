@@ -19,7 +19,7 @@ Canon::Canon(const sf::Vector2f& position): ComplexEntity(position)
 
 	weapon_.Init("decor-canon");
 	weapon_.SetOwner(this);
-	weapon_.SetOffset(80, 8);
+	weapon_.SetOffset(78, 8);
 }
 
 
