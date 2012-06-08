@@ -47,8 +47,8 @@ void Input::Init(const sf::Input& sfinput)
 	SetKeyboardBind(sf::Key::PageUp,   PANEL_UP);
 	SetKeyboardBind(sf::Key::PageDown, PANEL_DOWN);
 	SetKeyboardBind(sf::Key::Escape,   PAUSE);
-	SetKeyboardBind(sf::Key::Space,    USE_WEAPON_1);
-	SetKeyboardBind(sf::Key::A,        USE_WEAPON_2);
+	SetKeyboardBind(sf::Key::Space,    USE_LASER);
+	SetKeyboardBind(sf::Key::A,        USE_PLASMA);
 	SetKeyboardBind(sf::Key::LControl, USE_COOLER);
 	SetKeyboardBind(sf::Key::Z,        USE_MISSILE);
 	SetKeyboardBind(sf::Key::F1,       TAKE_SCREENSHOT);
@@ -57,8 +57,8 @@ void Input::Init(const sf::Input& sfinput)
 	// default joystick binding
 	SetJoystickBind(0, ENTER);
 	SetJoystickBind(1, PAUSE);
-	SetJoystickBind(6, USE_WEAPON_1);
-	SetJoystickBind(7, USE_WEAPON_2);
+	SetJoystickBind(6, USE_LASER);
+	SetJoystickBind(7, USE_PLASMA);
 	SetJoystickBind(2, USE_COOLER);
 	SetJoystickBind(3, USE_MISSILE);
 
@@ -185,10 +185,10 @@ const std::wstring& Input::ActionToString(Action action)
 			return _t("action.left");
 		case MOVE_RIGHT:
 			return _t("action.right");
-		case USE_WEAPON_1:
-			return _t("action.weapon_1");
-		case USE_WEAPON_2:
-			return _t("action.weapon_2");
+		case USE_LASER:
+			return _t("action.laser");
+		case USE_PLASMA:
+			return _t("action.plasma");
 		case USE_COOLER:
 			return _t("action.cooler");
 		case USE_MISSILE:
@@ -403,10 +403,10 @@ void Input::LoadFromConfig(IniParser& config)
 		SetKeyboardBind(key, MOVE_LEFT);
 	if (config.Get("move_right", key))
 		SetKeyboardBind(key, MOVE_RIGHT);
-	if (config.Get("weapon_1", key))
-		SetKeyboardBind(key, USE_WEAPON_1);
-	if (config.Get("weapon_2", key))
-		SetKeyboardBind(key, USE_WEAPON_2);
+	if (config.Get("laser", key))
+		SetKeyboardBind(key, USE_LASER);
+	if (config.Get("plasma", key))
+		SetKeyboardBind(key, USE_PLASMA);
 	if (config.Get("use_cooler", key))
 		SetKeyboardBind(key, USE_COOLER);
 	if (config.Get("use_missile", key))
@@ -416,10 +416,10 @@ void Input::LoadFromConfig(IniParser& config)
 	unsigned int button;
 	if (config.Get("pause", button))
 		SetJoystickBind(button, PAUSE);
-	if (config.Get("weapon_1", button))
-		SetJoystickBind(button, USE_WEAPON_1);
-	if (config.Get("weapon_2", button))
-		SetJoystickBind(button, USE_WEAPON_2);
+	if (config.Get("laser", button))
+		SetJoystickBind(button, USE_LASER);
+	if (config.Get("plasma", button))
+		SetJoystickBind(button, USE_PLASMA);
 	if (config.Get("use_cooler", button))
 		SetJoystickBind(button, USE_COOLER);
 	if (config.Get("use_missile", button))
@@ -436,15 +436,15 @@ void Input::SaveToConfig(IniParser& config) const
 	config.Set("move_down",   action_to_key_[MOVE_DOWN]);
 	config.Set("move_left",   action_to_key_[MOVE_LEFT]);
 	config.Set("move_right",  action_to_key_[MOVE_RIGHT]);
-	config.Set("weapon_1",    action_to_key_[USE_WEAPON_1]);
-	config.Set("weapon_2",    action_to_key_[USE_WEAPON_2]);
+	config.Set("laser",       action_to_key_[USE_LASER]);
+	config.Set("plasma",      action_to_key_[USE_PLASMA]);
 	config.Set("use_cooler",  action_to_key_[USE_COOLER]);
 	config.Set("use_missile", action_to_key_[USE_MISSILE]);
 
 	config.SeekSection("Joystick");
 	config.Set("pause",       action_to_joybutton_[PAUSE]);
-	config.Set("weapon_1",    action_to_joybutton_[USE_WEAPON_1]);
-	config.Set("weapon_2",    action_to_joybutton_[USE_WEAPON_2]);
+	config.Set("laser",       action_to_joybutton_[USE_LASER]);
+	config.Set("plasma",      action_to_joybutton_[USE_PLASMA]);
 	config.Set("use_cooler",  action_to_joybutton_[USE_COOLER]);
 	config.Set("use_missile", action_to_joybutton_[USE_MISSILE]);
 	config.Set("sensitivity", sensitivity_);

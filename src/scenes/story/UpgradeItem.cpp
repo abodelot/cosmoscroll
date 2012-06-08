@@ -12,12 +12,12 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 	int x = 0, y = 0;
 	switch (type)
 	{
-		case ItemData::LASER1:
+		case ItemData::LASER_CANNON:
 			halo_.SetImage(Resources::GetImage("gui/halo-laser1.png"));
 			x = 496;
 			y = 249;
 			break;
-		case ItemData::LASER2:
+		case ItemData::PLASMA_CANNON:
 			halo_.SetImage(Resources::GetImage("gui/halo-laser2.png"));
 			x = 494;
 			y = 263;
@@ -58,7 +58,7 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 	label_.SetPosition(x, -20);
 
 	// label background
-	label_bg_ = sf::Shape::Rectangle(-4, -4, label_.GetRect().GetWidth() + 4, label_.GetRect().GetHeight() + 4, sf::Color(0, 0, 0, 128), 1, sf::Color::White);
+	label_bg_ = sf::Shape::Rectangle(-4, -4, label_.GetRect().GetWidth() + 4, label_.GetRect().GetHeight() + 6, sf::Color(0, 0, 0, 128));
 	label_bg_.SetPosition(label_.GetPosition());
 }
 

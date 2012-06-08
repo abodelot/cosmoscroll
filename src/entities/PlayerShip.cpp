@@ -85,8 +85,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	konami_code_[5] = Input::MOVE_RIGHT;
 	konami_code_[6] = Input::MOVE_LEFT;
 	konami_code_[7] = Input::MOVE_RIGHT;
-	konami_code_[8] = Input::USE_WEAPON_2;
-	konami_code_[9] = Input::USE_WEAPON_1;
+	konami_code_[8] = Input::USE_PLASMA;
+	konami_code_[9] = Input::USE_LASER;
 	current_konami_event_ = 0;
 	konami_code_activated_ = false;
 
@@ -138,12 +138,12 @@ void PlayerShip::Initialize()
 	panel_.SetHeat(heat_);
 
 	// weapon1
-	int weapon1_lvl = save.LevelOf(ItemData::LASER1);
+	int weapon1_lvl = save.LevelOf(ItemData::LASER_CANNON);
 	const WeaponData* weapon1_data = items.GetWeaponData("hellfire", weapon1_lvl);
 	weapon1_data->InitWeapon(&weapon1_);
 
 	// weapon2
-	int weapon2_lvl = save.LevelOf(ItemData::LASER2);
+	int weapon2_lvl = save.LevelOf(ItemData::PLASMA_CANNON);
 	const WeaponData* weapon2_data = items.GetWeaponData("laser-blue", weapon2_lvl);
 	weapon2_data->InitWeapon(&weapon2_);
 }
@@ -248,11 +248,11 @@ void PlayerShip::Update(float frametime)
 	if (!overheated_)
 	{
 		float h = 0.f;
-		if (input_.HasInput(Input::USE_WEAPON_1))
+		if (input_.HasInput(Input::USE_LASER))
 		{
 			h += weapon1_.Shoot(0);
 		}
-		if (input_.HasInput(Input::USE_WEAPON_2))
+		if (input_.HasInput(Input::USE_PLASMA))
 		{
 			h += weapon2_.Shoot(0);
 		}
@@ -267,7 +267,7 @@ void PlayerShip::Update(float frametime)
 		if (h > 0)
 			AudibleHeatingCue(frametime);
 	}
-	else if (input_.HasInput(Input::USE_WEAPON_1) || input_.HasInput(Input::USE_WEAPON_2))
+	else if (input_.HasInput(Input::USE_LASER) || input_.HasInput(Input::USE_PLASMA))
 	{
 		SoundSystem::GetInstance().PlaySound(*snd_disabled_);
 	}

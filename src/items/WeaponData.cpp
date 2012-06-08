@@ -41,9 +41,9 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 	id_ = p;
 	// TODO: torcheballe
 	if (id_ == "hellfire")
-		SetType(ItemData::LASER1);
+		SetType(ItemData::LASER_CANNON);
 	else if (id_ == "laser-blue")
-		SetType(ItemData::LASER2);
+		SetType(ItemData::PLASMA_CANNON);
 
 	// image
 	p = elem->Attribute("image");

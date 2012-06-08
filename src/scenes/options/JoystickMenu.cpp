@@ -14,8 +14,8 @@ JoystickMenu::JoystickMenu()
 
 	gui::FormLayout form(110, 110);
 	form.SetSpacing(20, 16);
-	AddRow(form, Input::USE_WEAPON_1, &but_weapon1_);
-	AddRow(form, Input::USE_WEAPON_2, &but_weapon2_);
+	AddRow(form, Input::USE_LASER, &but_weapon1_);
+	AddRow(form, Input::USE_PLASMA, &but_weapon2_);
 	AddRow(form, Input::USE_MISSILE, &but_missile_);
 	AddRow(form, Input::USE_COOLER, &but_cooler_);
 	AddRow(form, Input::PAUSE, &but_pause_);
@@ -33,9 +33,9 @@ JoystickMenu::JoystickMenu()
 void JoystickMenu::OnFocus()
 {
 	BaseMenu::OnFocus();
-	but_weapon1_->SetText(GetButtonLabel(Input::USE_WEAPON_1));
+	but_weapon1_->SetText(GetButtonLabel(Input::USE_LASER));
 
-	but_weapon2_->SetText(GetButtonLabel(Input::USE_WEAPON_2));
+	but_weapon2_->SetText(GetButtonLabel(Input::USE_PLASMA));
 
 	but_missile_->SetText(GetButtonLabel(Input::USE_MISSILE));
 

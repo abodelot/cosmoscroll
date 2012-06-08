@@ -156,7 +156,7 @@
 		</level>
 
 		<level desc="This doesn't smell good." background_img="gui/background-spacehulk.png"
-		 decor_img="gui/decor-layer.png" decor_height="28" stars="0">
+		 decor_img="gui/decor-layer.png" decor_height="24" stars="0">
 			<!-- LVL3: we introduce interceptor and mines -->
 			<loop count="2">
 				<decor id="gate" y="0" />
@@ -228,11 +228,11 @@
 		</level>
 
 		<level desc="Where did I put those keys again?" background_img="gui/background-spacehulk.png"
-		 decor_img="gui/decor-layer.png" decor_height="28" stars="0">
+		 decor_img="gui/decor-layer.png" decor_height="24" stars="0">
 			<!-- LVL4: way more interceptors + miniboss x1 -->
 			<ship id="5" y="120" t="1"/>
-			<decor id="guntower" t="1"/>
-			<ship id="2" y="200" t="2"/>
+			<decor id="guntower" t="2"/>
+			<ship id="2" y="200" t="5"/>
 			<ship id="3" y="60" t="1"/>
 			<ship id="3" y="80" t="2"/>
 			<ship id="2" y="305" t="1"/>
@@ -240,7 +240,7 @@
 			<shio id="2" y="236" t="2"/>
 			<decor id="gate" t="2"/>
 
-			<ship id="3" y="200" t="5"/>
+			<ship id="3" y="200" t="6"/>
 			<ship id="3" y="240" t="2"/>
 			<ship id="3" y="160"/>
 
