@@ -97,6 +97,8 @@
 		<Unit filename="src/entities/complex/ComplexEntity.hpp" />
 		<Unit filename="src/entities/complex/Gate.cpp" />
 		<Unit filename="src/entities/complex/Gate.hpp" />
+		<Unit filename="src/entities/complex/GunTower.cpp" />
+		<Unit filename="src/entities/complex/GunTower.hpp" />
 		<Unit filename="src/entities/complex/Part.cpp" />
 		<Unit filename="src/entities/complex/Part.hpp" />
 		<Unit filename="src/gui/BitmapFont.cpp" />

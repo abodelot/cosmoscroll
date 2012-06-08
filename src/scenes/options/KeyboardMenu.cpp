@@ -19,7 +19,6 @@ KeyboardMenu::KeyboardMenu()
 	AddRow(form, Input::USE_WEAPON_2, &but_weapon2_);
 	AddRow(form, Input::USE_COOLER,   &but_cooler_);
 	AddRow(form, Input::USE_MISSILE,  &but_missile_);
-	AddRow(form, Input::PAUSE,        &but_pause_);
 
 	gui::Button* b = new CosmoButton(this, _t("menu.back"));
 	b->SetPosition(210, 410);
@@ -38,7 +37,6 @@ void KeyboardMenu::OnFocus()
 	but_weapon2_->SetText(GetKeyLabel(Input::USE_WEAPON_2));
 	but_cooler_->SetText(GetKeyLabel(Input::USE_COOLER));
 	but_missile_->SetText(GetKeyLabel(Input::USE_MISSILE));
-	but_pause_->SetText(GetKeyLabel(Input::PAUSE));
 }
 
 

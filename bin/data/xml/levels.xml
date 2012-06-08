@@ -230,8 +230,15 @@
 		<level desc="Where did I put those keys again?" background_img="gui/background-spacehulk.png"
 		 decor_img="gui/decor-layer.png" decor_height="28" stars="0">
 			<!-- LVL4: way more interceptors + miniboss x1 -->
-			<ship id="5" y="120"/>
-			<decor id="gate" y="0"/>
+			<ship id="5" y="120" t="1"/>
+			<decor id="guntower" t="1"/>
+			<ship id="2" y="200" t="2"/>
+			<ship id="3" y="60" t="1"/>
+			<ship id="3" y="80" t="2"/>
+			<ship id="2" y="305" t="1"/>
+			<ship id="2" y="142" t="2"/>
+			<shio id="2" y="236" t="2"/>
+			<decor id="gate" t="2"/>
 
 			<ship id="3" y="200" t="5"/>
 			<ship id="3" y="240" t="2"/>
@@ -244,6 +251,7 @@
 			<wait t="3"/>
 			<ship id="3" y="200" t="5"/>
 			<ship id="3" y="240" t="2"/>
+			<decor id="guntower" />
 			<ship id="3" y="160"/>
 			<wait t="5"/>
 			<call func="scoot_line_3"/>

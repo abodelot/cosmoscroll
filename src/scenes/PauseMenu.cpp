@@ -1,9 +1,9 @@
 #include "PauseMenu.hpp"
-#include "../core/Game.hpp"
-#include "../core/ControlPanel.hpp"
-#include "../core/ParticleSystem.hpp"
-#include "../entities/EntityManager.hpp"
-#include "../utils/I18n.hpp"
+#include "core/Game.hpp"
+#include "core/ControlPanel.hpp"
+#include "core/ParticleSystem.hpp"
+#include "entities/EntityManager.hpp"
+#include "utils/I18n.hpp"
 
 
 PauseMenu::PauseMenu()

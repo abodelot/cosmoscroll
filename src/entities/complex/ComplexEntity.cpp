@@ -80,9 +80,9 @@ void ComplexEntity::AddPart(Part& part, float x, float y)
 
 
 //Todo, return NULL on fail (refactor api? ;))
-Part* ComplexEntity::GetPart(size_t index)
+Part* ComplexEntity::GetPartAt(size_t index)
 {
-	if (index && index < parts_.size())
+	if (index < parts_.size())
 	{
 		return &parts_[index];
 	}

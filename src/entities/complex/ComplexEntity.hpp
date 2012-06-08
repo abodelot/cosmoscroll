@@ -24,8 +24,8 @@ public:
 protected:
 	void AddPart(Part& part, float x=0.f, float y=0.f);
 
-	// TODO: refactor API
-	Part* GetPart(size_t index);
+
+	Part* GetPartAt(size_t index);
 	Part* GetPartByID(int id);
 
 	/**

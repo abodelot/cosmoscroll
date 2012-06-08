@@ -8,6 +8,7 @@
 #include "entities/BossTentacles.hpp"
 #include "entities/complex/Gate.hpp"
 #include "entities/complex/Canon.hpp"
+#include "entities/complex/GunTower.hpp"
 #include "utils/Resources.hpp"
 
 #define DEFAULT_STARS_COUNT 33
@@ -328,6 +329,8 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 				entity = new Gate(position);
 			else if (decor_name == "canon")
 				entity = new Canon(position);
+			else if (decor_name == "guntower")
+				entity = new GunTower(position);
 		}
 		else
 		{

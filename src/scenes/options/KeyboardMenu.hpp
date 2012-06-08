@@ -31,7 +31,6 @@ private:
 	gui::Button* but_weapon2_;
 	gui::Button* but_cooler_;
 	gui::Button* but_missile_;
-	gui::Button* but_pause_;
 };
 
 #endif // KEYBOARDMENU_HPP

@@ -46,14 +46,13 @@ void Input::Init(const sf::Input& sfinput)
 	SetKeyboardBind(sf::Key::Right,    MOVE_RIGHT);
 	SetKeyboardBind(sf::Key::PageUp,   PANEL_UP);
 	SetKeyboardBind(sf::Key::PageDown, PANEL_DOWN);
-	SetKeyboardBind(sf::Key::P,        PAUSE);
+	SetKeyboardBind(sf::Key::Escape,   PAUSE);
 	SetKeyboardBind(sf::Key::Space,    USE_WEAPON_1);
 	SetKeyboardBind(sf::Key::A,        USE_WEAPON_2);
 	SetKeyboardBind(sf::Key::LControl, USE_COOLER);
 	SetKeyboardBind(sf::Key::Z,        USE_MISSILE);
 	SetKeyboardBind(sf::Key::F1,       TAKE_SCREENSHOT);
 	SetKeyboardBind(sf::Key::D,        DEBUG_ACTION);
-	//SetKeyboardBind(sf::Key::Escape,   EXIT_APP);
 
 	// default joystick binding
 	SetJoystickBind(0, ENTER);
@@ -404,8 +403,6 @@ void Input::LoadFromConfig(IniParser& config)
 		SetKeyboardBind(key, MOVE_LEFT);
 	if (config.Get("move_right", key))
 		SetKeyboardBind(key, MOVE_RIGHT);
-	if (config.Get("pause", key))
-		SetKeyboardBind(key, PAUSE);
 	if (config.Get("weapon_1", key))
 		SetKeyboardBind(key, USE_WEAPON_1);
 	if (config.Get("weapon_2", key))
@@ -439,7 +436,6 @@ void Input::SaveToConfig(IniParser& config) const
 	config.Set("move_down",   action_to_key_[MOVE_DOWN]);
 	config.Set("move_left",   action_to_key_[MOVE_LEFT]);
 	config.Set("move_right",  action_to_key_[MOVE_RIGHT]);
-	config.Set("pause",       action_to_key_[PAUSE]);
 	config.Set("weapon_1",    action_to_key_[USE_WEAPON_1]);
 	config.Set("weapon_2",    action_to_key_[USE_WEAPON_2]);
 	config.Set("use_cooler",  action_to_key_[USE_COOLER]);
