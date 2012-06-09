@@ -2,6 +2,7 @@
 #include "core/Game.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
+#include "core/SoundSystem.hpp"
 #include "entities/EntityManager.hpp"
 #include "utils/I18n.hpp"
 
@@ -18,6 +19,21 @@ PauseMenu::PauseMenu()
 }
 
 
+void PauseMenu::OnEvent(const sf::Event& event)
+{
+	Input::Action action = Input::GetInstance().EventToAction(event);
+	if (action == Input::PAUSE) // resume
+	{
+		Game::GetInstance().SetNextScene(Game::SC_InGameScene);
+		SoundSystem::GetInstance().PlayMusic();
+	}
+	else
+	{
+		BaseMenu::OnEvent(event);
+	}
+}
+
+
 void PauseMenu::EventCallback(int id)
 {
 	Game& game = Game::GetInstance();
@@ -25,9 +41,11 @@ void PauseMenu::EventCallback(int id)
 	{
 		case 1:
 			game.SetNextScene(Game::SC_InGameScene);
+			SoundSystem::GetInstance().PlayMusic();
 			break;
 		case 2:
 			game.SetNextScene(Game::SC_MainMenu);
+			SoundSystem::GetInstance().PlayMusic();
 			break;
 		case 3:
 			game.Quit();

@@ -21,7 +21,7 @@ AudioMenu::AudioMenu()
 	opt_music_->AddOption("Escape for assault", "escape_for_assault.mod");
 
 	// current music is default displayed value
-	const std::string music_name = sound.GetMusicName();
+	const std::string music_name = sound.GetMusic();
 	for (int i = 0; i < opt_music_->GetNbItems(); ++i)
 	{
 		if (opt_music_->GetOptionAt(i) == music_name)
@@ -68,7 +68,8 @@ void AudioMenu::EventCallback(int id)
 			Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
 			break;
 		case 1:
-			sound.PlayMusic(opt_music_->GetSelectedOption());
+			sound.SetMusic(opt_music_->GetSelectedOption());
+			sound.PlayMusic();
 			break;
 		case 2:
 			sound.EnableMusic(cb_music_->Checked());

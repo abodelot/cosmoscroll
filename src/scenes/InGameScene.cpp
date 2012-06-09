@@ -1,8 +1,9 @@
 #include "InGameScene.hpp"
-#include "../core/Game.hpp"
-#include "../core/Input.hpp"
-#include "../core/ControlPanel.hpp"
-#include "../entities/EntityManager.hpp"
+#include "core/Game.hpp"
+#include "core/Input.hpp"
+#include "core/ControlPanel.hpp"
+#include "core/SoundSystem.hpp"
+#include "entities/EntityManager.hpp"
 
 
 InGameScene::InGameScene():
@@ -27,6 +28,7 @@ void InGameScene::OnEvent(const sf::Event& event)
 			entities_.SetY(0);
 			break;
 		case Input::PAUSE:
+			SoundSystem::GetInstance().PauseMusic();
 			Game::GetInstance().SetNextScene(Game::SC_PauseMenu);
 			break;
 		default:

@@ -9,6 +9,9 @@ public:
 	PauseMenu();
 
 	// inherited
+	void OnEvent(const sf::Event& event);
+
+	// inherited
 	void Update(float frametime);
 
 	// inherited

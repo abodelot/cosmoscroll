@@ -45,6 +45,10 @@
 			<Add library="sfml-network" />
 			<Add library="dumb" />
 		</Linker>
+		<Unit filename="bin/data/lang/de.lang" />
+		<Unit filename="bin/data/lang/en.lang" />
+		<Unit filename="bin/data/lang/fr.lang" />
+		<Unit filename="bin/data/lang/ru.lang" />
 		<Unit filename="bin/data/xml/animations.xml" />
 		<Unit filename="bin/data/xml/items.xml" />
 		<Unit filename="bin/data/xml/levels.xml" />

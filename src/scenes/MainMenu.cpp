@@ -21,7 +21,7 @@ MainMenu::MainMenu()
 
 	// init background music at first launch of main menu
 	SoundSystem& sound = SoundSystem::GetInstance();
-	sound.PlayMusic(sound.GetMusicName());
+	sound.PlayMusic();
 }
 
 

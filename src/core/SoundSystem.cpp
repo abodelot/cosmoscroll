@@ -47,24 +47,6 @@ SoundSystem::~SoundSystem()
 }
 
 
-
-void SoundSystem::PlayMusic(const std::string& music_name)
-{
-	SetMusic(music_name);
-
-	if (enable_music_)
-	{
-		music_->Play();
-	}
-}
-
-
-const std::string& SoundSystem::GetMusicName() const
-{
-	return music_name_;
-}
-
-
 void SoundSystem::SetMusic(const std::string& music_name)
 {
 	sf::SoundStream* music = Resources::GetDumbMusic(music_name);
@@ -79,11 +61,35 @@ void SoundSystem::SetMusic(const std::string& music_name)
 }
 
 
+const std::string& SoundSystem::GetMusic() const
+{
+	return music_name_;
+}
+
+
+void SoundSystem::PlayMusic()
+{
+	if (music_ != NULL && enable_music_)
+	{
+		music_->Play();
+	}
+}
+
+
 void SoundSystem::StopMusic()
 {
-	if (music_ != NULL && music_->GetStatus() == sf::Sound::Playing)
+	if (music_ != NULL)
 	{
 		music_->Stop();
+	}
+}
+
+
+void SoundSystem::PauseMusic()
+{
+	if (music_ != NULL)
+	{
+		music_->Pause();
 	}
 }
 

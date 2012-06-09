@@ -12,21 +12,18 @@ public:
 	static SoundSystem& GetInstance();
 
 	/**
-	 * Jouer une musique (une musique à la fois)
-	 * @param music: musique à jouer
-	 */
-	void PlayMusic(const std::string& music_name);
-
-	/**
-	 * Charger une musique
+	 * Set/Get current background music
 	 */
 	void SetMusic(const std::string& music_name);
-	const std::string& GetMusicName() const;
+	const std::string& GetMusic() const;
 
 	/**
-	 * Stopper la lecture de la musique
+	 * Control music
 	 */
+	void PlayMusic();
 	void StopMusic();
+	void PauseMusic();
+
 
 	/**
 	 * Jouer un son
