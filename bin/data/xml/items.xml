@@ -15,13 +15,13 @@
 		<weapon id="decor-canon" image="ammo/fireball.png" heat_cost="0" fire_rate="1" damage="20" speed="200" sound="canon.ogg"/>
 	</weapons>
 	<shields>
-		<shield level="1" points="3" />
-		<shield level="2" points="6" price="50" />
-		<shield level="3" points="8" price="250" />
+		<shield level="1" points="4" />
+		<shield level="2" points="5" price="100" />
+		<shield level="3" points="6" price="200" />
 	</shields>
 	<engines>
-		<engine level="1" speed="140" />
-		<engine level="2" speed="180" price="50" />
+		<engine level="1" speed="180" />
+		<engine level="2" speed="200" price="50" />
 		<engine level="3" speed="220" price="200" />
 	</engines>
 	<heatsinks>
@@ -30,8 +30,8 @@
 		<heatsink level="3" heat="120" price="250" />
 	</heatsinks>
 	<armors>
-		<armor level="1" hp="3" />
-		<armor level="2" hp="4" price="100" />
+		<armor level="1" hp="4" />
+		<armor level="2" hp="5" price="150" />
 		<armor level="3" hp="6" price="250" />
 	</armors>
 </items>

@@ -104,7 +104,7 @@
 			<ship id="2" y="300" t="1"/>
 		</level>
 
-		<level desc="Ahoi captain of the space!" background_img="gui/background-blue.jpg" stars="25">
+		<level desc="Ahoi captain of the space!" layer1="gui/background-blue.jpg" stars="25">
 			<!-- LVL2: more scoots but still very easy-->
 			<loop count="2">
 				<call func="caps_x5"/>
@@ -155,8 +155,8 @@
 			<call func="scoot_line_5"/>
 		</level>
 
-		<level desc="This doesn't smell good." background_img="gui/background-spacehulk.png"
-		 decor_img="gui/decor-layer.png" decor_height="24" stars="0">
+		<level desc="This doesn't smell good." layer1="gui/background-spacehulk.png"
+		layer2="gui/decor-layer.png" decor_height="24" stars="0">
 			<!-- LVL3: we introduce interceptor and mines -->
 			<loop count="2">
 				<decor id="gate" y="0" />
@@ -227,8 +227,8 @@
 			</loop>
 		</level>
 
-		<level desc="Where did I put those keys again?" background_img="gui/background-spacehulk.png"
-		 decor_img="gui/decor-layer.png" decor_height="24" stars="0">
+		<level desc="Where did I put those keys again?" layer1="gui/background-spacehulk.png"
+		 layer2="gui/decor-layer.png" decor_height="24" stars="0">
 			<!-- LVL4: way more interceptors + miniboss x1 -->
 			<ship id="5" y="120" t="1"/>
 			<decor id="guntower" t="2"/>
@@ -237,7 +237,7 @@
 			<ship id="3" y="80" t="2"/>
 			<ship id="2" y="305" t="1"/>
 			<ship id="2" y="142" t="2"/>
-			<shio id="2" y="236" t="2"/>
+			<ship id="2" y="236" t="2"/>
 			<decor id="gate" t="2"/>
 
 			<ship id="3" y="200" t="6"/>
@@ -292,11 +292,11 @@
 			<ship id="3" y="240" t="2"/>
 			<ship id="3" y="160"/>
 			<wait t="5"/>
-			<call func="interceptors_7"/>
+			<call func="interceptors_5"/>
 			<boss_tentacles y="210" t="10"/>
 		</level>
 
-		<level desc="I'll bet my badge that we haven't\nseen the last of those weirdies." background_img="gui/background-purple.jpg" stars="50">
+		<level desc="I'll bet my badge that we haven't\nseen the last of those weirdies." layer1="gui/background-purple.jpg" stars="50">
 			<!-- LVL5: pyramids of scoots, we introduce saucer -->
 			<asteroid y="100" t="2.0"/>
 			<asteroid y="170" t="0.5"/>
@@ -337,7 +337,7 @@
 			<call func="interceptors_7"/>
 		</level>
 
-		<level desc="The saucers are up there.\nThe graveyard is out there." background_img="gui/background-purple.jpg" stars="35">
+		<level desc="The saucers are up there.\nThe graveyard is out there." layer1="gui/background-purple.jpg" stars="35">
 			<!-- LVL6: tons of saucer , miniboss x2  -->
 			<wait t="2"/>
 			<asteroid y="150" t="4"/>
@@ -381,7 +381,7 @@
 			<boss_tentacles y="290" t="10"/>
 		</level>
 
-		<level desc="Now toddle off and fly\nyour flying machine!" background_img="gui/background-blue.jpg" stars="40">
+		<level desc="Now toddle off and fly\nyour flying machine!" layer1="gui/background-blue.jpg" stars="40">
 			<!-- LVL7: saucers + interceptors -->
 			<loop count="2">
 				<asteroid y="140" t="4.0"/>
@@ -438,7 +438,7 @@
 			<ship id="5" y="90" t="0.5"/>
 		</level>
 
-		<level desc="Take me to your leader." background_img="gui/background-red.jpg" stars="70">
+		<level desc="Take me to your leader." layer1="gui/background-red.jpg" stars="70">
 			<!-- LVL8: a bit of everything + evilboss -->
 			<wait t="1"/>
 			<loop count="3">

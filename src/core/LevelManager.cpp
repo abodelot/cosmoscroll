@@ -109,16 +109,16 @@ const char* LevelManager::GetDescription() const
 }
 
 
-const sf::Image* LevelManager::GetBackgroundImage() const
+const sf::Image* LevelManager::GetLayerImage1() const
 {
-	const char* p = GetLevelElement(current_level_)->Attribute("background_img");
+	const char* p = GetLevelElement(current_level_)->Attribute("layer1");
 	return p != NULL ? &Resources::GetImage(p) : NULL;
 }
 
 
-const sf::Image* LevelManager::GetDecorImage() const
+const sf::Image* LevelManager::GetLayerImage2() const
 {
-	const char* p = GetLevelElement(current_level_)->Attribute("decor_img");
+	const char* p = GetLevelElement(current_level_)->Attribute("layer2");
 	return p != NULL ? &Resources::GetImage(p) : NULL;
 }
 

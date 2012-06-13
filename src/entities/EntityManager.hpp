@@ -210,8 +210,8 @@ private:
 		void Draw(sf::RenderTarget& target) const;
 	};
 
-	ParallaxLayer background_;
-	ParallaxLayer decor_;
+	ParallaxLayer layer1_;
+	ParallaxLayer layer2_;
 };
 
 

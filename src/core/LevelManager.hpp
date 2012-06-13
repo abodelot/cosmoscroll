@@ -73,9 +73,9 @@ public:
 	 * Get scrolling background image used in current level
 	 * @return image, or NULL if none
 	 */
-	const sf::Image* GetBackgroundImage() const;
+	const sf::Image* GetLayerImage1() const;
+	const sf::Image* GetLayerImage2() const;
 
-	const sf::Image* GetDecorImage() const;
 	int GetDecorHeight() const;
 	int GetStarsCount() const;
 

@@ -25,7 +25,7 @@ valeur max :  	apparait à partir de :
 
 // background image scrolling speed (if any)
 #define BACKGROUND_SPEED 20
-#define DECOR_SPEED 45
+#define FOREGROUND_SPEED 45
 
 EntityManager& EntityManager::GetInstance()
 {
@@ -46,8 +46,8 @@ EntityManager::EntityManager():
 	mode_ = MODE_ARCADE;
 	timer_ = arcade_record_ = 0.f;
 
-	background_.scrolling_speed_ = BACKGROUND_SPEED;
-	decor_.scrolling_speed_ = DECOR_SPEED;
+	layer1_.scrolling_speed_ = BACKGROUND_SPEED;
+	layer2_.scrolling_speed_ = FOREGROUND_SPEED;
 	decor_height_ = 0;
 }
 
@@ -68,6 +68,8 @@ void EntityManager::InitMode(Mode mode)
 	particles_.Clear();
 
 	ControlPanel::GetInstance().Init(mode);
+	LevelManager& levels = LevelManager::GetInstance();
+
 	switch (mode)
 	{
 		case MODE_STORY:
@@ -97,11 +99,10 @@ void EntityManager::InitMode(Mode mode)
 				player_->SetPosition(0, height_ / 2);
 				player_->Initialize();
 			}
-			{LevelManager& levels = LevelManager::GetInstance();
-			background_.SetScrollingTexture(levels.GetBackgroundImage());
-			decor_.SetScrollingTexture(levels.GetDecorImage());
+			layer1_.SetScrollingTexture(levels.GetLayerImage1());
+			layer2_.SetScrollingTexture(levels.GetLayerImage2());
 			decor_height_ = levels.GetDecorHeight();
-			particles_.AddStars(levels.GetStarsCount());}
+			particles_.AddStars(levels.GetStarsCount());
 			break;
 
 		case MODE_ARCADE:
@@ -109,7 +110,8 @@ void EntityManager::InitMode(Mode mode)
 			// on démarre toujours le mode arcade avec un nouveau vaisseau
 			RespawnPlayer();
 			// disable background image
-			background_.SetScrollingTexture(NULL);
+			layer1_.SetScrollingTexture(NULL);
+			layer2_.SetScrollingTexture(NULL);
 			decor_height_ = 0;
 			std::wstring game_info = wstr_replace(_t("panel.record"), L"{record}", to_wstring(arcade_record_));
 			ControlPanel::GetInstance().SetGameInfo(game_info);
@@ -218,8 +220,8 @@ void EntityManager::Update(float frametime)
 	particles_.Update(frametime);
 
 	// parallax scrolling
-	background_.OnUpdate(frametime);
-	decor_.OnUpdate(frametime);
+	layer1_.OnUpdate(frametime);
+	layer2_.OnUpdate(frametime);
 
 	timer_ += frametime;
 }
@@ -272,8 +274,8 @@ void EntityManager::UpdateArcadeRecord()
 void EntityManager::Render(sf::RenderTarget& target) const
 {
 	// draw scrolling background images
-	background_.Draw(target);
-	decor_.Draw(target);
+	layer1_.Draw(target);
+	layer2_.Draw(target);
 
 	particles_.Show(target);
 	// draw each managed entity
