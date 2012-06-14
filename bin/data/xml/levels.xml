@@ -70,7 +70,7 @@
 		</def>
 	</functions>
 	<levels>
-		<level desc="This is piece of cake." stars="30">
+		<level desc="This is piece of cake." stars="30" layer1="layers/blue.jpg" layer2="layers/fog.png">
 			<!-- LVL1:  a bunch of caps and scoots -->
 			<loop count="2">
 				<call func="caps_x3"/>
@@ -104,7 +104,7 @@
 			<ship id="2" y="300" t="1"/>
 		</level>
 
-		<level desc="Ahoi captain of the space!" layer1="gui/background-blue.jpg" stars="25">
+		<level desc="Ahoi captain of the space!" layer1="layers/blue.jpg" layer2="layers/fog.png" stars="25">
 			<!-- LVL2: more scoots but still very easy-->
 			<loop count="2">
 				<call func="caps_x5"/>
@@ -155,8 +155,7 @@
 			<call func="scoot_line_5"/>
 		</level>
 
-		<level desc="This doesn't smell good." layer1="gui/background-spacehulk.png"
-		layer2="gui/decor-layer.png" decor_height="24" stars="0">
+		<level desc="This doesn't smell good." layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0">
 			<!-- LVL3: we introduce interceptor and mines -->
 			<loop count="2">
 				<decor id="gate" y="0" />
@@ -227,8 +226,7 @@
 			</loop>
 		</level>
 
-		<level desc="Where did I put those keys again?" layer1="gui/background-spacehulk.png"
-		 layer2="gui/decor-layer.png" decor_height="24" stars="0">
+		<level desc="Where did I put those keys again?" layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0">
 			<!-- LVL4: way more interceptors + miniboss x1 -->
 			<ship id="5" y="120" t="1"/>
 			<decor id="guntower" t="2"/>
@@ -296,7 +294,7 @@
 			<boss_tentacles y="210" t="10"/>
 		</level>
 
-		<level desc="I'll bet my badge that we haven't\nseen the last of those weirdies." layer1="gui/background-purple.jpg" stars="50">
+		<level desc="I'll bet my badge that we haven't\nseen the last of those weirdies." layer1="layers/purple.jpg" layer2="layers/fog.png" stars="50">
 			<!-- LVL5: pyramids of scoots, we introduce saucer -->
 			<asteroid y="100" t="2.0"/>
 			<asteroid y="170" t="0.5"/>
@@ -337,7 +335,7 @@
 			<call func="interceptors_7"/>
 		</level>
 
-		<level desc="The saucers are up there.\nThe graveyard is out there." layer1="gui/background-purple.jpg" stars="35">
+		<level desc="The saucers are up there.\nThe graveyard is out there." layer1="layers/purple.jpg" layer2="layers/fog.png" stars="35">
 			<!-- LVL6: tons of saucer , miniboss x2  -->
 			<wait t="2"/>
 			<asteroid y="150" t="4"/>
@@ -381,7 +379,7 @@
 			<boss_tentacles y="290" t="10"/>
 		</level>
 
-		<level desc="Now toddle off and fly\nyour flying machine!" layer1="gui/background-blue.jpg" stars="40">
+		<level desc="Now toddle off and fly\nyour flying machine!" layer1="layers/green.jpg" layer2="layers/fog.png" stars="40">
 			<!-- LVL7: saucers + interceptors -->
 			<loop count="2">
 				<asteroid y="140" t="4.0"/>
@@ -438,7 +436,7 @@
 			<ship id="5" y="90" t="0.5"/>
 		</level>
 
-		<level desc="Take me to your leader." layer1="gui/background-red.jpg" stars="70">
+		<level desc="Take me to your leader." layer1="layers/green.jpg" layer2="layers/fog.png" stars="70">
 			<!-- LVL8: a bit of everything + evilboss -->
 			<wait t="1"/>
 			<loop count="3">
@@ -475,19 +473,6 @@
 			<ship id="6" y="240" t="2.5" />
 			<ship id="6" y="240" t="2.5" />
 			<evilboss y="170" t="8"/>
-		</level>
-	</levels>
-</levelset>
-
-<levelset>
-<!-- Here to experiment with props -->
-	<functions>
-	</functions>
-	<levels>
-		<level desc="Let me see your goods! ;-)" background_img="gui/background-red.jpg" stars="70">
-			<loop count="128">
-				<evilboss y="170" t="0.1"/>
-			</loop>
 		</level>
 	</levels>
 </levelset>

@@ -2,7 +2,7 @@
 <items>
 	<weapons>
 		<weapon id="hellfire" image="ammo/hellfire.png" heat_cost="1.5" fire_rate="4" damage="1" speed="440" sound="hellfire.ogg" level="1"/>
-		<weapon id="hellfire" image="ammo/hellfire.png" heat_cost="1.5" fire_rate="10" damage="1" speed="450" sound="hellfire.ogg" level="2" price="50"/>
+		<weapon id="hellfire" image="ammo/hellfire.png" heat_cost="1.5" fire_rate="8" damage="1" speed="450" sound="hellfire.ogg" level="2" price="50"/>
 		<weapon id="hellfire" image="ammo/hellfire.png" heat_cost="1.5" fire_rate="16" damage="1" speed="490" sound="hellfire.ogg" level="3" price="120"/>
 		<weapon id="laser-blue" image="ammo/laser-blue.png" heat_cost="2.5" fire_rate="2" damage="2" speed="340" sound="laser-blue.ogg" level="1"/>
 		<weapon id="laser-blue" image="ammo/laser-blue.png" heat_cost="2.5" fire_rate="4" damage="2" speed="360" sound="laser-blue.ogg" level="2" price="60"/>
