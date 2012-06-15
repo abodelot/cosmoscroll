@@ -217,11 +217,11 @@ void LevelManager::ParseFile(const std::string& file, unsigned int offset)
 	}
 
 	// Constitution de la liste de pointeurs vers les niveaux
-	node = set->FirstChild("levels")->FirstChild();
+	node = set->FirstChild("levels")->FirstChild("level");
 	while (node != NULL)
 	{
 		levels_.push_back(node->ToElement());
-		node = node->NextSibling();
+		node = node->NextSibling("level");
 	}
 	printf("%d levels found\n", (int) levels_.size());
 }

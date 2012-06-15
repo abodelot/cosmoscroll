@@ -28,7 +28,6 @@ public:
 		USE_MISSILE,
 		ENTER,
 		EXIT_APP,
-		DEBUG_ACTION,
 
 		COUNT // do not use
 	};

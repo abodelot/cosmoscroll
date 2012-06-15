@@ -350,6 +350,9 @@ void PlayerShip::Update(float frametime)
 
 void PlayerShip::TakeDamage(int damage)
 {
+	if (damage == 0)
+		return;
+
 	static ParticleSystem& p = ParticleSystem::GetInstance();
 	if (shield_ > 0)
 	{

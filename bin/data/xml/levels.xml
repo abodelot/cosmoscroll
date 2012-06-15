@@ -14,7 +14,7 @@
 			<ship id="1" y="320"/>
 		</def>
 		<def name="scoot_line_3">
-			<ship id="2" y="160" t="1.2"/>
+			<ship id="2" y="160" t="2"/>
 			<ship id="2" y="200"/>
 			<ship id="2" y="240"/>
 		</def>
@@ -27,16 +27,6 @@
 			<call func="scoot_line_5"/>
 			<ship id="2" y="80"/>
 			<ship id="2" y="320"/>
-		</def>
-		<def name="scoot_line_9">
-			<call func="scoot_line_7"/>
-			<ship id="2" y="40"/>
-			<ship id="2" y="360"/>
-		</def>
-		<def name="scoot_line_11">
-			<call func="scoot_line_9"/>
-			<ship id="2" y="0"/>
-			<ship id="2" y="400"/>
 		</def>
 		<def name="saucers_12">
 			<ship id="4" y="70" t="1"/>
@@ -53,25 +43,26 @@
 			<ship id="4" y="150" t="1"/>
 		</def>
 		<def name="interceptors_5">
-			<ship id="3" y="200"/>
-			<ship id="3" y="280" t="1"/>
-			<ship id="3" y="120"/>
-			<ship id="3" y="360" t="1"/>
-			<ship id="3" y="40"/>
+			<ship id="3" y="190"/>
+			<ship id="3" y="270" t="1"/>
+			<ship id="3" y="110"/>
+			<ship id="3" y="350" t="1"/>
+			<ship id="3" y="30"/>
 		</def>
 		<def name="interceptors_7">
-			<ship id="3" y="200"/>
-			<ship id="3" y="260" t="1"/>
-			<ship id="3" y="140"/>
-			<ship id="3" y="320" t="1"/>
-			<ship id="3" y="80"/>
-			<ship id="3" y="380" t="1"/>
-			<ship id="3" y="20"/>
+			<ship id="3" y="190"/>
+			<ship id="3" y="250" t="1"/>
+			<ship id="3" y="130"/>
+			<ship id="3" y="310" t="1"/>
+			<ship id="3" y="70"/>
+			<ship id="3" y="370" t="1"/>
+			<ship id="3" y="10"/>
 		</def>
 	</functions>
 	<levels>
+		<!-- LVL1 -->
 		<level desc="This is piece of cake." stars="30" layer1="layers/blue.jpg" layer2="layers/fog.png">
-			<!-- LVL1:  a bunch of caps and scoots -->
+
 			<loop count="2">
 				<call func="caps_x3"/>
 			</loop>
@@ -104,8 +95,8 @@
 			<ship id="2" y="300" t="1"/>
 		</level>
 
+		<!-- LVL2 -->
 		<level desc="Ahoi captain of the space!" layer1="layers/blue.jpg" layer2="layers/fog.png" stars="25">
-			<!-- LVL2: more scoots but still very easy-->
 			<loop count="2">
 				<call func="caps_x5"/>
 				<ship id="2" y="50" t="1"/>
@@ -130,8 +121,9 @@
 			<asteroid y="368" t="1"/>
 			<asteroid y="249" t="0.5"/>
 			<asteroid y="19" t="1"/>
+			<asteroid y="150" t="1"/>
 			<asteroid y="230"/>
-			<ship id="2" y="310"/>
+			<ship id="2" y="310" t="3"/>
 			<ship id="2" y="270" t="2"/>
 			<ship id="2" y="170" t="1"/>
 			<ship id="1" y="320" t="2"/>
@@ -155,13 +147,13 @@
 			<call func="scoot_line_5"/>
 		</level>
 
+		<!-- LVL3 -->
 		<level desc="This doesn't smell good." layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0">
-			<!-- LVL3: we introduce interceptor and mines -->
 			<loop count="2">
 				<decor id="gate" y="0" />
 				<decor id="canon" y="261" t="6"/>
 				<ship id="2" y="205" t="6"/>
-				<ship id="2" y="210" t="0.5"/>
+				<ship id="2" y="210" t="1"/>
 				<ship id="3" y="200" t="1"/>
 			</loop>
 			<ship id="2" y="360" t="3"/>
@@ -226,8 +218,8 @@
 			</loop>
 		</level>
 
+		<!-- LVL4 -->
 		<level desc="Where did I put those keys again?" layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0">
-			<!-- LVL4: way more interceptors + miniboss x1 -->
 			<ship id="5" y="120" t="1"/>
 			<decor id="guntower" t="2"/>
 			<ship id="2" y="200" t="5"/>
@@ -294,49 +286,56 @@
 			<boss_tentacles y="210" t="10"/>
 		</level>
 
+		<!-- LVL5 (scoot pyramids) -->
 		<level desc="I'll bet my badge that we haven't\nseen the last of those weirdies." layer1="layers/purple.jpg" layer2="layers/fog.png" stars="50">
-			<!-- LVL5: pyramids of scoots, we introduce saucer -->
-			<asteroid y="100" t="2.0"/>
+			<asteroid y="100" t="1.0"/>
 			<asteroid y="170" t="0.5"/>
 			<asteroid y="360" t="0.5"/>
 			<asteroid y="267" t="0.5"/>
+
+			<ship id="2" y="200" t="4"/>
+			<call func="scoot_line_3"/>
+			<call func="scoot_line_5"/>
+			<call func="scoot_line_7"/>
+			<call func="scoot_line_5"/>
+			<ship id="2" y="200" t="2"/>
+
 			<loop count="2">
-				<ship id="2" y="200" t="2"/>
-				<call func="scoot_line_3"/>
-				<call func="scoot_line_5"/>
-				<call func="scoot_line_7"/>
-				<call func="scoot_line_9"/>
+				<ship id="3" y="100" t="3.0"/>
+				<ship id="3" y="280"/>
+				<ship id="4" y="140" t="1.0"/>
+				<ship id="4" y="310"/>
 			</loop>
-			<loop count="2">
-				<ship id="4" y="120" t="4.0"/>
-				<ship id="4" y="300"/>
-				<ship id="3" y="120" t="1.0"/>
-				<ship id="3" y="300"/>
-			</loop>
+
 			<ship id="2" y="200" t="6"/>
 			<call func="scoot_line_3"/>
 			<call func="scoot_line_5"/>
 			<call func="scoot_line_7"/>
-			<call func="scoot_line_9"/>
 			<ship id="4" y="320" t="1"/>
 			<ship id="4" y="70" t="1"/>
 			<ship id="4" y="230" t="1"/>
-			<ship id="4" y="160" t="1"/>
+			<ship id="4" y="160" t="2"/>
 			<call func="interceptors_5"/>
+			<ship id="5" y="120" t="1" />
+			<ship id="5" y="320" t="1" />
+			<ship id="5" y="200" t="2" />
 			<loop count="2">
 				<ship id="2" y="200" t="6"/>
 				<call func="scoot_line_3"/>
 				<call func="scoot_line_5"/>
 				<call func="scoot_line_7"/>
-				<call func="scoot_line_9"/>
-				<call func="scoot_line_11"/>
 			</loop>
+			<ship id="5" y="20" t="4" />
+			<ship id="5" y="340" t="1" />
+			<ship id="5" y="100" t="2" />
 			<wait t="6"/>
+			<call func="interceptors_5" />
+			<wait t="4" />
 			<call func="interceptors_7"/>
 		</level>
 
+		<!-- LVL6 (saucers, miniboss x2) -->
 		<level desc="The saucers are up there.\nThe graveyard is out there." layer1="layers/purple.jpg" layer2="layers/fog.png" stars="35">
-			<!-- LVL6: tons of saucer , miniboss x2  -->
 			<wait t="2"/>
 			<asteroid y="150" t="4"/>
 			<asteroid y="220" t="0.5"/>
@@ -379,8 +378,9 @@
 			<boss_tentacles y="290" t="10"/>
 		</level>
 
+		<!-- LVL7 (saucers, interceptors, heavy interceptors) -->
 		<level desc="Now toddle off and fly\nyour flying machine!" layer1="layers/green.jpg" layer2="layers/fog.png" stars="40">
-			<!-- LVL7: saucers + interceptors -->
+
 			<loop count="2">
 				<asteroid y="140" t="4.0"/>
 				<asteroid y="300" t="0.5"/>
@@ -399,10 +399,10 @@
 			<call func="interceptors_7"/>
 			<loop count="2">
 				<ship id="5" y="290" t="2.5" />
-				<ship id="5" y="120" t="0.5" />
-				<ship id="5" y="210" t="0.5"/>
-				<ship id="5" y="30" t="0.5"/>
-				<ship id="5" y="360" t="0.5"/>
+				<ship id="7" y="120" t="1" />
+				<ship id="5" y="210" t="1"/>
+				<ship id="7" y="30" t="1"/>
+				<ship id="5" y="360" t="1"/>
 			</loop>
 			<asteroid y="200" t="1"/>
 			<loop count="2">
@@ -411,33 +411,41 @@
 				<ship id="4" y="100" t="1"/>
 			</loop>
 			<loop count="2">
-				<ship id="2" y="300" t="4"/>
-				<ship id="2" y="350"/>
+				<ship id="2" y="200" t="4"/>
+				<ship id="2" y="320"/>
 				<call func="interceptors_5"/>
-				<ship id="4" y="50" t="1.5"/>
+				<ship id="4" y="50" t="2"/>
 				<ship id="2" y="100"/>
 			</loop>
 			<call func="saucers_12"/>
 			<wait t="3"/>
 			<call func="interceptors_7"/>
 			<asteroid y="100" t="4"/>
-			<asteroid y="360" t="0.5"/>
-			<asteroid y="200" t="0.5"/>
+			<asteroid y="360" t="1"/>
+			<asteroid y="200" t="1"/>
 			<asteroid y="300" t="1"/>
 			<asteroid y="19" t="1"/>
-			<asteroid y="360" t="0.5"/>
+			<asteroid y="360" t="1"/>
 			<ship id="2" y="200" t="2"/>
-			<ship id="3" y="320" t="0.5"/>
-			<ship id="4" y="20" t="0.5"/>
-			<ship id="5" y="180" />
+			<ship id="3" y="320" t="1"/>
+			<ship id="4" y="20" t="1"/>
+			<ship id="7" y="180" />
 			<ship id="2" y="250" t="2"/>
 			<ship id="3" y="100" t="1"/>
-			<ship id="4" y="300" t="0.5"/>
-			<ship id="5" y="90" t="0.5"/>
+			<ship id="4" y="300" t="1"/>
+			<ship id="7" y="90" />
+			<loop count="2">
+				<ship id="4" y="20" t="3" />
+				<ship id="6" y="90" t="1" />
+				<ship id="6" y="130" t="1" />
+				<ship id="4" y="170" t="1" />
+				<ship id="6" y="210" t="1" />
+				<ship id="6" y="250" t="1" />
+			</loop>
 		</level>
 
+		<!-- LVL8 -->
 		<level desc="Take me to your leader." layer1="layers/green.jpg" layer2="layers/fog.png" stars="70">
-			<!-- LVL8: a bit of everything + evilboss -->
 			<wait t="1"/>
 			<loop count="3">
 				<ship id="5" y="270" t="1" />
@@ -446,10 +454,9 @@
 			<loop count="3">
 				<ship id="7" y="300" t="1" />
 			</loop>
-			<call func="caps_x3"/>
-			<call func="caps_x5"/>
+
 			<ship id="3" y="270" t="4"/>
-			<ship id="2" y="170" t="2"/>
+			<ship id="6" y="170" t="2"/>
 			<ship id="3" y="370" t="1"/>
 			<call func="scoot_line_3"/>
 			<call func="scoot_line_5"/>
@@ -465,7 +472,7 @@
 			<ship id="4" y="200" t="1"/>
 			<ship id="5" y="70"/>
 			<call func="interceptors_7"/>
-			<ship id="2" y="170" t="2"/>
+			<ship id="6" y="170" t="2"/>
 			<ship id="3" y="40" t="1"/>
 			<ship id="3" y="370" t="2"/>
 			<ship id="6" y="240" t="1" />

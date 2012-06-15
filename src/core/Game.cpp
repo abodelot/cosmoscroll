@@ -11,11 +11,9 @@
 #include "utils/I18n.hpp"
 #include "utils/FileSystem.hpp"
 #include "md5/md5.hpp"
-#include <stdexcept>
 #include "scenes/scenes.hpp"
-#include "BigScrollingMessagingAppliance.hpp"
 
-#include <fcntl.h>
+#include <stdexcept>
 #include <sys/stat.h>
 
 // config and data files
@@ -231,11 +229,6 @@ int Game::Run()
 	SetNextScene(SC_IntroScene);
 	app_.Display();
 
-	// <HACK>
-	BSMA *screen_ = &BSMA::GetInstance();
-	static bool to = false;
-	// </HACK>
-
 	// game main loop which handle the current scene
 	sf::Event event;
 	Input::Action action;
@@ -254,34 +247,18 @@ int Game::Run()
 				case Input::TAKE_SCREENSHOT:
 					TakeScreenshot();
 					break;
-				case Input::DEBUG_ACTION:
-					to = true;
-					break;
 				// other events are send to the current scene
 				default:
 					current_scene_->OnEvent(event);
 					break;
 			}
 		}
-		app_.Clear();
 		// 2. updating the current scene
+		app_.Clear();
 		current_scene_->Update(app_.GetFrameTime());
 
-		// <HACK>
-		if (to)
-		{
-			BSMA::text_message t;
-			t.str = sf::Unicode::Text(L"Téstàge xD xD   ...:<3:<3:<3:<3:<3:<3:<3:...");
-			t.delay = 1.f;
-			screen_->Push(t);
-			to = false;
-		}
-		screen_->Update(app_.GetFrameTime());
-		// </HACK>
 		// 3. displaying the current scene
 		current_scene_->Show(app_);
-		// <HACK>
-		screen_->Show(app_);
 		app_.Display();
 	}
 	return (EXIT_SUCCESS);
@@ -296,8 +273,6 @@ sf::RenderWindow& Game::GetApp()
 
 void Game::SetNextScene(Scene enum_scene)
 {
-#define ALLOC_SCENE() \
-    BaseScene *new_scene = NULL;
 #define CASE_SCENE(__scene__) \
 	case Game::SC_ ## __scene__:\
 		new_scene = new __scene__();\
@@ -305,7 +280,7 @@ void Game::SetNextScene(Scene enum_scene)
 
 	if (scenes_[enum_scene] == NULL)
 	{
-		ALLOC_SCENE();
+		BaseScene *new_scene = NULL;
 		switch (enum_scene)
 		{
 			CASE_SCENE(IntroScene);

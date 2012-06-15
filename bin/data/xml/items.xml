@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <items>
 	<weapons>
-		<weapon id="hellfire" image="ammo/hellfire.png" heat_cost="1.5" fire_rate="4" damage="1" speed="440" sound="hellfire.ogg" level="1"/>
-		<weapon id="hellfire" image="ammo/hellfire.png" heat_cost="1.5" fire_rate="8" damage="1" speed="450" sound="hellfire.ogg" level="2" price="50"/>
-		<weapon id="hellfire" image="ammo/hellfire.png" heat_cost="1.5" fire_rate="16" damage="1" speed="490" sound="hellfire.ogg" level="3" price="120"/>
+		<weapon id="hellfire" image="ammo/laser-red.png" heat_cost="1.5" fire_rate="4" damage="1" speed="440" sound="hellfire.ogg" level="1"/>
+		<weapon id="hellfire" image="ammo/laser-red.png" heat_cost="1.5" fire_rate="8" damage="1" speed="450" sound="hellfire.ogg" level="2" price="50"/>
+		<weapon id="hellfire" image="ammo/laser-red.png" heat_cost="1.5" fire_rate="16" damage="1" speed="490" sound="hellfire.ogg" level="3" price="150"/>
 		<weapon id="laser-blue" image="ammo/laser-blue.png" heat_cost="2.5" fire_rate="2" damage="2" speed="340" sound="laser-blue.ogg" level="1"/>
 		<weapon id="laser-blue" image="ammo/laser-blue.png" heat_cost="2.5" fire_rate="4" damage="2" speed="360" sound="laser-blue.ogg" level="2" price="60"/>
-		<weapon id="laser-blue" image="ammo/laser-blue.png" heat_cost="2.5" fire_rate="6" damage="3" speed="380" sound="laser-blue.ogg" level="3" price="180"/>
+		<weapon id="laser-blue" image="ammo/laser-blue.png" heat_cost="2.5" fire_rate="6" damage="2" speed="380" sound="laser-blue.ogg" level="3" price="180"/>
 		<weapon id="laser-green" image="ammo/laser-green.png" heat_cost="5" fire_rate="2.2" damage="1" speed="340" sound="laser-green.ogg"/>
 		<weapon id="laser-pink" image="ammo/laser-pink.png" heat_cost="5" fire_rate="1" damage="2" speed="400" sound="laser-pink.ogg"/>
 		<weapon id="laser-red" image="ammo/laser-red.png" heat_cost="0" fire_rate="2" damage="2" speed="400" sound="laser-pink.ogg"/>
@@ -22,16 +22,16 @@
 	<engines>
 		<engine level="1" speed="180" />
 		<engine level="2" speed="200" price="50" />
-		<engine level="3" speed="220" price="200" />
+		<engine level="3" speed="220" price="150" />
 	</engines>
 	<heatsinks>
 		<heatsink level="1" heat="80" />
-		<heatsink level="2" heat="100" price="100" />
-		<heatsink level="3" heat="120" price="250" />
+		<heatsink level="2" heat="100" price="80" />
+		<heatsink level="3" heat="130" price="200" />
 	</heatsinks>
 	<armors>
 		<armor level="1" hp="4" />
-		<armor level="2" hp="5" price="150" />
-		<armor level="3" hp="6" price="250" />
+		<armor level="2" hp="5" price="50" />
+		<armor level="3" hp="6" price="150" />
 	</armors>
 </items>
