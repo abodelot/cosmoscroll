@@ -126,23 +126,22 @@ void SpaceShip::OnDestroy()
 
 void SpaceShip::move_magnet(float frametime)
 {
-	float velocity = speed_ * frametime;
-	float vy = 0;
-	float vx = 0;
 	sf::Vector2f player_pos = target_->GetCenter_();
 	sf::Vector2f my_pos = GetCenter_();
 
-	if (my_pos.x > player_pos.x)
-		vx = -velocity;
-	else if (my_pos.x < player_pos.x)
-		vx = velocity;
+	float velocity = speed_ * frametime;
+	float x_diff = my_pos.x - player_pos.x;
+	float y_diff = my_pos.y - player_pos.y;
 
-	if (my_pos.y > player_pos.y)
-		vy = -velocity;
-	else if (my_pos.y < player_pos.y)
-		vy = velocity;
+	if (x_diff > 5)
+		sf::Sprite::Move(-velocity, 0);
+	else if (x_diff < -5)
+		sf::Sprite::Move(velocity, 0);
 
-	sf::Sprite::Move(vx, vy);
+	if (y_diff > 5)
+		sf::Sprite::Move(0, -velocity);
+	else if (y_diff < -5)
+		sf::Sprite::Move(0, velocity);
 }
 
 

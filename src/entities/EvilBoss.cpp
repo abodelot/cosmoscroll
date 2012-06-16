@@ -25,6 +25,8 @@ EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	eye_right_.Init("devil-eyes");
 	eye_right_.SetOwner(this);
 	eye_right_.SetOffset(EYE_OFFSET_RIGHT);
+	// hack: disable sound on the second eye so it won't be played twice
+	eye_right_.SetSound(NULL);
 
 	canon_.SetOwner(this); // (init canon later)
 	canon_.SetOffset(MOUTH_OFFSET);
@@ -86,7 +88,7 @@ void EvilBoss::TakeDamage(int damage)
 		{
 			case MORE_EVIL:
 				SetSubRect(sf::IntRect(242, 0, 242 * 2, 160));
-				canon_.Init("laser-red");
+				canon_.Init("laser-pink");
 				next_ = DAMN_EVIL;
 				break;
 			case DAMN_EVIL:

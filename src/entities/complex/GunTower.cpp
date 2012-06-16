@@ -21,7 +21,7 @@ GunTower::GunTower(const sf::Vector2f& position): ComplexEntity(position)
 	AddPart(base, 0, 31);
 	target_ = NULL;
 
-	weapon_.Init("laser-red");
+	weapon_.Init("laser-pink");
 	weapon_.SetOwner(this);
 	weapon_.SetOffset(img_turret.GetWidth() / 2, img_turret.GetHeight() / 2);
 }

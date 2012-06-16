@@ -40,7 +40,7 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 
 	id_ = p;
 	// TODO: torcheballe
-	if (id_ == "hellfire")
+	if (id_ == "laser-red")
 		SetType(ItemData::LASER_CANNON);
 	else if (id_ == "laser-blue")
 		SetType(ItemData::PLASMA_CANNON);

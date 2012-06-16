@@ -42,7 +42,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	snd_disabled_ = &Resources::GetSoundBuffer("disabled.ogg");
 	snd_overheat_ = &Resources::GetSoundBuffer("overheat.ogg");
 	// init weapons
-	weapon1_.Init("hellfire");
+	weapon1_.Init("laser-red");
 	weapon1_.SetOwner(this);
 	weapon1_.SetOffset(WEAPON1_OFFSET);
 
@@ -139,7 +139,7 @@ void PlayerShip::Initialize()
 
 	// weapon1
 	int weapon1_lvl = save.LevelOf(ItemData::LASER_CANNON);
-	const WeaponData* weapon1_data = items.GetWeaponData("hellfire", weapon1_lvl);
+	const WeaponData* weapon1_data = items.GetWeaponData("laser-red", weapon1_lvl);
 	weapon1_data->InitWeapon(&weapon1_);
 
 	// weapon2
@@ -385,7 +385,7 @@ void PlayerShip::OnCollide(Entity& entity)
 	{
 		HandleBonus(bonus->GetType());
 		ParticleSystem::GetInstance().AddMessage(bonus->GetPosition(), bonus->GetDescription());
-		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("bonus.ogg"));
+		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("power-up.ogg"));
 		entity.Kill();
 	}
 	else
@@ -549,7 +549,7 @@ void PlayerShip::KonamiCodeOn()
 	missiles_ = 42;
 	panel_.SetMissiles(42);
 
-	SetCollideFlag(C_IGNORE_HITS);
+	SetCollideFlag(C_IGNORE_HITS | C_IGNORE_DAMAGE);
 
 	weapon1_.SetMultiply(3);
 	weapon2_.SetMultiply(2);

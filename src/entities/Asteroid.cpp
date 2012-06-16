@@ -3,6 +3,7 @@
 #include "Asteroid.hpp"
 #include "EntityManager.hpp"
 #include "core/ParticleSystem.hpp"
+#include "core/SoundSystem.hpp"
 #include "utils/Resources.hpp"
 #include "utils/Math.hpp"
 
@@ -75,6 +76,7 @@ void Asteroid::OnDestroy()
 		default:
 			break;
 	}
+	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("asteroid-break.ogg"));
 	ParticleSystem::GetInstance().ImpactSfx(GetPosition(), 10);
 }
 
