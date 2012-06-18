@@ -93,6 +93,7 @@
 			<ship id="2" y="100" t="1"/>
 			<ship id="2" y="100" t="1"/>
 			<ship id="2" y="300" t="1"/>
+			<call func="caps_x3"/>
 		</level>
 
 		<!-- LVL2 -->
@@ -152,7 +153,6 @@
 
 		<!-- LVL3 -->
 		<level desc="This doesn't smell good." layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0">
-
 			<ship id="2" y="100" t="2"/>
 			<ship id="2" y="150" />
 			<ship id="2" y="200" t="2"/>
@@ -261,27 +261,24 @@
 			<call func="scoot_line_5"/>
 			<ship id="5" y="123" t="1"/>
 			<ship id="2" y="200" t="4.0"/>
-			<ship id="2" y="230" t="0.8"/>
+			<ship id="2" y="230" t="1"/>
 			<ship id="5" y="30"/>
-			<ship id="2" y="260" t="0.8"/>
-			<ship id="2" y="290" t="0.8"/>
-			<ship id="5" y="150"/>
-			<decor id="canon" y="261" t="3"/>
-			<ship id="2" y="260" t="0.8"/>
-			<ship id="2" y="230" t="0.8"/>
-			<ship id="5" y="100"/>
-			<ship id="2" y="200" t="0.8"/>
-			<ship id="2" y="230" t="0.8"/>
-			<ship id="5" y="269"/>
-			<decor id="canon" y="261" t="3"/>
-			<ship id="2" y="260" t="0.8"/>
-			<ship id="2" y="290" t="0.8"/>
-			<ship id="5" y="120"/>
-			<ship id="2" y="260" t="0.8"/>
-			<ship id="2" y="230" t="0.8"/>
-			<ship id="5" y="230"/>
-			<decor id="canon" y="261" t="3"/>
-			<ship id="2" y="200" t="3"/>
+			<ship id="2" y="200" t="1"/>
+			<ship id="2" y="280" t="1"/>
+			<ship id="5" y="150" />
+			<decor id="canon" y="261" t="1"/>
+			<loop count="3">
+				<decor id="canon" y="261" t="4"/>
+			</loop>
+			<loop count="2">
+				<ship id="2" y="260" t="2"/>
+				<ship id="2" y="230" t="1"/>
+				<ship id="5" y="100"/>
+				<ship id="2" y="200" t="1"/>
+				<ship id="2" y="230" t="1"/>
+				<ship id="5" y="289"/>
+			</loop>
+			<ship id="2" y="120" t="4"/>
 			<ship id="3" y="300" t="4"/>
 			<loop count="2">
 				<wait t="3"/>

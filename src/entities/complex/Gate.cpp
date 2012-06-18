@@ -11,10 +11,8 @@ Gate::Gate(const sf::Vector2f& pos):
 {
 	Part cell(1);
 	cell.SetImage(Resources::GetImage("entities/decor-energy-cell.png"));
-	cell.SetHP(10);
-	AddPart(cell, 0, 30);
-	AddPart(cell, 0, GetSize().y);
-
+	cell.SetHP(16);
+	AddPart(cell, 0, 40);
 
 	Part base_top(2);
 	base_top.SetImage(Resources::GetImage("entities/decor-base.png"));
@@ -33,10 +31,9 @@ Gate::Gate(const sf::Vector2f& pos):
 	base_bottom.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(base_bottom, 32, GetSize().y);
 
-	AddPart(cell, 0, 330);
-	AddPart(cell, 0, 362);
+	AddPart(cell, 0, 336);
 
-	energy_cells_ = 4;
+	energy_cells_ = 2;
 	door_timer_ = 0;
 }
 
