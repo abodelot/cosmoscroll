@@ -39,6 +39,7 @@ void IntroScene::OnEvent(const sf::Event& event)
 	switch (action)
 	{
 		case Input::ENTER:
+		case Input::PAUSE:
 			elapsed_ = DURATION;
 			break;
 		default:

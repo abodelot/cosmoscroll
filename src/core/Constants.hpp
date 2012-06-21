@@ -5,7 +5,7 @@
 #define GAME_VERSION				"0.4-devel"
 #define GAME_LICENSE				"GPL"
 #define GAME_AUTHORS				L"    Alexandre Bodelot\n" \
-									 "    Arnaud Wolff"
+									L"    Arnaud Wolff"
 #define DISCLAIMER_BLOB				"This is free software; see the source for copying conditions.  There is NO\n\
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 

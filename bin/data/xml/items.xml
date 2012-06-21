@@ -10,9 +10,9 @@
 		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
 			level="1" heat_cost="2.5" fire_rate="4" damage="2" speed="340"  />
 		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
-			level="2" heat_cost="2.5" fire_rate="6" damage="2" speed="360" price="60"/>
+			level="2" heat_cost="2.5" fire_rate="6" damage="2" speed="360" price="50"/>
 		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
-			level="3" heat_cost="2.5" fire_rate="8" damage="2" speed="380" price="180"/>
+			level="3" heat_cost="2.5" fire_rate="8" damage="2" speed="380" price="150"/>
 		<weapon id="laser-green" image="ammo/laser-green.png" sound="laser-green.ogg"
 			heat_cost="5" fire_rate="2.2" damage="1" speed="340" />
 		<weapon id="laser-pink" image="ammo/laser-pink.png" sound="laser-pink.ogg"
@@ -36,8 +36,8 @@
 	</engines>
 	<heatsinks>
 		<heatsink level="1" heat="80" />
-		<heatsink level="2" heat="100" price="80" />
-		<heatsink level="3" heat="130" price="200" />
+		<heatsink level="2" heat="110" price="80" />
+		<heatsink level="3" heat="140" price="180" />
 	</heatsinks>
 	<armors>
 		<armor level="1" hp="4" />

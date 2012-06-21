@@ -33,6 +33,7 @@ private:
 		gui::Label* current_level_details;
 		gui::Label* next_level;
 		gui::Label* next_level_details;
+		gui::Label* price;
 		gui::Button* but_back;
 		gui::Button* but_buy;
 	} dialog_;

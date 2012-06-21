@@ -83,17 +83,12 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 }
 
 
-std::wstring WeaponData::BuildDescriptionString(bool include_price) const
+std::wstring WeaponData::BuildDescriptionString() const
 {
 	std::wstring s = _t("item.weapon_info");
-	if (include_price)
-	{
-		s = s + L"\n" + _t("item.price");
-	}
 	wstr_self_replace(s, L"{speed}", to_wstring(speed_));
 	wstr_self_replace(s, L"{dmg}", to_wstring(damage_));
 	wstr_self_replace(s, L"{rate}", to_wstring(fire_rate_));
-	wstr_self_replace(s, L"{price}", to_wstring(GetPrice()));
 	return s;
 }
 

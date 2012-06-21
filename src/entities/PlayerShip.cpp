@@ -542,14 +542,15 @@ void PlayerShip::IncreaseShield(int count)
 void PlayerShip::KonamiCodeOn()
 {
 	konami_code_activated_ = true;
+
+	hp_max_ = 42;
+	panel_.SetMaxShipHP(hp_max_);
 	HandleBonus(Bonus::SUPER_BANANA);
-	HandleBonus(Bonus::SPEED);
+
 	coolers_ = 42;
 	panel_.SetCoolers(42);
 	missiles_ = 42;
 	panel_.SetMissiles(42);
-
-	SetCollideFlag(C_IGNORE_HITS | C_IGNORE_DAMAGE);
 
 	weapon1_.SetMultiply(3);
 	weapon2_.SetMultiply(2);

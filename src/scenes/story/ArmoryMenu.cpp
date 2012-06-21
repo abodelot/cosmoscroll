@@ -30,7 +30,7 @@ ArmoryMenu::ArmoryMenu()
 	dialog_.lab_item = new gui::Label(this, "\n");
 	dialog_.lab_item->SetPosition(x, y + 6);
 	// left side
-	gui::VBoxLayout layout_left(x + 20, y + 40);
+	gui::VBoxLayout layout_left(x + 30, y + 30);
 	layout_left.SetSpacing(0, 5);
 	const sf::Font& font = Resources::GetFont("Ubuntu-R.ttf");
 
@@ -39,7 +39,7 @@ ArmoryMenu::ArmoryMenu()
 	dialog_.current_level->SetSize(18);
 	layout_left.Add(dialog_.current_level);
 
-	dialog_.current_level_details = new gui::Label(this, "\n");
+	dialog_.current_level_details = new gui::Label(this, "\n\n");
 	dialog_.current_level_details->SetFont(font);
 	dialog_.current_level_details->SetSize(12);
 	layout_left.Add(dialog_.current_level_details);
@@ -49,13 +49,20 @@ ArmoryMenu::ArmoryMenu()
 	dialog_.next_level->SetSize(18);
 	layout_left.Add(dialog_.next_level);
 
-	dialog_.next_level_details = new gui::Label(this, "\n");
+	dialog_.next_level_details = new gui::Label(this, "\n\n");
 	dialog_.next_level_details->SetFont(font);
 	dialog_.next_level_details->SetSize(12);
 	layout_left.Add(dialog_.next_level_details);
+
 	// right side: buttons
-	gui::VBoxLayout layout_right(x + 220, y + 90);
+	gui::VBoxLayout layout_right(x + 210, y + 70);
 	layout_right.SetSpacing(0, 10);
+
+	dialog_.price = new gui::Label(this, "\n");
+	dialog_.price->SetFont(font);
+	dialog_.price->SetSize(12);
+	dialog_.price->SetColor(sf::Color(255, 128, 0));
+	layout_right.Add(dialog_.price);
 
 	dialog_.but_buy = new ConfigButton(this, _t("armory.buy"));
 	dialog_.but_buy->SetCallbackID(100);
@@ -146,6 +153,7 @@ void ArmoryMenu::ShowDialog(bool visible)
 	dialog_.current_level_details->SetVisible(visible);
 	dialog_.next_level->SetVisible(visible);
 	dialog_.next_level_details->SetVisible(visible);
+	dialog_.price->SetVisible(visible);
 	dialog_.but_buy->SetVisible(visible);
 	dialog_.but_back->SetVisible(visible);
 
@@ -186,6 +194,7 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 		text = _t("armory.max_level");
 		dialog_.next_level->SetText(text);
 		dialog_.next_level_details->SetText("");
+		dialog_.price->SetText("");
 		dialog_.but_buy->SetVisible(false);
 	}
 	else
@@ -195,6 +204,9 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 		dialog_.next_level->SetText(text);
 
 		// next item description
-		dialog_.next_level_details->SetText(data->BuildDescriptionString(true));
+		dialog_.next_level_details->SetText(data->BuildDescriptionString());
+		text = _t("item.price");
+		wstr_self_replace(text, L"{price}", to_wstring(data->GetPrice()));
+		dialog_.price->SetText(text);
 	}
 }

@@ -17,6 +17,7 @@ private:
 
 	sf::String info_text_;
 	sf::Sprite logos_;
+
 };
 
 #endif // ABOUTMENU_HPP

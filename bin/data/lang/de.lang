@@ -18,7 +18,7 @@ menu.story.title = Story-Modus
 menu.story.credits = Kredits:\n{credits}
 menu.story.select = Wählen Sie ein Level:
 menu.story.progression = Fortschritt:
-menu.story.intro = Level {level}\n\n"{description}"\n\nGegner: {count}
+menu.story.intro = Level {level}\n\n{description}\n\nGegner: {count}
 menu.story.play = Spielen
 menu.story.armory = Zeughaus
 
@@ -136,7 +136,7 @@ item.shield = Energie Schild
 item.shield_info = Schutzpunkte: {points}
 item.laser = Laserkanone
 item.plasma = Plasma-Kanone
-item.weapon_info = Damage: {dmg}, Geschwindigkeit: {speed}\nrate: {rate} Schuss/s
+item.weapon_info = Damage: {dmg}\nGeschwindigkeit: {speed}\nRate: {rate} Schuss/s
 item.engine = Motor
 item.engine_info = Geschwindigkeit: {speed}
 item.heatsink = Heatsink

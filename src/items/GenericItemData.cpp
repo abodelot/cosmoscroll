@@ -40,14 +40,9 @@ bool GenericItemData::LoadFromXml(TiXmlElement* elem)
 }
 
 
-std::wstring GenericItemData::BuildDescriptionString(bool include_price) const
+std::wstring GenericItemData::BuildDescriptionString() const
 {
 	std::wstring s = _t(std::string(TypeToString()) + "_info");
-	if (include_price)
-	{
-		s = s + L"\n" + _t("item.price");
-	}
-
 	const wchar_t* keyword = NULL;
 	switch (GetType())
 	{
@@ -69,7 +64,6 @@ std::wstring GenericItemData::BuildDescriptionString(bool include_price) const
 	if (keyword != NULL)
 	{
 		wstr_self_replace(s, keyword, to_wstring(int_value_));
-		wstr_self_replace(s, L"{price}", to_wstring(GetPrice()));
 	}
 	return s;
 }

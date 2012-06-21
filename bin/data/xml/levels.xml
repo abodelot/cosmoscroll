@@ -61,7 +61,7 @@
 	</functions>
 	<levels>
 		<!-- LVL1 -->
-		<level desc="This is piece of cake." stars="30" layer1="layers/blue.jpg" layer2="layers/fog.png">
+		<level desc="First encounter." stars="30" layer1="layers/blue.jpg" layer2="layers/fog.png">
 
 			<loop count="2">
 				<call func="caps_x3"/>
@@ -97,7 +97,7 @@
 		</level>
 
 		<!-- LVL2 -->
-		<level desc="Ahoi captain of the space!" layer1="layers/blue.jpg" layer2="layers/fog.png" stars="25">
+		<level desc="Ahoi captain of space!" layer1="layers/blue.jpg" layer2="layers/fog.png" stars="25">
 			<loop count="2">
 				<call func="caps_x5"/>
 				<ship id="2" y="50" t="1"/>
@@ -152,7 +152,7 @@
 		</level>
 
 		<!-- LVL3 -->
-		<level desc="This doesn't smell good." layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0">
+		<level desc="Inside the bandits' lair (part 1)" layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0">
 			<ship id="2" y="100" t="2"/>
 			<ship id="2" y="150" />
 			<ship id="2" y="200" t="2"/>
@@ -216,9 +216,9 @@
 			<ship id="2" y="300" t="1.2"/>
 			<ship id="3" y="340" t="1.2"/>
 			<decor id="gate" y="0"/>
-			<ship id="3" y="250" t="4"/>
-			<ship id="3" y="300" t="1"/>
-			<ship id="3" y="200"/>
+			<ship id="3" y="250" t="7"/>
+			<ship id="3" y="100" t="3"/>
+			<ship id="2" y="200"/>
 			<ship id="5" y="350" t="1"/>
 			<ship id="3" y="150"/>
 			<ship id="5" y="130" t="3"/>
@@ -229,7 +229,7 @@
 		</level>
 
 		<!-- LVL4 -->
-		<level desc="Where did I put those keys again?" layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0">
+		<level desc="Inside the bandits' lair (part 2)" layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0">
 			<ship id="5" y="120" t="1"/>
 			<decor id="guntower" t="2"/>
 			<ship id="2" y="200" t="5"/>
@@ -271,12 +271,12 @@
 				<decor id="canon" y="261" t="4"/>
 			</loop>
 			<loop count="2">
-				<ship id="2" y="260" t="2"/>
-				<ship id="2" y="230" t="1"/>
+				<ship id="2" y="130" t="2"/>
+				<ship id="2" y="160" t="1"/>
 				<ship id="5" y="100"/>
-				<ship id="2" y="200" t="1"/>
-				<ship id="2" y="230" t="1"/>
-				<ship id="5" y="289"/>
+				<ship id="2" y="130" t="1"/>
+				<ship id="2" y="160" t="1"/>
+				<ship id="5" y="100"/>
 			</loop>
 			<ship id="2" y="120" t="4"/>
 			<ship id="3" y="300" t="4"/>
@@ -309,9 +309,9 @@
 
 			<loop count="2">
 				<ship id="3" y="100" t="3.0"/>
-				<ship id="3" y="280"/>
-				<ship id="4" y="140" t="1.0"/>
-				<ship id="4" y="310"/>
+				<ship id="3" y="280" t="0.5" />
+				<ship id="4" y="140" t="0.5"/>
+				<ship id="4" y="310" t="0.5"/>
 			</loop>
 
 			<ship id="2" y="200" t="6"/>
@@ -322,6 +322,7 @@
 			<ship id="4" y="70" t="1"/>
 			<ship id="4" y="230" t="1"/>
 			<ship id="4" y="160" t="2"/>
+			<wait t="2"/>
 			<call func="interceptors_5"/>
 			<ship id="5" y="120" t="1" />
 			<ship id="5" y="320" t="1" />
@@ -339,6 +340,11 @@
 			<call func="interceptors_5" />
 			<wait t="4" />
 			<call func="interceptors_7"/>
+			<ship id="4" y="230" t="4"/>
+			<ship id="4" y="240" t="1"/>
+			<ship id="4" y="310" t="2"/>
+			<ship id="4" y="100" t="1"/>
+			<ship id="4" y="150" t="2"/>
 		</level>
 
 		<!-- LVL6 (saucers, miniboss x2) -->
@@ -401,8 +407,9 @@
 				<asteroid y="300" t="0.5"/>
 				<ship id="5" y="300" t="0.5"/>
 			</loop>
+			<wait t="1"/>
 			<call func="interceptors_5"/>
-			<wait t="3"/>
+			<wait t="4"/>
 			<call func="interceptors_7"/>
 			<loop count="2">
 				<ship id="5" y="290" t="2.5" />
@@ -482,10 +489,13 @@
 			<ship id="6" y="170" t="2"/>
 			<ship id="3" y="40" t="1"/>
 			<ship id="3" y="370" t="2"/>
-			<ship id="6" y="240" t="1" />
-			<ship id="6" y="240" t="2.5" />
-			<ship id="6" y="240" t="2.5" />
-			<ship id="6" y="240" t="2.5" />
+			<ship id="6" y="240" t="1"/>
+			<ship id="6" y="240" t="2"/>
+			<ship id="6" y="240" t="2"/>
+			<ship id="7" y="240" t="2"/>
+			<ship id="6" y="100" t="1"/>
+			<ship id="6" y="300" t="1"/>
+			<ship id="6" y="200" t="1"/>
 			<evilboss y="170" t="8"/>
 		</level>
 	</levels>

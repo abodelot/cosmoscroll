@@ -121,7 +121,7 @@ void ParticleSystem::RemoveShield(const sf::Sprite* handle)
 	for (it = particles_.begin(); it != particles_.end();)
 	{
 		ShieldParticle* p = dynamic_cast<ShieldParticle*>(*it);
-		if (p != NULL and p->GetHandle() == handle)
+		if (p != NULL && p->GetHandle() == handle)
 		{
 			delete *it;
 			it = particles_.erase(it);

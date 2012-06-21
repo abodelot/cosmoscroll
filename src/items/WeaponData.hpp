@@ -16,7 +16,7 @@ public:
 	bool LoadFromXml(TiXmlElement* elem);
 
 	// override
-	std::wstring BuildDescriptionString(bool include_price=false) const;
+	std::wstring BuildDescriptionString() const;
 
 	const std::string& GetID() const;
 	void InitWeapon(Weapon* weapon) const;

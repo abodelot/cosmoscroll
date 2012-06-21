@@ -17,7 +17,7 @@ menu.story.title = История режиме
 menu.story.credits = Кредиты:\n{credits}
 menu.story.select = Выбор уровня:
 menu.story.progression = Прогрессия:
-menu.story.intro = Уровень {level}\n\n"{description}"\n\nпарни: {count}
+menu.story.intro = Уровень {level}\n\n{description}\n\nпарни: {count}
 menu.story.play = Play
 menu.story.armory = Оружейной
 
@@ -133,7 +133,7 @@ item.shield = (Пресс Побег отменить)
 item.shield_info = указывает защита: {points}
 item.laser = Лазерная пушка
 item.plasma = Плазменная пушка
-item.weapon_info = Урон: {dmg}, скорость: {speed}\nтемп стрельбы: {rate} круглый/сек
+item.weapon_info = Урон: {dmg}\nскорость: {speed}\nтемп стрельбы: {rate} круглый/сек
 item.engine = Двигатель
 item.engine_info = Скорость: {speed}
 item.heatsink = радиатора

@@ -32,7 +32,7 @@ public:
 	inline Type GetType() const { return type_; }
 	void SetType(Type type) { type_ = type; }
 
-	virtual std::wstring BuildDescriptionString(bool include_price=false) const = 0;
+	virtual std::wstring BuildDescriptionString() const = 0;
 
 
 private:
