@@ -35,9 +35,9 @@
 		<engine level="3" speed="220" price="150" />
 	</engines>
 	<heatsinks>
-		<heatsink level="1" heat="80" />
-		<heatsink level="2" heat="110" price="80" />
-		<heatsink level="3" heat="140" price="180" />
+		<heatsink level="1" heat="100" />
+		<heatsink level="2" heat="120" price="80" />
+		<heatsink level="3" heat="150" price="180" />
 	</heatsinks>
 	<armors>
 		<armor level="1" hp="4" />

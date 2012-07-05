@@ -23,11 +23,13 @@
 #define MISSILES_DEFAULT            0
 #define MISSILES_MAX                3
 
-#define HEAT_RECOVERY_RATE          13
+// time to wait from overheat to heat 0 (seconds)
+#define COOLING_DELAY              10
 
-#define SHIELD_RECOVERY_DELAY       6 // time to wait before earning another shield point
+// time to wait before earning another shield point (seconds)
+#define SHIELD_RECOVERY_DELAY       6
 
-#define TIMED_BONUS_DURATION        10 // seconds
+#define TIMED_BONUS_DURATION        10
 
 
 PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
@@ -244,7 +246,7 @@ void PlayerShip::Update(float frametime)
 	// animation
 	Animated::UpdateSubRect(*this, frametime);
 
-	// tirs
+	// weapons
 	if (!overheated_)
 	{
 		float h = 0.f;
@@ -272,12 +274,11 @@ void PlayerShip::Update(float frametime)
 		SoundSystem::GetInstance().PlaySound(*snd_disabled_);
 	}
 
-	// déplacement
+	// moving
 	ComputeMove(frametime);
 	sf::Vector2f pos = GetPosition();
 	pos.y = pos.y + speed_y_ * frametime;
 	pos.x = pos.x + speed_x_ * frametime;
-
 
 	const int X_BOUND = manager.GetWidth() - GetSize().x;
 	const int Y_BOUND = manager.GetHeight() - GetSize().y;
@@ -300,7 +301,7 @@ void PlayerShip::Update(float frametime)
 	}
 	SetPosition(pos);
 
-	// regénération bouclier
+	// shield regeneration
 	if (shield_ < shield_max_)
 	{
 		shield_timer_ += frametime;
@@ -311,10 +312,10 @@ void PlayerShip::Update(float frametime)
 		}
 	}
 
-	// refroidissement
+	// cooling
 	if (heat_ > 0.f)
 	{
-		heat_ -= HEAT_RECOVERY_RATE * frametime;
+		heat_ -= frametime * heat_max_ / COOLING_DELAY;
 		if (heat_ <= 0.f)
 		{
 			heat_ = 0.f;
@@ -466,14 +467,11 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 		// immediate bonus
 		case Bonus::SUPER_BANANA:
 			ParticleSystem::GetInstance().FierySfx(GetCenter_(), 50);
-			// max hp
-			SetHP(hp_max_);
-			panel_.SetShipHP(hp_max_);
-			// max shield
-			IncreaseShield(shield_max_ - shield_);
-			// +1 missile, +1 cooler
+			// +1 missile, +1 cooler, +1 health, +1 shield
 			HandleBonus(Bonus::MISSILE);
 			HandleBonus(Bonus::COOLER);
+			HandleBonus(Bonus::HEALTH);
+			HandleBonus(Bonus::SHIELD);
 			break;
 		case Bonus::HEALTH:
 			if (GetHP() < hp_max_)
@@ -543,9 +541,12 @@ void PlayerShip::KonamiCodeOn()
 {
 	konami_code_activated_ = true;
 
-	hp_max_ = 42;
-	panel_.SetMaxShipHP(hp_max_);
-	HandleBonus(Bonus::SUPER_BANANA);
+	HandleBonus(Bonus::SPEED);
+	// max hp
+	SetHP(hp_max_);
+	panel_.SetShipHP(hp_max_);
+	// max shield
+	IncreaseShield(shield_max_ - shield_);
 
 	coolers_ = 42;
 	panel_.SetCoolers(42);
@@ -557,4 +558,8 @@ void PlayerShip::KonamiCodeOn()
 	missile_launcher_.SetMultiply(3);
 
 	ParticleSystem::GetInstance().AddMessage(GetPosition(), L"For great justice!");
+
+#ifdef DEBUG
+	this->SetCollideFlag(C_IGNORE_DAMAGE);
+#endif
 }

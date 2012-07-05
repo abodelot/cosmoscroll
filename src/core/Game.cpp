@@ -40,6 +40,8 @@ Game& Game::GetInstance()
 Game::Game():
 	input_(Input::GetInstance())
 {
+	// default location
+	config_file_ = FileSystem::InitSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
 }
 
 
@@ -89,8 +91,6 @@ void Game::OverrideConfigFile(const std::string& config_file)
 
 void Game::Init(const std::string& data_path, int level_set)
 {
-	config_file_ = FileSystem::InitSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
-
 	input_.Init(app_.GetInput());
 
 	// init resources directory

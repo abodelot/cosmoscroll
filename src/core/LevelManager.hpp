@@ -75,6 +75,7 @@ public:
 	 */
 	const sf::Image* GetLayerImage1() const;
 	const sf::Image* GetLayerImage2() const;
+	sf::Color GetLayerColor() const;
 
 	int GetDecorHeight() const;
 	int GetStarsCount() const;

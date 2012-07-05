@@ -8,6 +8,7 @@
 #include "utils/StringUtils.hpp"
 #include "utils/Error.hpp"
 #include "utils/I18n.hpp"
+#include "utils/Math.hpp"
 #include "tinyxml/tinyxml.h"
 
 /*
@@ -21,11 +22,8 @@ valeur max :  	apparait à partir de :
 4 points      	DROPPABLE_STEP * 3
 ...
 */
-#define DROPPABLE_STEP 20
+#define DROPPABLE_STEP 25
 
-// background image scrolling speed (if any)
-#define BACKGROUND_SPEED 20
-#define FOREGROUND_SPEED 45
 
 EntityManager& EntityManager::GetInstance()
 {
@@ -48,6 +46,7 @@ EntityManager::EntityManager():
 
 	layer1_.scrolling_speed_ = BACKGROUND_SPEED;
 	layer2_.scrolling_speed_ = FOREGROUND_SPEED;
+
 	decor_height_ = 0;
 }
 
@@ -101,6 +100,7 @@ void EntityManager::InitMode(Mode mode)
 			}
 			layer1_.SetScrollingTexture(levels.GetLayerImage1());
 			layer2_.SetScrollingTexture(levels.GetLayerImage2());
+			layer2_.SetColor(levels.GetLayerColor());
 			decor_height_ = levels.GetDecorHeight();
 			particles_.AddStars(levels.GetStarsCount());
 			break;
@@ -109,9 +109,10 @@ void EntityManager::InitMode(Mode mode)
 			more_bad_guys_ = &EntityManager::MoreBadGuys_ARCADE;
 			// on démarre toujours le mode arcade avec un nouveau vaisseau
 			RespawnPlayer();
-			// disable background image
+			// no image on layer 1, fog with random color on layer 2,
 			layer1_.SetScrollingTexture(NULL);
-			layer2_.SetScrollingTexture(NULL);
+			layer2_.SetScrollingTexture(&Resources::GetImage("layers/fog.png"));
+			layer2_.SetColor(math::random_color(0, 0, 20, 30, 30, 70));
 			decor_height_ = 0;
 			std::wstring game_info = wstr_replace(_t("panel.record"), L"{record}", to_wstring(arcade_record_));
 			ControlPanel::GetInstance().SetGameInfo(game_info);
@@ -276,8 +277,8 @@ void EntityManager::Render(sf::RenderTarget& target) const
 	// draw scrolling background images
 	layer1_.Draw(target);
 	layer2_.Draw(target);
-
 	particles_.Show(target);
+
 	// draw each managed entity
 	for (EntityList::const_iterator it = entities_.begin(); it != entities_.end(); ++it)
 	{
@@ -441,7 +442,7 @@ PlayerShip* EntityManager::GetPlayerShip() const
 void EntityManager::SpawnRandomEntity()
 {
 	// update index of the most valuable spwanable entity
-	max_droppable_points_ = timer_ / DROPPABLE_STEP;
+	max_droppable_points_ = timer_ / DROPPABLE_STEP + 1;
 
 	for (size_t i = max_droppable_index_; i < uniques_.size(); ++i)
 	{
@@ -543,14 +544,30 @@ void EntityManager::ParallaxLayer::SetScrollingTexture(const sf::Image* image)
 	image_ = image;
 	if (image != NULL)
 	{
-		sf::Sprite temp(*image);
-		background_ = temp;
-		background_.SetX(0);
-		background2_ = temp;
+		background_ = sf::Sprite(*image);
+		background2_ = sf::Sprite(*image);
 		background2_.SetX(image->GetWidth());
 	}
 }
 
+
+void EntityManager::ParallaxLayer::SetColor(const sf::Color& color)
+{
+	if (color != sf::Color::White)
+	{
+		background_.SetColor(color);
+		background2_.SetColor(color);
+		background_.SetBlendMode(sf::Blend::Add);
+		background2_.SetBlendMode(sf::Blend::Add);
+	}
+	else
+	{
+		background_.SetColor(sf::Color::White);
+		background2_.SetColor(sf::Color::White);
+		background_.SetBlendMode(sf::Blend::Alpha);
+		background2_.SetBlendMode(sf::Blend::Alpha);
+	}
+}
 
 void EntityManager::ParallaxLayer::Draw(sf::RenderTarget& target) const
 {

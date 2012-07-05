@@ -2,7 +2,6 @@
 #include "utils/Math.hpp"
 #include "core/ParticleSystem.hpp"
 
-#define DECOR_SPEED -45
 
 ComplexEntity::ComplexEntity(const sf::Vector2f& pos):
 	Entity(pos, 1)
@@ -15,7 +14,7 @@ ComplexEntity::ComplexEntity(const sf::Vector2f& pos):
 
 void ComplexEntity::Update(float frametime)
 {
-	sf::Sprite::Move(DECOR_SPEED * frametime, 0.f);
+	sf::Sprite::Move(-EntityManager::FOREGROUND_SPEED * frametime, 0.f);
 	for (size_t i = 0; i < parts_.size(); ++i)
 	{
 		parts_[i].Update(frametime);
@@ -44,8 +43,8 @@ void ComplexEntity::OnCollide(Entity& entity)
 				{
 					OnPartDestroyed(p);
 					sf::Vector2f pos;
-					pos.x = GetPosition().x + p.GetPosition().x;
-					pos.y = GetPosition().y + p.GetPosition().y;
+					pos.x = GetPosition().x + p.GetCenter_().x;
+					pos.y = GetPosition().y + p.GetCenter_().y;
 					ParticleSystem::GetInstance().ExplosionSfx(pos);
 				}
 				break;
@@ -58,7 +57,7 @@ void ComplexEntity::OnCollide(Entity& entity)
 
 float ComplexEntity::GetSpeedX() const
 {
-	return DECOR_SPEED;
+	return -EntityManager::FOREGROUND_SPEED;
 }
 
 

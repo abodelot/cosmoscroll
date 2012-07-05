@@ -38,7 +38,7 @@ SoundSystem::SoundSystem()
 	SetSoundVolume(DEFAULT_VOLUME);
 	enable_music_ = true;
 	enable_sound_ = true;
-	music_name_ = DEFAULT_MUSIC;
+	SetMusic(DEFAULT_MUSIC);
 }
 
 
@@ -184,11 +184,8 @@ void SoundSystem::LoadFromConfig(IniParser& config)
 {
 	config.SeekSection("Audio");
 
-	if (config.Get("enable_music", enable_music_))
-		EnableMusic(enable_music_);
-
-	if (config.Get("enable_sound", enable_sound_))
-		EnableSound(enable_sound_);
+	config.Get("enable_music", enable_music_);
+	config.Get("enable_sound", enable_sound_);
 
 	if (config.Get("music_name", music_name_))
 		SetMusic(music_name_);

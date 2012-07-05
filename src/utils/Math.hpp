@@ -2,6 +2,7 @@
 #define MATH_HPP
 
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <cmath>
 
 #define PI 3.14159265f
@@ -60,6 +61,8 @@ inline float distance(const sf::Vector2f& p1, const sf::Vector2f& p2 = sf::Vecto
 
 
 float angle(const sf::Vector2f& p1, const sf::Vector2f& p2);
+
+sf::Color random_color(sf::Uint8 min_r=0, sf::Uint8 min_g=0, sf::Uint8 min_b=0, sf::Uint8 max_r=255, sf::Uint8 max_g=255, sf::Uint8 max_b=255);
 
 }
 

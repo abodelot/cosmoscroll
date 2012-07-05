@@ -61,7 +61,7 @@
 	</functions>
 	<levels>
 		<!-- LVL1 -->
-		<level desc="First encounter." stars="30" layer1="layers/blue.jpg" layer2="layers/fog.png">
+		<level desc="First encounter." stars="30" layer1="layers/blue.jpg" layer2="layers/fog.png" color="#002060">
 
 			<loop count="2">
 				<call func="caps_x3"/>
@@ -97,7 +97,7 @@
 		</level>
 
 		<!-- LVL2 -->
-		<level desc="Ahoi captain of space!" layer1="layers/blue.jpg" layer2="layers/fog.png" stars="25">
+		<level desc="Ahoi captain of space!" layer1="layers/blue.jpg" layer2="layers/fog.png" color="#003070" stars="40">
 			<loop count="2">
 				<call func="caps_x5"/>
 				<ship id="2" y="50" t="1"/>
@@ -164,8 +164,8 @@
 			<ship id="3" y="200" t="7"/>
 			<ship id="3" y="100" t="2"/>
 
-			<decor id="canon" y="261" t="2"/>
-			<decor id="canon" y="261" t="4"/>
+			<decor id="canon" t="2"/>
+			<decor id="canon" t="4"/>
 			<ship id="2" y="200" t="7"/>
 			<ship id="2" y="100"/>
 			<call func="scoot_line_3"/>
@@ -266,9 +266,9 @@
 			<ship id="2" y="200" t="1"/>
 			<ship id="2" y="280" t="1"/>
 			<ship id="5" y="150" />
-			<decor id="canon" y="261" t="1"/>
+			<decor id="canon" t="1"/>
 			<loop count="3">
-				<decor id="canon" y="261" t="4"/>
+				<decor id="canon" t="4"/>
 			</loop>
 			<loop count="2">
 				<ship id="2" y="130" t="2"/>
@@ -294,7 +294,7 @@
 		</level>
 
 		<!-- LVL5 (scoot pyramids) -->
-		<level desc="I'll bet my badge that we haven't\nseen the last of those weirdies." layer1="layers/purple.jpg" layer2="layers/fog.png" stars="50">
+		<level desc="I'll bet my badge that we haven't\nseen the last of those weirdies." layer1="layers/purple.jpg" layer2="layers/fog.png" stars="50" color="#200010">
 			<asteroid y="100" t="1.0"/>
 			<asteroid y="170" t="0.5"/>
 			<asteroid y="360" t="0.5"/>
@@ -348,7 +348,7 @@
 		</level>
 
 		<!-- LVL6 (saucers, miniboss x2) -->
-		<level desc="The saucers are up there.\nThe graveyard is out there." layer1="layers/purple.jpg" layer2="layers/fog.png" stars="35">
+		<level desc="The saucers are up there.\nThe graveyard is out there." layer1="layers/purple.jpg" layer2="layers/fog.png" color="#200010" stars="35">
 			<wait t="2"/>
 			<asteroid y="150" t="4"/>
 			<asteroid y="220" t="0.5"/>
@@ -392,8 +392,7 @@
 		</level>
 
 		<!-- LVL7 (saucers, interceptors, heavy interceptors) -->
-		<level desc="Now toddle off and fly\nyour flying machine!" layer1="layers/green.jpg" layer2="layers/fog.png" stars="40">
-
+		<level desc="Now toddle off and fly\nyour flying machine!" layer1="layers/green.jpg" layer2="layers/fog.png" color="#003000" stars="40">
 			<loop count="2">
 				<asteroid y="140" t="4.0"/>
 				<asteroid y="300" t="0.5"/>
@@ -459,7 +458,7 @@
 		</level>
 
 		<!-- LVL8 -->
-		<level desc="Take me to your leader." layer1="layers/green.jpg" layer2="layers/fog.png" stars="70">
+		<level desc="Take me to your leader." layer1="layers/green.jpg" layer2="layers/fog.png" color="#003000" stars="70">
 			<wait t="1"/>
 			<loop count="3">
 				<ship id="5" y="270" t="1" />

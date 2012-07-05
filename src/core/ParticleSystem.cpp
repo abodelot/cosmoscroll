@@ -197,6 +197,7 @@ ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset, const sf::Image& img)
 {
 	sprite_.SetImage(img);
 	sprite_.SetPosition(offset);
+	sprite_.SetBlendMode(sf::Blend::Add);
 	angle_ = sf::Randomizer::Random(-PI, PI);
 	sprite_.SetRotation(math::rad_to_deg(angle_));
 	float scale = sf::Randomizer::Random(0.5f, 1.2f);
@@ -229,6 +230,7 @@ ParticleSystem::Star::Star(const sf::Image& img)
 	sprite_.SetPosition(x, y);
 	float scale = sf::Randomizer::Random(1.f, 2.f);
 	sprite_.SetScale(scale, scale);
+	sprite_.SetColor(math::random_color(200, 200, 200, 255, 255, 255));
 	speed_ = (int) (sf::Randomizer::Random(STAR_MIN_SPEED, STAR_MAX_SPEED));
 }
 

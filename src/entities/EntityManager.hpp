@@ -23,6 +23,10 @@ class LevelManager;
 class EntityManager: public sf::Drawable
 {
 public:
+	// background image speed for parallax scrolling
+	static const int BACKGROUND_SPEED = 15;
+	static const int FOREGROUND_SPEED = 45;
+
 	enum Mode
 	{
 		MODE_STORY,
@@ -207,6 +211,7 @@ private:
 		ParallaxLayer();
 		void OnUpdate(float frametime);
 		void SetScrollingTexture(const sf::Image* image);
+		void SetColor(const sf::Color& color);
 		void Draw(sf::RenderTarget& target) const;
 	};
 

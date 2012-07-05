@@ -3,9 +3,11 @@
 #include "utils/Math.hpp"
 #include "entities/EntityManager.hpp"
 
+#define BASE_OFFSET 28
+
 GunTower::GunTower(const sf::Vector2f& position): ComplexEntity(position)
 {
-	SetY(EntityManager::GetInstance().GetHeight() - 94);
+	SetY(EntityManager::GetInstance().GetHeight() - (BASE_OFFSET + 64));
 
 	Part base;
 	base.SetImage(Resources::GetImage("entities/guntower-base.png"));
@@ -18,7 +20,7 @@ GunTower::GunTower(const sf::Vector2f& position): ComplexEntity(position)
 	turret.SetCollideFlag(C_IGNORE_DAMAGE);
 
 	AddPart(turret, img_turret.GetWidth() / 2, img_turret.GetHeight() / 2);
-	AddPart(base, 0, 31);
+	AddPart(base, 0, BASE_OFFSET);
 	target_ = NULL;
 
 	weapon_.Init("laser-pink");
@@ -32,7 +34,7 @@ void GunTower::Update(float frametime)
 	ComplexEntity::Update(frametime);
 	weapon_.ShootAt(target_->GetCenter_());
 	weapon_.Update(frametime);
-	// todo rotate turret
+	// rotate turret toward player
 	GetPartAt(0)->SetRotation(180 + math::rad_to_deg(math::angle(target_->GetPosition(), GetPosition())));
 }
 

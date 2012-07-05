@@ -111,6 +111,7 @@ const char* LevelManager::GetDescription() const
 
 const sf::Image* LevelManager::GetLayerImage1() const
 {
+
 	const char* p = GetLevelElement(current_level_)->Attribute("layer1");
 	return p != NULL ? &Resources::GetImage(p) : NULL;
 }
@@ -120,6 +121,13 @@ const sf::Image* LevelManager::GetLayerImage2() const
 {
 	const char* p = GetLevelElement(current_level_)->Attribute("layer2");
 	return p != NULL ? &Resources::GetImage(p) : NULL;
+}
+
+
+sf::Color LevelManager::GetLayerColor() const
+{
+	const char* p = GetLevelElement(current_level_)->Attribute("color");
+	return p != NULL ? HexaToColor(p) : sf::Color::White;
 }
 
 
