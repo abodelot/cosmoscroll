@@ -10,6 +10,7 @@
 #include "entities/complex/Canon.hpp"
 #include "entities/complex/GunTower.hpp"
 #include "utils/Resources.hpp"
+#include "utils/Error.hpp"
 
 #define DEFAULT_STARS_COUNT 33
 
@@ -190,14 +191,12 @@ void LevelManager::EnableHardcore(bool hardcore)
 }
 
 
-void LevelManager::ParseFile(const std::string& file, unsigned int offset)
+int LevelManager::ParseFile(const std::string& file, unsigned int offset)
 {
-	printf("* loading levels... ");
-
 	if (!doc_.LoadFile(file))
 	{
-		std::cerr << "cannot load file " << file << std::endl;
-		std::cerr << "error #" << doc_.ErrorId() << ": " << doc_.ErrorDesc() << std::endl;
+		Error::Log << "Cannot load levels:\n" << file << "\n" << doc_.ErrorDesc();
+		throw Error::Exception();
 	}
 
 	TiXmlNode* set = doc_.RootElement();
@@ -231,7 +230,7 @@ void LevelManager::ParseFile(const std::string& file, unsigned int offset)
 		levels_.push_back(node->ToElement());
 		node = node->NextSibling("level");
 	}
-	printf("%d levels found\n", (int) levels_.size());
+	return (int) levels_.size();
 }
 
 

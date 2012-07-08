@@ -2,7 +2,7 @@
 #define GATE_HPP
 
 #include "ComplexEntity.hpp"
-
+#include "core/SoundSystem.hpp"
 
 class Gate: public ComplexEntity
 {
@@ -19,6 +19,7 @@ private:
 	int energy_cells_;
 	float door_timer_;
 	float door_full_height_;
+	static const sf::SoundBuffer& sound_opening_;
 
 };
 

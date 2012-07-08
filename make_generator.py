@@ -2,8 +2,8 @@
 #-*- coding: utf-8 -*-
 
 ##
-# Générateur de makefile
-# usage: ./make_make.py [makefile_name]
+# Makefile generator
+# usage: ./make_generator.py [makefile_name]
 # @author Alexandre Bodelot <alexandre.bodelot@gmail.com>
 # @date 2011-10-15
 #
@@ -12,12 +12,14 @@ import sys
 import os
 import time
 
+SRC_DIR = "src"
+MAKEFILE = "Makefile"
 TARGET = "bin/cosmoscroll"
 CFLAGS = "-Wall -Wextra -Wwrite-strings -ansi -pedantic -Isrc"
 LIBS = ("sfml-graphics", "sfml-window", "sfml-system", "sfml-audio", "sfml-network")
 
 
-class MakeMake:
+class MakeGenerator:
 
 	def __init__(self, target, makefile_name):
 		self.sources = []
@@ -115,10 +117,10 @@ class MakeMake:
 
 
 if __name__ == "__main__":
-	makefile_name = sys.argv[1] if len(sys.argv) > 1 else "Makefile"
+	makefile_name = sys.argv[1] if len(sys.argv) > 1 else MAKEFILE
 
-	m = MakeMake(TARGET, makefile_name)
-	m.add_sources("src")
+	m = MakeGenerator(TARGET, makefile_name)
+	m.add_sources(SRC_DIR)
 	m.set_libs(LIBS)
 	m.set_cflags(CFLAGS)
 	m.write_makefile()

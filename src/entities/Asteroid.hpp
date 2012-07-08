@@ -2,8 +2,7 @@
 #define ASTEROID_HPP
 
 #include "Entity.hpp"
-
-#include <SFML/Graphics.hpp>
+#include "core/SoundSystem.hpp"
 
 /**
  * Un astéroïde pouvant se diviser en petits morceaux
@@ -42,6 +41,7 @@ private:
 	Size size_;
 	sf::Vector2f speed_;
 	int rotation_speed_;
+	static const sf::SoundBuffer& sound_break_;
 };
 
 #endif // ASTEROID_HPP

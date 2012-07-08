@@ -48,6 +48,7 @@ EntityManager::EntityManager():
 	layer2_.scrolling_speed_ = FOREGROUND_SPEED;
 
 	decor_height_ = 0;
+	SetY(ControlPanel::HEIGHT); // default positon
 }
 
 
@@ -287,7 +288,7 @@ void EntityManager::Render(sf::RenderTarget& target) const
 }
 
 
-void EntityManager::LoadAnimations(const std::string& filename)
+int EntityManager::LoadAnimations(const std::string& filename)
 {
 	// chargement des animations
 	TiXmlDocument doc;
@@ -296,7 +297,7 @@ void EntityManager::LoadAnimations(const std::string& filename)
 		Error::Log << "Cannot load animations definition:\n" << doc.ErrorDesc() << "\n";
 		throw Error::Exception();
 	}
-	std::cout << "* loading animations..." << std::endl;
+
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	// attributs
 	int width, height, count;
@@ -329,10 +330,11 @@ void EntityManager::LoadAnimations(const std::string& filename)
 		}
 		elem = elem->NextSiblingElement();
 	}
+	return animations_.size();
 }
 
 
-void EntityManager::LoadSpaceShips(const std::string& filename)
+int EntityManager::LoadSpaceShips(const std::string& filename)
 {
 	TiXmlDocument doc;
 	if (!doc.LoadFile(filename))
@@ -340,7 +342,7 @@ void EntityManager::LoadSpaceShips(const std::string& filename)
 		Error::Log << "Cannot load spaceships definition:\n" << doc.ErrorDesc();
 		throw Error::Exception();
 	}
-	std::cout << "* loading spaceships..." << std::endl;
+
 	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
 	while (elem != NULL)
 	{
@@ -400,6 +402,7 @@ void EntityManager::LoadSpaceShips(const std::string& filename)
 	}
 
 	RegisterUniqueEntity(new Asteroid(sf::Vector2f(0, 0), Asteroid::BIG));
+	return spaceships_defs_.size();
 }
 
 

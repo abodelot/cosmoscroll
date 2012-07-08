@@ -19,7 +19,7 @@ public:
 	 * Load items definitions from XML
 	 * @param filename: XML document
 	 */
-	void LoadItems(const std::string& filename);
+	int LoadItems(const std::string& filename);
 
 	/**
 	 * Initialize weapon options

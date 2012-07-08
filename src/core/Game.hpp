@@ -121,7 +121,7 @@ private:
 	/**
 	 * Check game data files are unaltered
 	 */
-	void CheckPurity();
+	bool CheckResourcesPurity();
 
 	void BSOD(std::string message);
 

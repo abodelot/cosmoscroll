@@ -97,24 +97,26 @@ void Game::Init(const std::string& data_path, int level_set)
 	data_dir_ = current_dir_ + data_path;
 	Resources::SetDataPath(data_dir_);
 	I18n::GetInstance().SetDataPath(data_dir_);
+	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
 
 	// create window and display loading screen as early as possible
 	vsync_ = true;
 	SetFullscreen(false);
-	sf::String temp("loading..."); app_.Clear() ;app_.Draw(temp); app_.Display();
-
-	CheckPurity();
+	sf::String temp("[loading]"); app_.Clear() ;app_.Draw(temp); app_.Display();
 
 	// load XML resources
-	LevelManager::GetInstance().ParseFile(data_dir_ + XML_LEVELS, level_set);
-	ItemManager::GetInstance().LoadItems(data_dir_ + XML_ITEMS);
-
 	try
 	{
-		EntityManager& entities = EntityManager::GetInstance();
-		entities.LoadAnimations(data_dir_ + XML_ANIMATIONS);
-		entities.LoadSpaceShips(data_dir_ + XML_SPACESHIPS);
-		entities.SetY(ControlPanel::HEIGHT);
+		printf("* checking resources purity... %49s\n",
+			CheckResourcesPurity() ? "[OK]" : "[FAILED]");
+		printf("* loading %-59s [%2d found]\n", "levels...",
+			LevelManager::GetInstance().ParseFile(data_dir_ + XML_LEVELS, level_set));
+		printf("* loading %-59s [%2d found]\n", "items...",
+			ItemManager::GetInstance().LoadItems(data_dir_ + XML_ITEMS));
+		printf("* loading %-59s [%2d found]\n", "animations...",
+			EntityManager::GetInstance().LoadAnimations(data_dir_ + XML_ANIMATIONS));
+		printf("* loading %-59s [%2d found]\n", "spaceships definitions...",
+			EntityManager::GetInstance().LoadSpaceShips(data_dir_ + XML_SPACESHIPS));
 	}
 	catch (std::runtime_error& error)
 	{
@@ -122,7 +124,7 @@ void Game::Init(const std::string& data_path, int level_set)
 	}
 	// load config
 #ifdef DEBUG
-	printf("[config] configuration file is: %s\n", config_file_.c_str());
+	printf("configuration file is: %s\n", config_file_.c_str());
 #endif
 	LoadConfig(config_file_);
 
@@ -147,15 +149,10 @@ bool Game::LoadConfig(const std::string& filename)
 	IniParser config;
 	fullscreen_ = false;
 	vsync_ = true;
-	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
 
 	if (config.LoadFromFile(filename.c_str()))
 	{
-		// Directories
-		config.SeekSection("Directories");
-		screenshot_dir_ = config.Get("screenshots");
-
-		// General settings
+		// -- General settings --
 		config.SeekSection("Settings");
 		// language
 		std::string lang = config.Get("language");
@@ -163,6 +160,7 @@ bool Game::LoadConfig(const std::string& filename)
 		{
 			I18n::GetInstance().LoadSystemLanguage();
 		}
+
 		// high-score
 		int high_score = 0;
 		config.Get("arcade_high_score", high_score);
@@ -179,13 +177,16 @@ bool Game::LoadConfig(const std::string& filename)
 		config.Get("panel_on_top", top);
 		PanelOnTop(top);
 
-		// Audio settings
+		// screenshot directory
+		config.Get("screenshots", screenshot_dir_);
+
+		// -- Audio settings --
 		SoundSystem::GetInstance().LoadFromConfig(config);
 
-		// reading keyboard and joystick bindings
+		// -- Keyboard and joystick bindings --
 		input_.LoadFromConfig(config);
 
-		// reading story progression
+		// -- Story mode progression --
 		playersave_.LoadFromConfig(config);
 		return true;
 	}
@@ -198,9 +199,6 @@ void Game::WriteConfig(const std::string& filename) const
 {
 	IniParser config;
 
-	// Directories
-	config.SeekSection("Directories");
-	config.Set("screenshots", screenshot_dir_);
 	// General Settings
 	config.SeekSection("Settings");
 	config.Set("fullscreen", fullscreen_);
@@ -208,11 +206,12 @@ void Game::WriteConfig(const std::string& filename) const
 	config.Set("panel_on_top", ControlPanel::GetInstance().IsOnTop());
 	config.Set("arcade_high_score", EntityManager::GetInstance().GetArcadeRecord());
 	config.Set("language", I18n::GetInstance().GetCurrentCode());
+	config.Set("screenshots", screenshot_dir_);
 
 	// Audio settings
 	SoundSystem::GetInstance().SaveToConfig(config);
 
-	// writing keyboard and joystick bindings
+	// Keyboard and joystick bindings
 	input_.SaveToConfig(config);
 
 	// Player data
@@ -325,8 +324,8 @@ void Game::TakeScreenshot(void)
 	time_t t = time(NULL);
 	strftime(current_time, sizeof current_time, "%d-%m-%Y_%H-%M-%S", localtime(&t));
 
-	std::string filename = screenshot_dir_ + "/" + current_time + ".png";
-
+	std::string filename = current_dir_ + screenshot_dir_ + "/" + current_time + ".png";
+	std::cout << "current = " << current_dir_ << std::endl;
 	printf("screenshot saved to %s\n", filename.c_str());
 	app_.Capture().SaveToFile(filename);
 }
@@ -388,9 +387,8 @@ void Game::ReloadScenes()
 }
 
 
-void Game::CheckPurity()
+bool Game::CheckResourcesPurity()
 {
-	printf("* checking resources purity... ");
 	pure_ = true;
 	std::ifstream file;
 	MD5 md5sum;
@@ -406,7 +404,7 @@ void Game::CheckPurity()
 	file.open((data_dir_ + XML_ANIMATIONS).c_str());
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_ANIMATIONS);
 	file.close();
-	puts(pure_ ? "[OK]" : "[FAILED]");
+	return pure_;
 }
 
 

@@ -3,7 +3,7 @@
 #define DEFAULT_COLOR    sf::Color(0, 0xde, 0)
 #define DEFAULT_BG_COLOR sf::Color(0x60, 0x5a, 0x5c)
 #define FOCUS_COLOR      sf::Color(0x70, 0xde, 0)
-#define FOCUS_BG_COLOR   sf::Color(0x98, 0x87, 0x90)
+#define FOCUS_BG_COLOR   sf::Color(0xaa, 0xa0, 0xa0)
 
 using namespace gui;
 

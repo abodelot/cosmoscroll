@@ -4,6 +4,8 @@
 
 #define DOOR_DELAY 2.f
 
+const sf::SoundBuffer& Gate::sound_opening_ = Resources::GetSoundBuffer("door-opening.ogg");
+
 //TODO: remove magic numbers
 
 Gate::Gate(const sf::Vector2f& pos):
@@ -69,6 +71,7 @@ void Gate::OnPartDestroyed(const Part& part)
 		if (energy_cells_ == 0)
 		{
 			door_timer_ = DOOR_DELAY;
+			SoundSystem::GetInstance().PlaySound(sound_opening_);
 		}
 	}
 }

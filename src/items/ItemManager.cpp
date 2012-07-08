@@ -23,18 +23,16 @@ ItemManager::~ItemManager()
 }
 
 
-void ItemManager::LoadItems(const std::string& filename)
+int ItemManager::LoadItems(const std::string& filename)
 {
-	std::cout << "* loading items..." << std::endl;
 	TiXmlDocument doc;
 	if (!doc.LoadFile(filename))
 	{
-		Error::Log << "Cannot load items definitions:\n" << doc.ErrorDesc() << "\n";
+		Error::Log << "Cannot load items definitions:\n" << filename << "\n" << doc.ErrorDesc() << "\n";
 		throw Error::Exception();
 	}
 
 	TiXmlElement* root = doc.RootElement();
-
 	// weapons
 	TiXmlElement* elem = root->FirstChildElement("weapons")->FirstChildElement();
 	while (elem != NULL)
@@ -51,6 +49,7 @@ void ItemManager::LoadItems(const std::string& filename)
 	ParseGenericItems(root, "heatsinks", ItemData::HEATSINK);
 	ParseGenericItems(root, "armors", ItemData::ARMOR);
 	ParseGenericItems(root, "engines", ItemData::ENGINE);
+	return items_.size() + weapons_.size();
 }
 
 
@@ -84,8 +83,10 @@ const ItemData* ItemManager::GetItemData(ItemData::Type type, int level) const
 			return data;
 		}
 	}
-	std::cerr << "[ItemManager] item not found: " << ItemData::TypeToString(type)
+#ifdef DEBUG
+	std::cout << "[ItemManager] item not found: " << ItemData::TypeToString(type)
 		<< " (level " << level << ")" << std::endl;
+#endif
 	return NULL;
 }
 
