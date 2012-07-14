@@ -11,7 +11,6 @@ public:
 private:
 	void EventCallback(int id);
 
-	gui::OptionList* opt_music_;
 	gui::CheckBox* cb_music_;
 	gui::Slider* sl_music_vol_;
 	gui::CheckBox* cb_sound_;

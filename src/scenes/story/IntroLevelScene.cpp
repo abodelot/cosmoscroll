@@ -3,6 +3,7 @@
 #include "core/LevelManager.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/Resources.hpp"
+#include "entities/EntityManager.hpp"
 #include "utils/I18n.hpp"
 
 
@@ -25,7 +26,18 @@ void IntroLevelScene::OnEvent(const sf::Event& event)
 	switch (event.Type)
 	{
 		case sf::Event::KeyPressed:
+			if (event.Key.Code != sf::Key::Escape)
+			{
+				EntityManager::GetInstance().InitMode(EntityManager::MODE_STORY);
+				Game::GetInstance().SetNextScene(Game::SC_InGameScene);
+			}
+			else
+			{
+				Game::GetInstance().SetNextScene(Game::SC_LevelMenu);
+			}
+			break;
 		case sf::Event::JoyButtonPressed:
+			EntityManager::GetInstance().InitMode(EntityManager::MODE_STORY);
 			Game::GetInstance().SetNextScene(Game::SC_InGameScene);
 			break;
 		default:

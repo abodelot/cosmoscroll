@@ -1,8 +1,6 @@
 #include "BossTentacles.hpp"
 #include "EntityManager.hpp"
 #include "core/ParticleSystem.hpp"
-#include "core/SoundSystem.hpp"
-#include "utils/Resources.hpp"
 #include "utils/Math.hpp"
 
 
@@ -114,7 +112,6 @@ void BossTentacles::OnDestroy()
 {
 	sf::Vector2f pos = GetCenter_();
 	ParticleSystem::GetInstance().GreenImpactSfx(pos, 100);
-	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("boom.ogg"));
 }
 
 

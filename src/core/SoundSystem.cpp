@@ -2,10 +2,8 @@
 
 #include "SoundSystem.hpp"
 #include "utils/Resources.hpp"
-#include "utils/DumbMusic.hpp"
 #include "utils/IniParser.hpp"
 
-#define DEFAULT_MUSIC  "space.mod"
 #define DEFAULT_VOLUME 40
 
 
@@ -30,15 +28,13 @@ SoundSystem& SoundSystem::GetInstance()
 }
 
 
-SoundSystem::SoundSystem()
+SoundSystem::SoundSystem():
+	last_used_(0),
+	enable_music_(true),
+	enable_sound_(true)
 {
-	last_used_ = 0;
-	music_ = NULL;
-	music_volume_ = DEFAULT_VOLUME;
+	SetMusicVolume(DEFAULT_VOLUME);
 	SetSoundVolume(DEFAULT_VOLUME);
-	enable_music_ = true;
-	enable_sound_ = true;
-	SetMusic(DEFAULT_MUSIC);
 }
 
 
@@ -47,50 +43,37 @@ SoundSystem::~SoundSystem()
 }
 
 
-void SoundSystem::SetMusic(const std::string& music_name)
+void SoundSystem::PlayMusic(const std::string& music_name)
 {
-	sf::SoundStream* music = Resources::GetDumbMusic(music_name);
-	music_name_ = music_name;
-
-	if (music != music_)
+	if (enable_music_ && music_name != music_name_)
 	{
+		music_name_ = music_name;
 		StopMusic();
-		music_ = music;
-		music_->SetVolume(music_volume_);
+		music_.OpenFromFile(Resources::GetDataPath() + "/music/" + music_name);
+		music_.SetVolume(music_volume_);
+		music_.Play();
 	}
-}
-
-
-const std::string& SoundSystem::GetMusic() const
-{
-	return music_name_;
 }
 
 
 void SoundSystem::PlayMusic()
 {
-	if (music_ != NULL && enable_music_)
+	if (enable_music_)
 	{
-		music_->Play();
+		music_.Play();
 	}
 }
 
 
 void SoundSystem::StopMusic()
 {
-	if (music_ != NULL)
-	{
-		music_->Stop();
-	}
+	music_.Stop();
 }
 
 
 void SoundSystem::PauseMusic()
 {
-	if (music_ != NULL)
-	{
-		music_->Pause();
-	}
+	music_.Pause();
 }
 
 
@@ -114,14 +97,17 @@ void SoundSystem::PlaySound(const sf::SoundBuffer& soundbuffer)
 }
 
 
+void SoundSystem::PlaySound(const std::string& sound_name)
+{
+	PlaySound(Resources::GetSoundBuffer(sound_name));
+}
+
+
 void SoundSystem::SetMusicVolume(int volume)
 {
 	ensure_range(volume, 0, 100);
 	music_volume_ = volume;
-	if (music_ != NULL)
-	{
-		music_->SetVolume(volume);
-	}
+	music_.SetVolume(volume);
 }
 
 
@@ -142,9 +128,9 @@ void SoundSystem::EnableMusic(bool enabled)
 	{
 		StopMusic();
 	}
-	else if (music_ != NULL)
+	else
 	{
-		music_->Play();
+		music_.Play();
 	}
 }
 
@@ -187,9 +173,6 @@ void SoundSystem::LoadFromConfig(IniParser& config)
 	config.Get("enable_music", enable_music_);
 	config.Get("enable_sound", enable_sound_);
 
-	if (config.Get("music_name", music_name_))
-		SetMusic(music_name_);
-
 	if (config.Get("music_volume", music_volume_))
 		SetMusicVolume(music_volume_);
 
@@ -201,7 +184,6 @@ void SoundSystem::LoadFromConfig(IniParser& config)
 void SoundSystem::SaveToConfig(IniParser& config)
 {
 	config.SeekSection("Audio");
-	config.Set("music_name",   music_name_);
 	config.Set("enable_music", enable_music_);
 	config.Set("music_volume", music_volume_);
 	config.Set("enable_sound", enable_sound_);

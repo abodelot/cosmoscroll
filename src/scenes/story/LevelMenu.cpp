@@ -2,7 +2,6 @@
 #include "core/Game.hpp"
 #include "core/LevelManager.hpp"
 #include "core/ControlPanel.hpp"
-#include "entities/EntityManager.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
@@ -99,7 +98,6 @@ void LevelMenu::EventCallback(int id)
 				levels_.SetCurrent(selected_level);
 
 			levels_.LoadCurrent();
-			EntityManager::GetInstance().InitMode(EntityManager::MODE_STORY);
 
 			std::wstring s = wstr_replace(_t("panel.level"), L"{level}", to_wstring(selected_level));
 			ControlPanel::GetInstance().SetGameInfo(s);

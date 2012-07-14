@@ -28,7 +28,7 @@ ParticleSystem::~ParticleSystem()
 void ParticleSystem::ExplosionSfx(const sf::Vector2f& offset)
 {
 	particles_.push_front(new Explosion(offset));
-	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("boom.ogg"));
+	SoundSystem::GetInstance().PlaySound("boom.ogg");
 }
 
 
@@ -45,6 +45,7 @@ void ParticleSystem::GreenImpactSfx(const sf::Vector2f& pos, int count)
 	static const sf::Image& img = Resources::GetImage("particles/impact-green.png");
 	for (;count > 0; --count)
 		particles_.push_front(new Fiery(pos, img));
+	SoundSystem::GetInstance().PlaySound("boom.ogg");
 }
 
 

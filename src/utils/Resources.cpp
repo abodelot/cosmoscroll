@@ -6,7 +6,6 @@ std::string Resources::path_ = "./data";
 Resources::ImageMap Resources::images_;
 Resources::FontMap Resources::fonts_;
 Resources::SoundMap Resources::sounds_;
-Resources::DumbMusicMap Resources::dumb_musics_;
 
 
 void Resources::SetDataPath(const std::string& path)
@@ -15,6 +14,12 @@ void Resources::SetDataPath(const std::string& path)
 	{
 		path_ = path;
 	}
+}
+
+
+const std::string& Resources::GetDataPath()
+{
+	return path_;
 }
 
 
@@ -55,28 +60,4 @@ const sf::SoundBuffer& Resources::GetSoundBuffer(const std::string& name)
 		return sound;
 	}
 	return it->second;
-}
-
-
-DumbMusic* Resources::GetDumbMusic(const std::string& name)
-{
-	DumbMusicMap::iterator it = dumb_musics_.find(name);
-	if (it == dumb_musics_.end())
-	{
-		DumbMusic* music = new DumbMusic();
-		music->OpenFromFile(path_ + "/music/" + name);
-		dumb_musics_[name] = music;
-		return music;
-	}
-	return it->second;
-}
-
-
-void Resources::Unload()
-{
-	for (DumbMusicMap::iterator it = dumb_musics_.begin(); it != dumb_musics_.end(); ++it)
-	{
-		delete it->second;
-	}
-	dumb_musics_.clear();
 }

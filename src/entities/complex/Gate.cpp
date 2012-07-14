@@ -1,10 +1,10 @@
 #include "Gate.hpp"
 #include "Part.hpp"
 #include "utils/Resources.hpp"
+#include "core/SoundSystem.hpp"
 
 #define DOOR_DELAY 2.f
 
-const sf::SoundBuffer& Gate::sound_opening_ = Resources::GetSoundBuffer("door-opening.ogg");
 
 //TODO: remove magic numbers
 
@@ -71,7 +71,7 @@ void Gate::OnPartDestroyed(const Part& part)
 		if (energy_cells_ == 0)
 		{
 			door_timer_ = DOOR_DELAY;
-			SoundSystem::GetInstance().PlaySound(sound_opening_);
+			SoundSystem::GetInstance().PlaySound("door-opening.ogg");
 		}
 	}
 }

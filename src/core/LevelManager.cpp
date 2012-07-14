@@ -148,6 +148,12 @@ int LevelManager::GetStarsCount() const
 }
 
 
+const char* LevelManager::GetMusic() const
+{
+	return GetLevelElement(current_level_)->Attribute("music");
+}
+
+
 int LevelManager::GetDuration() const
 {
 	if (waiting_line_.empty())

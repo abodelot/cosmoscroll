@@ -18,10 +18,6 @@ MainMenu::MainMenu()
 	layout.Add(new CosmoButton(this, _t("menu.main.options")))->SetCallbackID(3);
 	layout.Add(new CosmoButton(this, _t("menu.main.about")))->SetCallbackID(4);
 	layout.Add(new CosmoButton(this, _t("menu.main.quit")))->SetCallbackID(5);
-
-	// init background music at first launch of main menu
-	SoundSystem& sound = SoundSystem::GetInstance();
-	sound.PlayMusic();
 }
 
 

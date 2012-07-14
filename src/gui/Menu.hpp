@@ -59,8 +59,6 @@ protected:
 	virtual void OnWidgetHovered() {};
 	virtual void OnWidgetFocused() {};
 
-private:
-
 	/**
 	 * Sélectionner un widget dans le menu
 	 * @param index: position du widget
@@ -94,6 +92,7 @@ private:
 	 */
 	Widget* GetHoveredWidget(int x, int y) const;
 
+private:
 	typedef std::vector<Widget*> WidgetList;
 	WidgetList widgets_;
 	int focus_index_;

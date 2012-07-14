@@ -18,6 +18,7 @@ class Resources
 public:
 	// Set path from which resources are loaded
 	static void SetDataPath(const std::string& path);
+	static const std::string& GetDataPath();
 
 	// Load an image
 	static sf::Image& GetImage(const std::string& name);
@@ -27,12 +28,6 @@ public:
 
 	// Load a sound buffer
 	static const sf::SoundBuffer& GetSoundBuffer(const std::string& name);
-
-	// Load a DUMB music
-	static DumbMusic* GetDumbMusic(const std::string& name);
-
-	// Unload allocated resources
-	static void Unload();
 
 private:
 	static std::string path_;
@@ -45,9 +40,6 @@ private:
 
 	typedef std::map<std::string, sf::SoundBuffer> SoundMap;
 	static SoundMap sounds_;
-
-	typedef std::map<std::string, DumbMusic*> DumbMusicMap;
-	static DumbMusicMap dumb_musics_;
 };
 
 #endif // RESOURCES_HPP

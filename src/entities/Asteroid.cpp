@@ -1,8 +1,7 @@
-#include <SFML/System.hpp>
-
 #include "Asteroid.hpp"
 #include "EntityManager.hpp"
 #include "core/ParticleSystem.hpp"
+#include "core/SoundSystem.hpp"
 #include "utils/Resources.hpp"
 #include "utils/Math.hpp"
 
@@ -14,7 +13,6 @@
 #define ROTATION_SPEED_MIN 40
 #define ROTATION_SPEED_MAX 160
 
-const sf::SoundBuffer& Asteroid::sound_break_ = Resources::GetSoundBuffer("asteroid-break.ogg");
 
 Asteroid::Asteroid(const sf::Vector2f& position, Size size, float angle) :
 	Entity(position, size + 1)
@@ -76,7 +74,7 @@ void Asteroid::OnDestroy()
 		default:
 			break;
 	}
-	SoundSystem::GetInstance().PlaySound(sound_break_);
+	SoundSystem::GetInstance().PlaySound("asteroid-break.ogg");
 	ParticleSystem::GetInstance().ImpactSfx(GetPosition(), 10);
 }
 

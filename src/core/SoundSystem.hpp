@@ -3,6 +3,7 @@
 
 #include <string>
 #include <SFML/Audio.hpp>
+#include "utils/DumbMusic.hpp"
 
 class IniParser;
 
@@ -12,14 +13,9 @@ public:
 	static SoundSystem& GetInstance();
 
 	/**
-	 * Set/Get current background music
-	 */
-	void SetMusic(const std::string& music_name);
-	const std::string& GetMusic() const;
-
-	/**
 	 * Control music
 	 */
+	void PlayMusic(const std::string& music_name);
 	void PlayMusic();
 	void StopMusic();
 	void PauseMusic();
@@ -29,6 +25,7 @@ public:
 	 * Jouer un son
 	 */
 	void PlaySound(const sf::SoundBuffer& soundbuffer);
+	void PlaySound(const std::string& sound_name);
 
 	/**
 	 * Volume de la musique
@@ -71,7 +68,7 @@ private:
 
 	sf::Sound sounds_[MAX_SOUNDS];
 	int last_used_;
-	sf::SoundStream* music_;
+	DumbMusic music_;
 	std::string music_name_;
 	int music_volume_;
 	int sound_volume_;

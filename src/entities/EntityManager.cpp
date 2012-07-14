@@ -4,6 +4,7 @@
 #include "core/LevelManager.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
+#include "core/SoundSystem.hpp"
 #include "utils/Resources.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/Error.hpp"
@@ -49,6 +50,17 @@ EntityManager::EntityManager():
 
 	decor_height_ = 0;
 	SetY(ControlPanel::HEIGHT); // default positon
+
+	// hack, pre-load some resources to avoid in game loading
+	Resources::GetSoundBuffer("asteroid-break.ogg");
+	Resources::GetSoundBuffer("door-opening.ogg");
+	Resources::GetSoundBuffer("boom.ogg");
+	Resources::GetSoundBuffer("disabled.ogg");
+	Resources::GetSoundBuffer("overheat.ogg");
+	Resources::GetSoundBuffer("cooler.ogg");
+	Resources::GetSoundBuffer("power-up.ogg");
+	Resources::GetSoundBuffer("ship-damage.ogg");
+	Resources::GetSoundBuffer("shield-damage.ogg");
 }
 
 
@@ -83,8 +95,7 @@ void EntityManager::InitMode(Mode mode)
 			else
 			{
 				// suppression de toutes les unités, sauf le joueur
-				for (EntityList::iterator it = entities_.begin();
-					it != entities_.end();)
+				for (EntityList::iterator it = entities_.begin(); it != entities_.end();)
 				{
 					if (*it != player_)
 					{
@@ -104,6 +115,13 @@ void EntityManager::InitMode(Mode mode)
 			layer2_.SetColor(levels.GetLayerColor());
 			decor_height_ = levels.GetDecorHeight();
 			particles_.AddStars(levels.GetStarsCount());
+			{
+				const char* music_name = levels.GetMusic();
+				if (music_name != NULL)
+					SoundSystem::GetInstance().PlayMusic(music_name);
+				else
+					SoundSystem::GetInstance().StopMusic();
+			}
 			break;
 
 		case MODE_ARCADE:
@@ -118,7 +136,7 @@ void EntityManager::InitMode(Mode mode)
 			std::wstring game_info = wstr_replace(_t("panel.record"), L"{record}", to_wstring(arcade_record_));
 			ControlPanel::GetInstance().SetGameInfo(game_info);
 			particles_.AddStars();
-
+			SoundSystem::GetInstance().PlayMusic("spacesong.mod");
 			max_droppable_index_ = 1;
 			max_droppable_points_ = 0;
 			break;

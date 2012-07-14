@@ -11,11 +11,11 @@ class MainMenu: public BaseMenu
 public:
 	MainMenu();
 
-	// inherited
+	// override
 	void Show(sf::RenderTarget& target) const;
 
 private:
-	// inherited
+	// override
 	void EventCallback(int id);
 
 	sf::Sprite title_;

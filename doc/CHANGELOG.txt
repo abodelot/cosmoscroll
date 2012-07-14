@@ -22,8 +22,9 @@ CosmoScroll 0.4  (2012-07-DD)
 - Window centered on desktop at start
 
 * Other
-- Enable/disable vertical synchronization in settings menu
+- Different background music for each level
 - New translation: german
+- Enable/disable vertical synchronization in settings menu
 - New sound effects
 - Optimised pixel-perfect collisions
 - Configuration saved in your OS settings directory

@@ -11,27 +11,6 @@ AudioMenu::AudioMenu()
 
 	gui::FormLayout form(60, 120);
 	form.SetSpacing(40, 20);
-	//form.SetLabelAlignment(gui::Align::RIGHT);
-
-	opt_music_ = new gui::OptionList(this);
-	opt_music_->SetCallbackID(1);
-	// feed with available music files
-	opt_music_->AddOption("Space Song", "space.mod");
-	opt_music_->AddOption("Aurora", "aurora.mod");
-	opt_music_->AddOption("Escape for assault", "escape_for_assault.mod");
-
-	// current music is default displayed value
-	const std::string music_name = sound.GetMusic();
-	for (int i = 0; i < opt_music_->GetNbItems(); ++i)
-	{
-		if (opt_music_->GetOptionAt(i) == music_name)
-		{
-			opt_music_->Select(i);
-			break;
-		}
-	}
-
-	form.AddRow(_t("menu.audio.music"), opt_music_);
 
 	cb_music_ = new gui::CheckBox(this);
 	cb_music_->Check(sound.IsMusicEnabled());
@@ -66,10 +45,6 @@ void AudioMenu::EventCallback(int id)
 	{
 		case 0:
 			Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
-			break;
-		case 1:
-			sound.SetMusic(opt_music_->GetSelectedOption());
-			sound.PlayMusic();
 			break;
 		case 2:
 			sound.EnableMusic(cb_music_->Checked());

@@ -111,10 +111,12 @@ void ArmoryMenu::EventCallback(int id)
 				wstr_self_replace(content, L"{level}", to_wstring(item_level));
 				lab_info_->SetText(content);
 				lab_info_->SetX((Game::WIDTH - lab_info_->GetWidth()) / 2);
+				FocusFirstWidget();
 			}
 			break;
 		case 101:
 			ShowDialog(false);
+			FocusFirstWidget();
 			break;
 		case 102:
 			Game::GetInstance().SetNextScene(Game::SC_LevelMenu);
@@ -209,4 +211,5 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 		wstr_self_replace(text, L"{price}", to_wstring(data->GetPrice()));
 		dialog_.price->SetText(text);
 	}
+	FocusFirstWidget();
 }

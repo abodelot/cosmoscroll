@@ -45,7 +45,6 @@ void PauseMenu::EventCallback(int id)
 			break;
 		case 2:
 			game.SetNextScene(Game::SC_MainMenu);
-			SoundSystem::GetInstance().PlayMusic();
 			break;
 		case 3:
 			game.Quit();

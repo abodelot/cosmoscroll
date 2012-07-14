@@ -41,8 +41,6 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	SetTeam(Entity::GOOD);
 	Reset(*this);
 
-	snd_disabled_ = &Resources::GetSoundBuffer("disabled.ogg");
-	snd_overheat_ = &Resources::GetSoundBuffer("overheat.ogg");
 	// init weapons
 	weapon1_.Init("laser-red");
 	weapon1_.SetOwner(this);
@@ -172,7 +170,7 @@ void PlayerShip::HandleAction(Input::Action action)
 		case Input::USE_COOLER:
 			if (coolers_ > 0)
 			{
-				SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("cooler.ogg"));
+				SoundSystem::GetInstance().PlaySound("cooler.ogg");
 				ParticleSystem::GetInstance().SnowflakeSfx(GetCenter_(), 40);
 				--coolers_;
 				panel_.SetCoolers(coolers_);
@@ -182,7 +180,7 @@ void PlayerShip::HandleAction(Input::Action action)
 			}
 			else
 			{
-				SoundSystem::GetInstance().PlaySound(*snd_disabled_);
+				SoundSystem::GetInstance().PlaySound("disabled.ogg");
 			}
 			break;
 		case Input::USE_MISSILE:
@@ -194,10 +192,17 @@ void PlayerShip::HandleAction(Input::Action action)
 			}
 			else
 			{
-				SoundSystem::GetInstance().PlaySound(*snd_disabled_);
+				SoundSystem::GetInstance().PlaySound("disabled.ogg");
 			}
 			break;
-		case Input::COUNT: // filter non-events
+		case Input::USE_LASER:
+		case Input::USE_PLASMA:
+			if (overheated_)
+			{
+				SoundSystem::GetInstance().PlaySound("disabled.ogg");
+			}
+			break;
+		case Input::COUNT: // filter non-events // TODO: wat?
 			return;
 		default:
 			break;
@@ -229,7 +234,7 @@ void PlayerShip::AudibleHeatingCue(float frametime)
 	float heat_pct_ = heat_ / heat_max_;
 	if (current_step < nb_steps && heat_pct_ > h_steps[current_step])
 	{
-		SoundSystem::GetInstance().PlaySound(*snd_overheat_);
+		SoundSystem::GetInstance().PlaySound("overheat.ogg");
 		++current_step;
 	}
 	else if (current_step > 0 && heat_pct_ < h_steps[current_step -1])
@@ -268,10 +273,6 @@ void PlayerShip::Update(float frametime)
 		}
 		if (h > 0)
 			AudibleHeatingCue(frametime);
-	}
-	else if (input_.HasInput(Input::USE_LASER) || input_.HasInput(Input::USE_PLASMA))
-	{
-		SoundSystem::GetInstance().PlaySound(*snd_disabled_);
 	}
 
 	// moving
@@ -358,7 +359,7 @@ void PlayerShip::TakeDamage(int damage)
 	if (shield_ > 0)
 	{
 		shield_ -= damage;
-		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("shield-damage.ogg"));
+		SoundSystem::GetInstance().PlaySound("shield-damage.ogg");
 		p.RemoveShield(this);
 		if (shield_ > 0)
 		{
@@ -373,7 +374,7 @@ void PlayerShip::TakeDamage(int damage)
 	else
 	{
 		Entity::TakeDamage(damage);
-		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("ship-damage.ogg"));
+		SoundSystem::GetInstance().PlaySound("ship-damage.ogg");
 		panel_.SetShipHP(GetHP());
 	}
 }
@@ -386,7 +387,7 @@ void PlayerShip::OnCollide(Entity& entity)
 	{
 		HandleBonus(bonus->GetType());
 		ParticleSystem::GetInstance().AddMessage(bonus->GetPosition(), bonus->GetDescription());
-		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("power-up.ogg"));
+		SoundSystem::GetInstance().PlaySound("power-up.ogg");
 		entity.Kill();
 	}
 	else

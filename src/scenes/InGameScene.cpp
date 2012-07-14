@@ -42,6 +42,7 @@ void InGameScene::Update(float frametime)
 {
 	if (entities_.IsGameOver())
 	{
+		SoundSystem::GetInstance().StopMusic();
 		Game::GetInstance().SetNextScene(Game::SC_EndGameScene);
 	}
 	else

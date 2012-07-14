@@ -80,6 +80,8 @@ public:
 	int GetDecorHeight() const;
 	int GetStarsCount() const;
 
+	const char* GetMusic() const;
+
 	/**
 	 * Durée du niveau en secondes
 	 */

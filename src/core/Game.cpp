@@ -57,8 +57,6 @@ Game::~Game()
 			delete scenes_[i];
 		}
 	}
-
-	Resources::Unload();
 }
 
 
@@ -325,7 +323,6 @@ void Game::TakeScreenshot(void)
 	strftime(current_time, sizeof current_time, "%d-%m-%Y_%H-%M-%S", localtime(&t));
 
 	std::string filename = current_dir_ + screenshot_dir_ + "/" + current_time + ".png";
-	std::cout << "current = " << current_dir_ << std::endl;
 	printf("screenshot saved to %s\n", filename.c_str());
 	app_.Capture().SaveToFile(filename);
 }

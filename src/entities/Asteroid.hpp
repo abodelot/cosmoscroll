@@ -2,10 +2,9 @@
 #define ASTEROID_HPP
 
 #include "Entity.hpp"
-#include "core/SoundSystem.hpp"
 
 /**
- * Un astéroïde pouvant se diviser en petits morceaux
+ * Asteroid object, can be split on smaller asteroids
  */
 class Asteroid: public Entity
 {
@@ -16,12 +15,11 @@ public:
 	};
 
 	/**
-	 * Création d'un astéroïde
-	 * @param offset: position
-	 * @param size: taille
-	 * @param angle: orientation de la trajectoire (degrés)
+	 * @param pos: initial position
+	 * @param size: size type
+	 * @param angle: movement direction
 	 */
-	Asteroid(const sf::Vector2f& offset, Size size, float angle=180);
+	Asteroid(const sf::Vector2f& pos, Size size, float angle=180);
 
 	// override
 	Asteroid* Clone() const;
@@ -41,7 +39,6 @@ private:
 	Size size_;
 	sf::Vector2f speed_;
 	int rotation_speed_;
-	static const sf::SoundBuffer& sound_break_;
 };
 
 #endif // ASTEROID_HPP

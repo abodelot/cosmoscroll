@@ -1,7 +1,5 @@
 #include "EvilBoss.hpp"
-
 #include "core/ParticleSystem.hpp"
-#include "core/SoundSystem.hpp"
 #include "utils/Resources.hpp"
 
 #define EYE_OFFSET_LEFT   sf::Vector2f(105, 55)
@@ -80,7 +78,6 @@ void EvilBoss::Update(float frametime)
 void EvilBoss::TakeDamage(int damage)
 {
 	Entity::TakeDamage(damage);
-	ParticleSystem::GetInstance().GreenImpactSfx(GetCenter_(), 1);
 	if (GetHP() < next_ && GetHP() > 0 && phase_ != next_)
 	{
 		phase_ = next_;
@@ -107,8 +104,6 @@ void EvilBoss::TakeDamage(int damage)
 void EvilBoss::OnDestroy()
 {
 	ParticleSystem::GetInstance().GreenImpactSfx(GetCenter_(), 200);
-
-	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("boom.ogg"));
 }
 
 
