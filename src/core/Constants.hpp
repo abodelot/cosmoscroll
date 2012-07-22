@@ -2,7 +2,7 @@
 #define CONSTANTS_HPP
 
 #define GAME_NAME					"cosmoscroll"
-#define GAME_VERSION				"0.4-devel"
+#define GAME_VERSION				"0.4"
 #define GAME_LICENSE				"GPL"
 #define GAME_AUTHORS				L"    Alexandre Bodelot\n" \
 									L"    Arnaud Wolff"

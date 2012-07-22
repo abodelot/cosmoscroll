@@ -1,23 +1,23 @@
 CHANGELOG
 
-CosmoScroll 0.4  (2012-07-DD)
+CosmoScroll 0.4  (2012-07-22)
 -----------------------------
 
 * Gameplay
 - You can collect credits by killing bad guys in Story Mode
 - Earned credits can be spent in Armory Menu to upgrade your spaceship
 - 6 components to improve: Energy Shield, Armor, Engine, Heatsink, Laser Canon and Plasma Canon
-- When playing in Arcade Mode, your improved spaceship from Story Mode is used
-- 2 new enemy spaceships
+- When playing in Arcade Mode, your improved spaceship from Story Mode is automatically imported
+- 2 new enemy types
 - 2 "indoor" levels, with interactive decors (doors, turrets, canons)
 - Audio signal when heat level raises
 
 * Display
 - New design for the HUD
-- the HUD displays a timer for each tempory power-up
+- the HUD displays a timer for each temporary power-up
 - Decors and spaceships flash in red when damaged
 - Parallax scrolling, with new background images
-- Animation when player destroyed
+- Animation when player is destroyed
 - Smoke effect improved
 - Window centered on desktop at start
 
@@ -26,12 +26,12 @@ CosmoScroll 0.4  (2012-07-DD)
 - New translation: german
 - Enable/disable vertical synchronization in settings menu
 - New sound effects
-- Optimised pixel-perfect collisions
+- Optimized pixel-perfect collisions
 - Configuration saved in your OS settings directory
-- You don't need to be in the game directory anymore to be able to launch it
-- Bugfix wrong md5 checksum on 64 bits platforms
+- The game can be launched form any directory (you don't need to be in game directory anymore).
+- Bugfix wrong md5 checksums on 64 bits platforms
 - Bugfix players allowed to send score with an empty pseudo
-- Manual translated in english (README.html)
+- Manual available in english (README.html)
 
 
 CosmoScroll 0.3  (2011-05-24)

@@ -100,7 +100,7 @@ void Game::Init(const std::string& data_path, int level_set)
 	// create window and display loading screen as early as possible
 	vsync_ = true;
 	SetFullscreen(false);
-	sf::String temp("[loading]"); app_.Clear() ;app_.Draw(temp); app_.Display();
+	sf::String temp("loading"); app_.Clear() ;app_.Draw(temp); app_.Display();
 
 	// load XML resources
 	try

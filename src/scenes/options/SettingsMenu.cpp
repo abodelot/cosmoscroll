@@ -1,5 +1,6 @@
 #include "SettingsMenu.hpp"
 #include "core/Game.hpp"
+#include "core/ControlPanel.hpp"
 #include "utils/I18n.hpp"
 
 
@@ -53,6 +54,7 @@ void SettingsMenu::EventCallback(int id)
 			I18n::GetInstance().LoadFromCode(opt_languages_->GetSelectedOption());
 			// delete other scenes
 			Game::GetInstance().ReloadScenes();
+			ControlPanel::GetInstance().RefreshTextTranslations();
 			// re-load i18ned texts
 			SetTitle(_t("menu.settings.title"));
 			form_.GetLabelAt(0)->SetText(_t("menu.settings.fullscreen"));

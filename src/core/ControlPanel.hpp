@@ -76,6 +76,7 @@ public:
 
 	void ActiveAttackBonus(int seconds, Bonus::Type bonus_type);
 
+	void RefreshTextTranslations();
 
 private:
 	ControlPanel();

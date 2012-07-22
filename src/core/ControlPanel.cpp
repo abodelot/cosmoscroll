@@ -228,6 +228,14 @@ void ControlPanel::ActiveAttackBonus(int seconds, Bonus::Type bonus_type)
 }
 
 
+void ControlPanel::RefreshTextTranslations()
+{
+	pbars_[ProgressBar::HP].label_.SetText(_t("panel.bar_hp"));
+	pbars_[ProgressBar::SHIELD].label_.SetText(_t("panel.bar_shield"));
+	pbars_[ProgressBar::HEAT].label_.SetText(_t("panel.bar_heat"));
+}
+
+
 void ControlPanel::Render(sf::RenderTarget& target) const
 {
 	// background

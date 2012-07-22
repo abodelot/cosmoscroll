@@ -45,8 +45,11 @@ SoundSystem::~SoundSystem()
 
 void SoundSystem::PlayMusic(const std::string& music_name)
 {
-	if (enable_music_ && music_name != music_name_)
+	if (enable_music_)
 	{
+		if (music_.GetStatus() == sf::Music::Playing && music_name == music_name_)
+			return;
+
 		music_name_ = music_name;
 		StopMusic();
 		music_.OpenFromFile(Resources::GetDataPath() + "/music/" + music_name);
