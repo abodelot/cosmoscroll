@@ -12,10 +12,10 @@ import sys
 import os
 import time
 
-SRC_DIR = "src"
+SRC_DIRS = ("src", "extlibs")
 MAKEFILE = "Makefile"
 TARGET = "bin/cosmoscroll"
-CFLAGS = "-Wall -Wextra -Wwrite-strings -ansi -pedantic -Isrc"
+CFLAGS = "-Wall -Wextra -Wwrite-strings -ansi -pedantic"
 LIBS = ("sfml-graphics", "sfml-window", "sfml-system", "sfml-audio", "sfml-network")
 
 
@@ -27,15 +27,24 @@ class MakeGenerator:
 		self.makefile_name = makefile_name
 		self.libs = ()
 		self.cflags = ""
+		self.searchpath = None
 
 	def set_cflags(self, cflags):
 		self.cflags = cflags
+
 
 	##
 	# Indiquer les bibliothèques à utiliser lors de l'édition des liens
 	#
 	def set_libs(self, libs):
 		self.libs = libs
+
+
+	def set_src_dirs(self, dirs):
+		self.searchpath = dirs
+		for d in dirs:
+			self.add_sources(d)
+
 
 	##
 	# Récupérer toutes les unités de compilation dans parent et ses sous-dossiers
@@ -56,7 +65,7 @@ class MakeGenerator:
 		f.write(
 		"# Makefile generated on " + time.ctime() + "\n\n"
 		"CC=g++\n"
-		"CFLAGS= " + self.cflags + "\n")
+		"CFLAGS= " + self.cflags + "".join(" -I" + d for d in self.searchpath) + "\n")
 
 		# libs
 		libs_linux = " ".join("-l" + lib for lib in self.libs)
@@ -120,7 +129,7 @@ if __name__ == "__main__":
 	makefile_name = sys.argv[1] if len(sys.argv) > 1 else MAKEFILE
 
 	m = MakeGenerator(TARGET, makefile_name)
-	m.add_sources(SRC_DIR)
+	m.set_src_dirs(SRC_DIRS)
 	m.set_libs(LIBS)
 	m.set_cflags(CFLAGS)
 	m.write_makefile()

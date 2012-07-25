@@ -30,12 +30,36 @@
 					<Add option="-s" />
 				</Linker>
 			</Target>
+			<Target title="ReleaseStatic">
+				<Option platforms="Windows;" />
+				<Option output="bin/cosmoscroll" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/" />
+				<Option object_output="obj/ReleaseStatic/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectLinkerOptionsRelation="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-static" />
+					<Add option="-DSFML_STATIC" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="sfml-graphics-s" />
+					<Add library="sfml-window-s" />
+					<Add library="sfml-audio-s" />
+					<Add library="sfml-network-s" />
+					<Add library="sfml-system-s" />
+					<Add library="dumb" />
+				</Linker>
+			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-pedantic" />
 			<Add option="-Wall" />
 			<Add option="-ansi" />
 			<Add directory="src/" />
+			<Add directory="extlibs/" />
 		</Compiler>
 		<Linker>
 			<Add library="sfml-graphics" />
@@ -48,11 +72,16 @@
 		<Unit filename="bin/data/lang/de.lang" />
 		<Unit filename="bin/data/lang/en.lang" />
 		<Unit filename="bin/data/lang/fr.lang" />
-		<Unit filename="bin/data/lang/ru.lang" />
 		<Unit filename="bin/data/xml/animations.xml" />
 		<Unit filename="bin/data/xml/items.xml" />
 		<Unit filename="bin/data/xml/levels.xml" />
 		<Unit filename="bin/data/xml/spaceships.xml" />
+		<Unit filename="extlibs/md5/md5.cpp" />
+		<Unit filename="extlibs/md5/md5.hpp" />
+		<Unit filename="extlibs/tinyxml/tinyxml.cpp" />
+		<Unit filename="extlibs/tinyxml/tinyxml.h" />
+		<Unit filename="extlibs/tinyxml/tinyxmlerror.cpp" />
+		<Unit filename="extlibs/tinyxml/tinyxmlparser.cpp" />
 		<Unit filename="src/core/BigScrollingMessagingAppliance.cpp" />
 		<Unit filename="src/core/BigScrollingMessagingAppliance.hpp" />
 		<Unit filename="src/core/Constants.hpp" />
@@ -150,8 +179,6 @@
 		<Unit filename="src/items/Weapon.hpp" />
 		<Unit filename="src/items/WeaponData.cpp" />
 		<Unit filename="src/items/WeaponData.hpp" />
-		<Unit filename="src/md5/md5.cpp" />
-		<Unit filename="src/md5/md5.hpp" />
 		<Unit filename="src/scenes/AboutMenu.cpp" />
 		<Unit filename="src/scenes/AboutMenu.hpp" />
 		<Unit filename="src/scenes/BaseMenu.cpp" />
@@ -198,10 +225,6 @@
 		<Unit filename="src/scenes/story/LevelMenu.hpp" />
 		<Unit filename="src/scenes/story/UpgradeItem.cpp" />
 		<Unit filename="src/scenes/story/UpgradeItem.hpp" />
-		<Unit filename="src/tinyxml/tinyxml.cpp" />
-		<Unit filename="src/tinyxml/tinyxml.h" />
-		<Unit filename="src/tinyxml/tinyxmlerror.cpp" />
-		<Unit filename="src/tinyxml/tinyxmlparser.cpp" />
 		<Unit filename="src/utils/DumbMusic.cpp" />
 		<Unit filename="src/utils/DumbMusic.hpp" />
 		<Unit filename="src/utils/Error.cpp" />

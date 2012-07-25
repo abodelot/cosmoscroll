@@ -6,11 +6,12 @@ CosmoScroll 0.4  (2012-07-22)
 * Gameplay
 - You can collect credits by killing bad guys in Story Mode
 - Earned credits can be spent in Armory Menu to upgrade your spaceship
-- 6 components to improve: Energy Shield, Armor, Engine, Heatsink, Laser Canon and Plasma Canon
+- 6 components to improve: Energy Shield, Armor, Engine, Heatsink, Laser Cannon and Plasma Cannon
 - When playing in Arcade Mode, your improved spaceship from Story Mode is automatically imported
 - 2 new enemy types
-- 2 "indoor" levels, with interactive decors (doors, turrets, canons)
+- 2 "indoor" levels, with interactive decors (doors, turrets, cannons)
 - Audio signal when heat level raises
+- Escap no longer quit the game without confirmation (use Alt-F4 for this)
 
 * Display
 - New design for the HUD
@@ -32,6 +33,7 @@ CosmoScroll 0.4  (2012-07-22)
 - Bugfix wrong md5 checksums on 64 bits platforms
 - Bugfix players allowed to send score with an empty pseudo
 - Manual available in english (README.html)
+- Dependencies included in Linux release
 
 
 CosmoScroll 0.3  (2011-05-24)
