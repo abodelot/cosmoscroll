@@ -10,7 +10,7 @@ FormLayout::FormLayout(float x, float y): Layout(x, y)
 }
 
 
-void FormLayout::AddRow(const sf::Unicode::Text& str_label, Widget* widget)
+void FormLayout::AddRow(const sf::String& str_label, Widget* widget)
 {
 	Label* label = new Label(widget->GetOwner(), str_label);
 
@@ -18,16 +18,16 @@ void FormLayout::AddRow(const sf::Unicode::Text& str_label, Widget* widget)
 	int y = 0;
 	if (rows_.size() > 0)
 	{
-		int label_y = rows_.back().first->GetPosition().y + rows_.back().first->GetHeight();
-		int widget_y = rows_.back().second->GetPosition().y + rows_.back().second->GetHeight();
+		int label_y = rows_.back().first->getPosition().y + rows_.back().first->GetHeight();
+		int widget_y = rows_.back().second->getPosition().y + rows_.back().second->GetHeight();
 		y = std::max(label_y, widget_y) + GetSpacing().y;
 	}
 	else
 	{
 		y = GetOffset().y;
 	}
-	label->SetY(y);
-	widget->SetY(y);
+	label->setPosition(label->getPosition().x, y);
+	widget->setPosition(widget->getPosition().x, y);
 
 	// label_width_ is the larger label inserted in the layout
 	if (label->GetWidth() > label_width_)
@@ -84,7 +84,7 @@ void FormLayout::AlignRows()
 			default:
 				break;
 		}
-		current_lab->SetX(x);
-		rows_[i].second->SetX(GetOffset().x + label_width_ + (GetSpacing().x * 2));
+		current_lab->setPosition(x, current_lab->getPosition().y);
+		rows_[i].second->setPosition(GetOffset().x + label_width_ + (GetSpacing().x * 2), rows_[i].second->getPosition().y);
 	}
 }

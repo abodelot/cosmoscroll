@@ -17,28 +17,27 @@ class LevelManager
 {
 public:
 	/**
-	 * Récupérer l'instance unique
-	 * @return référence sur le gestionnaire de niveaux
+	 * @return instance
 	 */
 	static LevelManager& GetInstance();
 
 	/**
-	 * Parser un fichier de niveaux
+	 * Parse the XML file storing the levels definitions
 	 */
-	int ParseFile(const std::string& file, unsigned int offset = 0);
+	int ParseFile(const std::string& file);
 
 	void LoadCurrent();
 
 	/**
-	 * Obtenir la prochaine unité du niveau
-	 * @param timer: temps écoulé depuis le début du niveau
-	 * @return entity s'il y en a au moins une qui doit aparaître avant timer
-	 * sinon, NULL (il n'y pas d'entity avant timer)
+	 * Get the next entity to be spawned in the current level
+	 * @param timer: elapsed time (seconds) in the level
+	 * @return entity if any, or NULL
 	 */
 	Entity* GiveNextEntity(float timer);
 
 	/**
-	 * Obtenir le nombre d'unités restantes dans la file d'attente du niveau
+	 * Size of the waiting line in the current level
+	 * @return number of remaining entities
 	 */
 	inline int RemainingEntities() const
 	{
@@ -46,8 +45,8 @@ public:
 	};
 
 	/**
-	 * Définir le niveau courant
-	 * @param level_num: numéro du niveau
+	 * Set the current level
+	 * @param level_num: level number in [1 - level_max]
 	 */
 	void SetCurrent(int level_num);
 	void VerifyCurrent(void);
@@ -73,8 +72,8 @@ public:
 	 * Get scrolling background image used in current level
 	 * @return image, or NULL if none
 	 */
-	const sf::Image* GetLayerImage1() const;
-	const sf::Image* GetLayerImage2() const;
+	const sf::Texture* GetLayerImage1() const;
+	const sf::Texture* GetLayerImage2() const;
 	sf::Color GetLayerColor() const;
 
 	int GetDecorHeight() const;

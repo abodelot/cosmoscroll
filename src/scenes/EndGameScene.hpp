@@ -2,6 +2,7 @@
 #define ENDGAMESCENE_HPP
 
 #include "BaseScene.hpp"
+#include "utils/sfml_helper.hpp"
 
 class EntityManager;
 
@@ -24,7 +25,7 @@ public:
 
 private:
 	float timer_;
-	sf::String info_;
+	xsf::Text info_;
 	EntityManager& entities_;
 	bool player_dead_;
 };

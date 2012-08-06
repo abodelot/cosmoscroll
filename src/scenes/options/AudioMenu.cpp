@@ -33,7 +33,7 @@ AudioMenu::AudioMenu()
 	form.AddRow(_t("menu.audio.sound_volume"), sl_sound_vol_);
 
 	gui::Button* b = new CosmoButton(this, _t("menu.back"));
-	b->SetPosition(210, 335);
+	b->setPosition(210, 335);
 	b->SetCallbackID(0);
 }
 

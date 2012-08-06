@@ -25,12 +25,12 @@ public:
 	DumbMusic();
 	~DumbMusic();
 
-	bool OpenFromFile(const std::string& name);
+	bool openFromFile(const std::string& name);
 
 private:
-	bool OnStart();
+	bool onGetData(Chunk& data);
 
-	bool OnGetData(Chunk& data);
+	void onSeek(sf::Time timeOffset);
 
 	sf::Int16 samples_[BUFFER_SIZE * N_CHANNELS];
 

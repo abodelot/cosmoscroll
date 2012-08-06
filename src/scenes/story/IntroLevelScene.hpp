@@ -2,6 +2,7 @@
 #define INTROLEVELSCENE_HPP
 
 #include "scenes/BaseScene.hpp"
+#include "utils/sfml_helper.hpp"
 
 /**
  * Scène d'introduction avant le début d'un niveau
@@ -21,9 +22,9 @@ public:
 	void OnFocus();
 
 private:
-	sf::String description_;
-	sf::Sprite background_;
-	sf::Sprite title_;
+	xsf::Text description_;
+	xsf::Sprite background_;
+	xsf::Sprite title_;
 };
 
 #endif // INTROLEVELSCENE_HPP

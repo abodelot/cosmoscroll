@@ -57,7 +57,7 @@ public:
 	 */
 	void OverrideConfigFile(const std::string& config_file);
 
-	void Init(const std::string& data_dir, int level_set);
+	void Init(const std::string& data_dir);
 
 	/**
 	 * Lancer une partie de CosmoScroll

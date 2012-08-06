@@ -4,11 +4,14 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <cmath>
+#include <cstdlib>
 
-#define PI 3.14159265f
 
 namespace math
 {
+
+extern const float PI;
+extern unsigned int seed;
 
 // misc helpers
 
@@ -24,16 +27,34 @@ inline T min(T a, T b)
 	return a < b ? a : b;
 }
 
+template <class T>
+inline T clamp(T value, T max, T min)
+{
+	return value < max ? max : (value > min ? value : min);
+}
+
+
+inline int random(int begin, int end)
+{
+	return std::rand() % (end - begin + 1) + begin;
+}
+
+inline float random(float begin, float end)
+{
+	return static_cast<float>(std::rand()) / RAND_MAX * (end - begin) + begin;
+}
+
+void set_seed(unsigned int seed);
 
 // 2D helpers
 
-inline float deg_to_rad(float degres)
+inline float to_rad(float degres)
 {
 	return degres * PI / 180;
 }
 
 
-inline float rad_to_deg(float radians)
+inline float to_deg(float radians)
 {
 	return radians / PI * 180;
 }
@@ -67,4 +88,3 @@ sf::Color random_color(sf::Uint8 min_r=0, sf::Uint8 min_g=0, sf::Uint8 min_b=0, 
 }
 
 #endif // MATH_HPP
-

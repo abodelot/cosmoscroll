@@ -17,7 +17,7 @@ class FormLayout: public Layout
 public:
 	FormLayout(float x=0.f, float y=0.f);
 
-	void AddRow(const sf::Unicode::Text& label, Widget* widget);
+	void AddRow(const sf::String& label, Widget* widget);
 
 	/**
 	 * Holds the horizontal alignment of the labels (left or right).

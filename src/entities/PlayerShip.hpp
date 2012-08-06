@@ -56,7 +56,7 @@ private:
 		TIMED_BONUS_COUNT
 	};
 
-	void ComputeMove(float frametime);
+	void Computemove(float frametime);
 
 	/**
 	 * Gérer un bonus attrapé

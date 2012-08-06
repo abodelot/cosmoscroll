@@ -1,7 +1,7 @@
 #ifndef WEAPONDATA_HPP
 #define WEAPONDATA_HPP
 
-#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include "ItemData.hpp"
 
@@ -27,7 +27,7 @@ private:
 	float fire_rate_;        // shot per second
 	int speed_;              // bullet speed (pixels per second)
 	int damage_;             // inflicted damage
-	const sf::Image* image_; // hit image
+	const sf::Texture* image_; // hit image
 	const sf::SoundBuffer* sound_; // sfx
 };
 

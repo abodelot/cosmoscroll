@@ -23,11 +23,11 @@ public:
 		}
 
 		if (e.GetTeam() != hit_.GetTeam()
-			&& math::distance(e.GetPosition(), hit_.GetPosition()) < radius_)
+			&& math::distance(e.getPosition(), hit_.getPosition()) < radius_)
 		{
 			e.TakeDamage(hit_.GetCollideDamage());
 			if (e.IsDead())
-				ParticleSystem::GetInstance().ImpactSfx(e.GetPosition(), 10);
+				ParticleSystem::GetInstance().ImpactSfx(e.getPosition(), 10);
 		}
 	}
 
@@ -39,7 +39,7 @@ private:
 #define PARTICLES_PER_HIT 128
 
 ImpactHit::ImpactHit(Entity* emitter, const sf::Vector2f& position, float angle,
-		const sf::Image* image, int speed, int damage):
+		const sf::Texture* image, int speed, int damage):
 	Hit(emitter, position, angle, image, speed, damage)
 {
 	ParticleSystem::GetInstance().AddSmoke(PARTICLES_PER_HIT, this);
@@ -58,7 +58,7 @@ void ImpactHit::OnCollide(Entity& entity)
 	Hit::OnCollide(entity);
 	if (IsDead())
 	{
-		ParticleSystem::GetInstance().ImpactSfx(GetPosition(), 300);
+		ParticleSystem::GetInstance().ImpactSfx(getPosition(), 300);
 		Impact impact(*this);
 		EntityManager::GetInstance().ApplyToEach(impact);
 	}

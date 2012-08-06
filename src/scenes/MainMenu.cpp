@@ -1,14 +1,14 @@
 #include "MainMenu.hpp"
 #include "core/Game.hpp"
 #include "core/SoundSystem.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 #include "utils/I18n.hpp"
 
 
 MainMenu::MainMenu()
 {
-	title_.SetImage(Resources::GetImage("gui/cosmoscroll-logo.png"));
-	title_.SetPosition((Game::WIDTH - title_.GetSize().x) / 2, 12);
+	title_.setTexture(Resources::getTexture("gui/cosmoscroll-logo.png"));
+	title_.setPosition((Game::WIDTH - title_.getWidth()) / 2, 12);
 
 	gui::VBoxLayout layout(210, 120);
 	layout.SetSpacing(0, 10);
@@ -24,7 +24,7 @@ MainMenu::MainMenu()
 void MainMenu::Show(sf::RenderTarget& target) const
 {
 	BaseMenu::Show(target);
-	target.Draw(title_);
+	target.draw(title_);
 }
 
 

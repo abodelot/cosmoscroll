@@ -21,8 +21,8 @@ public:
 	/**
 	 * Ajouter une option à la liste
 	 */
-	void AddOption(const sf::Unicode::Text& option);
-	void AddOption(const sf::Unicode::Text& display, const std::string& value);
+	void AddOption(const sf::String& option);
+	void AddOption(const sf::String& display, const std::string& value);
 
 	int GetNbItems() const;
 
@@ -60,7 +60,7 @@ public:
 	void Update(float frametime);
 
 	// inherited callbacks
-	void OnKeyPressed(sf::Key::Code key);
+	void OnKeyPressed(sf::Keyboard::Key key);
 	void OnMouseClicked(int x, int y);
 	void OnMouseWheelMoved(int delta);
 
@@ -70,23 +70,23 @@ protected:
 
 private:
 	// inherited
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	void BuildBoxes();
 
 	/**
 	 * Calculer l'indentation d'une option selon l'alignement courant
 	 */
-	int ComputeIndentAlign(const sf::String& option) const;
+	int ComputeIndentAlign(const xsf::Text& option) const;
 
 	int PreviousIndex() const;
 	int NextIndex() const;
 
-	sf::Shape box_;
-	sf::Shape inside_box_;
-	sf::Shape left_arrow_;
-	sf::Shape right_arrow_;
-	typedef std::pair<sf::String, std::string> Item;
+	sf::RectangleShape box_;
+	sf::RectangleShape inside_box_;
+	sf::ConvexShape left_arrow_;
+	sf::ConvexShape right_arrow_;
+	typedef std::pair<xsf::Text, std::string> Item;
 	std::vector<Item> options_;
 	int current_opt_;
 	size_t max_opt_width_;

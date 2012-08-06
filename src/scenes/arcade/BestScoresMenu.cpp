@@ -11,12 +11,12 @@ BestScoresMenu::BestScoresMenu()
 {
 	SetTitle(_t("menu.best_scores.title"));
 	gui::Button* b = new CosmoButton(this, _t("menu.back"));
-	b->SetPosition(210, 420);
+	b->setPosition(210, 420);
 	b->SetCallbackID(1);
 
-	LoadBitmapFont(Resources::GetImage("gui/mono12-white.png"), 10, 10);
+	LoadBitmapFont(Resources::getTexture("gui/mono12-white.png"), 10, 10);
 	lab_content_ = new gui::BitmapString(*GetBitmapFont());
-	lab_content_->SetPosition(120, 100);
+	lab_content_->setPosition(120, 100);
 
 	querying_ = NOT_STARTED;
 }
@@ -47,28 +47,28 @@ void BestScoresMenu::Update(float frametime)
 	}
 	// Connect to cosmoscroll scores server
 	sf::Http server;
-	server.SetHost(COSMO_SERVER_HOSTNAME);
+	server.setHost(COSMO_SERVER_HOSTNAME);
 
 	// Prepare a request to retrieve the scores
 	sf::Http::Request request;
-	request.SetMethod(sf::Http::Request::Get);
+	request.setMethod(sf::Http::Request::Get);
 	std::string uri = COSMO_SERVER_URI;
 	uri += "?version=";
 	uri += GAME_VERSION;
-	request.SetURI(uri);
+	request.setUri(uri);
 
 	// Send it and get the response returned by the server
-	sf::Http::Response response = server.SendRequest(request);
-	switch (response.GetStatus())
+	sf::Http::Response response = server.sendRequest(request);
+	switch (response.getStatus())
 	{
 		case sf::Http::Response::Ok:
-			lab_content_->SetText(response.GetBody());
+			lab_content_->setString(response.getBody());
 			break;
 		case sf::Http::Response::ConnectionFailed:
-			lab_content_->SetText("Error: couldn't connect to CosmoScroll server");
+			lab_content_->setString("Error: couldn't connect to CosmoScroll server");
 			break;
 		default:
-			lab_content_->SetText("Error: server did not properly respond (" + to_string(response.GetStatus()) + ")");
+			lab_content_->setString("Error: server did not properly respond (" + to_string(response.getStatus()) + ")");
 			break;
 	}
 	querying_ = DONE;
@@ -78,12 +78,12 @@ void BestScoresMenu::Update(float frametime)
 void BestScoresMenu::Show(sf::RenderTarget& target) const
 {
 	BaseMenu::Show(target);
-	target.Draw(*lab_content_);
+	target.draw(*lab_content_);
 }
 
 
 void BestScoresMenu::OnFocus()
 {
-	lab_content_->SetText("Please wait...");
+	lab_content_->setString("Please wait...");
 	querying_ = NOT_STARTED;
 }

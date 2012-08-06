@@ -35,7 +35,7 @@ void Widget::Update(float) {}
 
 bool Widget::ContainsPoint(float x, float y)
 {
-	return (x >= GetPosition().x) && (x <= GetPosition().x + width_) && (y >= GetPosition().y) && (y <= GetPosition().y + height_);
+	return (x >= getPosition().x) && (x <= getPosition().x + width_) && (y >= getPosition().y) && (y <= getPosition().y + height_);
 }
 
 

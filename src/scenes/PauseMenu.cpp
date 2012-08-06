@@ -22,7 +22,7 @@ PauseMenu::PauseMenu()
 void PauseMenu::OnEvent(const sf::Event& event)
 {
 	Input::Action action = Input::GetInstance().EventToAction(event);
-	if (action == Input::PAUSE && event.Type != sf::Event::LostFocus) // resume
+	if (action == Input::PAUSE && event.type != sf::Event::LostFocus) // resume
 	{
 		Game::GetInstance().SetNextScene(Game::SC_InGameScene);
 		SoundSystem::GetInstance().PlayMusic();
@@ -61,9 +61,9 @@ void PauseMenu::Update(float frametime)
 
 void PauseMenu::Show(sf::RenderTarget& target) const
 {
-	target.Draw(ControlPanel::GetInstance());
-	target.Draw(EntityManager::GetInstance());
-	target.Draw(GetTitle());
+	target.draw(ControlPanel::GetInstance());
+	target.draw(EntityManager::GetInstance());
+	target.draw(GetTitle());
 	gui::Menu::Show(target);
 }
 

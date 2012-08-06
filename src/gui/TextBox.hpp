@@ -22,7 +22,7 @@ public:
 	TextBox(Menu* owner, int x, int y, int visible_chars = 10,
 		int max_length = -1);
 
-	void SetText(const sf::Unicode::Text& text);
+	void setString(const sf::String& text);
 
 	const std::string& GetText() const;
 
@@ -31,7 +31,7 @@ public:
 
 	// inherited callbacks
 	void OnTextEntered(sf::Uint32 unicode);
-	void OnKeyPressed(sf::Key::Code code);
+	void OnKeyPressed(sf::Keyboard::Key code);
 	void OnMouseClicked(int x, int y);
 
 protected:
@@ -40,7 +40,7 @@ protected:
 
 private:
 	// inherited
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	/**
 	 * Positionne le curseur
@@ -65,10 +65,10 @@ private:
 
 	//void Debug() const;
 
-	sf::Shape box_;
+	sf::RectangleShape box_;
 	BitmapString display_text_;
 	std::string text_;
-	sf::Shape cursor_;
+	sf::RectangleShape cursor_;
 	// position du curseur
 	int cursor_pos_;
 	float cursor_timer_;

@@ -26,7 +26,7 @@ public:
 	void Check(bool checked);
 
 	// inherited callbacks
-	void OnKeyPressed(sf::Key::Code code);
+	void OnKeyPressed(sf::Keyboard::Key code);
 	void OnMouseClicked(int, int);
 
 protected:
@@ -35,12 +35,12 @@ protected:
 
 private:
 	// inherited
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	bool checked_;
-	sf::Shape box_;
-	sf::Shape v1_;
-	sf::Shape v2_;
+	sf::RectangleShape box_;
+	sf::RectangleShape v1_;
+	sf::RectangleShape v2_;
 };
 
 }

@@ -7,7 +7,7 @@
 class ConfigButton: public gui::Button
 {
 public:
-	ConfigButton(gui::Menu* owner, const sf::Unicode::Text& text);
+	ConfigButton(gui::Menu* owner, const sf::String& text);
 
 protected:
 	// override
@@ -17,10 +17,10 @@ protected:
 
 private:
 	// override
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	static const sf::Image* img_;
-	sf::Sprite background_;
+	static const sf::Texture* img_;
+	xsf::Sprite background_;
 };
 
 

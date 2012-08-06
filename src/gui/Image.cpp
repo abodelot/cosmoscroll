@@ -3,15 +3,17 @@
 
 using namespace gui;
 
-Image::Image(Menu* parent, const sf::Image& img, float x, float y):
+Image::Image(Menu* parent, const sf::Texture& img, float x, float y):
 	Widget(parent, false)
 {
-	image_.SetImage(img);
-	Resize(image_.GetSize().x, image_.GetSize().y);
+	image_.setTexture(img);
+	setPosition(x, y);
+	Resize(img.getSize().x, img.getSize().y);
 }
 
 
-void Image::Render(sf::RenderTarget& target) const
+void Image::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.Draw(image_);
+	states.transform *= getTransform();
+	target.draw(image_, states);
 }

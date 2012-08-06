@@ -1,19 +1,19 @@
 #include "EvilBoss.hpp"
 #include "core/ParticleSystem.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 
 #define EYE_OFFSET_LEFT   sf::Vector2f(105, 55)
 #define EYE_OFFSET_RIGHT  sf::Vector2f(190, 55)
 #define MOUTH_OFFSET      sf::Vector2f(143, 128)
 
 #define MAX_X 350
-#define MAX_Y (EntityManager::GetInstance().GetHeight() - GetSize().y)
+#define MAX_Y (EntityManager::GetInstance().GetHeight() - getHeight())
 
 EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	Entity(position, EVIL)
 {
-	SetImage(Resources::GetImage("entities/evil-boss.png"));
-	SetSubRect(sf::IntRect(0, 0, 242, 160));
+	setTexture(Resources::getTexture("entities/evil-boss.png"));
+	setTextureRect(sf::IntRect(0, 0, 242, 160));
 	SetTeam(Entity::BAD);
 
 	// init weapons
@@ -45,7 +45,7 @@ EvilBoss* EvilBoss::Clone() const
 
 void EvilBoss::Update(float frametime)
 {
-	sf::Vector2f target_pos = target_->GetCenter_();
+	sf::Vector2f target_pos = target_->getCenter();
 
 	eye_left_.ShootAt(target_pos);
 	eye_right_.ShootAt(target_pos);
@@ -55,18 +55,18 @@ void EvilBoss::Update(float frametime)
 		canon_.ShootAt(target_pos);
 	}
 
-	const sf::Vector2f& pos = GetPosition();
+	const sf::Vector2f& pos = getPosition();
 	if ((int) pos.y < 60 || (int) pos.y > MAX_Y - 60)
 	{
-		if      ((int) pos.y < 60)         SetY(60);
-		else if ((int) pos.y > MAX_Y - 60) SetY(MAX_Y - 60);
+		if      ((int) pos.y < 60)         setY(60);
+		else if ((int) pos.y > MAX_Y - 60) setY(MAX_Y - 60);
 		speed_y_ *= -1;
 	}
-	sf::Sprite::Move(0, speed_y_ * frametime);
+	sf::Sprite::move(0, speed_y_ * frametime);
 
 	if (pos.x > MAX_X)
 	{
-		sf::Sprite::Move(speed_x_ * frametime, 0);
+		sf::Sprite::move(speed_x_ * frametime, 0);
 	}
 	eye_left_.Update(frametime);
 	eye_right_.Update(frametime);
@@ -84,12 +84,12 @@ void EvilBoss::TakeDamage(int damage)
 		switch (phase_)
 		{
 			case MORE_EVIL:
-				SetSubRect(sf::IntRect(242, 0, 242 * 2, 160));
+				setTextureRect(sf::IntRect(242, 0, 242, 160));
 				canon_.Init("laser-pink");
 				next_ = DAMN_EVIL;
 				break;
 			case DAMN_EVIL:
-				SetSubRect(sf::IntRect(242 * 2, 0, 242 * 3, 160));
+				setTextureRect(sf::IntRect(242 * 2, 0, 242, 160));
 				canon_.SetMultiply(3);
 				eye_left_.SetMultiply(3);
 				eye_right_.SetMultiply(3);
@@ -103,7 +103,7 @@ void EvilBoss::TakeDamage(int damage)
 
 void EvilBoss::OnDestroy()
 {
-	ParticleSystem::GetInstance().GreenImpactSfx(GetCenter_(), 200);
+	ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 200);
 }
 
 

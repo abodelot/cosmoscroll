@@ -1,22 +1,22 @@
 #include "ConfigButton.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 
 #define BUT_W 120
 #define BUT_H 25
 
-const sf::Image* ConfigButton::img_ = NULL;
+const sf::Texture* ConfigButton::img_ = NULL;
 
-ConfigButton::ConfigButton(gui::Menu* owner, const sf::Unicode::Text& text) :
+ConfigButton::ConfigButton(gui::Menu* owner, const sf::String& text) :
 	gui::Button(owner, text, BUT_W, BUT_H)
 {
 	if (img_ == NULL)
 	{
-		img_ = &Resources::GetImage("gui/button-config.png");
+		img_ = &Resources::getTexture("gui/button-config.png");
 	}
 
-	background_.SetImage(*img_);
-	background_.SetSubRect(sf::IntRect(0, 0, BUT_W, BUT_H));
-	background_.Resize(BUT_W, BUT_H);
+	background_.setTexture(*img_);
+	background_.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
+	background_.resize(BUT_W, BUT_H);
 
 	SetTextPadding(0, -2);
 	SetAlign(gui::Align::CENTER);
@@ -29,13 +29,13 @@ void ConfigButton::OnStateChanged(gui::State::EState state)
 	switch (state)
 	{
 		case gui::State::DEFAULT:
-			background_.SetSubRect(sf::IntRect(0, 0, BUT_W, BUT_H));
+			background_.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
 			break;
 		case gui::State::HOVERED:
-			background_.SetSubRect(sf::IntRect(0, BUT_H, BUT_W, BUT_H * 2));
+			background_.setTextureRect(sf::IntRect(0, BUT_H, BUT_W, BUT_H));
 			break;
 		case gui::State::FOCUSED:
-			background_.SetSubRect(sf::IntRect(0, BUT_H * 2, BUT_W, BUT_H * 3));
+			background_.setTextureRect(sf::IntRect(0, BUT_H * 2, BUT_W, BUT_H));
 			break;
 		default:
 			break;
@@ -49,9 +49,10 @@ void ConfigButton::OnCallbackTriggered()
 }
 
 
-void ConfigButton::Render(sf::RenderTarget& target) const
+void ConfigButton::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.Draw(background_);
-	gui::Button::Render(target);
+	states.transform *= getTransform();
+	target.draw(background_, states);
+	target.draw((gui::Button) *this);
 }
 

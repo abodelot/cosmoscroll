@@ -10,7 +10,7 @@ enum CollisionBehavior
 };
 
 /**
- * Base de toute entité du jeu (classe abstraite)
+ * Abstrct base class for game objects
  */
 class Entity: public sf::Sprite
 {
@@ -34,7 +34,10 @@ public:
 	/**
 	 * @return sprite center
 	 */
-	sf::Vector2f GetCenter_() const;
+	sf::Vector2f getCenter() const;
+
+	// override
+	void setTexture(const sf::Texture& texture);
 
 	virtual void SetTarget(Entity* target);
 
@@ -78,12 +81,7 @@ public:
 	void SetHP(int hp);
 
 
-	void FlipX(bool flip);
-	void FlipY(bool flip);
 
-
-	inline bool IsFlippedX() const { return flipped_x_; }
-	inline bool IsFlippedY() const { return flipped_y_; }
 
 
 	virtual float GetSpeedX() const { return 0.f; }
@@ -93,14 +91,6 @@ public:
 	 * Obtenir la surface de collision du vaisseau
 	 */
 	sf::FloatRect GetCollideRect() const;
-
-	/**
-	 * Test if entity is colliding with another entity
-	 * @param other: other colliding entity
-	 * @param r1: pre-computed entity collide rect
-	 * @param r2: pre-computed other entity collide rec
-	 */
-	bool IsCollidingWith(const Entity& other, const sf::FloatRect& r1, const sf::FloatRect& r2);
 
 	/**
 	 * Obtenir l'équipe de l'entité
@@ -121,6 +111,12 @@ public:
 	int GetPoints() const;
 	int ConsumePoints();
 
+	inline float getWidth() const { return getTextureRect().width; }
+	inline float getHeight() const { return getTextureRect().height; }
+
+	inline void setX(float x) { setPosition(x, getPosition().y); }
+	inline void setY(float y) { setPosition(getPosition().x, y); }
+
 protected:
 	/**
 	 * Attribuer une équipe à l'entité (défaut: NEUTRAL)
@@ -136,8 +132,6 @@ protected:
 
 	void UpdateFlash(float frametime);
 private:
-	bool flipped_x_;
-	bool flipped_y_;
 	int hp_;
 	int points_;
 	int collide_damage_;

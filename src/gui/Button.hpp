@@ -19,12 +19,12 @@ public:
 	 * @param w: largeur (-1 pour largeur automatiquement adaptée au texte)
 	 * @param h: hauteur (-1 pour hauteur automatiquement adaptée au texte)
 	 */
-	Button(Menu* owner, const sf::Unicode::Text& text, int w = -1, int h = -1);
+	Button(Menu* owner, const sf::String& text, int w = -1, int h = -1);
 
 	/**
 	 * Indiquer le texte affiché sur le bouton
 	 */
-	virtual void SetText(const sf::Unicode::Text& text);
+	virtual void setString(const sf::String& text);
 
 	void SetTextPadding(int x, int y);
 
@@ -34,7 +34,7 @@ public:
 	virtual void SetAlign(Align::EAlign align);
 
 	// callbacks
-	virtual void OnKeyPressed(sf::Key::Code code);
+	virtual void OnKeyPressed(sf::Keyboard::Key code);
 	virtual void OnMouseClicked(int, int);
 
 protected:
@@ -42,10 +42,10 @@ protected:
 	virtual void OnStateChanged(State::EState state);
 
 	// override
-	virtual void Render(sf::RenderTarget& target) const;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
-	sf::String text_;
+	xsf::Text text_;
 	Align::EAlign align_;
 };
 

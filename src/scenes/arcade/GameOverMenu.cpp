@@ -12,30 +12,30 @@
 
 GameOverMenu::GameOverMenu()
 {
-	LoadBitmapFont(Resources::GetImage("gui/mono12-black.png"), 10, 10);
+	LoadBitmapFont(Resources::getTexture("gui/mono12-black.png"), 10, 10);
 	SetTitle(_t("menu.gameover.title"));
 
 	score_ = 0;
 	lab_result_ = new gui::Label(this, "", 120, 120);
-	lab_result_->SetSize(30);
+	lab_result_->setCharacterSize(30);
 
 	lab_pseudo_ = new gui::Label(this, _t("menu.gameover.pseudo"), 100, 200);
 	txt_pseudo_ = new gui::TextBox(this, 210, 200, 30);
 	txt_pseudo_->SetCallbackID(3);
 
 	but_commit_ = new CosmoButton(this, _t("menu.submit"));
-	but_commit_->SetPosition(210, 240);
+	but_commit_->setPosition(210, 240);
 	but_commit_->SetCallbackID(3);
 
 	but_send_score_ = new CosmoButton(this, _t("menu.gameover.send_score"));
-	but_send_score_->SetPosition(210, 240);
+	but_send_score_->setPosition(210, 240);
 	but_send_score_->SetCallbackID(0);
 
 	gui::Button* b = new CosmoButton(this, _t("menu.gameover.play_again"));
-	b->SetPosition(210, 290);
+	b->setPosition(210, 290);
 	b->SetCallbackID(1);
 	b = new CosmoButton(this, _t("menu.back_main_menu"));
-	b->SetPosition(210, 340);
+	b->setPosition(210, 340);
 	b->SetCallbackID(2);
 }
 
@@ -57,8 +57,8 @@ void GameOverMenu::OnFocus()
 	{
 		text = wstr_replace(_t("menu.gameover.no_record"), L"{score}", to_wstring(score_));
 	}
-	lab_result_->SetSize(30);
-	lab_result_->SetText(text);
+	lab_result_->setCharacterSize(30);
+	lab_result_->setString(text);
 
 	but_send_score_->SetVisible(true);
 	FocusWidget(but_send_score_);
@@ -89,13 +89,13 @@ void GameOverMenu::EventCallback(int id)
 		case 3:
 			if (EntityManager::GetInstance().GetPlayerShip()->HasCheated())
 			{
-				lab_result_->SetSize(20);
-				lab_result_->SetText(_t("menu.gameover.error_cheat"));
+				lab_result_->setCharacterSize(20);
+				lab_result_->setString(_t("menu.gameover.error_cheat"));
 			}
 			else if (!Game::GetInstance().IsPure())
 			{
-				lab_result_->SetSize(20);
-				lab_result_->SetText(_t("menu.gameover.error_altered_res"));
+				lab_result_->setCharacterSize(20);
+				lab_result_->setString(_t("menu.gameover.error_altered_res"));
 			}
 			else
 			{
@@ -119,30 +119,30 @@ void GameOverMenu::UploadScore()
 
 	// Connect to cosmoscroll scores server
 	sf::Http server;
-	server.SetHost(COSMO_SERVER_HOSTNAME);
+	server.setHost(COSMO_SERVER_HOSTNAME);
 
 	// Submit the score
 	sf::Http::Request request;
-	request.SetMethod(sf::Http::Request::Post);
-	request.SetURI(COSMO_SERVER_URI);
+	request.setMethod(sf::Http::Request::Post);
+	request.setUri(COSMO_SERVER_URI);
 	std::string body = "name=" + str_name
 	                 + "&score=" + str_score
 	                 + "&key=" + key.GetHash()
 	                 + "&version=" + GAME_VERSION;
-	request.SetBody(body);
+	request.setBody(body);
 
 	// Send it and get the response returned by the server
-	sf::Http::Response response = server.SendRequest(request);
-	switch (response.GetStatus())
+	sf::Http::Response response = server.sendRequest(request);
+	switch (response.getStatus())
 	{
 		case sf::Http::Response::Ok:
 			Game::GetInstance().SetNextScene(Game::SC_BestScoresMenu);
 			break;
 		case sf::Http::Response::ConnectionFailed:
-			lab_result_->SetText("Couldn't connect to CosmoScroll server");
+			lab_result_->setString("Couldn't connect to CosmoScroll server");
 			break;
 		default:
-			lab_result_->SetText(response.GetBody());
+			lab_result_->setString(response.getBody());
 			break;
 	}
 }

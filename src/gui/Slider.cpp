@@ -11,10 +11,14 @@ Slider::Slider(Menu* owner, int w, int h) :
 	{
 		h = owner->GetWidgetStyle().global_text_size;
 	}
-	bar_ = sf::Shape::Rectangle(0, 0, w, h, sf::Color::White,
-		1, owner->GetWidgetStyle().global_border_color);
-	handle_ = sf::Shape::Rectangle(0, 0, h, h,
-		sf::Color::White, 1, owner->GetWidgetStyle().global_border_color);
+	bar_.setSize(sf::Vector2f(w, h));
+	bar_.setOutlineThickness(1);
+	bar_.setOutlineColor(owner->GetWidgetStyle().global_border_color);
+
+	handle_.setSize(sf::Vector2f(h, h));
+	handle_.setOutlineThickness(1);
+	handle_.setOutlineColor(owner->GetWidgetStyle().global_border_color);
+
 	SetState(State::DEFAULT);
 
 	handle_index_ = 0;
@@ -46,20 +50,20 @@ void Slider::SetValue(int value)
 }
 
 
-void Slider::OnKeyPressed(sf::Key::Code key)
+void Slider::OnKeyPressed(sf::Keyboard::Key key)
 {
 	switch (key)
 	{
-		case sf::Key::Left:
+		case sf::Keyboard::Left:
 			UpdateHandle(handle_index_ - quantum_);
 			break;
-		case sf::Key::Right:
+		case sf::Keyboard::Right:
 			UpdateHandle(handle_index_ + quantum_);
 			break;
-		case sf::Key::Home:
+		case sf::Keyboard::Home:
 			UpdateHandle(0);
 			break;
-		case sf::Key::End:
+		case sf::Keyboard::End:
 			UpdateHandle(100);
 			break;
 		default:
@@ -87,12 +91,12 @@ void Slider::OnStateChanged(State::EState state)
 	switch (state)
 	{
 		case State::DEFAULT:
-			bar_.SetColor(style.slider_bg_color);
-			handle_.SetColor(style.slider_handle_color);
+			bar_.setFillColor(style.slider_bg_color);
+			handle_.setFillColor(style.slider_handle_color);
 			break;
 		case State::FOCUSED:
-			bar_.SetColor(style.slider_bg_color_focus);
-			handle_.SetColor(style.slider_handle_color_focus);
+			bar_.setFillColor(style.slider_bg_color_focus);
+			handle_.setFillColor(style.slider_handle_color_focus);
 			break;
 		default:
 			break;
@@ -100,10 +104,11 @@ void Slider::OnStateChanged(State::EState state)
 }
 
 
-void Slider::Render(sf::RenderTarget& target) const
+void Slider::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.Draw(bar_);
-	target.Draw(handle_);
+	states.transform *= getTransform();
+	target.draw(bar_, states);
+	target.draw(handle_, states);
 }
 
 
@@ -130,7 +135,8 @@ void Slider::UpdateHandle(int value)
 		CallTheCallback();
 	}
 	// then update handle sprite (handle is a square, size is Rect.Height)
-	int x = (GetWidth() - GetHeight()) * handle_index_ / 100;
-	handle_.SetX(x);
+	sf::Vector2f pos = handle_.getPosition();
+	pos.x = (GetWidth() - GetHeight()) * handle_index_ / 100;
+	handle_.setPosition(pos);
 }
 

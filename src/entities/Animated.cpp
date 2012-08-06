@@ -19,8 +19,8 @@ void Animated::Reset(sf::Sprite& sprite)
 {
 	if (animation_ != NULL)
 	{
-		sprite.SetImage(animation_->GetImage());
-		sprite.SetSubRect(animation_->GetFrame(0));
+		sprite.setTexture(animation_->getTexture());
+		sprite.setTextureRect(animation_->GetFrame(0));
 	}
 }
 
@@ -32,7 +32,7 @@ void Animated::UpdateSubRect(sf::Sprite& sprite, float frametime)
 	{
 		timer_ = animation_->GetDelay();
 		frame_ = (frame_ + 1) % animation_->GetSize();
-		sprite.SetSubRect(animation_->GetFrame(frame_));
+		sprite.setTextureRect(animation_->GetFrame(frame_));
 	}
 }
 

@@ -14,54 +14,56 @@ ArmoryMenu::ArmoryMenu()
 	lab_info_ = new gui::Label(this, "");
 
 	// ship GUI
-	new gui::Image(this, Resources::GetImage("gui/armory-ship-view.png"));
+	new gui::Image(this, Resources::getTexture("gui/armory-ship-view.png"));
 	for (int i = 0; i < ItemData::_COUNT; ++i)
 	{
 		items_[i] = new UpgradeItem(this, (ItemData::Type) i);
 	}
 
 	// init dialog
-	dialog_.background = new gui::Image(this, Resources::GetImage("gui/armory-dialog.png"));
+	dialog_.background = new gui::Image(this, Resources::getTexture("gui/armory-dialog.png"));
 	int x = dialog_.x = (Game::WIDTH - Dialog::WIDTH) / 2;
 	int y = dialog_.y = (Game::HEIGHT - Dialog::HEIGHT) / 2;
-	dialog_.background->SetPosition(x, y);
+	dialog_.background->setPosition(x, y);
 
 
-	dialog_.lab_item = new gui::Label(this, "\n");
-	dialog_.lab_item->SetPosition(x, y + 6);
+	dialog_.lab_item = new gui::Label(this, "A\n");
+	dialog_.lab_item->setPosition(x, y + 6);
 	// left side
 	gui::VBoxLayout layout_left(x + 30, y + 30);
 	layout_left.SetSpacing(0, 5);
-	const sf::Font& font = Resources::GetFont("Ubuntu-R.ttf");
+	const sf::Font& font = Resources::getFont("Ubuntu-R.ttf");
 
-	dialog_.current_level = new gui::Label(this, "\n");
-	dialog_.current_level->SetColor(sf::Color::Green);
-	dialog_.current_level->SetSize(18);
+	dialog_.current_level = new gui::Label(this, "A\n");
+	//dialog_.current_level->setFont(font);
+	dialog_.current_level->setStyle(sf::Text::Bold);
+	dialog_.current_level->setColor(sf::Color::Green);
+	dialog_.current_level->setCharacterSize(18);
 	layout_left.Add(dialog_.current_level);
 
-	dialog_.current_level_details = new gui::Label(this, "\n\n");
-	dialog_.current_level_details->SetFont(font);
-	dialog_.current_level_details->SetSize(12);
+	dialog_.current_level_details = new gui::Label(this, "A\nA\n");
+	//dialog_.current_level_details->setFont(font);
+	dialog_.current_level_details->setCharacterSize(12);
 	layout_left.Add(dialog_.current_level_details);
 
-	dialog_.next_level = new gui::Label(this, "\n");
-	dialog_.next_level->SetColor(sf::Color::Green);
-	dialog_.next_level->SetSize(18);
+	dialog_.next_level = new gui::Label(this, "A\n");
+	dialog_.next_level->setColor(sf::Color::Green);
+	dialog_.next_level->setCharacterSize(18);
 	layout_left.Add(dialog_.next_level);
 
-	dialog_.next_level_details = new gui::Label(this, "\n\n");
-	dialog_.next_level_details->SetFont(font);
-	dialog_.next_level_details->SetSize(12);
+	dialog_.next_level_details = new gui::Label(this, "A\nA\n");
+	dialog_.next_level_details->setFont(font);
+	dialog_.next_level_details->setCharacterSize(12);
 	layout_left.Add(dialog_.next_level_details);
 
 	// right side: buttons
 	gui::VBoxLayout layout_right(x + 210, y + 70);
 	layout_right.SetSpacing(0, 10);
 
-	dialog_.price = new gui::Label(this, "\n");
-	dialog_.price->SetFont(font);
-	dialog_.price->SetSize(12);
-	dialog_.price->SetColor(sf::Color(255, 128, 0));
+	dialog_.price = new gui::Label(this, "A\n");
+	dialog_.price->setFont(font);
+	dialog_.price->setCharacterSize(12);
+	dialog_.price->setColor(sf::Color(255, 128, 0));
 	layout_right.Add(dialog_.price);
 
 	dialog_.but_buy = new ConfigButton(this, _t("armory.buy"));
@@ -75,7 +77,7 @@ ArmoryMenu::ArmoryMenu()
 	ShowDialog(false);
 
 	gui::Button* but_back = new CosmoButton(this, _t("menu.back"));
-	but_back->SetPosition(210, 410);
+	but_back->setPosition(210, 410);
 	but_back->SetCallbackID(102);
 }
 
@@ -83,8 +85,8 @@ ArmoryMenu::ArmoryMenu()
 void ArmoryMenu::OnFocus()
 {
 	CreditCounterBase::OnFocus();
-	lab_info_->SetText(_t("armory.info"));
-	lab_info_->SetPosition((Game::WIDTH - lab_info_->GetWidth()) / 2, 366);
+	lab_info_->setString(_t("armory.info"));
+	lab_info_->setPosition((Game::WIDTH - lab_info_->GetWidth()) / 2, 366);
 }
 
 
@@ -109,8 +111,8 @@ void ArmoryMenu::EventCallback(int id)
 				int item_level = Game::GetInstance().GetPlayerSave().LevelOf(current_type_);
 				wstr_self_replace(content, L"{item}", _t(ItemData::TypeToString(current_type_)));
 				wstr_self_replace(content, L"{level}", to_wstring(item_level));
-				lab_info_->SetText(content);
-				lab_info_->SetX((Game::WIDTH - lab_info_->GetWidth()) / 2);
+				lab_info_->setString(content);
+				lab_info_->setPosition((Game::WIDTH - lab_info_->GetWidth()) / 2, lab_info_->getPosition().y);
 				FocusFirstWidget();
 			}
 			break;
@@ -139,10 +141,10 @@ bool ArmoryMenu::BuyItem()
 		items_[current_type_]->RefreshLabel(); // refresh item widget
 		CreditCounterBase::OnFocus(); // refresh credit counter
 
-		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("cash-register.ogg"));
+		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("cash-register.ogg"));
 		return true;
 	}
-	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("disabled.ogg"));
+	SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("disabled.ogg"));
 	return false;
 }
 
@@ -174,17 +176,17 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 
 	// dialog title
 	std::wstring text = _t(data->TypeToString());
-	dialog_.lab_item->SetText(text);
+	dialog_.lab_item->setString(text);
 	int x = (Dialog::WIDTH - dialog_.lab_item->GetWidth()) / 2;
-	dialog_.lab_item->SetX(dialog_.x + x);
+	dialog_.lab_item->setPosition(dialog_.x + x, dialog_.lab_item->getPosition().y);
 
 	// current item level
 	text = _t("armory.item_current_level");
 	wstr_self_replace(text, L"{level}", to_wstring(level));
-	dialog_.current_level->SetText(text);
+	dialog_.current_level->setString(text);
 
 	// current item description
-	dialog_.current_level_details->SetText(data->BuildDescriptionString());
+	dialog_.current_level_details->setString(data->BuildDescriptionString());
 
 	// next item level
 	++level;
@@ -194,22 +196,22 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 	if (data == NULL)
 	{
 		text = _t("armory.max_level");
-		dialog_.next_level->SetText(text);
-		dialog_.next_level_details->SetText("");
-		dialog_.price->SetText("");
+		dialog_.next_level->setString(text);
+		dialog_.next_level_details->setString("");
+		dialog_.price->setString("");
 		dialog_.but_buy->SetVisible(false);
 	}
 	else
 	{
 		text = _t("armory.item_next_level");
 		wstr_self_replace(text, L"{level}", to_wstring(level));
-		dialog_.next_level->SetText(text);
+		dialog_.next_level->setString(text);
 
 		// next item description
-		dialog_.next_level_details->SetText(data->BuildDescriptionString());
+		dialog_.next_level_details->setString(data->BuildDescriptionString());
 		text = _t("item.price");
 		wstr_self_replace(text, L"{price}", to_wstring(data->GetPrice()));
-		dialog_.price->SetText(text);
+		dialog_.price->setString(text);
 	}
 	FocusFirstWidget();
 }

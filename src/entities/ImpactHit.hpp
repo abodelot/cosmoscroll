@@ -10,7 +10,7 @@ class ImpactHit: public Hit
 {
 public:
 	ImpactHit(Entity* emitter, const sf::Vector2f& offset, float angle,
-		const sf::Image* image, int speed, int damage);
+		const sf::Texture* image, int speed, int damage);
 
 	~ImpactHit();
 

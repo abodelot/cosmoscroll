@@ -20,7 +20,7 @@ class LevelManager;
 /**
  * Gestionnaire de la vie, l'univers et tout le reste
  */
-class EntityManager: public sf::Drawable
+class EntityManager: public sf::Drawable, public sf::Transformable
 {
 public:
 	// background image speed for parallax scrolling
@@ -48,7 +48,7 @@ public:
 	/**
 	 * Dimensions de l'univers
 	 */
-	void SetSize(int width, int height);
+	void resize(int width, int height);
 
 	/**
 	 * @return largeur de l'univers
@@ -152,7 +152,7 @@ private:
 	void RegisterUniqueEntity(Entity* entity);
 
 	// inherited
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	/**
 	 * Spawner les prochains éléments du jeu en mode Arcade
@@ -201,18 +201,19 @@ private:
 	int max_droppable_index_;
 	int max_droppable_points_;
 
-	struct ParallaxLayer
+	struct ParallaxLayer: public sf::Drawable
 	{
 		float scrolling_speed_;
-		const sf::Image* image_;
+		const sf::Texture* image_;
 		sf::Sprite background_;
 		sf::Sprite background2_;
+		sf::BlendMode blend_mode_;
 
 		ParallaxLayer();
 		void OnUpdate(float frametime);
-		void SetScrollingTexture(const sf::Image* image);
-		void SetColor(const sf::Color& color);
-		void Draw(sf::RenderTarget& target) const;
+		void SetScrollingTexture(const sf::Texture* image);
+		void setColor(const sf::Color& color);
+		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	};
 
 	ParallaxLayer layer1_;

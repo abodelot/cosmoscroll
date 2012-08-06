@@ -28,7 +28,7 @@ public:
 	void SetValue(int value);
 
 	// inherited callbacks
-	void OnKeyPressed(sf::Key::Code code);
+	void OnKeyPressed(sf::Keyboard::Key code);
 	void OnMouseClicked(int x, int y);
 	void OnMouseWheelMoved(int delta);
 
@@ -38,12 +38,12 @@ protected:
 
 private:
 	// inherited
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	void UpdateHandle(int value);
 
-	sf::Shape bar_;
-	sf::Shape handle_;
+	sf::RectangleShape bar_;
+	sf::RectangleShape handle_;
 	int handle_index_;
 	int quantum_;
 };

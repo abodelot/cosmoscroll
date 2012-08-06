@@ -37,7 +37,7 @@ public:
 
 	Type GetType() const;
 
-	static sf::IntRect GetSubRect(Type type);
+	static sf::IntRect getTextureRect(Type type);
 
 private:
 	Type type_;

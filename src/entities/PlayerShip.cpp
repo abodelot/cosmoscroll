@@ -8,9 +8,9 @@
 #include "core/ParticleSystem.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/PlayerSave.hpp"
+#include "core/Resources.hpp"
 #include "items/ItemManager.hpp"
 #include "utils/I18n.hpp"
-#include "utils/Resources.hpp"
 #include "utils/Math.hpp"
 
 #define WEAPON1_OFFSET              52, 22
@@ -39,6 +39,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	panel_(ControlPanel::GetInstance())
 {
 	SetTeam(Entity::GOOD);
+	setTexture(GetAnimation()->getTexture());
 	Reset(*this);
 
 	// init weapons
@@ -171,7 +172,7 @@ void PlayerShip::HandleAction(Input::Action action)
 			if (coolers_ > 0)
 			{
 				SoundSystem::GetInstance().PlaySound("cooler.ogg");
-				ParticleSystem::GetInstance().SnowflakeSfx(GetCenter_(), 40);
+				ParticleSystem::GetInstance().SnowflakeSfx(getCenter(), 40);
 				--coolers_;
 				panel_.SetCoolers(coolers_);
 				heat_ = 0.f;
@@ -269,20 +270,20 @@ void PlayerShip::Update(float frametime)
 		{
 			overheated_ = true;
 			panel_.SetOverheat(true);
-			ParticleSystem::GetInstance().AddMessage(GetPosition(), _t("panel.overheat"));
+			ParticleSystem::GetInstance().AddMessage(getPosition(), _t("panel.overheat"));
 		}
 		if (h > 0)
 			AudibleHeatingCue(frametime);
 	}
 
 	// moving
-	ComputeMove(frametime);
-	sf::Vector2f pos = GetPosition();
+	Computemove(frametime);
+	sf::Vector2f pos = getPosition();
 	pos.y = pos.y + speed_y_ * frametime;
 	pos.x = pos.x + speed_x_ * frametime;
 
-	const int X_BOUND = manager.GetWidth() - GetSize().x;
-	const int Y_BOUND = manager.GetHeight() - GetSize().y;
+	const int X_BOUND = manager.GetWidth() - getWidth();
+	const int Y_BOUND = manager.GetHeight() - getHeight();
 
 	if (pos.y < 0)
 	{
@@ -300,7 +301,7 @@ void PlayerShip::Update(float frametime)
 	{
 		pos.x = X_BOUND;
 	}
-	SetPosition(pos);
+	setPosition(pos);
 
 	// shield regeneration
 	if (shield_ < shield_max_)
@@ -386,7 +387,7 @@ void PlayerShip::OnCollide(Entity& entity)
 	if (bonus != NULL)
 	{
 		HandleBonus(bonus->GetType());
-		ParticleSystem::GetInstance().AddMessage(bonus->GetPosition(), bonus->GetDescription());
+		ParticleSystem::GetInstance().AddMessage(bonus->getPosition(), bonus->GetDescription());
 		SoundSystem::GetInstance().PlaySound("power-up.ogg");
 		entity.Kill();
 	}
@@ -399,17 +400,17 @@ void PlayerShip::OnCollide(Entity& entity)
 
 void PlayerShip::OnDestroy()
 {
-	SetColor(sf::Color::White); // clear red flash
+	setColor(sf::Color::White); // clear red flash
 	EntityManager& manager = EntityManager::GetInstance();
 	SetAnimation(manager.GetAnimation("player-destroyed"));
 
 	Reset(*this);
 	manager.TerminateGame();
-	ParticleSystem::GetInstance().ExplosionSfx(GetCenter_());
+	ParticleSystem::GetInstance().ExplosionSfx(getCenter());
 }
 
 
-void PlayerShip::ComputeMove(float)
+void PlayerShip::Computemove(float)
 {
 	speed_x_ = speed_y_ = 0;
 	if (input_.HasInput(Input::MOVE_UP))
@@ -467,7 +468,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 			break;
 		// immediate bonus
 		case Bonus::SUPER_BANANA:
-			ParticleSystem::GetInstance().FierySfx(GetCenter_(), 50);
+			ParticleSystem::GetInstance().FierySfx(getCenter(), 50);
 			// +1 missile, +1 cooler, +1 health, +1 shield
 			HandleBonus(Bonus::MISSILE);
 			HandleBonus(Bonus::COOLER);
@@ -558,7 +559,7 @@ void PlayerShip::KonamiCodeOn()
 	weapon2_.SetMultiply(2);
 	missile_launcher_.SetMultiply(3);
 
-	ParticleSystem::GetInstance().AddMessage(GetPosition(), L"For great justice!");
+	ParticleSystem::GetInstance().AddMessage(getPosition(), L"For great justice!");
 
 #ifdef DEBUG
 	this->SetCollideFlag(C_IGNORE_DAMAGE);

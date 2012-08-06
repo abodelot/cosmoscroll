@@ -3,15 +3,15 @@
 #include "BaseMenu.hpp"
 #include "core/Game.hpp"
 #include "core/SoundSystem.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 
 
 gui::WidgetStyle BaseMenu::global_style_;
 
 BaseMenu::BaseMenu(): gui::Menu(global_style_)
 {
-	SetBackground(sf::Sprite(Resources::GetImage("gui/main-screen.png")));
-	scrolling_background_.SetImage(Resources::GetImage("gui/background.png"));
+	SetBackground(sf::Sprite(Resources::getTexture("gui/main-screen.png")));
+	scrolling_background_.setTexture(Resources::getTexture("gui/background.png"));
 
 	GetWidgetStyle().global_font = &GetMenuFont();
 }
@@ -33,7 +33,7 @@ void BaseMenu::Update(float frametime)
 	{
 		y = Game::HEIGHT;
 	}
-	scrolling_background_.SetY(y);
+	scrolling_background_.setY(y);
 
 	// updating gui
 	gui::Menu::Update(frametime);
@@ -43,36 +43,36 @@ void BaseMenu::Update(float frametime)
 void BaseMenu::Show(sf::RenderTarget& target) const
 {
 	// drawing background twice for scrolling purpose
-	target.Draw(scrolling_background_);
-	scrolling_background_.SetCenter(0.f, scrolling_background_.GetSize().y);
-	target.Draw(scrolling_background_);
-	scrolling_background_.SetCenter(0.f, 0.f);
+	target.draw(scrolling_background_);
+	scrolling_background_.setOrigin(0.f, scrolling_background_.getHeight());
+	target.draw(scrolling_background_);
+	scrolling_background_.setOrigin(0.f, 0.f);
 
 	// drawing gui
 	gui::Menu::Show(target);
-	target.Draw(title_);
+	target.draw(title_);
 }
 
 
 void BaseMenu::OnFocus()
 {
 	// for user-friendly menus
-	Game::GetInstance().GetApp().ShowMouseCursor(true);
-	Game::GetInstance().GetApp().EnableKeyRepeat(true);
+	Game::GetInstance().GetApp().setMouseCursorVisible(true);
+	Game::GetInstance().GetApp().setKeyRepeatEnabled(true);
 }
 
 
-void BaseMenu::SetTitle(const sf::Unicode::Text& text, int y)
+void BaseMenu::SetTitle(const sf::String& text, int y)
 {
-	title_.SetFont(GetMenuFont());
-	title_.SetSize(40);
-	title_.SetText(text);
-	title_.SetX((Game::WIDTH - title_.GetRect().GetWidth()) / 2);
-	title_.SetY(y);
+	title_.setFont(GetMenuFont());
+	title_.setCharacterSize(40);
+	title_.setString(text);
+	title_.setX((Game::WIDTH - title_.getWidth()) / 2);
+	title_.setY(y);
 }
 
 
-const sf::String& BaseMenu::GetTitle() const
+const sf::Text& BaseMenu::GetTitle() const
 {
 	return title_;
 }
@@ -80,7 +80,7 @@ const sf::String& BaseMenu::GetTitle() const
 
 void BaseMenu::OnWidgetFocused()
 {
-	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("menu-select.ogg"));
+	SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("menu-select.ogg"));
 }
 
 

@@ -18,7 +18,7 @@ private:
 	// override
 	void EventCallback(int id);
 
-	sf::Sprite title_;
+	xsf::Sprite title_;
 };
 
 #endif // MAINMENU_HPP

@@ -2,6 +2,7 @@
 #define GUI_WIDGET_HPP
 
 #include <SFML/Graphics.hpp>
+#include "utils/sfml_helper.hpp"
 
 namespace gui
 {
@@ -32,7 +33,7 @@ class Menu;
 /**
  * Base de tous les éléments graphiques (classe abstraite)
  */
-class Widget: public sf::Drawable
+class Widget: public sf::Drawable, public sf::Transformable
 {
 public:
 	/**
@@ -58,7 +59,7 @@ public:
 
 	// callbacks des événements -----------------------------------------------
 
-	virtual void OnKeyPressed(sf::Key::Code) {}
+	virtual void OnKeyPressed(sf::Keyboard::Key) {}
 
 	virtual void OnTextEntered(sf::Uint32) {}
 

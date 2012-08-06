@@ -25,7 +25,7 @@ JoystickMenu::JoystickMenu()
 	form.AddRow(_t("menu.joystick.sensitivity"), sl_joystick_);
 
 	gui::Button* b = new CosmoButton(this, _t("menu.back"));
-	b->SetPosition(210, 410);
+	b->setPosition(210, 410);
 	b->SetCallbackID(9001);
 }
 
@@ -33,15 +33,15 @@ JoystickMenu::JoystickMenu()
 void JoystickMenu::OnFocus()
 {
 	BaseMenu::OnFocus();
-	but_weapon1_->SetText(GetButtonLabel(Input::USE_LASER));
+	but_weapon1_->setString(GetButtonLabel(Input::USE_LASER));
 
-	but_weapon2_->SetText(GetButtonLabel(Input::USE_PLASMA));
+	but_weapon2_->setString(GetButtonLabel(Input::USE_PLASMA));
 
-	but_missile_->SetText(GetButtonLabel(Input::USE_MISSILE));
+	but_missile_->setString(GetButtonLabel(Input::USE_MISSILE));
 
-	but_cooler_->SetText(GetButtonLabel(Input::USE_COOLER));
+	but_cooler_->setString(GetButtonLabel(Input::USE_COOLER));
 
-	but_pause_->SetText(GetButtonLabel(Input::PAUSE));
+	but_pause_->setString(GetButtonLabel(Input::PAUSE));
 
 	sl_joystick_->SetValue(100 - Input::GetInstance().GetSensitivity());
 }

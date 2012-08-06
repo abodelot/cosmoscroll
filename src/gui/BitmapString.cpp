@@ -19,7 +19,7 @@ BitmapString::BitmapString(const BitmapFont& font)
 }
 
 
-void BitmapString::SetText(const char* text)
+void BitmapString::setString(const char* text)
 {
 	Clear();
 	const char* p = text;
@@ -31,9 +31,9 @@ void BitmapString::SetText(const char* text)
 }
 
 
-void BitmapString::SetText(const std::string& text)
+void BitmapString::setString(const std::string& text)
 {
-	SetText(text.c_str());
+	setString(text.c_str());
 }
 
 
@@ -53,11 +53,11 @@ void BitmapString::AppendChar(char character)
 	else
 	{
 		sf::Sprite sprite;
-		sprite.SetImage(font_->GetImage());
-		sprite.SetSubRect(font_->GetCharRect(character));
-		sprite.SetColor(GetColor());
+		sprite.setTexture(font_->getTexture());
+		sprite.setTextureRect(font_->GetCharRect(character));
+		//sprite.setColor(getColor());
 		last_x_ += char_width_;
-		sprite.SetPosition(last_x_, last_y_);
+		sprite.setPosition(last_x_, last_y_);
 		bitmaps_.push_back(sprite);
 	}
 	chars_ += character;
@@ -69,10 +69,10 @@ void BitmapString::InsertChar(char character, int position)
 	position = GetRealPosition(position);
 
 	sf::Sprite sprite;
-	sprite.SetImage(font_->GetImage());
-	sprite.SetSubRect(font_->GetCharRect(character));
-	sprite.SetColor(GetColor());
-	sprite.SetX(position * char_width_);
+	sprite.setTexture(font_->getTexture());
+	sprite.setTextureRect(font_->GetCharRect(character));
+	//sprite.setColor(getColor());
+	sprite.setPosition(position * char_width_, sprite.getPosition().y);
 
 	chars_.insert(position, 1, character);
 	bitmaps_.insert(bitmaps_.begin() + position, sprite);
@@ -105,7 +105,7 @@ char BitmapString::GetCharAt(int position) const
 }
 
 
-void BitmapString::SetFont(const BitmapFont& font)
+void BitmapString::setFont(const BitmapFont& font)
 {
 	if (&font != font_)
 	{
@@ -114,15 +114,15 @@ void BitmapString::SetFont(const BitmapFont& font)
 		for (size_t i = 0; i < bitmaps_.size(); ++i)
 		{
 			sf::Sprite& sprite = bitmaps_[i];
-			sprite.SetX(i * char_width_);
-			sprite.SetSubRect(font_->GetCharRect(chars_[i]));
-			sprite.SetImage(font_->GetImage());
+			sprite.setPosition(i * char_width_, sprite.getPosition().y);
+			sprite.setTextureRect(font_->GetCharRect(chars_[i]));
+			sprite.setTexture(font_->getTexture());
 		}
 	}
 }
 
 
-const BitmapFont& BitmapString::GetFont() const
+const BitmapFont& BitmapString::getFont() const
 {
 	return *font_;
 }
@@ -142,21 +142,22 @@ int BitmapString::Length() const
 }
 
 
-void BitmapString::SetColor(const sf::Color& color)
+void BitmapString::setColor(const sf::Color& color)
 {
-	Drawable::SetColor(color);
+	//Drawable::setColor(color);
 	for (SpriteVec::iterator it = bitmaps_.begin(); it != bitmaps_.end(); ++it)
 	{
-		it->SetColor(color);
+		it->setColor(color);
 	}
 }
 
 
-void BitmapString::Render(sf::RenderTarget& target) const
+void BitmapString::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	states.transform *= getTransform();
 	for (SpriteVec::const_iterator it = bitmaps_.begin(); it != bitmaps_.end(); ++it)
 	{
-		target.Draw(*it);
+		target.draw(*it, states);
 	}
 }
 
@@ -171,7 +172,7 @@ void BitmapString::ComputePosition(int from)
 {
 	for (size_t i = from; i < bitmaps_.size(); ++i)
 	{
-		bitmaps_[i].SetX(i * char_width_);
+		bitmaps_[i].setPosition(i * char_width_, bitmaps_[i].getPosition().y);
 	}
 }
 

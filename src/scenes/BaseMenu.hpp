@@ -35,15 +35,15 @@ protected:
 	 * @param text: contenu du titre
 	 * @param y: décalage axe Y
 	 */
-	void SetTitle(const sf::Unicode::Text& text, int y = 20);
-	const sf::String& GetTitle() const;
+	void SetTitle(const sf::String& text, int y = 20);
+	const sf::Text& GetTitle() const;
 
 	// override
 	void OnWidgetFocused();
 
 private:
-	sf::String title_;
-	mutable sf::Sprite scrolling_background_;
+	xsf::Text title_;
+	mutable xsf::Sprite scrolling_background_;
 	static gui::WidgetStyle global_style_;
 };
 

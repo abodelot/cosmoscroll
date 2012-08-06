@@ -24,9 +24,9 @@ public:
 	int GetValue() const;
 
 private:
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	sf::Shape background_;
+	sf::RectangleShape background_;
 	sf::Sprite bar_;
 	int value_;
 };

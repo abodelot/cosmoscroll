@@ -2,7 +2,7 @@
 #define WEAPON_HPP
 
 #include <SFML/System/Vector2.hpp>
-#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 
 class Entity;
@@ -40,7 +40,7 @@ public:
 	/**
 	 * @param image: image du projectile
 	 */
-	void SetImage(const sf::Image* image);
+	void setTexture(const sf::Texture* image);
 
 	/**
 	 * @param fire_rate: nombre de tirs par seconde
@@ -92,7 +92,7 @@ protected:
 
 	Entity* GetOwner() const;
 
-	const sf::Image* GetImage() const
+	const sf::Texture* getTexture() const
 	{
 		return image_;
 	}
@@ -113,7 +113,7 @@ private:
 	float heat_cost_;
 	int velocity_;
 	int damage_;
-	const sf::Image* image_;
+	const sf::Texture* image_;
 
 	// timer "compte à rebours" pour que la cadence de tir soit indépendante
 	// du nombre de FPS. Si <= 0, on peut tirer. Si tir, timer reinitialisé.

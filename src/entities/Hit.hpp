@@ -18,7 +18,7 @@ public:
 	 * @param damage: dégâts infligés lors d'une collision
 	 */
 	Hit(Entity* emitter, const sf::Vector2f& position, float angle,
-		const sf::Image* image, int speed, int damage);
+		const sf::Texture* image, int speed, int damage);
 
 	// inherited
 	Hit* Clone() const;

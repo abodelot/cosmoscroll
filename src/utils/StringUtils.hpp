@@ -34,19 +34,9 @@ inline std::wstring to_wstring(const T& t, int width = 0, wchar_t fill = '0')
 	return oss.str();
 }
 
-/**
- * Return a copy of the string with all occurrences of a substring replaced
- */
-//std::string str_replace(const std::string& str, const std::string& look_for, const std::string& replace_by);
-//std::wstring str_replace(const std::wstring& str, const std::wstring& look_for, const std::wstring& replace_by);
 
-template <typename T>
-inline T str_replace(const T& str, const T& look_for, const T& replace_by)
-{
-	T result = str;
-	str_self_replace(result, look_for, replace_by);
-	return result;
-}
+#define wstr_self_replace str_self_replace<std::wstring>
+#define wstr_replace      str_replace<std::wstring>
 
 /**
  * Replace all occurrences of a substring (in-place)
@@ -72,8 +62,20 @@ inline int str_self_replace(T& target, const T& look_for, const T& replace_by)
 	}
 	return cpt;
 }
-#define wstr_self_replace str_self_replace<std::wstring>
-#define wstr_replace      str_replace<std::wstring>
+
+/**
+ * Return a copy of the string with all occurrences of a substring replaced
+ */
+//std::string str_replace(const std::string& str, const std::string& look_for, const std::string& replace_by);
+//std::wstring str_replace(const std::wstring& str, const std::wstring& look_for, const std::wstring& replace_by);
+
+template <typename T>
+inline T str_replace(const T& str, const T& look_for, const T& replace_by)
+{
+	T result = str;
+	str_self_replace(result, look_for, replace_by);
+	return result;
+}
 
 /**
  * Return a copy of the string with leading and trailing whitespace removed

@@ -20,12 +20,12 @@ void InGameScene::OnEvent(const sf::Event& event)
 	switch (action)
 	{
 		case Input::PANEL_UP:
-			panel_.SetY(0);
-			entities_.SetY(ControlPanel::HEIGHT);
+			panel_.setPosition(0, 0);
+			entities_.setPosition(0, ControlPanel::HEIGHT);
 			break;
 		case Input::PANEL_DOWN:
-			panel_.SetY(Game::HEIGHT - ControlPanel::HEIGHT);
-			entities_.SetY(0);
+			panel_.setPosition(0, Game::HEIGHT - ControlPanel::HEIGHT);
+			entities_.setPosition(0, 0);
 			break;
 		case Input::PAUSE:
 			SoundSystem::GetInstance().PauseMusic();
@@ -56,13 +56,13 @@ void InGameScene::Update(float frametime)
 
 void InGameScene::Show(sf::RenderTarget& target) const
 {
-	target.Draw(entities_);
-	target.Draw(panel_);
+	target.draw(entities_);
+	target.draw(panel_);
 }
 
 
 void InGameScene::OnFocus()
 {
-	Game::GetInstance().GetApp().ShowMouseCursor(false);
-	Game::GetInstance().GetApp().EnableKeyRepeat(false);
+	Game::GetInstance().GetApp().setMouseCursorVisible(false);
+	Game::GetInstance().GetApp().setKeyRepeatEnabled(false);
 }

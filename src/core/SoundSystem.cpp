@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "SoundSystem.hpp"
-#include "utils/Resources.hpp"
+#include "Resources.hpp"
 #include "utils/IniParser.hpp"
 
 #define DEFAULT_VOLUME 40
@@ -47,14 +47,14 @@ void SoundSystem::PlayMusic(const std::string& music_name)
 {
 	if (enable_music_)
 	{
-		if (music_.GetStatus() == sf::Music::Playing && music_name == music_name_)
+		if (music_.getStatus() == sf::Music::Playing && music_name == music_name_)
 			return;
 
 		music_name_ = music_name;
 		StopMusic();
-		music_.OpenFromFile(Resources::GetDataPath() + "/music/" + music_name);
-		music_.SetVolume(music_volume_);
-		music_.Play();
+		music_.openFromFile(Resources::getDataPath() + "/music/" + music_name);
+		music_.setVolume(music_volume_);
+		music_.play();
 	}
 }
 
@@ -63,20 +63,20 @@ void SoundSystem::PlayMusic()
 {
 	if (enable_music_)
 	{
-		music_.Play();
+		music_.play();
 	}
 }
 
 
 void SoundSystem::StopMusic()
 {
-	music_.Stop();
+	music_.stop();
 }
 
 
 void SoundSystem::PauseMusic()
 {
-	music_.Pause();
+	music_.pause();
 }
 
 
@@ -89,12 +89,12 @@ void SoundSystem::PlaySound(const sf::SoundBuffer& soundbuffer)
 			last_used_ = 0;
 		}
 		sf::Sound& sound = sounds_[last_used_];
-		if (sound.GetStatus() == sf::Sound::Playing)
+		if (sound.getStatus() == sf::Sound::Playing)
 		{
-			sound.Stop();
+			sound.stop();
 		}
-		sound.SetBuffer(soundbuffer);
-		sound.Play();
+		sound.setBuffer(soundbuffer);
+		sound.play();
 		++last_used_;
 	}
 }
@@ -102,7 +102,7 @@ void SoundSystem::PlaySound(const sf::SoundBuffer& soundbuffer)
 
 void SoundSystem::PlaySound(const std::string& sound_name)
 {
-	PlaySound(Resources::GetSoundBuffer(sound_name));
+	PlaySound(Resources::getSoundBuffer(sound_name));
 }
 
 
@@ -110,7 +110,7 @@ void SoundSystem::SetMusicVolume(int volume)
 {
 	ensure_range(volume, 0, 100);
 	music_volume_ = volume;
-	music_.SetVolume(volume);
+	music_.setVolume(volume);
 }
 
 
@@ -120,7 +120,7 @@ void SoundSystem::SetSoundVolume(int volume)
 	sound_volume_ = volume;
 	for (int i = 0; i < MAX_SOUNDS; ++i)
 	{
-		sounds_[i].SetVolume(volume);
+		sounds_[i].setVolume(volume);
 	}
 }
 
@@ -133,7 +133,7 @@ void SoundSystem::EnableMusic(bool enabled)
 	}
 	else
 	{
-		music_.Play();
+		music_.play();
 	}
 }
 
@@ -160,9 +160,9 @@ void SoundSystem::StopAll()
 {
 	for (int i = 0; i < MAX_SOUNDS; ++i)
 	{
-		if (sounds_[i].GetStatus() == sf::Sound::Playing)
+		if (sounds_[i].getStatus() == sf::Sound::Playing)
 		{
-			sounds_[i].Stop();
+			sounds_[i].stop();
 		}
 	}
 	StopMusic();

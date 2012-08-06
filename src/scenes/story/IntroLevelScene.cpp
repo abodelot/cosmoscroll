@@ -2,31 +2,31 @@
 #include "core/Game.hpp"
 #include "core/LevelManager.hpp"
 #include "utils/StringUtils.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 #include "entities/EntityManager.hpp"
 #include "utils/I18n.hpp"
 
 
 IntroLevelScene::IntroLevelScene()
 {
-	background_.SetImage(Resources::GetImage("gui/background.png"));
+	background_.setTexture(Resources::getTexture("gui/background.png"));
 
-	description_.SetColor(sf::Color::White);
-	description_.SetFont(GetMenuFont());
-	description_.SetSize(35);
+	description_.setColor(sf::Color::White);
+	description_.setFont(GetMenuFont());
+	description_.setCharacterSize(35);
 
-	title_.SetImage(Resources::GetImage("gui/cosmoscroll-logo.png"));
-	title_.SetCenter(title_.GetSize().x / 2, 0);
-	title_.SetPosition(Game::WIDTH / 2, 20);
+	title_.setTexture(Resources::getTexture("gui/cosmoscroll-logo.png"));
+	title_.setOrigin(title_.getWidth() / 2, 0);
+	title_.setPosition(Game::WIDTH / 2, 20);
 }
 
 
 void IntroLevelScene::OnEvent(const sf::Event& event)
 {
-	switch (event.Type)
+	switch (event.type)
 	{
 		case sf::Event::KeyPressed:
-			if (event.Key.Code != sf::Key::Escape)
+			if (event.key.code != sf::Keyboard::Escape)
 			{
 				EntityManager::GetInstance().InitMode(EntityManager::MODE_STORY);
 				Game::GetInstance().SetNextScene(Game::SC_InGameScene);
@@ -36,7 +36,7 @@ void IntroLevelScene::OnEvent(const sf::Event& event)
 				Game::GetInstance().SetNextScene(Game::SC_LevelMenu);
 			}
 			break;
-		case sf::Event::JoyButtonPressed:
+		case sf::Event::JoystickButtonPressed:
 			EntityManager::GetInstance().InitMode(EntityManager::MODE_STORY);
 			Game::GetInstance().SetNextScene(Game::SC_InGameScene);
 			break;
@@ -48,9 +48,9 @@ void IntroLevelScene::OnEvent(const sf::Event& event)
 
 void IntroLevelScene::Show(sf::RenderTarget& target) const
 {
-	target.Draw(background_);
-	target.Draw(title_);
-	target.Draw(description_);
+	target.draw(background_);
+	target.draw(title_);
+	target.draw(description_);
 }
 
 
@@ -74,12 +74,11 @@ void IntroLevelScene::OnFocus()
 	wstr_self_replace(intro, L"{description}", I18n::DecodeUTF8(levels.GetDescription()));
 	wstr_self_replace(intro, L"{count}", to_wstring(levels.RemainingEntities()));
 	wstr_self_replace(intro, L"\\n", L"\n");
-	description_.SetText(intro);
+	description_.setString(intro);
 
 	// centered on screen
-	sf::FloatRect rect = description_.GetRect();
-	description_.SetPosition(
-		(Game::WIDTH  - rect.GetWidth())  / 2,
-		(Game::HEIGHT - rect.GetHeight()) / 2
+	description_.setPosition(
+		(Game::WIDTH  - description_.getWidth())  / 2,
+		(Game::HEIGHT - description_.getHeight()) / 2
 	);
 }

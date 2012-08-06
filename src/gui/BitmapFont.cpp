@@ -4,25 +4,25 @@
 using namespace gui;
 
 
-BitmapFont::BitmapFont(const sf::Image& image, int width, int height)
+BitmapFont::BitmapFont(const sf::Texture& image, int width, int height)
 {
 	width_ = width;
 	height_ = height;
 
-	SetImage(image);
+	setTexture(image);
 }
 
 
-bool BitmapFont::SetImage(const sf::Image& image)
+bool BitmapFont::setTexture(const sf::Texture& image)
 {
 	image_ = &image;
-	char_width_ = image.GetWidth() / width_;
-	char_height_ = image.GetHeight() / height_;
+	char_width_ = image.getSize().x / width_;
+	char_height_ = image.getSize().y / height_;
 	return true;
 }
 
 
-const sf::Image& BitmapFont::GetImage() const
+const sf::Texture& BitmapFont::getTexture() const
 {
 	return *image_;
 }
@@ -38,10 +38,10 @@ sf::IntRect BitmapFont::GetCharRect(char character) const
 	character -= FIRST_CHAR;
 
 	sf::IntRect subrect;
-	subrect.Left = (character % width_) * char_width_;
-	subrect.Right = subrect.Left + char_width_;
-	subrect.Top = (character / width_) * char_height_;
-	subrect.Bottom = subrect.Top + char_height_;
+	subrect.left = (character % width_) * char_width_;
+	subrect.width = char_width_;
+	subrect.top = (character / width_) * char_height_;
+	subrect.height = char_height_;
 	return subrect;
 }
 

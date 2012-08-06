@@ -84,6 +84,8 @@
 		<Unit filename="extlibs/tinyxml/tinyxmlparser.cpp" />
 		<Unit filename="src/core/BigScrollingMessagingAppliance.cpp" />
 		<Unit filename="src/core/BigScrollingMessagingAppliance.hpp" />
+		<Unit filename="src/core/Collisions.cpp" />
+		<Unit filename="src/core/Collisions.hpp" />
 		<Unit filename="src/core/Constants.hpp" />
 		<Unit filename="src/core/ControlPanel.cpp" />
 		<Unit filename="src/core/ControlPanel.hpp" />
@@ -98,6 +100,8 @@
 		<Unit filename="src/core/ParticleSystem.hpp" />
 		<Unit filename="src/core/PlayerSave.cpp" />
 		<Unit filename="src/core/PlayerSave.hpp" />
+		<Unit filename="src/core/Resources.cpp" />
+		<Unit filename="src/core/Resources.hpp" />
 		<Unit filename="src/core/SoundSystem.cpp" />
 		<Unit filename="src/core/SoundSystem.hpp" />
 		<Unit filename="src/entities/Animated.cpp" />
@@ -237,10 +241,9 @@
 		<Unit filename="src/utils/IniParser.hpp" />
 		<Unit filename="src/utils/Math.cpp" />
 		<Unit filename="src/utils/Math.hpp" />
-		<Unit filename="src/utils/Resources.cpp" />
-		<Unit filename="src/utils/Resources.hpp" />
 		<Unit filename="src/utils/StringUtils.cpp" />
 		<Unit filename="src/utils/StringUtils.hpp" />
+		<Unit filename="src/utils/sfml_helper.hpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

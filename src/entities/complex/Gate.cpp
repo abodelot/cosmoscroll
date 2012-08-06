@@ -1,6 +1,6 @@
 #include "Gate.hpp"
 #include "Part.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 #include "core/SoundSystem.hpp"
 
 #define DOOR_DELAY 2.f
@@ -12,25 +12,25 @@ Gate::Gate(const sf::Vector2f& pos):
 	ComplexEntity(pos)
 {
 	Part cell(1);
-	cell.SetImage(Resources::GetImage("entities/decor-energy-cell.png"));
+	cell.setTexture(Resources::getTexture("entities/decor-energy-cell.png"));
 	cell.SetHP(16);
 	AddPart(cell, 0, 28);
 
 	Part base_top(2);
-	base_top.SetImage(Resources::GetImage("entities/decor-top.png"));
+	base_top.setTexture(Resources::getTexture("entities/decor-top.png"));
 	base_top.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(base_top, 32);
 
 	Part door(3);
-	door.SetImage(Resources::GetImage("entities/decor-door.png"));
+	door.setTexture(Resources::getTexture("entities/decor-door.png"));
 	door.SetCollideFlag(C_IGNORE_DAMAGE);
-	AddPart(door, 64, GetSize().y);
-	door_full_height_ = door.GetSize().y;
+	AddPart(door, 64, getHeight());
+	door_full_height_ = door.getHeight();
 
 	Part base_bottom(2);
-	base_bottom.SetImage(Resources::GetImage("entities/decor-bottom.png"));
+	base_bottom.setTexture(Resources::getTexture("entities/decor-bottom.png"));
 	base_bottom.SetCollideFlag(C_IGNORE_DAMAGE);
-	AddPart(base_bottom, 32, GetSize().y);
+	AddPart(base_bottom, 32, getHeight());
 
 	AddPart(cell, 0, 332);
 
@@ -46,13 +46,13 @@ void Gate::Update(float frametime)
 	{
 		float delta_door = door_full_height_ * door_timer_ / DOOR_DELAY;
 		Part* door = GetPartByID(3);
-		sf::IntRect subrect(0, (door_full_height_ - delta_door), door->GetSize().x, door_full_height_);
+		sf::IntRect subrect(0, (door_full_height_ - delta_door), door->getWidth(), delta_door);
 		door_timer_ -= frametime;
 		if (door_timer_ <= 0)
 		{
-			subrect.Top = door_full_height_;
+			subrect.top = door_full_height_;
 		}
-		door->SetSubRect(subrect);
+		door->setTextureRect(subrect);
 	}
 }
 

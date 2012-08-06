@@ -1,6 +1,6 @@
 #include "WeaponData.hpp"
 #include "Weapon.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
@@ -18,7 +18,7 @@ WeaponData::WeaponData()
 
 void WeaponData::InitWeapon(Weapon* weapon) const
 {
-	weapon->SetImage(image_);
+	weapon->setTexture(image_);
 	weapon->SetFireRate(fire_rate_);
 	weapon->SetHeatCost(heat_cost_);
 	weapon->SetDamage(damage_);
@@ -51,13 +51,13 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 	{
 		std::cerr << "weapon ammo image is missing" << std::endl;
 	}
-	image_ = &Resources::GetImage(p);
+	image_ = &Resources::getTexture(p);
 
 	// sound (optional)
 	p = elem->Attribute("sound");
 	if (p != NULL)
 	{
-		sound_ = &Resources::GetSoundBuffer(p);
+		sound_ = &Resources::getSoundBuffer(p);
 	}
 
 	if (elem->QueryFloatAttribute("heat_cost", &heat_cost_) != TIXML_SUCCESS)

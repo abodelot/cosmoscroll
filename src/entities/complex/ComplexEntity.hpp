@@ -39,10 +39,9 @@ protected:
 	virtual void OnPartDestroyed(const Part&) {};
 
 	// override
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
-	sf::Shape test_;
 	typedef std::vector<Part> PartVector;
 	PartVector parts_;
 };

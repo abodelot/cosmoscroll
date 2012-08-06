@@ -21,7 +21,7 @@ KeyboardMenu::KeyboardMenu()
 	AddRow(form, Input::USE_MISSILE,  &but_missile_);
 
 	gui::Button* b = new CosmoButton(this, _t("menu.back"));
-	b->SetPosition(210, 410);
+	b->setPosition(210, 410);
 	b->SetCallbackID(9000);
 }
 
@@ -29,14 +29,14 @@ KeyboardMenu::KeyboardMenu()
 void KeyboardMenu::OnFocus()
 {
 	BaseMenu::OnFocus();
-	but_up_->SetText(GetKeyLabel(Input::MOVE_UP));
-	but_down_->SetText(GetKeyLabel(Input::MOVE_DOWN));
-	but_left_->SetText(GetKeyLabel(Input::MOVE_LEFT));
-	but_right_->SetText(GetKeyLabel(Input::MOVE_RIGHT));
-	but_weapon1_->SetText(GetKeyLabel(Input::USE_LASER));
-	but_weapon2_->SetText(GetKeyLabel(Input::USE_PLASMA));
-	but_cooler_->SetText(GetKeyLabel(Input::USE_COOLER));
-	but_missile_->SetText(GetKeyLabel(Input::USE_MISSILE));
+	but_up_->setString(GetKeyLabel(Input::MOVE_UP));
+	but_down_->setString(GetKeyLabel(Input::MOVE_DOWN));
+	but_left_->setString(GetKeyLabel(Input::MOVE_LEFT));
+	but_right_->setString(GetKeyLabel(Input::MOVE_RIGHT));
+	but_weapon1_->setString(GetKeyLabel(Input::USE_LASER));
+	but_weapon2_->setString(GetKeyLabel(Input::USE_PLASMA));
+	but_cooler_->setString(GetKeyLabel(Input::USE_COOLER));
+	but_missile_->setString(GetKeyLabel(Input::USE_MISSILE));
 }
 
 

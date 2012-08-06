@@ -67,7 +67,7 @@ void LevelMenu::OnFocus()
 
 	std::ostringstream progression;
 	progression << last_unlocked << "/" << last;
-	lab_progresion_->SetText(progression.str());
+	lab_progresion_->setString(progression.str());
 
 	// option widget
 	opt_levels_->Clear();
@@ -76,7 +76,7 @@ void LevelMenu::OnFocus()
 		bool activable = i <= last_unlocked;
 		if (activable)
 		{
-			opt_levels_->AddOption(to_string(i, 4, ' ') + "   ");
+			opt_levels_->AddOption(to_string(i));
 		}
 	}
 	opt_levels_->Select(current - 1);

@@ -20,25 +20,26 @@ TextBox::TextBox(Menu* owner, int x, int y, int visible_chars, int max_length):
 	visible_chars_ = visible_chars;
 	max_length_ = max_length;
 	left_offset_ = right_offset_ = 0;
-	int height = display_text_.GetFont().GetCharHeight() + PADDING * 2;
-	int width = display_text_.GetFont().GetCharWidth() * visible_chars + PADDING * 2;
+	int height = display_text_.getFont().GetCharHeight() + PADDING * 2;
+	int width = display_text_.getFont().GetCharWidth() * visible_chars + PADDING * 2;
 
-	box_ = sf::Shape::Rectangle(0, 0, width, height,
-		sf::Color::White, OUTLINE, owner->GetWidgetStyle().global_border_color);
+	/*box_.setSize(sf::Vector2f(width, height));
+	box_.setOutlineThickness(OUTLINE);
+	box_.setOutlineColor(owner->GetWidgetStyle().global_border_color);
 
-	display_text_.SetPosition(PADDING, PADDING);
+	display_text_.setPosition(PADDING, PADDING);
 
-	cursor_ = sf::Shape::Line(PADDING, PADDING, PADDING, height - PADDING,
-		CURSOR_WIDTH, sf::Color::White);
+	cursor_.setSize(sf::Vector2f(PADDING, PADDING, PADDING, height - PADDING,
+		CURSOR_WIDTH, sf::Color::White);*/
 	SetCursor(0);
 
-	SetPosition(x, y);
+	setPosition(x, y);
 	Resize(width, height);
 	OnStateChanged(GetState());
 }
 
 
-void TextBox::SetText(const sf::Unicode::Text& text)
+void TextBox::setString(const sf::String& text)
 {
 	left_offset_ = 0;
 	text_ = text;
@@ -59,7 +60,7 @@ void TextBox::SetText(const sf::Unicode::Text& text)
 	}
 	else
 	{
-		display_text_.SetText(text_);
+		display_text_.setString(text_);
 	}
 	SetCursor(0);
 }
@@ -79,7 +80,7 @@ void TextBox::Update(float frametime)
 		cursor_timer_ = 0.f;
 	}
 	float alpha = 255 * cursor_timer_ / BLINK_PERIOD;
-	cursor_.SetColor(sf::Color(64, 64, 255, 255 - (int) alpha));
+	cursor_.setFillColor(sf::Color(64, 64, 255, 255 - (int) alpha));
 }
 
 
@@ -109,11 +110,11 @@ void TextBox::OnTextEntered(sf::Uint32 unicode)
 }
 
 
-void TextBox::OnKeyPressed(sf::Key::Code key)
+void TextBox::OnKeyPressed(sf::Keyboard::Key key)
 {
 	switch (key)
 	{
-		case sf::Key::Back:
+		case sf::Keyboard::BackSpace:
 			// supprimer le caractère avant le curseur
 			if (cursor_pos_ > 0)
 			{
@@ -138,7 +139,7 @@ void TextBox::OnKeyPressed(sf::Key::Code key)
 				}
 			}
 			break;
-		case sf::Key::Delete:
+		case sf::Keyboard::Delete:
 			// supprimer le caractère après le curseur
 			if (cursor_pos_ < display_text_.Length())
 			{
@@ -158,13 +159,13 @@ void TextBox::OnKeyPressed(sf::Key::Code key)
 				}
 			}
 			break;
-		case sf::Key::Left:
+		case sf::Keyboard::Left:
 			SetCursor(cursor_pos_ - 1);
 			break;
-		case sf::Key::Right:
+		case sf::Keyboard::Right:
 			SetCursor(cursor_pos_ + 1);
 			break;
-		case sf::Key::Home:
+		case sf::Keyboard::Home:
 			// curseur en début
 			SetCursor(0);
 			while (left_offset_ > 0)
@@ -172,7 +173,7 @@ void TextBox::OnKeyPressed(sf::Key::Code key)
 				ShiftLeft();
 			}
 			break;
-		case sf::Key::End:
+		case sf::Keyboard::End:
 			// curseur en fin
 			while (right_offset_ > 0)
 			{
@@ -180,7 +181,7 @@ void TextBox::OnKeyPressed(sf::Key::Code key)
 			}
 			SetCursor(display_text_.Length());
 			break;
-		case sf::Key::Return:
+		case sf::Keyboard::Return:
 			CallTheCallback();
 			break;
 		default:
@@ -193,13 +194,13 @@ void TextBox::OnMouseClicked(int x, int y)
 {
 	(void) y;
 	// todo: semble marcher, vérifier sous valgrind
-	int letter_width = display_text_.GetFont().GetCharWidth();
+	int letter_width = display_text_.getFont().GetCharWidth();
 	int pos = x / letter_width;
 	if (pos > display_text_.Length())
 	{
 		pos = display_text_.Length();
 	}
-	cursor_.SetX(pos * letter_width);
+//	cursor_.SetX(pos * letter_width);
 	cursor_pos_ = pos;
 }
 
@@ -210,12 +211,12 @@ void TextBox::OnStateChanged(State::EState state)
 	switch (state)
 	{
 		case State::DEFAULT:
-			cursor_.SetColor(sf::Color(255, 255, 255, 0));
-			box_.SetColor(style.textbox_bg_color);
+			cursor_.setFillColor(sf::Color(255, 255, 255, 0));
+			box_.setFillColor(style.textbox_bg_color);
 			break;
 		case State::FOCUSED:
-			cursor_.SetColor(CURSOR_COLOR);
-			box_.SetColor(style.textbox_bg_color_focus);
+			cursor_.setFillColor(CURSOR_COLOR);
+			box_.setFillColor(style.textbox_bg_color_focus);
 			break;
 		default:
 			break;
@@ -223,11 +224,12 @@ void TextBox::OnStateChanged(State::EState state)
 }
 
 
-void TextBox::Render(sf::RenderTarget& app) const
+void TextBox::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	app.Draw(box_);
-	app.Draw(display_text_);
-	app.Draw(cursor_);
+	states.transform *= getTransform();
+	target.draw(box_, states);
+	target.draw(display_text_, states);
+	target.draw(cursor_, states);
 }
 
 
@@ -250,7 +252,7 @@ void TextBox::SetCursor(int position)
 		// le curseur n'est pas à une extrêmité de la box
 		cursor_timer_ = 0.f;
 		cursor_pos_ = position;
-		cursor_.SetX(position * display_text_.GetFont().GetCharWidth());
+		//cursor_.SetX(position * display_text_.getFont().GetCharWidth());
 	}
 }
 

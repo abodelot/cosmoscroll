@@ -3,7 +3,7 @@
 #include "core/SoundSystem.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/PlayerShip.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 
 #define DURATION    6.f
 #define JINGLE_TIME 2.f
@@ -13,22 +13,22 @@
 IntroScene::IntroScene() :
 	entity_mgr_(EntityManager::GetInstance())
 {
-	background_.SetImage(Resources::GetImage("gui/background.png"));
+	background_.setTexture(Resources::getTexture("gui/background.png"));
 
-	sf::Image& logo = Resources::GetImage("gui/cosmoscroll-logo.png");
-	logo.SetSmooth(true);
-	title_.SetImage(logo);
-	title_.SetCenter(title_.GetSize().x / 2, title_.GetSize().y / 2);
-	title_.SetPosition(Game::WIDTH / 2, Game::HEIGHT / 2);
-	title_.Resize(title_.GetSize().x * ZOOM_FACTOR, title_.GetSize().y * ZOOM_FACTOR);
+	sf::Texture& logo = Resources::getTexture("gui/cosmoscroll-logo.png");
+	logo.setSmooth(true);
+	title_.setTexture(logo);
+	title_.setOrigin(title_.getCenter());
+	title_.setPosition(Game::WIDTH / 2, Game::HEIGHT / 2);
+	title_.resize(title_.getWidth() * ZOOM_FACTOR, title_.getHeight() * ZOOM_FACTOR);
 
 	// show a tempory player ship during the scene
 	ship_ = new PlayerShip(sf::Vector2f(-200, 100), "player");
-	entity_mgr_.SetSize(Game::WIDTH, Game::HEIGHT);
-	entity_mgr_.AddEntity(ship_);
 
 	// allow the player ship to go beyond screen limits during the intro scene
-	entity_mgr_.SetSize(1000, 1000);
+	entity_mgr_.resize(1000, 1000);
+	entity_mgr_.AddEntity(ship_);
+
 	elapsed_ = 0.f;
 }
 
@@ -58,21 +58,21 @@ void IntroScene::Update(float frametime)
 	if (!jingle_played && elapsed_ >= JINGLE_TIME)
 	{
 		jingle_played = true;
-		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("title.ogg"));
+		SoundSystem::GetInstance().PlaySound("title.ogg");
 	}
 
 	entity_mgr_.Update(frametime);
-	ship_->Move(170 * frametime, 25 * frametime);
-	title_.Scale(0.99, 0.99); // FIXME: dépendant des FPS
+	ship_->move(170 * frametime, 25 * frametime);
+	title_.scale(0.99, 0.99); // FIXME: dépendant des FPS
 	// fading
-	title_.SetColor(sf::Color(255, 255, 255,
+	title_.setColor(sf::Color(255, 255, 255,
 		(sf::Uint8) (255 * elapsed_ / DURATION)));
 
 	if (elapsed_ >= DURATION)
 	{
 		// make entity manager ready for game use and restore original size
 		entity_mgr_.Clear();
-		entity_mgr_.SetSize(Game::WIDTH, Game::HEIGHT - ControlPanel::HEIGHT);
+		entity_mgr_.resize(Game::WIDTH, Game::HEIGHT - ControlPanel::HEIGHT);
 		Game::GetInstance().SetNextScene(Game::SC_MainMenu);
 	}
 }
@@ -80,9 +80,9 @@ void IntroScene::Update(float frametime)
 
 void IntroScene::Show(sf::RenderTarget& target) const
 {
-	target.Draw(background_);
-	target.Draw(entity_mgr_);
-	target.Draw(title_);
+	target.draw(background_);
+	target.draw(entity_mgr_);
+	target.draw(title_);
 }
 
 

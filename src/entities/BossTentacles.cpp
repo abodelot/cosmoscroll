@@ -5,7 +5,7 @@
 
 
 #define MAX_X 400
-#define MAX_Y (EntityManager::GetInstance().GetHeight() - GetSize().y)
+#define MAX_Y (EntityManager::GetInstance().GetHeight() - getHeight())
 
 
 BossTentacles::BossTentacles(const sf::Vector2f& position) :
@@ -41,20 +41,20 @@ void BossTentacles::Update(float frametime)
 	Animated::UpdateSubRect(*this, frametime);
 	timer_ += frametime;
 
-	sf::Vector2f target_pos = target_->GetPosition();
-	target_pos.x += target_->GetSize().x / 2;
-	target_pos.y += target_->GetSize().y / 2;
+	sf::Vector2f target_pos = target_->getPosition();
+	target_pos.x += target_->getWidth() / 2;
+	target_pos.y += target_->getHeight() / 2;
 
 	weapon_.ShootAt(target_pos);
 
 
-	sf::Vector2f pos = GetPosition();
+	sf::Vector2f pos = getPosition();
 	switch (move_)
 	{
 		case INIT:
 			if (pos.x < MAX_X)
 			{
-				SetX(MAX_X);
+				setX(MAX_X);
 				move_ = LURK;
 				speed_y_ = 120;
 				speed_x_ = 0;
@@ -63,8 +63,8 @@ void BossTentacles::Update(float frametime)
 		case LURK:
 			if ((int) pos.y < 40 || (int) pos.y > MAX_Y - 40)
 			{
-				if      ((int) pos.y < 40)         SetY(40);
-				else if ((int) pos.y > MAX_Y - 40) SetY(MAX_Y - 40);
+				if      ((int) pos.y < 40)         setY(40);
+				else if ((int) pos.y > MAX_Y - 40) setY(MAX_Y - 40);
 				speed_y_ *= -1;
 			}
 			if ((int) timer_ > 10)
@@ -87,22 +87,22 @@ void BossTentacles::Update(float frametime)
 		case CHARGE:
 			if ((int) pos.x < 10 || (int) pos.y < 10 || (int) pos.y > MAX_Y - 10)
 			{
-				if ((int) pos.x < 10)         SetX(10);
-				if ((int) pos.y < 10)         SetY(10);
-				if ((int) pos.y > MAX_Y - 10) SetY(MAX_Y - 10);
+				if ((int) pos.x < 10)         setX(10);
+				if ((int) pos.y < 10)         setY(10);
+				if ((int) pos.y > MAX_Y - 10) setY(MAX_Y - 10);
 				speed_x_ *= -1;
 				speed_y_ *= -1;
 			}
 			else if ((int) pos.x > MAX_X)
 			{
-				SetX(MAX_X);
+				setX(MAX_X);
 				move_ = LURK;
 				speed_x_ = 0;
 				speed_y_ = 120;
 			}
 			break;
 	}
-	sf::Sprite::Move(speed_x_ * frametime, speed_y_ * frametime);
+	sf::Sprite::move(speed_x_ * frametime, speed_y_ * frametime);
 	weapon_.Update(frametime);
 	Entity::UpdateFlash(frametime);
 }
@@ -110,7 +110,7 @@ void BossTentacles::Update(float frametime)
 
 void BossTentacles::OnDestroy()
 {
-	sf::Vector2f pos = GetCenter_();
+	sf::Vector2f pos = getCenter();
 	ParticleSystem::GetInstance().GreenImpactSfx(pos, 100);
 }
 

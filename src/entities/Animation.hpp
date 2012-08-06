@@ -46,13 +46,13 @@ public:
 	inline int GetSize() const
 	{ return subrects_.size(); }
 
-	void SetImage(const sf::Image& image);
+	void setTexture(const sf::Texture& image);
 
-	const sf::Image& GetImage() const;
+	const sf::Texture& getTexture() const;
 
 private:
 	std::vector<sf::IntRect> subrects_;
-	const sf::Image* image_;
+	const sf::Texture* image_;
 	float delay_;
 };
 

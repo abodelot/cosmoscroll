@@ -1,6 +1,7 @@
 #include "ControlPanel.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 #include "utils/StringUtils.hpp"
+
 #include "utils/I18n.hpp"
 
 #define BONUS_LENGTH 25   // offset label bonus slot
@@ -31,53 +32,53 @@ ControlPanel& ControlPanel::GetInstance()
 
 ControlPanel::ControlPanel()
 {
-	panel_.SetImage(Resources::GetImage("gui/score-board.png"));
-	const sf::Font& font = Resources::GetFont("Ubuntu-R.ttf", TEXT_SIZE);
+	panel_.setTexture(Resources::getTexture("gui/score-board.png"));
+	const sf::Font& font = Resources::getFont("Ubuntu-R.ttf");
 
 	// init progress bar
 	pbars_[ProgressBar::HP].Init(_t("panel.bar_hp"), font, BAR_SHIP);
-	pbars_[ProgressBar::HP].SetPosition(42, 7);
+	pbars_[ProgressBar::HP].setPosition(42, 7);
 
 	pbars_[ProgressBar::SHIELD].Init(_t("panel.bar_shield"), font, BAR_SHIELD);
-	pbars_[ProgressBar::SHIELD].SetPosition(42, 22);
+	pbars_[ProgressBar::SHIELD].setPosition(42, 22);
 
 	pbars_[ProgressBar::HEAT].Init(_t("panel.bar_heat"), font, BAR_HEAT);
-	pbars_[ProgressBar::HEAT].SetPosition(42, 37);
+	pbars_[ProgressBar::HEAT].setPosition(42, 37);
 
-	bar_mask_.SetImage(Resources::GetImage("gui/score-board-bar-mask.png"));
-	bar_mask_.SetPosition(101, 6);
+	bar_mask_.setTexture(Resources::getTexture("gui/score-board-bar-mask.png"));
+	bar_mask_.setPosition(101, 6);
 
 	// init bonus counters
 	bs_coolers_.Init(Bonus::COOLER, BonusSlot::COUNTER);
-	bs_coolers_.SetPosition(256, 8);
+	bs_coolers_.setPosition(256, 8);
 
 	bs_missiles_.Init(Bonus::MISSILE, BonusSlot::COUNTER);
-	bs_missiles_.SetPosition(256, 31);
+	bs_missiles_.setPosition(256, 31);
 
 	bs_attack_.Init(Bonus::DOUBLE_SHOT, BonusSlot::TIMER);
-	bs_attack_.SetPosition(334, 8);
+	bs_attack_.setPosition(334, 8);
 
 	bs_speed_.Init(Bonus::SPEED, BonusSlot::TIMER);
-	bs_speed_.SetPosition(334, 31);
+	bs_speed_.setPosition(334, 31);
 
 	// right container
-	timer_.SetPosition(430, 12);
-	timer_.SetFont(font);
-	timer_.SetSize(TEXT_SIZE);
+	timer_.setPosition(430, 12);
+	timer_.setFont(font);
+	timer_.setCharacterSize(TEXT_SIZE);
 
-	game_info_.SetPosition(530, 12);
-	game_info_.SetFont(font);
-	game_info_.SetSize(TEXT_SIZE);
+	game_info_.setPosition(530, 12);
+	game_info_.setFont(font);
+	game_info_.setCharacterSize(TEXT_SIZE);
 
-	str_points_.SetPosition(530, 26);
-	str_points_.SetSize(TEXT_SIZE);
-	str_points_.SetFont(font);
+	str_points_.setPosition(530, 26);
+	str_points_.setCharacterSize(TEXT_SIZE);
+	str_points_.setFont(font);
 
 	// story mode
-	level_bar_.SetImage(Resources::GetImage("gui/level-bar.png"));
-	level_bar_.SetPosition(LEVEL_BAR_X, LEVEL_BAR_Y);
-	level_cursor_.SetImage(Resources::GetImage("gui/level-cursor.png"));
-	level_cursor_.SetPosition(LEVEL_BAR_X, LEVEL_BAR_Y - 2);
+	level_bar_.setTexture(Resources::getTexture("gui/level-bar.png"));
+	level_bar_.setPosition(LEVEL_BAR_X, LEVEL_BAR_Y);
+	level_cursor_.setTexture(Resources::getTexture("gui/level-cursor.png"));
+	level_cursor_.setPosition(LEVEL_BAR_X, LEVEL_BAR_Y - 2);
 	level_duration_ = 0;
 }
 
@@ -88,7 +89,7 @@ void ControlPanel::Init(EntityManager::Mode mode)
 	switch (mode)
 	{
 		case EntityManager::MODE_STORY:
-			level_cursor_.SetX(LEVEL_BAR_X);
+			level_cursor_.setX(LEVEL_BAR_X);
 			break;
 		default:
 			break;
@@ -106,15 +107,15 @@ void ControlPanel::Update(float frametime)
 }
 
 
-void ControlPanel::SetGameInfo(const sf::Unicode::Text& text)
+void ControlPanel::SetGameInfo(const sf::String& text)
 {
-	game_info_.SetText(text);
+	game_info_.setString(text);
 }
 
 
 void ControlPanel::SetPoints(int points)
 {
-	str_points_.SetText(wstr_replace(_t("panel.points"), L"{points}", to_wstring(points)));
+	str_points_.setString(wstr_replace(_t("panel.points"), L"{points}", to_wstring(points)));
 }
 
 
@@ -127,14 +128,14 @@ void ControlPanel::SetTimer(float seconds)
 		std::wstring text = _t("panel.timer");
 		wstr_self_replace(text, L"{min}", to_wstring(rounded / 60, 2));
 		wstr_self_replace(text, L"{sec}", to_wstring(rounded % 60, 2));
-		timer_.SetText(text);
+		timer_.setString(text);
 		previous = rounded;
 		if (game_mode_ == EntityManager::MODE_STORY)
 		{
-			int max_progress = level_bar_.GetSize().x - level_cursor_.GetSize().x;
+			int max_progress = level_bar_.getWidth() - level_cursor_.getWidth();
 			int progress = max_progress * rounded / level_duration_;
 			int x = LEVEL_BAR_X + (progress > max_progress ? max_progress : progress);
-			level_cursor_.SetX(x);
+			level_cursor_.setX(x);
 		}
 	}
 }
@@ -142,7 +143,7 @@ void ControlPanel::SetTimer(float seconds)
 
 bool ControlPanel::IsOnTop() const
 {
-	return (int) GetPosition().y == 0;
+	return (int) getPosition().y == 0;
 }
 
 
@@ -156,13 +157,13 @@ void ControlPanel::SetOverheat(bool overheat)
 {
 	if (overheat)
 	{
-		pbars_[ProgressBar::HEAT].bar_.SetColor(BAR_OVERHEAT);
-		pbars_[ProgressBar::HEAT].label_.SetColor(BAR_OVERHEAT);
+		pbars_[ProgressBar::HEAT].bar_.setFillColor(BAR_OVERHEAT);
+		pbars_[ProgressBar::HEAT].label_.setColor(BAR_OVERHEAT);
 	}
 	else
 	{
-		pbars_[ProgressBar::HEAT].bar_.SetColor(BAR_HEAT);
-		pbars_[ProgressBar::HEAT].label_.SetColor(sf::Color::White);
+		pbars_[ProgressBar::HEAT].bar_.setFillColor(BAR_HEAT);
+		pbars_[ProgressBar::HEAT].label_.setColor(sf::Color::White);
 	}
 }
 
@@ -230,25 +231,27 @@ void ControlPanel::ActiveAttackBonus(int seconds, Bonus::Type bonus_type)
 
 void ControlPanel::RefreshTextTranslations()
 {
-	pbars_[ProgressBar::HP].label_.SetText(_t("panel.bar_hp"));
-	pbars_[ProgressBar::SHIELD].label_.SetText(_t("panel.bar_shield"));
-	pbars_[ProgressBar::HEAT].label_.SetText(_t("panel.bar_heat"));
+	pbars_[ProgressBar::HP].label_.setString(_t("panel.bar_hp"));
+	pbars_[ProgressBar::SHIELD].label_.setString(_t("panel.bar_shield"));
+	pbars_[ProgressBar::HEAT].label_.setString(_t("panel.bar_heat"));
 }
 
 
-void ControlPanel::Render(sf::RenderTarget& target) const
+void ControlPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	states.transform *= getTransform();
+
 	// background
-	target.Draw(panel_);
+	target.draw(panel_);
 
 	// draw progress bars
 	for (int i = 0; i < ProgressBar::_PBAR_COUNT; ++i)
 	{
-		target.Draw(pbars_[i].label_);
-		target.Draw(pbars_[i].bar_);
-		target.Draw(pbars_[i].value_);
+		target.draw(pbars_[i].label_);
+		target.draw(pbars_[i].bar_);
+		target.draw(pbars_[i].value_);
 	}
-	target.Draw(bar_mask_);
+	target.draw(bar_mask_);
 
 	// draw bonus slots
 	bs_coolers_.Show(target);
@@ -256,14 +259,14 @@ void ControlPanel::Render(sf::RenderTarget& target) const
 	bs_attack_.Show(target);
 	bs_speed_.Show(target);
 
-	target.Draw(game_info_);
-	target.Draw(timer_);
-	target.Draw(str_points_);
+	target.draw(game_info_);
+	target.draw(timer_);
+	target.draw(str_points_);
 
 	if (game_mode_ == EntityManager::MODE_STORY)
 	{
-		target.Draw(level_bar_);
-		target.Draw(level_cursor_);
+		target.draw(level_bar_);
+		target.draw(level_cursor_);
 	}
 }
 
@@ -274,25 +277,25 @@ ControlPanel::ProgressBar::ProgressBar()
 }
 
 
-void ControlPanel::ProgressBar::Init(const sf::Unicode::Text& text, const sf::Font& font, const sf::Color& color)
+void ControlPanel::ProgressBar::Init(const sf::String& text, const sf::Font& font, const sf::Color& color)
 {
-	label_.SetFont(font);
-	label_.SetText(text);
-	label_.SetSize(TEXT_SIZE);
-	label_.SetColor(sf::Color::White);
-	bar_ = sf::Shape::Rectangle(0, 0, 0, PROG_BAR_HEIGHT, sf::Color::White);
-	bar_.SetColor(color);
-	value_.SetFont(font);
-	value_.SetSize(TEXT_SIZE);
+	label_.setFont(font);
+	label_.setString(text);
+	label_.setCharacterSize(TEXT_SIZE);
+	label_.setColor(sf::Color::White);
+	bar_.setSize(sf::Vector2f(0, PROG_BAR_HEIGHT));
+	bar_.setFillColor(color);
+	value_.setFont(font);
+	value_.setCharacterSize(TEXT_SIZE);
 }
 
 
-void ControlPanel::ProgressBar::SetPosition(int x, int y)
+void ControlPanel::ProgressBar::setPosition(int x, int y)
 {
-	label_.SetPosition(x, y - TEXT_PADDING_Y);
+	label_.setPosition(x, y - TEXT_PADDING_Y);
 	int x_bar = x + PROG_BAR_TEXT_LENGTH;
-	bar_.SetPosition(x_bar, y);
-	value_.SetPosition(x_bar + 40, y - TEXT_PADDING_Y);
+	bar_.setPosition(x_bar, y);
+	value_.setPosition(x_bar + 40, y - TEXT_PADDING_Y);
 }
 
 
@@ -305,41 +308,40 @@ void ControlPanel::ProgressBar::SetValue(int value)
 	{
 		length = 0.1f;
 	}
-	bar_.SetPointPosition(1, length, 0);
-	bar_.SetPointPosition(2, length, PROG_BAR_HEIGHT);
+	bar_.setSize(sf::Vector2f(length, PROG_BAR_HEIGHT));
 
 	// display {value}/{max_value}
-	value_.SetText(to_string(value) + "/" + to_string(max_value_));
+	value_.setString(to_string(value) + "/" + to_string(max_value_));
 	// center text on progress bar
-	value_.SetX(bar_.GetPosition().x + (int) (PROG_BAR_WIDTH - value_.GetRect().GetWidth()) / 2);
+	value_.setX(bar_.getPosition().x + (int) (PROG_BAR_WIDTH - value_.getWidth()) / 2);
 }
 
 // BonusSlot ------------------------------------------------------------------
 
 void ControlPanel::BonusSlot::Init(Bonus::Type bonus_type, Type type)
 {
-	icon_.SetImage(Resources::GetImage("entities/bonus.png"));
-	icon_.SetSubRect(Bonus::GetSubRect(bonus_type));
+	icon_.setTexture(Resources::getTexture("entities/bonus.png"));
+	icon_.setTextureRect(Bonus::getTextureRect(bonus_type));
 
-	label_.SetSize(TEXT_SIZE);
-	label_.SetColor(sf::Color::White);
-	label_.SetText(type == COUNTER ? "x 0" : "-");
-	label_.SetFont(Resources::GetFont("Ubuntu-R.ttf", 12));
+	label_.setCharacterSize(TEXT_SIZE);
+	label_.setColor(sf::Color::White);
+	label_.setString(type == COUNTER ? "x 0" : "-");
+	label_.setFont(Resources::getFont("Ubuntu-R.ttf"));
 
-	glow_.SetImage(Resources::GetImage("gui/bonus-glow.png"));
-	glow_.SetColor(sf::Color(255, 255, 255, 0));
+	glow_.setTexture(Resources::getTexture("gui/bonus-glow.png"));
+	glow_.setColor(sf::Color(255, 255, 255, 0));
 	timer_ = -1.f;
 	glowing_ = STOP;
 	type_ = type;
 }
 
 
-void ControlPanel::BonusSlot::SetPosition(int x, int y)
+void ControlPanel::BonusSlot::setPosition(int x, int y)
 {
-	icon_.SetPosition(x, y);
-	label_.SetPosition(x + BONUS_LENGTH, y);
+	icon_.setPosition(x, y);
+	label_.setPosition(x + BONUS_LENGTH, y);
 	// glow is 64x64, centered on bonus sprite
-	glow_.SetPosition(x - 24, y - 24);
+	glow_.setPosition(x - 24, y - 24);
 }
 
 
@@ -348,15 +350,15 @@ void ControlPanel::BonusSlot::SetValue(int count)
 	switch (type_)
 	{
 		case COUNTER:
-			label_.SetText("x " + to_string(count));
+			label_.setString("x " + to_string(count));
 			timer_ = 0.f;
 			glowing_ = UP;
 			break;
 		case TIMER:
 			timer_ = count;
-			label_.SetText(to_string(count) + "s");
+			label_.setString(to_string(count) + "s");
 			glowing_ = UP;
-			glow_.SetColor(sf::Color::White);
+			glow_.setColor(sf::Color::White);
 			break;
 	}
 }
@@ -384,12 +386,12 @@ void ControlPanel::BonusSlot::Update(float frametime)
 					if (timer_ >= DELAY)
 					{
 						glowing_ = STOP;
-						glow_.SetColor(sf::Color(255, 255, 255, 0));
+						glow_.setColor(sf::Color(255, 255, 255, 0));
 						return;
 					}
 
 				}
-				glow_.SetColor(sf::Color(255, 255, 255, alpha));
+				glow_.setColor(sf::Color(255, 255, 255, alpha));
 			}
 			break;
 		case TIMER:
@@ -400,13 +402,13 @@ void ControlPanel::BonusSlot::Update(float frametime)
 				int new_timer = (int) (timer_ + 0.5f);
 				if (new_timer != old_timer)
 				{
-					label_.SetText(to_string(new_timer) + "s");
+					label_.setString(to_string(new_timer) + "s");
 				}
 				else if (timer_ <= 0.f)
 				{
-					glow_.SetColor(sf::Color(255, 255, 255, 0));
+					glow_.setColor(sf::Color(255, 255, 255, 0));
 					glowing_ = STOP;
-					label_.SetText("-");
+					label_.setString("-");
 				}
 			}
 			break;
@@ -416,8 +418,8 @@ void ControlPanel::BonusSlot::Update(float frametime)
 
 void ControlPanel::BonusSlot::Show(sf::RenderTarget& target) const
 {
-	target.Draw(glow_);
-	target.Draw(icon_);
-	target.Draw(label_);
+	target.draw(glow_);
+	target.draw(icon_);
+	target.draw(label_);
 }
 

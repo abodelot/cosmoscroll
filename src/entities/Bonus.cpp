@@ -1,9 +1,8 @@
 #include <cassert>
-#include <SFML/System/Randomizer.hpp>
-
 #include "Bonus.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 #include "utils/I18n.hpp"
+#include "utils/Math.hpp"
 
 #define BONUS_SPEED 100
 #define SIZE        16
@@ -12,8 +11,8 @@
 Bonus::Bonus(Type type, const sf::Vector2f& offset) :
 	Entity(offset, 1, 0)
 {
-	SetImage(Resources::GetImage("entities/bonus.png"));
-	SetSubRect(GetSubRect(type));
+	setTexture(Resources::getTexture("entities/bonus.png"));
+	setTextureRect(getTextureRect(type));
 	SetCollideFlag(C_IGNORE_HITS | C_IGNORE_DAMAGE); // non-damageable, power-ups will be removed by player
 	type_ = type;
 }
@@ -27,14 +26,14 @@ Bonus* Bonus::Clone() const
 
 Bonus* Bonus::MakeRandom(const sf::Vector2f& offset)
 {
-	Type type = (Type) sf::Randomizer::Random(0, BONUS_COUNT - 1);
+	Type type = (Type) math::random(0, BONUS_COUNT - 1);
 	return new Bonus((Type) type, offset);
 }
 
 
 void Bonus::Update(float frametime)
 {
-	sf::Sprite::Move(-BONUS_SPEED * frametime, 0);
+	sf::Sprite::move(-BONUS_SPEED * frametime, 0);
 }
 
 
@@ -71,10 +70,10 @@ Bonus::Type Bonus::GetType() const
 }
 
 
-sf::IntRect Bonus::GetSubRect(Type type)
+sf::IntRect Bonus::getTextureRect(Type type)
 {
 	// l'ordre des bonus dans la feuille de sprites est le même que celui
 	// de l'énumération Bonus::Type
-	return sf::IntRect(type * SIZE, 0, (type + 1) * SIZE, SIZE);
+	return sf::IntRect(type * SIZE, 0, SIZE, SIZE);
 }
 

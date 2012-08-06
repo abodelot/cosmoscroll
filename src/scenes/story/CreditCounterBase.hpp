@@ -19,7 +19,7 @@ public:
 	void Show(sf::RenderTarget& target) const;
 private:
 	sf::Sprite credit_counter_bg_;
-	sf::String credit_counter_;
+	sf::Text credit_counter_;
 };
 
 #endif // CREDITCOUNTERBASE_HPP

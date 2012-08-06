@@ -7,20 +7,20 @@
 
 
 Hit::Hit(Entity* emitter, const sf::Vector2f& position, float angle,
-	const sf::Image* image, int speed, int damage) :
+	const sf::Texture* image, int speed, int damage) :
 	Entity(position, 1, damage)
 {
-	SetImage(*image);
+	setTexture(*image);
 	SetTeam(emitter->GetTeam());
 	SetCollideFlag(C_IGNORE_HITS | C_IGNORE_DAMAGE); // hit objects die by themselves on collide
-	SetRotation(math::rad_to_deg(angle));
+	setRotation(-math::to_deg(angle));
 
 	// calcul du vecteur vitesse à partir de l'angle et de la vitesse
 	speed_.x = std::cos(angle) * speed + emitter->GetSpeedX();
 	speed_.y = -std::sin(angle) * speed;
 
 	// origin is located at sprite center to allow rotation
-	SetCenter(GetSize().x / 2, GetSize().y / 2);
+	setOrigin(getWidth() / 2, getHeight() / 2);
 }
 
 
@@ -32,7 +32,7 @@ Hit* Hit::Clone() const
 
 void Hit::Update(float frametime)
 {
-	Move(speed_.x * frametime, speed_.y * frametime);
+	move(speed_.x * frametime, speed_.y * frametime);
 }
 
 
@@ -44,7 +44,7 @@ void Hit::OnCollide(Entity& entity)
 		return;
 	}
 	Entity::OnCollide(entity);
-	ParticleSystem::GetInstance().ImpactSfx(GetPosition(), 10);
+	ParticleSystem::GetInstance().ImpactSfx(getPosition(), 10);
 	if (GetTeam() == Entity::GOOD && entity.IsDead())
 	{
 		int points = entity.ConsumePoints();
@@ -53,7 +53,7 @@ void Hit::OnCollide(Entity& entity)
 			std::string s = "+" + to_string(points);
 			EntityManager& e = EntityManager::GetInstance();
 			e.GetPlayerShip()->UpdateScoreCounter(points);
-			ParticleSystem::GetInstance().AddMessage(GetPosition(), s, sf::Color(255, 128, 0));
+			ParticleSystem::GetInstance().AddMessage(getPosition(), s, sf::Color(255, 128, 0));
 		}
 	}
 	Kill();

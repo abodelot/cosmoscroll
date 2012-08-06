@@ -1,23 +1,23 @@
 #include "CosmoButton.hpp"
 #include "core/SoundSystem.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 
 #define BUT_W 220
 #define BUT_H 40
 
-const sf::Image* CosmoButton::img_ = NULL;
+const sf::Texture* CosmoButton::img_ = NULL;
 
-CosmoButton::CosmoButton(gui::Menu* owner, const sf::Unicode::Text& text) :
+CosmoButton::CosmoButton(gui::Menu* owner, const sf::String& text) :
 	gui::Button(owner, text, BUT_W, BUT_H)
 {
 	if (img_ == NULL)
 	{
-		img_ = &Resources::GetImage("gui/button.png");
+		img_ = &Resources::getTexture("gui/button.png");
 	}
 
-	background_.SetImage(*img_);
-	background_.SetSubRect(sf::IntRect(0, 0, BUT_W, BUT_H));
-	background_.Resize(BUT_W, BUT_H);
+	background_.setTexture(*img_);
+	background_.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
+	background_.resize(BUT_W, BUT_H);
 
 	SetTextPadding(0, 8);
 	SetAlign(gui::Align::CENTER);
@@ -30,14 +30,14 @@ void CosmoButton::OnStateChanged(gui::State::EState state)
 	switch (state)
 	{
 		case gui::State::DEFAULT:
-			background_.SetSubRect(sf::IntRect(0, 0, BUT_W, BUT_H));
+			background_.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
 			break;
 		case gui::State::HOVERED:
-			background_.SetSubRect(sf::IntRect(0, 40, BUT_W, 40 + BUT_H));
-			SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("menu-select.ogg"));
+			background_.setTextureRect(sf::IntRect(0, 40, BUT_W, BUT_H));
+			SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("menu-select.ogg"));
 			break;
 		case gui::State::FOCUSED:
-			background_.SetSubRect(sf::IntRect(0, 80, BUT_W, 80 + BUT_H));
+			background_.setTextureRect(sf::IntRect(0, 80, BUT_W, BUT_H));
 			break;
 		default:
 			break;
@@ -48,12 +48,13 @@ void CosmoButton::OnStateChanged(gui::State::EState state)
 
 void CosmoButton::OnCallbackTriggered()
 {
-	SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("menu-valid.ogg"));
+	SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("menu-valid.ogg"));
 }
 
 
-void CosmoButton::Render(sf::RenderTarget& target) const
+void CosmoButton::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.Draw(background_);
-	gui::Button::Render(target);
+	states.transform *= getTransform();
+	target.draw(background_, states);
+	target.draw((gui::Button) *this);
 }

@@ -10,7 +10,7 @@ public:
 	UpgradeItem(gui::Menu* parent, ItemData::Type type);
 
 	// inherited callbacks
-	void OnKeyPressed(sf::Key::Code code);
+	void OnKeyPressed(sf::Keyboard::Key code);
 	void OnMouseClicked(int x, int y);
 
 	/**
@@ -19,12 +19,12 @@ public:
 	void RefreshLabel();
 
 private:
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	ItemData::Type type_;
-	sf::String label_;
-	sf::Sprite halo_;
-	sf::Shape label_bg_;
+	xsf::Text label_;
+	xsf::Sprite halo_;
+	sf::RectangleShape label_bg_;
 };
 
 #endif // UPGRADEITEM_HPP

@@ -39,6 +39,7 @@ SpaceShip::SpaceShip(const Animation& animation, int hp, int speed) :
 	Entity(sf::Vector2f(0, 0), hp),
 	Animated(animation)
 {
+	setTexture(animation.getTexture());
 	SetTeam(Entity::BAD);
 	Reset(*this);
 
@@ -115,49 +116,49 @@ void SpaceShip::Update(float frametime)
 
 void SpaceShip::OnDestroy()
 {
-	if (sf::Randomizer::Random(1, DROP_LUCK) == 1)
+	if (math::random(1, DROP_LUCK) == 1)
 	{
-		EntityManager::GetInstance().AddEntity(Bonus::MakeRandom(GetPosition()));
+		EntityManager::GetInstance().AddEntity(Bonus::MakeRandom(getPosition()));
 	}
-	ParticleSystem::GetInstance().ExplosionSfx(GetCenter_());
+	ParticleSystem::GetInstance().ExplosionSfx(getCenter());
 }
 
 // movement patterns -----------------------------------------------------------
 
 void SpaceShip::move_magnet(float frametime)
 {
-	sf::Vector2f player_pos = target_->GetCenter_();
-	sf::Vector2f my_pos = GetCenter_();
+	sf::Vector2f player_pos = target_->getCenter();
+	sf::Vector2f my_pos = getCenter();
 
 	float velocity = speed_ * frametime;
 	float x_diff = my_pos.x - player_pos.x;
 	float y_diff = my_pos.y - player_pos.y;
 
 	if (x_diff > 5)
-		sf::Sprite::Move(-velocity, 0);
+		sf::Sprite::move(-velocity, 0);
 	else if (x_diff < -5)
-		sf::Sprite::Move(velocity, 0);
+		sf::Sprite::move(velocity, 0);
 
 	if (y_diff > 5)
-		sf::Sprite::Move(0, -velocity);
+		sf::Sprite::move(0, -velocity);
 	else if (y_diff < -5)
-		sf::Sprite::Move(0, velocity);
+		sf::Sprite::move(0, velocity);
 }
 
 
 void SpaceShip::move_straight(float frametime)
 {
-	sf::Sprite::Move(-speed_ * frametime, 0);
+	sf::Sprite::move(-speed_ * frametime, 0);
 }
 
 
 void SpaceShip::move_sinus(float frametime)
 {
-	sf::Vector2f pos = GetPosition();
+	sf::Vector2f pos = getPosition();
 	pos.x += -speed_ * frametime;
 	if (base_y_ == -1)
 	{
-		int y_max = EntityManager::GetInstance().GetHeight() - SINUS_AMPLITUDE - GetSize().y;
+		int y_max = EntityManager::GetInstance().GetHeight() - SINUS_AMPLITUDE - getHeight();
 		// calcul de l'ordonnée à l'origine base_y_ de la fonction sinus
 		// l'amplitude de la courbe ne doit pas sortir de la zone de jeu
 		if (pos.y < SINUS_AMPLITUDE)
@@ -174,25 +175,25 @@ void SpaceShip::move_sinus(float frametime)
 		}
 	}
 	pos.y = std::sin(pos.x * SINUS_FREQUENCE) * SINUS_AMPLITUDE + base_y_;
-	SetPosition(pos);
+	setPosition(pos);
 }
 
 // attack patterns -------------------------------------------------------------
 
 void SpaceShip::attack_auto_aim()
 {
-	weapon_.ShootAt(target_->GetCenter_());
+	weapon_.ShootAt(target_->getCenter());
 }
 
 
 void SpaceShip::attack_on_sight()
 {
-	float my_y = GetCenter_().y;
-	float player_y = target_->GetCenter_().y;
+	float my_y = getCenter().y;
+	float player_y = target_->getCenter().y;
 	// Doit on tirer ?
 	if (std::abs(player_y - my_y) < 30)
 	{
-		weapon_.Shoot(-PI);
+		weapon_.Shoot(-math::PI);
 	}
 }
 

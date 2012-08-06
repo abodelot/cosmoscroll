@@ -9,10 +9,10 @@ namespace gui
 class Image: public Widget
 {
 public:
-	Image(Menu* parent, const sf::Image& img, float x=0, float y=0);
+	Image(Menu* parent, const sf::Texture& img, float x=0, float y=0);
 
 private:
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	sf::Sprite image_;
 };

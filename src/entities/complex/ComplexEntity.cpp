@@ -1,6 +1,7 @@
 #include "ComplexEntity.hpp"
 #include "utils/Math.hpp"
 #include "core/ParticleSystem.hpp"
+#include "core/Collisions.hpp"
 
 
 ComplexEntity::ComplexEntity(const sf::Vector2f& pos):
@@ -14,7 +15,7 @@ ComplexEntity::ComplexEntity(const sf::Vector2f& pos):
 
 void ComplexEntity::Update(float frametime)
 {
-	sf::Sprite::Move(-EntityManager::FOREGROUND_SPEED * frametime, 0.f);
+	sf::Sprite::move(-EntityManager::FOREGROUND_SPEED * frametime, 0.f);
 	for (size_t i = 0; i < parts_.size(); ++i)
 	{
 		parts_[i].Update(frametime);
@@ -26,30 +27,29 @@ void ComplexEntity::OnCollide(Entity& entity)
 {
 	for (PartVector::iterator it = parts_.begin(); it != parts_.end(); ++it)
 	{
-		sf::FloatRect entity_rect = entity.GetCollideRect();
-		Part& p = *it;
-		if (!p.IsDead())
+		Part& part = *it;
+		if (!part.IsDead())
 		{
 			// HACK: collide rect is relative to ComplexEntity position
 			// thus, compute part actual position, and then set back relative position
-			sf::Vector2f pos = p.GetPosition();
-			p.Move(GetPosition());
-			if (p.IsCollidingWith(entity, p.GetCollideRect(), entity_rect))
+			sf::Vector2f pos = part.getPosition();
+			part.move(getPosition());
+			if (Collisions::pixelPerfectTest(entity, part))
 			{
-				entity.OnCollide(p);
-				p.OnCollide(entity);
-				p.SetPosition(pos);
-				if (p.IsDead())
+				entity.OnCollide(part);
+				part.OnCollide(entity);
+				part.setPosition(pos); // restore original position
+				if (part.IsDead())
 				{
-					OnPartDestroyed(p);
+					OnPartDestroyed(part);
 					sf::Vector2f pos;
-					pos.x = GetPosition().x + p.GetCenter_().x;
-					pos.y = GetPosition().y + p.GetCenter_().y;
+					pos.x = getPosition().x + part.getCenter().x;
+					pos.y = getPosition().y + part.getCenter().y;
 					ParticleSystem::GetInstance().ExplosionSfx(pos);
 				}
 				break;
 			}
-			p.SetPosition(pos);
+			part.setPosition(pos);
 		}
 	}
 }
@@ -63,18 +63,15 @@ float ComplexEntity::GetSpeedX() const
 
 void ComplexEntity::AddPart(Part& part, float x, float y)
 {
-	part.SetPosition(x, y);
+	part.setPosition(x, y);
 	//part.SetTeam(GetTeam());
 	parts_.push_back(part);
 
-	float width = x + part.GetSize().x;
-	float height = y + part.GetSize().y;
-	float max_width = math::max(width, GetSize().x);
-	float max_height = math::max(height, GetSize().y);
-	SetSubRect(sf::IntRect(0, 0, max_width, max_height));
-
-
-	test_ = sf::Shape::Rectangle(0, 0, max_width, max_height, sf::Color(255, 0, 255, 64));
+	float width = x + part.getWidth();
+	float height = y + part.getHeight();
+	float max_width = math::max(width, getWidth());
+	float max_height = math::max(height, getHeight());
+	setTextureRect(sf::IntRect(0, 0, max_width, max_height));
 }
 
 
@@ -118,12 +115,13 @@ int ComplexEntity::DestroyPart(int id)
 }
 
 
-void ComplexEntity::Render(sf::RenderTarget& target) const
+void ComplexEntity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	states.transform *= getTransform();
 	for (size_t i = 0; i < parts_.size(); ++i)
 	{
 		const Part& p = parts_[i];
 		if (!p.IsDead())
-			target.Draw(parts_[i]);
+			target.draw(parts_[i], states);
 	}
 }

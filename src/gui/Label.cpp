@@ -4,29 +4,30 @@
 using namespace gui;
 
 
-Label::Label(Menu* owner, const sf::Unicode::Text& text, int x, int y) :
+Label::Label(Menu* owner, const sf::String& text, int x, int y) :
 	Widget(owner, false)
 {
 	const WidgetStyle& style = owner->GetWidgetStyle();
-	text_.SetText(text);
-	text_.SetColor(style.label_text_color);
-	text_.SetFont(*style.global_font);
-	text_.SetSize(style.global_text_size);
-	text_.SetPosition(0, 0);
+	text_.setString(text);
+	text_.setColor(style.label_text_color);
+	text_.setFont(*style.global_font);
+	text_.setCharacterSize(style.global_text_size);
+	text_.setPosition(0, 0);
 
-	SetPosition(x, y);
-	Resize(text_.GetRect().GetWidth(), text_.GetRect().GetHeight());
+	setPosition(x, y);
+	Resize(text_.getWidth(), text_.getHeight());
 }
 
 
-void Label::SetText(const sf::Unicode::Text& text)
+void Label::setString(const sf::String& text)
 {
-	text_.SetText(text);
-	Resize(text_.GetRect().GetWidth(), text_.GetRect().GetHeight());
+	text_.setString(text);
+	Resize(text_.getWidth(), text_.getHeight());
 }
 
 
-void Label::Render(sf::RenderTarget& target) const
+void Label::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.Draw(text_);
+	states.transform *= getTransform();
+	target.draw(text_, states);
 }

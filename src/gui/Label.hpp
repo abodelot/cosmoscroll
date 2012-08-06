@@ -9,29 +9,31 @@ namespace gui
 class Label: public Widget
 {
 public:
-	Label(Menu* owner, const sf::Unicode::Text& text, int x=0, int y=0);
+	Label(Menu* owner, const sf::String& text, int x=0, int y=0);
 
 	// texte du label
-	void SetText(const sf::Unicode::Text& text);
-	std::string GetText() const { return text_.GetText(); }
+	void setString(const sf::String& text);
+	std::string getString() const { return text_.getString(); }
 
 	// taille du texte
-	void SetSize(int size) { text_.SetSize(size); }
-	int GetSize() const { return text_.GetSize(); }
+	void setCharacterSize(int size) { text_.setCharacterSize(size); }
+	int getCharacterSize() const { return text_.getCharacterSize(); }
 
 	// text font
-	void SetFont(const sf::Font& font) { text_.SetFont(font); }
-	const sf::Font& GetFont() const { return text_.GetFont(); }
+	void setFont(const sf::Font& font) { text_.setFont(font); }
+	const sf::Font& getFont() const { return text_.getFont(); }
 
 	// text color
-	void SetColor(const sf::Color& color) { text_.SetColor(color); }
-	const sf::Color& GetColor() const { return text_.GetColor(); }
+	void setColor(const sf::Color& color) { text_.setColor(color); }
+	const sf::Color& getColor() const { return text_.getColor(); }
 
+	// text style
+	void setStyle(int flag) { text_.setStyle(flag); }
 private:
 	// inherited
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	sf::String text_;
+	xsf::Text text_;
 };
 
 }

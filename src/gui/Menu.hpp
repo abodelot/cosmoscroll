@@ -36,7 +36,7 @@ public:
 	 */
 	void SetBackground(const sf::Sprite& sprite);
 
-	void LoadBitmapFont(const sf::Image& image, int width, int height);
+	void LoadBitmapFont(const sf::Texture& image, int width, int height);
 
 	BitmapFont* GetBitmapFont() const;
 

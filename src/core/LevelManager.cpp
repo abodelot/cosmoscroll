@@ -2,6 +2,7 @@
 
 #include "LevelManager.hpp"
 #include "Game.hpp"
+#include "Resources.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Asteroid.hpp"
 #include "entities/EvilBoss.hpp"
@@ -9,7 +10,6 @@
 #include "entities/complex/Gate.hpp"
 #include "entities/complex/Canon.hpp"
 #include "entities/complex/GunTower.hpp"
-#include "utils/Resources.hpp"
 #include "utils/Error.hpp"
 
 #define DEFAULT_STARS_COUNT 33
@@ -110,18 +110,18 @@ const char* LevelManager::GetDescription() const
 }
 
 
-const sf::Image* LevelManager::GetLayerImage1() const
+const sf::Texture* LevelManager::GetLayerImage1() const
 {
 
 	const char* p = GetLevelElement(current_level_)->Attribute("layer1");
-	return p != NULL ? &Resources::GetImage(p) : NULL;
+	return p != NULL ? &Resources::getTexture(p) : NULL;
 }
 
 
-const sf::Image* LevelManager::GetLayerImage2() const
+const sf::Texture* LevelManager::GetLayerImage2() const
 {
 	const char* p = GetLevelElement(current_level_)->Attribute("layer2");
-	return p != NULL ? &Resources::GetImage(p) : NULL;
+	return p != NULL ? &Resources::getTexture(p) : NULL;
 }
 
 
@@ -197,7 +197,7 @@ void LevelManager::EnableHardcore(bool hardcore)
 }
 
 
-int LevelManager::ParseFile(const std::string& file, unsigned int offset)
+int LevelManager::ParseFile(const std::string& file)
 {
 	if (!doc_.LoadFile(file))
 	{
@@ -205,19 +205,10 @@ int LevelManager::ParseFile(const std::string& file, unsigned int offset)
 		throw Error::Exception();
 	}
 
-	TiXmlNode* set = doc_.RootElement();
-	for (unsigned int i = 0; set != NULL && i < offset; ++i)
-	{
-		set = set->NextSibling();
-	}
-	if (!set)
-	{
-		puts("warning: invalid level id");
-		exit(1);
-	}
+	TiXmlNode* root = doc_.RootElement();
 
-	// Constitution de la map de pointeurs vers les fonctions
-	TiXmlNode* node = set->FirstChild("functions")->FirstChild();
+	// Parse function nodes
+	TiXmlNode* node = root->FirstChild("functions")->FirstChild();
 	while (node != NULL)
 	{
 		TiXmlElement* element = node->ToElement();
@@ -229,8 +220,8 @@ int LevelManager::ParseFile(const std::string& file, unsigned int offset)
 		node = node->NextSibling();
 	}
 
-	// Constitution de la liste de pointeurs vers les niveaux
-	node = set->FirstChild("levels")->FirstChild("level");
+	// Parse level nodes
+	node = root->FirstChild("levels")->FirstChild("level");
 	while (node != NULL)
 	{
 		levels_.push_back(node->ToElement());
@@ -307,7 +298,7 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 	}
 	else
 	{
-		// common attributes
+		// common attributes for all tags
 		sf::Vector2f position(0, 0);
 		position.x = Game::WIDTH - 1; // default x: screen right side
 		float time = 0.f; // default: no delay

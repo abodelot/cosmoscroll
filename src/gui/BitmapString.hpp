@@ -10,7 +10,7 @@
 namespace gui
 {
 
-class BitmapString: public sf::Drawable
+class BitmapString: public sf::Drawable, public sf::Transformable
 {
 public:
 	BitmapString();
@@ -23,8 +23,8 @@ public:
 	/**
 	 * Définir le texte de la chaîne
 	 */
-	void SetText(const char* text);
-	void SetText(const std::string& text);
+	void setString(const char* text);
+	void setString(const std::string& text);
 
 	/**
 	 * Récupérer le texte de la chaîne
@@ -63,12 +63,12 @@ public:
 	/**
 	 * Changer la police bitmap
 	 */
-	void SetFont(const BitmapFont& font);
+	void setFont(const BitmapFont& font);
 
 	/**
 	 * Récupérer la police bitmap en cours d'utilisation
 	 */
-	const BitmapFont& GetFont() const;
+	const BitmapFont& getFont() const;
 
 	/**
 	 * Vider la chaîne
@@ -83,11 +83,11 @@ public:
 	/**
 	 * Définir la couleur des bitmaps
 	 */
-	void SetColor(const sf::Color& color);
+	void setColor(const sf::Color& color);
 
 private:
 	// inherited
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	/**
 	 * Transforme les positions négatives en positions positives exploitables

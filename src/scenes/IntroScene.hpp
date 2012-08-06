@@ -2,6 +2,7 @@
 #define INTROSCENE_HPP
 
 #include "BaseScene.hpp"
+#include "utils/sfml_helper.hpp"
 
 class EntityManager;
 class PlayerShip;
@@ -25,8 +26,8 @@ public:
 
 private:
 	float elapsed_;
-	sf::Sprite background_;
-	sf::Sprite title_;
+	xsf::Sprite background_;
+	xsf::Sprite title_;
 	EntityManager& entity_mgr_;
 	PlayerShip* ship_;
 };

@@ -5,7 +5,8 @@
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
 #include "core/SoundSystem.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
+#include "core/Collisions.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/Error.hpp"
 #include "utils/I18n.hpp"
@@ -37,7 +38,7 @@ EntityManager::EntityManager():
 	particles_(ParticleSystem::GetInstance()),
 	levels_(LevelManager::GetInstance())
 {
-	SetSize(0, 0);
+	resize(0, 0);
 
 	player_ = NULL;
 	more_bad_guys_ = &EntityManager::MoreBadGuys_ARCADE;
@@ -49,18 +50,18 @@ EntityManager::EntityManager():
 	layer2_.scrolling_speed_ = FOREGROUND_SPEED;
 
 	decor_height_ = 0;
-	SetY(ControlPanel::HEIGHT); // default positon
+	setPosition(0, ControlPanel::HEIGHT); // default positon
 
 	// hack, pre-load some resources to avoid in game loading
-	Resources::GetSoundBuffer("asteroid-break.ogg");
-	Resources::GetSoundBuffer("door-opening.ogg");
-	Resources::GetSoundBuffer("boom.ogg");
-	Resources::GetSoundBuffer("disabled.ogg");
-	Resources::GetSoundBuffer("overheat.ogg");
-	Resources::GetSoundBuffer("cooler.ogg");
-	Resources::GetSoundBuffer("power-up.ogg");
-	Resources::GetSoundBuffer("ship-damage.ogg");
-	Resources::GetSoundBuffer("shield-damage.ogg");
+	Resources::getSoundBuffer("asteroid-break.ogg");
+	Resources::getSoundBuffer("door-opening.ogg");
+	Resources::getSoundBuffer("boom.ogg");
+	Resources::getSoundBuffer("disabled.ogg");
+	Resources::getSoundBuffer("overheat.ogg");
+	Resources::getSoundBuffer("cooler.ogg");
+	Resources::getSoundBuffer("power-up.ogg");
+	Resources::getSoundBuffer("ship-damage.ogg");
+	Resources::getSoundBuffer("shield-damage.ogg");
 }
 
 
@@ -107,12 +108,12 @@ void EntityManager::InitMode(Mode mode)
 						++it;
 					}
 				}
-				player_->SetPosition(0, height_ / 2);
+				player_->setPosition(0, height_ / 2);
 				player_->Initialize();
 			}
 			layer1_.SetScrollingTexture(levels.GetLayerImage1());
 			layer2_.SetScrollingTexture(levels.GetLayerImage2());
-			layer2_.SetColor(levels.GetLayerColor());
+			layer2_.setColor(levels.GetLayerColor());
 			decor_height_ = levels.GetDecorHeight();
 			particles_.AddStars(levels.GetStarsCount());
 			{
@@ -130,8 +131,8 @@ void EntityManager::InitMode(Mode mode)
 			RespawnPlayer();
 			// no image on layer 1, fog with random color on layer 2,
 			layer1_.SetScrollingTexture(NULL);
-			layer2_.SetScrollingTexture(&Resources::GetImage("layers/fog.png"));
-			layer2_.SetColor(math::random_color(0, 0, 20, 30, 30, 70));
+			layer2_.SetScrollingTexture(&Resources::getTexture("layers/fog.png"));
+			layer2_.setColor(math::random_color(0, 0, 20, 30, 30, 70));
 			decor_height_ = 0;
 			std::wstring game_info = wstr_replace(_t("panel.record"), L"{record}", to_wstring(arcade_record_));
 			ControlPanel::GetInstance().SetGameInfo(game_info);
@@ -157,7 +158,7 @@ EntityManager::Mode EntityManager::GetMode() const
 }
 
 
-void EntityManager::SetSize(int width, int height)
+void EntityManager::resize(int width, int height)
 {
 	if (width < 0)
 	{
@@ -196,7 +197,7 @@ void EntityManager::Update(float frametime)
 			delete *it;
 			it = entities_.erase(it);
 		}
-		else if (r1.Bottom < 0 || r1.Top > height_ || r1.Right < 0 || r1.Left > width_)
+		else if (r1.top + r1.height < 0 || r1.top > height_ || r1.left + r1.width < 0 || r1.left > width_)
 		{
 			// removing entities outside the entity manager
 			delete *it;
@@ -208,8 +209,7 @@ void EntityManager::Update(float frametime)
 			for (++it2; it2 != entities_.end(); ++it2)
 			{
 				// collision dectection it1 <-> it2
-				r2 = (**it2).GetCollideRect();
-				if (entity.IsCollidingWith(**it2, r1, r2))
+				if (Collisions::pixelPerfectTest(entity, **it2))
 				{
 					entity.OnCollide(**it2);
 					(**it2).OnCollide(entity);
@@ -224,15 +224,15 @@ void EntityManager::Update(float frametime)
 	if (decor_height_ > 0)
 	{
 		// decor height applies only on player
-		float player_y = player_->GetPosition().y;
+		float player_y = player_->getPosition().y;
 		if (player_y < decor_height_)
 		{
-			player_->SetY(decor_height_ + 1);
+			player_->setY(decor_height_ + 1);
 			player_->TakeDamage(1);
 		}
-		else if ((player_y + player_->GetSize().y) > (height_ - decor_height_))
+		else if ((player_y + player_->getHeight()) > (height_ - decor_height_))
 		{
-			player_->SetY(height_ - decor_height_ - player_->GetSize().y - 1);
+			player_->setY(height_ - decor_height_ - player_->getHeight() - 1);
 			player_->TakeDamage(1);
 		}
 	}
@@ -291,17 +291,18 @@ void EntityManager::UpdateArcadeRecord()
 }
 
 
-void EntityManager::Render(sf::RenderTarget& target) const
+void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	states.transform *= getTransform();
 	// draw scrolling background images
-	layer1_.Draw(target);
-	layer2_.Draw(target);
-	particles_.Show(target);
+	target.draw(layer1_, states);
+	target.draw(layer2_, states);
+	target.draw(particles_, states);
 
 	// draw each managed entity
 	for (EntityList::const_iterator it = entities_.begin(); it != entities_.end(); ++it)
 	{
-		target.Draw(**it);
+		target.draw(**it, states);
 	}
 }
 
@@ -344,7 +345,7 @@ int EntityManager::LoadAnimations(const std::string& filename)
 				p->AddFrame(x + i * width, y, width, height);
 			}
 			p->SetDelay(delay);
-			p->SetImage(Resources::GetImage(img));
+			p->setTexture(Resources::getTexture(img));
 		}
 		elem = elem->NextSiblingElement();
 	}
@@ -387,7 +388,7 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 		int points = 0;
 		elem->QueryIntAttribute("points", &points);
 
-
+		// Create spaceship instance
 		SpaceShip* ship = new SpaceShip(GetAnimation(animation), hp, speed);
 		ship->SetPoints(points);
 
@@ -396,6 +397,7 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 		ship->SetMovePattern(move_pattern);
 		ship->SetAttackPattern(attack_pattern);
 
+		// Parse weapon tag
 		TiXmlElement* weapon = elem->FirstChildElement();
 		if (weapon != NULL)
 		{
@@ -432,7 +434,7 @@ SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
 	if (it != spaceships_defs_.end())
 	{
 		SpaceShip* ship = it->second->Clone();
-		ship->SetPosition(x, y);
+		ship->setPosition(x, y);
 		return ship;
 	}
 	std::cerr << "spaceship id:" << id << " is not defined" << std::endl;
@@ -477,10 +479,10 @@ void EntityManager::SpawnRandomEntity()
 			break;
 		}
 	}
-	Entity* entity = uniques_[sf::Randomizer::Random(0, max_droppable_index_)]->Clone();
+	Entity* entity = uniques_[math::random(0, max_droppable_index_)]->Clone();
 
-	entity->SetX(width_ - 1);
-	entity->SetY(sf::Randomizer::Random(0, height_ - (int) entity->GetSize().y));
+	entity->setX(width_ - 1);
+	entity->setY(math::random(0, height_ - (int) entity->getHeight()));
 	AddEntity(entity);
 }
 
@@ -539,8 +541,9 @@ EntityManager::ParallaxLayer::ParallaxLayer()
 {
 	image_ = NULL;
 	scrolling_speed_ = 0.f;
-	background_.SetPosition(0.f, 0.f);
-	background2_.SetPosition(0.f, 0.f);
+	background_.setPosition(0.f, 0.f);
+	background2_.setPosition(0.f, 0.f);
+	blend_mode_ = sf::BlendAlpha;
 }
 
 
@@ -548,53 +551,52 @@ void EntityManager::ParallaxLayer::OnUpdate(float frametime)
 {
 	if (image_ != NULL)
 	{
-		float x = background_.GetPosition().x - scrolling_speed_ * frametime;
-		float width = image_->GetWidth();
+		float x = background_.getPosition().x - scrolling_speed_ * frametime;
+		float width = image_->getSize().x;
 		if (x <= -width)
 		{
 			x = 0;
 		}
-		background_.SetX(x);
-		background2_.SetX(x + width);
+		background_.setPosition(x, 0);
+		background2_.setPosition(x + width, 0);
 	}
 }
 
 
-void EntityManager::ParallaxLayer::SetScrollingTexture(const sf::Image* image)
+void EntityManager::ParallaxLayer::SetScrollingTexture(const sf::Texture* image)
 {
 	image_ = image;
 	if (image != NULL)
 	{
 		background_ = sf::Sprite(*image);
 		background2_ = sf::Sprite(*image);
-		background2_.SetX(image->GetWidth());
+		background2_.setPosition(image->getSize().x, 0);
 	}
 }
 
 
-void EntityManager::ParallaxLayer::SetColor(const sf::Color& color)
+void EntityManager::ParallaxLayer::setColor(const sf::Color& color)
 {
 	if (color != sf::Color::White)
 	{
-		background_.SetColor(color);
-		background2_.SetColor(color);
-		background_.SetBlendMode(sf::Blend::Add);
-		background2_.SetBlendMode(sf::Blend::Add);
+		background_.setColor(color);
+		background2_.setColor(color);
+		blend_mode_ = sf::BlendAdd;
 	}
 	else
 	{
-		background_.SetColor(sf::Color::White);
-		background2_.SetColor(sf::Color::White);
-		background_.SetBlendMode(sf::Blend::Alpha);
-		background2_.SetBlendMode(sf::Blend::Alpha);
+		background_.setColor(sf::Color::White);
+		background2_.setColor(sf::Color::White);
+		blend_mode_ = sf::BlendAlpha;
 	}
 }
 
-void EntityManager::ParallaxLayer::Draw(sf::RenderTarget& target) const
+void EntityManager::ParallaxLayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (image_ != NULL)
 	{
-		target.Draw(background_);
-		target.Draw(background2_);
+		states.blendMode = blend_mode_;
+		target.draw(background_, states);
+		target.draw(background2_, states);
 	}
 }

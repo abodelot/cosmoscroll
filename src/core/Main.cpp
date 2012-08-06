@@ -39,7 +39,6 @@ const char* get_arg(int index, char** args)
 int main(int argc, char* argv[])
 {
 	// default values
-	int level_set = 0;
 	std::string config_file = "";
 	std::string data_dir = DEFAULT_DATA_DIR;
 
@@ -55,8 +54,6 @@ int main(int argc, char* argv[])
 			config_file = get_arg(i, argv);
 		else if (arg == "-d" || arg == "-data")
 			data_dir = get_arg(i, argv);
-		else if (arg == "-l" || arg == "-level")
-			level_set = (int)strtol(get_arg(i, argv), NULL, 10);
 	}
 
 	Game& game = Game::GetInstance();
@@ -65,6 +62,6 @@ int main(int argc, char* argv[])
 	{
 		game.OverrideConfigFile(config_file);
 	}
-	game.Init(data_dir, level_set);
+	game.Init(data_dir);
 	return game.Run();
 }

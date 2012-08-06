@@ -25,7 +25,7 @@ void BSMA::Override(BSMA::text_message &m)
 void BSMA::Update(float frametime)
 {
 	sf::Vector2f delta;
-	
+
 	if (direction_ == HORIZ)
 		delta.x = (direction_ == LEFT)? -time_base_ : time_base_;
 	else
@@ -33,11 +33,11 @@ void BSMA::Update(float frametime)
 
 	delta *= frametime;
 
-	std::vector<sf::String>::iterator it = chars_.begin();
-	std::vector<sf::String>::iterator end = chars_.end();
+	std::vector<sf::Text>::iterator it = chars_.begin();
+	std::vector<sf::Text>::iterator end = chars_.end();
 	while (it != end)
 	{
-		(*it).Move(delta);
+		(*it).move(delta);
 		++it;
 	}
 	if (shown_)
@@ -50,11 +50,11 @@ void BSMA::Update(float frametime)
 				for (unsigned int i = 0; i < std::string(messages_.front().str).size(); ++i)
 				{
 					temp[0] = std::wstring(messages_.front().str)[i];
-					sf::String r = sf::String(sf::Unicode::Text(temp));
-					r.SetPosition(pos);
+					sf::Text r = sf::Text(sf::String(temp));
+					r.setPosition(pos);
 					pos.x += 2;
 					chars_.push_back(r);
-					
+
 				}
 				messages_.pop_front();
 			}
@@ -63,16 +63,16 @@ void BSMA::Update(float frametime)
 
 void BSMA::Show(sf::RenderTarget &r) const
 {
-	std::vector<sf::String>::const_iterator it = chars_.begin();
-	std::vector<sf::String>::const_iterator end = chars_.end();
+	std::vector<sf::Text>::const_iterator it = chars_.begin();
+	std::vector<sf::Text>::const_iterator end = chars_.end();
 	while (it != end)
 	{
-		r.Draw((*it));
+		r.draw((*it));
 		++it;
 	}
 }
 
-BSMA::BSMA() : 
+BSMA::BSMA() :
 shown_(true) {Init();}
 
 BSMA::BSMA(const BSMA &other)
@@ -84,11 +84,11 @@ BSMA::~BSMA()
 {
 	Clear();
 }
-	
+
 void BSMA::Init(const sf::Vector2f &origin, BSMA::Direction direction, BSMA::Speed speed)
 {
 	origin_ = origin;
 	direction_ = direction;
-	speed_ = speed;	
+	speed_ = speed;
 }
 

@@ -22,7 +22,7 @@ void Animation::AddFrame(const sf::IntRect& subrect)
 
 void Animation::AddFrame(int left, int top, int width, int height)
 {
-	AddFrame(sf::IntRect(left, top, left + width, top + height));
+	AddFrame(sf::IntRect(left, top, width, height));
 }
 
 
@@ -32,13 +32,13 @@ void Animation::SetDelay(float delay)
 }
 
 
-void Animation::SetImage(const sf::Image& image)
+void Animation::setTexture(const sf::Texture& image)
 {
 	image_ = &image;
 }
 
 
-const sf::Image& Animation::GetImage() const
+const sf::Texture& Animation::getTexture() const
 {
 	return *image_;
 }

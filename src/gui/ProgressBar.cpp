@@ -11,13 +11,13 @@ ProgressBar::ProgressBar(Menu* owner, int w, int h) :
 	Widget(owner, false)
 {
 	value_ = 0;
-	background_ = sf::Shape::Rectangle(0, 0, w, h,
+	/*background_ = sf::Shape::Rectangle(0, 0, w, h,
 		sf::Color::White, 1, sf::Color::Black);
-	background_.SetColor(BG_COLOR);
+	background_.setColor(BG_COLOR);
 
 	bar_.Resize(0, h);
-	bar_.SetColor(BAR_COLOR);
-
+	bar_.setColor(BAR_COLOR);
+*/
 	Resize(w, h);
 }
 
@@ -34,7 +34,7 @@ void ProgressBar::SetValue(int value)
 	}
 	value_ = value;
 	float length = (float) value * GetWidth() / 100;
-	bar_.Resize(length == 0 ? 0.1 : length, GetHeight());
+	//bar_.Resize(length == 0 ? 0.1 : length, GetHeight());
 }
 
 
@@ -44,8 +44,9 @@ int ProgressBar::GetValue() const
 }
 
 
-void ProgressBar::Render(sf::RenderTarget& target) const
+void ProgressBar::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.Draw(background_);
-	target.Draw(bar_);
+	states.transform *= getTransform();
+	target.draw(background_, states);
+	target.draw(bar_, states);
 }

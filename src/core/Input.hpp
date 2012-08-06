@@ -41,7 +41,7 @@ public:
 
 	static Input& GetInstance();
 
-	void Init(const sf::Input& sfinput);
+	void Init();
 
 	/**
 	 * Transformer un événement en action
@@ -60,14 +60,14 @@ public:
 	 * @param key: touche à attacher
 	 * @param action: action à attacher
 	 */
-	void SetKeyboardBind(sf::Key::Code key, Action action);
+	void SetKeyboardBind(sf::Keyboard::Key key, Action action);
 
 	/**
 	 * Obtenir un binding clavier
 	 * @param action: action à tester
 	 * @return touche attachée
 	 */
-	sf::Key::Code GetKeyboardBind(Action action);
+	sf::Keyboard::Key GetKeyboardBind(Action action);
 
 	/**
 	 * Définir un binding joystick
@@ -131,20 +131,19 @@ private:
 	enum {MAX_JOY_BUTTON = 16};
 
 	// keyboard bindings
-	Action key_to_action_[sf::Key::Count];
-	sf::Key::Code action_to_key_[COUNT];
+	Action key_to_action_[sf::Keyboard::KeyCount];
+	sf::Keyboard::Key action_to_key_[COUNT];
 
 	// joystick bindings
 	Action joybutton_to_action_[MAX_JOY_BUTTON];
 	unsigned int action_to_joybutton_[COUNT];
 
 	int device_flag_;
-	const sf::Input* sfinput_;
 	int sensitivity_;
 };
 
 
-std::istream& operator>>(std::istream& in, sf::Key::Code& code);
+std::istream& operator>>(std::istream& in, sf::Keyboard::Key& code);
 
 #endif // INPUT_HPP
 

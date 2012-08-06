@@ -6,11 +6,12 @@
 
 #include "entities/Animated.hpp"
 #include "entities/EntityManager.hpp"
+#include "utils/sfml_helper.hpp"
 
 /**
  * Moteur de particules pour gérer des effets graphiques (singleton)
  */
-class ParticleSystem
+class ParticleSystem: public sf::Drawable
 {
 public:
 	/**
@@ -43,7 +44,7 @@ public:
 	 * @param offset: position
 	 * @param text: contenu du message
 	 */
-	void AddMessage(const sf::Vector2f& offset, const sf::Unicode::Text& text, const sf::Color& color=sf::Color::White);
+	void AddMessage(const sf::Vector2f& offset, const sf::String& text, const sf::Color& color=sf::Color::White);
 
 	void AddShield(int count, const sf::Sprite* handle);
 	void RemoveShield(const sf::Sprite* handle);
@@ -62,17 +63,19 @@ public:
 	 */
 	void Clear();
 
-	void Show(sf::RenderTarget& target) const;
+
 private:
 	ParticleSystem();
 	ParticleSystem(const ParticleSystem& other);
 	ParticleSystem& operator=(const ParticleSystem& other);
 	~ParticleSystem();
 
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
 	/**
 	 * Particule abstraite
 	 */
-	class Particle
+	class Particle: public sf::Drawable
 	{
 	public:
 		/**
@@ -85,7 +88,7 @@ private:
 		/**
 		 * Affichage de la particule
 		 */
-		virtual void Show(sf::RenderTarget& target) const = 0;
+		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 	};
 
 
@@ -95,13 +98,13 @@ private:
 	class Fiery: public Particle
 	{
 	public:
-		Fiery(const sf::Vector2f& offset, const sf::Image& img);
+		Fiery(const sf::Vector2f& offset, const sf::Texture& img);
 		~Fiery() {};
 		bool OnUpdate(float frametime);
 
-		inline void Show(sf::RenderTarget& target) const
+		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
 		{
-			target.Draw(sprite_);
+			target.draw(sprite_, states);
 		}
 	private:
 		sf::Sprite sprite_;
@@ -117,23 +120,23 @@ private:
 	class Star: public Particle
 	{
 	public:
-		Star(const sf::Image& img);
+		Star(const sf::Texture& img);
 		~Star() {};
 		bool OnUpdate(float frametime);
 
-		inline void Show(sf::RenderTarget& target) const
+		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
 		{
-			target.Draw(sprite_);
+			target.draw(sprite_, states);
 		}
 	protected:
 		int speed_;
-		sf::Sprite sprite_;
+		xsf::Sprite sprite_;
 	};
 
 	class CenteredStar: public Star
 	{
 	public:
-		CenteredStar(const sf::Image& img);
+		CenteredStar(const sf::Texture& img);
 		~CenteredStar() {};
 		bool OnUpdate(float frametime);
 
@@ -147,16 +150,16 @@ private:
 	class TextParticle: public Particle
 	{
 	public:
-		TextParticle(const sf::Vector2f& offset, const sf::Unicode::Text& text, const sf::Color& color);
+		TextParticle(const sf::Vector2f& offset, const sf::String& text, const sf::Color& color);
 		~TextParticle() {};
 		bool OnUpdate(float frametime);
 
-		inline void Show(sf::RenderTarget& target) const
+		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
 		{
-			target.Draw(text_);
+			target.draw(text_, states);
 		}
 	private:
-		sf::String text_;
+		sf::Text text_;
 		float timer_;
 	};
 
@@ -171,9 +174,9 @@ private:
 		~ShieldParticle() {};
 		bool OnUpdate(float frametime);
 
-		inline void Show(sf::RenderTarget& target) const
+		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
 		{
-			target.Draw(sprite_);
+			target.draw(sprite_, states);
 		}
 
 		inline const sf::Sprite* GetHandle() const
@@ -182,19 +185,19 @@ private:
 		}
 	private:
 		const sf::Sprite* handle_; // hack... le sprite cible sert de handle
-		sf::Sprite sprite_;
+		xsf::Sprite sprite_;
 		float angle_; // en radians
 	};
 
 	class Smoke: public Particle
 	{
 	public:
-		Smoke(const sf::Image& img, const sf::Sprite* handle);
+		Smoke(const sf::Texture& img, const sf::Sprite* handle);
 		~Smoke() { }
 		bool OnUpdate(float frametime);
-		inline void Show(sf::RenderTarget& target) const
+		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
 		{
-			target.Draw(sprite_);
+			target.draw(sprite_, states);
 		}
 		const sf::Sprite* GetHandle() const
 		{
@@ -206,7 +209,7 @@ private:
 		}
 	private:
 		int y_offset_;
-		sf::Sprite sprite_;
+		xsf::Sprite sprite_;
 		const sf::Sprite* handle_;
 		float timer_;
 		sf::Vector2f vspeed_;
@@ -219,8 +222,8 @@ private:
 			Animated(EntityManager::GetInstance().GetAnimation("explosion"))
 		{
 			Animated::Reset(sprite_);
-			sprite_.SetPosition(pos);
-			sprite_.SetCenter(sprite_.GetSize().x / 2, sprite_.GetSize().y / 2);
+			sprite_.setOrigin(sprite_.getCenter());
+			sprite_.setPosition(pos);
 			timer_ = 0;
 		}
 		bool OnUpdate(float frametime)
@@ -233,12 +236,12 @@ private:
 			}
 			return false;
 		}
-		inline void Show(sf::RenderTarget& target) const
+		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
 		{
-			target.Draw(sprite_);
+			target.draw(sprite_, states);
 		}
 		private:
-		sf::Sprite sprite_;
+		xsf::Sprite sprite_;
 		float timer_;
 	};
 	typedef std::list<Particle*> ParticleList;

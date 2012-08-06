@@ -50,7 +50,7 @@ float Weapon::Shoot(float angle)
 	// peut-on tirer ?
 	if (fire_timer_ <= 0.f)
 	{
-		sf::Vector2f offset = owner_->GetPosition();
+		sf::Vector2f offset = owner_->getPosition();
 		offset.x += x_;
 		offset.y += y_;
 
@@ -85,7 +85,7 @@ float Weapon::Shoot(float angle)
 
 float Weapon::ShootAt(const sf::Vector2f& target)
 {
-	sf::Vector2f my_pos = owner_->GetPosition();
+	sf::Vector2f my_pos = owner_->getPosition();
 	my_pos.x += x_;
 	my_pos.y += y_;
 	return Shoot(math::angle(target, my_pos));
@@ -98,7 +98,7 @@ void Weapon::Update(float frametime)
 }
 
 
-void Weapon::SetImage(const sf::Image* image)
+void Weapon::setTexture(const sf::Texture* image)
 {
 	image_ = image;
 }

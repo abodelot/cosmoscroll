@@ -1,6 +1,6 @@
 #include "UpgradeItem.hpp"
 #include "core/Game.hpp"
-#include "utils/Resources.hpp"
+#include "core/Resources.hpp"
 #include "utils/I18n.hpp"
 #include "utils/StringUtils.hpp"
 
@@ -13,59 +13,60 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 	switch (type)
 	{
 		case ItemData::LASER_CANNON:
-			halo_.SetImage(Resources::GetImage("gui/halo-laser1.png"));
+			halo_.setTexture(Resources::getTexture("gui/halo-laser1.png"));
 			x = 496;
 			y = 249;
 			break;
 		case ItemData::PLASMA_CANNON:
-			halo_.SetImage(Resources::GetImage("gui/halo-laser2.png"));
+			halo_.setTexture(Resources::getTexture("gui/halo-laser2.png"));
 			x = 494;
 			y = 263;
 			break;
 		case ItemData::ENGINE:
-			halo_.SetImage(Resources::GetImage("gui/halo-engine.png"));
+			halo_.setTexture(Resources::getTexture("gui/halo-engine.png"));
 			x = 143;
 			y = 224;
 			break;
 		case ItemData::ARMOR:
-			halo_.SetImage(Resources::GetImage("gui/halo-armor.png"));
+			halo_.setTexture(Resources::getTexture("gui/halo-armor.png"));
 			x = 419;
 			y = 176;
 			break;
 		case ItemData::SHIELD:
-			halo_.SetImage(Resources::GetImage("gui/halo-shield.png"));
+			halo_.setTexture(Resources::getTexture("gui/halo-shield.png"));
 			x = 207;
 			y = 244;
 			break;
 		case ItemData::HEATSINK:
-			halo_.SetImage(Resources::GetImage("gui/halo-heatsink.png"));
+			halo_.setTexture(Resources::getTexture("gui/halo-heatsink.png"));
 			x = 361;
 			y = 255;
 			break;
 		default:
 			break;
 	}
-	SetPosition(x, y);
-	Resize(halo_.GetSize().x, halo_.GetSize().y);
+	setPosition(x, y);
+	Resize(halo_.getWidth(), halo_.getHeight());
 	SetCallbackID(type);
 
 	// label centered on halo sprite
-	label_.SetFont(Resources::GetFont("Ubuntu-R.ttf"));
-	label_.SetSize(12);
-	label_.SetColor(sf::Color::White);
+	label_.setFont(Resources::getFont("Ubuntu-R.ttf"));
+	label_.setCharacterSize(12);
+	label_.setColor(sf::Color::White);
 	RefreshLabel();
-	x = (GetWidth() - label_.GetRect().GetWidth()) / 2;
-	label_.SetPosition(x, -20);
+	x = (GetWidth() - label_.getWidth()) / 2;
+	label_.setPosition(x, -20);
 
 	// label background
-	label_bg_ = sf::Shape::Rectangle(-4, -4, label_.GetRect().GetWidth() + 4, label_.GetRect().GetHeight() + 6, sf::Color(0, 0, 0, 128));
-	label_bg_.SetPosition(label_.GetPosition());
+	label_bg_.setSize(sf::Vector2f(label_.getWidth() + 8, label_.getHeight() + 10));
+	label_bg_.setFillColor(sf::Color(0, 0, 0, 128));
+	label_bg_.setPosition(label_.getPosition().x - 4, label_.getPosition().y - 4);
 }
 
 
-void UpgradeItem::OnKeyPressed(sf::Key::Code code)
+void UpgradeItem::OnKeyPressed(sf::Keyboard::Key code)
 {
-	if (code == sf::Key::Return)
+	if (code == sf::Keyboard::Return)
 	{
 		CallTheCallback();
 	}
@@ -85,20 +86,20 @@ void UpgradeItem::RefreshLabel()
 	content += _t("armory.item_level");
 	wstr_self_replace(content, L"{level}", to_wstring(Game::GetInstance().GetPlayerSave().LevelOf(type_)));
 
-	label_.SetText(content);
+	label_.setString(content);
 }
 
 
-void UpgradeItem::Render(sf::RenderTarget& target) const
+void UpgradeItem::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-
+	states.transform *= getTransform();
 	switch (GetState())
 	{
 		case gui::State::HOVERED:
 		case gui::State::FOCUSED:
-			target.Draw(halo_);
-			target.Draw(label_bg_);
-			target.Draw(label_);
+			target.draw(halo_, states);
+			target.draw(label_bg_, states);
+			target.draw(label_, states);
 			break;
 		default:
 			break;

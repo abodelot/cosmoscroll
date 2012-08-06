@@ -17,9 +17,9 @@ EndGameScene::EndGameScene():
 	entities_(EntityManager::GetInstance())
 {
 	timer_ = 0.f;
-	info_.SetSize(40);
-	info_.SetColor(sf::Color::White);
-	info_.SetFont(GetMenuFont());
+	info_.setCharacterSize(40);
+	info_.setColor(sf::Color::White);
+	info_.setFont(GetMenuFont());
 	player_dead_ = false;
 }
 
@@ -48,8 +48,8 @@ void EndGameScene::Update(float frametime)
 	if (player_dead_)
 	{
 		PlayerShip* player = EntityManager::GetInstance().GetPlayerShip();
-		player->Move(0, frametime * 100);
-		player->Rotate(10 * frametime);
+		player->move(0, frametime * 100);
+		player->rotate(10 * frametime);
 		player->UpdateSubRect(*player, frametime);
 	}
 }
@@ -57,9 +57,9 @@ void EndGameScene::Update(float frametime)
 
 void EndGameScene::Show(sf::RenderTarget& target) const
 {
-	target.Draw(ControlPanel::GetInstance());
-	target.Draw(entities_);
-	target.Draw(info_);
+	target.draw(ControlPanel::GetInstance());
+	target.draw(entities_);
+	target.draw(info_);
 }
 
 
@@ -71,28 +71,28 @@ void EndGameScene::OnFocus()
 	EntityManager::Mode mode = entities_.GetMode();
 	if (mode == EntityManager::MODE_ARCADE || entities_.Count() > 1)
 	{
-		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("game-over.ogg"));
-		info_.SetText(_t("endgame.game_over"));
+		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("game-over.ogg"));
+		info_.setString(_t("endgame.game_over"));
 		player_dead_ = true;
 	}
 	else
 	{
 		// niveau terminé
 		LevelManager& levels = LevelManager::GetInstance();
-		SoundSystem::GetInstance().PlaySound(Resources::GetSoundBuffer("end-level.ogg"));
+		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("end-level.ogg"));
 		int earned_credits = entities_.GetPlayerShip()->GetPoints();
 		int current = levels.GetCurrent();
 		// si dernier niveau du jeu
 		if (current % levels.CountLevel() == 0)
 		{
 			std::wstring s = wstr_replace(_t("endgame.end_last_level"), L"{credits}", to_wstring(earned_credits));
-			info_.SetText(s);
+			info_.setString(s);
 		}
 		else
 		{
 			std::wstring s = wstr_replace(_t("endgame.end_level"), L"{level}", to_wstring(current % levels.CountLevel()));
 			wstr_self_replace(s, L"{credits}", to_wstring(earned_credits));
-			info_.SetText(s);
+			info_.setString(s);
 		}
 
 		Game::GetPlayerSave().UpdateCredits(earned_credits);
@@ -104,9 +104,8 @@ void EndGameScene::OnFocus()
 		player_dead_ = false;
 	}
 
-	sf::FloatRect rect = info_.GetRect();
-	info_.SetPosition(
-		(Game::WIDTH - rect.GetWidth()) / 2,
-		(Game::HEIGHT - rect.GetHeight()) / 2
+	info_.setPosition(
+		(Game::WIDTH - info_.getWidth()) / 2,
+		(Game::HEIGHT - info_.getHeight()) / 2
 	);
 }

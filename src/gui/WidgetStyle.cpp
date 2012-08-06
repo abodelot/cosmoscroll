@@ -10,7 +10,7 @@ using namespace gui;
 WidgetStyle::WidgetStyle()
 {
 	global_text_size = 20;
-	global_font = &sf::Font::GetDefaultFont();
+	global_font = &sf::Font::getDefaultFont();
 	global_border_color = sf::Color(0xa5, 0xa5, 0xba);
 
 	label_text_color = sf::Color::White;

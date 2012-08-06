@@ -4,12 +4,13 @@
 #include <SFML/Graphics.hpp>
 #include "entities/EntityManager.hpp"
 #include "entities/Bonus.hpp"
+#include "utils/sfml_helper.hpp"
 
 
 /**
  * HUD: panel displaying various data about player status, current level, ...
  */
-class ControlPanel: public sf::Drawable
+class ControlPanel: public sf::Drawable, public sf::Transformable
 {
 public:
 	// height in pixels, width is Game::WIDTH
@@ -24,7 +25,7 @@ public:
 	/**
 	 * @param text: texte d'information
 	 */
-	void SetGameInfo(const sf::Unicode::Text& text);
+	void SetGameInfo(const sf::String& text);
 
 	void SetPoints(int points);
 
@@ -83,7 +84,7 @@ private:
 	ControlPanel(const ControlPanel& other);
 
 	// inherited
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 
 	struct ProgressBar
@@ -95,18 +96,18 @@ private:
 
 		ProgressBar();
 
-		void Init(const sf::Unicode::Text& text, const sf::Font& font, const sf::Color& color);
+		void Init(const sf::String& text, const sf::Font& font, const sf::Color& color);
 
 		// redimensionne la barre
 		void SetValue(int value);
 
 		// position de l'ensemble label/bar
-		void SetPosition(int x, int y);
+		void setPosition(int x, int y);
 
-		sf::String label_;
+		xsf::Text label_;
 
-		sf::Shape bar_;
-		sf::String value_;
+		sf::RectangleShape bar_;
+		xsf::Text value_;
 		int max_value_;
 	};
 
@@ -117,7 +118,7 @@ private:
 
 		void Init(Bonus::Type bonus_type, Type type);
 		// set widget position
-		void SetPosition(int x, int y);
+		void setPosition(int x, int y);
 
 		void SetValue(int value);
 
@@ -127,7 +128,7 @@ private:
 
 	private:
 		sf::Sprite icon_;
-		sf::String label_;
+		sf::Text label_;
 		sf::Sprite glow_;
 		float timer_;
 		enum GlowingStatus { UP, DOWN, STOP } glowing_;
@@ -140,17 +141,17 @@ private:
 	BonusSlot bs_attack_;
 	BonusSlot bs_speed_;
 
-	sf::String timer_;
-	sf::String game_info_;
+	sf::Text timer_;
+	sf::Text game_info_;
 	sf::Sprite panel_;
 
 	EntityManager::Mode game_mode_;
 	// story
 	int level_duration_;
-	sf::Sprite level_cursor_;
-	sf::Sprite level_bar_;
+	xsf::Sprite level_cursor_;
+	xsf::Sprite level_bar_;
 	// arcade
-	sf::String str_points_;
+	sf::Text str_points_;
 	sf::Sprite bar_mask_;
 };
 

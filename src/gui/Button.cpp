@@ -4,36 +4,36 @@
 using namespace gui;
 
 
-Button::Button(Menu* owner, const sf::Unicode::Text& text, int w, int h) :
+Button::Button(Menu* owner, const sf::String& text, int w, int h) :
 	Widget(owner, true)
 {
-	text_.SetText(text);
+	text_.setString(text);
 
 	// calcul du coin inférieur droit
-	int width = w == -1 ? text_.GetRect().GetWidth() : w;
-	int height = h == -1 ? text_.GetRect().GetHeight() : h;
+	int width = w == -1 ? text_.getWidth() : w;
+	int height = h == -1 ? text_.getHeight() : h;
 
 	Resize(width, height);
 	SetAlign(Align::CENTER);
 
 	const WidgetStyle& style = owner->GetWidgetStyle();
-	text_.SetSize(style.global_text_size);
-	text_.SetFont(*style.global_font);
-	text_.SetColor(style.button_text_color);
+	text_.setCharacterSize(style.global_text_size);
+	text_.setFont(*style.global_font);
+	text_.setColor(style.button_text_color);
 	OnStateChanged(GetState());
 }
 
 
-void Button::SetText(const sf::Unicode::Text& text)
+void Button::setString(const sf::String& text)
 {
-	text_.SetText(text);
+	text_.setString(text);
 	SetAlign(align_);
 }
 
 
 void Button::SetTextPadding(int x, int y)
 {
-	text_.SetPosition(x, y);
+	text_.setPosition(x, y);
 }
 
 
@@ -42,22 +42,22 @@ void Button::SetAlign(Align::EAlign align)
 	switch (align)
 	{
 		case Align::LEFT:
-			text_.SetX(0);
+			text_.setX(0);
 			break;
 		case Align::RIGHT:
-			text_.SetX(GetWidth() - text_.GetRect().GetWidth());
+			text_.setX(GetWidth() - text_.getWidth());
 			break;
 		case Align::CENTER:
-			text_.SetX((GetWidth() - text_.GetRect().GetWidth()) / 2);
+			text_.setX((GetWidth() - text_.getWidth()) / 2);
 			break;
 	}
 	align_ = align;
 }
 
 
-void Button::OnKeyPressed(sf::Key::Code code)
+void Button::OnKeyPressed(sf::Keyboard::Key code)
 {
-	if (code == sf::Key::Return)
+	if (code == sf::Keyboard::Return)
 	{
 		CallTheCallback();
 	}
@@ -75,10 +75,10 @@ void Button::OnStateChanged(State::EState state)
 	switch (state)
 	{
 		case State::DEFAULT:
-			text_.SetColor(GetOwner()->GetWidgetStyle().button_text_color);
+			text_.setColor(GetOwner()->GetWidgetStyle().button_text_color);
 			break;
 		case State::FOCUSED:
-			text_.SetColor(GetOwner()->GetWidgetStyle().button_text_color_focus);
+			text_.setColor(GetOwner()->GetWidgetStyle().button_text_color_focus);
 			break;
 		default:
 			break;
@@ -86,7 +86,8 @@ void Button::OnStateChanged(State::EState state)
 }
 
 
-void Button::Render(sf::RenderTarget& target) const
+void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.Draw(text_);
+	states.transform *= getTransform();
+	target.draw(text_, states);
 }

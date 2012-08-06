@@ -3,13 +3,14 @@
 #include "SoundSystem.hpp"
 #include "LevelManager.hpp"
 #include "ControlPanel.hpp"
+#include "Resources.hpp"
 #include "entities/EntityManager.hpp"
 #include "items/ItemManager.hpp"
-#include "utils/Resources.hpp"
 #include "utils/IniParser.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "utils/FileSystem.hpp"
+#include "utils/sfml_helper.hpp"
 #include "md5/md5.hpp"
 #include "scenes/scenes.hpp"
 
@@ -47,7 +48,7 @@ Game::Game():
 
 Game::~Game()
 {
-	app_.Close();
+	app_.close();
 
 	// delete allocated scenes
 	for (int i = 0; i < SC_COUNT; ++i)
@@ -87,20 +88,20 @@ void Game::OverrideConfigFile(const std::string& config_file)
 }
 
 
-void Game::Init(const std::string& data_path, int level_set)
+void Game::Init(const std::string& data_path)
 {
-	input_.Init(app_.GetInput());
+	input_.Init();
 
 	// init resources directory
 	data_dir_ = current_dir_ + data_path;
-	Resources::SetDataPath(data_dir_);
+	Resources::setDataPath(data_dir_);
 	I18n::GetInstance().SetDataPath(data_dir_);
 	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
 
 	// create window and display loading screen as early as possible
 	vsync_ = true;
 	SetFullscreen(false);
-	sf::String temp("loading"); app_.Clear() ;app_.Draw(temp); app_.Display();
+	sf::Text temp("loading"); app_.clear() ;app_.draw(temp); app_.display();
 
 	// load XML resources
 	try
@@ -108,7 +109,7 @@ void Game::Init(const std::string& data_path, int level_set)
 		printf("* checking resources purity... %49s\n",
 			CheckResourcesPurity() ? "[OK]" : "[FAILED]");
 		printf("* loading %-59s [%2d found]\n", "levels...",
-			LevelManager::GetInstance().ParseFile(data_dir_ + XML_LEVELS, level_set));
+			LevelManager::GetInstance().ParseFile(data_dir_ + XML_LEVELS));
 		printf("* loading %-59s [%2d found]\n", "items...",
 			ItemManager::GetInstance().LoadItems(data_dir_ + XML_ITEMS));
 		printf("* loading %-59s [%2d found]\n", "animations...",
@@ -126,11 +127,11 @@ void Game::Init(const std::string& data_path, int level_set)
 #endif
 	LoadConfig(config_file_);
 
-	app_.UseVerticalSync(vsync_);
-	app_.SetFramerateLimit(WIN_FPS);
-	app_.ShowMouseCursor(false);
-	app_.EnableKeyRepeat(false);
-	app_.UseVerticalSync(vsync_);
+	app_.setFramerateLimit(WIN_FPS);
+	app_.setMouseCursorVisible(false);
+	app_.setKeyRepeatEnabled(false);
+	app_.setVerticalSyncEnabled(vsync_);
+
 
 	// scenes will be allocated only if requested
 	for (int i = 0; i < SC_COUNT; ++i)
@@ -224,15 +225,16 @@ int Game::Run()
 {
 	// set the first displayed scene at launch
 	SetNextScene(SC_IntroScene);
-	app_.Display();
+	app_.display();
 
 	// game main loop which handle the current scene
 	sf::Event event;
 	Input::Action action;
+	sf::Clock clock;
 	while (running_)
 	{
 		// 1. polling events
-		while (app_.GetEvent(event))
+		while (app_.pollEvent(event))
 		{
 			action = input_.EventToAction(event);
 			switch (action)
@@ -251,12 +253,12 @@ int Game::Run()
 			}
 		}
 		// 2. updating the current scene
-		app_.Clear();
-		current_scene_->Update(app_.GetFrameTime());
+		app_.clear();
+		current_scene_->Update(clock.restart().asSeconds());
 
 		// 3. displaying the current scene
 		current_scene_->Show(app_);
-		app_.Display();
+		app_.display();
 	}
 	return (EXIT_SUCCESS);
 }
@@ -324,29 +326,29 @@ void Game::TakeScreenshot(void)
 
 	std::string filename = current_dir_ + screenshot_dir_ + "/" + current_time + ".png";
 	printf("screenshot saved to %s\n", filename.c_str());
-	app_.Capture().SaveToFile(filename);
+	app_.capture().saveToFile(filename);
 }
 
 
 void Game::SetFullscreen(bool full)
 {
-	if (app_.IsOpened())
-		app_.Close();
+	if (app_.isOpen())
+		app_.close();
 
 	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
-	app_.Create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
-	app_.UseVerticalSync(vsync_);
+	app_.create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
+	app_.setVerticalSyncEnabled(vsync_);
 	fullscreen_ = full;
 	if (!full)
 	{
 		// set window icon
-		sf::Image& icon = Resources::GetImage("gui/icon.bmp");
-		icon.CreateMaskFromColor(sf::Color(0xff, 0, 0xff));
-		app_.SetIcon(icon.GetWidth(), icon.GetHeight(), icon.GetPixelsPtr());
+		static sf::Image icon = Resources::getTexture("gui/icon.bmp").copyToImage();
+		icon.createMaskFromColor(sf::Color(0xff, 0, 0xff));
+		app_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
 		// center window on desktop
-		sf::VideoMode desktop = sf::VideoMode::GetDesktopMode();
-		app_.SetPosition((desktop.Width - WIDTH) / 2, (desktop.Height - HEIGHT) / 2);
+		sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+		app_.setPosition(sf::Vector2i((desktop.width - WIDTH) / 2, (desktop.height - HEIGHT) / 2));
 	}
 }
 
@@ -359,7 +361,7 @@ bool Game::IsFullscreen() const
 
 void Game::SetVerticalSync(bool vsync)
 {
-	app_.UseVerticalSync(vsync);
+	app_.setVerticalSyncEnabled(vsync);
 	vsync_ = vsync;
 }
 
@@ -409,49 +411,50 @@ void Game::PanelOnTop(bool top)
 {
 	if (top)
 	{
-		ControlPanel::GetInstance().SetY(0);
-		EntityManager::GetInstance().SetY(ControlPanel::HEIGHT);
+		ControlPanel::GetInstance().setPosition(0, 0);
+		EntityManager::GetInstance().setPosition(0, ControlPanel::HEIGHT);
 	}
 	else
 	{
-		ControlPanel::GetInstance().SetY(Game::HEIGHT - ControlPanel::HEIGHT);
-		EntityManager::GetInstance().SetY(0);
+		ControlPanel::GetInstance().setPosition(0, Game::HEIGHT - ControlPanel::HEIGHT);
+		EntityManager::GetInstance().setPosition(0, 0);
 	}
 }
 
 
 void Game::BSOD(std::string message)
 {
-	sf::String title("COSMIC ERROR");
-	title.SetSize(20);
-	title.SetColor(sf::Color(0, 0, 0x88));
-	sf::Shape title_bg = sf::Shape::Rectangle(-10, -10, title.GetRect().GetWidth() + 10, title.GetRect().GetHeight() + 10, sf::Color(0xaa, 0xaa, 0xaa));
+	xsf::Text title("COSMIC ERROR");
+	title.setCharacterSize(20);
+	title.setColor(sf::Color(0, 0, 0x88));
+	sf::RectangleShape title_bg(sf::Vector2f(title.getWidth() + 20, title.getHeight() + 20));
+	title_bg.setFillColor(sf::Color(0xaa, 0xaa, 0xaa));
 
-	int x = (WIDTH - title.GetRect().GetWidth()) / 2;
-	title.SetPosition(x, 60);
-	title_bg.SetPosition(x, 60);
+	int x = (WIDTH - title.getWidth()) / 2;
+	title.setPosition(x, 60);
+	title_bg.setPosition(x - 10, 50);
 
-	sf::String str;
+	sf::Text str;
 	message += "\n\nPress any key to exit.";
-	str.SetText(message);
-	str.SetSize(20);
-	str.SetPosition(50, 200);
+	str.setString(message);
+	str.setCharacterSize(20);
+	str.setPosition(50, 200);
 
 	while (true)
 	{
 		sf::Event event;
-		while (app_.GetEvent(event))
+		while (app_.pollEvent(event))
 		{
-			if (event.Type == sf::Event::KeyPressed)
+			if (event.type == sf::Event::KeyPressed)
 			{
-				app_.Close();
+				app_.close();
 				exit(EXIT_FAILURE);
 			}
 		}
-		app_.Clear(sf::Color(0, 0, 0x88));
-		app_.Draw(title_bg);
-		app_.Draw(title);
-		app_.Draw(str);
-		app_.Display();
+		app_.clear(sf::Color(0, 0, 0x88));
+		app_.draw(title_bg);
+		app_.draw(title);
+		app_.draw(str);
+		app_.display();
 	}
 }

@@ -9,7 +9,7 @@
 class CosmoButton: public gui::Button
 {
 public:
-	CosmoButton(gui::Menu* owner, const sf::Unicode::Text& text);
+	CosmoButton(gui::Menu* owner, const sf::String& text);
 
 protected:
 	// override
@@ -19,11 +19,11 @@ protected:
 
 private:
 	// override
-	void Render(sf::RenderTarget& target) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	static const sf::Image* img_;
+	static const sf::Texture* img_;
 
-	sf::Sprite background_;
+	xsf::Sprite background_;
 };
 
 #endif // COSMOBUTTON_HPP

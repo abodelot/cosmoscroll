@@ -23,26 +23,25 @@ OptionList::OptionList(Menu* owner) :
 	text_size_ = style.global_text_size;
 
 	// left arrow
-	left_arrow_.AddPoint(0, text_size_ / 2);
-	left_arrow_.AddPoint(text_size_, 0);
-	left_arrow_.AddPoint(text_size_, text_size_);
-	left_arrow_.SetCenter(text_size_ / 2, text_size_ / 2);
-	left_arrow_.SetPosition(BOX_PADDING + text_size_ / 2, BOX_PADDING + text_size_ / 2);
-	left_arrow_.SetOutlineWidth(1);
-	left_arrow_.SetPointOutlineColor(0, style.global_border_color);
-	left_arrow_.SetPointOutlineColor(1, style.global_border_color);
-	left_arrow_.SetPointOutlineColor(2, style.global_border_color);
+	left_arrow_.setPointCount(3);
+	left_arrow_.setPoint(0, sf::Vector2f(0, text_size_ / 2));
+	left_arrow_.setPoint(1, sf::Vector2f(text_size_, 0));
+	left_arrow_.setPoint(2, sf::Vector2f(text_size_, text_size_));
+	left_arrow_.setOrigin(text_size_ / 2, text_size_ / 2);
+	left_arrow_.setPosition(BOX_PADDING + text_size_ / 2, BOX_PADDING + text_size_ / 2);
+	left_arrow_.setOutlineThickness(1);
+	left_arrow_.setOutlineColor(style.global_border_color);
 
 	// right arrow
-	right_arrow_.AddPoint(0, 0);
-	right_arrow_.AddPoint(text_size_, text_size_ / 2);
-	right_arrow_.AddPoint(0, text_size_);
-	right_arrow_.SetCenter(text_size_ / 2, text_size_ / 2);
-	right_arrow_.SetY(BOX_PADDING + text_size_ / 2);
-	right_arrow_.SetOutlineWidth(1);
-	right_arrow_.SetPointOutlineColor(0, style.global_border_color);
-	right_arrow_.SetPointOutlineColor(1, style.global_border_color);
-	right_arrow_.SetPointOutlineColor(2, style.global_border_color);
+	right_arrow_.setPointCount(3);
+	right_arrow_.setPoint(0, sf::Vector2f(0, 0));
+	right_arrow_.setPoint(1, sf::Vector2f(text_size_, text_size_ / 2));
+	right_arrow_.setPoint(2, sf::Vector2f(0, text_size_));
+	right_arrow_.setOrigin(text_size_ / 2, text_size_ / 2);
+
+	right_arrow_.setPosition(0, BOX_PADDING + text_size_ / 2);
+	right_arrow_.setOutlineThickness(1);
+	right_arrow_.setOutlineColor(style.global_border_color);
 
 	// call Resize later, boxes aren't builded yet
 	OnStateChanged(GetState());
@@ -52,51 +51,60 @@ OptionList::OptionList(Menu* owner) :
 void OptionList::BuildBoxes()
 {
 	int inside_box_width = max_opt_width_ + BOX_PADDING * 2;
-	int box_width = inside_box_width + BOX_PADDING * 4 + text_size_ * 2;
-	int pad_text_width = text_size_ + BOX_PADDING * 2;
+	int arrow_box_width = text_size_ + BOX_PADDING * 2;
+
+	if (inside_box_width < arrow_box_width)
+		inside_box_width = arrow_box_width;
+
+	int total_width = inside_box_width + arrow_box_width * 2;
 	const WidgetStyle& style = GetOwner()->GetWidgetStyle();
 
-	inside_box_ = sf::Shape::Rectangle(0, 0, inside_box_width, pad_text_width, sf::Color::White, 1, style.global_border_color);
-	inside_box_.SetColor(style.optlist_bg_color);
-	inside_box_.SetX(pad_text_width);
+	inside_box_.setSize(sf::Vector2f(inside_box_width, arrow_box_width));
+	inside_box_.setOutlineThickness(1);
+	inside_box_.setOutlineColor(style.global_border_color);
+	inside_box_.setFillColor(style.optlist_bg_color);
+	inside_box_.setPosition(arrow_box_width, 0);
 
-	box_ = sf::Shape::Rectangle(0, 0, box_width, pad_text_width, sf::Color::White, 1, style.global_border_color);
-	box_.SetColor(style.optlist_bg_color);
+	box_.setSize(sf::Vector2f(total_width, arrow_box_width));
+	box_.setOutlineColor(style.global_border_color);
+	box_.setOutlineThickness(1);
+	box_.setFillColor(style.optlist_bg_color);
 
-	right_arrow_.SetX(pad_text_width + inside_box_width + BOX_PADDING + text_size_ / 2);
+
+	right_arrow_.setPosition(arrow_box_width + inside_box_width + BOX_PADDING + text_size_ / 2, right_arrow_.getPosition().y);
 	SetState(IsFocused() ? State::FOCUSED : State::DEFAULT);
 
-	Resize(box_width , pad_text_width);
+	Resize(total_width, arrow_box_width);
 }
 
 
-void OptionList::AddOption(const sf::Unicode::Text& option)
+void OptionList::AddOption(const sf::String& option)
 {
 	AddOption(option, "");
 }
 
 
-void OptionList::AddOption(const sf::Unicode::Text& option, const std::string& value)
+void OptionList::AddOption(const sf::String& option, const std::string& value)
 {
-	sf::String str;
-	str.SetText(option);
-	str.SetSize(text_size_);
-	str.SetColor(GetOwner()->GetWidgetStyle().label_text_color);
-	str.SetFont(*GetOwner()->GetWidgetStyle().global_font);
+	xsf::Text str;
+	str.setString(option);
+	str.setCharacterSize(text_size_);
+	str.setColor(GetOwner()->GetWidgetStyle().label_text_color);
+	str.setFont(*GetOwner()->GetWidgetStyle().global_font);
 
 	if (current_opt_ == -1)
 	{
 		current_opt_ = 0;
 	}
 	// resize widget if needed
-	int width = str.GetRect().GetWidth();
+	int width = str.getWidth();
 	if (width > (int) max_opt_width_)
 	{
 		max_opt_width_ = width;
 		BuildBoxes();
 	}
-	str.SetX(ComputeIndentAlign(str));
-	std::pair<sf::String, std::string> pair(str, value);
+	str.setX(ComputeIndentAlign(str));
+	std::pair<xsf::Text, std::string> pair(str, value);
 	options_.push_back(pair);
 }
 
@@ -110,10 +118,10 @@ int OptionList::GetNbItems() const
 std::string OptionList::GetOptionAt(int index) const
 {
 	assert(index >= 0 && index < (int) options_.size());
-	const std::pair<sf::String, std::string>& select = options_[index];
+	const std::pair<sf::Text, std::string>& select = options_[index];
 	if (select.second.size() == 0)
 	{
-		return select.first.GetText();
+		return select.first.getString();
 	}
 	return select.second;
 }
@@ -164,15 +172,15 @@ void OptionList::Clear()
 void OptionList::SetAlign(Align::EAlign align)
 {
 	align_ = align;
-	for (std::vector<std::pair<sf::String, std::string> >::iterator it = options_.begin();
+	for (std::vector<std::pair<xsf::Text, std::string> >::iterator it = options_.begin();
 		it != options_.end(); ++it)
 	{
-		it->first.SetX(ComputeIndentAlign(it->first));
+		it->first.setX(ComputeIndentAlign(it->first));
 	}
 }
 
 
-void OptionList::OnKeyPressed(sf::Key::Code key)
+void OptionList::OnKeyPressed(sf::Keyboard::Key key)
 {
 	if (options_.empty())
 	{
@@ -181,16 +189,16 @@ void OptionList::OnKeyPressed(sf::Key::Code key)
 	int opt = current_opt_;
 	switch (key)
 	{
-		case sf::Key::Left:
+		case sf::Keyboard::Left:
 			opt = PreviousIndex();
 			break;
-		case sf::Key::Right:
+		case sf::Keyboard::Right:
 			opt = NextIndex();
 			break;
-		case sf::Key::Home:
+		case sf::Keyboard::Home:
 			opt = 0;
 			break;
-		case sf::Key::End:
+		case sf::Keyboard::End:
 			opt = options_.size() - 1;
 			break;
 		default:
@@ -247,12 +255,12 @@ void OptionList::Update(float frametime)
 		dir_ *= -1;
 	}
 	scale_ = scale_ + frametime * 0.95 * dir_;
-	left_arrow_.SetScale(scale_, scale_);
-	right_arrow_.SetScale(scale_, scale_);
+	left_arrow_.setScale(scale_, scale_);
+	right_arrow_.setScale(scale_, scale_);
 }
 
 
-int OptionList::ComputeIndentAlign(const sf::String& option) const
+int OptionList::ComputeIndentAlign(const xsf::Text& option) const
 {
 	int base = text_size_ + BOX_PADDING * 3;
 	switch (align_)
@@ -260,9 +268,9 @@ int OptionList::ComputeIndentAlign(const sf::String& option) const
 		case Align::LEFT:
 			return base;
 		case Align::CENTER:
-			return base + (max_opt_width_ - option.GetRect().GetWidth()) / 2;
+			return base + (max_opt_width_ - option.getWidth()) / 2;
 		case Align::RIGHT:
-			return base + max_opt_width_ - option.GetRect().GetWidth();
+			return base + max_opt_width_ - option.getWidth();
 	}
 	return 0;
 }
@@ -275,19 +283,19 @@ void OptionList::OnStateChanged(State::EState state)
 	{
 		case State::DEFAULT:
 			scale_ = 1;
-			left_arrow_.SetScale(scale_, scale_);
-			right_arrow_.SetScale(scale_, scale_);
-			left_arrow_.SetColor(style.optlist_arrow_color);
-			right_arrow_.SetColor(style.optlist_arrow_color);
-			box_.SetColor(style.optlist_bg_color);
+			left_arrow_.setScale(scale_, scale_);
+			right_arrow_.setScale(scale_, scale_);
+			left_arrow_.setFillColor(style.optlist_arrow_color);
+			right_arrow_.setFillColor(style.optlist_arrow_color);
+			box_.setFillColor(style.optlist_bg_color);
 			break;
 		case State::FOCUSED:
-			left_arrow_.SetColor(style.optlist_arrow_color_focus);
-			right_arrow_.SetColor(style.optlist_arrow_color_focus);
-			box_.SetColor(style.optlist_bg_color_focus);
+			left_arrow_.setFillColor(style.optlist_arrow_color_focus);
+			right_arrow_.setFillColor(style.optlist_arrow_color_focus);
+			box_.setFillColor(style.optlist_bg_color_focus);
 			break;
 		/*case State::HOVERED:
-			box_.SetColor(style.optlist_bg_color_focus);
+			box_.setColor(style.optlist_bg_color_focus);
 			break;*/
 		default:
 			break;
@@ -295,15 +303,16 @@ void OptionList::OnStateChanged(State::EState state)
 }
 
 
-void OptionList::Render(sf::RenderTarget& target) const
+void OptionList::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.Draw(box_);
-	target.Draw(inside_box_);
-	target.Draw(left_arrow_);
-	target.Draw(right_arrow_);
+	states.transform *= getTransform();
+	target.draw(box_, states);
+	target.draw(inside_box_, states);
+	target.draw(left_arrow_, states);
+	target.draw(right_arrow_, states);
 	if (current_opt_ != -1)
 	{
-		target.Draw(options_[current_opt_].first);
+		target.draw(options_[current_opt_].first, states);
 	}
 }
 

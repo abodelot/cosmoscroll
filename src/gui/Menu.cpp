@@ -28,58 +28,58 @@ void Menu::OnEvent(const sf::Event& event)
 {
 	Widget* new_hovered = NULL;
 	Widget* new_focus = NULL;
-	switch (event.Type)
+	switch (event.type)
 	{
 		case sf::Event::KeyPressed:
-			switch (event.Key.Code)
+			switch (event.key.code)
 			{
-				case sf::Key::Up:
+				case sf::Keyboard::Up:
 					FocusPreviousWidget();
 					break;
-				case sf::Key::Down:
+				case sf::Keyboard::Down:
 					FocusNextWidget();
 					break;
 				default:
 					if (focus_ != NULL)
 					{
-						focus_->OnKeyPressed(event.Key.Code);
+						focus_->OnKeyPressed(event.key.code);
 					}
 					break;
 			}
 			break;
 
 
-		case sf::Event::JoyButtonPressed:
-			if (event.JoyButton.Button == 0 && focus_ != NULL)
+		case sf::Event::JoystickButtonPressed:
+			if (event.joystickButton.button == 0 && focus_ != NULL)
 			{
 				// first joystick button is mapped to "return" key
-				focus_->OnKeyPressed(sf::Key::Return);
+				focus_->OnKeyPressed(sf::Keyboard::Return);
 			}
 			break;
 
 
-		case sf::Event::JoyMoved:
-			if (event.JoyMove.Axis == sf::Joy::AxisX)
+		case sf::Event::JoystickMoved:
+			if (event.joystickMove.axis == sf::Joystick::X)
 			{
 				if (focus_ != NULL)
 				{	// map to "left" and "right" keys
-					if (event.JoyMove.Position > JOY_DEADZONE)
+					if (event.joystickMove.position > JOY_DEADZONE)
 					{
-						focus_->OnKeyPressed(sf::Key::Right);
+						focus_->OnKeyPressed(sf::Keyboard::Right);
 					}
-					else if (event.JoyMove.Position < -JOY_DEADZONE)
+					else if (event.joystickMove.position < -JOY_DEADZONE)
 					{
-						focus_->OnKeyPressed(sf::Key::Left);
+						focus_->OnKeyPressed(sf::Keyboard::Left);
 					}
 				}
 			}
-			else if (event.JoyMove.Axis == sf::Joy::AxisY)
+			else if (event.joystickMove.axis == sf::Joystick::Y)
 			{	// map to "up" and "down" key
-				if (event.JoyMove.Position > JOY_DEADZONE)
+				if (event.joystickMove.position > JOY_DEADZONE)
 				{
 					FocusNextWidget();
 				}
-				else if (event.JoyMove.Position < -JOY_DEADZONE)
+				else if (event.joystickMove.position < -JOY_DEADZONE)
 				{
 					FocusPreviousWidget();
 				}
@@ -90,13 +90,13 @@ void Menu::OnEvent(const sf::Event& event)
 		case sf::Event::TextEntered:
 			if (focus_ != NULL)
 			{
-				focus_->OnTextEntered(event.Text.Unicode);
+				focus_->OnTextEntered(event.text.unicode);
 			}
 			break;
 
 
 		case sf::Event::MouseMoved:
-			new_hovered = GetHoveredWidget(event.MouseMove.X, event.MouseMove.Y);
+			new_hovered = GetHoveredWidget(event.mouseMove.x, event.mouseMove.y);
 			// si un nouveau widget est hovered
 			if (new_hovered != NULL && new_hovered != hovered_widget_)
 			{
@@ -121,11 +121,11 @@ void Menu::OnEvent(const sf::Event& event)
 
 
 		case sf::Event::MouseButtonPressed:
-			if (event.MouseButton.Button == sf::Mouse::Left)
+			if (event.mouseButton.button == sf::Mouse::Left)
 			{
 				// OPTMIZE: utiliser le pointeur hovered_widget_ ?
 				// on vérifie si un widget doit prendre le focus (clic souris)
-				new_focus = GetHoveredWidget(event.MouseButton.X, event.MouseButton.Y);
+				new_focus = GetHoveredWidget(event.mouseButton.x, event.mouseButton.y);
 				if (new_focus != NULL && new_focus != focus_)
 				{
 					if (focus_ != NULL)
@@ -148,14 +148,14 @@ void Menu::OnEvent(const sf::Event& event)
 
 
 		case sf::Event::MouseButtonReleased:
-			if (event.MouseButton.Button == sf::Mouse::Left)
+			if (event.mouseButton.button == sf::Mouse::Left)
 			{
 				// la souris doit toujours être au-dessus du widget pour
 				// que le clic soit prise en compte
 				if (hovered_widget_ != NULL && focus_ == hovered_widget_)
 				{
-				    int x = event.MouseButton.X - focus_->GetPosition().x;
-				    int y = event.MouseButton.Y - focus_->GetPosition().y;
+				    int x = event.mouseButton.x - focus_->getPosition().x;
+				    int y = event.mouseButton.y - focus_->getPosition().y;
 					focus_->OnMouseClicked(x, y);
 				}
 			}
@@ -164,7 +164,7 @@ void Menu::OnEvent(const sf::Event& event)
 		case sf::Event::MouseWheelMoved:
 			if (focus_ != NULL)
 			{
-				focus_->OnMouseWheelMoved(event.MouseWheel.Delta);
+				focus_->OnMouseWheelMoved(event.mouseWheel.delta);
 			}
 			break;
 
@@ -185,12 +185,12 @@ void Menu::Update(float frametime)
 
 void Menu::Show(sf::RenderTarget& target) const
 {
-	target.Draw(background_);
+	target.draw(background_);
 	for (WidgetList::const_iterator it = widgets_.begin(); it != widgets_.end(); ++it)
 	{
 		if ((**it).IsVisible())
 		{
-			target.Draw(**it);
+			target.draw(**it);
 		}
 	}
 }
@@ -199,7 +199,7 @@ void Menu::Show(sf::RenderTarget& target) const
 void Menu::AddWidget(Widget* widget)
 {
 	/*WidgetList::iterator it = widgets_.begin();
-	while (it != widgets_.end() && (**it).GetPosition().y < widget->GetPosition().y)
+	while (it != widgets_.end() && (**it).getPosition().y < widget->getPosition().y)
 	{
 		++it;
 	}
@@ -221,7 +221,7 @@ void Menu::SetBackground(const sf::Sprite& sprite)
 void Menu::EventCallback(int) {}
 
 
-void Menu::LoadBitmapFont(const sf::Image& image, int width, int height)
+void Menu::LoadBitmapFont(const sf::Texture& image, int width, int height)
 {
 	if (bitfont_ != NULL)
 	{
@@ -340,8 +340,8 @@ bool Menu::FocusPreviousWidget()
 Widget* Menu::GetHoveredWidget(int x, int y) const
 {
 	// transformation des coords absolues en coords relatives
-	//x -= GetPosition().x;
-	//y -= GetPosition().y;
+	//x -= getPosition().x;
+	//y -= getPosition().y;
 	WidgetList::const_iterator it = widgets_.begin();
 	for (; it != widgets_.end(); ++it)
 	{
