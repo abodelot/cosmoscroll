@@ -9,7 +9,7 @@
 class BaseScene;
 
 /**
- * Gestion du déroulement du jeu
+ * Game controller singleton
  */
 class Game
 {

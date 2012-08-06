@@ -131,10 +131,6 @@ void SoundSystem::EnableMusic(bool enabled)
 	{
 		StopMusic();
 	}
-	else
-	{
-		music_.play();
-	}
 }
 
 

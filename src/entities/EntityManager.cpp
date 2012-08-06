@@ -520,10 +520,9 @@ bool EntityManager::MoreBadGuys_STORY()
 		AddEntity(p);
 		p = levels_.GiveNextEntity(timer_);
 	}
-
-	// le niveau n'est pas fini tant qu'il reste des ennemis, soit en file
-	// d'attente, soit dans le gestionnaire d'entités
-	return levels_.RemainingEntities() == 0 && Count() == 1; // 0 ennemis + le joueur = 1
+	// The current level is not completed if there are still enemies in the
+	// LevelManager's waiting line or in the EntityManager
+	return levels_.RemainingEntities() == 0 && Count() == 1; // no enemy && 1 player
 }
 
 

@@ -23,14 +23,13 @@ TextBox::TextBox(Menu* owner, int x, int y, int visible_chars, int max_length):
 	int height = display_text_.getFont().GetCharHeight() + PADDING * 2;
 	int width = display_text_.getFont().GetCharWidth() * visible_chars + PADDING * 2;
 
-	/*box_.setSize(sf::Vector2f(width, height));
+	box_.setSize(sf::Vector2f(width, height));
 	box_.setOutlineThickness(OUTLINE);
 	box_.setOutlineColor(owner->GetWidgetStyle().global_border_color);
 
 	display_text_.setPosition(PADDING, PADDING);
 
-	cursor_.setSize(sf::Vector2f(PADDING, PADDING, PADDING, height - PADDING,
-		CURSOR_WIDTH, sf::Color::White);*/
+	cursor_.setSize(sf::Vector2f(CURSOR_WIDTH, height - PADDING * 2));
 	SetCursor(0);
 
 	setPosition(x, y);
@@ -252,7 +251,7 @@ void TextBox::SetCursor(int position)
 		// le curseur n'est pas à une extrêmité de la box
 		cursor_timer_ = 0.f;
 		cursor_pos_ = position;
-		//cursor_.SetX(position * display_text_.getFont().GetCharWidth());
+		cursor_.setPosition(position * display_text_.getFont().GetCharWidth(), PADDING);
 	}
 }
 

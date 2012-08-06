@@ -10,6 +10,7 @@
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
+// auto switch to game over menu after this delay
 #define DURATION 7
 
 
@@ -47,6 +48,7 @@ void EndGameScene::Update(float frametime)
 
 	if (player_dead_)
 	{
+		// falling animation
 		PlayerShip* player = EntityManager::GetInstance().GetPlayerShip();
 		player->move(0, frametime * 100);
 		player->rotate(10 * frametime);
@@ -67,9 +69,7 @@ void EndGameScene::OnFocus()
 {
 	timer_ = 0.f;
 
-	// on ne peut pas gagner en arcade
-	EntityManager::Mode mode = entities_.GetMode();
-	if (mode == EntityManager::MODE_ARCADE || entities_.Count() > 1)
+	if (entities_.GetPlayerShip()->IsDead())
 	{
 		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("game-over.ogg"));
 		info_.setString(_t("endgame.game_over"));
@@ -77,12 +77,12 @@ void EndGameScene::OnFocus()
 	}
 	else
 	{
-		// niveau terminé
+		// Level completed
 		LevelManager& levels = LevelManager::GetInstance();
 		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("end-level.ogg"));
 		int earned_credits = entities_.GetPlayerShip()->GetPoints();
 		int current = levels.GetCurrent();
-		// si dernier niveau du jeu
+		// if last level
 		if (current % levels.CountLevel() == 0)
 		{
 			std::wstring s = wstr_replace(_t("endgame.end_last_level"), L"{credits}", to_wstring(earned_credits));
@@ -96,9 +96,9 @@ void EndGameScene::OnFocus()
 		}
 
 		Game::GetPlayerSave().UpdateCredits(earned_credits);
+		// Unlock next level
 		if (current == levels.GetLastUnlocked())
 		{
-			// nouveau niveau débloqué (si possible)
 			levels.UnlockNextLevel();
 		}
 		player_dead_ = false;
