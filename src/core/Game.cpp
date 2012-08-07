@@ -101,7 +101,7 @@ void Game::Init(const std::string& data_path)
 	// create window and display loading screen as early as possible
 	vsync_ = true;
 	SetFullscreen(false);
-	sf::Text temp("loading"); app_.clear() ;app_.draw(temp); app_.display();
+	xsf::Text temp("loading"); app_.clear(); app_.draw(temp); app_.display();
 
 	// load XML resources
 	try

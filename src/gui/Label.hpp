@@ -21,7 +21,7 @@ public:
 
 	// text font
 	void setFont(const sf::Font& font) { text_.setFont(font); }
-	const sf::Font& getFont() const { return text_.getFont(); }
+	const sf::Font& getFont() const { return *text_.getFont(); }
 
 	// text color
 	void setColor(const sf::Color& color) { text_.setColor(color); }

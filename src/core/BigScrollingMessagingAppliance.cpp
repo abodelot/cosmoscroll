@@ -50,10 +50,10 @@ void BSMA::Update(float frametime)
 				for (unsigned int i = 0; i < std::string(messages_.front().str).size(); ++i)
 				{
 					temp[0] = std::wstring(messages_.front().str)[i];
-					sf::Text r = sf::Text(sf::String(temp));
-					r.setPosition(pos);
+					//sf::Text r = sf::Text(sf::String(temp));
+					//r.setPosition(pos);
 					pos.x += 2;
-					chars_.push_back(r);
+					//chars_.push_back(r);
 
 				}
 				messages_.pop_front();

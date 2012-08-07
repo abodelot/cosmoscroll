@@ -41,7 +41,7 @@ class Text: public sf::Text
 {
 public:
 	Text(): sf::Text() {}
-	Text(const sf::String& string): sf::Text(string) {}
+	Text(const sf::String& string) { setString(string); }
 
 	inline void setX(float x) { setPosition(x, getPosition().y); }
 	inline void setY(float y) { setPosition(getPosition().x, y); }
