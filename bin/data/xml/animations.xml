@@ -11,4 +11,5 @@
 	<anim name="h-mine"      img="entities/heavy-mine.png"    width="28" height="28" count="12" delay="0.1" />
 	<anim name="explosion"   img="entities/explosion.png"     width="64" height="64" count="11" delay="0.12" />
 	<anim name="boss-tentacles" img="entities/boss-tentacles.png" width="140" height="100" count="6" delay="0.12"/>
+	<anim name="circle-scoot" img="entities/scoot.png" width="48" height="32" count="2" delay="0.1" />
 </animations>

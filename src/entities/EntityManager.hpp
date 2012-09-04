@@ -40,6 +40,7 @@ public:
 
 	/**
 	 * Initialiser un mode de jeu avant une partie
+	 * Initialize a game mode before a game
 	 */
 	void InitMode(Mode mode);
 

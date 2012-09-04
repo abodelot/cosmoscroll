@@ -28,6 +28,16 @@
 			<ship id="2" y="80"/>
 			<ship id="2" y="320"/>
 		</def>
+		<def name="c_scoot_triad">
+			<ship id="8" y="100" t="1" />
+			<ship id="8" y="150"  />
+			<ship id="8" y="200"  />
+		</def>
+		<def name="c_scoot_line_3">
+			<ship id="8" y="100" t="1" />
+			<ship id="8" y="200" t="2"/>
+			<ship id="8" y="300" t="3"/>
+		</def>
 		<def name="saucers_12">
 			<ship id="4" y="70" t="3"/>
 			<ship id="4" y="70" t="1"/>
@@ -62,7 +72,6 @@
 	<levels>
 		<!-- LVL1 -->
 		<level desc="First encounter." stars="30" layer1="layers/blue.jpg" layer2="layers/fog.png" color="#002060" music="aurora.mod">
-
 			<loop count="2">
 				<call func="caps_x3"/>
 			</loop>
@@ -93,19 +102,20 @@
 			<ship id="2" y="100" t="1"/>
 			<ship id="2" y="100" t="1"/>
 			<ship id="2" y="300" t="1"/>
-			<call func="caps_x3"/>
+			<call func="caps_x3"/>	
+			<call func="c_scoot_line_3"/>
 		</level>
 
 		<!-- LVL2 -->
 		<level desc="Ahoi captain of space!" layer1="layers/blue.jpg" layer2="layers/fog.png" color="#003070" stars="40" music="ground_zero.mod">
-			<loop count="2">
-				<call func="caps_x5"/>
-				<ship id="2" y="50" t="1"/>
-				<ship id="2" y="200" t="1"/>
+			<loop count="2">	
+				<call func="caps_x5"/>	
+				<ship id="2" y="450" t="2"/>
+				<ship id="2" y="100" />	
 				<ship id="2" y="300" t="1"/>
 				<ship id="2" y="120"/>
-				<call func="caps_x5"/>
-				<call func="scoot_line_3"/>
+				<call func="caps_x5"/>	
+				<call func="scoot_line_3"/>	
 				<call func="scoot_line_3"/>
 			</loop>
 			<ship id="2" y="270" t="6"/>
@@ -148,7 +158,8 @@
 			<call func="scoot_line_5"/>
 			<ship id="3" y="200" t="2"/>
 			<ship id="3" y="100" t="3"/>
-			<ship id="3" y="300" t="3"/>
+			<ship id="3" y="300" t="3"/>	
+			<call func="c_scoot_triad"/>	
 		</level>
 
 		<!-- LVL3 -->
@@ -225,7 +236,8 @@
 			<loop count="3">
 				<ship id="2" y="270" t="2"/>
 				<ship id="3" y="100" t="0.5"/>
-			</loop>
+			</loop>		
+			<call func="c_scoot_line_3"/>
 		</level>
 
 		<!-- LVL4 -->
@@ -346,6 +358,7 @@
 			<ship id="4" y="310" t="2"/>
 			<ship id="4" y="100" t="1"/>
 			<ship id="4" y="150" t="2"/>
+			<call func="c_scoot_triad"/>
 		</level>
 
 		<!-- LVL6 (saucers, miniboss x2) -->
@@ -455,7 +468,8 @@
 				<ship id="4" y="170" t="1" />
 				<ship id="6" y="210" t="1" />
 				<ship id="6" y="250" t="1" />
-			</loop>
+			</loop>		
+			<boss y="170" t="1" />
 		</level>
 
 		<!-- LVL8 -->
@@ -495,7 +509,7 @@
 			<ship id="7" y="240" t="2"/>
 			<ship id="6" y="100" t="1"/>
 			<ship id="6" y="300" t="1"/>
-			<ship id="6" y="200" t="1"/>
+			<ship id="6" y="200" t="1"/>	
 			<evilboss y="170" t="8"/>
 		</level>
 	</levels>

@@ -21,9 +21,14 @@ public:
 	};
 
 	/**
-	 * @param position: position (x, y) de départ
-	 * @param hp: points de vie
-	 * @param collide_damage: dégâts infligés lors d'une collision
+     *@param position: position (x, y) starting
+	 *@param position: position (x, y) de départ
+	 *
+	 *@param hp: points de vie
+	 *@param HP: Hit Points
+	 *
+	 *@param collide_damage: dégâts infligés lors d'une collision
+	 *@param collide_damage: damage in a collision
 	 */
 	Entity(const sf::Vector2f& position, int hp, int collide_damage = 1);
 

@@ -1,5 +1,6 @@
 #include <cstring>
 #include <cstdio>
+#include<cmath>
 
 #include "SpaceShip.hpp"
 #include "EntityManager.hpp"
@@ -8,6 +9,7 @@
 #include "utils/Math.hpp"
 #include "utils/StringUtils.hpp"
 #include "core/ParticleSystem.hpp"
+
 
 
 // bonus freq = 1 / DROP_LUCK
@@ -49,6 +51,7 @@ SpaceShip::SpaceShip(const Animation& animation, int hp, int speed) :
 	weapon_.SetOwner(this);
 	target_ = NULL;
 	base_y_ = -1;
+	base_x_ = -1;
 }
 
 
@@ -65,6 +68,7 @@ void SpaceShip::SetMovePattern(const char* pattern)
 	TEST_MOVE(pattern, straight, move_pattern_)
 	TEST_MOVE(pattern, magnet, move_pattern_)
 	TEST_MOVE(pattern, sinus, move_pattern_)
+	TEST_MOVE(pattern,circle,move_pattern_)
 	fprintf(stderr, "error: undefined move pattern: %s\n", pattern);
 }
 
@@ -124,6 +128,43 @@ void SpaceShip::OnDestroy()
 }
 
 // movement patterns -----------------------------------------------------------
+
+void SpaceShip::move_circle(float frametime)
+{
+
+    float current_angle;
+    sf::Vector2f pos = getPosition();
+
+   if(pos.x > 580 )
+        pos.x -= speed_*frametime;
+    else
+    {
+            if(base_y_ == -1)
+            {
+                base_y_ =  (int)pos.y;
+                base_x_ =  pos.x - 30;
+                current_angle = 0;
+            }
+            else
+            {
+                if(pos.y== base_y_  && pos.x > base_x_ )
+                    current_angle += math::PI/128;//0+inc.
+                else if(pos.x == base_x_ && pos.y < base_y_)
+                    current_angle = math::PI/2+math::PI/128;
+                else if(pos.y == base_y_ && pos.x < base_x_ )
+                    current_angle = math::PI +  math::PI/128;
+                else if(pos.x == base_x_ && pos.y > base_y_)
+                    current_angle = 3*math::PI/2 + math::PI/128;
+                else
+                    current_angle = atan2( ( base_y_ - pos.y) , (pos.x - base_x_) )+math::PI/128;
+
+                pos.x = base_x_ + 30*std::cos(current_angle) ;
+                pos.y = base_y_ - 30*std::sin(current_angle);
+            }
+    }
+    setPosition(pos);
+}
+
 
 void SpaceShip::move_magnet(float frametime)
 {

@@ -5,6 +5,7 @@
 #include "Resources.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Asteroid.hpp"
+#include "entities/Boss.hpp"
 #include "entities/EvilBoss.hpp"
 #include "entities/BossTentacles.hpp"
 #include "entities/complex/Gate.hpp"
@@ -324,6 +325,10 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		else if (strcmp(tag_name, "boss_tentacles") == 0)
 		{
 			entity = new BossTentacles(position);
+		}
+		else if(strcmp(tag_name,"boss") == 0)
+		{
+		    entity = new Boss(position);
 		}
 		else if (strcmp(tag_name, "decor") == 0)
 		{

@@ -40,6 +40,8 @@ private:
 	void move_straight(float frametime);
 	// courbe sinus
 	void move_sinus(float frametime);
+	//circle
+	void move_circle(float frametime);
 
 	// ATTACK PATTERN
 	// - Viser automatiquement le joueur
@@ -54,6 +56,7 @@ private:
 
 	int speed_;
 	int base_y_;
+	int base_x_;
 	Weapon weapon_;
 	Entity* target_;
 };

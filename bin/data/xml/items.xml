@@ -19,7 +19,7 @@
 			heat_cost="5" fire_rate="1" damage="2" speed="400" />
 		<weapon id="devil-eyes" image="ammo/fireball.png" sound="canon.ogg"
 			heat_cost="1" fire_rate="0.7" damage="6" speed="430"/>
-		<weapon id="missile" image="ammo/missile.png" sound="missile-gasfire.ogg"
+        <weapon id="missile" image="ammo/missile.png" sound="missile-gasfire.ogg"
 			heat_cost="0" fire_rate="0.4" damage="15" speed="300" />
 		<weapon id="decor-canon" image="ammo/fireball.png" sound="canon.ogg"
 			heat_cost="0" fire_rate="1.2" damage="20" speed="200" />
