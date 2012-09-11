@@ -73,22 +73,23 @@ void Boss::Update(float frametime)
 
     //Bound Check
     const sf::Vector2f& pos = getPosition();
-    if(split_mode_)
-    {
-            if( (int)pos.x <= 0)
-            {
-                 setX(0);
-                 speed_x_ *= -1;
-            }
-            else if((int)pos.x >= MAX_X)
-            {
-                setX(MAX_X);
-                speed_x_ *= -1;
-            }
-    }
-    else
-    {
-        if      ((int) pos.y < 0)
+
+    if( (int)pos.x <= 0)
+        {
+            setX(0);
+            speed_x_ *= -1;
+        }
+        else if((int)pos.x >= MAX_X)
+        {
+            //To Allow Rebounds and [**Slide in From Right @ Entry** ]
+            if(speed_x_ > 0)
+                {
+                    setX(MAX_X);
+                    speed_x_ *= -1;
+                }
+        }
+
+        if((int) pos.y < 0)
         {
              setY(0);
              speed_y_ *= -1;
@@ -98,13 +99,10 @@ void Boss::Update(float frametime)
             setY(MAX_Y );
             speed_y_ *= -1;
         }
-    }
 
     //Normal Movement
-    if(split_mode_)
-        sf::Sprite::move(speed_x_*frametime,0);
-    else
-        sf:Sprite::move(0,speed_y_*frametime);
+
+    sf::Sprite::move(speed_x_*frametime , speed_y_*frametime);
 
 	eye_left_.Update(frametime);
 	eye_right_.Update(frametime);

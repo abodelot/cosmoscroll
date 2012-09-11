@@ -139,6 +139,7 @@ void SpaceShip::move_circle(float frametime)
         pos.x -= speed_*frametime;
     else
     {
+            //Record Circle's Centre at Entry
             if(base_y_ == -1)
             {
                 base_y_ =  (int)pos.y;

@@ -1,6 +1,7 @@
 #ifndef MD5_HPP
 #define MD5_HPP
 
+
 /* Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
 rights reserved.
 
@@ -27,6 +28,9 @@ documentation and/or software.
 #include <fstream>
 #define uint32 unsigned int
 
+#include<stdint.h>
+using namespace std;
+
 class MD5
 {
 public:
@@ -37,7 +41,7 @@ public:
 
 	std::string Calculate(const std::string& source);
 	std::string Calculate(std::ifstream& file);
-	std::string Calculate(const unsigned char* source, uint32 len);
+	std::string Calculate(const unsigned char* source, uint32_t len);
 
 	std::string GetHash() const;
 	const unsigned char* GetRawHash() const { return m_rawHash; }

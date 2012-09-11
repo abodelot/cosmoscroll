@@ -24,6 +24,6 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 // resources checksums
 #define MD5SUM_ANIMATIONS "6432c2b6e1ea80b4e2dfa22b5fb5cdea"
 #define MD5SUM_SPACESHIPS "9fa447de35fcbc83b092391c4ef76f3c"
-#define MD5SUM_ITEMS      "a34dbee3321261eb26c23451b9eed154"
+#define MD5SUM_ITEMS      "96b220b011b29e7a45d5f671bdc27c0e"
 
 #endif // CONSTANTS_HPP

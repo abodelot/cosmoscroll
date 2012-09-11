@@ -236,7 +236,7 @@
 			<loop count="3">
 				<ship id="2" y="270" t="2"/>
 				<ship id="3" y="100" t="0.5"/>
-			</loop>		
+			</loop>			
 			<call func="c_scoot_line_3"/>
 		</level>
 
@@ -468,7 +468,7 @@
 				<ship id="4" y="170" t="1" />
 				<ship id="6" y="210" t="1" />
 				<ship id="6" y="250" t="1" />
-			</loop>		
+			</loop>	
 			<boss y="170" t="1" />
 		</level>
 
