@@ -342,9 +342,9 @@ int EntityManager::LoadAnimations(const std::string& filename)
 			Animation* p = &animations_[name];
 			for (int i = 0; i < count; ++i)
 			{
-				p->AddFrame(x + i * width, y, width, height);
+				p->addFrame(x + i * width, y, width, height);
 			}
-			p->SetDelay(delay);
+			p->setDelay(delay);
 			p->setTexture(Resources::getTexture(img));
 		}
 		elem = elem->NextSiblingElement();

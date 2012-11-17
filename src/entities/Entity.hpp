@@ -21,14 +21,9 @@ public:
 	};
 
 	/**
-     *@param position: position (x, y) starting
-	 *@param position: position (x, y) de départ
-	 *
-	 *@param hp: points de vie
-	 *@param HP: Hit Points
-	 *
-	 *@param collide_damage: dégâts infligés lors d'une collision
-	 *@param collide_damage: damage in a collision
+     * @param position: position at spawing
+	 * @param hp: Hit Points
+	 * @param collide_damage: inflicted damages in a collision
 	 */
 	Entity(const sf::Vector2f& position, int hp, int collide_damage = 1);
 
@@ -69,13 +64,10 @@ public:
 	 * Détermine si l'entité est encore en vie
 	 * @return true si l'entité doit être supprimée
 	 */
-	inline bool IsDead() const
-	{
-		return hp_ <= 0;
-	}
+	inline bool IsDead() const { return hp_ <= 0; }
 
 	/**
-	 * Tuer l'entité
+	 * Kill entity (will be removed from entity manager)
 	 */
 	void Kill();
 
@@ -84,10 +76,6 @@ public:
 	 */
 	int GetHP() const;
 	void SetHP(int hp);
-
-
-
-
 
 	virtual float GetSpeedX() const { return 0.f; }
 	virtual float GetSpeedY() const { return 0.f; };
@@ -107,7 +95,6 @@ public:
 
 	void SetCollideFlag(int collision_flag);
 	int GetCollideFlag() const;
-
 
 	/**
 	 * Valeur de l'entité

@@ -4,7 +4,7 @@
 #include <list>
 #include <SFML/Graphics.hpp>
 
-#include "entities/Animated.hpp"
+#include "entities/Animator.hpp"
 #include "entities/EntityManager.hpp"
 #include "utils/sfml_helper.hpp"
 
@@ -215,22 +215,21 @@ private:
 		sf::Vector2f vspeed_;
 	};
 
-	class Explosion: public Particle, public Animated
+	class Explosion: public Particle
 	{
 		public:
-		Explosion(const sf::Vector2f& pos) :
-			Animated(EntityManager::GetInstance().GetAnimation("explosion"))
+		Explosion(const sf::Vector2f& pos)
 		{
-			Animated::Reset(sprite_);
+			animator_.setAnimation(sprite_, EntityManager::GetInstance().GetAnimation("explosion"));
 			sprite_.setOrigin(sprite_.getCenter());
 			sprite_.setPosition(pos);
 			timer_ = 0;
 		}
 		bool OnUpdate(float frametime)
 		{
-			Animated::UpdateSubRect(sprite_, frametime);
+			animator_.updateSubRect(sprite_, frametime);
 			timer_ += frametime;
-			if (timer_ > Animated::GetAnimation()->GetDuration())
+			if (timer_ > animator_.getAnimation()->getDuration())
 			{
 				return true;
 			}
@@ -241,6 +240,7 @@ private:
 			target.draw(sprite_, states);
 		}
 		private:
+		Animator animator_;
 		xsf::Sprite sprite_;
 		float timer_;
 	};

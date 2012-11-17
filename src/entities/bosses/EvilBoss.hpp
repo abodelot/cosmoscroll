@@ -1,7 +1,7 @@
 #ifndef EVILBOSS_HPP
 #define EVILBOSS_HPP
 
-#include "Entity.hpp"
+#include "entities/Entity.hpp"
 #include "items/Weapon.hpp"
 
 

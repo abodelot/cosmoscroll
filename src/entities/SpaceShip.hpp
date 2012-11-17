@@ -3,9 +3,9 @@
 
 #include "Entity.hpp"
 #include "items/Weapon.hpp"
-#include "Animated.hpp"
+#include "Animator.hpp"
 
-class SpaceShip: public Entity, public Animated
+class SpaceShip: public Entity
 {
 public:
 	SpaceShip(const Animation& animation, int hp, int speed);
@@ -59,6 +59,7 @@ private:
 	int base_x_;
 	Weapon weapon_;
 	Entity* target_;
+	Animator animator_;
 };
 
 

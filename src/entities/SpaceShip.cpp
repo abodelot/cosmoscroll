@@ -38,12 +38,11 @@
 
 
 SpaceShip::SpaceShip(const Animation& animation, int hp, int speed) :
-	Entity(sf::Vector2f(0, 0), hp),
-	Animated(animation)
+	Entity(sf::Vector2f(0, 0), hp)
 {
 	setTexture(animation.getTexture());
 	SetTeam(Entity::BAD);
-	Reset(*this);
+	animator_.setAnimation(*this, animation);
 
 	move_pattern_ = DEFAULT_MOVE_PATTERN;
 	attack_pattern_ = DEFAULT_ATTACK_PATTERN;
@@ -112,7 +111,7 @@ void SpaceShip::Update(float frametime)
 	(this->*move_pattern_)(frametime);
 	(this->*attack_pattern_)();
 
-	Animated::UpdateSubRect(*this, frametime);
+	animator_.updateSubRect(*this, frametime);
 	weapon_.Update(frametime);
 	Entity::UpdateFlash(frametime);
 }

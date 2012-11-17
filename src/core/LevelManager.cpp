@@ -5,9 +5,9 @@
 #include "Resources.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Asteroid.hpp"
-#include "entities/Boss.hpp"
-#include "entities/EvilBoss.hpp"
-#include "entities/BossTentacles.hpp"
+#include "entities/bosses/SplitBoss.hpp"
+#include "entities/bosses/EvilBoss.hpp"
+#include "entities/bosses/BossTentacles.hpp"
 #include "entities/complex/Gate.hpp"
 #include "entities/complex/Canon.hpp"
 #include "entities/complex/GunTower.hpp"
@@ -326,9 +326,9 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		{
 			entity = new BossTentacles(position);
 		}
-		else if(strcmp(tag_name,"boss") == 0)
+		else if(strcmp(tag_name,"split_boss") == 0)
 		{
-		    entity = new Boss(position);
+		    entity = new SplitBoss(position);
 		}
 		else if (strcmp(tag_name, "decor") == 0)
 		{

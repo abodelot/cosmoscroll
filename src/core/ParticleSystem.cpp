@@ -293,6 +293,7 @@ ParticleSystem::TextParticle::TextParticle(const sf::Vector2f& offset, const sf:
 	text_.setCharacterSize(12);
 	text_.setColor(color);
 	text_.setPosition(offset);
+	text_.setFont(Resources::getFont("Ubuntu-R.ttf"));
 	timer_ = 0.f;
 }
 

@@ -1,19 +1,16 @@
 #include "BossTentacles.hpp"
-#include "EntityManager.hpp"
+#include "entities/EntityManager.hpp"
 #include "core/ParticleSystem.hpp"
 #include "utils/Math.hpp"
-
 
 #define MAX_X 400
 #define MAX_Y (EntityManager::GetInstance().GetHeight() - getHeight())
 
 
 BossTentacles::BossTentacles(const sf::Vector2f& position) :
-	Entity(position, 300),
-	Animated(EntityManager::GetInstance().GetAnimation("boss-tentacles"))
+	Entity(position, 300)
 {
 	SetTeam(Entity::BAD);
-	Reset(*this);
 
 	// init weapons
 	weapon_.Init("laser-pink");
@@ -27,6 +24,8 @@ BossTentacles::BossTentacles(const sf::Vector2f& position) :
 	speed_x_ = -100;
 	speed_y_ = 0;
 	timer_ = 0;
+
+	m_animator.setAnimation(*this, EntityManager::GetInstance().GetAnimation("boss-tentacles"));
 }
 
 
@@ -38,7 +37,8 @@ BossTentacles* BossTentacles::Clone() const
 
 void BossTentacles::Update(float frametime)
 {
-	Animated::UpdateSubRect(*this, frametime);
+	m_animator.updateSubRect(*this, frametime);
+
 	timer_ += frametime;
 
 	sf::Vector2f target_pos = target_->getPosition();

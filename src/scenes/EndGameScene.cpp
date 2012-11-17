@@ -52,7 +52,7 @@ void EndGameScene::Update(float frametime)
 		PlayerShip* player = EntityManager::GetInstance().GetPlayerShip();
 		player->move(0, frametime * 100);
 		player->rotate(10 * frametime);
-		player->UpdateSubRect(*player, frametime);
+		//FIXME player->updateSubRect(*player, frametime);
 	}
 }
 

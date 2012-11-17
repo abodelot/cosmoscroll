@@ -34,13 +34,11 @@
 
 PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	Entity(position, -1), // hack, init HP later (we must load items first)
-	Animated(EntityManager::GetInstance().GetAnimation(animation)),
 	input_(Input::GetInstance()),
 	panel_(ControlPanel::GetInstance())
 {
 	SetTeam(Entity::GOOD);
-	setTexture(GetAnimation()->getTexture());
-	Reset(*this);
+	animator_.setAnimation(*this, EntityManager::GetInstance().GetAnimation(animation));
 
 	// init weapons
 	weapon1_.Init("laser-red");
@@ -250,7 +248,7 @@ void PlayerShip::Update(float frametime)
 	static const EntityManager& manager = EntityManager::GetInstance();
 
 	// animation
-	Animated::UpdateSubRect(*this, frametime);
+	animator_.updateSubRect(*this, frametime);
 
 	// weapons
 	if (!overheated_)
@@ -402,9 +400,8 @@ void PlayerShip::OnDestroy()
 {
 	setColor(sf::Color::White); // clear red flash
 	EntityManager& manager = EntityManager::GetInstance();
-	SetAnimation(manager.GetAnimation("player-destroyed"));
+	animator_.setAnimation(*this, manager.GetAnimation("player-destroyed"));
 
-	Reset(*this);
 	manager.TerminateGame();
 	ParticleSystem::GetInstance().ExplosionSfx(getCenter());
 }

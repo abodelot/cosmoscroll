@@ -2,7 +2,7 @@
 #define PLAYERSHIP_HPP
 
 #include "Entity.hpp"
-#include "Animated.hpp"
+#include "Animator.hpp"
 #include "Bonus.hpp"
 #include "items/Weapon.hpp"
 #include "items/MissileLauncher.hpp"
@@ -12,7 +12,7 @@
 /**
  * Vaisseau spatial contrôlable par un joueur
  */
-class PlayerShip: public Entity, public Animated
+class PlayerShip: public Entity
 {
 public:
 	PlayerShip(const sf::Vector2f& position, const char* animation);
@@ -110,6 +110,8 @@ private:
 	Weapon weapon1_;
 	Weapon weapon2_;
 	MissileLauncher missile_launcher_;
+
+	Animator animator_;
 };
 
 #endif // PLAYERSHIP_HPP

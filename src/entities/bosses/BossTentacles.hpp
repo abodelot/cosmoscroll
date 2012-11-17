@@ -1,12 +1,12 @@
 #ifndef BOSSTENTACLES_HPP
 #define BOSSTENTACLES_HPP
 
-#include "Entity.hpp"
-#include "Animated.hpp"
+#include "entities/Entity.hpp"
+#include "entities/Animator.hpp"
 #include "items/Weapon.hpp"
 
 
-class BossTentacles: public Entity, public Animated
+class BossTentacles: public Entity
 {
 public:
 	BossTentacles(const sf::Vector2f& position);
@@ -38,6 +38,7 @@ private:
 	int speed_y_;
 	Weapon weapon_;
 	Entity* target_;
+	Animator m_animator;
 };
 
 #endif // BOSSTENTACLES_HPP

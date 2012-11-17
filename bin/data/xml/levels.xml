@@ -102,20 +102,20 @@
 			<ship id="2" y="100" t="1"/>
 			<ship id="2" y="100" t="1"/>
 			<ship id="2" y="300" t="1"/>
-			<call func="caps_x3"/>	
+			<call func="caps_x3"/>
 			<call func="c_scoot_line_3"/>
 		</level>
 
 		<!-- LVL2 -->
 		<level desc="Ahoi captain of space!" layer1="layers/blue.jpg" layer2="layers/fog.png" color="#003070" stars="40" music="ground_zero.mod">
-			<loop count="2">	
-				<call func="caps_x5"/>	
+			<loop count="2">
+				<call func="caps_x5"/>
 				<ship id="2" y="450" t="2"/>
-				<ship id="2" y="100" />	
+				<ship id="2" y="100" />
 				<ship id="2" y="300" t="1"/>
 				<ship id="2" y="120"/>
-				<call func="caps_x5"/>	
-				<call func="scoot_line_3"/>	
+				<call func="caps_x5"/>
+				<call func="scoot_line_3"/>
 				<call func="scoot_line_3"/>
 			</loop>
 			<ship id="2" y="270" t="6"/>
@@ -158,8 +158,9 @@
 			<call func="scoot_line_5"/>
 			<ship id="3" y="200" t="2"/>
 			<ship id="3" y="100" t="3"/>
-			<ship id="3" y="300" t="3"/>	
-			<call func="c_scoot_triad"/>	
+			<ship id="3" y="300" t="3"/>
+			<call func="c_scoot_triad"/>
+			<split_boss y="170" t="1" />
 		</level>
 
 		<!-- LVL3 -->
@@ -236,7 +237,7 @@
 			<loop count="3">
 				<ship id="2" y="270" t="2"/>
 				<ship id="3" y="100" t="0.5"/>
-			</loop>			
+			</loop>
 			<call func="c_scoot_line_3"/>
 		</level>
 
@@ -468,8 +469,7 @@
 				<ship id="4" y="170" t="1" />
 				<ship id="6" y="210" t="1" />
 				<ship id="6" y="250" t="1" />
-			</loop>	
-			<boss y="170" t="1" />
+			</loop>
 		</level>
 
 		<!-- LVL8 -->
@@ -509,7 +509,7 @@
 			<ship id="7" y="240" t="2"/>
 			<ship id="6" y="100" t="1"/>
 			<ship id="6" y="300" t="1"/>
-			<ship id="6" y="200" t="1"/>	
+			<ship id="6" y="200" t="1"/>
 			<evilboss y="170" t="8"/>
 		</level>
 	</levels>

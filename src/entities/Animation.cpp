@@ -8,25 +8,25 @@ Animation::Animation()
 }
 
 
-float Animation::GetDuration() const
+float Animation::getDuration() const
 {
 	return subrects_.size() * delay_;
 }
 
 
-void Animation::AddFrame(const sf::IntRect& subrect)
+void Animation::addFrame(const sf::IntRect& subrect)
 {
 	subrects_.push_back(subrect);
 }
 
 
-void Animation::AddFrame(int left, int top, int width, int height)
+void Animation::addFrame(int left, int top, int width, int height)
 {
-	AddFrame(sf::IntRect(left, top, width, height));
+	addFrame(sf::IntRect(left, top, width, height));
 }
 
 
-void Animation::SetDelay(float delay)
+void Animation::setDelay(float delay)
 {
 	delay_ = delay;
 }

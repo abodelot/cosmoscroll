@@ -1,5 +1,5 @@
-#include "Boss.hpp"
-#include "EntityManager.hpp"
+#include "SplitBoss.hpp"
+#include "entities/EntityManager.hpp"
 #include "core/ParticleSystem.hpp"
 #include "core/Resources.hpp"
 
@@ -14,9 +14,9 @@
 #define MAX_X (EntityManager::GetInstance().GetWidth() - getWidth())
 #define MAX_Y (EntityManager::GetInstance().GetHeight() - getHeight())
 
-Boss::Boss(sf::Vector2f& pos , int HP, bool split) : Entity(pos,HP)
+SplitBoss::SplitBoss(sf::Vector2f& pos, int HP, bool split) : Entity(pos,HP)
 {
-    if(split)
+    if (split)
     {
         setTexture(Resources::getTexture("entities/evil-boss.png"));
         setTextureRect(sf::IntRect(0, 0, 242, 160));
@@ -60,7 +60,7 @@ Boss::Boss(sf::Vector2f& pos , int HP, bool split) : Entity(pos,HP)
 	split_mode_ = split;
 }
 
-void Boss::Update(float frametime)
+void SplitBoss::Update(float frametime)
 {
     //Attack
 	sf::Vector2f target_pos = target_->getCenter();
@@ -71,34 +71,34 @@ void Boss::Update(float frametime)
 
     //Movement
 
-    //Bound Check
+	//Bound Check
     const sf::Vector2f& pos = getPosition();
 
-    if( (int)pos.x <= 0)
-        {
-            setX(0);
-            speed_x_ *= -1;
-        }
-        else if((int)pos.x >= MAX_X)
-        {
-            //To Allow Rebounds and [**Slide in From Right @ Entry** ]
-            if(speed_x_ > 0)
-                {
-                    setX(MAX_X);
-                    speed_x_ *= -1;
-                }
-        }
+    if ((int)pos.x <= 0)
+	{
+		setX(0);
+		speed_x_ *= -1;
+	}
+	else if ((int)pos.x >= MAX_X)
+	{
+		//To Allow Rebounds and [**Slide in From Right @ Entry** ]
+		if (speed_x_ > 0)
+		{
+			setX(MAX_X);
+			speed_x_ *= -1;
+		}
+	}
 
-        if((int) pos.y < 0)
-        {
-             setY(0);
-             speed_y_ *= -1;
-        }
-        else if ((int) pos.y >= MAX_Y )
-        {
-            setY(MAX_Y );
-            speed_y_ *= -1;
-        }
+	if ((int) pos.y < 0)
+	{
+		 setY(0);
+		 speed_y_ *= -1;
+	}
+	else if ((int) pos.y >= MAX_Y )
+	{
+		setY(MAX_Y );
+		speed_y_ *= -1;
+	}
 
     //Normal Movement
 
@@ -110,39 +110,34 @@ void Boss::Update(float frametime)
 	Entity::UpdateFlash(frametime);
 }
 
-void Boss::TakeDamage(int damage)
+void SplitBoss::TakeDamage(int damage)
 {
     Entity::TakeDamage(damage);
-    if(GetHP() == 0 && split_mode_)
+    if (IsDead() && split_mode_)
     {
         sf::Vector2f pos = getPosition();
-        Boss *small_boss2 = new Boss(pos,150,false);
+        SplitBoss *small_boss2 = new SplitBoss(pos,150,false);
         EntityManager::GetInstance().AddEntity(small_boss2);
 
-         sf::Vector2f pos1 = sf::Vector2f(pos.x ,pos.y - 10);
-        Boss *small_boss1 = new Boss(pos1,150,false);
-        small_boss1->invert_speed_y();
+        sf::Vector2f pos1 = sf::Vector2f(pos.x ,pos.y - 10);
+        SplitBoss *small_boss1 = new SplitBoss(pos1,150,false);
+        small_boss1->speed_y_ *= -1;
         EntityManager::GetInstance().AddEntity(small_boss1);
     }
 }
 
-void Boss::SetTarget(Entity* target)
+void SplitBoss::SetTarget(Entity* target)
 {
     target_ = target;
 }
 
-void Boss::OnDestroy()
+void SplitBoss::OnDestroy()
 {
     ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 200);
 }
 
-Boss* Boss::Clone() const
+SplitBoss* SplitBoss::Clone() const
 {
-    return new Boss(*this);
+    return new SplitBoss(*this);
 }
 
-
-void Boss::invert_speed_y()
-{
-    speed_y_ *= -1;
-}

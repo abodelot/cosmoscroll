@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Input.hpp"
 #include "Game.hpp"
+#include "Resources.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "utils/IniParser.hpp"
@@ -316,7 +317,7 @@ void Input::SetDevices(unsigned int flag)
 
 void Input::AskUserInput(Device device, Action action)
 {
-	std::wstring s;
+	sf::String s;
 	if (device == Input::KEYBOARD)
 	{
 		s = _t("input.press_key");
@@ -330,10 +331,11 @@ void Input::AskUserInput(Device device, Action action)
 	sf::Text prompt;
 	prompt.setString(s);
 	prompt.setColor(sf::Color::White);
+	prompt.setFont(Resources::getFont("Ubuntu-R.ttf"));
 	sf::FloatRect rect = prompt.getLocalBounds();
 	prompt.setPosition(
-		(Game::WIDTH - rect.width) / 2,
-		(Game::HEIGHT - rect.height) / 2
+		(int) (Game::WIDTH - rect.width) / 2,
+		(int) (Game::HEIGHT - rect.height) / 2
 	);
 
 	sf::Event event;
