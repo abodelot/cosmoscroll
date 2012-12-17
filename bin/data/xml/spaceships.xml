@@ -3,13 +3,13 @@
 	<ship id="8" name="Circle-scoot" animation="circle-scoot" hp="3" speed="75" move="circle" attack="auto_aim" points="1" >
 		<weapon id="laser-green" x="0" y="16"/>
 	</ship>
-	<ship id="1" name="Capsule" animation="capsule" hp="3" speed="75" move="straight" points="1" />
+	<ship id="1" name="Capsule" animation="capsule" hp="3" speed="75" move="line" points="1" />
 	<ship id="2" name="Scoot" animation="scoot" hp="4" speed="120" move="sinus" attack="on_sight" points="2">
 		<weapon id="laser-green" x="0" y="16"/>
 	</ship>
 	<ship id="5" name="Mine" animation="mine" hp="14" move="magnet" speed="50" points="2"/>
 	<ship id="7" name="Heavy-mine" animation="h-mine" hp="22" move="magnet" speed="80" points="5"/>
-	<ship id="3" name="Interceptor" animation="interceptor" hp="8" speed="50" move="straight" attack="auto_aim" points="3">
+	<ship id="3" name="Interceptor" animation="interceptor" hp="8" speed="50" move="line" attack="auto_aim" points="3">
 		<weapon id="laser-green" x="0" y="32"/>
 	</ship>
 	<ship id="6" name="Heavy-interceptor" animation="h-interceptor" hp="12" speed="50" move="sinus" attack="auto_aim" points="5">

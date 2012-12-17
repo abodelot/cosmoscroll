@@ -250,6 +250,7 @@ void EntityManager::Update(float frametime)
 void EntityManager::AddEntity(Entity* entity)
 {
 	entity->SetTarget(player_);
+	entity->onInit();
 	entities_.push_back(entity);
 }
 
@@ -392,10 +393,8 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 		SpaceShip* ship = new SpaceShip(GetAnimation(animation), hp, speed);
 		ship->SetPoints(points);
 
-		const char* move_pattern = elem->Attribute("move");
-		const char* attack_pattern = elem->Attribute("attack");
-		ship->SetMovePattern(move_pattern);
-		ship->SetAttackPattern(attack_pattern);
+		ship->setMovementPattern(getMovementPattern(elem));
+		ship->setAttackPattern(getAttackPattern((elem)));
 
 		// Parse weapon tag
 		TiXmlElement* weapon = elem->FirstChildElement();
@@ -535,6 +534,40 @@ void EntityManager::RespawnPlayer()
 }
 
 
+
+SpaceShip::AttackPattern EntityManager::getAttackPattern(const TiXmlElement* elem) const
+{
+	const char* attack = elem->Attribute("attack");
+	if (attack != NULL)
+	{
+		if (strcmp(attack, "auto_aim") == 0) return SpaceShip::AUTO_AIM;
+		if (strcmp(attack, "on_sight") == 0) return SpaceShip::ON_SIGHT;
+		if (strcmp(attack, "none")     == 0) return SpaceShip::NONE;
+
+		std::cerr << "unknown attack pattern: " << attack << std::endl;
+	}
+	return SpaceShip::NONE;
+}
+
+
+SpaceShip::MovementPattern EntityManager::getMovementPattern(const TiXmlElement* elem) const
+{
+	const char* move = elem->Attribute("move");
+	if (move != NULL)
+	{
+		if (strcmp(move, "line")   == 0) return SpaceShip::LINE;
+		if (strcmp(move, "magnet") == 0) return SpaceShip::MAGNET;
+		if (strcmp(move, "sinus")  == 0) return SpaceShip::SINUS;
+		if (strcmp(move, "circle") == 0) return SpaceShip::CIRCLE;
+
+		std::cerr << "unknown movement pattern: " << move << std::endl;
+	}
+	return SpaceShip::LINE;
+}
+
+
+
+// parallax layer --------------------------------------------------------------
 
 EntityManager::ParallaxLayer::ParallaxLayer()
 {

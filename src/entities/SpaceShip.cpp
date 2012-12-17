@@ -1,7 +1,3 @@
-#include <cstring>
-#include <cstdio>
-#include<cmath>
-
 #include "SpaceShip.hpp"
 #include "EntityManager.hpp"
 #include "Bonus.hpp"
@@ -11,46 +7,33 @@
 #include "core/ParticleSystem.hpp"
 
 
-
 // bonus freq = 1 / DROP_LUCK
 #define DROP_LUCK 8
 
-#define DEFAULT_MOVE_PATTERN   &SpaceShip::move_straight;
-#define DEFAULT_ATTACK_PATTERN &SpaceShip::attack_none;
-
-#define TEST_MOVE(pattern, test, ptr) \
-	if (strcmp(pattern, #test) == 0)\
-	{\
-		ptr = &SpaceShip::move_##test;\
-		return;\
-	}
-
-#define TEST_ATTACK(pattern, test, ptr) \
-	if (strcmp(pattern, #test) == 0)\
-	{\
-		ptr = &SpaceShip::attack_##test;\
-		return;\
-	}
-
-// paramètres de la fonction de déplacement sinus
+// sinus movement settings
 #define SINUS_AMPLITUDE 60
 #define SINUS_FREQUENCE 0.02
 
+// circle movement settings
+#define CIRCLE_START_AT 400
+#define CIRCLE_RADIUS   60
+#define CIRCLE_ROTATION_SPEED (math::PI * 0.8)
 
 SpaceShip::SpaceShip(const Animation& animation, int hp, int speed) :
-	Entity(sf::Vector2f(0, 0), hp)
+	Entity(sf::Vector2f(0, 0), hp),
+	attack_(NONE),
+	movement_(LINE)
 {
 	setTexture(animation.getTexture());
 	SetTeam(Entity::BAD);
 	animator_.setAnimation(*this, animation);
 
-	move_pattern_ = DEFAULT_MOVE_PATTERN;
-	attack_pattern_ = DEFAULT_ATTACK_PATTERN;
 	speed_ = speed;
 	weapon_.SetOwner(this);
 	target_ = NULL;
-	base_y_ = -1;
-	base_x_ = -1;
+	base_y_ = 0;
+	base_x_ = 0;
+	angle_ = 2 * math::PI;
 }
 
 
@@ -59,29 +42,48 @@ SpaceShip::~SpaceShip()
 }
 
 
-void SpaceShip::SetMovePattern(const char* pattern)
+void SpaceShip::onInit()
 {
-	if (pattern == NULL)
-		return;
+	if (movement_ == SINUS)
+	{
+		float y = getY();
+		// Compute maximal Y position according to the wave's amplitude
+		// (So the spacship is always within the screen's boundaries)
+		float y_max = EntityManager::GetInstance().GetHeight() - SINUS_AMPLITUDE - getHeight();
+		if (y < SINUS_AMPLITUDE)
+			base_y_ = SINUS_AMPLITUDE;
+		else if (y > y_max)
+			base_y_ = y_max;
+		else
+			base_y_ = y;
 
-	TEST_MOVE(pattern, straight, move_pattern_)
-	TEST_MOVE(pattern, magnet, move_pattern_)
-	TEST_MOVE(pattern, sinus, move_pattern_)
-	TEST_MOVE(pattern,circle,move_pattern_)
-	fprintf(stderr, "error: undefined move pattern: %s\n", pattern);
+		setY(base_y_);
+	}
+	else if (movement_ == CIRCLE)
+	{
+		float y = getY();
+		float y_max = EntityManager::GetInstance().GetHeight() - CIRCLE_RADIUS - getHeight();
+		if (y < CIRCLE_RADIUS)
+			base_y_ = CIRCLE_RADIUS;
+		else if (y > y_max)
+			base_y_ = y_max;
+		else
+			base_y_ = y;
+
+		setY(base_y_);
+	}
 }
 
 
-void SpaceShip::SetAttackPattern(const char* pattern)
+void SpaceShip::setMovementPattern(MovementPattern movement)
 {
-	if (pattern == NULL)
-		return;
+	movement_ = movement;
+}
 
-	TEST_ATTACK(pattern, auto_aim, attack_pattern_)
-	TEST_ATTACK(pattern, on_sight, attack_pattern_)
-	TEST_ATTACK(pattern, none, attack_pattern_)
 
-	fprintf(stderr, "error: undefined attack pattern: %s\n", pattern);
+void SpaceShip::setAttackPattern(AttackPattern attack)
+{
+	attack_ = attack;
 }
 
 
@@ -108,8 +110,80 @@ void SpaceShip::SetTarget(Entity* target)
 
 void SpaceShip::Update(float frametime)
 {
-	(this->*move_pattern_)(frametime);
-	(this->*attack_pattern_)();
+	// Apply movement pattern
+	float delta = speed_ * frametime;
+	switch (movement_)
+	{
+		case LINE:
+		{
+			move(delta, 0);
+		}
+		break;
+		case MAGNET:
+		{
+			sf::Vector2f player_pos = target_->getCenter();
+			sf::Vector2f my_pos = getCenter();
+
+			float x_diff = my_pos.x - player_pos.x;
+			float y_diff = my_pos.y - player_pos.y;
+
+			if (x_diff > 5)
+				move(-delta, 0);
+			else if (x_diff < -5)
+				move(delta, 0);
+
+			if (y_diff > 5)
+				move(0, -delta);
+			else if (y_diff < -5)
+				move(0, delta);
+		}
+		case SINUS:
+		{
+			sf::Vector2f pos = getPosition();
+			pos.x += -speed_ * frametime;
+			pos.y = std::sin(pos.x * SINUS_FREQUENCE) * SINUS_AMPLITUDE + base_y_;
+			setPosition(pos);
+		}
+		break;
+		case CIRCLE:
+		{
+			if (getX() > CIRCLE_START_AT + CIRCLE_RADIUS)
+			{
+				move(-delta, 0);
+			}
+			else
+			{
+				sf::Vector2f pos(CIRCLE_START_AT, base_y_);
+				angle_ += CIRCLE_ROTATION_SPEED * frametime;
+				pos.x += CIRCLE_RADIUS * std::cos(angle_);
+				pos.y -= CIRCLE_RADIUS * std::sin(angle_);
+				setPosition(pos);
+			}
+		}
+		break;
+	}
+
+
+	switch (attack_)
+	{
+		case AUTO_AIM:
+			weapon_.ShootAt(target_->getCenter());
+			break;
+
+		case ON_SIGHT:
+		{
+			float my_y = getCenter().y;
+			float player_y = target_->getCenter().y;
+			// if both spaceships are roughly on the same Y axis
+			if (std::abs(player_y - my_y) < 30)
+			{
+				weapon_.Shoot(-math::PI);
+			}
+		}
+			break;
+		case NONE:
+			break;
+	}
 
 	animator_.updateSubRect(*this, frametime);
 	weapon_.Update(frametime);
@@ -126,119 +200,3 @@ void SpaceShip::OnDestroy()
 	ParticleSystem::GetInstance().ExplosionSfx(getCenter());
 }
 
-// movement patterns -----------------------------------------------------------
-
-void SpaceShip::move_circle(float frametime)
-{
-
-    float current_angle;
-    sf::Vector2f pos = getPosition();
-
-   if(pos.x > 580 )
-        pos.x -= speed_*frametime;
-    else
-    {
-            //Record Circle's Centre at Entry
-            if(base_y_ == -1)
-            {
-                base_y_ =  (int)pos.y;
-                base_x_ =  pos.x - 30;
-                current_angle = 0;
-            }
-            else
-            {
-                if(pos.y== base_y_  && pos.x > base_x_ )
-                    current_angle += math::PI/128;//0+inc.
-                else if(pos.x == base_x_ && pos.y < base_y_)
-                    current_angle = math::PI/2+math::PI/128;
-                else if(pos.y == base_y_ && pos.x < base_x_ )
-                    current_angle = math::PI +  math::PI/128;
-                else if(pos.x == base_x_ && pos.y > base_y_)
-                    current_angle = 3*math::PI/2 + math::PI/128;
-                else
-                    current_angle = atan2( ( base_y_ - pos.y) , (pos.x - base_x_) )+math::PI/128;
-
-                pos.x = base_x_ + 30*std::cos(current_angle) ;
-                pos.y = base_y_ - 30*std::sin(current_angle);
-            }
-    }
-    setPosition(pos);
-}
-
-
-void SpaceShip::move_magnet(float frametime)
-{
-	sf::Vector2f player_pos = target_->getCenter();
-	sf::Vector2f my_pos = getCenter();
-
-	float velocity = speed_ * frametime;
-	float x_diff = my_pos.x - player_pos.x;
-	float y_diff = my_pos.y - player_pos.y;
-
-	if (x_diff > 5)
-		sf::Sprite::move(-velocity, 0);
-	else if (x_diff < -5)
-		sf::Sprite::move(velocity, 0);
-
-	if (y_diff > 5)
-		sf::Sprite::move(0, -velocity);
-	else if (y_diff < -5)
-		sf::Sprite::move(0, velocity);
-}
-
-
-void SpaceShip::move_straight(float frametime)
-{
-	sf::Sprite::move(-speed_ * frametime, 0);
-}
-
-
-void SpaceShip::move_sinus(float frametime)
-{
-	sf::Vector2f pos = getPosition();
-	pos.x += -speed_ * frametime;
-	if (base_y_ == -1)
-	{
-		int y_max = EntityManager::GetInstance().GetHeight() - SINUS_AMPLITUDE - getHeight();
-		// calcul de l'ordonnée à l'origine base_y_ de la fonction sinus
-		// l'amplitude de la courbe ne doit pas sortir de la zone de jeu
-		if (pos.y < SINUS_AMPLITUDE)
-		{
-			base_y_ = SINUS_AMPLITUDE;
-		}
-		else if (pos.y > y_max)
-		{
-			base_y_ = y_max;
-		}
-		else
-		{
-			base_y_ = pos.y;
-		}
-	}
-	pos.y = std::sin(pos.x * SINUS_FREQUENCE) * SINUS_AMPLITUDE + base_y_;
-	setPosition(pos);
-}
-
-// attack patterns -------------------------------------------------------------
-
-void SpaceShip::attack_auto_aim()
-{
-	weapon_.ShootAt(target_->getCenter());
-}
-
-
-void SpaceShip::attack_on_sight()
-{
-	float my_y = getCenter().y;
-	float player_y = target_->getCenter().y;
-	// Doit on tirer ?
-	if (std::abs(player_y - my_y) < 30)
-	{
-		weapon_.Shoot(-math::PI);
-	}
-}
-
-
-void SpaceShip::attack_none()
-{
-}

@@ -16,6 +16,7 @@
 class ParticleSystem;
 class PlayerShip;
 class LevelManager;
+class TiXmlElement;
 
 /**
  * Gestionnaire de la vie, l'univers et tout le reste
@@ -171,6 +172,16 @@ private:
 	 * Ré-allouer le vaisseau du joueur
 	 */
 	void RespawnPlayer();
+
+	/**
+	 * Get attack pattern encoded in an xml element
+	 */
+	SpaceShip::AttackPattern getAttackPattern(const TiXmlElement* elem) const;
+
+	/**
+	 * Get movement pattern encoded in an xml element
+	 */
+	SpaceShip::MovementPattern getMovementPattern(const TiXmlElement* elem) const;
 
 
 	typedef std::map<int, SpaceShip*> SpaceShipMap;

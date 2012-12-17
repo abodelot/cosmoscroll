@@ -32,6 +32,11 @@ public:
 	virtual Entity* Clone() const = 0;
 
 	/**
+	 * Called when entity is inserted in the entity manager
+	 */
+	virtual void onInit() {}
+
+	/**
 	 * @return sprite center
 	 */
 	sf::Vector2f getCenter() const;
@@ -106,6 +111,8 @@ public:
 	inline float getWidth() const { return getTextureRect().width; }
 	inline float getHeight() const { return getTextureRect().height; }
 
+	inline float getX() const { return getPosition().x; }
+	inline float getY() const { return getPosition().y; }
 	inline void setX(float x) { setPosition(x, getPosition().y); }
 	inline void setY(float y) { setPosition(getPosition().x, y); }
 

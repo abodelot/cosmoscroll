@@ -8,12 +8,25 @@
 class SpaceShip: public Entity
 {
 public:
+	enum MovementPattern
+	{
+		MAGNET, LINE, SINUS, CIRCLE
+	};
+
+	enum AttackPattern
+	{
+		AUTO_AIM, ON_SIGHT, NONE
+	};
+
 	SpaceShip(const Animation& animation, int hp, int speed);
 	~SpaceShip();
 
-	void SetMovePattern(const char* pattern);
+	// override
+	void onInit();
 
-	void SetAttackPattern(const char* pattern);
+	void setMovementPattern(MovementPattern movement);
+
+	void setAttackPattern(AttackPattern attack);
 
 	/**
 	 * Obtenir l'arme au vaisseau
@@ -33,32 +46,16 @@ public:
 	void OnDestroy();
 
 private:
-	// MOVEMENT PATTERN
-	// Suivre le joueur
-	void move_magnet(float frametime);
-	// Avancer tout droit
-	void move_straight(float frametime);
-	// courbe sinus
-	void move_sinus(float frametime);
-	//circle
-	void move_circle(float frametime);
+	AttackPattern   attack_;
+	MovementPattern movement_;
 
-	// ATTACK PATTERN
-	// - Viser automatiquement le joueur
-	void attack_auto_aim();
-	// - Tirer si le joueur passe devant
-	void attack_on_sight();
-	// - ne pas attaquer le joueur
-	void attack_none();
+	int      speed_;
+	float    base_y_;
+	float    base_x_;
+	float    angle_;
 
-	void (SpaceShip::*move_pattern_)(float);
-	void (SpaceShip::*attack_pattern_)();
-
-	int speed_;
-	int base_y_;
-	int base_x_;
-	Weapon weapon_;
-	Entity* target_;
+	Weapon   weapon_;
+	Entity*  target_;
 	Animator animator_;
 };
 

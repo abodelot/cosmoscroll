@@ -393,18 +393,16 @@ bool Game::CheckResourcesPurity()
 	MD5 md5sum;
 
 	file.open((data_dir_ + XML_ITEMS).c_str());
-	string s=md5sum.Calculate(file);
-	cout<<s;
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_ITEMS);
 	file.close();
 
-	/*file.open((data_dir_ + XML_SPACESHIPS).c_str());
+	file.open((data_dir_ + XML_SPACESHIPS).c_str());
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_SPACESHIPS);
 	file.close();
 
 	file.open((data_dir_ + XML_ANIMATIONS).c_str());
 	pure_ &= (md5sum.Calculate(file) == MD5SUM_ANIMATIONS);
-	file.close();*/
+	file.close();
 	return pure_;
 }
 
