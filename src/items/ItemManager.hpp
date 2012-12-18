@@ -7,8 +7,6 @@
 #include "WeaponData.hpp"
 #include "GenericItemData.hpp"
 
-class Weapon;
-
 class ItemManager
 {
 public:
@@ -26,7 +24,8 @@ public:
 	 * @param id: weapon XML id
 	 * @param weapon: weapon to initialize
 	 */
-	void InitWeapon(const char* id, Weapon* weapon) const;
+	template <class T>
+	void InitWeapon(const char* id, Weapon<T>& weapon) const;
 
 	/**
 	 * Get item data from any item type
@@ -56,5 +55,20 @@ private:
 	typedef std::list<GenericItemData> GenericItemList;
 	GenericItemList items_;
 };
+
+template <class T>
+void ItemManager::InitWeapon(const char* id, Weapon<T>& weapon) const
+{
+	const WeaponData* data = GetWeaponData(id);
+	if (data == NULL)
+	{
+		std::cerr << "can't initialize weapon " << id << " (unknown id)" << std::endl;
+	}
+	else
+	{
+		data->InitWeapon(weapon);
+	}
+}
+
 
 #endif // ITEMMANAGER_HPP

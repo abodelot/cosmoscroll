@@ -57,8 +57,7 @@ void PlayerSave::LoadFromConfig(IniParser& config)
 	LevelManager::GetInstance().SetCurrent(level);
 
 	config.Get("credits",      available_credits_);
-	config.Get("lvl_laser",    items_[ItemData::LASER_CANNON]);
-	config.Get("lvl_plasma",   items_[ItemData::PLASMA_CANNON]);
+	config.Get("lvl_laser",    items_[ItemData::WEAPON]);
 	config.Get("lvl_shield",   items_[ItemData::SHIELD]);
 	config.Get("lvl_armor",    items_[ItemData::ARMOR]);
 	config.Get("lvl_engine",   items_[ItemData::ENGINE]);
@@ -76,8 +75,7 @@ void PlayerSave::SaveToConfig(IniParser& config) const
 	config.Set("current_level", LevelManager::GetInstance().GetCurrent());
 	config.Set("last_unlocked_level", LevelManager::GetInstance().GetLastUnlocked());
 	config.Set("credits", available_credits_);
-	config.Set("lvl_laser", items_[ItemData::LASER_CANNON]);
-	config.Set("lvl_plasma", items_[ItemData::PLASMA_CANNON]);
+	config.Set("lvl_laser", items_[ItemData::WEAPON]);
 	config.Set("lvl_shield", items_[ItemData::SHIELD]);
 	config.Set("lvl_armor", items_[ItemData::ARMOR]);
 	config.Set("lvl_engine", items_[ItemData::ENGINE]);

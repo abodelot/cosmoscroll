@@ -1,12 +1,12 @@
-#ifndef HIT_HPP
-#define HIT_HPP
+#ifndef PROJECTILE_HPP
+#define PROJECTILE_HPP
 
 #include "Entity.hpp"
 
 /**
  * Bullet entity, emitted by Weapon class
  */
-class Hit: public Entity
+class Projectile: public Entity
 {
 public:
 	/**
@@ -17,11 +17,11 @@ public:
 	 * @param speed: vitesse du projectile (pixels / seconde)
 	 * @param damage: dégâts infligés lors d'une collision
 	 */
-	Hit(Entity* emitter, const sf::Vector2f& position, float angle,
+	Projectile(Entity* emitter, const sf::Vector2f& position, float angle,
 		const sf::Texture* image, int speed, int damage);
 
 	// inherited
-	Hit* Clone() const;
+	Projectile* Clone() const;
 
 	// inherited
 	void Update(float frametime);
@@ -33,4 +33,4 @@ private:
 	sf::Vector2f speed_;
 };
 
-#endif // HIT_HPP
+#endif // PROJECTILE_HPP

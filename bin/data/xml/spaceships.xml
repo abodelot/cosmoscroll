@@ -12,7 +12,7 @@
 	<ship id="3" name="Interceptor" animation="interceptor" hp="8" speed="50" move="line" attack="auto_aim" points="3">
 		<weapon id="laser-green" x="0" y="32"/>
 	</ship>
-	<ship id="6" name="Heavy-interceptor" animation="h-interceptor" hp="12" speed="50" move="sinus" attack="auto_aim" points="5">
+	<ship id="6" name="Heavy-interceptor" animation="h-interceptor" hp="12" speed="50" move="circle" attack="auto_aim" points="5">
 		<weapon id="laser-pink" x="0" y="24"/>
 	</ship>
 	<ship id="4" name="Saucer" animation="saucer" hp="6" speed="80" move="sinus" attack="auto_aim" points="4">

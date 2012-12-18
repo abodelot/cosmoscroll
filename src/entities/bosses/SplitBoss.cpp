@@ -7,54 +7,40 @@
 #define EYE_OFFSET_LEFT_SMALL  sf::Vector2f(52.5, 27.5)
 #define EYE_OFFSET_RIGHT  sf::Vector2f(190, 55)
 #define EYE_OFFSET_RIGHT_SMALL  sf::Vector2f(95, 27.5)
-#define MOUTH_OFFSET      sf::Vector2f(143, 128)
-#define MOUTH_OFFSET_SMALL     sf::Vector2f(72.5, 64)
-
 
 #define MAX_X (EntityManager::GetInstance().GetWidth() - getWidth())
 #define MAX_Y (EntityManager::GetInstance().GetHeight() - getHeight())
 
 SplitBoss::SplitBoss(sf::Vector2f& pos, int HP, bool split) : Entity(pos,HP)
 {
-    if (split)
-    {
-        setTexture(Resources::getTexture("entities/evil-boss.png"));
-        setTextureRect(sf::IntRect(0, 0, 242, 160));
+	if (split)
+	{
+		setTexture(Resources::getTexture("entities/evil-boss.png"));
+		setTextureRect(sf::IntRect(0, 0, 242, 160));
 
-        eye_left_.Init("devil-eyes");
-        eye_left_.SetOwner(this);
-        eye_left_.SetOffset(EYE_OFFSET_LEFT);
-        eye_right_.Init("devil-eyes");
-        eye_right_.SetOwner(this);
-        eye_right_.SetOffset(EYE_OFFSET_RIGHT);
-        // hack: disable sound on the second eye so it won't be played twice
-        eye_right_.SetSound(NULL);
+		eye_left_.init("devil-eyes");
+		eye_left_.setOwner(this);
+		eye_left_.setPosition(EYE_OFFSET_LEFT);
+		eye_right_.init("devil-eyes");
+		eye_right_.setOwner(this);
+		eye_right_.setPosition(EYE_OFFSET_RIGHT);
+	}
+	else
+	{
+		setTexture(Resources::getTexture("entities/evil-boss-small.png"));
+		setTextureRect(sf::IntRect(0,0,121,80));
 
-        canon_.Init("laser-pink");
-        canon_.SetOwner(this); // (init canon later)
-        canon_.SetOffset(MOUTH_OFFSET);
-    }
-    else
-    {
-        setTexture(Resources::getTexture("entities/evil-boss-small.png"));
-        setTextureRect(sf::IntRect(0,0,121,80));
-
-        eye_left_.Init("devil-eyes");
-        eye_left_.SetOwner(this);
-        eye_left_.SetOffset(EYE_OFFSET_LEFT_SMALL);
-        eye_right_.Init("devil-eyes");
-        eye_right_.SetOwner(this);
-        eye_right_.SetOffset(EYE_OFFSET_RIGHT_SMALL);
-        // hack: disable sound on the second eye so it won't be played twice
-        eye_right_.SetSound(NULL);
-
-        canon_.Init("laser-pink");
-        canon_.SetOwner(this); // (init canon later)
-        canon_.SetOffset(MOUTH_OFFSET_SMALL);
-    }
-
+		eye_left_.init("devil-eyes");
+		eye_left_.setOwner(this);
+		eye_left_.setPosition(EYE_OFFSET_LEFT_SMALL);
+		eye_right_.init("devil-eyes");
+		eye_right_.setOwner(this);
+		eye_right_.setPosition(EYE_OFFSET_RIGHT_SMALL);
+	}
+	// hack: disable sound on the second eye so it won't be played twice
+	eye_right_.setSound(NULL);
 	SetTeam(Entity::BAD);
-    target_ = NULL;
+	target_ = NULL;
 	speed_x_ = -70;
 	speed_y_ = -70;
 	split_mode_ = split;
@@ -65,9 +51,8 @@ void SplitBoss::Update(float frametime)
     //Attack
 	sf::Vector2f target_pos = target_->getCenter();
 
-	eye_left_.ShootAt(target_pos);
-	eye_right_.ShootAt(target_pos);
-	canon_.ShootAt(target_pos);
+	eye_left_.shoot(target_pos);
+	eye_right_.shoot(target_pos);
 
     //Movement
 
@@ -104,9 +89,8 @@ void SplitBoss::Update(float frametime)
 
     sf::Sprite::move(speed_x_*frametime , speed_y_*frametime);
 
-	eye_left_.Update(frametime);
-	eye_right_.Update(frametime);
-	canon_.Update(frametime);
+	eye_left_.onUpdate(frametime);
+	eye_right_.onUpdate(frametime);
 	Entity::UpdateFlash(frametime);
 }
 

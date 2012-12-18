@@ -53,20 +53,6 @@ int ItemManager::LoadItems(const std::string& filename)
 }
 
 
-void ItemManager::InitWeapon(const char* id, Weapon* weapon) const
-{
-	const WeaponData* data = GetWeaponData(id);
-	if (data == NULL)
-	{
-		std::cerr << "can't initialize weapon " << id << " (unknown id)" << std::endl;
-	}
-	else
-	{
-		data->InitWeapon(weapon);
-	}
-}
-
-
 const ItemData* ItemManager::GetItemData(ItemData::Type type, int level) const
 {
 	const ItemData* data = GetGenericItemData(type, level);

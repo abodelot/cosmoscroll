@@ -28,11 +28,6 @@ public:
 
 	void setAttackPattern(AttackPattern attack);
 
-	/**
-	 * Obtenir l'arme au vaisseau
-	 */
-	Weapon* GetWeapon();
-
 	// override
 	SpaceShip* Clone() const;
 
@@ -45,6 +40,8 @@ public:
 	// override
 	void OnDestroy();
 
+	Weapon<>& getWeapon() { return weapon_; }
+
 private:
 	AttackPattern   attack_;
 	MovementPattern movement_;
@@ -54,7 +51,7 @@ private:
 	float    base_x_;
 	float    angle_;
 
-	Weapon   weapon_;
+	Weapon<> weapon_;
 	Entity*  target_;
 	Animator animator_;
 };

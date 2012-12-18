@@ -12,15 +12,10 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 	int x = 0, y = 0;
 	switch (type)
 	{
-		case ItemData::LASER_CANNON:
+		case ItemData::WEAPON:
 			halo_.setTexture(Resources::getTexture("gui/halo-laser1.png"));
 			x = 496;
-			y = 249;
-			break;
-		case ItemData::PLASMA_CANNON:
-			halo_.setTexture(Resources::getTexture("gui/halo-laser2.png"));
-			x = 494;
-			y = 263;
+			y = 252;
 			break;
 		case ItemData::ENGINE:
 			halo_.setTexture(Resources::getTexture("gui/halo-engine.png"));

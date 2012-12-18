@@ -12,8 +12,7 @@ public:
 		ENGINE,
 		SHIELD,
 		HEATSINK,
-		LASER_CANNON,
-		PLASMA_CANNON,
+		WEAPON,
 		_COUNT,
 		_UNSET
 	};

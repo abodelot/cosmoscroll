@@ -28,9 +28,8 @@ private :
 	int speed_x_,speed_y_;
 	Entity* target_;
 	bool split_mode_;
-	Weapon eye_left_;
-	Weapon eye_right_;
-	Weapon canon_;
+	Weapon<> eye_left_;
+	Weapon<> eye_right_;
 };
 
 

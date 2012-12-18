@@ -17,17 +17,17 @@ EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	SetTeam(Entity::BAD);
 
 	// init weapons
-	eye_left_.Init("devil-eyes");
-	eye_left_.SetOwner(this);
-	eye_left_.SetOffset(EYE_OFFSET_LEFT);
-	eye_right_.Init("devil-eyes");
-	eye_right_.SetOwner(this);
-	eye_right_.SetOffset(EYE_OFFSET_RIGHT);
+	m_eye_left.init("devil-eyes");
+	m_eye_left.setOwner(this);
+	m_eye_left.setPosition(EYE_OFFSET_LEFT);
+	m_eye_right.init("devil-eyes");
+	m_eye_right.setOwner(this);
+	m_eye_right.setPosition(EYE_OFFSET_RIGHT);
 	// hack: disable sound on the second eye so it won't be played twice
-	eye_right_.SetSound(NULL);
+	m_eye_right.setSound(NULL);
 
-	canon_.SetOwner(this); // (init canon later)
-	canon_.SetOffset(MOUTH_OFFSET);
+	m_mouth.setOwner(this); // (this one must inited later)
+	m_mouth.setPosition(MOUTH_OFFSET);
 
 	target_ = NULL;
 	phase_ = EVIL;
@@ -47,12 +47,12 @@ void EvilBoss::Update(float frametime)
 {
 	sf::Vector2f target_pos = target_->getCenter();
 
-	eye_left_.ShootAt(target_pos);
-	eye_right_.ShootAt(target_pos);
+	m_eye_left.shoot(target_pos);
+	m_eye_right.shoot(target_pos);
 
-	if (canon_.IsInited())
+	if (m_mouth.isInited())
 	{
-		canon_.ShootAt(target_pos);
+		m_mouth.shoot(target_pos);
 	}
 
 	const sf::Vector2f& pos = getPosition();
@@ -68,9 +68,9 @@ void EvilBoss::Update(float frametime)
 	{
 		sf::Sprite::move(speed_x_ * frametime, 0);
 	}
-	eye_left_.Update(frametime);
-	eye_right_.Update(frametime);
-	canon_.Update(frametime);
+	m_eye_left.onUpdate(frametime);
+	m_eye_left.onUpdate(frametime);
+	m_mouth.onUpdate(frametime);
 	Entity::UpdateFlash(frametime);
 }
 
@@ -85,14 +85,14 @@ void EvilBoss::TakeDamage(int damage)
 		{
 			case MORE_EVIL:
 				setTextureRect(sf::IntRect(242, 0, 242, 160));
-				canon_.Init("laser-pink");
+				m_mouth.init("laser-pink");
 				next_ = DAMN_EVIL;
 				break;
 			case DAMN_EVIL:
 				setTextureRect(sf::IntRect(242 * 2, 0, 242, 160));
-				canon_.SetMultiply(3);
-				eye_left_.SetMultiply(3);
-				eye_right_.SetMultiply(3);
+				m_mouth.setMultiply(3);
+				m_eye_left.setMultiply(3);
+				m_eye_right.setMultiply(3);
 				break;
 			default:
 				break;

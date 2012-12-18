@@ -5,6 +5,7 @@
 #include "Resources.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Asteroid.hpp"
+#include "entities/SpaceShip.hpp"
 #include "entities/bosses/SplitBoss.hpp"
 #include "entities/bosses/EvilBoss.hpp"
 #include "entities/bosses/BossTentacles.hpp"

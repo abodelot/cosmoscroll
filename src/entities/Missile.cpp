@@ -1,18 +1,18 @@
-#include "ImpactHit.hpp"
+#include "Missile.hpp"
 #include "EntityManager.hpp"
-#include "../core/ParticleSystem.hpp"
+#include "core/ParticleSystem.hpp"
 
-#include "../utils/Math.hpp"
+#include "utils/Math.hpp"
 
 #define IMPACT_RADIUS 256
 
 class Impact
 {
 public:
-	Impact(Hit& hit) :
-		hit_(hit)
+	Impact(Missile& missile) :
+		m_missile(missile),
+		m_radius(IMPACT_RADIUS)
 	{
-		radius_ = IMPACT_RADIUS;
 	}
 
 	void operator()(Entity& e)
@@ -22,40 +22,40 @@ public:
 			return;
 		}
 
-		if (e.GetTeam() != hit_.GetTeam()
-			&& math::distance(e.getPosition(), hit_.getPosition()) < radius_)
+		if (e.GetTeam() != m_missile.GetTeam()
+			&& math::distance(e.getPosition(), m_missile.getPosition()) < m_radius)
 		{
-			e.TakeDamage(hit_.GetCollideDamage());
+			e.TakeDamage(m_missile.GetCollideDamage());
 			if (e.IsDead())
 				ParticleSystem::GetInstance().ImpactSfx(e.getPosition(), 10);
 		}
 	}
 
 private:
-	Hit& hit_;
-	int radius_;
+	Missile& m_missile;
+	int      m_radius;
 };
 
 #define PARTICLES_PER_HIT 128
 
-ImpactHit::ImpactHit(Entity* emitter, const sf::Vector2f& position, float angle,
+Missile::Missile(Entity* emitter, const sf::Vector2f& position, float angle,
 		const sf::Texture* image, int speed, int damage):
-	Hit(emitter, position, angle, image, speed, damage)
+	Projectile(emitter, position, angle, image, speed, damage)
 {
 	ParticleSystem::GetInstance().AddSmoke(PARTICLES_PER_HIT, this);
 }
 
 
-ImpactHit::~ImpactHit()
+Missile::~Missile()
 {
 	ParticleSystem::GetInstance().ClearSmoke(this);
 }
 
 
-void ImpactHit::OnCollide(Entity& entity)
+void Missile::OnCollide(Entity& entity)
 {
 
-	Hit::OnCollide(entity);
+	Projectile::OnCollide(entity);
 	if (IsDead())
 	{
 		ParticleSystem::GetInstance().ImpactSfx(getPosition(), 300);

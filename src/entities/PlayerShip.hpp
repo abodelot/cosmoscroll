@@ -5,7 +5,7 @@
 #include "Animator.hpp"
 #include "Bonus.hpp"
 #include "items/Weapon.hpp"
-#include "items/MissileLauncher.hpp"
+#include "Missile.hpp"
 #include "core/Input.hpp"
 #include "core/ControlPanel.hpp"
 
@@ -107,9 +107,8 @@ private:
 
 	Input& input_;
 	ControlPanel& panel_;
-	Weapon weapon1_;
-	Weapon weapon2_;
-	MissileLauncher missile_launcher_;
+	Weapon<>        m_weapon;
+	Weapon<Missile> m_missile_launcher;
 
 	Animator animator_;
 };

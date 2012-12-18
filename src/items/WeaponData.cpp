@@ -16,17 +16,6 @@ WeaponData::WeaponData()
 }
 
 
-void WeaponData::InitWeapon(Weapon* weapon) const
-{
-	weapon->setTexture(image_);
-	weapon->SetFireRate(fire_rate_);
-	weapon->SetHeatCost(heat_cost_);
-	weapon->SetDamage(damage_);
-	weapon->SetVelociy(speed_);
-	weapon->SetSound(sound_);
-}
-
-
 bool WeaponData::LoadFromXml(TiXmlElement* elem)
 {
 	ItemData::LoadFromXml(elem);
@@ -39,11 +28,7 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 	}
 
 	id_ = p;
-	// TODO: torcheballe
-	if (id_ == "laser-red")
-		SetType(ItemData::LASER_CANNON);
-	else if (id_ == "laser-blue")
-		SetType(ItemData::PLASMA_CANNON);
+	SetType(ItemData::WEAPON);
 
 	// image
 	p = elem->Attribute("image");

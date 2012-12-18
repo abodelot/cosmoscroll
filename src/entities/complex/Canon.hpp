@@ -14,7 +14,7 @@ public:
 	Canon* Clone() const;
 
 private:
-	Weapon weapon_;
+	Weapon<> weapon_;
 };
 
 #endif // CANON_HPP

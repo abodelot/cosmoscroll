@@ -29,7 +29,7 @@ SpaceShip::SpaceShip(const Animation& animation, int hp, int speed) :
 	animator_.setAnimation(*this, animation);
 
 	speed_ = speed;
-	weapon_.SetOwner(this);
+	weapon_.setOwner(this);
 	target_ = NULL;
 	base_y_ = 0;
 	base_x_ = 0;
@@ -87,17 +87,11 @@ void SpaceShip::setAttackPattern(AttackPattern attack)
 }
 
 
-Weapon* SpaceShip::GetWeapon()
-{
-	return &weapon_;
-}
-
-
 SpaceShip* SpaceShip::Clone() const
 {
 	SpaceShip* ship = new SpaceShip(*this);
 	ship->SetPoints(GetPoints());
-	ship->GetWeapon()->SetOwner(ship);
+	ship->weapon_.setOwner(ship);
 	return ship;
 }
 
@@ -116,7 +110,7 @@ void SpaceShip::Update(float frametime)
 	{
 		case LINE:
 		{
-			move(delta, 0);
+			move(-delta, 0);
 		}
 		break;
 		case MAGNET:
@@ -137,6 +131,7 @@ void SpaceShip::Update(float frametime)
 			else if (y_diff < -5)
 				move(0, delta);
 		}
+		break;
 		case SINUS:
 		{
 			sf::Vector2f pos = getPosition();
@@ -167,7 +162,7 @@ void SpaceShip::Update(float frametime)
 	switch (attack_)
 	{
 		case AUTO_AIM:
-			weapon_.ShootAt(target_->getCenter());
+			weapon_.shoot(target_->getCenter());
 			break;
 
 		case ON_SIGHT:
@@ -177,7 +172,7 @@ void SpaceShip::Update(float frametime)
 			// if both spaceships are roughly on the same Y axis
 			if (std::abs(player_y - my_y) < 30)
 			{
-				weapon_.Shoot(-math::PI);
+				weapon_.shoot(-math::PI);
 			}
 		}
 			break;
@@ -186,7 +181,7 @@ void SpaceShip::Update(float frametime)
 	}
 
 	animator_.updateSubRect(*this, frametime);
-	weapon_.Update(frametime);
+	weapon_.onUpdate(frametime);
 	Entity::UpdateFlash(frametime);
 }
 

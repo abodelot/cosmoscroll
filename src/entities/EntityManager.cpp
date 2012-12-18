@@ -1,6 +1,7 @@
 #include "EntityManager.hpp"
 #include "Asteroid.hpp"
 #include "PlayerShip.hpp"
+#include "SpaceShip.hpp"
 #include "core/LevelManager.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
@@ -12,6 +13,42 @@
 #include "utils/I18n.hpp"
 #include "utils/Math.hpp"
 #include "tinyxml/tinyxml.h"
+
+
+/**
+ * Get attack pattern encoded in an xml element
+ */
+static SpaceShip::AttackPattern GetAttackPattern(const TiXmlElement* elem)
+{
+	const char* attack = elem->Attribute("attack");
+	if (attack != NULL)
+	{
+		if (strcmp(attack, "auto_aim") == 0) return SpaceShip::AUTO_AIM;
+		if (strcmp(attack, "on_sight") == 0) return SpaceShip::ON_SIGHT;
+		if (strcmp(attack, "none")     == 0) return SpaceShip::NONE;
+
+		std::cerr << "unknown attack pattern: " << attack << std::endl;
+	}
+	return SpaceShip::NONE;
+}
+
+/**
+ * Get movement pattern encoded in an xml element
+ */
+static SpaceShip::MovementPattern GetMovementPattern(const TiXmlElement* elem)
+{
+	const char* move = elem->Attribute("move");
+	if (move != NULL)
+	{
+		if (strcmp(move, "line")   == 0) return SpaceShip::LINE;
+		if (strcmp(move, "magnet") == 0) return SpaceShip::MAGNET;
+		if (strcmp(move, "sinus")  == 0) return SpaceShip::SINUS;
+		if (strcmp(move, "circle") == 0) return SpaceShip::CIRCLE;
+
+		std::cerr << "unknown movement pattern: " << move << std::endl;
+	}
+	return SpaceShip::LINE;
+}
 
 /*
 En mode arcade, la difficulté est progressive
@@ -393,8 +430,8 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 		SpaceShip* ship = new SpaceShip(GetAnimation(animation), hp, speed);
 		ship->SetPoints(points);
 
-		ship->setMovementPattern(getMovementPattern(elem));
-		ship->setAttackPattern(getAttackPattern((elem)));
+		ship->setMovementPattern(GetMovementPattern(elem));
+		ship->setAttackPattern(GetAttackPattern(elem));
 
 		// Parse weapon tag
 		TiXmlElement* weapon = elem->FirstChildElement();
@@ -411,8 +448,8 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 			if (weapon->QueryIntAttribute("y", &w_y) != TIXML_SUCCESS)
 				throw Error::Exception("parese error: spaceship > weapon[y] is missing");
 
-			ship->GetWeapon()->Init(weapon_id);
-			ship->GetWeapon()->SetOffset(w_x, w_y);
+			ship->getWeapon().init(weapon_id);
+			ship->getWeapon().setPosition(w_x, w_y);
 		}
 
 		spaceships_defs_[id] = ship;
@@ -532,39 +569,6 @@ void EntityManager::RespawnPlayer()
 	player_ = new PlayerShip(position, "player");
 	AddEntity(player_);
 }
-
-
-
-SpaceShip::AttackPattern EntityManager::getAttackPattern(const TiXmlElement* elem) const
-{
-	const char* attack = elem->Attribute("attack");
-	if (attack != NULL)
-	{
-		if (strcmp(attack, "auto_aim") == 0) return SpaceShip::AUTO_AIM;
-		if (strcmp(attack, "on_sight") == 0) return SpaceShip::ON_SIGHT;
-		if (strcmp(attack, "none")     == 0) return SpaceShip::NONE;
-
-		std::cerr << "unknown attack pattern: " << attack << std::endl;
-	}
-	return SpaceShip::NONE;
-}
-
-
-SpaceShip::MovementPattern EntityManager::getMovementPattern(const TiXmlElement* elem) const
-{
-	const char* move = elem->Attribute("move");
-	if (move != NULL)
-	{
-		if (strcmp(move, "line")   == 0) return SpaceShip::LINE;
-		if (strcmp(move, "magnet") == 0) return SpaceShip::MAGNET;
-		if (strcmp(move, "sinus")  == 0) return SpaceShip::SINUS;
-		if (strcmp(move, "circle") == 0) return SpaceShip::CIRCLE;
-
-		std::cerr << "unknown movement pattern: " << move << std::endl;
-	}
-	return SpaceShip::LINE;
-}
-
 
 
 // parallax layer --------------------------------------------------------------

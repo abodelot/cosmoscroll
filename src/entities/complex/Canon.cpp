@@ -19,17 +19,17 @@ Canon::Canon(const sf::Vector2f& position): ComplexEntity(position)
 	AddPart(base, 0, 18);
 	AddPart(top, (base.getWidth() - top.getWidth()) / 2, 0);
 
-	weapon_.Init("decor-canon");
-	weapon_.SetOwner(this);
-	weapon_.SetOffset(64, 8);
+	weapon_.init("decor-canon");
+	weapon_.setOwner(this);
+	weapon_.setPosition(64, 8);
 }
 
 
 void Canon::Update(float frametime)
 {
 	ComplexEntity::Update(frametime);
-	weapon_.Shoot(math::PI / 2.f);
-	weapon_.Update(frametime);
+	weapon_.shoot(math::PI / 2.f);
+	weapon_.onUpdate(frametime);
 }
 
 Canon* Canon::Clone() const

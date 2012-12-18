@@ -12,10 +12,8 @@ const char* ItemData::TypeToString(Type type)
 {
 	switch (type)
 	{
-		case ItemData::LASER_CANNON:
+		case ItemData::WEAPON:
 			return "item.laser";
-		case ItemData::PLASMA_CANNON:
-			return "item.plasma";
 		case ItemData::ENGINE:
 			return "item.engine";
 		case ItemData::ARMOR:

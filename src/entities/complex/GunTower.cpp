@@ -23,17 +23,17 @@ GunTower::GunTower(const sf::Vector2f& position): ComplexEntity(position)
 	AddPart(base, 0, BASE_OFFSET);
 	target_ = NULL;
 
-	weapon_.Init("laser-pink");
-	weapon_.SetOwner(this);
-	weapon_.SetOffset(img_turret.getSize().x / 2, img_turret.getSize().y / 2);
+	weapon_.init("laser-pink");
+	weapon_.setOwner(this);
+	weapon_.setPosition(img_turret.getSize().x / 2, img_turret.getSize().y / 2);
 }
 
 
 void GunTower::Update(float frametime)
 {
 	ComplexEntity::Update(frametime);
-	weapon_.ShootAt(target_->getCenter());
-	weapon_.Update(frametime);
+	weapon_.shoot(target_->getCenter());
+	weapon_.onUpdate(frametime);
 	// rotate turret toward player
 	GetPartAt(0)->setRotation(180 - math::to_deg(math::angle(target_->getPosition(), getPosition())));
 }

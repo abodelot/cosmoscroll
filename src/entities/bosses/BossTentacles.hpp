@@ -36,7 +36,7 @@ private:
 	float timer_;
 	int speed_x_;
 	int speed_y_;
-	Weapon weapon_;
+	Weapon<> m_weapon;
 	Entity* target_;
 	Animator m_animator;
 };

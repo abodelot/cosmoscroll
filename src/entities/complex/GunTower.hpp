@@ -16,7 +16,7 @@ public:
 	// for auto-aim on player
 	virtual void SetTarget(Entity* target);
 private:
-	Weapon weapon_;
+	Weapon<> weapon_;
 	Entity* target_;
 };
 

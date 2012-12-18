@@ -96,8 +96,7 @@ void ArmoryMenu::EventCallback(int id)
 	{
 		case ItemData::ARMOR:
 		case ItemData::ENGINE:
-		case ItemData::LASER_CANNON:
-		case ItemData::PLASMA_CANNON:
+		case ItemData::WEAPON:
 		case ItemData::SHIELD:
 		case ItemData::HEATSINK:
 			ShowDialog(true);

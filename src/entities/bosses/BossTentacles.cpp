@@ -13,10 +13,10 @@ BossTentacles::BossTentacles(const sf::Vector2f& position) :
 	SetTeam(Entity::BAD);
 
 	// init weapons
-	weapon_.Init("laser-pink");
-	weapon_.SetOwner(this);
-	weapon_.SetOffset(74, 42);
-	weapon_.SetMultiply(3);
+	m_weapon.init("laser-pink");
+	m_weapon.setOwner(this);
+	m_weapon.setPosition(74, 42);
+	m_weapon.setMultiply(3);
 
 
 	target_ = NULL;
@@ -45,7 +45,7 @@ void BossTentacles::Update(float frametime)
 	target_pos.x += target_->getWidth() / 2;
 	target_pos.y += target_->getHeight() / 2;
 
-	weapon_.ShootAt(target_pos);
+	m_weapon.shoot(target_pos);
 
 
 	sf::Vector2f pos = getPosition();
@@ -103,7 +103,7 @@ void BossTentacles::Update(float frametime)
 			break;
 	}
 	sf::Sprite::move(speed_x_ * frametime, speed_y_ * frametime);
-	weapon_.Update(frametime);
+	m_weapon.onUpdate(frametime);
 	Entity::UpdateFlash(frametime);
 }
 

@@ -1,4 +1,4 @@
-#include "Hit.hpp"
+#include "Projectile.hpp"
 #include "Bonus.hpp"
 #include "PlayerShip.hpp"
 #include "utils/Math.hpp"
@@ -6,7 +6,7 @@
 #include "core/ParticleSystem.hpp"
 
 
-Hit::Hit(Entity* emitter, const sf::Vector2f& position, float angle,
+Projectile::Projectile(Entity* emitter, const sf::Vector2f& position, float angle,
 	const sf::Texture* image, int speed, int damage) :
 	Entity(position, 1, damage)
 {
@@ -24,19 +24,19 @@ Hit::Hit(Entity* emitter, const sf::Vector2f& position, float angle,
 }
 
 
-Hit* Hit::Clone() const
+Projectile* Projectile::Clone() const
 {
-	return new Hit(*this);
+	return new Projectile(*this);
 }
 
 
-void Hit::Update(float frametime)
+void Projectile::Update(float frametime)
 {
 	move(speed_.x * frametime, speed_.y * frametime);
 }
 
 
-void Hit::OnCollide(Entity& entity)
+void Projectile::OnCollide(Entity& entity)
 {
 	// ignore friend entities, hit and bonuses
 	if (entity.GetTeam() == GetTeam() || entity.GetCollideFlag() & C_IGNORE_HITS)

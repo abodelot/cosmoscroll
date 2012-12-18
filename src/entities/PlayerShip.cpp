@@ -13,8 +13,7 @@
 #include "utils/I18n.hpp"
 #include "utils/Math.hpp"
 
-#define WEAPON1_OFFSET              52, 22
-#define WEAPON2_OFFSET              50, 24
+#define WEAPON_POSITION             sf::Vector2f(54, 24)
 
 #define BONUS_SPEED_FACTOR 1.5
 #define COOLER_DEFAULT              0
@@ -41,17 +40,13 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	animator_.setAnimation(*this, EntityManager::GetInstance().GetAnimation(animation));
 
 	// init weapons
-	weapon1_.Init("laser-red");
-	weapon1_.SetOwner(this);
-	weapon1_.SetOffset(WEAPON1_OFFSET);
+	m_weapon.init("laser-red");
+	m_weapon.setOwner(this);
+	m_weapon.setPosition(WEAPON_POSITION);
 
-	weapon2_.Init("laser-blue");
-	weapon2_.SetOwner(this);
-	weapon2_.SetOffset(WEAPON2_OFFSET);
-
-	missile_launcher_.Init("missile");
-	missile_launcher_.SetOwner(this);
-	missile_launcher_.SetOffset(WEAPON2_OFFSET);
+	m_missile_launcher.init("missile");
+	m_missile_launcher.setOwner(this);
+	m_missile_launcher.setPosition(WEAPON_POSITION);
 
 	coolers_ = COOLER_DEFAULT;
 	missiles_ = MISSILES_DEFAULT;
@@ -137,14 +132,9 @@ void PlayerShip::Initialize()
 	panel_.SetHeat(heat_);
 
 	// weapon1
-	int weapon1_lvl = save.LevelOf(ItemData::LASER_CANNON);
-	const WeaponData* weapon1_data = items.GetWeaponData("laser-red", weapon1_lvl);
-	weapon1_data->InitWeapon(&weapon1_);
-
-	// weapon2
-	int weapon2_lvl = save.LevelOf(ItemData::PLASMA_CANNON);
-	const WeaponData* weapon2_data = items.GetWeaponData("laser-blue", weapon2_lvl);
-	weapon2_data->InitWeapon(&weapon2_);
+	int weapon_lvl = save.LevelOf(ItemData::WEAPON);
+	const WeaponData* weapon_data = items.GetWeaponData("laser-red", weapon_lvl);
+	weapon_data->InitWeapon(m_weapon);
 }
 
 
@@ -183,11 +173,11 @@ void PlayerShip::HandleAction(Input::Action action)
 			}
 			break;
 		case Input::USE_MISSILE:
-			if (missiles_ > 0 && missile_launcher_.IsReady())
+			if (missiles_ > 0 && m_missile_launcher.isReady())
 			{
 				--missiles_;
 				panel_.SetMissiles(missiles_);
-				missile_launcher_.Shoot(0);
+				m_missile_launcher.shoot(0);
 			}
 			else
 			{
@@ -256,11 +246,7 @@ void PlayerShip::Update(float frametime)
 		float h = 0.f;
 		if (input_.HasInput(Input::USE_LASER))
 		{
-			h += weapon1_.Shoot(0);
-		}
-		if (input_.HasInput(Input::USE_PLASMA))
-		{
-			h += weapon2_.Shoot(0);
+			h += m_weapon.shoot(0);
 		}
 
 		heat_ += h;
@@ -341,10 +327,9 @@ void PlayerShip::Update(float frametime)
 			}
 		}
 	}
-	// update armes
-	weapon1_.Update(frametime);
-	weapon2_.Update(frametime);
-	missile_launcher_.Update(frametime);
+	// update weapons
+	m_weapon.onUpdate(frametime);
+	m_missile_launcher.onUpdate(frametime);
 	Entity::UpdateFlash(frametime);
 }
 
@@ -437,8 +422,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 		case Bonus::DOUBLE_SHOT:
 			if (bonus_[T_DOUBLESHOT] == 0)
 			{
-				weapon1_.SetMultiply(2);
-				weapon2_.SetMultiply(2);
+				m_weapon.setMultiply(2);
 			}
 			bonus_[T_TRISHOT] = 0;
 			bonus_[T_DOUBLESHOT] += TIMED_BONUS_DURATION;
@@ -447,8 +431,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 		case Bonus::TRIPLE_SHOT:
 			if (bonus_[T_TRISHOT] == 0)
 			{
-				weapon1_.SetMultiply(3);
-				weapon2_.SetMultiply(3);
+				m_weapon.setMultiply(3);
 			}
 			bonus_[T_DOUBLESHOT] = 0;
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
@@ -510,8 +493,7 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 	{
 		case T_DOUBLESHOT:
 		case T_TRISHOT:
-			weapon1_.SetMultiply(1);
-			weapon2_.SetMultiply(1);
+			m_weapon.setMultiply(1);
 			break;
 		case T_SPEED:
 			speed_max_ /= BONUS_SPEED_FACTOR;
@@ -552,9 +534,8 @@ void PlayerShip::KonamiCodeOn()
 	missiles_ = 42;
 	panel_.SetMissiles(42);
 
-	weapon1_.SetMultiply(3);
-	weapon2_.SetMultiply(2);
-	missile_launcher_.SetMultiply(3);
+	m_weapon.setMultiply(3);
+	m_missile_launcher.setMultiply(3);
 
 	ParticleSystem::GetInstance().AddMessage(getPosition(), L"For great justice!");
 

@@ -4,129 +4,113 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
+#include "entities/Projectile.hpp"
 
 class Entity;
 
 
 /**
- * Une arme associée à une entité
+ * Represents a weapon and can throw bullet entities in the entity manager.
+ * Must be associated to an owner entity.
  */
+template <class T = Projectile>
 class Weapon
 {
 public:
 	Weapon();
 
 	/**
-	 * Initialiser une arme
-	 * @param weapon_id: identifiant de l'arme (cf. weapons.xml)
+	 * Init weapon settings
+	 * @param weapon_id: see weapons.xml
 	 */
-	void Init(const char* weapon_id);
+	void init(const char* weapon_id);
 
 	/**
-	 * @return true si l'arme peut être utilisée, sinon false
+	 * @return true if weapon has already been inited
 	 */
-	bool IsInited() const;
+	bool isInited() const;
 
 	/**
-	 * Utiliser l'arme
-	 * @param angle: angle de tir en radians
-	 * @param pos: position cible (trajectoire auto-calculée)
+	 * Throw a projectile
+	 * @param angle: projectile direction (radians)
+	 * @param pos: projectile target (angle will be computed)
 	 */
-	float Shoot(float angle);
-	float ShootAt(const sf::Vector2f& pos);
+	float shoot(float angle);
+	float shoot(const sf::Vector2f& target);
 
-	void Update(float frametime);
+	void onUpdate(float frametime);
 
 	/**
-	 * @param image: image du projectile
+	 * Texture used for the projectiles
 	 */
-	void setTexture(const sf::Texture* image);
+	void setTexture(const sf::Texture* texture);
 
 	/**
-	 * @param fire_rate: nombre de tirs par seconde
+	 * Amount of projectiles per second
 	 */
-	void SetFireRate(float shot_per_sec);
+	void setFireRate(float shot_per_sec);
 
 	/**
-	 * @param heat_cost: chaleur dégagée par tir
+	 * Heat cost per projectile
 	 */
-	void SetHeatCost(float heat_cost);
+	void setHeatCost(float heat_cost);
 
 	/**
-	 * @param damage: dégâts infligés par tir
+	 * Projectile damage on impact
 	 */
-	void SetDamage(int damage);
+	void setDamage(int damage);
 
 	/**
-	 * @param velocity: vitesse du tir en pixels par seconde
+	 * Projectile speed (pixels/sec)
 	 */
-	void SetVelociy(int velocity);
+	void setVelociy(int velocity);
 
 	/**
-	 * @param sound: son joué lors d'un tir (NULL si pas de son)
+	 * Sound effect play when shooting, NULL if no sound
 	 */
-	void SetSound(const sf::SoundBuffer* sound);
+	void setSound(const sf::SoundBuffer* sound);
 
 	/**
-	 * Position de l'arme relative à la position de son propriétaire
+	 * Weapon position, relative to owner's position
 	 */
-	void SetOffset(int x, int y);
-	void SetOffset(const sf::Vector2f& offset);
+	void setPosition(const sf::Vector2f& position);
+	void setPosition(float x, float y);
 
 	/**
-	 * @param owner: entité propriétaire de l'arme
+	 * Weapon's owner
 	 */
-	void SetOwner(Entity* owner);
+	void setOwner(Entity* owner);
 
 	/**
-	 * Indique si l'arme est prête à tirer
+	 * true if weapon can be used
 	 */
-	bool IsReady() const;
+	bool isReady() const;
 
-
-
-	void SetMultiply(int n);
+	void setMultiply(int n);
 
 protected:
-	virtual void ThrowHit(const sf::Vector2f& offset, float angle);
+	void createProjectile(const sf::Vector2f& offset, float angle);
 
-	Entity* GetOwner() const;
 
-	const sf::Texture* getTexture() const
-	{
-		return image_;
-	}
-
-	int GetVelocity() const
-	{
-		return velocity_;
-	}
-
-	int GetDamage() const
-	{
-		return damage_;
-	}
 
 private:
-	// cadence de tir
-	float fire_rate_;
-	float heat_cost_;
-	int velocity_;
-	int damage_;
-	const sf::Texture* image_;
-
+	float m_fire_rate;
 	// timer "compte à rebours" pour que la cadence de tir soit indépendante
 	// du nombre de FPS. Si <= 0, on peut tirer. Si tir, timer reinitialisé.
 	// le timer est mis à jour à chaque frame dans Update
-	float fire_timer_;
-
-	const sf::SoundBuffer* sound_;
-	int multiply_;
-	Entity* owner_;
-
-	bool inited_;
-	int x_;
-	int y_;
+	float m_fire_timer;
+	float m_heat_cost;
+	int   m_velocity;
+	int   m_damage;
+	const sf::Texture*     m_texture;
+	const sf::SoundBuffer* m_sound;
+	Entity* m_owner;
+	bool m_inited;
+	int m_x;
+	int m_y;
+	int m_multiply;
 };
+
+#include "Weapon.inl"
 
 #endif // WEAPON_HPP
