@@ -2,22 +2,21 @@
 #include "core/Resources.hpp"
 #include "utils/Math.hpp"
 #include "entities/EntityManager.hpp"
+#include "entities/Player.hpp"
 
 #define BASE_OFFSET 28
 
 GunTower::GunTower(const sf::Vector2f& position): ComplexEntity(position)
 {
-	setY(EntityManager::GetInstance().GetHeight() - (BASE_OFFSET + 64));
+	setY(EntityManager::getInstance().getHeight() - (BASE_OFFSET + 64));
 
 	Part base;
 	base.setTexture(Resources::getTexture("entities/guntower-base.png"));
-	base.SetCollideFlag(C_IGNORE_DAMAGE);
 
 	Part turret;
 	const sf::Texture& img_turret = Resources::getTexture("entities/guntower-turret.png");
 	turret.setTexture(img_turret);
 	turret.setOrigin(img_turret.getSize().x / 2, img_turret.getSize().y / 2);
-	turret.SetCollideFlag(C_IGNORE_DAMAGE);
 
 	AddPart(turret, img_turret.getSize().x / 2, img_turret.getSize().y / 2);
 	AddPart(base, 0, BASE_OFFSET);
@@ -29,9 +28,9 @@ GunTower::GunTower(const sf::Vector2f& position): ComplexEntity(position)
 }
 
 
-void GunTower::Update(float frametime)
+void GunTower::onUpdate(float frametime)
 {
-	ComplexEntity::Update(frametime);
+	ComplexEntity::onUpdate(frametime);
 	weapon_.shoot(target_->getCenter());
 	weapon_.onUpdate(frametime);
 	// rotate turret toward player
@@ -39,13 +38,13 @@ void GunTower::Update(float frametime)
 }
 
 
-void GunTower::SetTarget(Entity* entity)
+void GunTower::onInit()
 {
-	target_ = entity;
+	target_ = EntityManager::getInstance().GetPlayerShip();
 }
 
 
-GunTower* GunTower::Clone() const
+GunTower* GunTower::clone() const
 {
 	return new GunTower(*this);
 }

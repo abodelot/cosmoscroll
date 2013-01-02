@@ -15,8 +15,7 @@ KeyboardMenu::KeyboardMenu()
 	AddRow(form, Input::MOVE_DOWN,    &but_down_);
 	AddRow(form, Input::MOVE_LEFT,    &but_left_);
 	AddRow(form, Input::MOVE_RIGHT,   &but_right_);
-	AddRow(form, Input::USE_LASER, &but_weapon1_);
-	AddRow(form, Input::USE_PLASMA, &but_weapon2_);
+	AddRow(form, Input::USE_LASER,    &but_weapon_);
 	AddRow(form, Input::USE_COOLER,   &but_cooler_);
 	AddRow(form, Input::USE_MISSILE,  &but_missile_);
 
@@ -33,8 +32,7 @@ void KeyboardMenu::OnFocus()
 	but_down_->setString(GetKeyLabel(Input::MOVE_DOWN));
 	but_left_->setString(GetKeyLabel(Input::MOVE_LEFT));
 	but_right_->setString(GetKeyLabel(Input::MOVE_RIGHT));
-	but_weapon1_->setString(GetKeyLabel(Input::USE_LASER));
-	but_weapon2_->setString(GetKeyLabel(Input::USE_PLASMA));
+	but_weapon_->setString(GetKeyLabel(Input::USE_LASER));
 	but_cooler_->setString(GetKeyLabel(Input::USE_COOLER));
 	but_missile_->setString(GetKeyLabel(Input::USE_MISSILE));
 }

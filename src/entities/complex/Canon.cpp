@@ -6,15 +6,13 @@
 
 Canon::Canon(const sf::Vector2f& position): ComplexEntity(position)
 {
-	setY(EntityManager::GetInstance().GetHeight() - (18 + 128));
+	setY(EntityManager::getInstance().getHeight() - (18 + 128));
 
 	Part base;
 	base.setTexture(Resources::getTexture("entities/decor-bottom.png"));
-	base.SetCollideFlag(C_IGNORE_DAMAGE);
 
 	Part top(1);
 	top.setTexture(Resources::getTexture("entities/decor-canon.png"));
-	top.SetCollideFlag(C_IGNORE_DAMAGE);
 
 	AddPart(base, 0, 18);
 	AddPart(top, (base.getWidth() - top.getWidth()) / 2, 0);
@@ -25,14 +23,14 @@ Canon::Canon(const sf::Vector2f& position): ComplexEntity(position)
 }
 
 
-void Canon::Update(float frametime)
+void Canon::onUpdate(float frametime)
 {
-	ComplexEntity::Update(frametime);
+	ComplexEntity::onUpdate(frametime);
 	weapon_.shoot(math::PI / 2.f);
 	weapon_.onUpdate(frametime);
 }
 
-Canon* Canon::Clone() const
+Canon* Canon::clone() const
 {
 	return new Canon(*this);
 }

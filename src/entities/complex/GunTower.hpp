@@ -9,12 +9,12 @@ class GunTower: public ComplexEntity
 public:
 	GunTower(const sf::Vector2f& position);
 
-	void Update(float frametime);
+	void onInit();
 
-	GunTower* Clone() const;
+	void onUpdate(float frametime);
 
-	// for auto-aim on player
-	virtual void SetTarget(Entity* target);
+	GunTower* clone() const;
+
 private:
 	Weapon<> weapon_;
 	Entity* target_;

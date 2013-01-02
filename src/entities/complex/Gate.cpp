@@ -13,23 +13,21 @@ Gate::Gate(const sf::Vector2f& pos):
 {
 	Part cell(1);
 	cell.setTexture(Resources::getTexture("entities/decor-energy-cell.png"));
-	cell.SetHP(16);
+	cell.setHP(16);
+	cell.setDestructible(true);
 	AddPart(cell, 0, 28);
 
 	Part base_top(2);
 	base_top.setTexture(Resources::getTexture("entities/decor-top.png"));
-	base_top.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(base_top, 32);
 
 	Part door(3);
 	door.setTexture(Resources::getTexture("entities/decor-door.png"));
-	door.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(door, 64, getHeight());
 	door_full_height_ = door.getHeight();
 
 	Part base_bottom(2);
 	base_bottom.setTexture(Resources::getTexture("entities/decor-bottom.png"));
-	base_bottom.SetCollideFlag(C_IGNORE_DAMAGE);
 	AddPart(base_bottom, 32, getHeight());
 
 	AddPart(cell, 0, 332);
@@ -39,9 +37,9 @@ Gate::Gate(const sf::Vector2f& pos):
 }
 
 
-void Gate::Update(float frametime)
+void Gate::onUpdate(float frametime)
 {
-	ComplexEntity::Update(frametime);
+	ComplexEntity::onUpdate(frametime);
 	if (door_timer_ > 0)
 	{
 		float delta_door = door_full_height_ * door_timer_ / DOOR_DELAY;
@@ -57,13 +55,13 @@ void Gate::Update(float frametime)
 }
 
 
-Entity* Gate::Clone() const
+Entity* Gate::clone() const
 {
 	return new Gate(*this);
 }
 
 
-void Gate::OnPartDestroyed(const Part& part)
+void Gate::onPartDestroyed(const Part& part)
 {
 	if (part.GetID() == 1)
 	{

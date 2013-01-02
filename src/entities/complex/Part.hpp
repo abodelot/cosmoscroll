@@ -11,15 +11,26 @@ public:
 	Part(int id=-1);
 
 	// override
-	void Update(float frametime);
+	void onUpdate(float frametime);
 
 	// override
-	Entity* Clone() const;
+	Entity* clone() const;
+
+	// override
+	void onCollision(const Entity& entity);
 
 	int GetID() const;
 
+	void setDestructible(bool destructible);
+
+	void setParent(ComplexEntity* parent);
+
+	void onDestroy();
+
 private:
-	int id_;
+	int  m_id;
+	bool m_destructible;
+	ComplexEntity* m_parent;
 };
 
 

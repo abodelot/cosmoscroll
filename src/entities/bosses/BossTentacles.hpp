@@ -11,16 +11,16 @@ class BossTentacles: public Entity
 public:
 	BossTentacles(const sf::Vector2f& position);
 
-	BossTentacles* Clone() const;
+	BossTentacles* clone() const;
 
-	// inherited
-	void Update(float frametime);
+	// override
+	void onUpdate(float frametime);
 
-	// inherited
-	void OnDestroy();
+	// override
+	void onInit();
 
-	// inherited
-	void SetTarget(Entity* target);
+	// override
+	void onDestroy();
 
 private:
 	enum Move

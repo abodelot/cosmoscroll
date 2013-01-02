@@ -1,16 +1,17 @@
 #include "BossTentacles.hpp"
 #include "entities/EntityManager.hpp"
 #include "core/ParticleSystem.hpp"
+#include "entities/Player.hpp"
 #include "utils/Math.hpp"
 
 #define MAX_X 400
-#define MAX_Y (EntityManager::GetInstance().GetHeight() - getHeight())
+#define MAX_Y (EntityManager::getInstance().getHeight() - getHeight())
 
 
 BossTentacles::BossTentacles(const sf::Vector2f& position) :
 	Entity(position, 300)
 {
-	SetTeam(Entity::BAD);
+	setTeam(Entity::BAD);
 
 	// init weapons
 	m_weapon.init("laser-pink");
@@ -25,17 +26,17 @@ BossTentacles::BossTentacles(const sf::Vector2f& position) :
 	speed_y_ = 0;
 	timer_ = 0;
 
-	m_animator.setAnimation(*this, EntityManager::GetInstance().GetAnimation("boss-tentacles"));
+	m_animator.setAnimation(*this, EntityManager::getInstance().GetAnimation("boss-tentacles"));
 }
 
 
-BossTentacles* BossTentacles::Clone() const
+BossTentacles* BossTentacles::clone() const
 {
 	return new BossTentacles(*this);
 }
 
 
-void BossTentacles::Update(float frametime)
+void BossTentacles::onUpdate(float frametime)
 {
 	m_animator.updateSubRect(*this, frametime);
 
@@ -108,15 +109,15 @@ void BossTentacles::Update(float frametime)
 }
 
 
-void BossTentacles::OnDestroy()
+void BossTentacles::onDestroy()
 {
 	sf::Vector2f pos = getCenter();
 	ParticleSystem::GetInstance().GreenImpactSfx(pos, 100);
 }
 
 
-void BossTentacles::SetTarget(Entity* target)
+void BossTentacles::onInit()
 {
-	target_ = target;
+    target_ = EntityManager::getInstance().GetPlayerShip();
 }
 

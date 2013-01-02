@@ -5,7 +5,7 @@
 #include "Resources.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Asteroid.hpp"
-#include "entities/SpaceShip.hpp"
+#include "entities/Spaceship.hpp"
 #include "entities/bosses/SplitBoss.hpp"
 #include "entities/bosses/EvilBoss.hpp"
 #include "entities/bosses/BossTentacles.hpp"
@@ -250,7 +250,7 @@ void LevelManager::ParseLevel(TiXmlElement* elem)
 
 void LevelManager::ParseEntity(TiXmlElement* elem)
 {
-	EntityManager& entity_mgr = EntityManager::GetInstance();
+	EntityManager& entity_mgr = EntityManager::getInstance();
 	const char* tag_name = elem->Value();
 	if (strcmp(tag_name, "loop") == 0)
 	{
@@ -313,7 +313,7 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 			int id = 0;
 			elem->QueryIntAttribute("id", &id);
 			entity = entity_mgr.CreateSpaceShip(id, position.x, position.y);
-			total_points_ += entity->GetPoints();
+			total_points_ += entity->getPoints();
 		}
 		else if (strcmp(tag_name, "asteroid") == 0)
 		{
@@ -356,7 +356,7 @@ void LevelManager::AppendToWaitingLine(Entity* entity, float time)
 	EntitySlot slot;
 	if (IsHardcoreEnabled())
 	{
-		entity->SetHP(entity->GetHP() * 2);
+		entity->setHP(entity->getHP() * 2);
 	}
 	slot.entity = entity;
 	last_insert_time_ += time;

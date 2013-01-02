@@ -11,8 +11,8 @@
 #include "Entity.hpp"
 
 class ParticleSystem;
-class SpaceShip;
-class PlayerShip;
+class Spaceship;
+class Player;
 class LevelManager;
 #include "Animation.hpp"
 
@@ -35,7 +35,7 @@ public:
 	/**
 	 * @return instance unique
 	 */
-	static EntityManager& GetInstance();
+	static EntityManager& getInstance();
 
 	/**
 	 * Initialiser un mode de jeu avant une partie
@@ -53,12 +53,12 @@ public:
 	/**
 	 * @return largeur de l'univers
 	 */
-	inline int GetWidth() const {return width_;};
+	inline int getWidth() const {return width_;};
 
 	/**
 	 * @return hauteur de l'univers
 	 */
-	inline int GetHeight() const{return height_;};
+	inline int getHeight() const{return height_;};
 
 
 	void HandleAction(Input::Action action);
@@ -73,7 +73,7 @@ public:
 	 * Ajouter une entité
 	 * @param entity: entité à ajouter
 	 */
-	void AddEntity(Entity* entity);
+	void addEntity(Entity* entity);
 
 	/**
 	 * Supprimer toutes les entités
@@ -103,7 +103,7 @@ public:
 	 * @param y: position y (pixels)
 	 * @return vaisseau
 	 */
-	SpaceShip* CreateSpaceShip(int id, int x, int y);
+	Spaceship* CreateSpaceShip(int id, int x, int y);
 
 	/**
 	 * Obtenir une animation
@@ -126,7 +126,7 @@ public:
 	/**
 	 * Obtenir le vaisseau du joueur
 	 */
-	PlayerShip* GetPlayerShip() const;
+	Player* GetPlayerShip() const;
 
 	/**
 	 * Appliquer un foncteur sur chaque entité
@@ -171,7 +171,7 @@ private:
 	 */
 	void RespawnPlayer();
 
-	typedef std::map<int, SpaceShip*> SpaceShipMap;
+	typedef std::map<int, Spaceship*> SpaceShipMap;
 	SpaceShipMap spaceships_defs_;
 
 	typedef std::map<std::string, Animation> AnimationMap;
@@ -190,7 +190,7 @@ private:
 
 	ParticleSystem& particles_;
 
-	PlayerShip* player_;
+	Player* player_;
 	bool (EntityManager::*more_bad_guys_)();
 	bool game_over_;
 	float timer_;

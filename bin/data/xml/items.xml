@@ -6,9 +6,9 @@
 		<weapon id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg"
 			level="2" heat_cost="1.5" fire_rate="12" damage="1" speed="450" price="50"/>
 		<weapon id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg"
-			level="3" heat_cost="1.5" fire_rate="16" damage="1" speed="490"  price="150"/>
+			level="3" heat_cost="1.5" fire_rate="16" damage="2" speed="490"  price="150"/>
 		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
-			level="1" heat_cost="2.5" fire_rate="4" damage="2" speed="340"  />
+			level="1" heat_cost="2.5" fire_rate="4" damage="3" speed="340"  />
 		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
 			level="2" heat_cost="2.5" fire_rate="6" damage="2" speed="360" price="50"/>
 		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
@@ -20,14 +20,14 @@
 		<weapon id="devil-eyes" image="ammo/fireball.png" sound="canon.ogg"
 			heat_cost="1" fire_rate="0.7" damage="6" speed="430"/>
         <weapon id="missile" image="ammo/missile.png" sound="missile-gasfire.ogg"
-			heat_cost="0" fire_rate="0.4" damage="15" speed="300" />
+			heat_cost="0" fire_rate="0.4" damage="10" speed="300" />
 		<weapon id="decor-canon" image="ammo/fireball.png" sound="canon.ogg"
 			heat_cost="0" fire_rate="1.2" damage="20" speed="200" />
 	</weapons>
 	<shields>
-		<shield level="1" points="4" />
-		<shield level="2" points="5" price="100" />
-		<shield level="3" points="6" price="200" />
+		<shield level="1" points="3" />
+		<shield level="2" points="4" price="100" />
+		<shield level="3" points="5" price="200" />
 	</shields>
 	<engines>
 		<engine level="1" speed="180" />
@@ -35,13 +35,13 @@
 		<engine level="3" speed="220" price="150" />
 	</engines>
 	<heatsinks>
-		<heatsink level="1" heat="100" />
-		<heatsink level="2" heat="120" price="80" />
-		<heatsink level="3" heat="150" price="180" />
+		<heatsink level="1" heat="60" />
+		<heatsink level="2" heat="80" price="80" />
+		<heatsink level="3" heat="100" price="180" />
 	</heatsinks>
 	<armors>
-		<armor level="1" hp="4" />
-		<armor level="2" hp="5" price="50" />
-		<armor level="3" hp="6" price="150" />
+		<armor level="1" hp="3" />
+		<armor level="2" hp="4" price="50" />
+		<armor level="3" hp="5" price="150" />
 	</armors>
 </items>

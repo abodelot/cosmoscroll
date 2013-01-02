@@ -1,48 +1,17 @@
 #include "Missile.hpp"
 #include "EntityManager.hpp"
 #include "core/ParticleSystem.hpp"
+#include "Player.hpp"
 
 #include "utils/Math.hpp"
-
-#define IMPACT_RADIUS 256
-
-class Impact
-{
-public:
-	Impact(Missile& missile) :
-		m_missile(missile),
-		m_radius(IMPACT_RADIUS)
-	{
-	}
-
-	void operator()(Entity& e)
-	{
-		if (e.GetCollideFlag() & C_IGNORE_HITS)
-		{
-			return;
-		}
-
-		if (e.GetTeam() != m_missile.GetTeam()
-			&& math::distance(e.getPosition(), m_missile.getPosition()) < m_radius)
-		{
-			e.TakeDamage(m_missile.GetCollideDamage());
-			if (e.IsDead())
-				ParticleSystem::GetInstance().ImpactSfx(e.getPosition(), 10);
-		}
-	}
-
-private:
-	Missile& m_missile;
-	int      m_radius;
-};
-
-#define PARTICLES_PER_HIT 128
+#include "core/Resources.hpp"
 
 Missile::Missile(Entity* emitter, const sf::Vector2f& position, float angle,
-		const sf::Texture* image, int speed, int damage):
-	Projectile(emitter, position, angle, image, speed, damage)
+		const sf::Texture& image, int speed, int damage):
+	Projectile(emitter, position, angle, image, speed, damage),
+	m_angle(angle)
 {
-	ParticleSystem::GetInstance().AddSmoke(PARTICLES_PER_HIT, this);
+	ParticleSystem::GetInstance().AddSmoke(128, this);
 }
 
 
@@ -52,15 +21,20 @@ Missile::~Missile()
 }
 
 
-void Missile::OnCollide(Entity& entity)
+void Missile::onCollision(const Entity& entity)
 {
-
-	Projectile::OnCollide(entity);
-	if (IsDead())
+	Projectile::onCollision(entity);
+	if (isDead())
 	{
-		ParticleSystem::GetInstance().ImpactSfx(getPosition(), 300);
-		Impact impact(*this);
-		EntityManager::GetInstance().ApplyToEach(impact);
+		ParticleSystem::GetInstance().ImpactSfx(getPosition(), 100);
+		for (int i = 0; i < 16; ++i)
+		{
+			float angle = math::random(m_angle - math::PI / 2, m_angle + math::PI / 2);
+			int speed = math::random(300, 500);
+			Projectile* p = new Projectile(EntityManager::getInstance().GetPlayerShip(), entity.getPosition(), angle,
+				Resources::getTexture("ammo/laser-red.png"), speed, 3);
+			EntityManager::getInstance().addEntity(p);
+		}
 	}
 }
 

@@ -1,5 +1,6 @@
 #include "SplitBoss.hpp"
 #include "entities/EntityManager.hpp"
+#include "entities/Player.hpp"
 #include "core/ParticleSystem.hpp"
 #include "core/Resources.hpp"
 
@@ -8,8 +9,8 @@
 #define EYE_OFFSET_RIGHT  sf::Vector2f(190, 55)
 #define EYE_OFFSET_RIGHT_SMALL  sf::Vector2f(95, 27.5)
 
-#define MAX_X (EntityManager::GetInstance().GetWidth() - getWidth())
-#define MAX_Y (EntityManager::GetInstance().GetHeight() - getHeight())
+#define MAX_X (EntityManager::getInstance().getWidth() - getWidth())
+#define MAX_Y (EntityManager::getInstance().getHeight() - getHeight())
 
 SplitBoss::SplitBoss(sf::Vector2f& pos, int HP, bool split) : Entity(pos,HP)
 {
@@ -39,14 +40,15 @@ SplitBoss::SplitBoss(sf::Vector2f& pos, int HP, bool split) : Entity(pos,HP)
 	}
 	// hack: disable sound on the second eye so it won't be played twice
 	eye_right_.setSound(NULL);
-	SetTeam(Entity::BAD);
+	setTeam(Entity::BAD);
 	target_ = NULL;
 	speed_x_ = -70;
 	speed_y_ = -70;
 	split_mode_ = split;
 }
 
-void SplitBoss::Update(float frametime)
+
+void SplitBoss::onUpdate(float frametime)
 {
     //Attack
 	sf::Vector2f target_pos = target_->getCenter();
@@ -94,33 +96,35 @@ void SplitBoss::Update(float frametime)
 	Entity::UpdateFlash(frametime);
 }
 
-void SplitBoss::TakeDamage(int damage)
+void SplitBoss::takeDamage(int damage)
 {
-    Entity::TakeDamage(damage);
-    if (IsDead() && split_mode_)
+    Entity::takeDamage(damage);
+    if (isDead() && split_mode_)
     {
         sf::Vector2f pos = getPosition();
         SplitBoss *small_boss2 = new SplitBoss(pos,150,false);
-        EntityManager::GetInstance().AddEntity(small_boss2);
+        EntityManager::getInstance().addEntity(small_boss2);
 
         sf::Vector2f pos1 = sf::Vector2f(pos.x ,pos.y - 10);
         SplitBoss *small_boss1 = new SplitBoss(pos1,150,false);
         small_boss1->speed_y_ *= -1;
-        EntityManager::GetInstance().AddEntity(small_boss1);
+        EntityManager::getInstance().addEntity(small_boss1);
     }
 }
 
-void SplitBoss::SetTarget(Entity* target)
+void SplitBoss::onInit()
 {
-    target_ = target;
+    target_ = EntityManager::getInstance().GetPlayerShip();
 }
 
-void SplitBoss::OnDestroy()
+
+void SplitBoss::onDestroy()
 {
     ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 200);
 }
 
-SplitBoss* SplitBoss::Clone() const
+
+SplitBoss* SplitBoss::clone() const
 {
     return new SplitBoss(*this);
 }

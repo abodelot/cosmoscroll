@@ -23,8 +23,7 @@ private:
 	// inherited
 	void EventCallback(int id);
 
-	gui::Button* but_weapon1_;
-	gui::Button* but_weapon2_;
+	gui::Button* but_weapon_;
 	gui::Button* but_missile_;
 	gui::Button* but_cooler_;
 	gui::Button* but_pause_;

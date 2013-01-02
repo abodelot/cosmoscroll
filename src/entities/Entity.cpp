@@ -1,18 +1,17 @@
 #include "Entity.hpp"
 #include "core/Collisions.hpp"
+#include "complex/ComplexEntity.hpp"
+#include "complex/Part.hpp"
 
 #define FLASH_DELAY 0.5f
-#include <cstdio>
 
 
-Entity::Entity(const sf::Vector2f& position, int hp, int collide_damage)
+Entity::Entity(const sf::Vector2f& position, int hp):
+	m_hp(hp),
+	m_points(0),
+	m_team(NEUTRAL)
 {
 	setPosition(position);
-	team_ = NEUTRAL;
-	hp_ = hp;
-	collide_damage_ = collide_damage;
-	collide_flag_ = 0;
-	points_ = 0;
 	flash_timer_ = 0.f;
 }
 
@@ -37,17 +36,16 @@ void Entity::setTexture(const sf::Texture& texture)
 	Collisions::registerTexture(&texture);
 }
 
-void Entity::SetTarget(Entity*)
-{
-}
 
-
-void Entity::TakeDamage(int damage)
+void Entity::takeDamage(int damage)
 {
-	hp_ -= damage;
-	if (hp_ <= 0)
+	if (isDead())
+		return;
+
+	m_hp -= damage;
+	if (m_hp <= 0)
 	{
-		OnDestroy();
+		onDestroy();
 	}
 	else if (flash_timer_ <= 0)
 	{
@@ -56,27 +54,34 @@ void Entity::TakeDamage(int damage)
 }
 
 
-void Entity::OnCollide(Entity& entity)
+void Entity::kill()
 {
-	if (team_ != entity.team_ && !(entity.collide_flag_ & C_IGNORE_DAMAGE))
+	m_hp = 0;
+}
+
+
+int Entity::getHP() const
+{
+	return m_hp;
+}
+
+
+void Entity::onCollision(const Entity& entity)
+{
+	// This is the default collision behavior, suitable for most entities
+	// See overriden methods for specific behavior
+
+	if (entity.toPowerUp() != NULL) // ignore power ups
+		return;
+
+	if (entity.toComplexEntity() != NULL)
+		return;
+
+	else if (m_team != entity.m_team)
 	{
-		entity.TakeDamage(collide_damage_);
+		takeDamage(entity.m_hp);
 	}
 }
-
-
-void Entity::Kill()
-{
-	hp_ = 0;
-}
-
-
-int Entity::GetHP() const
-{
-	return hp_;
-}
-
-
 
 
 sf::FloatRect Entity::GetCollideRect() const
@@ -93,60 +98,40 @@ sf::FloatRect Entity::GetCollideRect() const
 }
 
 
-Entity::Team Entity::GetTeam() const
+Entity::Team Entity::getTeam() const
 {
-	return team_;
+	return m_team;
 }
 
 
-int Entity::GetCollideDamage() const
+void Entity::setTeam(Team team)
 {
-	return collide_damage_;
-}
-
-
-void Entity::SetTeam(Team team)
-{
-	team_ = team;
+	m_team = team;
 }
 
 
 int Entity::UpdateHP(int diff)
 {
-	hp_ += diff;
-	return hp_;
+	m_hp += diff;
+	return m_hp;
 }
 
 
-void Entity::SetHP(int hp)
+void Entity::setHP(int hp)
 {
-	hp_ = hp;
+	m_hp = hp;
 }
 
 
-void Entity::SetPoints(int points)
+void Entity::setPoints(int points)
 {
-	points_ = points;
+	m_points = points;
 }
 
 
-int Entity::GetPoints() const
+int Entity::getPoints() const
 {
-	return points_;
-}
-
-
-int Entity::ConsumePoints()
-{
-	int r = points_;
-	points_ = 0;
-	return r;
-}
-
-
-void Entity::SetCollideDamage(int damage)
-{
-	collide_damage_ = damage;
+	return m_points;
 }
 
 
@@ -162,16 +147,4 @@ void Entity::UpdateFlash(float frametime)
 			setColor(sf::Color::White);
 		}
 	}
-}
-
-
-void Entity::SetCollideFlag(int collide_flag)
-{
-	collide_flag_ = collide_flag;
-}
-
-
-int Entity::GetCollideFlag() const
-{
-	return collide_flag_;
 }

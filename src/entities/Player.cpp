@@ -2,7 +2,7 @@
 #include <typeinfo>
 #include <SFML/System.hpp>
 
-#include "PlayerShip.hpp"
+#include "Player.hpp"
 #include "EntityManager.hpp"
 #include "core/Game.hpp"
 #include "core/ParticleSystem.hpp"
@@ -31,13 +31,13 @@
 #define TIMED_BONUS_DURATION        10
 
 
-PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
+Player::Player(const sf::Vector2f& position, const char* animation) :
 	Entity(position, -1), // hack, init HP later (we must load items first)
 	input_(Input::GetInstance()),
 	panel_(ControlPanel::GetInstance())
 {
-	SetTeam(Entity::GOOD);
-	animator_.setAnimation(*this, EntityManager::GetInstance().GetAnimation(animation));
+	setTeam(Entity::GOOD);
+	m_animator.setAnimation(*this, EntityManager::getInstance().GetAnimation(animation));
 
 	// init weapons
 	m_weapon.init("laser-red");
@@ -67,8 +67,8 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	panel_.SetCoolers(coolers_);
 	panel_.SetMissiles(missiles_);
 	panel_.SetOverheat(false);
-	panel_.ActiveSpeedBonus(0);
-	panel_.ActiveAttackBonus(0, Bonus::DOUBLE_SHOT);
+	panel_.ActiveSpeedPowerUp(0);
+	panel_.ActiveAttackPowerUp(0, PowerUp::DOUBLE_SHOT);
 
 	// init Konami code
 	konami_code_[0] = Input::MOVE_UP;
@@ -79,7 +79,7 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 	konami_code_[5] = Input::MOVE_RIGHT;
 	konami_code_[6] = Input::MOVE_LEFT;
 	konami_code_[7] = Input::MOVE_RIGHT;
-	konami_code_[8] = Input::USE_PLASMA;
+	konami_code_[8] = Input::USE_MISSILE;
 	konami_code_[9] = Input::USE_LASER;
 	current_konami_event_ = 0;
 	konami_code_activated_ = false;
@@ -88,20 +88,20 @@ PlayerShip::PlayerShip(const sf::Vector2f& position, const char* animation) :
 }
 
 
-PlayerShip::~PlayerShip()
+Player::~Player()
 {
 	ParticleSystem::GetInstance().RemoveShield(this);
 	ParticleSystem::GetInstance().ClearSmoke(this);
 }
 
 
-void PlayerShip::Initialize()
+void Player::Initialize()
 {
 	const PlayerSave& save = Game::GetInstance().GetPlayerSave();
 	const ItemManager& items = ItemManager::GetInstance();
 
 	// points
-	SetPoints(0);
+	setPoints(0);
 	panel_.SetPoints(0);
 
 	// shield
@@ -111,13 +111,13 @@ void PlayerShip::Initialize()
 
 	// ship armor
 	int hp = items.GetGenericItemData(ItemData::ARMOR, save.LevelOf(ItemData::ARMOR))->GetValue();
-	if (GetHP() == -1) // keep previous HP value unless HP wasn't initialized yet
+	if (getHP() == -1) // keep previous HP value unless HP wasn't initialized yet
 	{
-		SetHP(hp);
+		setHP(hp);
 	}
 	hp_max_ = hp;
 	panel_.SetMaxShipHP(hp);
-	panel_.SetShipHP(GetHP());
+	panel_.SetShipHP(getHP());
 
 	// engine
 	speed_max_ = items.GetGenericItemData(ItemData::ENGINE, save.LevelOf(ItemData::ENGINE))->GetValue();
@@ -138,21 +138,21 @@ void PlayerShip::Initialize()
 }
 
 
-void PlayerShip::UpdateScoreCounter(int diff)
+void Player::UpdateScoreCounter(int diff)
 {
-	int points = GetPoints() + diff;
+	int points = getPoints() + diff;
 	panel_.SetPoints(points);
-	SetPoints(points);
+	setPoints(points);
 }
 
 
-PlayerShip* PlayerShip::Clone() const
+Player* Player::clone() const
 {
-	return new PlayerShip(*this);
+	return new Player(*this);
 }
 
 
-void PlayerShip::HandleAction(Input::Action action)
+void Player::HandleAction(Input::Action action)
 {
 	switch (action)
 	{
@@ -185,7 +185,6 @@ void PlayerShip::HandleAction(Input::Action action)
 			}
 			break;
 		case Input::USE_LASER:
-		case Input::USE_PLASMA:
 			if (overheated_)
 			{
 				SoundSystem::GetInstance().PlaySound("disabled.ogg");
@@ -214,7 +213,7 @@ void PlayerShip::HandleAction(Input::Action action)
 }
 
 
-void PlayerShip::AudibleHeatingCue(float frametime)
+void Player::AudibleHeatingCue(float frametime)
 {
 	static float h_steps[] = {.50f, .65f, .80f, .90f};
 	static int nb_steps = sizeof (h_steps) / sizeof (float);
@@ -233,12 +232,12 @@ void PlayerShip::AudibleHeatingCue(float frametime)
 }
 
 
-void PlayerShip::Update(float frametime)
+void Player::onUpdate(float frametime)
 {
-	static const EntityManager& manager = EntityManager::GetInstance();
+	static const EntityManager& manager = EntityManager::getInstance();
 
 	// animation
-	animator_.updateSubRect(*this, frametime);
+	m_animator.updateSubRect(*this, frametime);
 
 	// weapons
 	if (!overheated_)
@@ -266,8 +265,8 @@ void PlayerShip::Update(float frametime)
 	pos.y = pos.y + speed_y_ * frametime;
 	pos.x = pos.x + speed_x_ * frametime;
 
-	const int X_BOUND = manager.GetWidth() - getWidth();
-	const int Y_BOUND = manager.GetHeight() - getHeight();
+	const int X_BOUND = manager.getWidth() - getWidth();
+	const int Y_BOUND = manager.getHeight() - getHeight();
 
 	if (pos.y < 0)
 	{
@@ -323,7 +322,7 @@ void PlayerShip::Update(float frametime)
 			if (bonus_[i] <= 0)
 			{
 				bonus_[i] = 0;
-				DisableTimedBonus((TimedBonus) i);
+				DisableTimedPowerUp((TimedPowerUp) i);
 			}
 		}
 	}
@@ -334,7 +333,7 @@ void PlayerShip::Update(float frametime)
 }
 
 
-void PlayerShip::TakeDamage(int damage)
+void Player::takeDamage(int damage)
 {
 	if (damage == 0)
 		return;
@@ -357,42 +356,41 @@ void PlayerShip::TakeDamage(int damage)
 	}
 	else
 	{
-		Entity::TakeDamage(damage);
+		Entity::takeDamage(damage);
 		SoundSystem::GetInstance().PlaySound("ship-damage.ogg");
-		panel_.SetShipHP(GetHP());
+		panel_.SetShipHP(getHP());
 	}
 }
 
 
-void PlayerShip::OnCollide(Entity& entity)
+void Player::onCollision(const Entity& entity)
 {
-	Bonus* bonus = dynamic_cast<Bonus*>(&entity);
-	if (bonus != NULL)
+	const PowerUp* powerup = entity.toPowerUp();
+	if (powerup)
 	{
-		HandleBonus(bonus->GetType());
-		ParticleSystem::GetInstance().AddMessage(bonus->getPosition(), bonus->GetDescription());
+		HandlePowerUp(powerup->getType());
+		ParticleSystem::GetInstance().AddMessage(powerup->getPosition(), powerup->getDescription());
 		SoundSystem::GetInstance().PlaySound("power-up.ogg");
-		entity.Kill();
 	}
 	else
 	{
-		Entity::OnCollide(entity);
+		Entity::onCollision(entity);
 	}
 }
 
 
-void PlayerShip::OnDestroy()
+void Player::onDestroy()
 {
 	setColor(sf::Color::White); // clear red flash
-	EntityManager& manager = EntityManager::GetInstance();
-	animator_.setAnimation(*this, manager.GetAnimation("player-destroyed"));
+	EntityManager& manager = EntityManager::getInstance();
+	m_animator.setAnimation(*this, manager.GetAnimation("player-destroyed"));
 
 	manager.TerminateGame();
 	ParticleSystem::GetInstance().ExplosionSfx(getCenter());
 }
 
 
-void PlayerShip::Computemove(float)
+void Player::Computemove(float)
 {
 	speed_x_ = speed_y_ = 0;
 	if (input_.HasInput(Input::MOVE_UP))
@@ -414,67 +412,67 @@ void PlayerShip::Computemove(float)
 }
 
 
-void PlayerShip::HandleBonus(Bonus::Type bonus_t)
+void Player::HandlePowerUp(PowerUp::Type bonus_t)
 {
 	switch (bonus_t)
 	{
 		// timed bonus
-		case Bonus::DOUBLE_SHOT:
+		case PowerUp::DOUBLE_SHOT:
 			if (bonus_[T_DOUBLESHOT] == 0)
 			{
 				m_weapon.setMultiply(2);
 			}
 			bonus_[T_TRISHOT] = 0;
 			bonus_[T_DOUBLESHOT] += TIMED_BONUS_DURATION;
-			panel_.ActiveAttackBonus(bonus_[T_DOUBLESHOT], bonus_t);
+			panel_.ActiveAttackPowerUp(bonus_[T_DOUBLESHOT], bonus_t);
 			break;
-		case Bonus::TRIPLE_SHOT:
+		case PowerUp::TRIPLE_SHOT:
 			if (bonus_[T_TRISHOT] == 0)
 			{
 				m_weapon.setMultiply(3);
 			}
 			bonus_[T_DOUBLESHOT] = 0;
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
-			panel_.ActiveAttackBonus(bonus_[T_TRISHOT], bonus_t);
+			panel_.ActiveAttackPowerUp(bonus_[T_TRISHOT], bonus_t);
 			break;
-		case Bonus::SPEED:
+		case PowerUp::SPEED:
 			if (bonus_[T_SPEED] == 0)
 			{
 				speed_max_ *= BONUS_SPEED_FACTOR;
 				ParticleSystem::GetInstance().AddSmoke(96, this);
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
-			panel_.ActiveSpeedBonus(bonus_[T_SPEED]);
+			panel_.ActiveSpeedPowerUp(bonus_[T_SPEED]);
 			break;
 		// immediate bonus
-		case Bonus::SUPER_BANANA:
+		case PowerUp::SUPER_BANANA:
 			ParticleSystem::GetInstance().FierySfx(getCenter(), 50);
 			// +1 missile, +1 cooler, +1 health, +1 shield
-			HandleBonus(Bonus::MISSILE);
-			HandleBonus(Bonus::COOLER);
-			HandleBonus(Bonus::HEALTH);
-			HandleBonus(Bonus::SHIELD);
+			HandlePowerUp(PowerUp::MISSILE);
+			HandlePowerUp(PowerUp::COOLER);
+			HandlePowerUp(PowerUp::HEALTH);
+			HandlePowerUp(PowerUp::SHIELD);
 			break;
-		case Bonus::HEALTH:
-			if (GetHP() < hp_max_)
+		case PowerUp::HEALTH:
+			if (getHP() < hp_max_)
 			{
 				panel_.SetShipHP(UpdateHP(1));
 			}
 			break;
-		case Bonus::SHIELD:
+		case PowerUp::SHIELD:
 			if (shield_ < shield_max_)
 			{
 				IncreaseShield();
 			}
 			break;
-		case Bonus::COOLER:
+		case PowerUp::COOLER:
 			if (coolers_ < COOLER_MAX)
 			{
 				++coolers_;
 				panel_.SetCoolers(coolers_);
 			}
 			break;
-		case Bonus::MISSILE:
+		case PowerUp::MISSILE:
 			if (missiles_ < MISSILES_MAX)
 			{
 				++missiles_;
@@ -487,7 +485,7 @@ void PlayerShip::HandleBonus(Bonus::Type bonus_t)
 }
 
 
-void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
+void Player::DisableTimedPowerUp(TimedPowerUp tbonus)
 {
 	switch (tbonus)
 	{
@@ -506,7 +504,7 @@ void PlayerShip::DisableTimedBonus(TimedBonus tbonus)
 }
 
 
-void PlayerShip::IncreaseShield(int count)
+void Player::IncreaseShield(int count)
 {
 	shield_ += count;
 	// update particles
@@ -518,13 +516,13 @@ void PlayerShip::IncreaseShield(int count)
 }
 
 
-void PlayerShip::KonamiCodeOn()
+void Player::KonamiCodeOn()
 {
 	konami_code_activated_ = true;
 
-	HandleBonus(Bonus::SPEED);
+	HandlePowerUp(PowerUp::SPEED);
 	// max hp
-	SetHP(hp_max_);
+	setHP(hp_max_);
 	panel_.SetShipHP(hp_max_);
 	// max shield
 	IncreaseShield(shield_max_ - shield_);
@@ -534,12 +532,12 @@ void PlayerShip::KonamiCodeOn()
 	missiles_ = 42;
 	panel_.SetMissiles(42);
 
-	m_weapon.setMultiply(3);
-	m_missile_launcher.setMultiply(3);
+	//m_weapon.setMultiply(3);
+	//m_missile_launcher.setMultiply(3);
 
 	ParticleSystem::GetInstance().AddMessage(getPosition(), L"For great justice!");
 
 #ifdef DEBUG
-	this->SetCollideFlag(C_IGNORE_DAMAGE);
+	//this->setCollideFlag(C_IGNORE_DAMAGE);
 #endif
 }

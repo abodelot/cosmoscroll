@@ -9,12 +9,12 @@ class Gate: public ComplexEntity
 public:
 	Gate(const sf::Vector2f& pos);
 
-	void Update(float frametime);
+	void onUpdate(float frametime);
 
-	Entity* Clone() const;
+	Entity* clone() const;
 private:
 	// override
-	void OnPartDestroyed(const Part& part);
+	void onPartDestroyed(const Part& part);
 
 	int energy_cells_;
 	float door_timer_;

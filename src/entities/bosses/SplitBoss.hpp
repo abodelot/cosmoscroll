@@ -8,21 +8,21 @@
 class SplitBoss: public Entity
 {
 public:
-	SplitBoss( sf::Vector2f& pos,int HP = 300,bool split = true);
+	SplitBoss(sf::Vector2f& pos,int HP = 300,bool split = true);
 
-	SplitBoss* Clone() const;
-
-	// override
-	void Update(float frametime);
+	SplitBoss* clone() const;
 
 	// override
-	void TakeDamage(int damage);
+	void onUpdate(float frametime);
 
 	// override
-	void SetTarget(Entity* target);
+	void takeDamage(int damage);
 
 	// override
-	void OnDestroy();
+	void onInit();
+
+	// override
+	void onDestroy();
 
 private :
 	int speed_x_,speed_y_;

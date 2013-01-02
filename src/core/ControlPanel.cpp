@@ -49,16 +49,16 @@ ControlPanel::ControlPanel()
 	bar_mask_.setPosition(101, 6);
 
 	// init bonus counters
-	bs_coolers_.Init(Bonus::COOLER, BonusSlot::COUNTER);
+	bs_coolers_.Init(PowerUp::COOLER, PowerUpSlot::COUNTER);
 	bs_coolers_.setPosition(256, 8);
 
-	bs_missiles_.Init(Bonus::MISSILE, BonusSlot::COUNTER);
+	bs_missiles_.Init(PowerUp::MISSILE, PowerUpSlot::COUNTER);
 	bs_missiles_.setPosition(256, 31);
 
-	bs_attack_.Init(Bonus::DOUBLE_SHOT, BonusSlot::TIMER);
+	bs_attack_.Init(PowerUp::DOUBLE_SHOT, PowerUpSlot::TIMER);
 	bs_attack_.setPosition(334, 8);
 
-	bs_speed_.Init(Bonus::SPEED, BonusSlot::TIMER);
+	bs_speed_.Init(PowerUp::SPEED, PowerUpSlot::TIMER);
 	bs_speed_.setPosition(334, 31);
 
 	// right container
@@ -216,15 +216,15 @@ void ControlPanel::SetMissiles(int count)
 }
 
 
-void ControlPanel::ActiveSpeedBonus(int seconds)
+void ControlPanel::ActiveSpeedPowerUp(int seconds)
 {
 	bs_speed_.SetValue(seconds);
 }
 
 
-void ControlPanel::ActiveAttackBonus(int seconds, Bonus::Type bonus_type)
+void ControlPanel::ActiveAttackPowerUp(int seconds, PowerUp::Type bonus_type)
 {
-	bs_attack_.Init(bonus_type, BonusSlot::TIMER);
+	bs_attack_.Init(bonus_type, PowerUpSlot::TIMER);
 	bs_attack_.SetValue(seconds);
 }
 
@@ -316,12 +316,12 @@ void ControlPanel::ProgressBar::SetValue(int value)
 	value_.setX(bar_.getPosition().x + (int) (PROG_BAR_WIDTH - value_.getWidth()) / 2);
 }
 
-// BonusSlot ------------------------------------------------------------------
+// PowerUpSlot ------------------------------------------------------------------
 
-void ControlPanel::BonusSlot::Init(Bonus::Type bonus_type, Type type)
+void ControlPanel::PowerUpSlot::Init(PowerUp::Type bonus_type, Type type)
 {
 	icon_.setTexture(Resources::getTexture("entities/bonus.png"));
-	icon_.setTextureRect(Bonus::getTextureRect(bonus_type));
+	icon_.setTextureRect(PowerUp::getTextureRect(bonus_type));
 
 	label_.setCharacterSize(TEXT_SIZE);
 	label_.setColor(sf::Color::White);
@@ -336,7 +336,7 @@ void ControlPanel::BonusSlot::Init(Bonus::Type bonus_type, Type type)
 }
 
 
-void ControlPanel::BonusSlot::setPosition(int x, int y)
+void ControlPanel::PowerUpSlot::setPosition(int x, int y)
 {
 	icon_.setPosition(x, y);
 	label_.setPosition(x + BONUS_LENGTH, y);
@@ -345,7 +345,7 @@ void ControlPanel::BonusSlot::setPosition(int x, int y)
 }
 
 
-void ControlPanel::BonusSlot::SetValue(int count)
+void ControlPanel::PowerUpSlot::SetValue(int count)
 {
 	switch (type_)
 	{
@@ -364,7 +364,7 @@ void ControlPanel::BonusSlot::SetValue(int count)
 }
 
 
-void ControlPanel::BonusSlot::Update(float frametime)
+void ControlPanel::PowerUpSlot::Update(float frametime)
 {
 	switch (type_)
 	{
@@ -416,7 +416,7 @@ void ControlPanel::BonusSlot::Update(float frametime)
 }
 
 
-void ControlPanel::BonusSlot::Show(sf::RenderTarget& target) const
+void ControlPanel::PowerUpSlot::Show(sf::RenderTarget& target) const
 {
 	target.draw(glow_);
 	target.draw(icon_);

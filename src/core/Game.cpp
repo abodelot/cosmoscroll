@@ -113,9 +113,9 @@ void Game::Init(const std::string& data_path)
 		printf("* loading %-59s [%2d found]\n", "items...",
 			ItemManager::GetInstance().LoadItems(data_dir_ + XML_ITEMS));
 		printf("* loading %-59s [%2d found]\n", "animations...",
-			EntityManager::GetInstance().LoadAnimations(data_dir_ + XML_ANIMATIONS));
+			EntityManager::getInstance().LoadAnimations(data_dir_ + XML_ANIMATIONS));
 		printf("* loading %-59s [%2d found]\n", "spaceships definitions...",
-			EntityManager::GetInstance().LoadSpaceShips(data_dir_ + XML_SPACESHIPS));
+			EntityManager::getInstance().LoadSpaceShips(data_dir_ + XML_SPACESHIPS));
 	}
 	catch (std::runtime_error& error)
 	{
@@ -163,7 +163,7 @@ bool Game::LoadConfig(const std::string& filename)
 		// high-score
 		int high_score = 0;
 		config.Get("arcade_high_score", high_score);
-		EntityManager::GetInstance().SetArcadeRecord(high_score);
+		EntityManager::getInstance().SetArcadeRecord(high_score);
 
 		// fullscreen & vsync
 		config.Get("vsync", vsync_);
@@ -203,7 +203,7 @@ void Game::WriteConfig(const std::string& filename) const
 	config.Set("fullscreen", fullscreen_);
 	config.Set("vsync", vsync_);
 	config.Set("panel_on_top", ControlPanel::GetInstance().IsOnTop());
-	config.Set("arcade_high_score", EntityManager::GetInstance().GetArcadeRecord());
+	config.Set("arcade_high_score", EntityManager::getInstance().GetArcadeRecord());
 	config.Set("language", I18n::GetInstance().GetCurrentCode());
 	config.Set("screenshots", screenshot_dir_);
 
@@ -412,12 +412,12 @@ void Game::PanelOnTop(bool top)
 	if (top)
 	{
 		ControlPanel::GetInstance().setPosition(0, 0);
-		EntityManager::GetInstance().setPosition(0, ControlPanel::HEIGHT);
+		EntityManager::getInstance().setPosition(0, ControlPanel::HEIGHT);
 	}
 	else
 	{
 		ControlPanel::GetInstance().setPosition(0, Game::HEIGHT - ControlPanel::HEIGHT);
-		EntityManager::GetInstance().setPosition(0, 0);
+		EntityManager::getInstance().setPosition(0, 0);
 	}
 }
 

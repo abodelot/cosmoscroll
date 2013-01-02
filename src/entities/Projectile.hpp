@@ -18,19 +18,21 @@ public:
 	 * @param damage: dégâts infligés lors d'une collision
 	 */
 	Projectile(Entity* emitter, const sf::Vector2f& position, float angle,
-		const sf::Texture* image, int speed, int damage);
+		const sf::Texture& image, int speed, int damage);
 
-	// inherited
-	Projectile* Clone() const;
+	// override
+	Projectile* clone() const;
 
-	// inherited
-	void Update(float frametime);
+	// override
+	void onUpdate(float frametime);
 
-	// inherited
-	void OnCollide(Entity& entity);
+	// override
+	void onCollision(const Entity& entity);
+
+	const Projectile* toProjectile() const { return this; }
 
 private:
-	sf::Vector2f speed_;
+	sf::Vector2f m_speed;
 };
 
 #endif // PROJECTILE_HPP

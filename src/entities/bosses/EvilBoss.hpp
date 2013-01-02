@@ -13,19 +13,19 @@ class EvilBoss: public Entity
 public:
 	EvilBoss(const sf::Vector2f& position);
 
-	EvilBoss* Clone() const;
+	EvilBoss* clone() const;
 
 	// override
-	void Update(float frametime);
+	void onUpdate(float frametime);
 
 	// override
-	void TakeDamage(int damage);
+	void takeDamage(int damage);
 
 	// override
-	void SetTarget(Entity* target);
+	void onInit();
 
 	// override
-	void OnDestroy();
+	void onDestroy();
 
 private:
 	enum Phase

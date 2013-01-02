@@ -3,11 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 
-enum CollisionBehavior
-{
-	C_IGNORE_DAMAGE = 1 << 0,
-	C_IGNORE_HITS   = 1 << 1
-};
+class Asteroid;
+class ComplexEntity;
+class Spaceship;
+class Player;
+class PowerUp;
+class Projectile;
+
 
 /**
  * Abstrct base class for game objects
@@ -23,13 +25,12 @@ public:
 	/**
      * @param position: position at spawing
 	 * @param hp: Hit Points
-	 * @param collide_damage: inflicted damages in a collision
 	 */
-	Entity(const sf::Vector2f& position, int hp, int collide_damage = 1);
+	Entity(const sf::Vector2f& position, int hp);
 
 	virtual ~Entity();
 
-	virtual Entity* Clone() const = 0;
+	virtual Entity* clone() const = 0;
 
 	/**
 	 * Called when entity is inserted in the entity manager
@@ -44,43 +45,46 @@ public:
 	// override
 	void setTexture(const sf::Texture& texture);
 
-	virtual void SetTarget(Entity* target);
-
 	/**
 	 * Encaisser des dommages
 	 */
-	virtual void TakeDamage(int damage);
+	virtual void takeDamage(int damage);
 
 	/**
 	 * Mettre à jour l'entité
 	 * @param frametime: temps de la frame actuelle
 	 */
-	virtual void Update(float frametime) = 0;
+	virtual void onUpdate(float frametime) = 0;
+
+	virtual void onDestroy() {}
 
 	/**
-	 * Notifier l'entité d'une collision
-	 * @param entity: entité entrée en collision
+	 * Collision callback
 	 */
-	virtual void OnCollide(Entity& entity);
+	virtual void onCollision(const Entity& entity);
 
-	virtual void OnDestroy() {};
+	// cast
+	virtual const PowerUp* toPowerUp() const   { return NULL; }
+	virtual const ComplexEntity*    toComplexEntity() const { return NULL; }
+	virtual const Player*  toPlayer() const    { return NULL; }
+	virtual const Projectile* toProjectile() const { return NULL; }
 
 	/**
 	 * Détermine si l'entité est encore en vie
 	 * @return true si l'entité doit être supprimée
 	 */
-	inline bool IsDead() const { return hp_ <= 0; }
+	inline bool isDead() const { return m_hp <= 0; }
 
 	/**
 	 * Kill entity (will be removed from entity manager)
 	 */
-	void Kill();
+	void kill();
 
 	/**
 	 * @return entity remaining health points
 	 */
-	int GetHP() const;
-	void SetHP(int hp);
+	int getHP() const;
+	void setHP(int hp);
 
 	virtual float GetSpeedX() const { return 0.f; }
 	virtual float GetSpeedY() const { return 0.f; };
@@ -93,20 +97,13 @@ public:
 	/**
 	 * Obtenir l'équipe de l'entité
 	 */
-	Team GetTeam() const;
-
-	int GetCollideDamage() const;
-
-
-	void SetCollideFlag(int collision_flag);
-	int GetCollideFlag() const;
+	Team getTeam() const;
 
 	/**
 	 * Valeur de l'entité
 	 */
-	void SetPoints(int points);
-	int GetPoints() const;
-	int ConsumePoints();
+	void setPoints(int points);
+	int getPoints() const;
 
 	inline float getWidth() const { return getTextureRect().width; }
 	inline float getHeight() const { return getTextureRect().height; }
@@ -120,22 +117,15 @@ protected:
 	/**
 	 * Attribuer une équipe à l'entité (défaut: NEUTRAL)
 	 */
-	void SetTeam(Team team);
+	void setTeam(Team team);
 
 	int UpdateHP(int diff);
 
-	/**
-	 * Set inflicted damage on collision
-	 */
-	void SetCollideDamage(int damage);
-
 	void UpdateFlash(float frametime);
 private:
-	int hp_;
-	int points_;
-	int collide_damage_;
-	int collide_flag_;
-	Team team_;
+	int m_hp;
+	int m_points;
+	Team m_team;
 	float flash_timer_;
 };
 

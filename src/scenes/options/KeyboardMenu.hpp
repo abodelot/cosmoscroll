@@ -27,8 +27,7 @@ private:
 	gui::Button* but_down_;
 	gui::Button* but_left_;
 	gui::Button* but_right_;
-	gui::Button* but_weapon1_;
-	gui::Button* but_weapon2_;
+	gui::Button* but_weapon_;
 	gui::Button* but_cooler_;
 	gui::Button* but_missile_;
 };

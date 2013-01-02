@@ -7,7 +7,7 @@
 
 
 InGameScene::InGameScene():
-	entities_(EntityManager::GetInstance()),
+	entities_(EntityManager::getInstance()),
 	panel_(ControlPanel::GetInstance())
 {
 }

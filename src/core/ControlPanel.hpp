@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "entities/EntityManager.hpp"
-#include "entities/Bonus.hpp"
+#include "entities/PowerUp.hpp"
 #include "utils/sfml_helper.hpp"
 
 
@@ -73,9 +73,9 @@ public:
 	// Set missiles count
 	void SetMissiles(int count);
 
-	void ActiveSpeedBonus(int seconds);
+	void ActiveSpeedPowerUp(int seconds);
 
-	void ActiveAttackBonus(int seconds, Bonus::Type bonus_type);
+	void ActiveAttackPowerUp(int seconds, PowerUp::Type bonus_type);
 
 	void RefreshTextTranslations();
 
@@ -111,12 +111,12 @@ private:
 		int max_value_;
 	};
 
-	class BonusSlot
+	class PowerUpSlot
 	{
 	public:
 		enum Type { COUNTER, TIMER };
 
-		void Init(Bonus::Type bonus_type, Type type);
+		void Init(PowerUp::Type bonus_type, Type type);
 		// set widget position
 		void setPosition(int x, int y);
 
@@ -136,10 +136,10 @@ private:
 	};
 
 	ProgressBar pbars_[ProgressBar::_PBAR_COUNT];
-	BonusSlot bs_coolers_;
-	BonusSlot bs_missiles_;
-	BonusSlot bs_attack_;
-	BonusSlot bs_speed_;
+	PowerUpSlot bs_coolers_;
+	PowerUpSlot bs_missiles_;
+	PowerUpSlot bs_attack_;
+	PowerUpSlot bs_speed_;
 
 	sf::Text timer_;
 	sf::Text game_info_;

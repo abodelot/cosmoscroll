@@ -10,12 +10,14 @@ class Missile: public Projectile
 {
 public:
 	Missile(Entity* emitter, const sf::Vector2f& offset, float angle,
-		const sf::Texture* image, int speed, int damage);
+		const sf::Texture& image, int speed, int damage);
 
 	~Missile();
 
 	// override
-	void OnCollide(Entity& entity);
+	void onCollision(const Entity& entity);
+private:
+	float m_angle;
 };
 
 #endif // MISSILE_HPP

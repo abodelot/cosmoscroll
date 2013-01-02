@@ -1,23 +1,23 @@
-#ifndef PLAYERSHIP_HPP
-#define PLAYERSHIP_HPP
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
 #include "Entity.hpp"
 #include "Animator.hpp"
-#include "Bonus.hpp"
-#include "items/Weapon.hpp"
+#include "PowerUp.hpp"
 #include "Missile.hpp"
 #include "core/Input.hpp"
 #include "core/ControlPanel.hpp"
+#include "items/Weapon.hpp"
 
 /**
  * Vaisseau spatial contrôlable par un joueur
  */
-class PlayerShip: public Entity
+class Player: public Entity
 {
 public:
-	PlayerShip(const sf::Vector2f& position, const char* animation);
+	Player(const sf::Vector2f& position, const char* animation);
 
-	~PlayerShip();
+	~Player();
 
 	void Initialize();
 
@@ -31,24 +31,26 @@ public:
 	void UpdateScoreCounter(int diff);
 
 	// override
-	PlayerShip* Clone() const;
+	Player* clone() const;
 
 	void HandleAction(Input::Action action);
 
 	// override
-	void Update(float frametime);
+	void onUpdate(float frametime);
 
 	// override
-	void OnCollide(Entity& entity);
+	void onCollision(const Entity& entity);
 
 	// override
-	void OnDestroy();
+	void onDestroy();
 
 	// override
-	void TakeDamage(int damage);
+	void takeDamage(int damage);
+
+	const Player* toPlayer() const { return this; }
 
 private:
-	enum TimedBonus
+	enum TimedPowerUp
 	{
 		T_DOUBLESHOT,
 		T_TRISHOT,
@@ -61,12 +63,12 @@ private:
 	/**
 	 * Gérer un bonus attrapé
 	 */
-	void HandleBonus(Bonus::Type bonus_t);
+	void HandlePowerUp(PowerUp::Type bonus_t);
 
 	/**
 	 * Désactiver un bonus à effet temporaire
 	 */
-	void DisableTimedBonus(TimedBonus tbonus);
+	void DisableTimedPowerUp(TimedPowerUp tbonus);
 
 	/**
 	 * Activer les effets du Code Konami
@@ -110,8 +112,8 @@ private:
 	Weapon<>        m_weapon;
 	Weapon<Missile> m_missile_launcher;
 
-	Animator animator_;
+	Animator m_animator;
 };
 
-#endif // PLAYERSHIP_HPP
+#endif // PLAYER_HPP
 

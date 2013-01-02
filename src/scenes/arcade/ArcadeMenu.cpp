@@ -22,7 +22,7 @@ void ArcadeMenu::EventCallback(int id)
 	{
 		case 1:
 			game.SetNextScene(Game::SC_InGameScene);
-			EntityManager::GetInstance().InitMode(EntityManager::MODE_ARCADE);
+			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
 			break;
 		case 2:
 			game.SetNextScene(Game::SC_BestScoresMenu);

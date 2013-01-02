@@ -1,11 +1,10 @@
-#include "SpaceShip.hpp"
+#include "Spaceship.hpp"
 #include "EntityManager.hpp"
-#include "Bonus.hpp"
+#include "Player.hpp"
 
 #include "utils/Math.hpp"
 #include "utils/StringUtils.hpp"
 #include "core/ParticleSystem.hpp"
-
 
 // bonus freq = 1 / DROP_LUCK
 #define DROP_LUCK 8
@@ -19,37 +18,37 @@
 #define CIRCLE_RADIUS   60
 #define CIRCLE_ROTATION_SPEED (math::PI * 0.8)
 
-SpaceShip::SpaceShip(const Animation& animation, int hp, int speed) :
+Spaceship::Spaceship(const Animation& animation, int hp, int speed) :
 	Entity(sf::Vector2f(0, 0), hp),
-	attack_(NONE),
-	movement_(LINE)
+	m_attack(NONE),
+	m_movement(LINE),
+	m_target(NULL)
 {
 	setTexture(animation.getTexture());
-	SetTeam(Entity::BAD);
-	animator_.setAnimation(*this, animation);
+	setTeam(Entity::BAD);
+	m_animator.setAnimation(*this, animation);
 
 	speed_ = speed;
-	weapon_.setOwner(this);
-	target_ = NULL;
+	m_weapon.setOwner(this);
 	base_y_ = 0;
 	base_x_ = 0;
 	angle_ = 2 * math::PI;
 }
 
 
-SpaceShip::~SpaceShip()
+Spaceship::~Spaceship()
 {
 }
 
 
-void SpaceShip::onInit()
+void Spaceship::onInit()
 {
-	if (movement_ == SINUS)
+	if (m_movement == SINUS)
 	{
 		float y = getY();
 		// Compute maximal Y position according to the wave's amplitude
 		// (So the spacship is always within the screen's boundaries)
-		float y_max = EntityManager::GetInstance().GetHeight() - SINUS_AMPLITUDE - getHeight();
+		float y_max = EntityManager::getInstance().getHeight() - SINUS_AMPLITUDE - getHeight();
 		if (y < SINUS_AMPLITUDE)
 			base_y_ = SINUS_AMPLITUDE;
 		else if (y > y_max)
@@ -59,10 +58,10 @@ void SpaceShip::onInit()
 
 		setY(base_y_);
 	}
-	else if (movement_ == CIRCLE)
+	else if (m_movement == CIRCLE)
 	{
 		float y = getY();
-		float y_max = EntityManager::GetInstance().GetHeight() - CIRCLE_RADIUS - getHeight();
+		float y_max = EntityManager::getInstance().getHeight() - CIRCLE_RADIUS - getHeight();
 		if (y < CIRCLE_RADIUS)
 			base_y_ = CIRCLE_RADIUS;
 		else if (y > y_max)
@@ -72,41 +71,37 @@ void SpaceShip::onInit()
 
 		setY(base_y_);
 	}
+
+	m_target = EntityManager::getInstance().GetPlayerShip();
 }
 
 
-void SpaceShip::setMovementPattern(MovementPattern movement)
+void Spaceship::setMovementPattern(MovementPattern movement)
 {
-	movement_ = movement;
+	m_movement = movement;
 }
 
 
-void SpaceShip::setAttackPattern(AttackPattern attack)
+void Spaceship::setAttackPattern(AttackPattern attack)
 {
-	attack_ = attack;
+	m_attack = attack;
 }
 
 
-SpaceShip* SpaceShip::Clone() const
+Spaceship* Spaceship::clone() const
 {
-	SpaceShip* ship = new SpaceShip(*this);
-	ship->SetPoints(GetPoints());
-	ship->weapon_.setOwner(ship);
+	Spaceship* ship = new Spaceship(*this);
+	ship->setPoints(getPoints());
+	ship->m_weapon.setOwner(ship);
 	return ship;
 }
 
 
-void SpaceShip::SetTarget(Entity* target)
-{
-	target_ = target;
-}
-
-
-void SpaceShip::Update(float frametime)
+void Spaceship::onUpdate(float frametime)
 {
 	// Apply movement pattern
 	float delta = speed_ * frametime;
-	switch (movement_)
+	switch (m_movement)
 	{
 		case LINE:
 		{
@@ -115,7 +110,7 @@ void SpaceShip::Update(float frametime)
 		break;
 		case MAGNET:
 		{
-			sf::Vector2f player_pos = target_->getCenter();
+			sf::Vector2f player_pos = m_target->getCenter();
 			sf::Vector2f my_pos = getCenter();
 
 			float x_diff = my_pos.x - player_pos.x;
@@ -159,20 +154,20 @@ void SpaceShip::Update(float frametime)
 	}
 
 
-	switch (attack_)
+	switch (m_attack)
 	{
 		case AUTO_AIM:
-			weapon_.shoot(target_->getCenter());
+			m_weapon.shoot(m_target->getCenter());
 			break;
 
 		case ON_SIGHT:
 		{
 			float my_y = getCenter().y;
-			float player_y = target_->getCenter().y;
-			// if both spaceships are roughly on the same Y axis
+			float player_y = m_target->getCenter().y;
+			// if both Spaceships are roughly on the same Y axis
 			if (std::abs(player_y - my_y) < 30)
 			{
-				weapon_.shoot(-math::PI);
+				m_weapon.shoot(-math::PI);
 			}
 		}
 			break;
@@ -180,17 +175,17 @@ void SpaceShip::Update(float frametime)
 			break;
 	}
 
-	animator_.updateSubRect(*this, frametime);
-	weapon_.onUpdate(frametime);
+	m_animator.updateSubRect(*this, frametime);
+	m_weapon.onUpdate(frametime);
 	Entity::UpdateFlash(frametime);
 }
 
 
-void SpaceShip::OnDestroy()
+void Spaceship::onDestroy()
 {
 	if (math::random(1, DROP_LUCK) == 1)
 	{
-		EntityManager::GetInstance().AddEntity(Bonus::MakeRandom(getPosition()));
+		PowerUp::dropRandom(getPosition());
 	}
 	ParticleSystem::GetInstance().ExplosionSfx(getCenter());
 }

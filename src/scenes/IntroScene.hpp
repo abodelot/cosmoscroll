@@ -5,7 +5,7 @@
 #include "utils/sfml_helper.hpp"
 
 class EntityManager;
-class PlayerShip;
+class Player;
 
 /**
  * Nice interactive splash screen at start =)
@@ -29,7 +29,7 @@ private:
 	xsf::Sprite background_;
 	xsf::Sprite title_;
 	EntityManager& entity_mgr_;
-	PlayerShip* ship_;
+	Player* ship_;
 };
 
 #endif // INTROSCENE_HPP

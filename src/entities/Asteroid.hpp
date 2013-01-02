@@ -22,13 +22,13 @@ public:
 	Asteroid(const sf::Vector2f& pos, Size size, float angle=180);
 
 	// override
-	Asteroid* Clone() const;
+	Asteroid* clone() const;
 
 	// override
-	void Update(float frametime);
+	void onUpdate(float frametime);
 
 	// override
-	void OnDestroy();
+	void onDestroy();
 
 private:
 	/**

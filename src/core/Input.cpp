@@ -48,16 +48,14 @@ void Input::Init()
 	SetKeyboardBind(sf::Keyboard::PageDown, PANEL_DOWN);
 	SetKeyboardBind(sf::Keyboard::Escape,   PAUSE);
 	SetKeyboardBind(sf::Keyboard::Space,    USE_LASER);
-	SetKeyboardBind(sf::Keyboard::A,        USE_PLASMA);
 	SetKeyboardBind(sf::Keyboard::LControl, USE_COOLER);
-	SetKeyboardBind(sf::Keyboard::Z,        USE_MISSILE);
+	SetKeyboardBind(sf::Keyboard::A,        USE_MISSILE);
 	SetKeyboardBind(sf::Keyboard::F1,       TAKE_SCREENSHOT);
 
 	// default joystick binding
 	SetJoystickBind(0, ENTER);
 	SetJoystickBind(1, PAUSE);
 	SetJoystickBind(6, USE_LASER);
-	SetJoystickBind(7, USE_PLASMA);
 	SetJoystickBind(2, USE_COOLER);
 	SetJoystickBind(3, USE_MISSILE);
 
@@ -186,8 +184,6 @@ const std::wstring& Input::ActionToString(Action action)
 			return _t("action.right");
 		case USE_LASER:
 			return _t("action.laser");
-		case USE_PLASMA:
-			return _t("action.plasma");
 		case USE_COOLER:
 			return _t("action.cooler");
 		case USE_MISSILE:
@@ -405,8 +401,6 @@ void Input::LoadFromConfig(IniParser& config)
 		SetKeyboardBind(key, MOVE_RIGHT);
 	if (config.Get("laser", key))
 		SetKeyboardBind(key, USE_LASER);
-	if (config.Get("plasma", key))
-		SetKeyboardBind(key, USE_PLASMA);
 	if (config.Get("use_cooler", key))
 		SetKeyboardBind(key, USE_COOLER);
 	if (config.Get("use_missile", key))
@@ -418,8 +412,6 @@ void Input::LoadFromConfig(IniParser& config)
 		SetJoystickBind(button, PAUSE);
 	if (config.Get("laser", button))
 		SetJoystickBind(button, USE_LASER);
-	if (config.Get("plasma", button))
-		SetJoystickBind(button, USE_PLASMA);
 	if (config.Get("use_cooler", button))
 		SetJoystickBind(button, USE_COOLER);
 	if (config.Get("use_missile", button))
@@ -437,14 +429,12 @@ void Input::SaveToConfig(IniParser& config) const
 	config.Set("move_left",   action_to_key_[MOVE_LEFT]);
 	config.Set("move_right",  action_to_key_[MOVE_RIGHT]);
 	config.Set("laser",       action_to_key_[USE_LASER]);
-	config.Set("plasma",      action_to_key_[USE_PLASMA]);
 	config.Set("use_cooler",  action_to_key_[USE_COOLER]);
 	config.Set("use_missile", action_to_key_[USE_MISSILE]);
 
 	config.SeekSection("Joystick");
 	config.Set("pause",       action_to_joybutton_[PAUSE]);
 	config.Set("laser",       action_to_joybutton_[USE_LASER]);
-	config.Set("plasma",      action_to_joybutton_[USE_PLASMA]);
 	config.Set("use_cooler",  action_to_joybutton_[USE_COOLER]);
 	config.Set("use_missile", action_to_joybutton_[USE_MISSILE]);
 	config.Set("sensitivity", sensitivity_);

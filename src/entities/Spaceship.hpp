@@ -5,7 +5,7 @@
 #include "items/Weapon.hpp"
 #include "Animator.hpp"
 
-class SpaceShip: public Entity
+class Spaceship: public Entity
 {
 public:
 	enum MovementPattern
@@ -18,8 +18,8 @@ public:
 		AUTO_AIM, ON_SIGHT, NONE
 	};
 
-	SpaceShip(const Animation& animation, int hp, int speed);
-	~SpaceShip();
+	Spaceship(const Animation& animation, int hp, int speed);
+	~Spaceship();
 
 	// override
 	void onInit();
@@ -29,31 +29,30 @@ public:
 	void setAttackPattern(AttackPattern attack);
 
 	// override
-	SpaceShip* Clone() const;
+	Spaceship* clone() const;
+
+	void collide(Entity& entity) const { entity.onCollision(*this); }
 
 	// override
-	void SetTarget(Entity* target);
+	void onUpdate(float frametime);
 
 	// override
-	void Update(float frametime);
+	void onDestroy();
 
-	// override
-	void OnDestroy();
-
-	Weapon<>& getWeapon() { return weapon_; }
+	Weapon<>& getWeapon() { return m_weapon; }
 
 private:
-	AttackPattern   attack_;
-	MovementPattern movement_;
+	AttackPattern   m_attack;
+	MovementPattern m_movement;
 
 	int      speed_;
 	float    base_y_;
 	float    base_x_;
 	float    angle_;
 
-	Weapon<> weapon_;
-	Entity*  target_;
-	Animator animator_;
+	Weapon<> m_weapon;
+	Entity*  m_target;
+	Animator m_animator;
 };
 
 

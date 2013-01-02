@@ -9,9 +9,9 @@ class Canon: public ComplexEntity
 public:
 	Canon(const sf::Vector2f& position);
 
-	void Update(float frametime);
+	void onUpdate(float frametime);
 
-	Canon* Clone() const;
+	Canon* clone() const;
 
 private:
 	Weapon<> weapon_;

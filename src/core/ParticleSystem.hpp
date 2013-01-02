@@ -220,7 +220,7 @@ private:
 		public:
 		Explosion(const sf::Vector2f& pos)
 		{
-			animator_.setAnimation(sprite_, EntityManager::GetInstance().GetAnimation("explosion"));
+			animator_.setAnimation(sprite_, EntityManager::getInstance().GetAnimation("explosion"));
 			sprite_.setOrigin(sprite_.getCenter());
 			sprite_.setPosition(pos);
 			timer_ = 0;

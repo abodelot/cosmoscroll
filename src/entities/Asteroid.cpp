@@ -34,7 +34,7 @@ Asteroid::Asteroid(const sf::Vector2f& position, Size size, float angle) :
 }
 
 
-Asteroid* Asteroid::Clone() const
+Asteroid* Asteroid::clone() const
 {
 	Asteroid* asteroid = new Asteroid(*this);
 	asteroid->SetRandomImage();
@@ -42,7 +42,7 @@ Asteroid* Asteroid::Clone() const
 }
 
 
-void Asteroid::Update(float frametime)
+void Asteroid::onUpdate(float frametime)
 {
 	sf::Vector2f pos = getPosition();
 	pos.x += speed_.x * frametime;
@@ -52,23 +52,23 @@ void Asteroid::Update(float frametime)
 }
 
 
-void Asteroid::OnDestroy()
+void Asteroid::onDestroy()
 {
 	sf::Vector2f pos = getPosition();
 
-	static EntityManager& manager = EntityManager::GetInstance();
+	static EntityManager& manager = EntityManager::getInstance();
 	switch (size_)
 	{
 		case BIG:
 			for (int i = 0; i < BIG_SPLIT_INTO; ++i)
 			{
-				manager.AddEntity(new Asteroid(pos, MEDIUM, math::random(0, 360)));
+				manager.addEntity(new Asteroid(pos, MEDIUM, math::random(0, 360)));
 			}
 			break;
 		case MEDIUM:
 			for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
 			{
-				manager.AddEntity(new Asteroid(pos, SMALL, math::random(0, 360)));
+				manager.addEntity(new Asteroid(pos, SMALL, math::random(0, 360)));
 			}
 			break;
 		default:

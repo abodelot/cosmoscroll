@@ -6,7 +6,7 @@
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
 #include "entities/EntityManager.hpp"
-#include "entities/PlayerShip.hpp"
+#include "entities/Player.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
@@ -15,7 +15,7 @@
 
 
 EndGameScene::EndGameScene():
-	entities_(EntityManager::GetInstance())
+	entities_(EntityManager::getInstance())
 {
 	timer_ = 0.f;
 	info_.setCharacterSize(40);
@@ -49,7 +49,7 @@ void EndGameScene::Update(float frametime)
 	if (player_dead_)
 	{
 		// falling animation
-		PlayerShip* player = EntityManager::GetInstance().GetPlayerShip();
+		Player* player = EntityManager::getInstance().GetPlayerShip();
 		player->move(0, frametime * 100);
 		player->rotate(10 * frametime);
 		//FIXME player->updateSubRect(*player, frametime);
@@ -69,7 +69,7 @@ void EndGameScene::OnFocus()
 {
 	timer_ = 0.f;
 
-	if (entities_.GetPlayerShip()->IsDead())
+	if (entities_.GetPlayerShip()->isDead())
 	{
 		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("game-over.ogg"));
 		info_.setString(_t("endgame.game_over"));
@@ -80,7 +80,7 @@ void EndGameScene::OnFocus()
 		// Level completed
 		LevelManager& levels = LevelManager::GetInstance();
 		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("end-level.ogg"));
-		int earned_credits = entities_.GetPlayerShip()->GetPoints();
+		int earned_credits = entities_.GetPlayerShip()->getPoints();
 		int current = levels.GetCurrent();
 		// if last level
 		if (current % levels.CountLevel() == 0)

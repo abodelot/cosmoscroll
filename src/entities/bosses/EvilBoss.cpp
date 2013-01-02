@@ -1,4 +1,5 @@
 #include "EvilBoss.hpp"
+#include "entities/Player.hpp"
 #include "core/ParticleSystem.hpp"
 #include "core/Resources.hpp"
 
@@ -7,14 +8,14 @@
 #define MOUTH_OFFSET      sf::Vector2f(143, 128)
 
 #define MAX_X 350
-#define MAX_Y (EntityManager::GetInstance().GetHeight() - getHeight())
+#define MAX_Y (EntityManager::getInstance().getHeight() - getHeight())
 
 EvilBoss::EvilBoss(const sf::Vector2f& position) :
 	Entity(position, EVIL)
 {
 	setTexture(Resources::getTexture("entities/evil-boss.png"));
 	setTextureRect(sf::IntRect(0, 0, 242, 160));
-	SetTeam(Entity::BAD);
+	setTeam(Entity::BAD);
 
 	// init weapons
 	m_eye_left.init("devil-eyes");
@@ -37,13 +38,13 @@ EvilBoss::EvilBoss(const sf::Vector2f& position) :
 }
 
 
-EvilBoss* EvilBoss::Clone() const
+EvilBoss* EvilBoss::clone() const
 {
 	return new EvilBoss(*this);
 }
 
 
-void EvilBoss::Update(float frametime)
+void EvilBoss::onUpdate(float frametime)
 {
 	sf::Vector2f target_pos = target_->getCenter();
 
@@ -75,10 +76,10 @@ void EvilBoss::Update(float frametime)
 }
 
 
-void EvilBoss::TakeDamage(int damage)
+void EvilBoss::takeDamage(int damage)
 {
-	Entity::TakeDamage(damage);
-	if (GetHP() < next_ && GetHP() > 0 && phase_ != next_)
+	Entity::takeDamage(damage);
+	if (getHP() < next_ && getHP() > 0 && phase_ != next_)
 	{
 		phase_ = next_;
 		switch (phase_)
@@ -101,14 +102,14 @@ void EvilBoss::TakeDamage(int damage)
 }
 
 
-void EvilBoss::OnDestroy()
+void EvilBoss::onDestroy()
 {
 	ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 200);
 }
 
 
-void EvilBoss::SetTarget(Entity* target)
+void EvilBoss::onInit()
 {
-	target_ = target;
+    target_ = EntityManager::getInstance().GetPlayerShip();
 }
 

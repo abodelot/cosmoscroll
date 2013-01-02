@@ -2,7 +2,7 @@
 #include "core/Game.hpp"
 #include "core/SoundSystem.hpp"
 #include "entities/EntityManager.hpp"
-#include "entities/PlayerShip.hpp"
+#include "entities/Player.hpp"
 #include "core/Resources.hpp"
 
 #define DURATION    6.f
@@ -11,7 +11,7 @@
 
 
 IntroScene::IntroScene() :
-	entity_mgr_(EntityManager::GetInstance())
+	entity_mgr_(EntityManager::getInstance())
 {
 	background_.setTexture(Resources::getTexture("gui/background.png"));
 
@@ -23,11 +23,11 @@ IntroScene::IntroScene() :
 	title_.resize(title_.getWidth() * ZOOM_FACTOR, title_.getHeight() * ZOOM_FACTOR);
 
 	// show a tempory player ship during the scene
-	ship_ = new PlayerShip(sf::Vector2f(-200, 100), "player");
+	ship_ = new Player(sf::Vector2f(-200, 100), "player");
 
 	// allow the player ship to go beyond screen limits during the intro scene
 	entity_mgr_.resize(1000, 1000);
-	entity_mgr_.AddEntity(ship_);
+	entity_mgr_.addEntity(ship_);
 
 	elapsed_ = 0.f;
 }

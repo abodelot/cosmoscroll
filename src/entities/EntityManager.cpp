@@ -1,7 +1,7 @@
 #include "EntityManager.hpp"
 #include "Asteroid.hpp"
-#include "PlayerShip.hpp"
-#include "SpaceShip.hpp"
+#include "Player.hpp"
+#include "Spaceship.hpp"
 #include "core/LevelManager.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
@@ -18,36 +18,36 @@
 /**
  * Get attack pattern encoded in an xml element
  */
-static SpaceShip::AttackPattern GetAttackPattern(const TiXmlElement* elem)
+static Spaceship::AttackPattern GetAttackPattern(const TiXmlElement* elem)
 {
 	const char* attack = elem->Attribute("attack");
 	if (attack != NULL)
 	{
-		if (strcmp(attack, "auto_aim") == 0) return SpaceShip::AUTO_AIM;
-		if (strcmp(attack, "on_sight") == 0) return SpaceShip::ON_SIGHT;
-		if (strcmp(attack, "none")     == 0) return SpaceShip::NONE;
+		if (strcmp(attack, "auto_aim") == 0) return Spaceship::AUTO_AIM;
+		if (strcmp(attack, "on_sight") == 0) return Spaceship::ON_SIGHT;
+		if (strcmp(attack, "none")     == 0) return Spaceship::NONE;
 
 		std::cerr << "unknown attack pattern: " << attack << std::endl;
 	}
-	return SpaceShip::NONE;
+	return Spaceship::NONE;
 }
 
 /**
  * Get movement pattern encoded in an xml element
  */
-static SpaceShip::MovementPattern GetMovementPattern(const TiXmlElement* elem)
+static Spaceship::MovementPattern GetMovementPattern(const TiXmlElement* elem)
 {
 	const char* move = elem->Attribute("move");
 	if (move != NULL)
 	{
-		if (strcmp(move, "line")   == 0) return SpaceShip::LINE;
-		if (strcmp(move, "magnet") == 0) return SpaceShip::MAGNET;
-		if (strcmp(move, "sinus")  == 0) return SpaceShip::SINUS;
-		if (strcmp(move, "circle") == 0) return SpaceShip::CIRCLE;
+		if (strcmp(move, "line")   == 0) return Spaceship::LINE;
+		if (strcmp(move, "magnet") == 0) return Spaceship::MAGNET;
+		if (strcmp(move, "sinus")  == 0) return Spaceship::SINUS;
+		if (strcmp(move, "circle") == 0) return Spaceship::CIRCLE;
 
 		std::cerr << "unknown movement pattern: " << move << std::endl;
 	}
-	return SpaceShip::LINE;
+	return Spaceship::LINE;
 }
 
 /*
@@ -64,7 +64,7 @@ valeur max :  	apparait à partir de :
 #define DROPPABLE_STEP 25
 
 
-EntityManager& EntityManager::GetInstance()
+EntityManager& EntityManager::getInstance()
 {
 	static EntityManager self;
 	return self;
@@ -126,7 +126,7 @@ void EntityManager::InitMode(Mode mode)
 			ControlPanel::GetInstance().SetLevelDuration(levels_.GetDuration());
 			more_bad_guys_ = &EntityManager::MoreBadGuys_STORY;
 			// le vaisseau du joueur est conservé d'un niveau à l'autre
-			if (mode_ != MODE_STORY || player_ == NULL || player_->IsDead())
+			if (mode_ != MODE_STORY || player_ == NULL || player_->isDead())
 			{
 				RespawnPlayer();
 			}
@@ -224,11 +224,11 @@ void EntityManager::Update(float frametime)
 	for (it = entities_.begin(); it != entities_.end();)
 	{
 		Entity& entity = **it;
-		entity.Update(frametime);
+		entity.onUpdate(frametime);
 
 		r1 = entity.GetCollideRect();
 
-		if (entity.IsDead())
+		if (entity.isDead())
 		{
 			// removing dead entities
 			delete *it;
@@ -248,8 +248,8 @@ void EntityManager::Update(float frametime)
 				// collision dectection it1 <-> it2
 				if (Collisions::pixelPerfectTest(entity, **it2))
 				{
-					entity.OnCollide(**it2);
-					(**it2).OnCollide(entity);
+					entity.onCollision(**it2);
+					(**it2).onCollision(entity);
 				}
 			}
 			++it;
@@ -265,12 +265,12 @@ void EntityManager::Update(float frametime)
 		if (player_y < decor_height_)
 		{
 			player_->setY(decor_height_ + 1);
-			player_->TakeDamage(1);
+			player_->takeDamage(1);
 		}
 		else if ((player_y + player_->getHeight()) > (height_ - decor_height_))
 		{
 			player_->setY(height_ - decor_height_ - player_->getHeight() - 1);
-			player_->TakeDamage(1);
+			player_->takeDamage(1);
 		}
 	}
 
@@ -284,9 +284,8 @@ void EntityManager::Update(float frametime)
 }
 
 
-void EntityManager::AddEntity(Entity* entity)
+void EntityManager::addEntity(Entity* entity)
 {
-	entity->SetTarget(player_);
 	entity->onInit();
 	entities_.push_back(entity);
 }
@@ -324,8 +323,8 @@ bool EntityManager::IsGameOver()
 
 void EntityManager::UpdateArcadeRecord()
 {
-	assert(player_->GetPoints() > arcade_record_);
-	arcade_record_ = player_->GetPoints();
+	assert(player_->getPoints() > arcade_record_);
+	arcade_record_ = player_->getPoints();
 }
 
 
@@ -427,8 +426,8 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 		elem->QueryIntAttribute("points", &points);
 
 		// Create spaceship instance
-		SpaceShip* ship = new SpaceShip(GetAnimation(animation), hp, speed);
-		ship->SetPoints(points);
+		Spaceship* ship = new Spaceship(GetAnimation(animation), hp, speed);
+		ship->setPoints(points);
 
 		ship->setMovementPattern(GetMovementPattern(elem));
 		ship->setAttackPattern(GetAttackPattern(elem));
@@ -462,14 +461,14 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 }
 
 
-SpaceShip* EntityManager::CreateSpaceShip(int id, int x, int y)
+Spaceship* EntityManager::CreateSpaceShip(int id, int x, int y)
 {
 	SpaceShipMap::const_iterator it;
 	it = spaceships_defs_.find(id);
 
 	if (it != spaceships_defs_.end())
 	{
-		SpaceShip* ship = it->second->Clone();
+		Spaceship* ship = it->second->clone();
 		ship->setPosition(x, y);
 		return ship;
 	}
@@ -491,7 +490,7 @@ const Animation& EntityManager::GetAnimation(const std::string& key) const
 }
 
 
-PlayerShip* EntityManager::GetPlayerShip() const
+Player* EntityManager::GetPlayerShip() const
 {
 	assert(player_ != NULL);
 	return player_;
@@ -506,7 +505,7 @@ void EntityManager::SpawnRandomEntity()
 	for (size_t i = max_droppable_index_; i < uniques_.size(); ++i)
 	{
 		Entity* entity = uniques_[i];
-		if (entity->GetPoints() <= max_droppable_points_)
+		if (entity->getPoints() <= max_droppable_points_)
 		{
 			max_droppable_index_ = i;
 		}
@@ -515,18 +514,18 @@ void EntityManager::SpawnRandomEntity()
 			break;
 		}
 	}
-	Entity* entity = uniques_[math::random(0, max_droppable_index_)]->Clone();
+	Entity* entity = uniques_[math::random(0, max_droppable_index_)]->clone();
 
 	entity->setX(width_ - 1);
 	entity->setY(math::random(0, height_ - (int) entity->getHeight()));
-	AddEntity(entity);
+	addEntity(entity);
 }
 
 
 void EntityManager::RegisterUniqueEntity(Entity* entity)
 {
 	std::vector<Entity*>::iterator it = uniques_.begin();
-	while (it != uniques_.end() && (**it).GetPoints() < entity->GetPoints())
+	while (it != uniques_.end() && (**it).getPoints() < entity->getPoints())
 	{
 		++it;
 	}
@@ -553,7 +552,7 @@ bool EntityManager::MoreBadGuys_STORY()
 	Entity* p = levels_.GiveNextEntity(timer_);
 	while (p != NULL)
 	{
-		AddEntity(p);
+		addEntity(p);
 		p = levels_.GiveNextEntity(timer_);
 	}
 	// The current level is not completed if there are still enemies in the
@@ -566,8 +565,8 @@ void EntityManager::RespawnPlayer()
 {
 	Clear();
 	sf::Vector2f position(50, height_ / 2);
-	player_ = new PlayerShip(position, "player");
-	AddEntity(player_);
+	player_ = new Player(position, "player");
+	addEntity(player_);
 }
 
 

@@ -13,14 +13,18 @@ public:
 	ComplexEntity(const sf::Vector2f& pos);
 
 	// override
-	void Update(float frametime);
+	void onUpdate(float frametime);
 
 	// override
-	void OnCollide(Entity& entity);
+	void onCollision(const Entity& entity);
 
 	// override
 	float GetSpeedX() const;
 
+	const ComplexEntity* toComplexEntity() const { return this; }
+
+	// callbacks
+	virtual void onPartDestroyed(const Part&) {};
 protected:
 	void AddPart(Part& part, float x=0.f, float y=0.f);
 
@@ -35,8 +39,7 @@ protected:
 	 */
 	int DestroyPart(int id);
 
-	// callbacks
-	virtual void OnPartDestroyed(const Part&) {};
+
 
 	// override
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;

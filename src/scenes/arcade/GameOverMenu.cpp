@@ -4,7 +4,7 @@
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "entities/EntityManager.hpp"
-#include "entities/PlayerShip.hpp"
+#include "entities/Player.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "md5/md5.hpp"
@@ -43,9 +43,9 @@ GameOverMenu::GameOverMenu()
 void GameOverMenu::OnFocus()
 {
 	BaseMenu::OnFocus();
-	EntityManager& entities = EntityManager::GetInstance();
+	EntityManager& entities = EntityManager::getInstance();
 
-	score_ = entities.GetPlayerShip()->GetPoints();
+	score_ = entities.GetPlayerShip()->getPoints();
 
 	std::wstring text;
 	if (score_ > entities.GetArcadeRecord())
@@ -80,14 +80,14 @@ void GameOverMenu::EventCallback(int id)
 			but_send_score_->SetVisible(false);
 			break;
 		case 1:
-			EntityManager::GetInstance().InitMode(EntityManager::MODE_ARCADE);
+			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
 			Game::GetInstance().SetNextScene(Game::SC_InGameScene);
 			break;
 		case 2:
 			Game::GetInstance().SetNextScene(Game::SC_MainMenu);
 			break;
 		case 3:
-			if (EntityManager::GetInstance().GetPlayerShip()->HasCheated())
+			if (EntityManager::getInstance().GetPlayerShip()->HasCheated())
 			{
 				lab_result_->setCharacterSize(20);
 				lab_result_->setString(_t("menu.gameover.error_cheat"));

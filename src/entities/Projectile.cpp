@@ -1,60 +1,57 @@
 #include "Projectile.hpp"
-#include "Bonus.hpp"
-#include "PlayerShip.hpp"
+#include "Player.hpp"
 #include "utils/Math.hpp"
 #include "utils/StringUtils.hpp"
 #include "core/ParticleSystem.hpp"
 
 
 Projectile::Projectile(Entity* emitter, const sf::Vector2f& position, float angle,
-	const sf::Texture* image, int speed, int damage) :
-	Entity(position, 1, damage)
+	const sf::Texture& image, int speed, int damage) :
+	Entity(position, damage)
 {
-	setTexture(*image);
-	SetTeam(emitter->GetTeam());
-	SetCollideFlag(C_IGNORE_HITS | C_IGNORE_DAMAGE); // hit objects die by themselves on collide
+	setTexture(image);
+	setTeam(emitter->getTeam());
 	setRotation(-math::to_deg(angle));
 
 	// calcul du vecteur vitesse à partir de l'angle et de la vitesse
-	speed_.x = std::cos(angle) * speed + emitter->GetSpeedX();
-	speed_.y = -std::sin(angle) * speed;
+	m_speed.x = std::cos(angle) * speed + emitter->GetSpeedX();
+	m_speed.y = -std::sin(angle) * speed;
 
 	// origin is located at sprite center to allow rotation
 	setOrigin(getWidth() / 2, getHeight() / 2);
 }
 
 
-Projectile* Projectile::Clone() const
+Projectile* Projectile::clone() const
 {
 	return new Projectile(*this);
 }
 
 
-void Projectile::Update(float frametime)
+void Projectile::onUpdate(float frametime)
 {
-	move(speed_.x * frametime, speed_.y * frametime);
+	move(m_speed.x * frametime, m_speed.y * frametime);
 }
 
 
-void Projectile::OnCollide(Entity& entity)
+void Projectile::onCollision(const Entity& entity)
 {
-	// ignore friend entities, hit and bonuses
-	if (entity.GetTeam() == GetTeam() || entity.GetCollideFlag() & C_IGNORE_HITS)
+	// Ignore friendly entities
+	if (entity.getTeam() == getTeam() || entity.toProjectile() || entity.toComplexEntity() || entity.toPowerUp())
 	{
 		return;
 	}
-	Entity::OnCollide(entity);
 	ParticleSystem::GetInstance().ImpactSfx(getPosition(), 10);
-	if (GetTeam() == Entity::GOOD && entity.IsDead())
+	if (getTeam() == Entity::GOOD && entity.isDead())
 	{
-		int points = entity.ConsumePoints();
+		int points = entity.getPoints();
 		if (points != 0)
 		{
 			std::string s = "+" + to_string(points);
-			EntityManager& e = EntityManager::GetInstance();
+			EntityManager& e = EntityManager::getInstance();
 			e.GetPlayerShip()->UpdateScoreCounter(points);
 			ParticleSystem::GetInstance().AddMessage(getPosition(), s, sf::Color(255, 128, 0));
 		}
 	}
-	Kill();
+	kill();
 }
