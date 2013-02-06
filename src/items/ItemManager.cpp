@@ -1,6 +1,6 @@
 #include "ItemManager.hpp"
 #include "Weapon.hpp"
-#include "tinyxml/tinyxml.h"
+#include "tinyxml/tinyxml2.h"
 #include "utils/Error.hpp"
 
 
@@ -25,16 +25,16 @@ ItemManager::~ItemManager()
 
 int ItemManager::LoadItems(const std::string& filename)
 {
-	TiXmlDocument doc;
-	if (!doc.LoadFile(filename))
+	tinyxml2::XMLDocument doc;
+	if (doc.LoadFile(filename.c_str()) != 0)
 	{
-		Error::Log << "Cannot load items definitions:\n" << filename << "\n" << doc.ErrorDesc() << "\n";
+		Error::Log << "Cannot load items definitions:\n" << filename << "\n" << doc.GetErrorStr1() << "\n";
 		throw Error::Exception();
 	}
 
-	TiXmlElement* root = doc.RootElement();
+	tinyxml2::XMLElement* root = doc.RootElement();
 	// weapons
-	TiXmlElement* elem = root->FirstChildElement("weapons")->FirstChildElement();
+	tinyxml2::XMLElement* elem = root->FirstChildElement("weapons")->FirstChildElement();
 	while (elem != NULL)
 	{
 		WeaponData data;
@@ -104,7 +104,7 @@ const GenericItemData* ItemManager::GetGenericItemData(ItemData::Type type, int 
 }
 
 
-void ItemManager::ParseGenericItems(TiXmlElement* elem, const char* tagname, ItemData::Type type)
+void ItemManager::ParseGenericItems(tinyxml2::XMLElement* elem, const char* tagname, ItemData::Type type)
 {
 	elem = elem->FirstChildElement(tagname);
 	if (elem != NULL)

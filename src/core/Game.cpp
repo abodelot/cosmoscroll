@@ -435,7 +435,9 @@ void Game::BSOD(std::string message)
 	title_bg.setPosition(x - 10, 50);
 
 	sf::Text str;
+	std::cerr << message << std::endl;
 	message += "\n\nPress any key to exit.";
+
 	str.setString(message);
 	str.setCharacterSize(20);
 	str.setPosition(50, 200);

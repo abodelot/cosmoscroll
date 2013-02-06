@@ -16,7 +16,7 @@ WeaponData::WeaponData()
 }
 
 
-bool WeaponData::LoadFromXml(TiXmlElement* elem)
+bool WeaponData::LoadFromXml(tinyxml2::XMLElement* elem)
 {
 	ItemData::LoadFromXml(elem);
 
@@ -45,22 +45,22 @@ bool WeaponData::LoadFromXml(TiXmlElement* elem)
 		sound_ = &Resources::getSoundBuffer(p);
 	}
 
-	if (elem->QueryFloatAttribute("heat_cost", &heat_cost_) != TIXML_SUCCESS)
+	if (elem->QueryFloatAttribute("heat_cost", &heat_cost_) != tinyxml2::XML_SUCCESS)
 	{
 		std::cerr << "weapon heat cost is missing" << std::endl;
 	}
 
-	if (elem->QueryFloatAttribute("fire_rate", &fire_rate_) != TIXML_SUCCESS)
+	if (elem->QueryFloatAttribute("fire_rate", &fire_rate_) != tinyxml2::XML_SUCCESS)
 	{
 		std::cerr << "weapon fire rate is missing" << std::endl;
 	}
 
-	if (elem->QueryIntAttribute("damage", &damage_) != TIXML_SUCCESS)
+	if (elem->QueryIntAttribute("damage", &damage_) != tinyxml2::XML_SUCCESS)
 	{
 		std::cerr << "weapon damage is missing" << std::endl;
 	}
 
-	if (elem->QueryIntAttribute("speed", &speed_) != TIXML_SUCCESS)
+	if (elem->QueryIntAttribute("speed", &speed_) != tinyxml2::XML_SUCCESS)
 	{
 		std::cerr << "weapon speed is missing" << std::endl;
 	}

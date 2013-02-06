@@ -10,7 +10,7 @@ GenericItemData::GenericItemData(ItemData::Type type)
 }
 
 
-bool GenericItemData::LoadFromXml(TiXmlElement* elem)
+bool GenericItemData::LoadFromXml(tinyxml2::XMLElement* elem)
 {
 	ItemData::LoadFromXml(elem);
 

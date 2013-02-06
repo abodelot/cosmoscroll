@@ -201,39 +201,40 @@ void LevelManager::EnableHardcore(bool hardcore)
 
 int LevelManager::ParseFile(const std::string& file)
 {
-	if (!doc_.LoadFile(file))
+	std::cerr << "aaa\n";
+	if (doc_.LoadFile(file.c_str()) != 0)
 	{
-		Error::Log << "Cannot load levels:\n" << file << "\n" << doc_.ErrorDesc();
+		Error::Log << "Cannot load levels:\n" << file << "\n" << doc_.GetErrorStr1();
 		throw Error::Exception();
 	}
-
-	TiXmlNode* root = doc_.RootElement();
+	std::cerr << "bbb\n";
+	tinyxml2::XMLElement* root = doc_.RootElement();
 
 	// Parse function nodes
-	TiXmlNode* node = root->FirstChild("functions")->FirstChild();
+	tinyxml2::XMLElement* node = root->FirstChildElement("functions")->FirstChildElement();
+
 	while (node != NULL)
 	{
-		TiXmlElement* element = node->ToElement();
-		const char* name = element->Attribute("name");
+		const char* name = node->Attribute("name");
 		if (name != NULL)
-			functions_[name] = element;
+			functions_[name] = node;
 		else
 			puts("warning: function doesn't have a proper name");
-		node = node->NextSibling();
+		node = node->NextSiblingElement();
 	}
 
 	// Parse level nodes
-	node = root->FirstChild("levels")->FirstChild("level");
+	node = root->FirstChildElement("levels")->FirstChildElement("level");
 	while (node != NULL)
 	{
-		levels_.push_back(node->ToElement());
-		node = node->NextSibling("level");
+		levels_.push_back(node);
+		node = node->NextSiblingElement("level");
 	}
 	return (int) levels_.size();
 }
 
 
-void LevelManager::ParseLevel(TiXmlElement* elem)
+void LevelManager::ParseLevel(tinyxml2::XMLElement* elem)
 {
 	ClearWaitingLine();
 	last_insert_time_ = 0.f;
@@ -248,7 +249,7 @@ void LevelManager::ParseLevel(TiXmlElement* elem)
 }
 
 
-void LevelManager::ParseEntity(TiXmlElement* elem)
+void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 {
 	EntityManager& entity_mgr = EntityManager::getInstance();
 	const char* tag_name = elem->Value();
@@ -258,7 +259,7 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		elem->QueryIntAttribute("count", &count);
 		while (count > 0)
 		{
-			TiXmlElement* child = elem->FirstChildElement();
+			tinyxml2::XMLElement* child = elem->FirstChildElement();
 			while (child != NULL)
 			{
 				ParseEntity(child);
@@ -272,10 +273,10 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		const char* func_name = elem->Attribute("func");
 		if (func_name != NULL)
 		{
-			std::map<std::string, TiXmlElement*>::iterator it = functions_.find(func_name);
+			std::map<std::string, tinyxml2::XMLElement*>::iterator it = functions_.find(func_name);
 			if (it != functions_.end())
 			{
-				TiXmlElement* child	= it->second->FirstChildElement();
+				tinyxml2::XMLElement* child	= it->second->FirstChildElement();
 				while (child != NULL)
 				{
 					ParseEntity(child);
@@ -333,13 +334,11 @@ void LevelManager::ParseEntity(TiXmlElement* elem)
 		}
 		else if (strcmp(tag_name, "decor") == 0)
 		{
-			std::string decor_name = "";
-			elem->QueryValueAttribute("id", &decor_name);
-			if (decor_name == "gate")
+			if (elem->Attribute("id", "gate"))
 				entity = new Gate(position);
-			else if (decor_name == "canon")
+			else if (elem->Attribute("id", "canon"))
 				entity = new Canon(position);
-			else if (decor_name == "guntower")
+			else if (elem->Attribute("id", "guntower"))
 				entity = new GunTower(position);
 		}
 		else
@@ -376,7 +375,7 @@ void LevelManager::ClearWaitingLine()
 }
 
 
-TiXmlElement* LevelManager::GetLevelElement(int level) const
+tinyxml2::XMLElement* LevelManager::GetLevelElement(int level) const
 {
 	if (level > (int) levels_.size())
 		level -= levels_.size();

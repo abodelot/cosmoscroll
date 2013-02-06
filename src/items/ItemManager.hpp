@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <iostream>
 
 #include "WeaponData.hpp"
 #include "GenericItemData.hpp"
@@ -47,7 +48,7 @@ private:
 	~ItemManager();
 
 
-	void ParseGenericItems(TiXmlElement* elem, const char* tagname, ItemData::Type type);
+	void ParseGenericItems(tinyxml2::XMLElement* elem, const char* tagname, ItemData::Type type);
 
 	typedef std::list<WeaponData> WeaponList;
 	WeaponList weapons_;

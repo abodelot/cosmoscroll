@@ -1,7 +1,8 @@
 #ifndef ITEMDATA_HPP
 #define ITEMDATA_HPP
 
-#include "tinyxml/tinyxml.h"
+#include "tinyxml/tinyxml2.h"
+#include <string>
 
 class ItemData
 {
@@ -23,7 +24,7 @@ public:
 
 	const char* TypeToString() const;
 
-	virtual bool LoadFromXml(TiXmlElement* elem);
+	virtual bool LoadFromXml(tinyxml2::XMLElement* elem);
 
 	int GetPrice() const;
 	int GetLevel() const;

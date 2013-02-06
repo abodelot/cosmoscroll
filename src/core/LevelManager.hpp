@@ -6,7 +6,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-#include "tinyxml/tinyxml.h"
+#include "tinyxml/tinyxml2.h"
 
 class Entity;
 
@@ -122,12 +122,12 @@ private:
 	 * Parser un niveau
 	 * @param elem: noeud XML contenant le niveau
 	 */
-	void ParseLevel(TiXmlElement* elem);
+	void ParseLevel(tinyxml2::XMLElement* elem);
 
 	/**
 	 * Parser un élément de niveau
 	 */
-	void ParseEntity(TiXmlElement* elem);
+	void ParseEntity(tinyxml2::XMLElement* elem);
 
 	/**
 	 * Ajouter une entité à la file d'attente
@@ -145,7 +145,7 @@ private:
 	 * Obtenir l'élément XML d'un niveau
 	 * @return element, premier niveau si niveau inexistant
 	 */
-	TiXmlElement* GetLevelElement(int level) const;
+	tinyxml2::XMLElement* GetLevelElement(int level) const;
 
 	/**
 	 * "#FF0000" -> sf::Color(255, 0, 0)
@@ -159,11 +159,11 @@ private:
 	};
 
 	float last_insert_time_;
-	TiXmlDocument doc_;
-	// pointeurs vers les définitions XML des niveaux
-	std::vector<TiXmlElement*> levels_;
-	// fonctions XML des niveaux
-	std::map<std::string, TiXmlElement*> functions_;
+	tinyxml2::XMLDocument doc_;
+	// Level definition nodes
+	std::vector<tinyxml2::XMLElement*> levels_;
+	// Functions declarations nodes
+	std::map<std::string, tinyxml2::XMLElement*> functions_;
 	// liste des vaisseaux à spawner pour le niveau courant
 	std::queue<EntitySlot> waiting_line_;
 	int current_level_;

@@ -12,7 +12,7 @@ public:
 	GenericItemData(ItemData::Type type);
 
 	// override
-	bool LoadFromXml(TiXmlElement* elem);
+	bool LoadFromXml(tinyxml2::XMLElement* elem);
 
 	// override
 	std::wstring BuildDescriptionString() const;

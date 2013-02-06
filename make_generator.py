@@ -5,14 +5,13 @@
 # Makefile generator
 # usage: ./make_generator.py [makefile_name]
 # @author Alexandre Bodelot <alexandre.bodelot@gmail.com>
-# @date 2011-10-15
 #
 
 import sys
 import os
 import time
 
-SRC_DIRS = ("src", "extlibs")
+SRC_DIR = "src"
 MAKEFILE = "Makefile"
 TARGET = "bin/cosmoscroll"
 CFLAGS = "-Wall -Wextra -Wwrite-strings -ansi -pedantic"
@@ -27,7 +26,7 @@ class MakeGenerator:
 		self.makefile_name = makefile_name
 		self.libs = ()
 		self.cflags = ""
-		self.searchpath = None
+		self.searchpath = []
 
 	def set_cflags(self, cflags):
 		self.cflags = cflags
@@ -40,10 +39,12 @@ class MakeGenerator:
 		self.libs = libs
 
 
-	def set_src_dirs(self, dirs):
-		self.searchpath = dirs
-		for d in dirs:
-			self.add_sources(d)
+	##
+	# Add a source directory in the search path
+	#
+	def add_src_dir(self, directory):
+		self.searchpath.append(directory)
+		self.add_sources(directory)
 
 
 	##
@@ -115,22 +116,13 @@ class MakeGenerator:
 
 		f.close();
 
-	##
-	# Invoquer le fichier makefile
-	#
-	def invoke_makefile(self):
-		if os.path.isfile(self.makefile_name):
-			os.system("make -f %s" % self.makefile_name)
-		else:
-			print "makefile " + self.makefile_name + " not found."
-
 
 if __name__ == "__main__":
 	makefile_name = sys.argv[1] if len(sys.argv) > 1 else MAKEFILE
 
 	m = MakeGenerator(TARGET, makefile_name)
-	m.set_src_dirs(SRC_DIRS)
+	m.add_src_dir(SRC_DIR)
 	m.set_libs(LIBS)
 	m.set_cflags(CFLAGS)
 	m.write_makefile()
-	m.invoke_makefile()
+	print makefile_name, "generated."

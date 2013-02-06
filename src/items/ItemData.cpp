@@ -35,7 +35,7 @@ const char* ItemData::TypeToString() const
 }
 
 
-bool ItemData::LoadFromXml(TiXmlElement* elem)
+bool ItemData::LoadFromXml(tinyxml2::XMLElement* elem)
 {
 	elem->QueryIntAttribute("price", &price_);
 	elem->QueryIntAttribute("level", &level_);

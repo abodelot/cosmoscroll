@@ -12,41 +12,33 @@
 #include "utils/Error.hpp"
 #include "utils/I18n.hpp"
 #include "utils/Math.hpp"
-#include "tinyxml/tinyxml.h"
+#include "tinyxml/tinyxml2.h"
 
 
 /**
  * Get attack pattern encoded in an xml element
  */
-static Spaceship::AttackPattern GetAttackPattern(const TiXmlElement* elem)
+static Spaceship::AttackPattern GetAttackPattern(const tinyxml2::XMLElement* elem)
 {
-	const char* attack = elem->Attribute("attack");
-	if (attack != NULL)
-	{
-		if (strcmp(attack, "auto_aim") == 0) return Spaceship::AUTO_AIM;
-		if (strcmp(attack, "on_sight") == 0) return Spaceship::ON_SIGHT;
-		if (strcmp(attack, "none")     == 0) return Spaceship::NONE;
+	if (elem->Attribute("attack", "auto_aim")) return Spaceship::AUTO_AIM;
+	if (elem->Attribute("attack", "on_sight")) return Spaceship::ON_SIGHT;
+	if (elem->Attribute("attack", "none")    ) return Spaceship::NONE;
 
-		std::cerr << "unknown attack pattern: " << attack << std::endl;
-	}
+	std::cerr << "unknown attack pattern" << std::endl;
 	return Spaceship::NONE;
 }
 
 /**
  * Get movement pattern encoded in an xml element
  */
-static Spaceship::MovementPattern GetMovementPattern(const TiXmlElement* elem)
+static Spaceship::MovementPattern GetMovementPattern(const tinyxml2::XMLElement* elem)
 {
-	const char* move = elem->Attribute("move");
-	if (move != NULL)
-	{
-		if (strcmp(move, "line")   == 0) return Spaceship::LINE;
-		if (strcmp(move, "magnet") == 0) return Spaceship::MAGNET;
-		if (strcmp(move, "sinus")  == 0) return Spaceship::SINUS;
-		if (strcmp(move, "circle") == 0) return Spaceship::CIRCLE;
+	if (elem->Attribute("move", "line")  ) return Spaceship::LINE;
+	if (elem->Attribute("move", "magnet")) return Spaceship::MAGNET;
+	if (elem->Attribute("move", "sinus") ) return Spaceship::SINUS;
+	if (elem->Attribute("move", "circle")) return Spaceship::CIRCLE;
 
-		std::cerr << "unknown movement pattern: " << move << std::endl;
-	}
+	std::cerr << "unknown movement pattern" << std::endl;
 	return Spaceship::LINE;
 }
 
@@ -347,14 +339,14 @@ void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 int EntityManager::LoadAnimations(const std::string& filename)
 {
 	// chargement des animations
-	TiXmlDocument doc;
-	if (!doc.LoadFile(filename))
+	tinyxml2::XMLDocument doc;
+	if (doc.LoadFile(filename.c_str()) != 0)
 	{
-		Error::Log << "Cannot load animations definition:\n" << doc.ErrorDesc() << "\n";
+		Error::Log << "Cannot load animations definition:\n" << doc.GetErrorStr1() << "\n";
 		throw Error::Exception();
 	}
 
-	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
+	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement();
 	// attributs
 	int width, height, count;
 	float delay = 0.f;
@@ -365,10 +357,10 @@ int EntityManager::LoadAnimations(const std::string& filename)
 		bool ok = true;
 		ok &= ((name = elem->Attribute("name")) != NULL);
 		ok &= ((img = elem->Attribute("img")) != NULL);
-		ok &= (elem->QueryIntAttribute("width", &width) == TIXML_SUCCESS);
-		ok &= (elem->QueryIntAttribute("height", &height) == TIXML_SUCCESS);
-		ok &= (elem->QueryIntAttribute("count", &count) == TIXML_SUCCESS);
-		ok &= (elem->QueryFloatAttribute("delay", &delay) == TIXML_SUCCESS);
+		ok &= (elem->QueryIntAttribute("width", &width) == tinyxml2::XML_SUCCESS);
+		ok &= (elem->QueryIntAttribute("height", &height) == tinyxml2::XML_SUCCESS);
+		ok &= (elem->QueryIntAttribute("count", &count) == tinyxml2::XML_SUCCESS);
+		ok &= (elem->QueryFloatAttribute("delay", &delay) == tinyxml2::XML_SUCCESS);
 		int x = 0, y = 0;
 		elem->QueryIntAttribute("x", &x);
 		elem->QueryIntAttribute("y", &y);
@@ -392,18 +384,18 @@ int EntityManager::LoadAnimations(const std::string& filename)
 
 int EntityManager::LoadSpaceShips(const std::string& filename)
 {
-	TiXmlDocument doc;
-	if (!doc.LoadFile(filename))
+	tinyxml2::XMLDocument doc;
+	if (doc.LoadFile(filename.c_str()) != 0)
 	{
-		Error::Log << "Cannot load spaceships definition:\n" << doc.ErrorDesc();
+		Error::Log << "Cannot load spaceships definition:\n" << doc.GetErrorStr1();
 		throw Error::Exception();
 	}
 
-	TiXmlElement* elem = doc.RootElement()->FirstChildElement();
+	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement();
 	while (elem != NULL)
 	{
 		int id;
-		if (elem->QueryIntAttribute("id", &id) != TIXML_SUCCESS)
+		if (elem->QueryIntAttribute("id", &id) != tinyxml2::XML_SUCCESS)
 			throw Error::Exception("parse error: spaceship[id] is missing");
 
 		const char* name = elem->Attribute("name");
@@ -415,11 +407,11 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 			throw Error::Exception("parse error: spaceship[animation] is missing");
 
 		int hp;
-		if (elem->QueryIntAttribute("hp", &hp) != TIXML_SUCCESS)
+		if (elem->QueryIntAttribute("hp", &hp) != tinyxml2::XML_SUCCESS)
 			throw Error::Exception("parse error: spaceship[hp] is missing");
 
 		int speed;
-		if (elem->QueryIntAttribute("speed", &speed) != TIXML_SUCCESS)
+		if (elem->QueryIntAttribute("speed", &speed) != tinyxml2::XML_SUCCESS)
 			throw Error::Exception("parse error: spaceship[speed] is missing");
 
 		int points = 0;
@@ -433,7 +425,7 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 		ship->setAttackPattern(GetAttackPattern(elem));
 
 		// Parse weapon tag
-		TiXmlElement* weapon = elem->FirstChildElement();
+		tinyxml2::XMLElement* weapon = elem->FirstChildElement();
 		if (weapon != NULL)
 		{
 			int w_x, w_y;
@@ -441,10 +433,10 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 			if (weapon_id == NULL)
 				throw Error::Exception("parse error: spaceship > weapon[id] is missing");
 
-			if (weapon->QueryIntAttribute("x", &w_x) != TIXML_SUCCESS)
+			if (weapon->QueryIntAttribute("x", &w_x) != tinyxml2::XML_SUCCESS)
 				throw Error::Exception("parese error: spaceship > weapon[x] is missing");
 
-			if (weapon->QueryIntAttribute("y", &w_y) != TIXML_SUCCESS)
+			if (weapon->QueryIntAttribute("y", &w_y) != tinyxml2::XML_SUCCESS)
 				throw Error::Exception("parese error: spaceship > weapon[y] is missing");
 
 			ship->getWeapon().init(weapon_id);
