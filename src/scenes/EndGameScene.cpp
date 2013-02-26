@@ -85,13 +85,12 @@ void EndGameScene::OnFocus()
 		// if last level
 		if (current % levels.CountLevel() == 0)
 		{
-			std::wstring s = wstr_replace(_t("endgame.end_last_level"), L"{credits}", to_wstring(earned_credits));
-			info_.setString(s);
+			info_.setString(I18n::templatize("endgame.end_last_level", "{credits}", earned_credits));
 		}
 		else
 		{
-			std::wstring s = wstr_replace(_t("endgame.end_level"), L"{level}", to_wstring(current % levels.CountLevel()));
-			wstr_self_replace(s, L"{credits}", to_wstring(earned_credits));
+			std::wstring s = wstr_replace(_t("endgame.end_level"), L"{level}", std::to_wstring(current % levels.CountLevel()));
+			wstr_self_replace(s, L"{credits}", std::to_wstring(earned_credits));
 			info_.setString(s);
 		}
 
@@ -103,9 +102,6 @@ void EndGameScene::OnFocus()
 		}
 		player_dead_ = false;
 	}
-
-	info_.setPosition(
-		(Game::WIDTH - info_.getWidth()) / 2,
-		(Game::HEIGHT - info_.getHeight()) / 2
-	);
+	// Centered on screen
+	info_.setPosition((Game::WIDTH - info_.getWidth()) / 2, (Game::HEIGHT - info_.getHeight()) / 2);
 }

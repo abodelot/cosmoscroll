@@ -15,7 +15,7 @@ BitmapFont::BitmapFont(const sf::Texture& image, int width, int height)
 
 bool BitmapFont::setTexture(const sf::Texture& image)
 {
-	image_ = &image;
+	m_texture = &image;
 	char_width_ = image.getSize().x / width_;
 	char_height_ = image.getSize().y / height_;
 	return true;
@@ -24,7 +24,7 @@ bool BitmapFont::setTexture(const sf::Texture& image)
 
 const sf::Texture& BitmapFont::getTexture() const
 {
-	return *image_;
+	return *m_texture;
 }
 
 

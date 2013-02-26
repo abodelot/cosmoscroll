@@ -47,7 +47,7 @@ void Projectile::onCollision(const Entity& entity)
 		int points = entity.getPoints();
 		if (points != 0)
 		{
-			std::string s = "+" + to_string(points);
+			std::string s = "+" + std::to_string(points);
 			EntityManager& e = EntityManager::getInstance();
 			e.GetPlayerShip()->UpdateScoreCounter(points);
 			ParticleSystem::GetInstance().AddMessage(getPosition(), s, sf::Color(255, 128, 0));

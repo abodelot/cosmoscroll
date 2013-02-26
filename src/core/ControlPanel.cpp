@@ -1,3 +1,5 @@
+#include <string>
+
 #include "ControlPanel.hpp"
 #include "core/Resources.hpp"
 #include "utils/StringUtils.hpp"
@@ -115,7 +117,7 @@ void ControlPanel::SetGameInfo(const sf::String& text)
 
 void ControlPanel::SetPoints(int points)
 {
-	str_points_.setString(wstr_replace(_t("panel.points"), L"{points}", to_wstring(points)));
+	str_points_.setString(wstr_replace(_t("panel.points"), L"{points}", std::to_wstring(points)));
 }
 
 
@@ -123,11 +125,15 @@ void ControlPanel::SetTimer(float seconds)
 {
 	static int previous = -1; // negative, to force update at first call
 	int rounded = (int) seconds;
+	// Update every second
 	if (rounded != previous)
 	{
 		std::wstring text = _t("panel.timer");
-		wstr_self_replace(text, L"{min}", to_wstring(rounded / 60, 2));
-		wstr_self_replace(text, L"{sec}", to_wstring(rounded % 60, 2));
+		std::wstring min = std::to_wstring(rounded / 60);
+		std::wstring sec = std::to_wstring(rounded % 60);
+		// Format on 2 digits
+		wstr_self_replace(text, L"{min}", min.size() > 1 ? min : L"0" + min);
+		wstr_self_replace(text, L"{sec}", sec.size() > 1 ? sec : L"0" + sec);
 		timer_.setString(text);
 		previous = rounded;
 		if (game_mode_ == EntityManager::MODE_STORY)
@@ -311,7 +317,7 @@ void ControlPanel::ProgressBar::SetValue(int value)
 	bar_.setSize(sf::Vector2f(length, PROG_BAR_HEIGHT));
 
 	// display {value}/{max_value}
-	value_.setString(to_string(value) + "/" + to_string(max_value_));
+	value_.setString(std::to_string(value) + "/" + std::to_string(max_value_));
 	// center text on progress bar
 	value_.setX(bar_.getPosition().x + (int) (PROG_BAR_WIDTH - value_.getWidth()) / 2);
 }
@@ -350,13 +356,13 @@ void ControlPanel::PowerUpSlot::SetValue(int count)
 	switch (type_)
 	{
 		case COUNTER:
-			label_.setString("x " + to_string(count));
+			label_.setString("x " + std::to_string(count));
 			timer_ = 0.f;
 			glowing_ = UP;
 			break;
 		case TIMER:
 			timer_ = count;
-			label_.setString(to_string(count) + "s");
+			label_.setString(std::to_string(count) + "s");
 			glowing_ = UP;
 			glow_.setColor(sf::Color::White);
 			break;
@@ -402,7 +408,7 @@ void ControlPanel::PowerUpSlot::Update(float frametime)
 				int new_timer = (int) (timer_ + 0.5f);
 				if (new_timer != old_timer)
 				{
-					label_.setString(to_string(new_timer) + "s");
+					label_.setString(std::to_string(new_timer) + "s");
 				}
 				else if (timer_ <= 0.f)
 				{

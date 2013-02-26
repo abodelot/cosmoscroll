@@ -54,7 +54,11 @@ public:
 
 	void resize(float width, float height)
 	{
+		int LocalWidth  = getLocalBounds().width;
+		int LocalHeight = getLocalBounds().height;
 
+		if ((LocalWidth > 0) && (LocalHeight > 0))
+			setScale(width / LocalWidth, height / LocalHeight);
 	}
 
 	// return center of text

@@ -5,9 +5,9 @@
 #include "utils/I18n.hpp"
 
 
-WeaponData::WeaponData()
+WeaponData::WeaponData():
+	m_texture(NULL)
 {
-	image_ = NULL;
 	sound_ = NULL;
 	heat_cost_ = 0.f;
 	fire_rate_ = 1.f;
@@ -36,7 +36,7 @@ bool WeaponData::LoadFromXml(tinyxml2::XMLElement* elem)
 	{
 		std::cerr << "weapon ammo image is missing" << std::endl;
 	}
-	image_ = &Resources::getTexture(p);
+	m_texture = &Resources::getTexture(p);
 
 	// sound (optional)
 	p = elem->Attribute("sound");
@@ -71,9 +71,9 @@ bool WeaponData::LoadFromXml(tinyxml2::XMLElement* elem)
 std::wstring WeaponData::BuildDescriptionString() const
 {
 	std::wstring s = _t("item.weapon_info");
-	wstr_self_replace(s, L"{speed}", to_wstring(speed_));
-	wstr_self_replace(s, L"{dmg}", to_wstring(damage_));
-	wstr_self_replace(s, L"{rate}", to_wstring(fire_rate_));
+	wstr_self_replace(s, L"{speed}", std::to_wstring(speed_));
+	wstr_self_replace(s, L"{dmg}", std::to_wstring(damage_));
+	wstr_self_replace(s, L"{rate}", std::to_wstring(fire_rate_));
 	return s;
 }
 

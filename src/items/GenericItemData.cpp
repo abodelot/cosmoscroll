@@ -63,7 +63,7 @@ std::wstring GenericItemData::BuildDescriptionString() const
 	}
 	if (keyword != NULL)
 	{
-		wstr_self_replace(s, keyword, to_wstring(int_value_));
+		wstr_self_replace(s, keyword, std::to_wstring(int_value_));
 	}
 	return s;
 }

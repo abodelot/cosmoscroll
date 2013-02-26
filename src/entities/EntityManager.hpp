@@ -203,7 +203,7 @@ private:
 	struct ParallaxLayer: public sf::Drawable
 	{
 		float scrolling_speed_;
-		const sf::Texture* image_;
+		const sf::Texture* m_texture;
 		sf::Sprite background_;
 		sf::Sprite background2_;
 		sf::BlendMode blend_mode_;

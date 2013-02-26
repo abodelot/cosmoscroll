@@ -213,7 +213,7 @@ void Player::HandleAction(Input::Action action)
 }
 
 
-void Player::AudibleHeatingCue(float frametime)
+void Player::AudibleHeatingCue()
 {
 	static float h_steps[] = {.50f, .65f, .80f, .90f};
 	static int nb_steps = sizeof (h_steps) / sizeof (float);
@@ -256,7 +256,7 @@ void Player::onUpdate(float frametime)
 			ParticleSystem::GetInstance().AddMessage(getPosition(), _t("panel.overheat"));
 		}
 		if (h > 0)
-			AudibleHeatingCue(frametime);
+			AudibleHeatingCue();
 	}
 
 	// moving

@@ -95,7 +95,7 @@ void Game::Init(const std::string& data_path)
 	// init resources directory
 	data_dir_ = current_dir_ + data_path;
 	Resources::setDataPath(data_dir_);
-	I18n::GetInstance().SetDataPath(data_dir_);
+	I18n::getInstance().setDataPath(data_dir_);
 	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
 
 	// create window and display loading screen as early as possible
@@ -155,9 +155,9 @@ bool Game::LoadConfig(const std::string& filename)
 		config.SeekSection("Settings");
 		// language
 		std::string lang = config.Get("language");
-		if (lang.empty() || !I18n::GetInstance().LoadFromCode(lang))
+		if (lang.empty() || !I18n::getInstance().loadFromCode(lang))
 		{
-			I18n::GetInstance().LoadSystemLanguage();
+			I18n::getInstance().loadSystemLanguage();
 		}
 
 		// high-score
@@ -189,7 +189,7 @@ bool Game::LoadConfig(const std::string& filename)
 		playersave_.LoadFromConfig(config);
 		return true;
 	}
-	I18n::GetInstance().LoadSystemLanguage();
+	I18n::getInstance().loadSystemLanguage();
 	return false;
 }
 
@@ -204,7 +204,7 @@ void Game::WriteConfig(const std::string& filename) const
 	config.Set("vsync", vsync_);
 	config.Set("panel_on_top", ControlPanel::GetInstance().IsOnTop());
 	config.Set("arcade_high_score", EntityManager::getInstance().GetArcadeRecord());
-	config.Set("language", I18n::GetInstance().GetCurrentCode());
+	config.Set("language", I18n::getInstance().getLangCode());
 	config.Set("screenshots", screenshot_dir_);
 
 	// Audio settings

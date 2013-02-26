@@ -31,14 +31,14 @@ private:
 	float fire_rate_;        // shot per second
 	int speed_;              // bullet speed (pixels per second)
 	int damage_;             // inflicted damage
-	const sf::Texture* image_; // hit image
+	const sf::Texture* m_texture; // hit image
 	const sf::SoundBuffer* sound_; // sfx
 };
 
 template <class T>
 void WeaponData::InitWeapon(Weapon<T>& weapon) const
 {
-	weapon.setTexture(image_);
+	weapon.setTexture(m_texture);
 	weapon.setFireRate(fire_rate_);
 	weapon.setHeatCost(heat_cost_);
 	weapon.setDamage(damage_);

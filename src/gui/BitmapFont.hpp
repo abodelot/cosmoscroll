@@ -49,7 +49,7 @@ public:
 	int GetCharHeight() const;
 
 private:
-	const sf::Texture* image_;
+	const sf::Texture* m_texture;
 	int width_;
 	int height_;
 	int char_width_;

@@ -70,9 +70,9 @@ void IntroLevelScene::OnFocus()
 	{
 		current_level -= levels.CountLevel();
 	}
-	wstr_self_replace(intro, L"{level}", to_wstring(current_level));
-	wstr_self_replace(intro, L"{description}", I18n::DecodeUTF8(levels.GetDescription()));
-	wstr_self_replace(intro, L"{count}", to_wstring(levels.RemainingEntities()));
+	wstr_self_replace(intro, L"{level}", std::to_wstring(current_level));
+	wstr_self_replace(intro, L"{description}", decode_utf8(levels.GetDescription()));
+	wstr_self_replace(intro, L"{count}", std::to_wstring(levels.RemainingEntities()));
 	wstr_self_replace(intro, L"\\n", L"\n");
 	description_.setString(intro);
 

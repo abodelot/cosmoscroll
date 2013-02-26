@@ -19,7 +19,7 @@ void CreditCounterBase::OnFocus()
 	BaseMenu::OnFocus();
 
 	int credits = Game::GetPlayerSave().GetCredits();
-	credit_counter_.setString(wstr_replace(_t("menu.story.credits"), L"{credits}", to_wstring(credits)));
+	credit_counter_.setString(I18n::templatize("menu.story.credits", "{credits}", credits));
 }
 
 

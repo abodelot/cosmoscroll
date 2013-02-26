@@ -1,44 +1,44 @@
 #include "Animation.hpp"
 
 
-Animation::Animation()
+Animation::Animation():
+	m_texture(NULL),
+	m_delay(1.f)
 {
-	image_ = NULL;
-	delay_ = 1.0f;
 }
 
 
 float Animation::getDuration() const
 {
-	return subrects_.size() * delay_;
+	return m_frames.size() * m_delay;
 }
 
 
 void Animation::addFrame(const sf::IntRect& subrect)
 {
-	subrects_.push_back(subrect);
+	m_frames.push_back(subrect);
 }
 
 
-void Animation::addFrame(int left, int top, int width, int height)
+const sf::IntRect& Animation::getFrame(int num_frame) const
 {
-	addFrame(sf::IntRect(left, top, width, height));
+	return m_frames[num_frame];
 }
 
 
 void Animation::setDelay(float delay)
 {
-	delay_ = delay;
+	m_delay = delay;
 }
 
 
 void Animation::setTexture(const sf::Texture& image)
 {
-	image_ = &image;
+	m_texture = &image;
 }
 
 
 const sf::Texture& Animation::getTexture() const
 {
-	return *image_;
+	return *m_texture;
 }

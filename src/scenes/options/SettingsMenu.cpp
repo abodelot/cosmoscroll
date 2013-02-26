@@ -23,11 +23,11 @@ SettingsMenu::SettingsMenu()
 	form_.AddRow(_t("menu.settings.vsync"), cb_vsync_);
 
 	opt_languages_ = new gui::OptionList(this);
-	opt_languages_->AddOption(L"English", "en");
+	opt_languages_->AddOption(L"English",  "en");
 	opt_languages_->AddOption(L"Français", "fr");
-	opt_languages_->AddOption(L"Deutsch", "de");
-	opt_languages_->AddOption(L"Pусский", "ru");
-	opt_languages_->SelectByValue(I18n::GetInstance().GetCurrentCode());
+	opt_languages_->AddOption(L"Deutsch",  "de");
+
+	opt_languages_->SelectByValue(I18n::getInstance().getLangCode());
 	opt_languages_->SetCallbackID(3);
 	form_.AddRow(_t("menu.settings.language"), opt_languages_);
 
@@ -51,7 +51,7 @@ void SettingsMenu::EventCallback(int id)
 			Game::GetInstance().SetVerticalSync(cb_vsync_->Checked());
 			break;
 		case 3:
-			I18n::GetInstance().LoadFromCode(opt_languages_->GetSelectedOption());
+			I18n::getInstance().loadFromCode(opt_languages_->GetSelectedOption());
 			// delete other scenes
 			Game::GetInstance().ReloadScenes();
 			ControlPanel::GetInstance().RefreshTextTranslations();

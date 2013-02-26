@@ -20,7 +20,7 @@ public:
 	 * Obtenir le temps d'attente entre chaque frame
 	 * @return temps en secondes
 	 */
-	inline float getDelay() const	{ return delay_; }
+	inline float getDelay() const	{ return m_delay; }
 
 	/**
 	 * Animation total duration
@@ -28,32 +28,31 @@ public:
 	float getDuration() const;
 
 	/**
-	 * Ajouter une frame dans l'animation
-	 * @param subrect: rectangle de la frame
+	 * Append a frame to the animation
+	 * @param subrect: frame subrect in the animation texture
 	 */
 	void addFrame(const sf::IntRect& subrect);
-	void addFrame(int left, int up, int width, int height);
 
 	/**
 	 * Obtenir une frame de l'animation
 	 * @param num_frame: numéro de la frame demandée
 	 * @return rectangle de la frame
 	 */
-	inline const sf::IntRect& getFrame(int num_frame) const { return subrects_[num_frame]; }
+	const sf::IntRect& getFrame(int num_frame) const;
 
 	/**
 	 * Obtenir le nombre de frame qui composent l'animation
 	 */
-	inline int getSize() const { return subrects_.size(); }
+	inline int getSize() const { return m_frames.size(); }
 
     // Texture bind to the animation
 	void setTexture(const sf::Texture& image);
 	const sf::Texture& getTexture() const;
 
 private:
-	std::vector<sf::IntRect> subrects_;
-	const sf::Texture* image_;
-	float delay_;
+	std::vector<sf::IntRect> m_frames;
+	const sf::Texture*       m_texture;
+	float                    m_delay;
 };
 
 #endif // ANIMATION_HPP

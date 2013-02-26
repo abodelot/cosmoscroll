@@ -65,10 +65,10 @@ void BestScoresMenu::Update(float frametime)
 			lab_content_->setString(response.getBody());
 			break;
 		case sf::Http::Response::ConnectionFailed:
-			lab_content_->setString("Error: couldn't connect to CosmoScroll server");
+			lab_content_->setString("Error: couldn't connect to server");
 			break;
 		default:
-			lab_content_->setString("Error: server did not properly respond (" + to_string(response.getStatus()) + ")");
+			lab_content_->setString("Error: server did not properly respond (" + std::to_string(response.getStatus()) + ")");
 			break;
 	}
 	querying_ = DONE;

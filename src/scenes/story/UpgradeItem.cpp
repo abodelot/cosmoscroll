@@ -79,7 +79,7 @@ void UpgradeItem::RefreshLabel()
 	std::wstring content = _t(ItemData::TypeToString(type_));
 	content += L"\n";
 	content += _t("armory.item_level");
-	wstr_self_replace(content, L"{level}", to_wstring(Game::GetInstance().GetPlayerSave().LevelOf(type_)));
+	wstr_self_replace(content, L"{level}", std::to_wstring(Game::GetInstance().GetPlayerSave().LevelOf(type_)));
 
 	label_.setString(content);
 }

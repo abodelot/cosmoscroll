@@ -14,7 +14,7 @@ public:
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	sf::Sprite image_;
+	sf::Sprite m_texture;
 };
 
 }

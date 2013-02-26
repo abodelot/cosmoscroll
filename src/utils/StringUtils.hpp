@@ -14,25 +14,6 @@
 //std::string str_sprintf(const char format[], ...);
 //std::wstring str_sprintf(const wchar_t format[], ...);
 
-template <typename T>
-inline std::string to_string(const T& t, int width = 0, char fill = '0')
-{
-	std::ostringstream oss;
-	if (width > 0)
-		oss << std::setw(width) << std::setfill(fill);
-	oss << t;
-	return oss.str();
-}
-
-template <typename T>
-inline std::wstring to_wstring(const T& t, int width = 0, wchar_t fill = '0')
-{
-	std::wostringstream oss;
-	if (width > 0)
-		oss << std::setw(width) << std::setfill(fill);
-	oss << t;
-	return oss.str();
-}
 
 
 #define wstr_self_replace str_self_replace<std::wstring>
@@ -107,5 +88,10 @@ std::wstring str_upper(const std::wstring& str);
 void str_self_upper(std::string& str);
 void str_self_upper(std::wstring& str);
 
+/// Encode to UTF-8
+std::string encode_utf8(const std::wstring& src);
+
+/// Decode from UTF-8
+std::wstring decode_utf8(const std::string& src);
 
 #endif // STRINGUTILS_HPP

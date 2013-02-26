@@ -14,7 +14,7 @@ import time
 SRC_DIR = "src"
 MAKEFILE = "Makefile"
 TARGET = "bin/cosmoscroll"
-CFLAGS = "-Wall -Wextra -Wwrite-strings -ansi -pedantic"
+CFLAGS = "-Wall -Wextra -Wwrite-strings -std=c++11 -pedantic"
 LIBS = ("sfml-graphics", "sfml-window", "sfml-system", "sfml-audio", "sfml-network")
 
 
@@ -125,4 +125,4 @@ if __name__ == "__main__":
 	m.set_libs(LIBS)
 	m.set_cflags(CFLAGS)
 	m.write_makefile()
-	print makefile_name, "generated."
+	print '"%s" generated. Run make to compile.' % makefile_name

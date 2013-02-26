@@ -148,6 +148,7 @@ private:
 
 	// groupe de niveaux
 	unsigned int level_set_;
+	sf::View m_view;
 };
 
 #endif // GAME_HPP

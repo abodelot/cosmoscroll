@@ -163,7 +163,7 @@ void EntityManager::InitMode(Mode mode)
 			layer2_.SetScrollingTexture(&Resources::getTexture("layers/fog.png"));
 			layer2_.setColor(math::random_color(0, 0, 20, 30, 30, 70));
 			decor_height_ = 0;
-			std::wstring game_info = wstr_replace(_t("panel.record"), L"{record}", to_wstring(arcade_record_));
+			std::wstring game_info = I18n::templatize("panel.record", "{record}", arcade_record_);
 			ControlPanel::GetInstance().SetGameInfo(game_info);
 			particles_.AddStars();
 			SoundSystem::GetInstance().PlayMusic("spacesong.mod");
@@ -371,7 +371,7 @@ int EntityManager::LoadAnimations(const std::string& filename)
 			Animation* p = &animations_[name];
 			for (int i = 0; i < count; ++i)
 			{
-				p->addFrame(x + i * width, y, width, height);
+				p->addFrame({x + i * width, y, width, height});
 			}
 			p->setDelay(delay);
 			p->setTexture(Resources::getTexture(img));
@@ -566,7 +566,7 @@ void EntityManager::RespawnPlayer()
 
 EntityManager::ParallaxLayer::ParallaxLayer()
 {
-	image_ = NULL;
+	m_texture = NULL;
 	scrolling_speed_ = 0.f;
 	background_.setPosition(0.f, 0.f);
 	background2_.setPosition(0.f, 0.f);
@@ -576,10 +576,10 @@ EntityManager::ParallaxLayer::ParallaxLayer()
 
 void EntityManager::ParallaxLayer::OnUpdate(float frametime)
 {
-	if (image_ != NULL)
+	if (m_texture != NULL)
 	{
 		float x = background_.getPosition().x - scrolling_speed_ * frametime;
-		float width = image_->getSize().x;
+		float width = m_texture->getSize().x;
 		if (x <= -width)
 		{
 			x = 0;
@@ -592,7 +592,7 @@ void EntityManager::ParallaxLayer::OnUpdate(float frametime)
 
 void EntityManager::ParallaxLayer::SetScrollingTexture(const sf::Texture* image)
 {
-	image_ = image;
+	m_texture = image;
 	if (image != NULL)
 	{
 		background_ = sf::Sprite(*image);
@@ -620,7 +620,7 @@ void EntityManager::ParallaxLayer::setColor(const sf::Color& color)
 
 void EntityManager::ParallaxLayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	if (image_ != NULL)
+	if (m_texture != NULL)
 	{
 		states.blendMode = blend_mode_;
 		target.draw(background_, states);

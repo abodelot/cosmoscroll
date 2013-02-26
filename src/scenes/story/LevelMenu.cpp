@@ -76,7 +76,7 @@ void LevelMenu::OnFocus()
 		bool activable = i <= last_unlocked;
 		if (activable)
 		{
-			opt_levels_->AddOption(to_string(i));
+			opt_levels_->AddOption(std::to_string(i));
 		}
 	}
 	opt_levels_->Select(current - 1);
@@ -99,7 +99,7 @@ void LevelMenu::EventCallback(int id)
 
 			levels_.LoadCurrent();
 
-			std::wstring s = wstr_replace(_t("panel.level"), L"{level}", to_wstring(selected_level));
+			std::wstring s = I18n::templatize("panel.level", "{level}", selected_level);
 			ControlPanel::GetInstance().SetGameInfo(s);
 			Game::GetInstance().SetNextScene(Game::SC_IntroLevelScene);
 			}

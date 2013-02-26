@@ -9,17 +9,16 @@ int usage(const char *pn)
 {
 	const char *n = strrchr(pn, '/') ;      // Stick to the program name - Unix System
 
-	if(n == NULL)
-        n=strrchr(pn,'\\') ;        // Stick to the program name - Windows System
+	if (n == NULL)
+		n = strrchr(pn,'\\') ;        // Stick to the program name - Windows System
 
-	if(n != NULL)
-        printf("usage: %s [-c config_file] [-d data_path] [-h] [-v]\n\n", n+1);
+	if (n != NULL)
+		printf("usage: %s [-c config_file] [-d data_path] [-h] [-v]\n\n", n+1);
     else
         printf("usage: %s [-c config_file] [-d data_path] [-h] [-v]\n\n", pn);      // For Relative Path
 	puts("If config_file is a directory, the game will look for a configuration file named");
 	puts("\42cosmoscroll.cfg\42 (or create it if it doesn't exist).");
 	puts("If it is a regular file, it will use it as an alternate configuration file.");
-	puts("\nYou can currently override the game's story mode level set (MUST be a number)\n");
 	return EXIT_SUCCESS;
 }
 

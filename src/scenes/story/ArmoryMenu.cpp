@@ -109,7 +109,7 @@ void ArmoryMenu::EventCallback(int id)
 				std::wstring content = _t("armory.item_upgraded");
 				int item_level = Game::GetInstance().GetPlayerSave().LevelOf(current_type_);
 				wstr_self_replace(content, L"{item}", _t(ItemData::TypeToString(current_type_)));
-				wstr_self_replace(content, L"{level}", to_wstring(item_level));
+				wstr_self_replace(content, L"{level}", std::to_wstring(item_level));
 				lab_info_->setString(content);
 				lab_info_->setPosition((Game::WIDTH - lab_info_->GetWidth()) / 2, lab_info_->getPosition().y);
 				FocusFirstWidget();
@@ -180,9 +180,7 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 	dialog_.lab_item->setPosition(dialog_.x + x, dialog_.lab_item->getPosition().y);
 
 	// current item level
-	text = _t("armory.item_current_level");
-	wstr_self_replace(text, L"{level}", to_wstring(level));
-	dialog_.current_level->setString(text);
+	dialog_.current_level->setString(I18n::templatize("armory.item_current_level", "{level}", level));
 
 	// current item description
 	dialog_.current_level_details->setString(data->BuildDescriptionString());
@@ -202,15 +200,11 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 	}
 	else
 	{
-		text = _t("armory.item_next_level");
-		wstr_self_replace(text, L"{level}", to_wstring(level));
-		dialog_.next_level->setString(text);
+		dialog_.next_level->setString(I18n::templatize("armory.item_next_level", "{level}", level));
 
 		// next item description
 		dialog_.next_level_details->setString(data->BuildDescriptionString());
-		text = _t("item.price");
-		wstr_self_replace(text, L"{price}", to_wstring(data->GetPrice()));
-		dialog_.price->setString(text);
+		dialog_.price->setString(I18n::templatize("item.price", "{price}", data->GetPrice()));
 	}
 	FocusFirstWidget();
 }

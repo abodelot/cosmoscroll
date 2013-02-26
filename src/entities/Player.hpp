@@ -83,9 +83,8 @@ private:
 
 	/**
 	 * Faire beeper l'indicateur de surchauffe
-	 * @param frametime
 	 */
-	void AudibleHeatingCue(float frametime);
+	void AudibleHeatingCue();
 
 	enum
 	{
