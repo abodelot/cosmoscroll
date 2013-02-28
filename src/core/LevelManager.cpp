@@ -65,7 +65,7 @@ void LevelManager::SetCurrent(int level)
 
 void LevelManager::VerifyCurrent(void)
 {
-	if (current_level_ < 1 || current_level_ > last_unlocked_level_ || current_level_ > (int) levels_.size() * 2)
+	if (current_level_ < 1 || current_level_ > last_unlocked_level_ || current_level_ > (int) levels_.size())
 	{
 		std::cerr << " [levels] level " << current_level_ << " is undefined, using level 1" << std::endl;
 		current_level_ = 1;
@@ -79,27 +79,27 @@ int LevelManager::GetCurrent() const
 }
 
 
-int LevelManager::UnlockNextLevel()
+int LevelManager::unlockNextLevel()
 {
-	if (last_unlocked_level_ < (int) levels_.size() * 2)
+	if (last_unlocked_level_ < (int) levels_.size())
 	{
-		++last_unlocked_level_;
-		current_level_ = last_unlocked_level_;
+		current_level_ = ++last_unlocked_level_;
 	}
 	return current_level_;
 }
 
 
-int LevelManager::GetLastUnlocked() const
+int LevelManager::getLastUnlocked() const
 {
 	return last_unlocked_level_;
 }
 
 
-void LevelManager::SetLastUnlocked(int level)
+void LevelManager::setLastUnlocked(int level)
 {
-	if (level < 1 || level > (int) levels_.size() * 2)
+	if (level < 1 || level > (int) levels_.size())
 	{
+		std::cerr << " [levels] level " << level << " is undefined, using level 1" << std::endl;
 		level = 1;
 	}
 	last_unlocked_level_ = level;
@@ -184,35 +184,18 @@ bool LevelManager::AllLevelsCompleted() const
 }
 
 
-bool LevelManager::IsHardcoreEnabled() const
-{
-	return current_level_ > (int) levels_.size();
-}
-
-
-void LevelManager::EnableHardcore(bool hardcore)
-{
-	if (hardcore)
-		current_level_ = last_unlocked_level_;
-	else
-		current_level_ = AllLevelsCompleted() ? (int) levels_.size() : last_unlocked_level_;
-}
-
-
 int LevelManager::ParseFile(const std::string& file)
 {
-	std::cerr << "aaa\n";
+	// Open level file
 	if (doc_.LoadFile(file.c_str()) != 0)
 	{
 		Error::Log << "Cannot load levels:\n" << file << "\n" << doc_.GetErrorStr1();
 		throw Error::Exception();
 	}
-	std::cerr << "bbb\n";
 	tinyxml2::XMLElement* root = doc_.RootElement();
 
 	// Parse function nodes
 	tinyxml2::XMLElement* node = root->FirstChildElement("functions")->FirstChildElement();
-
 	while (node != NULL)
 	{
 		const char* name = node->Attribute("name");
@@ -353,10 +336,6 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 void LevelManager::AppendToWaitingLine(Entity* entity, float time)
 {
 	EntitySlot slot;
-	if (IsHardcoreEnabled())
-	{
-		entity->setHP(entity->getHP() * 2);
-	}
 	slot.entity = entity;
 	last_insert_time_ += time;
 	slot.spawntime = last_insert_time_;
@@ -366,7 +345,7 @@ void LevelManager::AppendToWaitingLine(Entity* entity, float time)
 
 void LevelManager::ClearWaitingLine()
 {
-	// delete remaining entities in the waiting line
+	// Delete remaining entities in the waiting line
 	while (!waiting_line_.empty())
 	{
 		delete waiting_line_.front().entity;
@@ -377,8 +356,6 @@ void LevelManager::ClearWaitingLine()
 
 tinyxml2::XMLElement* LevelManager::GetLevelElement(int level) const
 {
-	if (level > (int) levels_.size())
-		level -= levels_.size();
 	--level; // index starts at 0
 	if (level < 0 || level >= (int) levels_.size())
 	{

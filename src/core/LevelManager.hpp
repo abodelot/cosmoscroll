@@ -56,9 +56,9 @@ public:
 	/**
 	 * Last reached level
 	 */
-	int UnlockNextLevel();
-	void SetLastUnlocked(int level);
-	int GetLastUnlocked() const;
+	int unlockNextLevel();
+	void setLastUnlocked(int level);
+	int getLastUnlocked() const;
 
 	// attributs du niveau courant
 
@@ -96,16 +96,6 @@ public:
 	 * @return true si tous les niveaux sont terminés
 	 */
 	bool AllLevelsCompleted() const;
-
-	/**
-	 * Activer/désactiver le mode hardcore
-	 */
-	void EnableHardcore(bool hardcore);
-
-	/**
-	 * @return true si le mode hardcore est activé
-	 */
-	bool IsHardcoreEnabled() const;
 
 	/**
 	 * Total des points disponibles dans le niveau courant

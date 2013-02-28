@@ -14,7 +14,7 @@
 		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
 			level="3" heat_cost="2.5" fire_rate="8" damage="2" speed="380" price="150"/>
 		<weapon id="laser-green" image="ammo/laser-green.png" sound="laser-green.ogg"
-			heat_cost="5" fire_rate="2.2" damage="1" speed="340" />
+			heat_cost="5" fire_rate="2" damage="1" speed="320" />
 		<weapon id="laser-pink" image="ammo/laser-pink.png" sound="laser-pink.ogg"
 			heat_cost="5" fire_rate="1" damage="2" speed="400" />
 		<weapon id="devil-eyes" image="ammo/fireball.png" sound="canon.ogg"

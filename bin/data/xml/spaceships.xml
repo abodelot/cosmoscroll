@@ -3,8 +3,8 @@
 	<ship id="8" name="Circle-scoot" animation="circle-scoot" hp="3" speed="75" move="circle" attack="auto_aim" points="1" >
 		<weapon id="laser-green" x="0" y="16"/>
 	</ship>
-	<ship id="1" name="Capsule" animation="capsule" hp="3" speed="75" move="line" points="1" />
-	<ship id="2" name="Scoot" animation="scoot" hp="4" speed="120" move="sinus" attack="on_sight" points="2">
+	<ship id="1" name="Capsule" animation="capsule" hp="2" speed="75" move="line" points="1" />
+	<ship id="2" name="Scoot" animation="scoot" hp="3" speed="120" move="sinus" attack="on_sight" points="2">
 		<weapon id="laser-green" x="0" y="16"/>
 	</ship>
 	<ship id="5" name="Mine" animation="mine" hp="14" move="magnet" speed="50" points="2"/>

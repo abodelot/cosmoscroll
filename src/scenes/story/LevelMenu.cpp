@@ -20,12 +20,6 @@ LevelMenu::LevelMenu():
 	lab_progresion_ = new gui::Label(this, "");
 	form.AddRow(_t("menu.story.progression"), lab_progresion_);
 
-	cbx_hardcore_ = new gui::CheckBox(this);
-	cbx_hardcore_->SetVisible(false);
-	form.AddRow("Mode hardcore", cbx_hardcore_);
-	lab_hardcore_ = form.GetLabelAt(2);
-	lab_hardcore_->SetVisible(false);
-
 	gui::VBoxLayout layout(210, 240);
 	layout.Add(new CosmoButton(this, _t("menu.story.play")))->SetCallbackID(1);
 	layout.Add(new CosmoButton(this, _t("menu.story.armory")))->SetCallbackID(2);
@@ -41,25 +35,7 @@ void LevelMenu::OnFocus()
 	levels_.VerifyCurrent();	// FIX: On charge dorénavant la config avant le levelmanager.
 
 	int current = levels_.GetCurrent();
-	if (levels_.IsHardcoreEnabled())
-		current -= last;
-
-	int last_unlocked = levels_.GetLastUnlocked();
-	if (levels_.AllLevelsCompleted())
-	{
-		if (levels_.IsHardcoreEnabled())
-			last_unlocked -= last;
-
-		// enable/disable hardcore
-		if (!cbx_hardcore_->IsVisible())
-		{
-			lab_hardcore_->SetVisible(true);
-			cbx_hardcore_->SetVisible(true);
-			cbx_hardcore_->SetCallbackID(3);
-		}
-		cbx_hardcore_->Check(levels_.IsHardcoreEnabled());
-	}
-
+	int last_unlocked = levels_.getLastUnlocked();
 	if (last_unlocked > levels_.CountLevel())
 	{
 		last_unlocked = levels_.CountLevel();
@@ -92,11 +68,7 @@ void LevelMenu::EventCallback(int id)
 			break;
 		case 1: {
 			int selected_level = opt_levels_->GetSelectedOptionIndex() + 1;
-			if (cbx_hardcore_->Checked())
-				levels_.SetCurrent(selected_level + levels_.CountLevel());
-			else
-				levels_.SetCurrent(selected_level);
-
+			levels_.SetCurrent(selected_level);
 			levels_.LoadCurrent();
 
 			std::wstring s = I18n::templatize("panel.level", "{level}", selected_level);
@@ -107,11 +79,5 @@ void LevelMenu::EventCallback(int id)
 		case 2:
 			Game::GetInstance().SetNextScene(Game::SC_ArmoryMenu);
 			break;
-		case 3:
-			levels_.EnableHardcore(cbx_hardcore_->Checked());
-			// rebuild level list widget
-			OnFocus();
-			break;
-
 	}
 }

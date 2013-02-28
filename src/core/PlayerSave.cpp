@@ -50,7 +50,7 @@ void PlayerSave::LoadFromConfig(IniParser& config)
 	config.SeekSection("Player");
 	int level = 1;
 	config.Get("last_unlocked_level", level);
-	LevelManager::GetInstance().SetLastUnlocked(level);
+	LevelManager::GetInstance().setLastUnlocked(level);
 
 	level = 1;
 	config.Get("current_level", level);
@@ -73,7 +73,7 @@ void PlayerSave::SaveToConfig(IniParser& config) const
 {
 	config.SeekSection("Player");
 	config.Set("current_level", LevelManager::GetInstance().GetCurrent());
-	config.Set("last_unlocked_level", LevelManager::GetInstance().GetLastUnlocked());
+	config.Set("last_unlocked_level", LevelManager::GetInstance().getLastUnlocked());
 	config.Set("credits", available_credits_);
 	config.Set("lvl_laser", items_[ItemData::WEAPON]);
 	config.Set("lvl_shield", items_[ItemData::SHIELD]);

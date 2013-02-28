@@ -27,12 +27,12 @@ void Missile::onCollision(const Entity& entity)
 	if (isDead())
 	{
 		ParticleSystem::GetInstance().ImpactSfx(getPosition(), 100);
-		for (int i = 0; i < 16; ++i)
+		for (int i = 0; i < 20; ++i)
 		{
 			float angle = math::random(m_angle - math::PI / 2, m_angle + math::PI / 2);
-			int speed = math::random(300, 500);
+			int speed = math::random(200, 600);
 			Projectile* p = new Projectile(EntityManager::getInstance().GetPlayerShip(), entity.getPosition(), angle,
-				Resources::getTexture("ammo/laser-red.png"), speed, 3);
+				Resources::getTexture("ammo/laser-red.png"), speed, 4);
 			EntityManager::getInstance().addEntity(p);
 		}
 	}

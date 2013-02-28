@@ -35,14 +35,12 @@ ArmoryMenu::ArmoryMenu()
 	const sf::Font& font = Resources::getFont("Ubuntu-R.ttf");
 
 	dialog_.current_level = new gui::Label(this, "A\n");
-	//dialog_.current_level->setFont(font);
-	dialog_.current_level->setStyle(sf::Text::Bold);
 	dialog_.current_level->setColor(sf::Color::Green);
 	dialog_.current_level->setCharacterSize(18);
 	layout_left.Add(dialog_.current_level);
 
 	dialog_.current_level_details = new gui::Label(this, "A\nA\n");
-	//dialog_.current_level_details->setFont(font);
+	dialog_.current_level_details->setFont(font);
 	dialog_.current_level_details->setCharacterSize(12);
 	layout_left.Add(dialog_.current_level_details);
 

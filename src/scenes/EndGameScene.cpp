@@ -96,9 +96,9 @@ void EndGameScene::OnFocus()
 
 		Game::GetPlayerSave().UpdateCredits(earned_credits);
 		// Unlock next level
-		if (current == levels.GetLastUnlocked())
+		if (current == levels.getLastUnlocked())
 		{
-			levels.UnlockNextLevel();
+			levels.unlockNextLevel();
 		}
 		player_dead_ = false;
 	}

@@ -70,7 +70,7 @@ void EvilBoss::onUpdate(float frametime)
 		sf::Sprite::move(speed_x_ * frametime, 0);
 	}
 	m_eye_left.onUpdate(frametime);
-	m_eye_left.onUpdate(frametime);
+	m_eye_right.onUpdate(frametime);
 	m_mouth.onUpdate(frametime);
 	Entity::UpdateFlash(frametime);
 }
