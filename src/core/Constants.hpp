@@ -13,8 +13,8 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 									DISCLAIMER_BLOB
 
 // fallback file paths
-#define DEFAULT_DATA_DIR			"data"
-#define DEFAULT_SCREENSHOT_DIR		"screenshots"
+#define DEFAULT_RESOURCES_DIR       "resources"
+#define DEFAULT_SCREENSHOT_DIR      "screenshots"
 
 // leaderboard server
 #define COSMO_SERVER_HOSTNAME "http://perkypenguin.free.fr"

@@ -7,17 +7,15 @@
 
 int usage(const char *pn)
 {
-	const char *n = strrchr(pn, '/') ;      // Stick to the program name - Unix System
+	// Stick to the program name
+	const char* n = strrchr(pn, '/'); // Unix systems
 
 	if (n == NULL)
-		n = strrchr(pn,'\\') ;        // Stick to the program name - Windows System
+		n = strrchr(pn, '\\'); // Windows systems
 
-	if (n != NULL)
-		printf("usage: %s [-c config_file] [-d data_path] [-h] [-v]\n\n", n+1);
-    else
-        printf("usage: %s [-c config_file] [-d data_path] [-h] [-v]\n\n", pn);      // For Relative Path
+	printf("usage: %s [-c config_file] [-r resources_dir] [-h] [-v]\n\n", n == NULL ? pn : n + 1);
 	puts("If config_file is a directory, the game will look for a configuration file named");
-	puts("\42cosmoscroll.cfg\42 (or create it if it doesn't exist).");
+	puts("\42cosmoscroll.ini\42 (or create it if it doesn't exist).");
 	puts("If it is a regular file, it will use it as an alternate configuration file.");
 	return EXIT_SUCCESS;
 }
@@ -46,20 +44,20 @@ int main(int argc, char* argv[])
 {
 	// default values
 	std::string config_file = "";
-	std::string data_dir = DEFAULT_DATA_DIR;
+	std::string res_dir = DEFAULT_RESOURCES_DIR;
 
 	// parse args
 	for (int i = 0; i < argc; ++i)
 	{
 		std::string arg = argv[i];
-		if (arg == "-v" || arg == "-version")
+		if (arg == "-v" || arg == "--version")
 			return version();
-		else if (arg == "-h" || arg == "-help")
+		else if (arg == "-h" || arg == "--help")
 			return usage(argv[0]);
-		else if (arg == "-c" || arg == "-config")
+		else if (arg == "-c" || arg == "--config")
 			config_file = get_arg(i, argv);
-		else if (arg == "-d" || arg == "-data")
-			data_dir = get_arg(i, argv);
+		else if (arg == "-r" || arg == "--resources")
+			res_dir = get_arg(i, argv);
 	}
 
 	Game& game = Game::GetInstance();
@@ -68,6 +66,6 @@ int main(int argc, char* argv[])
 	{
 		game.OverrideConfigFile(config_file);
 	}
-	game.Init(data_dir);
+	game.Init(res_dir);
 	return game.Run();
 }
