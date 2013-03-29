@@ -1,0 +1,10 @@
+# Code::Blocks
+cosmoscroll.layout
+cosmoscroll.depend
+
+# Executable
+bin/cosmoscroll
+
+# Compiled object files
+*.o
+
