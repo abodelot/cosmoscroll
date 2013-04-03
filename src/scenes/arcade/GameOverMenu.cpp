@@ -51,11 +51,11 @@ void GameOverMenu::OnFocus()
 	if (score_ > entities.GetArcadeRecord())
 	{
 		entities.UpdateArcadeRecord();
-		text = wstr_replace(_t("menu.gameover.new_record"), L"{score}", to_wstring(score_));
+		text = wstr_replace(_t("menu.gameover.new_record"), L"{score}", std::to_wstring(score_));
 	}
 	else
 	{
-		text = wstr_replace(_t("menu.gameover.no_record"), L"{score}", to_wstring(score_));
+		text = wstr_replace(_t("menu.gameover.no_record"), L"{score}", std::to_wstring(score_));
 	}
 	lab_result_->setCharacterSize(30);
 	lab_result_->setString(text);
@@ -112,7 +112,7 @@ void GameOverMenu::UploadScore()
 	if (str_name.empty())
 		return;
 
-	std::string str_score = to_string(score_);
+	std::string str_score = std::to_string(score_);
 
 	// COSMO_SERVER_KEY is a salt, producing a different salted key for each couple (name, score)
 	MD5 key(str_name + str_score + COSMO_SERVER_KEY);

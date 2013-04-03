@@ -60,6 +60,7 @@
 			<Add option="-Wextra" />
 			<Add option="-Wall" />
 			<Add directory="src/" />
+			<Add directory="extlibs/" />
 		</Compiler>
 		<Linker>
 			<Add library="sfml-graphics" />
@@ -76,6 +77,10 @@
 		<Unit filename="bin/data/xml/items.xml" />
 		<Unit filename="bin/data/xml/levels.xml" />
 		<Unit filename="bin/data/xml/spaceships.xml" />
+		<Unit filename="extlibs/md5/md5.cpp" />
+		<Unit filename="extlibs/md5/md5.hpp" />
+		<Unit filename="extlibs/tinyxml/tinyxml2.cpp" />
+		<Unit filename="extlibs/tinyxml/tinyxml2.h" />
 		<Unit filename="src/core/BigScrollingMessagingAppliance.cpp" />
 		<Unit filename="src/core/BigScrollingMessagingAppliance.hpp" />
 		<Unit filename="src/core/Collisions.cpp" />
@@ -177,8 +182,6 @@
 		<Unit filename="src/items/Weapon.inl" />
 		<Unit filename="src/items/WeaponData.cpp" />
 		<Unit filename="src/items/WeaponData.hpp" />
-		<Unit filename="src/md5/md5.cpp" />
-		<Unit filename="src/md5/md5.hpp" />
 		<Unit filename="src/scenes/AboutMenu.cpp" />
 		<Unit filename="src/scenes/AboutMenu.hpp" />
 		<Unit filename="src/scenes/BaseMenu.cpp" />
@@ -225,8 +228,6 @@
 		<Unit filename="src/scenes/story/LevelMenu.hpp" />
 		<Unit filename="src/scenes/story/UpgradeItem.cpp" />
 		<Unit filename="src/scenes/story/UpgradeItem.hpp" />
-		<Unit filename="src/tinyxml/tinyxml2.cpp" />
-		<Unit filename="src/tinyxml/tinyxml2.h" />
 		<Unit filename="src/utils/DumbMusic.cpp" />
 		<Unit filename="src/utils/DumbMusic.hpp" />
 		<Unit filename="src/utils/Error.cpp" />

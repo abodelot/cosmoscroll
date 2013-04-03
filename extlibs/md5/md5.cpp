@@ -43,7 +43,7 @@ MD5::MD5(const std::string& source)
 	Calculate(source);
 }
 
-MD5::MD5(const unsigned char* source, uint32 len)
+MD5::MD5(const unsigned char* source, size_t len)
 {
 	Calculate(source, len);
 }
@@ -74,7 +74,7 @@ std::string MD5::Calculate(std::ifstream& file)
 	return m_sHash;
 }
 
-std::string MD5::Calculate(const unsigned char* source, uint32_t len)
+std::string MD5::Calculate(const unsigned char* source, size_t len)
 {
 	MD5_CTX context;
 
