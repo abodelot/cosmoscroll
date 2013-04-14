@@ -6,6 +6,7 @@
 #include "EntityManager.hpp"
 #include "core/Game.hpp"
 #include "core/ParticleSystem.hpp"
+#include "core/MessageSystem.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/PlayerSave.hpp"
 #include "core/Resources.hpp"
@@ -253,7 +254,7 @@ void Player::onUpdate(float frametime)
 		{
 			overheated_ = true;
 			panel_.SetOverheat(true);
-			ParticleSystem::GetInstance().AddMessage(getPosition(), _t("panel.overheat"));
+			MessageSystem::write(_t("panel.overheat"), getPosition());
 		}
 		if (h > 0)
 			AudibleHeatingCue();
@@ -369,7 +370,7 @@ void Player::onCollision(const Entity& entity)
 	if (powerup)
 	{
 		HandlePowerUp(powerup->getType());
-		ParticleSystem::GetInstance().AddMessage(powerup->getPosition(), powerup->getDescription());
+		MessageSystem::write(powerup->getDescription(), powerup->getPosition());
 		SoundSystem::GetInstance().PlaySound("power-up.ogg");
 	}
 	else
@@ -535,7 +536,7 @@ void Player::KonamiCodeOn()
 	//m_weapon.setMultiply(3);
 	//m_missile_launcher.setMultiply(3);
 
-	ParticleSystem::GetInstance().AddMessage(getPosition(), L"For great justice!");
+	MessageSystem::write("For great justice!", getPosition());
 
 #ifdef DEBUG
 	//this->setCollideFlag(C_IGNORE_DAMAGE);

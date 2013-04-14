@@ -4,6 +4,7 @@
 #include "LevelManager.hpp"
 #include "ControlPanel.hpp"
 #include "Resources.hpp"
+#include "MessageSystem.hpp"
 #include "entities/EntityManager.hpp"
 #include "items/ItemManager.hpp"
 #include "utils/IniParser.hpp"
@@ -97,6 +98,7 @@ void Game::Init(const std::string& data_path)
 	Resources::setDataPath(data_dir_);
 	I18n::getInstance().setDataPath(data_dir_);
 	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
+	MessageSystem::setFont(Resources::getFont("Ubuntu-R.ttf"));
 
 	// create window and display loading screen as early as possible
 	vsync_ = true;

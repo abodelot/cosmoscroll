@@ -39,13 +39,6 @@ public:
 
 	void AddCenteredStars(int count);
 
-	/**
-	 * Ajouter un message défilant
-	 * @param offset: position
-	 * @param text: contenu du message
-	 */
-	void AddMessage(const sf::Vector2f& offset, const sf::String& text, const sf::Color& color=sf::Color::White);
-
 	void AddShield(int count, const sf::Sprite* handle);
 	void RemoveShield(const sf::Sprite* handle);
 
@@ -143,26 +136,6 @@ private:
 	private:
 		float angle_;
 	};
-
-	/**
-	 * Court message défilant
-	 */
-	class TextParticle: public Particle
-	{
-	public:
-		TextParticle(const sf::Vector2f& offset, const sf::String& text, const sf::Color& color);
-		~TextParticle() {};
-		bool OnUpdate(float frametime);
-
-		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
-		{
-			target.draw(text_, states);
-		}
-	private:
-		sf::Text text_;
-		float timer_;
-	};
-
 
 	/**
 	 * Particule liée à un objet externe au ParticleSystem (non autonome)

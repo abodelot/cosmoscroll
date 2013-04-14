@@ -3,6 +3,7 @@
 #include "utils/Math.hpp"
 #include "utils/StringUtils.hpp"
 #include "core/ParticleSystem.hpp"
+#include "core/MessageSystem.hpp"
 
 
 Projectile::Projectile(Entity* emitter, const sf::Vector2f& position, float angle,
@@ -47,10 +48,9 @@ void Projectile::onCollision(const Entity& entity)
 		int points = entity.getPoints();
 		if (points != 0)
 		{
-			std::string s = "+" + std::to_string(points);
-			EntityManager& e = EntityManager::getInstance();
-			e.GetPlayerShip()->UpdateScoreCounter(points);
-			ParticleSystem::GetInstance().AddMessage(getPosition(), s, sf::Color(255, 128, 0));
+			EntityManager::getInstance().GetPlayerShip()->UpdateScoreCounter(points);
+
+			MessageSystem::write("+" + std::to_string(points), getPosition(), sf::Color(255, 128, 0));
 		}
 	}
 	kill();

@@ -81,8 +81,6 @@
 		<Unit filename="extlibs/md5/md5.hpp" />
 		<Unit filename="extlibs/tinyxml/tinyxml2.cpp" />
 		<Unit filename="extlibs/tinyxml/tinyxml2.h" />
-		<Unit filename="src/core/BigScrollingMessagingAppliance.cpp" />
-		<Unit filename="src/core/BigScrollingMessagingAppliance.hpp" />
 		<Unit filename="src/core/Collisions.cpp" />
 		<Unit filename="src/core/Collisions.hpp" />
 		<Unit filename="src/core/Constants.hpp" />
@@ -95,6 +93,8 @@
 		<Unit filename="src/core/LevelManager.cpp" />
 		<Unit filename="src/core/LevelManager.hpp" />
 		<Unit filename="src/core/Main.cpp" />
+		<Unit filename="src/core/MessageSystem.cpp" />
+		<Unit filename="src/core/MessageSystem.hpp" />
 		<Unit filename="src/core/ParticleSystem.cpp" />
 		<Unit filename="src/core/ParticleSystem.hpp" />
 		<Unit filename="src/core/PlayerSave.cpp" />

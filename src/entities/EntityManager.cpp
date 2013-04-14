@@ -5,6 +5,7 @@
 #include "core/LevelManager.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
+#include "core/MessageSystem.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
 #include "core/Collisions.hpp"
@@ -267,6 +268,7 @@ void EntityManager::Update(float frametime)
 	}
 
 	particles_.Update(frametime);
+	MessageSystem::update(frametime);
 
 	// parallax scrolling
 	layer1_.OnUpdate(frametime);
@@ -327,6 +329,7 @@ void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 	target.draw(layer1_, states);
 	target.draw(layer2_, states);
 	target.draw(particles_, states);
+	MessageSystem::show(target, states);
 
 	// draw each managed entity
 	for (EntityList::const_iterator it = entities_.begin(); it != entities_.end(); ++it)
