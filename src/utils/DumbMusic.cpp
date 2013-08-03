@@ -1,63 +1,101 @@
+#include <cstring>
 #include "DumbMusic.hpp"
 
-#define DELTA          65536.0f / SAMPLING_RATE
 
-bool DumbMusic::inited_ = false;
+void DumbMusic::initDumb()
+{
+	// Must be called before trying to open a file
+	dumb_register_stdfiles();
+}
 
 
-void DumbMusic::Exit()
+void DumbMusic::exitDumb()
 {
 	dumb_exit();
 }
 
 
-DumbMusic::DumbMusic()
+DumbMusic::DumbMusic():
+	m_module(NULL),
+	m_player(NULL)
 {
-	if (!inited_)
-	{
-		dumb_register_stdfiles();
-		inited_ = true;
-	}
-
-	module_ = NULL;
-	player_ = NULL;
 }
 
 
 DumbMusic::~DumbMusic()
 {
-	if (player_ != NULL)
-		duh_end_sigrenderer(player_);
-	if (module_ != NULL)
-		unload_duh(module_);
+	close();
 }
 
 
 bool DumbMusic::openFromFile(const std::string& filename)
 {
-	initialize(N_CHANNELS, SAMPLING_RATE);
-	module_ = dumb_load_mod_quick(filename.c_str());
-	return module_ != NULL;
+	close();
+
+	// Guess file type from extension
+	const char* ext = strrchr(filename.c_str(), '.');
+
+	if (strcmp(ext, ".mod") == 0) // Amiga module
+		m_module = dumb_load_mod_quick(filename.c_str());
+
+	else if (strcmp(ext, ".xm") == 0) // Fast Tracker II
+		m_module = dumb_load_xm_quick(filename.c_str());
+
+	else if (strcmp(ext, ".s3m") == 0) // Scream Tracker 3
+		m_module = dumb_load_s3m_quick(filename.c_str());
+
+	else if (strcmp(ext, ".it") == 0) // Impulse Tracker
+		m_module = dumb_load_it_quick(filename.c_str());
+
+	if (m_module != NULL)
+	{
+		initialize(NB_CHANNELS, SAMPLING_RATE);
+		return true;
+	}
+	return false;
+}
+
+
+sf::Time DumbMusic::getDuration() const
+{
+	// 65536 represents one second
+	return sf::seconds(static_cast<float>(duh_get_length(m_module) / 65536));
+}
+
+
+void DumbMusic::close()
+{
+	if (m_player != NULL)
+	{
+		duh_end_sigrenderer(m_player);
+		m_player = NULL;
+	}
+	if (m_module != NULL)
+	{
+		unload_duh(m_module);
+		m_module = NULL;
+	}
 }
 
 
 void DumbMusic::onSeek(sf::Time timeOffset)
 {
-	// TODO: implement seeking using timeoffset
-	const int sig = 0;
-	const long pos = 0;
-	player_ = duh_start_sigrenderer(module_, sig, N_CHANNELS, pos);
+	// When specifying the position, 0 represents the start of the DUH, and 65536 represents one second.
+	long pos = static_cast<long>(timeOffset.asSeconds() * 65536);
+	m_player = duh_start_sigrenderer(m_module, 0, NB_CHANNELS, pos);
 }
 
 
 bool DumbMusic::onGetData(Chunk& data)
 {
-	// FIXME: le /2 est magique [sans lui, skipping]
-	duh_render(player_, 16, 0, 1.0f, DELTA, BUFFER_SIZE / 2, samples_);
+	// Use delta to control the speed of the output signal. If you pass 1.0f, the resultant signal
+	// will be suitable for a 65536-Hz sampling rate (which isn't a commonly used rate).
+	float delta =  65536.0f / SAMPLING_RATE;
 
-	data.samples = samples_;
-	data.sampleCount = BUFFER_SIZE; // nombre de samples
+	// le /2 est magique (sans lui, skipping)
+	duh_render(m_player, 16, 0, 1.0f, delta, BUFFER_SIZE / 2, m_samples);
+
+	data.samples = m_samples;
+	data.sampleCount = BUFFER_SIZE;
 	return true;
 }
-
-

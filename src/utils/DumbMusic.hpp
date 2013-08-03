@@ -1,44 +1,55 @@
 #ifndef DUMBMUSIC_HPP
 #define DUMBMUSIC_HPP
 
-
 #include <dumb.h>
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 
-#define SAMPLING_RATE  44100
-#define N_CHANNELS     2
-#define BUFFER_LENGTH  1	// Fixme: Magique?
-#define BUFFER_SIZE    SAMPLING_RATE / BUFFER_LENGTH
-
 /**
- * Musique chargée avec libdumb (support du format .mod)
+ * SFML wrapper around DUMB library for playing module music files
  */
 class DumbMusic: public sf::SoundStream
 {
 public:
 	/**
-	 * Quitter le module DUMB en fin de programme
+	 * Load DUMB library
 	 */
-	static void Exit();
+	static void initDumb();
+
+	/**
+	 * Unload DUMB library
+	 */
+	static void exitDumb();
 
 	DumbMusic();
+
 	~DumbMusic();
 
-	bool openFromFile(const std::string& name);
+	/**
+	 * Open a music from an audio file
+	 */
+	bool openFromFile(const std::string& filename);
+
+	/**
+	 * Get the total duration of the music
+	 */
+	sf::Time getDuration() const;
 
 private:
+	static const int SAMPLING_RATE = 44100;
+	static const int BUFFER_SIZE   = SAMPLING_RATE;
+	static const int NB_CHANNELS   = 2; // stereo
+
+	void close();
+
 	bool onGetData(Chunk& data);
 
 	void onSeek(sf::Time timeOffset);
 
-	sf::Int16 samples_[BUFFER_SIZE * N_CHANNELS];
-
-	DUH* module_;
-	DUH_SIGRENDERER* player_;
-	static bool inited_;
+	sf::Int16        m_samples[BUFFER_SIZE];
+	DUH*             m_module;
+	DUH_SIGRENDERER* m_player;
 };
 
 
 #endif // DUMBMUSIC_HPP
-
