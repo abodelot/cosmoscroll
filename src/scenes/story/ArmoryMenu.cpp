@@ -34,22 +34,24 @@ ArmoryMenu::ArmoryMenu()
 	layout_left.SetSpacing(0, 5);
 	const sf::Font& font = Resources::getFont("Ubuntu-R.ttf");
 
-	dialog_.current_level = new gui::Label(this, "A\n");
+	dialog_.current_level = new gui::Label(this, "1");
+	dialog_.current_level->setFont(font);
 	dialog_.current_level->setColor(sf::Color::Green);
-	dialog_.current_level->setCharacterSize(18);
+	dialog_.current_level->setCharacterSize(12);
 	layout_left.Add(dialog_.current_level);
 
-	dialog_.current_level_details = new gui::Label(this, "A\nA\n");
+	dialog_.current_level_details = new gui::Label(this, "1\n2\n3");
 	dialog_.current_level_details->setFont(font);
 	dialog_.current_level_details->setCharacterSize(12);
 	layout_left.Add(dialog_.current_level_details);
 
-	dialog_.next_level = new gui::Label(this, "A\n");
+	dialog_.next_level = new gui::Label(this, "1");
+	dialog_.next_level->setFont(font);
 	dialog_.next_level->setColor(sf::Color::Green);
-	dialog_.next_level->setCharacterSize(18);
+	dialog_.next_level->setCharacterSize(12);
 	layout_left.Add(dialog_.next_level);
 
-	dialog_.next_level_details = new gui::Label(this, "A\nA\n");
+	dialog_.next_level_details = new gui::Label(this, "1\n2\n3s");
 	dialog_.next_level_details->setFont(font);
 	dialog_.next_level_details->setCharacterSize(12);
 	layout_left.Add(dialog_.next_level_details);
@@ -60,8 +62,7 @@ ArmoryMenu::ArmoryMenu()
 
 	dialog_.price = new gui::Label(this, "A\n");
 	dialog_.price->setFont(font);
-	dialog_.price->setCharacterSize(12);
-	dialog_.price->setColor(sf::Color(255, 128, 0));
+	dialog_.price->setCharacterSize(14);
 	layout_right.Add(dialog_.price);
 
 	dialog_.but_buy = new ConfigButton(this, _t("armory.buy"));
@@ -203,6 +204,10 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 		// next item description
 		dialog_.next_level_details->setString(data->BuildDescriptionString());
 		dialog_.price->setString(I18n::templatize("item.price", "{price}", data->GetPrice()));
+		if (Game::GetInstance().GetPlayerSave().GetCredits() >= data->GetPrice())
+            dialog_.price->setColor(sf::Color::White);
+        else
+            dialog_.price->setColor(sf::Color::Red);
 	}
 	FocusFirstWidget();
 }

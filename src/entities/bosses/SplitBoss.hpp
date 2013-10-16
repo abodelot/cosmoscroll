@@ -8,7 +8,7 @@
 class SplitBoss: public Entity
 {
 public:
-	SplitBoss(sf::Vector2f& pos,int HP = 300,bool split = true);
+	SplitBoss(sf::Vector2f& pos,int HP = 200,bool split = true);
 
 	SplitBoss* clone() const;
 
