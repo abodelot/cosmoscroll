@@ -70,13 +70,13 @@
 			<Add library="sfml-network" />
 			<Add library="dumb" />
 		</Linker>
-		<Unit filename="bin/data/lang/de.lang" />
-		<Unit filename="bin/data/lang/en.lang" />
-		<Unit filename="bin/data/lang/fr.lang" />
-		<Unit filename="bin/data/xml/animations.xml" />
-		<Unit filename="bin/data/xml/items.xml" />
-		<Unit filename="bin/data/xml/levels.xml" />
-		<Unit filename="bin/data/xml/spaceships.xml" />
+		<Unit filename="bin/resources/lang/de.lang" />
+		<Unit filename="bin/resources/lang/en.lang" />
+		<Unit filename="bin/resources/lang/fr.lang" />
+		<Unit filename="bin/resources/xml/animations.xml" />
+		<Unit filename="bin/resources/xml/items.xml" />
+		<Unit filename="bin/resources/xml/levels.xml" />
+		<Unit filename="bin/resources/xml/spaceships.xml" />
 		<Unit filename="extlibs/md5/md5.cpp" />
 		<Unit filename="extlibs/md5/md5.hpp" />
 		<Unit filename="extlibs/tinyxml/tinyxml2.cpp" />
@@ -109,6 +109,8 @@
 		<Unit filename="src/entities/Animator.hpp" />
 		<Unit filename="src/entities/Asteroid.cpp" />
 		<Unit filename="src/entities/Asteroid.hpp" />
+		<Unit filename="src/entities/Damageable.cpp" />
+		<Unit filename="src/entities/Damageable.hpp" />
 		<Unit filename="src/entities/Entity.cpp" />
 		<Unit filename="src/entities/Entity.hpp" />
 		<Unit filename="src/entities/EntityManager.cpp" />
@@ -131,12 +133,12 @@
 		<Unit filename="src/entities/bosses/SplitBoss.hpp" />
 		<Unit filename="src/entities/complex/Canon.cpp" />
 		<Unit filename="src/entities/complex/Canon.hpp" />
-		<Unit filename="src/entities/complex/ComplexEntity.cpp" />
-		<Unit filename="src/entities/complex/ComplexEntity.hpp" />
 		<Unit filename="src/entities/complex/Gate.cpp" />
 		<Unit filename="src/entities/complex/Gate.hpp" />
 		<Unit filename="src/entities/complex/GunTower.cpp" />
 		<Unit filename="src/entities/complex/GunTower.hpp" />
+		<Unit filename="src/entities/complex/MultiPartEntity.cpp" />
+		<Unit filename="src/entities/complex/MultiPartEntity.hpp" />
 		<Unit filename="src/entities/complex/Part.cpp" />
 		<Unit filename="src/entities/complex/Part.hpp" />
 		<Unit filename="src/gui/BitmapFont.cpp" />
@@ -226,8 +228,8 @@
 		<Unit filename="src/scenes/story/IntroLevelScene.hpp" />
 		<Unit filename="src/scenes/story/LevelMenu.cpp" />
 		<Unit filename="src/scenes/story/LevelMenu.hpp" />
-		<Unit filename="src/scenes/story/UpgradeItem.cpp" />
-		<Unit filename="src/scenes/story/UpgradeItem.hpp" />
+		<Unit filename="src/scenes/story/ShipPartWidget.cpp" />
+		<Unit filename="src/scenes/story/ShipPartWidget.hpp" />
 		<Unit filename="src/utils/DumbMusic.cpp" />
 		<Unit filename="src/utils/DumbMusic.hpp" />
 		<Unit filename="src/utils/Error.cpp" />

@@ -3,19 +3,17 @@
 
 #include "Projectile.hpp"
 
-/**
- * Projectile with zone damage
- */
 class Missile: public Projectile
 {
 public:
-	Missile(Entity* emitter, const sf::Vector2f& offset, float angle,
-		const sf::Texture& image, int speed, int damage);
+	Missile(Entity* emitter, float angle, const sf::Texture& image, int speed, int damage);
 
 	~Missile();
 
-	// override
-	void onCollision(const Entity& entity);
+	// callbacks ---------------------------------------------------------------
+
+	void onDestroy();
+
 private:
 	float m_angle;
 };

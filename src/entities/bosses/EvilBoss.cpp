@@ -10,12 +10,12 @@
 #define MAX_X 350
 #define MAX_Y (EntityManager::getInstance().getHeight() - getHeight())
 
-EvilBoss::EvilBoss(const sf::Vector2f& position) :
-	Entity(position, EVIL)
+EvilBoss::EvilBoss()
 {
 	setTexture(Resources::getTexture("entities/evil-boss.png"));
 	setTextureRect(sf::IntRect(0, 0, 242, 160));
 	setTeam(Entity::BAD);
+	setHP(EVIL);
 
 	// init weapons
 	m_eye_left.init("devil-eyes");
@@ -72,13 +72,14 @@ void EvilBoss::onUpdate(float frametime)
 	m_eye_left.onUpdate(frametime);
 	m_eye_right.onUpdate(frametime);
 	m_mouth.onUpdate(frametime);
-	Entity::UpdateFlash(frametime);
+
+	updateDamageFlash(frametime);
 }
 
 
 void EvilBoss::takeDamage(int damage)
 {
-	Entity::takeDamage(damage);
+	Damageable::takeDamage(damage);
 	if (getHP() < next_ && getHP() > 0 && phase_ != next_)
 	{
 		phase_ = next_;

@@ -22,10 +22,11 @@ IntroScene::IntroScene() :
 	title_.setPosition(Game::WIDTH / 2, Game::HEIGHT / 2);
 	title_.resize(title_.getWidth() * ZOOM_FACTOR, title_.getHeight() * ZOOM_FACTOR);
 
-	// show a tempory player ship during the scene
-	ship_ = new Player(sf::Vector2f(-200, 100), "player");
+	// Display a player ship instance in the intro scene
+	ship_ = new Player("player");
+	ship_->setPosition(-200, 100);
 
-	// allow the player ship to go beyond screen limits during the intro scene
+	// Allow the player ship to go beyond screen limits during the intro scene
 	entity_mgr_.resize(1000, 1000);
 	entity_mgr_.addEntity(ship_);
 

@@ -14,30 +14,27 @@
 #define ROTATION_SPEED_MAX 160
 
 
-Asteroid::Asteroid(const sf::Vector2f& position, Size size, float angle) :
-	Entity(position, size + 1)
+Asteroid::Asteroid(Size size, float angle):
+	m_size(size),
+	m_rotation_speed(math::random(ROTATION_SPEED_MIN, ROTATION_SPEED_MAX))
 {
-	rotation_speed_ = math::random(ROTATION_SPEED_MIN, ROTATION_SPEED_MAX);
-	size_ = size;
-	SetRandomImage();
+	setHP(size * 2 + 1);
+	setRandomImage();
 
-	// calcul du vecteur vitesse à partir de l'angle et de la vitesse
+	// Compute speed vector from angle and velocity
 	angle = math::to_rad(angle);
-	speed_.x = std::cos(angle) * BASE_SPEED;
-	speed_.y = -std::sin(angle) * BASE_SPEED;
+	m_speed.x = std::cos(angle) * BASE_SPEED;
+	m_speed.y = -std::sin(angle) * BASE_SPEED;
 
-	// origin is located at sprite center to enable centered rotation
-	const sf::IntRect& rect = getTextureRect();
-	setOrigin(rect.width / 2, rect.height / 2);
-	// hack: décalage de la position car l'origine du sprite est le centre et non le coin top-left
-	sf::Sprite::move(sf::Sprite::getOrigin());
+	// Origin must be located at sprite center to enable centered rotation
+	setOrigin(getWidth() / 2, getHeight() / 2);
 }
 
 
 Asteroid* Asteroid::clone() const
 {
 	Asteroid* asteroid = new Asteroid(*this);
-	asteroid->SetRandomImage();
+	asteroid->setRandomImage();
 	return asteroid;
 }
 
@@ -45,30 +42,32 @@ Asteroid* Asteroid::clone() const
 void Asteroid::onUpdate(float frametime)
 {
 	sf::Vector2f pos = getPosition();
-	pos.x += speed_.x * frametime;
-	pos.y += speed_.y * frametime;
+	pos.x += m_speed.x * frametime;
+	pos.y += m_speed.y * frametime;
 	setPosition(pos);
-	rotate(rotation_speed_ * frametime);
+	rotate(m_rotation_speed * frametime);
 }
 
 
 void Asteroid::onDestroy()
 {
 	sf::Vector2f pos = getPosition();
-
-	static EntityManager& manager = EntityManager::getInstance();
-	switch (size_)
+	switch (m_size)
 	{
 		case BIG:
 			for (int i = 0; i < BIG_SPLIT_INTO; ++i)
 			{
-				manager.addEntity(new Asteroid(pos, MEDIUM, math::random(0, 360)));
+				Asteroid* asteroid = new Asteroid(MEDIUM, math::random(0, 360));
+				asteroid->setPosition(pos);
+				EntityManager::getInstance().addEntity(asteroid);
 			}
 			break;
 		case MEDIUM:
 			for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
 			{
-				manager.addEntity(new Asteroid(pos, SMALL, math::random(0, 360)));
+				Asteroid* asteroid = new Asteroid(SMALL, math::random(0, 360));
+				asteroid->setPosition(pos);
+				EntityManager::getInstance().addEntity(asteroid);
 			}
 			break;
 		default:
@@ -79,10 +78,10 @@ void Asteroid::onDestroy()
 }
 
 
-void Asteroid::SetRandomImage()
+void Asteroid::setRandomImage()
 {
 	int x = 0;
-	switch (size_)
+	switch (m_size)
 	{
 		case SMALL:
 			setTexture(Resources::getTexture("entities/asteroid-small.png"));

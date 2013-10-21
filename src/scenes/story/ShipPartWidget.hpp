@@ -1,13 +1,13 @@
-#ifndef UPGRADEITEM_HPP
-#define UPGRADEITEM_HPP
+#ifndef SHIPPARTWIDGET_HPP
+#define SHIPPARTWIDGET_HPP
 
 #include "gui/Widget.hpp"
 #include "items/ItemData.hpp"
 
-class UpgradeItem: public gui::Widget
+class ShipPartWidget: public gui::Widget
 {
 public:
-	UpgradeItem(gui::Menu* parent, ItemData::Type type);
+	ShipPartWidget(gui::Menu* parent, ItemData::Type type);
 
 	// inherited callbacks
 	void OnKeyPressed(sf::Keyboard::Key code);
@@ -22,9 +22,10 @@ private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	ItemData::Type type_;
-	xsf::Text label_;
+	xsf::Text m_text_name;
+	xsf::Text m_text_level;
 	xsf::Sprite halo_;
 	sf::RectangleShape label_bg_;
 };
 
-#endif // UPGRADEITEM_HPP
+#endif // SHIPPARTWIDGET_HPP

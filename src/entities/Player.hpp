@@ -1,7 +1,7 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "Entity.hpp"
+#include "Damageable.hpp"
 #include "Animator.hpp"
 #include "PowerUp.hpp"
 #include "Missile.hpp"
@@ -10,44 +10,40 @@
 #include "items/Weapon.hpp"
 
 /**
- * Vaisseau spatial contrôlable par un joueur
+ * Player's spaceship
  */
-class Player: public Entity
+class Player: public Damageable
 {
 public:
-	Player(const sf::Vector2f& position, const char* animation);
+	Player(const char* animation);
 
 	~Player();
-
-	void Initialize();
-
-	/**
-	 * @return points de bouclier
-	 */
-	inline int GetShield() const { return shield_; }
-
-	inline bool HasCheated() const { return konami_code_activated_; }
-
-	void UpdateScoreCounter(int diff);
 
 	// override
 	Player* clone() const;
 
 	void HandleAction(Input::Action action);
 
-	// override
-	void onUpdate(float frametime);
+	int getScore() const;
 
-	// override
-	void onCollision(const Entity& entity);
-
-	// override
-	void onDestroy();
+	void updateScore(int diff);
 
 	// override
 	void takeDamage(int damage);
 
-	const Player* toPlayer() const { return this; }
+	inline bool HasCheated() const { return konami_code_activated_; }
+
+	inline Animator& getAnimator() { return m_animator; }
+
+	// callbacks ---------------------------------------------------------------
+
+	void onInit();
+
+	void onUpdate(float frametime);
+
+	void onCollision(PowerUp& powerup);
+
+	void onDestroy();
 
 private:
 	enum TimedPowerUp
@@ -61,11 +57,6 @@ private:
 	void Computemove(float frametime);
 
 	/**
-	 * Gérer un bonus attrapé
-	 */
-	void HandlePowerUp(PowerUp::Type bonus_t);
-
-	/**
 	 * Désactiver un bonus à effet temporaire
 	 */
 	void DisableTimedPowerUp(TimedPowerUp tbonus);
@@ -76,10 +67,9 @@ private:
 	void KonamiCodeOn();
 
 	/**
-	 * Augmenter l'énergie du bouclier
-	 * @param count: quantité à ajouter
+	 * Set shield points
 	 */
-	void IncreaseShield(int count = 1);
+	void setShield(int shield);
 
 	/**
 	 * Faire beeper l'indicateur de surchauffe
@@ -112,6 +102,7 @@ private:
 	Weapon<Missile> m_missile_launcher;
 
 	Animator m_animator;
+	int      m_score;
 };
 
 #endif // PLAYER_HPP

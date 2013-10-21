@@ -96,7 +96,7 @@ void ControlPanel::Init(EntityManager::Mode mode)
 		default:
 			break;
 	}
-	SetPoints(0);
+	setScore(0);
 }
 
 
@@ -115,9 +115,9 @@ void ControlPanel::SetGameInfo(const sf::String& text)
 }
 
 
-void ControlPanel::SetPoints(int points)
+void ControlPanel::setScore(int score)
 {
-	str_points_.setString(wstr_replace(_t("panel.points"), L"{points}", std::to_wstring(points)));
+	str_points_.setString(I18n::templatize("panel.points", "{points}", score));
 }
 
 

@@ -6,41 +6,45 @@
 
 #define BASE_OFFSET 28
 
-GunTower::GunTower(const sf::Vector2f& position): ComplexEntity(position)
-{
-	setY(EntityManager::getInstance().getHeight() - (BASE_OFFSET + 64));
+#define BASE_ID  0
+#define CANON_ID 1
 
-	Part base;
+GunTower::GunTower():
+	m_target(NULL)
+{
+	Part base(BASE_ID);
 	base.setTexture(Resources::getTexture("entities/guntower-base.png"));
 
-	Part turret;
+	Part turret(CANON_ID);
 	const sf::Texture& img_turret = Resources::getTexture("entities/guntower-turret.png");
 	turret.setTexture(img_turret);
 	turret.setOrigin(img_turret.getSize().x / 2, img_turret.getSize().y / 2);
+	addPart(turret, img_turret.getSize().x / 2, img_turret.getSize().y / 2);
+	addPart(base, 0, BASE_OFFSET);
 
-	AddPart(turret, img_turret.getSize().x / 2, img_turret.getSize().y / 2);
-	AddPart(base, 0, BASE_OFFSET);
-	target_ = NULL;
-
-	weapon_.init("laser-pink");
-	weapon_.setOwner(this);
-	weapon_.setPosition(img_turret.getSize().x / 2, img_turret.getSize().y / 2);
+	m_weapon.init("laser-pink");
+	m_weapon.setOwner(this);
+	m_weapon.setPosition(img_turret.getSize().x / 2, img_turret.getSize().y / 2);
 }
 
 
 void GunTower::onUpdate(float frametime)
 {
-	ComplexEntity::onUpdate(frametime);
-	weapon_.shoot(target_->getCenter());
-	weapon_.onUpdate(frametime);
-	// rotate turret toward player
-	GetPartAt(0)->setRotation(180 - math::to_deg(math::angle(target_->getPosition(), getPosition())));
+	MultiPartEntity::onUpdate(frametime);
+
+	// Rotate turret toward player
+	getPartAt(0).setRotation(180 - math::to_deg(math::angle(m_target->getPosition(), getPosition())));
+	m_weapon.shoot(m_target->getCenter());
+	m_weapon.onUpdate(frametime);
 }
 
 
 void GunTower::onInit()
 {
-	target_ = EntityManager::getInstance().GetPlayerShip();
+	m_target = EntityManager::getInstance().GetPlayerShip();
+
+	// Always positionned at bottom
+	setY(EntityManager::getInstance().getHeight() - (BASE_OFFSET + 64));
 }
 
 

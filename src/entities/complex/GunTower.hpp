@@ -1,13 +1,13 @@
 #ifndef GUN_TOWER_HPP
 #define GUN_TOWER_HPP
 
-#include "ComplexEntity.hpp"
+#include "MultiPartEntity.hpp"
 #include "items/Weapon.hpp"
 
-class GunTower: public ComplexEntity
+class GunTower: public MultiPartEntity
 {
 public:
-	GunTower(const sf::Vector2f& position);
+	GunTower();
 
 	void onInit();
 
@@ -16,8 +16,8 @@ public:
 	GunTower* clone() const;
 
 private:
-	Weapon<> weapon_;
-	Entity* target_;
+	Weapon<> m_weapon;
+	Entity*  m_target;
 };
 
 #endif // GUN_TOWER_HPP

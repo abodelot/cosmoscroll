@@ -48,11 +48,11 @@ void EndGameScene::Update(float frametime)
 
 	if (player_dead_)
 	{
-		// falling animation
+		// Falling animation
 		Player* player = EntityManager::getInstance().GetPlayerShip();
-		player->move(0, frametime * 100);
-		player->rotate(10 * frametime);
-		//FIXME player->updateSubRect(*player, frametime);
+		player->move(-100 * frametime, 100 * frametime);
+		player->rotate(-60 * frametime);
+		player->getAnimator().updateSubRect(*player, frametime);
 	}
 }
 
@@ -80,18 +80,16 @@ void EndGameScene::OnFocus()
 		// Level completed
 		LevelManager& levels = LevelManager::GetInstance();
 		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("end-level.ogg"));
-		int earned_credits = entities_.GetPlayerShip()->getPoints();
+		int earned_credits = entities_.GetPlayerShip()->getScore();
 		int current = levels.GetCurrent();
 		// if last level
-		if (current % levels.CountLevel() == 0)
+		if (current == levels.CountLevel())
 		{
 			info_.setString(I18n::templatize("endgame.end_last_level", "{credits}", earned_credits));
 		}
 		else
 		{
-			std::wstring s = wstr_replace(_t("endgame.end_level"), L"{level}", std::to_wstring(current % levels.CountLevel()));
-			wstr_self_replace(s, L"{credits}", std::to_wstring(earned_credits));
-			info_.setString(s);
+			info_.setString(I18n::templatize("endgame.end_level", "{level}", current, "{credits}", earned_credits));
 		}
 
 		Game::GetPlayerSave().UpdateCredits(earned_credits);

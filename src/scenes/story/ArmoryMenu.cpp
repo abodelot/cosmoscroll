@@ -17,7 +17,7 @@ ArmoryMenu::ArmoryMenu()
 	new gui::Image(this, Resources::getTexture("gui/armory-ship-view.png"));
 	for (int i = 0; i < ItemData::_COUNT; ++i)
 	{
-		items_[i] = new UpgradeItem(this, (ItemData::Type) i);
+		items_[i] = new ShipPartWidget(this, (ItemData::Type) i);
 	}
 
 	// init dialog
@@ -30,12 +30,13 @@ ArmoryMenu::ArmoryMenu()
 	dialog_.lab_item = new gui::Label(this, "A\n");
 	dialog_.lab_item->setPosition(x, y + 6);
 	// left side
-	gui::VBoxLayout layout_left(x + 30, y + 30);
-	layout_left.SetSpacing(0, 5);
+	gui::VBoxLayout layout_left(x + 30, y + 40);
+	layout_left.SetSpacing(0, 1);
 	const sf::Font& font = Resources::getFont("Ubuntu-R.ttf");
 
 	dialog_.current_level = new gui::Label(this, "1");
 	dialog_.current_level->setFont(font);
+	dialog_.current_level->setStyle(sf::Text::Bold);
 	dialog_.current_level->setColor(sf::Color::Green);
 	dialog_.current_level->setCharacterSize(12);
 	layout_left.Add(dialog_.current_level);
@@ -47,6 +48,7 @@ ArmoryMenu::ArmoryMenu()
 
 	dialog_.next_level = new gui::Label(this, "1");
 	dialog_.next_level->setFont(font);
+	dialog_.next_level->setStyle(sf::Text::Bold);
 	dialog_.next_level->setColor(sf::Color::Green);
 	dialog_.next_level->setCharacterSize(12);
 	layout_left.Add(dialog_.next_level);
@@ -205,9 +207,9 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 		dialog_.next_level_details->setString(data->BuildDescriptionString());
 		dialog_.price->setString(I18n::templatize("item.price", "{price}", data->GetPrice()));
 		if (Game::GetInstance().GetPlayerSave().GetCredits() >= data->GetPrice())
-            dialog_.price->setColor(sf::Color::White);
-        else
-            dialog_.price->setColor(sf::Color::Red);
+			dialog_.price->setColor(sf::Color::White);
+		else
+			dialog_.price->setColor(sf::Color::Red);
 	}
 	FocusFirstWidget();
 }

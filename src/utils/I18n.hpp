@@ -61,6 +61,17 @@ public:
 		                   std::to_wstring(value));
 	}
 
+	template <typename T1, typename T2>
+	static std::wstring templatize(const char* key, const std::string& search1, T1 value1,
+													const std::string& search2, T2 value2)
+	{
+		std::wstring s = str_replace(getInstance().translate(key), std::wstring(search1.begin(), search1.end()), std::to_wstring(value1));
+		str_self_replace(s, std::wstring(search2.begin(), search2.end()), std::to_wstring(value2));
+		return s;
+	}
+
+
+
 private:
 	I18n();
 	I18n(const I18n&);

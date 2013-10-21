@@ -2,11 +2,11 @@
 <items>
 	<weapons>
 		<weapon id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg"
-			level="1" heat_cost="1.5" fire_rate="8" damage="1" speed="440" />
+			level="1" heat_cost="1.5" fire_rate="8" damage="1" speed="400" />
 		<weapon id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg"
-			level="2" heat_cost="1.5" fire_rate="12" damage="1" speed="450" price="50"/>
+			level="2" heat_cost="1.5" fire_rate="12" damage="2" speed="450" price="50"/>
 		<weapon id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg"
-			level="3" heat_cost="1.5" fire_rate="16" damage="2" speed="490"  price="150"/>
+			level="3" heat_cost="1.5" fire_rate="12" damage="3" speed="450"  price="150"/>
 		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
 			level="1" heat_cost="2.5" fire_rate="4" damage="3" speed="340"  />
 		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
@@ -28,6 +28,7 @@
 		<shield level="1" points="3" />
 		<shield level="2" points="4" price="100" />
 		<shield level="3" points="5" price="200" />
+		<shield level="4" points="6" price="350" />
 	</shields>
 	<engines>
 		<engine level="1" speed="180" />

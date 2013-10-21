@@ -5,6 +5,7 @@
 #include "utils/Math.hpp"
 #include "utils/StringUtils.hpp"
 #include "core/ParticleSystem.hpp"
+#include "core/MessageSystem.hpp"
 
 // bonus freq = 1 / DROP_LUCK
 #define DROP_LUCK 8
@@ -18,14 +19,15 @@
 #define CIRCLE_RADIUS   60
 #define CIRCLE_ROTATION_SPEED (math::PI * 0.8)
 
-Spaceship::Spaceship(const Animation& animation, int hp, int speed) :
-	Entity(sf::Vector2f(0, 0), hp),
+Spaceship::Spaceship(const Animation& animation, int hp, int speed):
 	m_attack(NONE),
 	m_movement(LINE),
+	m_points(1),
 	m_target(NULL)
 {
 	setTexture(animation.getTexture());
 	setTeam(Entity::BAD);
+	setHP(hp);
 	m_animator.setAnimation(*this, animation);
 
 	speed_ = speed;
@@ -99,6 +101,8 @@ Spaceship* Spaceship::clone() const
 
 void Spaceship::onUpdate(float frametime)
 {
+	m_animator.updateSubRect(*this, frametime);
+
 	// Apply movement pattern
 	float delta = speed_ * frametime;
 	switch (m_movement)
@@ -153,6 +157,13 @@ void Spaceship::onUpdate(float frametime)
 		break;
 	}
 
+	if (getHP() <= 0)
+	{
+		if (m_destroyed_at.getElapsedTime().asSeconds() >= m_animator.getAnimation()->getDuration())
+			setKill(true);
+
+		return;
+	}
 
 	switch (m_attack)
 	{
@@ -175,9 +186,9 @@ void Spaceship::onUpdate(float frametime)
 			break;
 	}
 
-	m_animator.updateSubRect(*this, frametime);
 	m_weapon.onUpdate(frametime);
-	Entity::UpdateFlash(frametime);
+
+	updateDamageFlash(frametime);
 }
 
 
@@ -187,6 +198,25 @@ void Spaceship::onDestroy()
 	{
 		PowerUp::dropRandom(getPosition());
 	}
-	ParticleSystem::GetInstance().ExplosionSfx(getCenter());
+	setKill(false);
+	SoundSystem::GetInstance().PlaySound("boom.ogg");
+	setMovementPattern(LINE);
+	m_animator.setAnimation(*this, EntityManager::getInstance().GetAnimation("explosion"));
+	m_destroyed_at.restart();
+
+	EntityManager::getInstance().GetPlayerShip()->updateScore(m_points);
+	MessageSystem::write("+" + std::to_string(m_points), getPosition(), sf::Color(255, 128, 0));
+}
+
+
+void Spaceship::setPoints(int points)
+{
+	m_points = points;
+}
+
+
+int Spaceship::getPoints() const
+{
+	return m_points;
 }
 

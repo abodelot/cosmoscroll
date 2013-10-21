@@ -296,38 +296,40 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 		{
 			int id = 0;
 			elem->QueryIntAttribute("id", &id);
-			entity = entity_mgr.CreateSpaceShip(id, position.x, position.y);
-			total_points_ += entity->getPoints();
+			Spaceship* spaceship = entity_mgr.CreateSpaceShip(id);
+			total_points_ += spaceship->getPoints();
+			entity = spaceship;
 		}
 		else if (strcmp(tag_name, "asteroid") == 0)
 		{
-			entity = new Asteroid(position, Asteroid::BIG);
+			entity = new Asteroid(Asteroid::BIG);
 		}
 		else if (strcmp(tag_name, "evilboss") == 0)
 		{
-			entity = new EvilBoss(position);
+			entity = new EvilBoss();
 		}
 		else if (strcmp(tag_name, "boss_tentacles") == 0)
 		{
-			entity = new BossTentacles(position);
+			entity = new BossTentacles();
 		}
 		else if(strcmp(tag_name,"split_boss") == 0)
 		{
-		    entity = new SplitBoss(position);
+		    entity = new SplitBoss();
 		}
 		else if (strcmp(tag_name, "decor") == 0)
 		{
 			if (elem->Attribute("id", "gate"))
-				entity = new Gate(position);
+				entity = new Gate();
 			else if (elem->Attribute("id", "canon"))
-				entity = new Canon(position);
+				entity = new Canon();
 			else if (elem->Attribute("id", "guntower"))
-				entity = new GunTower(position);
+				entity = new GunTower();
 		}
 		else
 		{
 			std::cerr << "[levels] unsupported tag '" << tag_name << "' ignored" << std::endl;
 		}
+		entity->setPosition(position);
 		AppendToWaitingLine(entity, time);
 	}
 }

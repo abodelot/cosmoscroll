@@ -1,15 +1,15 @@
 #ifndef BOSSTENTACLES_HPP
 #define BOSSTENTACLES_HPP
 
-#include "entities/Entity.hpp"
+#include "entities/Damageable.hpp"
 #include "entities/Animator.hpp"
 #include "items/Weapon.hpp"
 
 
-class BossTentacles: public Entity
+class BossTentacles: public Damageable
 {
 public:
-	BossTentacles(const sf::Vector2f& position);
+	BossTentacles();
 
 	BossTentacles* clone() const;
 

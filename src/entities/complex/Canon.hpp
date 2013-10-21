@@ -1,17 +1,18 @@
 #ifndef CANON_HPP
 #define CANON_HPP
 
-#include "ComplexEntity.hpp"
+#include "MultiPartEntity.hpp"
 #include "items/Weapon.hpp"
 
-class Canon: public ComplexEntity
+class Canon: public MultiPartEntity
 {
 public:
-	Canon(const sf::Vector2f& position);
-
-	void onUpdate(float frametime);
+	Canon();
 
 	Canon* clone() const;
+
+	void onInit();
+	void onUpdate(float frametime);
 
 private:
 	Weapon<> weapon_;

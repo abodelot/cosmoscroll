@@ -32,12 +32,12 @@
 #define TIMED_BONUS_DURATION        10
 
 
-Player::Player(const sf::Vector2f& position, const char* animation) :
-	Entity(position, -1), // hack, init HP later (we must load items first)
+Player::Player(const char* animation):
 	input_(Input::GetInstance()),
 	panel_(ControlPanel::GetInstance())
 {
 	setTeam(Entity::GOOD);
+	setHP(-1);
 	m_animator.setAnimation(*this, EntityManager::getInstance().GetAnimation(animation));
 
 	// init weapons
@@ -85,7 +85,7 @@ Player::Player(const sf::Vector2f& position, const char* animation) :
 	current_konami_event_ = 0;
 	konami_code_activated_ = false;
 
-	Initialize();
+	onInit();
 }
 
 
@@ -96,19 +96,19 @@ Player::~Player()
 }
 
 
-void Player::Initialize()
+void Player::onInit()
 {
 	const PlayerSave& save = Game::GetInstance().GetPlayerSave();
 	const ItemManager& items = ItemManager::GetInstance();
 
-	// points
-	setPoints(0);
-	panel_.SetPoints(0);
+	// score
+	m_score = 0;
+	panel_.setScore(0);
 
 	// shield
 	shield_max_ = items.GetGenericItemData(ItemData::SHIELD, save.LevelOf(ItemData::SHIELD))->GetValue();
 	panel_.SetMaxShield(shield_max_);
-	panel_.SetShield(shield_);
+	setShield(shield_);
 
 	// ship armor
 	int hp = items.GetGenericItemData(ItemData::ARMOR, save.LevelOf(ItemData::ARMOR))->GetValue();
@@ -136,14 +136,6 @@ void Player::Initialize()
 	int weapon_lvl = save.LevelOf(ItemData::WEAPON);
 	const WeaponData* weapon_data = items.GetWeaponData("laser-red", weapon_lvl);
 	weapon_data->InitWeapon(m_weapon);
-}
-
-
-void Player::UpdateScoreCounter(int diff)
-{
-	int points = getPoints() + diff;
-	panel_.SetPoints(points);
-	setPoints(points);
 }
 
 
@@ -211,6 +203,19 @@ void Player::HandleAction(Input::Action action)
 	{
 		current_konami_event_ = 0;
 	}
+}
+
+
+int Player::getScore() const
+{
+	return m_score;
+}
+
+
+void Player::updateScore(int diff)
+{
+	m_score += diff;
+	panel_.setScore(m_score);
 }
 
 
@@ -293,7 +298,7 @@ void Player::onUpdate(float frametime)
 		shield_timer_ += frametime;
 		if (shield_timer_ >= SHIELD_RECOVERY_DELAY)
 		{
-			IncreaseShield();
+			setShield(shield_ + 1);
 			shield_timer_ = 0.f;
 		}
 	}
@@ -330,7 +335,8 @@ void Player::onUpdate(float frametime)
 	// update weapons
 	m_weapon.onUpdate(frametime);
 	m_missile_launcher.onUpdate(frametime);
-	Entity::UpdateFlash(frametime);
+
+	updateDamageFlash(frametime);
 }
 
 
@@ -357,26 +363,85 @@ void Player::takeDamage(int damage)
 	}
 	else
 	{
-		Entity::takeDamage(damage);
+		Damageable::takeDamage(damage);
 		SoundSystem::GetInstance().PlaySound("ship-damage.ogg");
 		panel_.SetShipHP(getHP());
 	}
 }
 
 
-void Player::onCollision(const Entity& entity)
+void Player::onCollision(PowerUp& powerup)
 {
-	const PowerUp* powerup = entity.toPowerUp();
-	if (powerup)
+	switch (powerup.getType())
 	{
-		HandlePowerUp(powerup->getType());
-		MessageSystem::write(powerup->getDescription(), powerup->getPosition());
-		SoundSystem::GetInstance().PlaySound("power-up.ogg");
+		// timed bonus
+		case PowerUp::DOUBLE_SHOT:
+			if (bonus_[T_DOUBLESHOT] == 0)
+			{
+				m_weapon.setMultiply(2);
+			}
+			bonus_[T_TRISHOT] = 0;
+			bonus_[T_DOUBLESHOT] += TIMED_BONUS_DURATION;
+			panel_.ActiveAttackPowerUp(bonus_[T_DOUBLESHOT], powerup.getType());
+			break;
+		case PowerUp::TRIPLE_SHOT:
+			if (bonus_[T_TRISHOT] == 0)
+			{
+				m_weapon.setMultiply(3);
+			}
+			bonus_[T_DOUBLESHOT] = 0;
+			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
+			panel_.ActiveAttackPowerUp(bonus_[T_TRISHOT], powerup.getType());
+			break;
+		case PowerUp::SPEED:
+			if (bonus_[T_SPEED] == 0)
+			{
+				speed_max_ *= BONUS_SPEED_FACTOR;
+				ParticleSystem::GetInstance().AddSmoke(96, this);
+			}
+			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
+			panel_.ActiveSpeedPowerUp(bonus_[T_SPEED]);
+			break;
+		// immediate bonus
+		case PowerUp::SUPER_BANANA:
+			ParticleSystem::GetInstance().FierySfx(getCenter(), 50);
+			setHP(hp_max_);
+			panel_.SetShipHP(hp_max_);
+			setShield(shield_max_);
+			break;
+		case PowerUp::HEALTH:
+			if (getHP() < hp_max_)
+			{
+				panel_.SetShipHP(updateHP(1));
+			}
+			break;
+		case PowerUp::SHIELD:
+			if (shield_ < shield_max_)
+			{
+				setShield(shield_ + 1);
+			}
+			break;
+		case PowerUp::COOLER:
+			if (coolers_ < COOLER_MAX)
+			{
+				++coolers_;
+				panel_.SetCoolers(coolers_);
+			}
+			break;
+		case PowerUp::MISSILE:
+			if (missiles_ < MISSILES_MAX)
+			{
+				++missiles_;
+				panel_.SetMissiles(missiles_);
+			}
+			break;
+		default:
+			break;
 	}
-	else
-	{
-		Entity::onCollision(entity);
-	}
+
+	powerup.kill();
+	MessageSystem::write(powerup.getDescription(), powerup.getPosition());
+	SoundSystem::GetInstance().PlaySound("power-up.ogg");
 }
 
 
@@ -387,7 +452,6 @@ void Player::onDestroy()
 	m_animator.setAnimation(*this, manager.GetAnimation("player-destroyed"));
 
 	manager.TerminateGame();
-	ParticleSystem::GetInstance().ExplosionSfx(getCenter());
 }
 
 
@@ -413,79 +477,6 @@ void Player::Computemove(float)
 }
 
 
-void Player::HandlePowerUp(PowerUp::Type bonus_t)
-{
-	switch (bonus_t)
-	{
-		// timed bonus
-		case PowerUp::DOUBLE_SHOT:
-			if (bonus_[T_DOUBLESHOT] == 0)
-			{
-				m_weapon.setMultiply(2);
-			}
-			bonus_[T_TRISHOT] = 0;
-			bonus_[T_DOUBLESHOT] += TIMED_BONUS_DURATION;
-			panel_.ActiveAttackPowerUp(bonus_[T_DOUBLESHOT], bonus_t);
-			break;
-		case PowerUp::TRIPLE_SHOT:
-			if (bonus_[T_TRISHOT] == 0)
-			{
-				m_weapon.setMultiply(3);
-			}
-			bonus_[T_DOUBLESHOT] = 0;
-			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
-			panel_.ActiveAttackPowerUp(bonus_[T_TRISHOT], bonus_t);
-			break;
-		case PowerUp::SPEED:
-			if (bonus_[T_SPEED] == 0)
-			{
-				speed_max_ *= BONUS_SPEED_FACTOR;
-				ParticleSystem::GetInstance().AddSmoke(96, this);
-			}
-			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
-			panel_.ActiveSpeedPowerUp(bonus_[T_SPEED]);
-			break;
-		// immediate bonus
-		case PowerUp::SUPER_BANANA:
-			ParticleSystem::GetInstance().FierySfx(getCenter(), 50);
-			// +1 missile, +1 cooler, +1 health, +1 shield
-			HandlePowerUp(PowerUp::MISSILE);
-			HandlePowerUp(PowerUp::COOLER);
-			HandlePowerUp(PowerUp::HEALTH);
-			HandlePowerUp(PowerUp::SHIELD);
-			break;
-		case PowerUp::HEALTH:
-			if (getHP() < hp_max_)
-			{
-				panel_.SetShipHP(UpdateHP(1));
-			}
-			break;
-		case PowerUp::SHIELD:
-			if (shield_ < shield_max_)
-			{
-				IncreaseShield();
-			}
-			break;
-		case PowerUp::COOLER:
-			if (coolers_ < COOLER_MAX)
-			{
-				++coolers_;
-				panel_.SetCoolers(coolers_);
-			}
-			break;
-		case PowerUp::MISSILE:
-			if (missiles_ < MISSILES_MAX)
-			{
-				++missiles_;
-				panel_.SetMissiles(missiles_);
-			}
-			break;
-		default:
-			break;
-	}
-}
-
-
 void Player::DisableTimedPowerUp(TimedPowerUp tbonus)
 {
 	switch (tbonus)
@@ -505,9 +496,9 @@ void Player::DisableTimedPowerUp(TimedPowerUp tbonus)
 }
 
 
-void Player::IncreaseShield(int count)
+void Player::setShield(int count)
 {
-	shield_ += count;
+	shield_ = count;
 	// update particles
 	ParticleSystem& p = ParticleSystem::GetInstance();
 	p.RemoveShield(this);
@@ -521,12 +512,11 @@ void Player::KonamiCodeOn()
 {
 	konami_code_activated_ = true;
 
-	HandlePowerUp(PowerUp::SPEED);
 	// max hp
 	setHP(hp_max_);
 	panel_.SetShipHP(hp_max_);
 	// max shield
-	IncreaseShield(shield_max_ - shield_);
+	setShield(shield_max_);
 
 	coolers_ = 42;
 	panel_.SetCoolers(42);

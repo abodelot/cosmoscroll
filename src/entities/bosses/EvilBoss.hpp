@@ -1,17 +1,17 @@
 #ifndef EVILBOSS_HPP
 #define EVILBOSS_HPP
 
-#include "entities/Entity.hpp"
+#include "entities/Damageable.hpp"
 #include "items/Weapon.hpp"
 
 
 /**
  * Il est très méchant, et il en veut !
  */
-class EvilBoss: public Entity
+class EvilBoss: public Damageable
 {
 public:
-	EvilBoss(const sf::Vector2f& position);
+	EvilBoss();
 
 	EvilBoss* clone() const;
 

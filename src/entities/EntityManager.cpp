@@ -66,11 +66,11 @@ EntityManager& EntityManager::getInstance()
 
 EntityManager::EntityManager():
 	particles_(ParticleSystem::GetInstance()),
+	m_player(NULL),
 	levels_(LevelManager::GetInstance())
 {
 	resize(0, 0);
 
-	player_ = NULL;
 	more_bad_guys_ = &EntityManager::MoreBadGuys_ARCADE;
 	game_over_ = false;
 	mode_ = MODE_ARCADE;
@@ -109,6 +109,7 @@ void EntityManager::InitMode(Mode mode)
 {
 	// re-init particles
 	particles_.Clear();
+	MessageSystem::clear();
 
 	ControlPanel::GetInstance().Init(mode);
 	LevelManager& levels = LevelManager::GetInstance();
@@ -119,27 +120,27 @@ void EntityManager::InitMode(Mode mode)
 			ControlPanel::GetInstance().SetLevelDuration(levels_.GetDuration());
 			more_bad_guys_ = &EntityManager::MoreBadGuys_STORY;
 			// le vaisseau du joueur est conservé d'un niveau à l'autre
-			if (mode_ != MODE_STORY || player_ == NULL || player_->isDead())
+			if (mode_ != MODE_STORY || m_player == NULL || m_player->getHP() <= 0)
 			{
 				RespawnPlayer();
 			}
 			else
 			{
 				// suppression de toutes les unités, sauf le joueur
-				for (EntityList::iterator it = entities_.begin(); it != entities_.end();)
+				for (EntityList::iterator it = m_entities.begin(); it != m_entities.end();)
 				{
-					if (*it != player_)
+					if (*it != m_player)
 					{
 						delete *it;
-						it = entities_.erase(it);
+						it = m_entities.erase(it);
 					}
 					else
 					{
 						++it;
 					}
 				}
-				player_->setPosition(0, height_ / 2);
-				player_->Initialize();
+				m_player->setPosition(0, m_height / 2);
+				m_player->onInit();
 			}
 			layer1_.SetScrollingTexture(levels.GetLayerImage1());
 			layer2_.SetScrollingTexture(levels.GetLayerImage2());
@@ -177,8 +178,6 @@ void EntityManager::InitMode(Mode mode)
 	// initialisation avant une nouvelle partie
 	game_over_ = false;
 	timer_ = 0.f;
-	particles_.AddShield(player_->GetShield(), player_);
-
 }
 
 
@@ -191,21 +190,19 @@ EntityManager::Mode EntityManager::GetMode() const
 void EntityManager::resize(int width, int height)
 {
 	if (width < 0)
-	{
 		width = 0;
-	}
+
 	if (height < 0)
-	{
 		height = 0;
-	}
-	width_ = width;
-	height_ = height;
+
+	m_width = width;
+	m_height = height;
 }
 
 
 void EntityManager::HandleAction(Input::Action action)
 {
-	player_->HandleAction(action);
+	m_player->HandleAction(action);
 }
 
 
@@ -214,56 +211,54 @@ void EntityManager::Update(float frametime)
 	EntityList::iterator it, it2;
 
 	sf::FloatRect r1, r2;
-	for (it = entities_.begin(); it != entities_.end();)
+	for (it = m_entities.begin(); it != m_entities.end();)
 	{
 		Entity& entity = **it;
 		entity.onUpdate(frametime);
 
-		r1 = entity.GetCollideRect();
-
 		if (entity.isDead())
 		{
-			// removing dead entities
+			// Remove dead entities
 			delete *it;
-			it = entities_.erase(it);
+			it = m_entities.erase(it);
 		}
-		else if (r1.top + r1.height < 0 || r1.top > height_ || r1.left + r1.width < 0 || r1.left > width_)
+		else if (entity.getY() + entity.getHeight() < 0 || entity.getY() > m_height ||
+				 entity.getX() + entity.getWidth() < 0 || entity.getX() > m_width)
 		{
-			// removing entities outside the entity manager
+			// Remove entities outside the entity manager
 			delete *it;
-			it = entities_.erase(it);
+			it = m_entities.erase(it);
 		}
 		else
 		{
 			it2 = it;
-			for (++it2; it2 != entities_.end(); ++it2)
+			for (++it2; it2 != m_entities.end(); ++it2)
 			{
-				// collision dectection it1 <-> it2
+				// Collision dectection it1 <-> it2
 				if (Collisions::pixelPerfectTest(entity, **it2))
 				{
-					entity.onCollision(**it2);
-					(**it2).onCollision(entity);
+					entity.collides(**it2);
+					(**it2).collides(entity);
 				}
 			}
 			++it;
 		}
-
 	}
 
-	// update and collision
+	// Update and collision
 	if (decor_height_ > 0)
 	{
 		// decor height applies only on player
-		float player_y = player_->getPosition().y;
+		float player_y = m_player->getY();
 		if (player_y < decor_height_)
 		{
-			player_->setY(decor_height_ + 1);
-			player_->takeDamage(1);
+			m_player->setY(decor_height_ + 1);
+			m_player->takeDamage(1);
 		}
-		else if ((player_y + player_->getHeight()) > (height_ - decor_height_))
+		else if ((player_y + m_player->getHeight()) > (m_height - decor_height_))
 		{
-			player_->setY(height_ - decor_height_ - player_->getHeight() - 1);
-			player_->takeDamage(1);
+			m_player->setY(m_height - decor_height_ - m_player->getHeight() - 1);
+			m_player->takeDamage(1);
 		}
 	}
 
@@ -281,25 +276,25 @@ void EntityManager::Update(float frametime)
 void EntityManager::addEntity(Entity* entity)
 {
 	entity->onInit();
-	entities_.push_back(entity);
+	m_entities.push_back(entity);
 }
 
 
 void EntityManager::Clear()
 {
 	// suppression de toutes les entités
-	for (EntityList::iterator it = entities_.begin(); it != entities_.end();
+	for (EntityList::iterator it = m_entities.begin(); it != m_entities.end();
 		++it)
 	{
 		delete *it;
 	}
-	entities_.clear();
+	m_entities.clear();
 }
 
 
 int EntityManager::Count() const
 {
-	return (int) entities_.size();
+	return (int) m_entities.size();
 }
 
 
@@ -317,8 +312,8 @@ bool EntityManager::IsGameOver()
 
 void EntityManager::UpdateArcadeRecord()
 {
-	assert(player_->getPoints() > arcade_record_);
-	arcade_record_ = player_->getPoints();
+	assert(m_player->getScore() > arcade_record_);
+	arcade_record_ = m_player->getScore();
 }
 
 
@@ -332,7 +327,7 @@ void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 	MessageSystem::show(target, states);
 
 	// draw each managed entity
-	for (EntityList::const_iterator it = entities_.begin(); it != entities_.end(); ++it)
+	for (EntityList::const_iterator it = m_entities.begin(); it != m_entities.end(); ++it)
 	{
 		target.draw(**it, states);
 	}
@@ -451,20 +446,18 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 		elem = elem->NextSiblingElement();
 	}
 
-	RegisterUniqueEntity(new Asteroid(sf::Vector2f(0, 0), Asteroid::BIG));
+	RegisterUniqueEntity(new Asteroid(Asteroid::BIG));
 	return spaceships_defs_.size();
 }
 
 
-Spaceship* EntityManager::CreateSpaceShip(int id, int x, int y)
+Spaceship* EntityManager::CreateSpaceShip(int id) const
 {
-	SpaceShipMap::const_iterator it;
-	it = spaceships_defs_.find(id);
+	SpaceShipMap::const_iterator it = spaceships_defs_.find(id);
 
 	if (it != spaceships_defs_.end())
 	{
 		Spaceship* ship = it->second->clone();
-		ship->setPosition(x, y);
 		return ship;
 	}
 	std::cerr << "spaceship id:" << id << " is not defined" << std::endl;
@@ -487,8 +480,8 @@ const Animation& EntityManager::GetAnimation(const std::string& key) const
 
 Player* EntityManager::GetPlayerShip() const
 {
-	assert(player_ != NULL);
-	return player_;
+	assert(m_player != NULL);
+	return m_player;
 }
 
 
@@ -511,8 +504,8 @@ void EntityManager::SpawnRandomEntity()
 	}
 	Entity* entity = uniques_[math::random(0, max_droppable_index_)]->clone();
 
-	entity->setX(width_ - 1);
-	entity->setY(math::random(0, height_ - (int) entity->getHeight()));
+	entity->setX(m_width - 1);
+	entity->setY(math::random(0, m_height - (int) entity->getHeight()));
 	addEntity(entity);
 }
 
@@ -559,9 +552,9 @@ bool EntityManager::MoreBadGuys_STORY()
 void EntityManager::RespawnPlayer()
 {
 	Clear();
-	sf::Vector2f position(50, height_ / 2);
-	player_ = new Player(position, "player");
-	addEntity(player_);
+	m_player = new Player("player");
+	m_player->setPosition(50, m_height / 2);
+	addEntity(m_player);
 }
 
 

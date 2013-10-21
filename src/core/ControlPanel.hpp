@@ -27,7 +27,7 @@ public:
 	 */
 	void SetGameInfo(const sf::String& text);
 
-	void SetPoints(int points);
+	void setScore(int score);
 
 	/**
 	 * @param seconds: nombre de secondes écoulées

@@ -4,35 +4,32 @@
 #include "Entity.hpp"
 
 /**
- * Bullet entity, emitted by Weapon class
+ * Bullet entity, see Weapon class
  */
 class Projectile: public Entity
 {
 public:
 	/**
 	 * @param emitter: entity which fired the projectile
-	 * @param position: initial position
 	 * @param angle: trajectory angle (radians)
-	 * @param image: image du projectile
-	 * @param speed: vitesse du projectile (pixels / seconde)
-	 * @param damage: dégâts infligés lors d'une collision
+	 * @param texture: texture displayed
+	 * @param speed: velocity (pixels / seconde)
+	 * @param damage: inflicted damage if entity is damageable
 	 */
-	Projectile(Entity* emitter, const sf::Vector2f& position, float angle,
-		const sf::Texture& image, int speed, int damage);
+	Projectile(Entity* emitter, float angle, const sf::Texture& texture, int speed, int damage);
 
-	// override
+	void collides(Entity& entity);
 	Projectile* clone() const;
 
-	// override
+	int getDamage() const;
+
+	// callbacks ---------------------------------------------------------------
+
 	void onUpdate(float frametime);
-
-	// override
-	void onCollision(const Entity& entity);
-
-	const Projectile* toProjectile() const { return this; }
 
 private:
 	sf::Vector2f m_speed;
+	int          m_damage;
 };
 
 #endif // PROJECTILE_HPP

@@ -8,10 +8,10 @@
 #define MAX_Y (EntityManager::getInstance().getHeight() - getHeight())
 
 
-BossTentacles::BossTentacles(const sf::Vector2f& position) :
-	Entity(position, 300)
+BossTentacles::BossTentacles()
 {
 	setTeam(Entity::BAD);
+	setHP(300);
 
 	// init weapons
 	m_weapon.init("laser-pink");
@@ -105,7 +105,8 @@ void BossTentacles::onUpdate(float frametime)
 	}
 	sf::Sprite::move(speed_x_ * frametime, speed_y_ * frametime);
 	m_weapon.onUpdate(frametime);
-	Entity::UpdateFlash(frametime);
+
+	updateDamageFlash(frametime);
 }
 
 

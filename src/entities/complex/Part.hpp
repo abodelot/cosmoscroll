@@ -1,14 +1,14 @@
 #ifndef PART_HPP
 #define PART_HPP
 
-#include "entities/Entity.hpp"
+#include "entities/Damageable.hpp"
 
-class ComplexEntity;
+class MultiPartEntity;
 
-class Part: public Entity
+class Part: public Damageable
 {
 public:
-	Part(int id=-1);
+	Part(int id = -1, int hp = 1);
 
 	// override
 	void onUpdate(float frametime);
@@ -16,21 +16,20 @@ public:
 	// override
 	Entity* clone() const;
 
-	// override
-	void onCollision(const Entity& entity);
+	void takeDamage(int damage);
 
-	int GetID() const;
+	int getID() const;
 
 	void setDestructible(bool destructible);
 
-	void setParent(ComplexEntity* parent);
+	void setParent(MultiPartEntity* parent);
 
 	void onDestroy();
 
 private:
 	int  m_id;
 	bool m_destructible;
-	ComplexEntity* m_parent;
+	MultiPartEntity* m_parent;
 };
 
 

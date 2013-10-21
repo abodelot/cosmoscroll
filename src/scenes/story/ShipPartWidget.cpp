@@ -1,11 +1,11 @@
-#include "UpgradeItem.hpp"
+#include "ShipPartWidget.hpp"
 #include "core/Game.hpp"
 #include "core/Resources.hpp"
 #include "utils/I18n.hpp"
 #include "utils/StringUtils.hpp"
 
 
-UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
+ShipPartWidget::ShipPartWidget(gui::Menu* parent, ItemData::Type type):
 	gui::Widget(parent, true)
 {
 	type_ = type;
@@ -45,21 +45,28 @@ UpgradeItem::UpgradeItem(gui::Menu* parent, ItemData::Type type):
 	SetCallbackID(type);
 
 	// label centered on halo sprite
-	label_.setFont(Resources::getFont("Ubuntu-R.ttf"));
-	label_.setCharacterSize(12);
-	label_.setColor(sf::Color::White);
+	m_text_name.setFont(Resources::getFont("Ubuntu-R.ttf"));
+	m_text_name.setStyle(sf::Text::Bold);
+	m_text_name.setCharacterSize(12);
+	m_text_name.setColor(sf::Color::White);
+
+	m_text_level.setFont(Resources::getFont("Ubuntu-R.ttf"));
+	m_text_level.setCharacterSize(12);
+	m_text_level.setColor(sf::Color::Yellow);
+
 	RefreshLabel();
-	x = (GetWidth() - label_.getWidth()) / 2;
-	label_.setPosition(x, -20);
+	x = (GetWidth() - m_text_name.getWidth()) / 2;
+	m_text_name.setPosition(x, -30);
+	m_text_level.setPosition(x, -14);
 
 	// label background
-	label_bg_.setSize(sf::Vector2f(label_.getWidth() + 8, label_.getHeight() + 10));
+	label_bg_.setSize(sf::Vector2f(m_text_name.getWidth() + 8, m_text_name.getHeight() + m_text_level.getHeight() + 10));
 	label_bg_.setFillColor(sf::Color(0, 0, 0, 128));
-	label_bg_.setPosition(label_.getPosition().x - 4, label_.getPosition().y - 4);
+	label_bg_.setPosition(m_text_name.getPosition() - sf::Vector2f(4, 4));
 }
 
 
-void UpgradeItem::OnKeyPressed(sf::Keyboard::Key code)
+void ShipPartWidget::OnKeyPressed(sf::Keyboard::Key code)
 {
 	if (code == sf::Keyboard::Return)
 	{
@@ -68,24 +75,20 @@ void UpgradeItem::OnKeyPressed(sf::Keyboard::Key code)
 }
 
 
-void UpgradeItem::OnMouseClicked(int, int)
+void ShipPartWidget::OnMouseClicked(int, int)
 {
 	CallTheCallback();
 }
 
 
-void UpgradeItem::RefreshLabel()
+void ShipPartWidget::RefreshLabel()
 {
-	std::wstring content = _t(ItemData::TypeToString(type_));
-	content += L"\n";
-	content += _t("armory.item_level");
-	wstr_self_replace(content, L"{level}", std::to_wstring(Game::GetInstance().GetPlayerSave().LevelOf(type_)));
-
-	label_.setString(content);
+	m_text_name.setString(_t(ItemData::TypeToString(type_)));
+	m_text_level.setString(I18n::templatize("armory.item_level", "{level}", Game::GetInstance().GetPlayerSave().LevelOf(type_)));
 }
 
 
-void UpgradeItem::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void ShipPartWidget::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 	switch (GetState())
@@ -94,7 +97,8 @@ void UpgradeItem::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		case gui::State::FOCUSED:
 			target.draw(halo_, states);
 			target.draw(label_bg_, states);
-			target.draw(label_, states);
+			target.draw(m_text_name, states);
+			target.draw(m_text_level, states);
 			break;
 		default:
 			break;

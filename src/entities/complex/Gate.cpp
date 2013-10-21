@@ -5,32 +5,31 @@
 
 #define DOOR_DELAY 2.f
 
+#define CELL_ID  1
+#define BASE_ID  2
+#define DOOR_ID  3
 
-//TODO: remove magic numbers
-
-Gate::Gate(const sf::Vector2f& pos):
-	ComplexEntity(pos)
+Gate::Gate()
 {
-	Part cell(1);
+	Part cell(CELL_ID, 16);
 	cell.setTexture(Resources::getTexture("entities/decor-energy-cell.png"));
-	cell.setHP(16);
 	cell.setDestructible(true);
-	AddPart(cell, 0, 28);
+	addPart(cell, 0, 28);
 
-	Part base_top(2);
+	Part base_top(BASE_ID);
 	base_top.setTexture(Resources::getTexture("entities/decor-top.png"));
-	AddPart(base_top, 32);
+	addPart(base_top, 32);
 
-	Part door(3);
+	Part door(DOOR_ID);
 	door.setTexture(Resources::getTexture("entities/decor-door.png"));
-	AddPart(door, 64, getHeight());
+	addPart(door, 64, getHeight());
 	door_full_height_ = door.getHeight();
 
-	Part base_bottom(2);
+	Part base_bottom(BASE_ID);
 	base_bottom.setTexture(Resources::getTexture("entities/decor-bottom.png"));
-	AddPart(base_bottom, 32, getHeight());
+	addPart(base_bottom, 32, getHeight());
 
-	AddPart(cell, 0, 332);
+	addPart(cell, 0, 332);
 
 	energy_cells_ = 2;
 	door_timer_ = 0;
@@ -39,11 +38,11 @@ Gate::Gate(const sf::Vector2f& pos):
 
 void Gate::onUpdate(float frametime)
 {
-	ComplexEntity::onUpdate(frametime);
+	MultiPartEntity::onUpdate(frametime);
 	if (door_timer_ > 0)
 	{
 		float delta_door = door_full_height_ * door_timer_ / DOOR_DELAY;
-		Part* door = GetPartByID(3);
+		Part* door = getPartByID(DOOR_ID);
 		sf::IntRect subrect(0, (door_full_height_ - delta_door), door->getWidth(), delta_door);
 		door_timer_ -= frametime;
 		if (door_timer_ <= 0)
@@ -63,7 +62,7 @@ Entity* Gate::clone() const
 
 void Gate::onPartDestroyed(const Part& part)
 {
-	if (part.GetID() == 1)
+	if (part.getID() == CELL_ID)
 	{
 		--energy_cells_;
 		if (energy_cells_ == 0)

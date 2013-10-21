@@ -1,13 +1,13 @@
 #ifndef GATE_HPP
 #define GATE_HPP
 
-#include "ComplexEntity.hpp"
+#include "MultiPartEntity.hpp"
 
 
-class Gate: public ComplexEntity
+class Gate: public MultiPartEntity
 {
 public:
-	Gate(const sf::Vector2f& pos);
+	Gate();
 
 	void onUpdate(float frametime);
 

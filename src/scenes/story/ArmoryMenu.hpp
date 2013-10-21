@@ -2,7 +2,7 @@
 #define ARMORY_HPP
 
 #include "CreditCounterBase.hpp"
-#include "UpgradeItem.hpp"
+#include "ShipPartWidget.hpp"
 
 
 class ArmoryMenu: public CreditCounterBase
@@ -38,7 +38,7 @@ private:
 		gui::Button* but_buy;
 	} dialog_;
 
-	UpgradeItem* items_[ItemData::_COUNT];
+	ShipPartWidget* items_[ItemData::_COUNT];
 	gui::Label* lab_info_;
 	ItemData::Type current_type_;
 };

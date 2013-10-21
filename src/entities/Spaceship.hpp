@@ -1,11 +1,11 @@
 #ifndef SPACESHIP_HPP
 #define SPACESHIP_HPP
 
-#include "Entity.hpp"
+#include "Damageable.hpp"
 #include "items/Weapon.hpp"
 #include "Animator.hpp"
 
-class Spaceship: public Entity
+class Spaceship: public Damageable
 {
 public:
 	enum MovementPattern
@@ -31,15 +31,14 @@ public:
 	// override
 	Spaceship* clone() const;
 
-	void collide(Entity& entity) const { entity.onCollision(*this); }
-
-	// override
 	void onUpdate(float frametime);
 
-	// override
 	void onDestroy();
 
 	Weapon<>& getWeapon() { return m_weapon; }
+
+	void setPoints(int points);
+	int getPoints() const;
 
 private:
 	AttackPattern   m_attack;
@@ -50,9 +49,11 @@ private:
 	float    base_x_;
 	float    angle_;
 
-	Weapon<> m_weapon;
-	Entity*  m_target;
-	Animator m_animator;
+	int       m_points;
+	Weapon<>  m_weapon;
+	Entity*   m_target;
+	Animator  m_animator;
+	sf::Clock m_destroyed_at;
 };
 
 

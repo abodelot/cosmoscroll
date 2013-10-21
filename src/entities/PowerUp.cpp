@@ -1,5 +1,4 @@
 #include "PowerUp.hpp"
-#include "Player.hpp"
 #include "EntityManager.hpp"
 #include "core/Resources.hpp"
 #include "utils/I18n.hpp"
@@ -9,12 +8,17 @@
 #define SIZE          16
 
 
-PowerUp::PowerUp(Type type, const sf::Vector2f& position) :
-	Entity(position, 1),
+PowerUp::PowerUp(Type type):
 	m_type(type)
 {
 	setTexture(Resources::getTexture("entities/bonus.png"));
 	setTextureRect(getTextureRect(type));
+}
+
+
+void PowerUp::collides(Entity& entity)
+{
+	entity.onCollision(*this);
 }
 
 
@@ -24,31 +28,11 @@ PowerUp* PowerUp::clone() const
 }
 
 
-void PowerUp::onUpdate(float frametime)
-{
-	sf::Sprite::move(-POWERUP_SPEED * frametime, 0);
-}
-
-
-void PowerUp::onCollision(const Entity& entity)
-{
-	if (entity.toPlayer())
-	{
-		kill();
-	}
-}
-
-
-const PowerUp* PowerUp::toPowerUp() const
-{
-	return this;
-}
-
-
 void PowerUp::dropRandom(const sf::Vector2f& position)
 {
-	Type type = (Type) math::random(0, POWERUP_COUNT - 1);
-	EntityManager::getInstance().addEntity(new PowerUp((Type) type, position));
+	PowerUp* powerup = new PowerUp((Type) math::random(0, POWERUP_COUNT - 1));
+	powerup->setPosition(position);
+	EntityManager::getInstance().addEntity(powerup);
 }
 
 
@@ -87,8 +71,14 @@ PowerUp::Type PowerUp::getType() const
 
 sf::IntRect PowerUp::getTextureRect(Type type)
 {
-	// l'ordre des bonus dans la feuille de sprites est le même que celui
-	// de l'énumération Bonus::Type
+	// Bonus::Type enumeration has the same order than the spritesheet
 	return sf::IntRect(type * SIZE, 0, SIZE, SIZE);
+}
+
+// callbacks -------------------------------------------------------------------
+
+void PowerUp::onUpdate(float frametime)
+{
+	move(-POWERUP_SPEED * frametime, 0);
 }
 

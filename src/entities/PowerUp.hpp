@@ -20,16 +20,11 @@ public:
 		POWERUP_COUNT
 	};
 
-	PowerUp(Type type, const sf::Vector2f& offset);
+	PowerUp(Type type);
 
 	PowerUp* clone() const;
 
-	// override
-	void onUpdate(float frametime);
-
-	void onCollision(const Entity& entity);
-
-	const PowerUp* toPowerUp() const;
+	void collides(Entity& entity);
 
 	/**
 	 * Drop a random powerup at a given position
@@ -44,6 +39,10 @@ public:
 	Type getType() const;
 
 	static sf::IntRect getTextureRect(Type type);
+
+	// callbacks ---------------------------------------------------------------
+
+	void onUpdate(float frametime);
 
 private:
 	Type m_type;

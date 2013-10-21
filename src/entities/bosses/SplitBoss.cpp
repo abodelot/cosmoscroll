@@ -12,10 +12,11 @@
 #define MAX_X (EntityManager::getInstance().getWidth() - getWidth())
 #define MAX_Y (EntityManager::getInstance().getHeight() - getHeight())
 
-SplitBoss::SplitBoss(sf::Vector2f& pos, int HP, bool split) : Entity(pos,HP)
+SplitBoss::SplitBoss(bool split)
 {
 	if (split)
 	{
+		setHP(250);
 		setTexture(Resources::getTexture("entities/evil-boss.png"));
 		setTextureRect(sf::IntRect(0, 0, 242, 160));
 
@@ -28,6 +29,7 @@ SplitBoss::SplitBoss(sf::Vector2f& pos, int HP, bool split) : Entity(pos,HP)
 	}
 	else
 	{
+		setHP(100);
 		setTexture(Resources::getTexture("entities/evil-boss-small.png"));
 		setTextureRect(sf::IntRect(0,0,121,80));
 
@@ -93,24 +95,29 @@ void SplitBoss::onUpdate(float frametime)
 
 	eye_left_.onUpdate(frametime);
 	eye_right_.onUpdate(frametime);
-	Entity::UpdateFlash(frametime);
+
+	updateDamageFlash(frametime);
 }
+
 
 void SplitBoss::takeDamage(int damage)
 {
-    Entity::takeDamage(damage);
-    if (isDead() && split_mode_)
-    {
-        sf::Vector2f pos = getPosition();
-        SplitBoss *small_boss2 = new SplitBoss(pos,150,false);
-        EntityManager::getInstance().addEntity(small_boss2);
+	Damageable::takeDamage(damage);
+	if (getHP() <= 0 && split_mode_)
+	{
+		sf::Vector2f pos = getPosition();
+		SplitBoss* small_boss2 = new SplitBoss(false);
+		small_boss2->setPosition(pos);
+		EntityManager::getInstance().addEntity(small_boss2);
 
-        sf::Vector2f pos1 = sf::Vector2f(pos.x ,pos.y - 10);
-        SplitBoss *small_boss1 = new SplitBoss(pos1,150,false);
-        small_boss1->speed_y_ *= -1;
-        EntityManager::getInstance().addEntity(small_boss1);
-    }
+		sf::Vector2f pos1 = sf::Vector2f(pos.x, pos.y - 10);
+		SplitBoss* small_boss1 = new SplitBoss(false);
+		small_boss1->setPosition(pos1);
+		small_boss1->speed_y_ *= -1;
+		EntityManager::getInstance().addEntity(small_boss1);
+	}
 }
+
 
 void SplitBoss::onInit()
 {

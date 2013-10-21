@@ -165,7 +165,8 @@ void Weapon<T>::setMultiply(int n)
 template <class T>
 void Weapon<T>::createProjectile(const sf::Vector2f& position, float angle)
 {
-	T* projectile = new T(m_owner, position, angle, *m_texture, m_velocity, m_damage);
+	T* projectile = new T(m_owner, angle, *m_texture, m_velocity, m_damage);
+	projectile->setPosition(position);
 	EntityManager::getInstance().addEntity(projectile);
 }
 

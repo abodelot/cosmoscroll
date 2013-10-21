@@ -1,30 +1,14 @@
 #include "Part.hpp"
 #include "core/ParticleSystem.hpp"
-#include "ComplexEntity.hpp"
+#include "MultiPartEntity.hpp"
 
 
-Part::Part(int id):
-	Entity(sf::Vector2f(0, 0), 1),
+Part::Part(int id, int hp):
 	m_id(id),
 	m_destructible(false),
 	m_parent(NULL)
 {
-	setTeam(Entity::NEUTRAL);
-}
-
-
-void Part::onUpdate(float frametime)
-{
-	Entity::UpdateFlash(frametime);
-}
-
-
-void Part::onCollision(const Entity& entity)
-{
-	if (m_destructible)
-	{
-		Entity::onCollision(entity);
-	}
+	setHP(hp);
 }
 
 
@@ -34,7 +18,22 @@ Entity* Part::clone() const
 }
 
 
-int Part::GetID() const
+void Part::onUpdate(float frametime)
+{
+	updateDamageFlash(frametime);
+}
+
+
+void Part::takeDamage(int damage)
+{
+	if (m_destructible)
+	{
+		Damageable::takeDamage(damage);
+	}
+}
+
+
+int Part::getID() const
 {
 	return m_id;
 }
@@ -46,7 +45,7 @@ void Part::setDestructible(bool destructible)
 }
 
 
-void Part::setParent(ComplexEntity* parent)
+void Part::setParent(MultiPartEntity* parent)
 {
 	m_parent = parent;
 }

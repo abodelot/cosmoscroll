@@ -53,12 +53,12 @@ public:
 	/**
 	 * @return largeur de l'univers
 	 */
-	inline int getWidth() const {return width_;};
+	inline int getWidth() const {return m_width;};
 
 	/**
 	 * @return hauteur de l'univers
 	 */
-	inline int getHeight() const{return height_;};
+	inline int getHeight() const{return m_height;};
 
 
 	void HandleAction(Input::Action action);
@@ -99,11 +99,9 @@ public:
 	/**
 	 * Allouer un vaisseau
 	 * @param id: type du vaisseau demandé
-	 * @param x: position x (pixels)
-	 * @param y: position y (pixels)
 	 * @return vaisseau
 	 */
-	Spaceship* CreateSpaceShip(int id, int x, int y);
+	Spaceship* CreateSpaceShip(int id) const;
 
 	/**
 	 * Obtenir une animation
@@ -178,19 +176,19 @@ private:
 	AnimationMap animations_;
 
 	typedef std::list<Entity*> EntityList;
-	EntityList entities_;
+	EntityList m_entities;
 
 	std::vector<Entity*> uniques_;
 
-	int width_;
-	int height_;
+	int m_width;
+	int m_height;
 	int decor_height_;
 
 	Mode mode_;
 
 	ParticleSystem& particles_;
 
-	Player* player_;
+	Player* m_player;
 	bool (EntityManager::*more_bad_guys_)();
 	bool game_over_;
 	float timer_;
@@ -223,7 +221,7 @@ private:
 template <class T>
 void EntityManager::ApplyToEach(T& functor)
 {
-	for (EntityList::iterator it = entities_.begin(); it != entities_.end(); ++it)
+	for (EntityList::iterator it = m_entities.begin(); it != m_entities.end(); ++it)
 	{
 		functor(**it);
 	}

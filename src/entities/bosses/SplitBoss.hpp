@@ -1,14 +1,14 @@
 #ifndef SPLITBOSS_HPP
 #define SPLITBOSS_HPP
 
-#include "entities/Entity.hpp"
+#include "entities/Damageable.hpp"
 #include "items/Weapon.hpp"
 
 
-class SplitBoss: public Entity
+class SplitBoss: public Damageable
 {
 public:
-	SplitBoss(sf::Vector2f& pos,int HP = 200,bool split = true);
+	SplitBoss(bool split = true);
 
 	SplitBoss* clone() const;
 

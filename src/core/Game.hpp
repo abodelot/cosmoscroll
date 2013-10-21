@@ -145,10 +145,6 @@ private:
 	std::string data_dir_;
 	std::string screenshot_dir_;
 	std::string config_file_;
-
-	// groupe de niveaux
-	unsigned int level_set_;
-	sf::View m_view;
 };
 
 #endif // GAME_HPP
