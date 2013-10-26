@@ -123,6 +123,11 @@ public:
 	 */
 	void SaveToConfig(IniParser& config) const;
 
+	sf::Keyboard::Key keyForAction(Action action) const
+	{
+		return action_to_key_[action];
+	}
+
 private:
 	Input() {};
 	Input(const Input&);

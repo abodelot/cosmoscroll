@@ -24,7 +24,7 @@ void Input::Init()
 	// unset bindings for everything
 	for (int i = 0; i < Input::COUNT; ++i)
 	{
-		action_to_key_[i] = sf::Keyboard::KeyCount;
+		action_to_key_[i] = sf::Keyboard::Unknown;
 		action_to_joybutton_[i] = MAX_JOY_BUTTON;
 	}
 

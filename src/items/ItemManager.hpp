@@ -26,7 +26,7 @@ public:
 	 * @param weapon: weapon to initialize
 	 */
 	template <class T>
-	void InitWeapon(const char* id, Weapon<T>& weapon) const;
+	void InitWeapon(Weapon<T>& weapon, const char* id, int level) const;
 
 	/**
 	 * Get item data from any item type
@@ -36,7 +36,7 @@ public:
 	/**
 	 * Get item data from a weapon
 	 */
-	const WeaponData* GetWeaponData(const char* id, int level=0) const;
+	const WeaponData* GetWeaponData(const char* id, int level=1) const;
 
 	/**
 	 * Get item data from a generic item
@@ -58,9 +58,9 @@ private:
 };
 
 template <class T>
-void ItemManager::InitWeapon(const char* id, Weapon<T>& weapon) const
+void ItemManager::InitWeapon(Weapon<T>& weapon, const char* id, int level) const
 {
-	const WeaponData* data = GetWeaponData(id);
+	const WeaponData* data = GetWeaponData(id, level);
 	if (data == NULL)
 	{
 		std::cerr << "can't initialize weapon " << id << " (unknown id)" << std::endl;

@@ -44,7 +44,7 @@ void IntroScene::OnEvent(const sf::Event& event)
 			elapsed_ = DURATION;
 			break;
 		default:
-			ship_->HandleAction(action);
+			ship_->onEvent(event);
 			break;
 	}
 }

@@ -15,14 +15,15 @@ GunTower::GunTower():
 	Part base(BASE_ID);
 	base.setTexture(Resources::getTexture("entities/guntower-base.png"));
 
-	Part turret(CANON_ID);
+	Part turret(CANON_ID, 20);
+	turret.setDestructible(true);
 	const sf::Texture& img_turret = Resources::getTexture("entities/guntower-turret.png");
 	turret.setTexture(img_turret);
 	turret.setOrigin(img_turret.getSize().x / 2, img_turret.getSize().y / 2);
 	addPart(turret, img_turret.getSize().x / 2, img_turret.getSize().y / 2);
 	addPart(base, 0, BASE_OFFSET);
 
-	m_weapon.init("laser-pink");
+	m_weapon.init("laser-blue");
 	m_weapon.setOwner(this);
 	m_weapon.setPosition(img_turret.getSize().x / 2, img_turret.getSize().y / 2);
 }
@@ -33,9 +34,13 @@ void GunTower::onUpdate(float frametime)
 	MultiPartEntity::onUpdate(frametime);
 
 	// Rotate turret toward player
-	getPartAt(0).setRotation(180 - math::to_deg(math::angle(m_target->getPosition(), getPosition())));
-	m_weapon.shoot(m_target->getCenter());
-	m_weapon.onUpdate(frametime);
+	Part& turret = getPartAt(0);
+	if (!turret.isDead())
+	{
+		turret.setRotation(180 - math::to_deg(math::angle(m_target->getPosition(), getPosition())));
+		m_weapon.shoot(m_target->getCenter());
+		m_weapon.onUpdate(frametime);
+	}
 }
 
 

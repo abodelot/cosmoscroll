@@ -23,7 +23,7 @@ public:
 	 * Init weapon settings
 	 * @param weapon_id: see weapons.xml
 	 */
-	void init(const char* weapon_id);
+	void init(const char* weapon_id, int level = 1);
 
 	/**
 	 * @return true if weapon has already been inited

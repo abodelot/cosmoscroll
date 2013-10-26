@@ -18,10 +18,10 @@ EvilBoss::EvilBoss()
 	setHP(EVIL);
 
 	// init weapons
-	m_eye_left.init("devil-eyes");
+	m_eye_left.init("fireball");
 	m_eye_left.setOwner(this);
 	m_eye_left.setPosition(EYE_OFFSET_LEFT);
-	m_eye_right.init("devil-eyes");
+	m_eye_right.init("fireball");
 	m_eye_right.setOwner(this);
 	m_eye_right.setPosition(EYE_OFFSET_RIGHT);
 	// hack: disable sound on the second eye so it won't be played twice

@@ -14,13 +14,13 @@ class WeaponData: public ItemData
 public:
 	WeaponData();
 
-	// override
-	bool LoadFromXml(tinyxml2::XMLElement* elem);
+	bool loadClassFromXml(tinyxml2::XMLElement* elem);
+	bool loadFromXml(tinyxml2::XMLElement* elem);
 
 	// override
 	std::wstring BuildDescriptionString() const;
 
-	const std::string& GetID() const;
+	const std::string& getID() const;
 
 	template <class T>
 	void InitWeapon(Weapon<T>& weapon) const;

@@ -26,9 +26,9 @@ Weapon<T>::Weapon():
 }
 
 template <class T>
-void Weapon<T>::init(const char* weapon_id)
+void Weapon<T>::init(const char* weapon_id, int level)
 {
-	ItemManager::GetInstance().InitWeapon(weapon_id, *this);
+	ItemManager::GetInstance().InitWeapon(*this, weapon_id, level);
 	m_inited = true;
 }
 

@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <items>
 	<weapons>
-		<weapon id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg"
-			level="1" heat_cost="1.5" fire_rate="8" damage="1" speed="400" />
-		<weapon id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg"
-			level="2" heat_cost="1.5" fire_rate="12" damage="2" speed="450" price="50"/>
-		<weapon id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg"
-			level="3" heat_cost="1.5" fire_rate="12" damage="3" speed="450"  price="150"/>
-		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
-			level="1" heat_cost="2.5" fire_rate="4" damage="3" speed="340"  />
-		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
-			level="2" heat_cost="2.5" fire_rate="6" damage="2" speed="360" price="50"/>
-		<weapon id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg"
-			level="3" heat_cost="2.5" fire_rate="8" damage="2" speed="380" price="150"/>
-		<weapon id="laser-green" image="ammo/laser-green.png" sound="laser-green.ogg"
-			heat_cost="5" fire_rate="2" damage="1" speed="320" />
-		<weapon id="laser-pink" image="ammo/laser-pink.png" sound="laser-pink.ogg"
-			heat_cost="5" fire_rate="1" damage="2" speed="400" />
-		<weapon id="devil-eyes" image="ammo/fireball.png" sound="canon.ogg"
-			heat_cost="1" fire_rate="0.7" damage="6" speed="430"/>
-        <weapon id="missile" image="ammo/missile.png" sound="missile-gasfire.ogg"
-			heat_cost="0" fire_rate="0.4" damage="10" speed="300" />
-		<weapon id="decor-canon" image="ammo/fireball.png" sound="canon.ogg"
-			heat_cost="0" fire_rate="1.2" damage="20" speed="200" />
+		<class id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg">
+			<weapon level="1" heat_cost="1.5" fire_rate="10" damage="1" speed="400" />
+			<weapon level="2" heat_cost="1.9" fire_rate="10" damage="2" speed="420" price="50" />
+			<weapon level="3" heat_cost="2.3" fire_rate="10" damage="3" speed="440" price="200" />
+		</class>
+		<class id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg">
+			<weapon level="1" heat_cost="1" fire_rate="4" damage="1" speed="340" />
+			<weapon level="2" heat_cost="1" fire_rate="8" damage="1" speed="360" price="50" />
+			<weapon level="3" heat_cost="1" fire_rate="12" damage="1" speed="400" price="200" />
+		</class>
+		<class id="laser-green" image="ammo/laser-green.png" sound="laser-green.ogg">
+			<weapon level="1" heat_cost="5" fire_rate="2" damage="1" speed="320" />
+		</class>
+		<class id="laser-pink" image="ammo/laser-pink.png" sound="laser-pink.ogg">
+			<weapon level="1" heat_cost="5" fire_rate="1" damage="2" speed="400" />
+		</class>
+		<class id="fireball" image="ammo/fireball.png" sound="canon.ogg">
+			<weapon level="1" heat_cost="0" fire_rate="0.7" damage="6" speed="430"/>
+			<weapon level="2" heat_cost="0" fire_rate="1.2" damage="20" speed="200" />
+		</class>
+        <class id="missile" image="ammo/missile.png" sound="missile-gasfire.ogg">
+			<weapon level="1" heat_cost="0" fire_rate="0.4" damage="10" speed="300" />
+        </class>
 	</weapons>
 	<shields>
 		<shield level="1" points="3" />
@@ -37,12 +38,12 @@
 	</engines>
 	<heatsinks>
 		<heatsink level="1" heat="60" />
-		<heatsink level="2" heat="80" price="80" />
-		<heatsink level="3" heat="100" price="180" />
+		<heatsink level="2" heat="80" price="50" />
+		<heatsink level="3" heat="100" price="150" />
 	</heatsinks>
 	<armors>
 		<armor level="1" hp="3" />
-		<armor level="2" hp="4" price="50" />
-		<armor level="3" hp="5" price="150" />
+		<armor level="2" hp="4" price="40" />
+		<armor level="3" hp="5" price="120" />
 	</armors>
 </items>

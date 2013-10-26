@@ -16,10 +16,8 @@ WeaponData::WeaponData():
 }
 
 
-bool WeaponData::LoadFromXml(tinyxml2::XMLElement* elem)
+bool WeaponData::loadClassFromXml(tinyxml2::XMLElement* elem)
 {
-	ItemData::LoadFromXml(elem);
-
 	const char* p = elem->Attribute("id");
 	if (p == NULL)
 	{
@@ -44,6 +42,13 @@ bool WeaponData::LoadFromXml(tinyxml2::XMLElement* elem)
 	{
 		sound_ = &Resources::getSoundBuffer(p);
 	}
+	return true;
+}
+
+
+bool WeaponData::loadFromXml(tinyxml2::XMLElement* elem)
+{
+	ItemData::LoadFromXml(elem); // fetch price and level
 
 	if (elem->QueryFloatAttribute("heat_cost", &heat_cost_) != tinyxml2::XML_SUCCESS)
 	{
@@ -78,7 +83,7 @@ std::wstring WeaponData::BuildDescriptionString() const
 }
 
 
-const std::string& WeaponData::GetID() const
+const std::string& WeaponData::getID() const
 {
 	return id_;
 }

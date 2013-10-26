@@ -22,6 +22,8 @@ public:
 	// override
 	Player* clone() const;
 
+	void onEvent(const sf::Event& event);
+
 	void HandleAction(Input::Action action);
 
 	int getScore() const;
@@ -32,8 +34,6 @@ public:
 	void takeDamage(int damage);
 
 	inline bool HasCheated() const { return konami_code_activated_; }
-
-	inline Animator& getAnimator() { return m_animator; }
 
 	// callbacks ---------------------------------------------------------------
 

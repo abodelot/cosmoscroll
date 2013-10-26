@@ -26,8 +26,8 @@ public:
 
 	virtual bool LoadFromXml(tinyxml2::XMLElement* elem);
 
-	int GetPrice() const;
-	int GetLevel() const;
+	int getPrice() const;
+	int getLevel() const;
 
 	inline Type GetType() const { return type_; }
 	void SetType(Type type) { type_ = type; }

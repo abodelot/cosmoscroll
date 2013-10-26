@@ -43,13 +43,13 @@ bool ItemData::LoadFromXml(tinyxml2::XMLElement* elem)
 }
 
 
-int ItemData::GetPrice() const
+int ItemData::getPrice() const
 {
 	return price_;
 }
 
 
-int ItemData::GetLevel() const
+int ItemData::getLevel() const
 {
 	return level_;
 }

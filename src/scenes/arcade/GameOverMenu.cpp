@@ -45,20 +45,19 @@ void GameOverMenu::OnFocus()
 	BaseMenu::OnFocus();
 	EntityManager& entities = EntityManager::getInstance();
 
-	score_ = entities.GetPlayerShip()->getPoints();
+	score_ = entities.GetPlayerShip()->getScore();
 
 	std::wstring text;
 	if (score_ > entities.GetArcadeRecord())
 	{
 		entities.UpdateArcadeRecord();
-		text = wstr_replace(_t("menu.gameover.new_record"), L"{score}", std::to_wstring(score_));
+		lab_result_->setString(I18n::templatize("menu.gameover.new_record", "{score}", score_));
 	}
 	else
 	{
-		text = wstr_replace(_t("menu.gameover.no_record"), L"{score}", std::to_wstring(score_));
+		lab_result_->setString(I18n::templatize("menu.gameover.no_record", "{score}", score_));
 	}
 	lab_result_->setCharacterSize(30);
-	lab_result_->setString(text);
 
 	but_send_score_->SetVisible(true);
 	FocusWidget(but_send_score_);
@@ -66,6 +65,7 @@ void GameOverMenu::OnFocus()
 	txt_pseudo_->SetVisible(false);
 	but_commit_->SetVisible(false);
 }
+
 
 
 void GameOverMenu::EventCallback(int id)

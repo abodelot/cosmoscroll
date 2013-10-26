@@ -133,9 +133,9 @@ bool ArmoryMenu::BuyItem()
 	int level = playersave.LevelOf(current_type_) + 1;
 	const ItemData* data = ItemManager::GetInstance().GetItemData(current_type_, level);
 
-	if (playersave.GetCredits() >= data->GetPrice())
+	if (playersave.GetCredits() >= data->getPrice())
 	{
-		playersave.UpdateCredits(-data->GetPrice());
+		playersave.UpdateCredits(-data->getPrice());
 		playersave.SetItemLevel(current_type_, level);
 
 		items_[current_type_]->RefreshLabel(); // refresh item widget
@@ -205,11 +205,11 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 
 		// next item description
 		dialog_.next_level_details->setString(data->BuildDescriptionString());
-		dialog_.price->setString(I18n::templatize("item.price", "{price}", data->GetPrice()));
-		if (Game::GetInstance().GetPlayerSave().GetCredits() >= data->GetPrice())
+		dialog_.price->setString(I18n::templatize("item.price", "{price}", data->getPrice()));
+		if (Game::GetInstance().GetPlayerSave().GetCredits() >= data->getPrice())
 			dialog_.price->setColor(sf::Color::White);
 		else
-			dialog_.price->setColor(sf::Color::Red);
+			dialog_.price->setColor(sf::Color(255, 128, 0));
 	}
 	FocusFirstWidget();
 }

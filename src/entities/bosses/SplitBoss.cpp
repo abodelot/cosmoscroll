@@ -20,10 +20,10 @@ SplitBoss::SplitBoss(bool split)
 		setTexture(Resources::getTexture("entities/evil-boss.png"));
 		setTextureRect(sf::IntRect(0, 0, 242, 160));
 
-		eye_left_.init("devil-eyes");
+		eye_left_.init("fireball");
 		eye_left_.setOwner(this);
 		eye_left_.setPosition(EYE_OFFSET_LEFT);
-		eye_right_.init("devil-eyes");
+		eye_right_.init("fireball");
 		eye_right_.setOwner(this);
 		eye_right_.setPosition(EYE_OFFSET_RIGHT);
 	}
@@ -33,10 +33,10 @@ SplitBoss::SplitBoss(bool split)
 		setTexture(Resources::getTexture("entities/evil-boss-small.png"));
 		setTextureRect(sf::IntRect(0,0,121,80));
 
-		eye_left_.init("devil-eyes");
+		eye_left_.init("fireball");
 		eye_left_.setOwner(this);
 		eye_left_.setPosition(EYE_OFFSET_LEFT_SMALL);
-		eye_right_.init("devil-eyes");
+		eye_right_.init("fireball");
 		eye_right_.setOwner(this);
 		eye_right_.setPosition(EYE_OFFSET_RIGHT_SMALL);
 	}

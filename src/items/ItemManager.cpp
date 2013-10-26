@@ -34,15 +34,21 @@ int ItemManager::LoadItems(const std::string& filename)
 
 	tinyxml2::XMLElement* root = doc.RootElement();
 	// weapons
-	tinyxml2::XMLElement* elem = root->FirstChildElement("weapons")->FirstChildElement();
-	while (elem != NULL)
+	tinyxml2::XMLElement* elem_class = root->FirstChildElement("weapons")->FirstChildElement("class");
+	while (elem_class != NULL)
 	{
+		tinyxml2::XMLElement* elem_weapon = elem_class->FirstChildElement("weapon");
 		WeaponData data;
-		if (data.LoadFromXml(elem))
+		data.loadClassFromXml(elem_class);
+		while (elem_weapon != NULL)
 		{
-			weapons_.push_back(data);
+			if (data.loadFromXml(elem_weapon))
+			{
+				weapons_.push_back(data);
+			}
+			elem_weapon = elem_weapon->NextSiblingElement();
 		}
-		elem = elem->NextSiblingElement();
+		elem_class = elem_class->NextSiblingElement();
 	}
 	// generic items
 	ParseGenericItems(root, "shields", ItemData::SHIELD);
@@ -64,7 +70,7 @@ const ItemData* ItemManager::GetItemData(ItemData::Type type, int level) const
 	for (WeaponList::const_iterator it = weapons_.begin(); it != weapons_.end(); ++it)
 	{
 		data = &(*it);
-		if (data->GetType() == type && data->GetLevel() == level)
+		if (data->GetType() == type && data->getLevel() == level)
 		{
 			return data;
 		}
@@ -81,7 +87,7 @@ const WeaponData* ItemManager::GetWeaponData(const char* id, int level) const
 {
 	for (WeaponList::const_iterator it = weapons_.begin(); it != weapons_.end(); ++it)
 	{
-		if (it->GetID() == id && (level == 0 || level == it->GetLevel()))
+		if (it->getID() == id && (level == 0 || level == it->getLevel()))
 		{
 			return &(*it);
 		}
@@ -95,7 +101,7 @@ const GenericItemData* ItemManager::GetGenericItemData(ItemData::Type type, int 
 	for (GenericItemList::const_iterator it = items_.begin(); it != items_.end(); ++it)
 	{
 		const GenericItemData* data = &(*it);
-		if (data->GetType() == type && data->GetLevel() == level)
+		if (data->GetType() == type && data->getLevel() == level)
 		{
 			return data;
 		}

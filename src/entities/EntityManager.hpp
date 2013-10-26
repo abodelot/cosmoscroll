@@ -7,7 +7,6 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "core/Input.hpp"
 #include "Entity.hpp"
 
 class ParticleSystem;
@@ -59,9 +58,6 @@ public:
 	 * @return hauteur de l'univers
 	 */
 	inline int getHeight() const{return m_height;};
-
-
-	void HandleAction(Input::Action action);
 
 	/**
 	 * Mettre à jour les entités

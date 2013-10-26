@@ -15,7 +15,7 @@ Canon::Canon()
 	addPart(base, 0, 18);
 	addPart(top, (base.getWidth() - top.getWidth()) / 2, 0);
 
-	weapon_.init("decor-canon");
+	weapon_.init("fireball", 2);
 	weapon_.setOwner(this);
 	weapon_.setPosition(64, 8);
 }

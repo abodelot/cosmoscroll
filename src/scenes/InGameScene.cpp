@@ -4,6 +4,7 @@
 #include "core/ControlPanel.hpp"
 #include "core/SoundSystem.hpp"
 #include "entities/EntityManager.hpp"
+#include "entities/Player.hpp"
 
 
 InGameScene::InGameScene():
@@ -32,9 +33,9 @@ void InGameScene::OnEvent(const sf::Event& event)
 			Game::GetInstance().SetNextScene(Game::SC_PauseMenu);
 			break;
 		default:
-			entities_.HandleAction(action);
 			break;
 	}
+	entities_.GetPlayerShip()->onEvent(event);
 }
 
 

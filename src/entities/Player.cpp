@@ -132,10 +132,8 @@ void Player::onInit()
 	panel_.SetMaxHeat(heat_max_);
 	panel_.SetHeat(heat_);
 
-	// weapon1
-	int weapon_lvl = save.LevelOf(ItemData::WEAPON);
-	const WeaponData* weapon_data = items.GetWeaponData("laser-red", weapon_lvl);
-	weapon_data->InitWeapon(m_weapon);
+	// weapon
+	m_weapon.init("laser-red", save.LevelOf(ItemData::WEAPON));
 }
 
 
@@ -145,8 +143,59 @@ Player* Player::clone() const
 }
 
 
-void Player::HandleAction(Input::Action action)
+int Player::getScore() const
 {
+	return m_score;
+}
+
+
+void Player::updateScore(int diff)
+{
+	m_score += diff;
+	panel_.setScore(m_score);
+}
+
+
+void Player::AudibleHeatingCue()
+{
+	static float h_steps[] = {.50f, .65f, .80f, .90f};
+	static int nb_steps = sizeof (h_steps) / sizeof (float);
+	static int current_step = 0;
+
+	float heat_pct_ = heat_ / heat_max_;
+	if (current_step < nb_steps && heat_pct_ > h_steps[current_step])
+	{
+		SoundSystem::GetInstance().PlaySound("overheat.ogg");
+		++current_step;
+	}
+	else if (current_step > 0 && heat_pct_ < h_steps[current_step -1])
+	{
+		--current_step;
+	}
+}
+
+
+void Player::onEvent(const sf::Event& event)
+{
+	EntityManager& manager = EntityManager::getInstance();
+	switch (event.type)
+	{
+		case sf::Event::KeyPressed:
+			if (input_.keyForAction(Input::MOVE_UP) == event.key.code)
+				m_animator.setAnimation(*this, manager.GetAnimation("player-up"));
+			else if (input_.keyForAction(Input::MOVE_DOWN) == event.key.code)
+				m_animator.setAnimation(*this, manager.GetAnimation("player-down"));
+			break;
+		case sf::Event::KeyReleased:
+			if (input_.keyForAction(Input::MOVE_UP) == event.key.code ||
+				input_.keyForAction(Input::MOVE_DOWN) == event.key.code)
+			{
+				m_animator.setAnimation(*this, manager.GetAnimation("player"));
+			}
+			break;
+	}
+
+	Input::Action action = input_.EventToAction(event);
 	switch (action)
 	{
 		case Input::USE_COOLER:
@@ -203,38 +252,7 @@ void Player::HandleAction(Input::Action action)
 	{
 		current_konami_event_ = 0;
 	}
-}
 
-
-int Player::getScore() const
-{
-	return m_score;
-}
-
-
-void Player::updateScore(int diff)
-{
-	m_score += diff;
-	panel_.setScore(m_score);
-}
-
-
-void Player::AudibleHeatingCue()
-{
-	static float h_steps[] = {.50f, .65f, .80f, .90f};
-	static int nb_steps = sizeof (h_steps) / sizeof (float);
-	static int current_step = 0;
-
-	float heat_pct_ = heat_ / heat_max_;
-	if (current_step < nb_steps && heat_pct_ > h_steps[current_step])
-	{
-		SoundSystem::GetInstance().PlaySound("overheat.ogg");
-		++current_step;
-	}
-	else if (current_step > 0 && heat_pct_ < h_steps[current_step -1])
-	{
-		--current_step;
-	}
 }
 
 
@@ -264,6 +282,7 @@ void Player::onUpdate(float frametime)
 		if (h > 0)
 			AudibleHeatingCue();
 	}
+
 
 	// moving
 	Computemove(frametime);

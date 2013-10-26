@@ -200,12 +200,6 @@ void EntityManager::resize(int width, int height)
 }
 
 
-void EntityManager::HandleAction(Input::Action action)
-{
-	m_player->HandleAction(action);
-}
-
-
 void EntityManager::Update(float frametime)
 {
 	EntityList::iterator it, it2;
