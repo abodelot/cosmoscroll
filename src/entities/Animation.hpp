@@ -11,16 +11,17 @@ public:
 	Animation();
 
 	/**
-	 * Définir le temps d'attente entre chaque frame
-	 * @param delay: temps en secondes
+	 * Time to wait before displaying the next frame in the animation
+	 * @param delay: duration in seconds
 	 */
 	void setDelay(float delay);
+	float getDelay() const;
 
 	/**
-	 * Obtenir le temps d'attente entre chaque frame
-	 * @return temps en secondes
-	 */
-	inline float getDelay() const	{ return m_delay; }
+     * Texture containing the animation frames
+     */
+	void setTexture(const sf::Texture& texture);
+	const sf::Texture& getTexture() const;
 
 	/**
 	 * Animation total duration
@@ -34,20 +35,16 @@ public:
 	void addFrame(const sf::IntRect& subrect);
 
 	/**
-	 * Obtenir une frame de l'animation
-	 * @param num_frame: numéro de la frame demandée
-	 * @return rectangle de la frame
+	 * Get a frame in the animation
+	 * @param index: frame's index
+	 * @return texture subrect
 	 */
-	const sf::IntRect& getFrame(int num_frame) const;
+	const sf::IntRect& getFrame(int index) const;
 
 	/**
-	 * Obtenir le nombre de frame qui composent l'animation
+	 * Get number of frames in the animation
 	 */
-	inline int getSize() const { return m_frames.size(); }
-
-    // Texture bind to the animation
-	void setTexture(const sf::Texture& image);
-	const sf::Texture& getTexture() const;
+	size_t getFrameCount() const;
 
 private:
 	std::vector<sf::IntRect> m_frames;

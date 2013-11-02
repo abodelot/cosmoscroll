@@ -4,7 +4,6 @@
 	<anim name="player-down"   img="entities/player.png"        y="40" width="64" height="40" count="2" delay="0.1" />
 	<anim name="player-up"   img="entities/player.png"      y="80" width="64" height="40" count="2" delay="0.1" />
 	<anim name="player-destroyed" img="entities/player.png"   y="120" width="64" height="40" count="2" delay="0.1" />
-	<anim name="capsule"     img="entities/capsule.png"       width="32" height="32" count="8" delay="0.1" />
 	<anim name="scoot"       img="entities/scoot.png"         width="48" height="32" count="2" delay="0.1" />
 	<anim name="interceptor" img="entities/interceptor.png"   width="56" height="48" count="2" delay="0.1" />
 	<anim name="h-interceptor" img="entities/heavy-interceptor.png" width="64" height="48" count="2" delay="0.1" />

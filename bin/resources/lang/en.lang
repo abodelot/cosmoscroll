@@ -95,7 +95,7 @@ endgame.end_level = Level {level} cleared!\nCredits earned: +{credits}
 endgame.end_last_level = Congratulations!\n\nYou've finished the game!\nCredits earned: +{credits}
 
 # Control panel
-panel.bar_hp = Ship
+panel.bar_hp = Hull
 panel.bar_shield = Shield
 panel.bar_heat = Heat
 panel.overheat = Overheat!

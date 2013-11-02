@@ -1,48 +1,46 @@
 #include "Animator.hpp"
-#include "core/Collisions.hpp"
 
 
-Animator::Animator()
+Animator::Animator():
+	m_animation(NULL),
+	m_frame(0),
+	m_timer(0.f)
 {
-	animation_ = NULL;
-	timer_ = 0.f;
-	frame_ = 0;
 }
 
 
 void Animator::reset(sf::Sprite& sprite)
 {
-	if (animation_ != NULL)
+	if (m_animation != NULL)
 	{
-		sprite.setTexture(animation_->getTexture());
-		sprite.setTextureRect(animation_->getFrame(0));
-		timer_ = animation_->getDelay();
-		frame_ = 0;
+		sprite.setTexture(m_animation->getTexture());
+		sprite.setTextureRect(m_animation->getFrame(0));
+		m_timer = m_animation->getDelay();
+		m_frame = 0;
 	}
 }
 
 
 void Animator::updateSubRect(sf::Sprite& sprite, float frametime)
 {
-	timer_ -= frametime;
-	if (timer_ <= 0)
+	m_timer -= frametime;
+	if (m_timer <= 0)
 	{
-		timer_ = animation_->getDelay();
-		frame_ = (frame_ + 1) % animation_->getSize();
-		sprite.setTextureRect(animation_->getFrame(frame_));
+		m_timer = m_animation->getDelay();
+		m_frame = (m_frame + 1) % m_animation->getFrameCount(); // Next frame
+		sprite.setTextureRect(m_animation->getFrame(m_frame));
 	}
 }
 
 
 void Animator::setAnimation(sf::Sprite& sprite, const Animation& animation)
 {
-	animation_ = &animation;
+	m_animation = &animation;
 	reset(sprite);
-	Collisions::registerTexture(&animation.getTexture());
 }
 
 
 const Animation* Animator::getAnimation() const
 {
-	return animation_;
+	return m_animation;
 }

@@ -8,6 +8,30 @@ Animation::Animation():
 }
 
 
+void Animation::setDelay(float delay)
+{
+	m_delay = delay;
+}
+
+
+float Animation::getDelay() const
+{
+	return m_delay;
+}
+
+
+void Animation::setTexture(const sf::Texture& texture)
+{
+	m_texture = &texture;
+}
+
+
+const sf::Texture& Animation::getTexture() const
+{
+	return *m_texture;
+}
+
+
 float Animation::getDuration() const
 {
 	return m_frames.size() * m_delay;
@@ -20,25 +44,16 @@ void Animation::addFrame(const sf::IntRect& subrect)
 }
 
 
-const sf::IntRect& Animation::getFrame(int num_frame) const
+const sf::IntRect& Animation::getFrame(int index) const
 {
-	return m_frames[num_frame];
+	return m_frames[index];
 }
 
 
-void Animation::setDelay(float delay)
+size_t Animation::getFrameCount() const
 {
-	m_delay = delay;
+	return m_frames.size();
 }
 
 
-void Animation::setTexture(const sf::Texture& image)
-{
-	m_texture = &image;
-}
 
-
-const sf::Texture& Animation::getTexture() const
-{
-	return *m_texture;
-}

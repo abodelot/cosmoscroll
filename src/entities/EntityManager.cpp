@@ -360,13 +360,14 @@ int EntityManager::LoadAnimations(const std::string& filename)
 		if (ok)
 		{
 			// construction de l'animation
-			Animation* p = &animations_[name];
+			Animation* anim = &animations_[name];
 			for (int i = 0; i < count; ++i)
 			{
-				p->addFrame({x + i * width, y, width, height});
+				anim->addFrame({x + i * width, y, width, height});
 			}
-			p->setDelay(delay);
-			p->setTexture(Resources::getTexture(img));
+			anim->setDelay(delay);
+			anim->setTexture(Resources::getTexture(img));
+			Collisions::registerTexture(&anim->getTexture());
 		}
 		elem = elem->NextSiblingElement();
 	}

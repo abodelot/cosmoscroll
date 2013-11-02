@@ -25,9 +25,9 @@ public:
 	const Animation* getAnimation() const;
 
 private:
-	const Animation* animation_;
-	int frame_; // indice de la frame courante
-	float timer_;
+	const Animation* m_animation;
+	int              m_frame; // current frame index
+	float            m_timer;
 };
 
 #endif // ANIMATOR_HPP
