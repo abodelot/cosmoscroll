@@ -157,14 +157,6 @@ void Spaceship::onUpdate(float frametime)
 		break;
 	}
 
-	if (getHP() <= 0)
-	{
-		if (m_destroyed_at.getElapsedTime().asSeconds() >= m_animator.getAnimation()->getDuration())
-			setKill(true);
-
-		return;
-	}
-
 	switch (m_attack)
 	{
 		case AUTO_AIM:
@@ -194,15 +186,11 @@ void Spaceship::onUpdate(float frametime)
 
 void Spaceship::onDestroy()
 {
+	Damageable::onDestroy();
 	if (math::random(1, DROP_LUCK) == 1)
 	{
 		PowerUp::dropRandom(getPosition());
 	}
-	setKill(false);
-	SoundSystem::GetInstance().PlaySound("boom.ogg");
-	setMovementPattern(LINE);
-	m_animator.setAnimation(*this, EntityManager::getInstance().GetAnimation("explosion"));
-	m_destroyed_at.restart();
 
 	EntityManager::getInstance().GetPlayerShip()->updateScore(m_points);
 	MessageSystem::write("+" + std::to_string(m_points), getPosition(), sf::Color(255, 128, 0));

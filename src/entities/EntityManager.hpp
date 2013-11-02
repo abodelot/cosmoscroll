@@ -103,7 +103,7 @@ public:
 	 * Obtenir une animation
 	 * @param key: identifiant de l'animation
 	 */
-	const Animation& GetAnimation(const std::string& key) const;
+	const Animation& getAnimation(const std::string& key) const;
 
 	/**
 	 * Charger les définitions XML des animations

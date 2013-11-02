@@ -4,7 +4,6 @@
 #include <list>
 #include <SFML/Graphics.hpp>
 
-#include "entities/Animator.hpp"
 #include "entities/EntityManager.hpp"
 #include "utils/sfml_helper.hpp"
 
@@ -24,7 +23,6 @@ public:
 	 * @param pos: sfx origin
 	 * @param count: number of particles
 	 */
-	void ExplosionSfx(const sf::Vector2f& pos);
 	void ImpactSfx(const sf::Vector2f& pos, int count);
 	void GreenImpactSfx(const sf::Vector2f& pos, int count);
 	void FierySfx(const sf::Vector2f& pos, int count);
@@ -188,35 +186,6 @@ private:
 		sf::Vector2f vspeed_;
 	};
 
-	class Explosion: public Particle
-	{
-		public:
-		Explosion(const sf::Vector2f& pos)
-		{
-			animator_.setAnimation(sprite_, EntityManager::getInstance().GetAnimation("explosion"));
-			sprite_.setOrigin(sprite_.getCenter());
-			sprite_.setPosition(pos);
-			timer_ = 0;
-		}
-		bool OnUpdate(float frametime)
-		{
-			animator_.updateSubRect(sprite_, frametime);
-			timer_ += frametime;
-			if (timer_ > animator_.getAnimation()->getDuration())
-			{
-				return true;
-			}
-			return false;
-		}
-		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
-		{
-			target.draw(sprite_, states);
-		}
-		private:
-		Animator animator_;
-		xsf::Sprite sprite_;
-		float timer_;
-	};
 	typedef std::list<Particle*> ParticleList;
 
 	ParticleList particles_;

@@ -1,6 +1,7 @@
 #include "Part.hpp"
-#include "core/ParticleSystem.hpp"
 #include "MultiPartEntity.hpp"
+#include "entities/Explosion.hpp"
+#include "entities/EntityManager.hpp"
 
 
 Part::Part(int id, int hp):
@@ -54,8 +55,9 @@ void Part::setParent(MultiPartEntity* parent)
 void Part::onDestroy()
 {
 	m_parent->onPartDestroyed(*this);
-	sf::Vector2f pos = m_parent->getPosition();
-	pos.x += getCenter().x;
-	pos.y += getCenter().y;
-	ParticleSystem::GetInstance().ExplosionSfx(pos);
+
+	Explosion* explosion = new Explosion;
+	sf::Vector2f pos = m_parent->getPosition() + getCenter();
+	explosion->setPosition(pos);
+	EntityManager::getInstance().addEntity(explosion);
 }

@@ -115,6 +115,8 @@
 		<Unit filename="src/entities/Entity.hpp" />
 		<Unit filename="src/entities/EntityManager.cpp" />
 		<Unit filename="src/entities/EntityManager.hpp" />
+		<Unit filename="src/entities/Explosion.cpp" />
+		<Unit filename="src/entities/Explosion.hpp" />
 		<Unit filename="src/entities/Missile.cpp" />
 		<Unit filename="src/entities/Missile.hpp" />
 		<Unit filename="src/entities/Player.cpp" />

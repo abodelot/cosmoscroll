@@ -411,7 +411,7 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 		elem->QueryIntAttribute("points", &points);
 
 		// Create spaceship instance
-		Spaceship* ship = new Spaceship(GetAnimation(animation), hp, speed);
+		Spaceship* ship = new Spaceship(getAnimation(animation), hp, speed);
 		ship->setPoints(points);
 
 		ship->setMovementPattern(GetMovementPattern(elem));
@@ -460,7 +460,7 @@ Spaceship* EntityManager::CreateSpaceShip(int id) const
 }
 
 
-const Animation& EntityManager::GetAnimation(const std::string& key) const
+const Animation& EntityManager::getAnimation(const std::string& key) const
 {
 	AnimationMap::const_iterator it;
 	it = animations_.find(key);

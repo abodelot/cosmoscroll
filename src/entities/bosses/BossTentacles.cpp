@@ -26,7 +26,7 @@ BossTentacles::BossTentacles()
 	speed_y_ = 0;
 	timer_ = 0;
 
-	m_animator.setAnimation(*this, EntityManager::getInstance().GetAnimation("boss-tentacles"));
+	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("boss-tentacles"));
 }
 
 

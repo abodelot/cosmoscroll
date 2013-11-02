@@ -53,7 +53,6 @@ private:
 	Weapon<>  m_weapon;
 	Entity*   m_target;
 	Animator  m_animator;
-	sf::Clock m_destroyed_at;
 };
 
 

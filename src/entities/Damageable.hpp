@@ -21,7 +21,7 @@ public:
 
 	void onCollision(Damageable& entity);
 	void onCollision(Projectile& projectile);
-
+	void onDestroy();
 
 protected:
 	void setHP(int hp);

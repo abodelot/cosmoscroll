@@ -3,7 +3,7 @@
 
 
 Entity::Entity():
-	m_killed(false),
+	m_dead(false),
 	m_team(NEUTRAL)
 {
 
@@ -12,13 +12,13 @@ Entity::Entity():
 
 bool Entity::isDead() const
 {
-	return m_killed;
+	return m_dead;
 }
 
 
 void Entity::kill()
 {
-	m_killed = true;
+	m_dead = true;
 	onDestroy();
 }
 

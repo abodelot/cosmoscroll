@@ -20,6 +20,9 @@ public:
 
 	Entity();
 
+	/**
+	 * If true, entity will be removed from the scene
+	 */
 	bool isDead() const;
 
 	/**
@@ -57,6 +60,7 @@ public:
 	 */
 	virtual void onDestroy() {}
 
+	virtual void onCollision(Entity&)     {}
 	virtual void onCollision(Damageable&) {}
 	virtual void onCollision(PowerUp&)    {}
 	virtual void onCollision(Projectile&) {}
@@ -78,13 +82,12 @@ public:
 	virtual float getSpeedX() const { return 0.f; }
 	virtual float getSpeedY() const { return 0.f; }
 	virtual int getPoints() const { return 0;}
-	void setKill(bool kill) { m_killed = kill; }
 
 protected:
 	void setTeam(Team team);
 
 private:
-	bool m_killed;
+	bool m_dead;
 	Team m_team;
 };
 

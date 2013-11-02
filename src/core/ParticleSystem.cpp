@@ -25,12 +25,6 @@ ParticleSystem::~ParticleSystem()
 	Clear();
 }
 
-void ParticleSystem::ExplosionSfx(const sf::Vector2f& offset)
-{
-	particles_.push_front(new Explosion(offset));
-	SoundSystem::GetInstance().PlaySound("boom.ogg");
-}
-
 
 void ParticleSystem::ImpactSfx(const sf::Vector2f& pos, int count)
 {

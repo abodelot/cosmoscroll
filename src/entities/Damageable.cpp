@@ -1,5 +1,7 @@
 #include "Damageable.hpp"
 #include "Projectile.hpp"
+#include "Explosion.hpp"
+#include "EntityManager.hpp"
 #include "core/ParticleSystem.hpp"
 
 #define FLASH_DELAY 0.5f
@@ -38,6 +40,14 @@ void Damageable::onCollision(Projectile& projectile)
 		ParticleSystem::GetInstance().ImpactSfx(projectile.getPosition(), 10);
 		projectile.kill();
 	}
+}
+
+
+void Damageable::onDestroy()
+{
+	Explosion* explosion = new Explosion;
+	explosion->setPosition(getCenter());
+	EntityManager::getInstance().addEntity(explosion);
 }
 
 

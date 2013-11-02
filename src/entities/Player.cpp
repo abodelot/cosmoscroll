@@ -38,7 +38,7 @@ Player::Player(const char* animation):
 {
 	setTeam(Entity::GOOD);
 	setHP(-1);
-	m_animator.setAnimation(*this, EntityManager::getInstance().GetAnimation(animation));
+	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation(animation));
 
 	// init weapons
 	m_weapon.init("laser-red");
@@ -182,16 +182,18 @@ void Player::onEvent(const sf::Event& event)
 	{
 		case sf::Event::KeyPressed:
 			if (input_.keyForAction(Input::MOVE_UP) == event.key.code)
-				m_animator.setAnimation(*this, manager.GetAnimation("player-up"));
+				m_animator.setAnimation(*this, manager.getAnimation("player-up"));
 			else if (input_.keyForAction(Input::MOVE_DOWN) == event.key.code)
-				m_animator.setAnimation(*this, manager.GetAnimation("player-down"));
+				m_animator.setAnimation(*this, manager.getAnimation("player-down"));
 			break;
 		case sf::Event::KeyReleased:
 			if (input_.keyForAction(Input::MOVE_UP) == event.key.code ||
 				input_.keyForAction(Input::MOVE_DOWN) == event.key.code)
 			{
-				m_animator.setAnimation(*this, manager.GetAnimation("player"));
+				m_animator.setAnimation(*this, manager.getAnimation("player"));
 			}
+			break;
+		default:
 			break;
 	}
 
@@ -468,7 +470,7 @@ void Player::onDestroy()
 {
 	setColor(sf::Color::White); // clear red flash
 	EntityManager& manager = EntityManager::getInstance();
-	m_animator.setAnimation(*this, manager.GetAnimation("player-destroyed"));
+	m_animator.setAnimation(*this, manager.getAnimation("player-destroyed"));
 
 	manager.TerminateGame();
 }
