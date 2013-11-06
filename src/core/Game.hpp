@@ -124,8 +124,6 @@ private:
 	 */
 	bool checkResourcesPurity(const std::string& resources_dir);
 
-	void BSOD(std::string message);
-
 	sf::RenderWindow m_window;
 	bool m_fullscreen;
 	bool m_vsync;

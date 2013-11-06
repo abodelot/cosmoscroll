@@ -7,11 +7,13 @@
 class Error
 {
 public:
-	static std::ostringstream Log;
+	static std::ostringstream log;
 
-	static std::runtime_error Exception();
+	static std::runtime_error exception();
 
-	static std::runtime_error Exception(const std::string& message);
+	static std::runtime_error exception(const std::string& message);
+
+	static void dump();
 };
 
 

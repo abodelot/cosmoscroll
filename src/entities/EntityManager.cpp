@@ -334,8 +334,8 @@ int EntityManager::LoadAnimations(const std::string& filename)
 	tinyxml2::XMLDocument doc;
 	if (doc.LoadFile(filename.c_str()) != 0)
 	{
-		Error::Log << "Cannot load animations definition:\n" << doc.GetErrorStr1() << "\n";
-		throw Error::Exception();
+		Error::log << "Cannot load animations definition:\n" << doc.GetErrorStr1() << "\n";
+		throw Error::exception();
 	}
 
 	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement();
@@ -380,8 +380,8 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 	tinyxml2::XMLDocument doc;
 	if (doc.LoadFile(filename.c_str()) != 0)
 	{
-		Error::Log << "Cannot load spaceships definition:\n" << doc.GetErrorStr1();
-		throw Error::Exception();
+		Error::log << "Cannot load spaceships definition:\n" << doc.GetErrorStr1();
+		throw Error::exception();
 	}
 
 	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement();
@@ -389,23 +389,23 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 	{
 		int id;
 		if (elem->QueryIntAttribute("id", &id) != tinyxml2::XML_SUCCESS)
-			throw Error::Exception("parse error: spaceship[id] is missing");
+			throw Error::exception("parse error: spaceship[id] is missing");
 
 		const char* name = elem->Attribute("name");
 		if (name == NULL)
-			throw Error::Exception("parse error: spaceship[name] is missing");
+			throw Error::exception("parse error: spaceship[name] is missing");
 
 		const char* animation = elem->Attribute("animation");
 		if (animation == NULL)
-			throw Error::Exception("parse error: spaceship[animation] is missing");
+			throw Error::exception("parse error: spaceship[animation] is missing");
 
 		int hp;
 		if (elem->QueryIntAttribute("hp", &hp) != tinyxml2::XML_SUCCESS)
-			throw Error::Exception("parse error: spaceship[hp] is missing");
+			throw Error::exception("parse error: spaceship[hp] is missing");
 
 		int speed;
 		if (elem->QueryIntAttribute("speed", &speed) != tinyxml2::XML_SUCCESS)
-			throw Error::Exception("parse error: spaceship[speed] is missing");
+			throw Error::exception("parse error: spaceship[speed] is missing");
 
 		int points = 0;
 		elem->QueryIntAttribute("points", &points);
@@ -424,13 +424,13 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 			int w_x, w_y;
 			const char* weapon_id = weapon->Attribute("id");
 			if (weapon_id == NULL)
-				throw Error::Exception("parse error: spaceship > weapon[id] is missing");
+				throw Error::exception("parse error: spaceship > weapon[id] is missing");
 
 			if (weapon->QueryIntAttribute("x", &w_x) != tinyxml2::XML_SUCCESS)
-				throw Error::Exception("parese error: spaceship > weapon[x] is missing");
+				throw Error::exception("parese error: spaceship > weapon[x] is missing");
 
 			if (weapon->QueryIntAttribute("y", &w_y) != tinyxml2::XML_SUCCESS)
-				throw Error::Exception("parese error: spaceship > weapon[y] is missing");
+				throw Error::exception("parese error: spaceship > weapon[y] is missing");
 
 			ship->getWeapon().init(weapon_id);
 			ship->getWeapon().setPosition(w_x, w_y);
@@ -466,8 +466,8 @@ const Animation& EntityManager::getAnimation(const std::string& key) const
 	it = animations_.find(key);
 	if (it == animations_.end())
 	{
-		Error::Log << "Animation " << key << " doesn't exist\n";
-		throw Error::Exception();
+		Error::log << "Animation " << key << " doesn't exist\n";
+		throw Error::exception();
 	}
 	return it->second;
 }

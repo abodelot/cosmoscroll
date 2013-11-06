@@ -189,8 +189,8 @@ int LevelManager::ParseFile(const std::string& file)
 	// Open level file
 	if (doc_.LoadFile(file.c_str()) != 0)
 	{
-		Error::Log << "Cannot load levels:\n" << file << "\n" << doc_.GetErrorStr1();
-		throw Error::Exception();
+		Error::log << "Cannot load levels:\n" << file << "\n" << doc_.GetErrorStr1();
+		throw Error::exception();
 	}
 	tinyxml2::XMLElement* root = doc_.RootElement();
 

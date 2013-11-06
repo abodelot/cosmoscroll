@@ -11,6 +11,7 @@
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "utils/FileSystem.hpp"
+#include "utils/Error.hpp"
 #include "md5/md5.hpp"
 #include "scenes/scenes.hpp"
 
@@ -41,7 +42,15 @@ Game& Game::getInstance()
 Game::Game():
 	m_input(Input::GetInstance())
 {
-	// default location
+	// scenes will be allocated only if requested
+	for (int i = 0; i < SC_COUNT; ++i)
+	{
+		m_scenes[i] = NULL;
+	}
+	m_current_scene = NULL;
+	m_running = true;
+
+	// default config location
 	m_config_file = FileSystem::initSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
 }
 
@@ -119,7 +128,9 @@ void Game::loadResources(const std::string& data_path)
 	}
 	catch (std::runtime_error& error)
 	{
-		BSOD(error.what());
+		std::cerr << error.what() << std::endl;
+		Error::dump();
+		quit();
 	}
 	// load config
 #ifdef DEBUG
@@ -131,15 +142,6 @@ void Game::loadResources(const std::string& data_path)
 	m_window.setMouseCursorVisible(false);
 	m_window.setKeyRepeatEnabled(false);
 	m_window.setVerticalSyncEnabled(m_vsync);
-
-
-	// scenes will be allocated only if requested
-	for (int i = 0; i < SC_COUNT; ++i)
-	{
-		m_scenes[i] = NULL;
-	}
-	m_current_scene = NULL;
-	m_running = true;
 }
 
 
@@ -431,42 +433,3 @@ void Game::panelOnTop(bool top)
 	}
 }
 
-
-void Game::BSOD(std::string message)
-{
-	xsf::Text title("COSMIC ERROR");
-	title.setCharacterSize(20);
-	title.setColor(sf::Color(0, 0, 0x88));
-	sf::RectangleShape title_bg(sf::Vector2f(title.getWidth() + 20, title.getHeight() + 20));
-	title_bg.setFillColor(sf::Color(0xaa, 0xaa, 0xaa));
-
-	int x = (WIDTH - title.getWidth()) / 2;
-	title.setPosition(x, 60);
-	title_bg.setPosition(x - 10, 50);
-
-	sf::Text str;
-	std::cerr << message << std::endl;
-	message += "\n\nPress any key to exit.";
-
-	str.setString(message);
-	str.setCharacterSize(20);
-	str.setPosition(50, 200);
-
-	while (true)
-	{
-		sf::Event event;
-		while (m_window.pollEvent(event))
-		{
-			if (event.type == sf::Event::KeyPressed)
-			{
-				m_window.close();
-				exit(EXIT_FAILURE);
-			}
-		}
-		m_window.clear(sf::Color(0, 0, 0x88));
-		m_window.draw(title_bg);
-		m_window.draw(title);
-		m_window.draw(str);
-		m_window.display();
-	}
-}
