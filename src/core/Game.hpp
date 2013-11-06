@@ -43,61 +43,62 @@ public:
 		SC_COUNT
 	};
 
-	static Game& GetInstance();
+	static Game& getInstance();
 
 	/**
 	 * @param path: name by which the program was called
 	 */
-	void SetCurrentDirectory(const std::string& path);
+	void init(const std::string& path);
 
 	/**
 	 * Override location of the configuration file
 	 * Must be called before Init
 	 * @param config_file: directory of file
 	 */
-	void OverrideConfigFile(const std::string& config_file);
+	void setConfigFile(const std::string& config_file);
 
-	void Init(const std::string& data_dir);
+	void loadResources(const std::string& data_dir);
 
 	/**
 	 * Lancer une partie de CosmoScroll
 	 * @return error code
 	 */
-	int Run();
+	int run();
 
 	/**
 	 * @return application rendering window
 	 */
-	sf::RenderWindow& GetApp();
+	sf::RenderWindow& getWindow();
 
 	/**
 	 * Quit CosmoScroll
 	 */
-	void Quit();
+	void quit();
 
 	/**
 	 * Indiquer la prochaine scène à afficher
 	 */
-	void SetNextScene(Scene scene);
+	void setNextScene(Scene scene);
 
 	/**
 	 * Holds windowed/fullscreen display mode
 	 */
-	void SetFullscreen(bool full);
-	bool IsFullscreen() const;
+	void setFullscreen(bool full);
+	bool isFullscreen() const;
 
 	/**
 	 * Holds vertical synchronization property
 	 */
-	void SetVerticalSync(bool vsync);
-	bool IsVerticalSync() const;
+	void setVerticalSync(bool vsync);
+	bool isVerticalSync() const;
 
-	void ReloadScenes();
+	void reloadScenes();
 
-	inline bool IsPure() const { return pure_; }
-	inline static PlayerSave& GetPlayerSave() { return GetInstance().playersave_; }
+	bool resourcesChecked() const;
 
-	void PanelOnTop(bool top);
+	inline static PlayerSave& getPlayerSave() { return getInstance().playersave_; }
+
+	void panelOnTop(bool top);
 
 private:
 	Game();
@@ -106,45 +107,44 @@ private:
 	/**
 	 * Load a configuration file
 	 */
-	bool LoadConfig(const std::string& filename);
+	bool loadConfig(const std::string& filename);
 
 	/**
 	 * Write the configuration in a file
 	 */
-	void WriteConfig(const std::string& filename) const;
+	void writeConfig(const std::string& filename) const;
 
 	/**
 	 * Take a screenshot and save the image to screenshot_dir_
 	 */
-	void TakeScreenshot(void);
+	void takeScreenshot(void);
 
 	/**
 	 * Check game data files are unaltered
 	 */
-	bool CheckResourcesPurity();
+	bool checkResourcesPurity(const std::string& resources_dir);
 
 	void BSOD(std::string message);
 
-	sf::RenderWindow app_;
-	bool fullscreen_;
-	bool vsync_;
-	bool running_;
-    bool pure_;
+	sf::RenderWindow m_window;
+	bool m_fullscreen;
+	bool m_vsync;
+	bool m_running;
+    bool m_resources_checked;
 
 	// event manager
-	Input& input_;
+	Input& m_input;
 
 	// scènes
-	BaseScene* scenes_[SC_COUNT];
-	BaseScene* current_scene_;
+	BaseScene* m_scenes[SC_COUNT];
+	BaseScene* m_current_scene;
 
 	PlayerSave playersave_;
 
 	// directories
-	std::string current_dir_;
-	std::string data_dir_;
-	std::string screenshot_dir_;
-	std::string config_file_;
+	std::string m_app_dir;
+	std::string m_screenshots_dir;
+	std::string m_config_file;
 };
 
 #endif // GAME_HPP

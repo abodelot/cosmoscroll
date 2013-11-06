@@ -60,12 +60,12 @@ int main(int argc, char* argv[])
 			res_dir = get_arg(i, argv);
 	}
 
-	Game& game = Game::GetInstance();
-	game.SetCurrentDirectory(argv[0]);
+	Game& game = Game::getInstance();
+	game.init(argv[0]);
 	if (!config_file.empty())
 	{
-		game.OverrideConfigFile(config_file);
+		game.setConfigFile(config_file);
 	}
-	game.Init(res_dir);
-	return game.Run();
+	game.loadResources(res_dir);
+	return game.run();
 }

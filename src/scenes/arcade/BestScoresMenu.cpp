@@ -27,7 +27,7 @@ void BestScoresMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 1:
-			Game::GetInstance().SetNextScene(Game::SC_ArcadeMenu);
+			Game::getInstance().setNextScene(Game::SC_ArcadeMenu);
 			break;
 	}
 }

@@ -30,7 +30,7 @@ void InGameScene::OnEvent(const sf::Event& event)
 			break;
 		case Input::PAUSE:
 			SoundSystem::GetInstance().PauseMusic();
-			Game::GetInstance().SetNextScene(Game::SC_PauseMenu);
+			Game::getInstance().setNextScene(Game::SC_PauseMenu);
 			break;
 		default:
 			break;
@@ -44,7 +44,7 @@ void InGameScene::Update(float frametime)
 	if (entities_.IsGameOver())
 	{
 		SoundSystem::GetInstance().StopMusic();
-		Game::GetInstance().SetNextScene(Game::SC_EndGameScene);
+		Game::getInstance().setNextScene(Game::SC_EndGameScene);
 	}
 	else
 	{
@@ -64,6 +64,6 @@ void InGameScene::Show(sf::RenderTarget& target) const
 
 void InGameScene::OnFocus()
 {
-	Game::GetInstance().GetApp().setMouseCursorVisible(false);
-	Game::GetInstance().GetApp().setKeyRepeatEnabled(false);
+	Game::getInstance().getWindow().setMouseCursorVisible(false);
+	Game::getInstance().getWindow().setKeyRepeatEnabled(false);
 }

@@ -14,12 +14,12 @@ SettingsMenu::SettingsMenu()
 
 	cb_fullscreen_ = new gui::CheckBox(this);
 	cb_fullscreen_->SetCallbackID(1);
-	cb_fullscreen_->Check(Game::GetInstance().IsFullscreen());
+	cb_fullscreen_->Check(Game::getInstance().isFullscreen());
 	form_.AddRow(_t("menu.settings.fullscreen"), cb_fullscreen_);
 
 	cb_vsync_ = new gui::CheckBox(this);
 	cb_vsync_->SetCallbackID(2);
-	cb_vsync_->Check(Game::GetInstance().IsVerticalSync());
+	cb_vsync_->Check(Game::getInstance().isVerticalSync());
 	form_.AddRow(_t("menu.settings.vsync"), cb_vsync_);
 
 	opt_languages_ = new gui::OptionList(this);
@@ -42,18 +42,18 @@ void SettingsMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 0:
-			Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
+			Game::getInstance().setNextScene(Game::SC_OptionMenu);
 			break;
 		case  1:
-			Game::GetInstance().SetFullscreen(cb_fullscreen_->Checked());
+			Game::getInstance().setFullscreen(cb_fullscreen_->Checked());
 			break;
 		case 2:
-			Game::GetInstance().SetVerticalSync(cb_vsync_->Checked());
+			Game::getInstance().setVerticalSync(cb_vsync_->Checked());
 			break;
 		case 3:
 			I18n::getInstance().loadFromCode(opt_languages_->GetSelectedOption());
 			// delete other scenes
-			Game::GetInstance().ReloadScenes();
+			Game::getInstance().reloadScenes();
 			ControlPanel::GetInstance().RefreshTextTranslations();
 			// re-load i18ned texts
 			SetTitle(_t("menu.settings.title"));

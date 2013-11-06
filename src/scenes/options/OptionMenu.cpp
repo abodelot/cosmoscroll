@@ -19,23 +19,23 @@ OptionMenu::OptionMenu()
 
 void OptionMenu::EventCallback(int id)
 {
-	Game& game = Game::GetInstance();
+	Game& game = Game::getInstance();
 	switch (id)
 	{
 		case 1:
-			game.SetNextScene(Game::SC_KeyboardMenu);
+			game.setNextScene(Game::SC_KeyboardMenu);
 			break;
 		case 2:
-			game.SetNextScene(Game::SC_JoystickMenu);
+			game.setNextScene(Game::SC_JoystickMenu);
 			break;
 		case 3:
-			game.SetNextScene(Game::SC_AudioMenu);
+			game.setNextScene(Game::SC_AudioMenu);
 			break;
 		case 4:
-			game.SetNextScene(Game::SC_SettingsMenu);
+			game.setNextScene(Game::SC_SettingsMenu);
 			break;
 		case 5:
-			game.SetNextScene(Game::SC_MainMenu);
+			game.setNextScene(Game::SC_MainMenu);
 			break;
 	}
 }

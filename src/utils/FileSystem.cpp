@@ -23,7 +23,7 @@
 #endif
 
 
-bool FileSystem::IsDirectory(const std::string& path)
+bool FileSystem::isDirectory(const std::string& path)
 {
 	struct stat buf;
 	if (stat(path.c_str(), &buf) == 0)
@@ -34,7 +34,7 @@ bool FileSystem::IsDirectory(const std::string& path)
 }
 
 
-bool FileSystem::CreateDirectory(const std::string& name)
+bool FileSystem::createDirectory(const std::string& name)
 {
 	bool success = false;
 
@@ -50,11 +50,11 @@ bool FileSystem::CreateDirectory(const std::string& name)
 }
 
 
-std::string FileSystem::InitSettingsDirectory(const std::string& appname)
+std::string FileSystem::initSettingsDirectory(const std::string& appname)
 {
 	std::string config_dir;
 
-	// set config directory path
+	// Set config directory path
 #ifdef SYS_WINDOWS
 	config_dir = getenv("APPDATA");
 	config_dir += "\\" + appname;
@@ -69,10 +69,10 @@ std::string FileSystem::InitSettingsDirectory(const std::string& appname)
 
 #endif
 
-	// create directory if it doesn't already exist
-	if (!IsDirectory(config_dir))
+	// Create directory if it doesn't already exist
+	if (!isDirectory(config_dir))
 	{
-		CreateDirectory(config_dir);
+		createDirectory(config_dir);
 	}
 	return config_dir;
 }

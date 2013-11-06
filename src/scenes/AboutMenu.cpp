@@ -32,7 +32,7 @@ void AboutMenu::EventCallback(int id)
 {
 	if (id == 1)
 	{
-		Game::GetInstance().SetNextScene(Game::SC_MainMenu);
+		Game::getInstance().setNextScene(Game::SC_MainMenu);
 	}
 }
 

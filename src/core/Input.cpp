@@ -336,7 +336,7 @@ void Input::AskUserInput(Device device, Action action)
 
 	sf::Event event;
 	bool running = true;
-	sf::RenderWindow& app = Game::GetInstance().GetApp();
+	sf::RenderWindow& app = Game::getInstance().getWindow();
 	while (running)
 	{
 		while (app.pollEvent(event))

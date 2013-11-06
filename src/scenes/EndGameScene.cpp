@@ -43,7 +43,7 @@ void EndGameScene::Update(float frametime)
 	{
 		Game::Scene next = entities_.GetMode() == EntityManager::MODE_STORY ?
 			Game::SC_LevelMenu : Game::SC_GameOverMenu;
-		Game::GetInstance().SetNextScene(next);
+		Game::getInstance().setNextScene(next);
 	}
 
 	if (player_dead_)
@@ -91,7 +91,7 @@ void EndGameScene::OnFocus()
 			info_.setString(I18n::templatize("endgame.end_level", "{level}", current, "{credits}", earned_credits));
 		}
 
-		Game::GetPlayerSave().UpdateCredits(earned_credits);
+		Game::getPlayerSave().UpdateCredits(earned_credits);
 		// Unlock next level
 		if (current == levels.getLastUnlocked())
 		{

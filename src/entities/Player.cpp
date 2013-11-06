@@ -98,7 +98,7 @@ Player::~Player()
 
 void Player::onInit()
 {
-	const PlayerSave& save = Game::GetInstance().GetPlayerSave();
+	const PlayerSave& save = Game::getInstance().getPlayerSave();
 	const ItemManager& items = ItemManager::GetInstance();
 
 	// score

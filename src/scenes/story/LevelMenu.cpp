@@ -64,7 +64,7 @@ void LevelMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 0:
-			Game::GetInstance().SetNextScene(Game::SC_MainMenu);
+			Game::getInstance().setNextScene(Game::SC_MainMenu);
 			break;
 		case 1: {
 			int selected_level = opt_levels_->GetSelectedOptionIndex() + 1;
@@ -73,11 +73,11 @@ void LevelMenu::EventCallback(int id)
 
 			std::wstring s = I18n::templatize("panel.level", "{level}", selected_level);
 			ControlPanel::GetInstance().SetGameInfo(s);
-			Game::GetInstance().SetNextScene(Game::SC_IntroLevelScene);
+			Game::getInstance().setNextScene(Game::SC_IntroLevelScene);
 			}
 			break;
 		case 2:
-			Game::GetInstance().SetNextScene(Game::SC_ArmoryMenu);
+			Game::getInstance().setNextScene(Game::SC_ArmoryMenu);
 			break;
 	}
 }

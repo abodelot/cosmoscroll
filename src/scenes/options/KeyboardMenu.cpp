@@ -43,7 +43,7 @@ void KeyboardMenu::EventCallback(int id)
 {
 	if (id == 9000)
 	{
-		Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
+		Game::getInstance().setNextScene(Game::SC_OptionMenu);
 	}
 	else
 	{

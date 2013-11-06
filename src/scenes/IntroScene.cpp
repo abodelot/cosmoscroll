@@ -74,7 +74,7 @@ void IntroScene::Update(float frametime)
 		// make entity manager ready for game use and restore original size
 		entity_mgr_.Clear();
 		entity_mgr_.resize(Game::WIDTH, Game::HEIGHT - ControlPanel::HEIGHT);
-		Game::GetInstance().SetNextScene(Game::SC_MainMenu);
+		Game::getInstance().setNextScene(Game::SC_MainMenu);
 	}
 }
 

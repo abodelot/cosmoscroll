@@ -11,7 +11,6 @@
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "utils/FileSystem.hpp"
-#include "utils/sfml_helper.hpp"
 #include "md5/md5.hpp"
 #include "scenes/scenes.hpp"
 
@@ -32,7 +31,7 @@
 #define WIN_TITLE   "CosmoScroll"
 
 
-Game& Game::GetInstance()
+Game& Game::getInstance()
 {
 	static Game self;
 	return self;
@@ -40,46 +39,46 @@ Game& Game::GetInstance()
 
 
 Game::Game():
-	input_(Input::GetInstance())
+	m_input(Input::GetInstance())
 {
 	// default location
-	config_file_ = FileSystem::InitSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
+	m_config_file = FileSystem::initSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
 }
 
 
 Game::~Game()
 {
-	app_.close();
+	m_window.close();
 
 	// delete allocated scenes
 	for (int i = 0; i < SC_COUNT; ++i)
 	{
-		if (scenes_[i] != NULL)
+		if (m_scenes[i] != NULL)
 		{
-			delete scenes_[i];
+			delete m_scenes[i];
 		}
 	}
 }
 
 
-void Game::SetCurrentDirectory(const std::string& path)
+void Game::init(const std::string& path)
 {
 	size_t found = path.find_last_of("/\\");
-	current_dir_ = path.substr(0, found + 1);
-	if (current_dir_.empty())
-		current_dir_ = "./";
+	m_app_dir = path.substr(0, found + 1);
+	if (m_app_dir.empty())
+		m_app_dir = "./";
 }
 
 
-void Game::OverrideConfigFile(const std::string& config_file)
+void Game::setConfigFile(const std::string& config_file)
 {
 	struct stat buf;
-	config_file_ = config_file;
+	m_config_file = config_file;
 
-	if (!stat(config_file_.c_str(), &buf))
+	if (!stat(m_config_file.c_str(), &buf))
 	{
 		if (buf.st_mode & S_IFDIR)
-			(config_file_ += "/") += CONFIG_FILENAME;
+			(m_config_file += "/") += CONFIG_FILENAME;
 		else if (!buf.st_mode & S_IFREG)		// wtf is this file?
 			puts("Error: configuration file is nor a regular file nor a directory");
 	}
@@ -89,35 +88,34 @@ void Game::OverrideConfigFile(const std::string& config_file)
 }
 
 
-void Game::Init(const std::string& data_path)
+void Game::loadResources(const std::string& data_path)
 {
-	input_.Init();
+	m_input.Init();
 
 	// init resources directory
-	data_dir_ = current_dir_ + data_path;
-	Resources::setDataPath(data_dir_);
-	I18n::getInstance().setDataPath(data_dir_);
-	screenshot_dir_ = DEFAULT_SCREENSHOT_DIR;
+	std::string resources_dir = m_app_dir + data_path;
+	Resources::setDataPath(resources_dir);
+	I18n::getInstance().setDataPath(resources_dir);
+	m_screenshots_dir = DEFAULT_SCREENSHOT_DIR;
 	MessageSystem::setFont(Resources::getFont("Ubuntu-R.ttf"));
 
 	// create window and display loading screen as early as possible
-	vsync_ = true;
-	SetFullscreen(false);
-	xsf::Text temp("loading"); app_.clear(); app_.draw(temp); app_.display();
+	m_vsync = true;
+	setFullscreen(false);
 
 	// load XML resources
 	try
 	{
 		printf("* checking resources purity... %49s\n",
-			CheckResourcesPurity() ? "[OK]" : "[FAILED]");
+			 (m_resources_checked = checkResourcesPurity(resources_dir)) ? "[OK]" : "[FAILED]");
 		printf("* loading %-59s [%2d found]\n", "levels...",
-			LevelManager::GetInstance().ParseFile(data_dir_ + XML_LEVELS));
+			LevelManager::GetInstance().ParseFile(resources_dir + XML_LEVELS));
 		printf("* loading %-59s [%2d found]\n", "items...",
-			ItemManager::GetInstance().LoadItems(data_dir_ + XML_ITEMS));
+			ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS));
 		printf("* loading %-59s [%2d found]\n", "animations...",
-			EntityManager::getInstance().LoadAnimations(data_dir_ + XML_ANIMATIONS));
+			EntityManager::getInstance().LoadAnimations(resources_dir + XML_ANIMATIONS));
 		printf("* loading %-59s [%2d found]\n", "spaceships definitions...",
-			EntityManager::getInstance().LoadSpaceShips(data_dir_ + XML_SPACESHIPS));
+			EntityManager::getInstance().LoadSpaceShips(resources_dir + XML_SPACESHIPS));
 	}
 	catch (std::runtime_error& error)
 	{
@@ -125,31 +123,31 @@ void Game::Init(const std::string& data_path)
 	}
 	// load config
 #ifdef DEBUG
-	printf("configuration file is: %s\n", config_file_.c_str());
+	printf("configuration file is: %s\n", m_config_file.c_str());
 #endif
-	LoadConfig(config_file_);
+	loadConfig(m_config_file);
 
-	app_.setFramerateLimit(WIN_FPS);
-	app_.setMouseCursorVisible(false);
-	app_.setKeyRepeatEnabled(false);
-	app_.setVerticalSyncEnabled(vsync_);
+	m_window.setFramerateLimit(WIN_FPS);
+	m_window.setMouseCursorVisible(false);
+	m_window.setKeyRepeatEnabled(false);
+	m_window.setVerticalSyncEnabled(m_vsync);
 
 
 	// scenes will be allocated only if requested
 	for (int i = 0; i < SC_COUNT; ++i)
 	{
-		scenes_[i] = NULL;
+		m_scenes[i] = NULL;
 	}
-	current_scene_ = NULL;
-	running_ = true;
+	m_current_scene = NULL;
+	m_running = true;
 }
 
 
-bool Game::LoadConfig(const std::string& filename)
+bool Game::loadConfig(const std::string& filename)
 {
 	IniParser config;
-	fullscreen_ = false;
-	vsync_ = true;
+	m_fullscreen = false;
+	m_vsync = true;
 
 	if (config.LoadFromFile(filename.c_str()))
 	{
@@ -168,24 +166,24 @@ bool Game::LoadConfig(const std::string& filename)
 		EntityManager::getInstance().SetArcadeRecord(high_score);
 
 		// fullscreen & vsync
-		config.Get("vsync", vsync_);
-		config.Get("fullscreen", fullscreen_);
-		if (fullscreen_)
-			SetFullscreen(fullscreen_);
+		config.Get("vsync", m_vsync);
+		config.Get("fullscreen", m_fullscreen);
+		if (m_fullscreen)
+			setFullscreen(m_fullscreen);
 
 		// panel pop
 		bool top = true;
 		config.Get("panel_on_top", top);
-		PanelOnTop(top);
+		panelOnTop(top);
 
 		// screenshot directory
-		config.Get("screenshots", screenshot_dir_);
+		config.Get("screenshots", m_screenshots_dir);
 
 		// -- Audio settings --
 		SoundSystem::GetInstance().LoadFromConfig(config);
 
 		// -- Keyboard and joystick bindings --
-		input_.LoadFromConfig(config);
+		m_input.LoadFromConfig(config);
 
 		// -- Story mode progression --
 		playersave_.LoadFromConfig(config);
@@ -196,24 +194,24 @@ bool Game::LoadConfig(const std::string& filename)
 }
 
 
-void Game::WriteConfig(const std::string& filename) const
+void Game::writeConfig(const std::string& filename) const
 {
 	IniParser config;
 
 	// General Settings
 	config.SeekSection("Settings");
-	config.Set("fullscreen", fullscreen_);
-	config.Set("vsync", vsync_);
+	config.Set("fullscreen", m_fullscreen);
+	config.Set("vsync", m_vsync);
 	config.Set("panel_on_top", ControlPanel::GetInstance().IsOnTop());
 	config.Set("arcade_high_score", EntityManager::getInstance().GetArcadeRecord());
 	config.Set("language", I18n::getInstance().getLangCode());
-	config.Set("screenshots", screenshot_dir_);
+	config.Set("screenshots", m_screenshots_dir);
 
 	// Audio settings
 	SoundSystem::GetInstance().SaveToConfig(config);
 
 	// Keyboard and joystick bindings
-	input_.SaveToConfig(config);
+	m_input.SaveToConfig(config);
 
 	// Player data
 	playersave_.SaveToConfig(config);
@@ -223,63 +221,63 @@ void Game::WriteConfig(const std::string& filename) const
 }
 
 
-int Game::Run()
+int Game::run()
 {
 	// set the first displayed scene at launch
-	SetNextScene(SC_IntroScene);
-	app_.display();
+	setNextScene(SC_IntroScene);
+	m_window.display();
 
 	// game main loop which handle the current scene
 	sf::Event event;
 	Input::Action action;
 	sf::Clock clock;
-	while (running_)
+	while (m_running)
 	{
 		// 1. polling events
-		while (app_.pollEvent(event))
+		while (m_window.pollEvent(event))
 		{
-			action = input_.EventToAction(event);
+			action = m_input.EventToAction(event);
 			switch (action)
 			{
 				// these events are always handled on each scene
 				case Input::EXIT_APP:
-					Quit();
+					quit();
 					break;
 				case Input::TAKE_SCREENSHOT:
-					TakeScreenshot();
+					takeScreenshot();
 					break;
 				// other events are send to the current scene
 				default:
-					current_scene_->OnEvent(event);
+					m_current_scene->OnEvent(event);
 					break;
 			}
 		}
 		// 2. updating the current scene
-		app_.clear();
-		current_scene_->Update(clock.restart().asSeconds());
+		m_window.clear();
+		m_current_scene->Update(clock.restart().asSeconds());
 
 		// 3. displaying the current scene
-		current_scene_->Show(app_);
-		app_.display();
+		m_current_scene->Show(m_window);
+		m_window.display();
 	}
-	return (EXIT_SUCCESS);
+	return EXIT_SUCCESS;
 }
 
 
-sf::RenderWindow& Game::GetApp()
+sf::RenderWindow& Game::getWindow()
 {
-	return app_;
+	return m_window;
 }
 
 
-void Game::SetNextScene(Scene enum_scene)
+void Game::setNextScene(Scene enum_scene)
 {
 #define CASE_SCENE(__scene__) \
 	case Game::SC_ ## __scene__:\
 		new_scene = new __scene__();\
 		break
 
-	if (scenes_[enum_scene] == NULL)
+	if (m_scenes[enum_scene] == NULL)
 	{
 		BaseScene *new_scene = NULL;
 		switch (enum_scene)
@@ -305,111 +303,121 @@ void Game::SetNextScene(Scene enum_scene)
 			default:
 				return;
 		}
-		scenes_[enum_scene] = new_scene;
+		m_scenes[enum_scene] = new_scene;
 	}
-	current_scene_ = scenes_[enum_scene];
-	current_scene_->OnFocus();
+	m_current_scene = m_scenes[enum_scene];
+	m_current_scene->OnFocus();
 }
 
 
-void Game::Quit()
+void Game::quit()
 {
-	running_ = false;
+	m_running = false;
 	SoundSystem::GetInstance().StopAll();
-	WriteConfig(config_file_);
+	writeConfig(m_config_file);
 }
 
-//Todo verifier si screenshotdir est valide
-void Game::TakeScreenshot(void)
+
+void Game::takeScreenshot()
 {
-	char current_time[256];
+	// Create screenshots directory if it doesn't exist yet
+	if (!FileSystem::isDirectory(m_screenshots_dir))
+		FileSystem::createDirectory(m_screenshots_dir);
+
+	char current_time[20]; // YYYY-MM-DD_HH-MM-SS + \0
 	time_t t = time(NULL);
-	strftime(current_time, sizeof current_time, "%d-%m-%Y_%H-%M-%S", localtime(&t));
+	strftime(current_time, sizeof current_time, "%Y-%m-%d_%H-%M-%S", localtime(&t));
+	std::string filename = m_screenshots_dir + "/" + current_time + ".png";
 
-	std::string filename = current_dir_ + screenshot_dir_ + "/" + current_time + ".png";
-	printf("screenshot saved to %s\n", filename.c_str());
-	app_.capture().saveToFile(filename);
+	if (m_window.capture().saveToFile(filename))
+		std::cout << "screenshot saved to " << filename << std::endl;
 }
 
 
-void Game::SetFullscreen(bool full)
+void Game::setFullscreen(bool full)
 {
-	if (app_.isOpen())
-		app_.close();
+	if (m_window.isOpen())
+		m_window.close();
 
 	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
-	app_.create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
-	app_.setVerticalSyncEnabled(vsync_);
-	fullscreen_ = full;
+	m_window.create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
+	m_window.setVerticalSyncEnabled(m_vsync);
+	m_fullscreen = full;
 	if (!full)
 	{
 		// set window icon
 		static sf::Image icon = Resources::getTexture("gui/icon.bmp").copyToImage();
 		icon.createMaskFromColor(sf::Color(0xff, 0, 0xff));
-		app_.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+		m_window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
 		// center window on desktop
 		sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-		app_.setPosition(sf::Vector2i((desktop.width - WIDTH) / 2, (desktop.height - HEIGHT) / 2));
+		m_window.setPosition(sf::Vector2i((desktop.width - WIDTH) / 2, (desktop.height - HEIGHT) / 2));
 	}
 }
 
 
-bool Game::IsFullscreen() const
+bool Game::isFullscreen() const
 {
-	return fullscreen_;
+	return m_fullscreen;
 }
 
 
-void Game::SetVerticalSync(bool vsync)
+void Game::setVerticalSync(bool vsync)
 {
-	app_.setVerticalSyncEnabled(vsync);
-	vsync_ = vsync;
+	m_window.setVerticalSyncEnabled(vsync);
+	m_vsync = vsync;
 }
 
 
-bool Game::IsVerticalSync() const
+bool Game::isVerticalSync() const
 {
-	return vsync_;
+	return m_vsync;
 }
 
 
-void Game::ReloadScenes()
+void Game::reloadScenes()
 {
 	// delete allocated scenes, except the current one
 	for (int i = 0; i < SC_COUNT; ++i)
 	{
-		if (scenes_[i] != NULL && scenes_[i] != current_scene_)
+		if (m_scenes[i] != NULL && m_scenes[i] != m_current_scene)
 		{
-			delete scenes_[i];
-			scenes_[i] = NULL;
+			delete m_scenes[i];
+			m_scenes[i] = NULL;
 		}
 	}
 }
 
 
-bool Game::CheckResourcesPurity()
+bool Game::checkResourcesPurity(const std::string& resources_dir)
 {
-	pure_ = true;
+	bool check_passed = true;
 	std::ifstream file;
 	MD5 md5sum;
 
-	file.open((data_dir_ + XML_ITEMS).c_str());
-	pure_ &= (md5sum.Calculate(file) == MD5SUM_ITEMS);
+	file.open((resources_dir + XML_ITEMS).c_str());
+	check_passed &= (md5sum.Calculate(file) == MD5SUM_ITEMS);
 	file.close();
 
-	file.open((data_dir_ + XML_SPACESHIPS).c_str());
-	pure_ &= (md5sum.Calculate(file) == MD5SUM_SPACESHIPS);
+	file.open((resources_dir + XML_SPACESHIPS).c_str());
+	check_passed &= (md5sum.Calculate(file) == MD5SUM_SPACESHIPS);
 	file.close();
 
-	file.open((data_dir_ + XML_ANIMATIONS).c_str());
-	pure_ &= (md5sum.Calculate(file) == MD5SUM_ANIMATIONS);
+	file.open((resources_dir + XML_ANIMATIONS).c_str());
+	check_passed &= (md5sum.Calculate(file) == MD5SUM_ANIMATIONS);
 	file.close();
-	return pure_;
+	return check_passed;
 }
 
 
-void Game::PanelOnTop(bool top)
+bool Game::resourcesChecked() const
+{
+	return m_resources_checked;
+}
+
+
+void Game::panelOnTop(bool top)
 {
 	if (top)
 	{
@@ -447,18 +455,18 @@ void Game::BSOD(std::string message)
 	while (true)
 	{
 		sf::Event event;
-		while (app_.pollEvent(event))
+		while (m_window.pollEvent(event))
 		{
 			if (event.type == sf::Event::KeyPressed)
 			{
-				app_.close();
+				m_window.close();
 				exit(EXIT_FAILURE);
 			}
 		}
-		app_.clear(sf::Color(0, 0, 0x88));
-		app_.draw(title_bg);
-		app_.draw(title);
-		app_.draw(str);
-		app_.display();
+		m_window.clear(sf::Color(0, 0, 0x88));
+		m_window.draw(title_bg);
+		m_window.draw(title);
+		m_window.draw(str);
+		m_window.display();
 	}
 }

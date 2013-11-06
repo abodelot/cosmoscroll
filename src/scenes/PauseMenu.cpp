@@ -24,7 +24,7 @@ void PauseMenu::OnEvent(const sf::Event& event)
 	Input::Action action = Input::GetInstance().EventToAction(event);
 	if (action == Input::PAUSE && event.type != sf::Event::LostFocus) // resume
 	{
-		Game::GetInstance().SetNextScene(Game::SC_InGameScene);
+		Game::getInstance().setNextScene(Game::SC_InGameScene);
 		SoundSystem::GetInstance().PlayMusic();
 	}
 	else
@@ -36,18 +36,18 @@ void PauseMenu::OnEvent(const sf::Event& event)
 
 void PauseMenu::EventCallback(int id)
 {
-	Game& game = Game::GetInstance();
+	Game& game = Game::getInstance();
 	switch (id)
 	{
 		case 1:
-			game.SetNextScene(Game::SC_InGameScene);
+			game.setNextScene(Game::SC_InGameScene);
 			SoundSystem::GetInstance().PlayMusic();
 			break;
 		case 2:
-			game.SetNextScene(Game::SC_MainMenu);
+			game.setNextScene(Game::SC_MainMenu);
 			break;
 		case 3:
-			game.Quit();
+			game.quit();
 			break;
 	}
 }

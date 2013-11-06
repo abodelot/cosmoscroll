@@ -66,7 +66,7 @@ void JoystickMenu::EventCallback(int id)
 			input.SetSensitivity(100 - sl_joystick_->GetValue());
 			break;
 		case 9001:
-			Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
+			Game::getInstance().setNextScene(Game::SC_OptionMenu);
 			break;
 		default:
 			// Input::Action enumerations are used as menu ids

@@ -30,23 +30,23 @@ void MainMenu::Show(sf::RenderTarget& target) const
 
 void MainMenu::EventCallback(int id)
 {
-	Game& game = Game::GetInstance();
+	Game& game = Game::getInstance();
 	switch (id)
 	{
 		case 1:
-			game.SetNextScene(Game::SC_LevelMenu);
+			game.setNextScene(Game::SC_LevelMenu);
 			break;
 		case 2:
-			game.SetNextScene(Game::SC_ArcadeMenu);
+			game.setNextScene(Game::SC_ArcadeMenu);
 			break;
 		case 3:
-			game.SetNextScene(Game::SC_OptionMenu);
+			game.setNextScene(Game::SC_OptionMenu);
 			break;
 		case 4:
-			game.SetNextScene(Game::SC_AboutMenu);
+			game.setNextScene(Game::SC_AboutMenu);
 			break;
 		case 5:
-			game.Quit();
+			game.quit();
 			break;
 	}
 }

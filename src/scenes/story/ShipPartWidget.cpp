@@ -84,7 +84,7 @@ void ShipPartWidget::OnMouseClicked(int, int)
 void ShipPartWidget::RefreshLabel()
 {
 	m_text_name.setString(_t(ItemData::TypeToString(type_)));
-	m_text_level.setString(I18n::templatize("armory.item_level", "{level}", Game::GetInstance().GetPlayerSave().LevelOf(type_)));
+	m_text_level.setString(I18n::templatize("armory.item_level", "{level}", Game::getInstance().getPlayerSave().LevelOf(type_)));
 }
 
 

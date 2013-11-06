@@ -81,10 +81,10 @@ void GameOverMenu::EventCallback(int id)
 			break;
 		case 1:
 			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
-			Game::GetInstance().SetNextScene(Game::SC_InGameScene);
+			Game::getInstance().setNextScene(Game::SC_InGameScene);
 			break;
 		case 2:
-			Game::GetInstance().SetNextScene(Game::SC_MainMenu);
+			Game::getInstance().setNextScene(Game::SC_MainMenu);
 			break;
 		case 3:
 			if (EntityManager::getInstance().GetPlayerShip()->HasCheated())
@@ -92,7 +92,7 @@ void GameOverMenu::EventCallback(int id)
 				lab_result_->setCharacterSize(20);
 				lab_result_->setString(_t("menu.gameover.error_cheat"));
 			}
-			else if (!Game::GetInstance().IsPure())
+			else if (!Game::getInstance().resourcesChecked())
 			{
 				lab_result_->setCharacterSize(20);
 				lab_result_->setString(_t("menu.gameover.error_altered_res"));
@@ -136,7 +136,7 @@ void GameOverMenu::UploadScore()
 	switch (response.getStatus())
 	{
 		case sf::Http::Response::Ok:
-			Game::GetInstance().SetNextScene(Game::SC_BestScoresMenu);
+			Game::getInstance().setNextScene(Game::SC_BestScoresMenu);
 			break;
 		case sf::Http::Response::ConnectionFailed:
 			lab_result_->setString("Couldn't connect to CosmoScroll server");

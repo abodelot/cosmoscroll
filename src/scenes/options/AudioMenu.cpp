@@ -44,7 +44,7 @@ void AudioMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 0:
-			Game::GetInstance().SetNextScene(Game::SC_OptionMenu);
+			Game::getInstance().setNextScene(Game::SC_OptionMenu);
 			break;
 		case 2:
 			sound.EnableMusic(cb_music_->Checked());

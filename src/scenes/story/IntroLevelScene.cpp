@@ -29,16 +29,16 @@ void IntroLevelScene::OnEvent(const sf::Event& event)
 			if (event.key.code != sf::Keyboard::Escape)
 			{
 				EntityManager::getInstance().InitMode(EntityManager::MODE_STORY);
-				Game::GetInstance().SetNextScene(Game::SC_InGameScene);
+				Game::getInstance().setNextScene(Game::SC_InGameScene);
 			}
 			else
 			{
-				Game::GetInstance().SetNextScene(Game::SC_LevelMenu);
+				Game::getInstance().setNextScene(Game::SC_LevelMenu);
 			}
 			break;
 		case sf::Event::JoystickButtonPressed:
 			EntityManager::getInstance().InitMode(EntityManager::MODE_STORY);
-			Game::GetInstance().SetNextScene(Game::SC_InGameScene);
+			Game::getInstance().setNextScene(Game::SC_InGameScene);
 			break;
 		default:
 			break;

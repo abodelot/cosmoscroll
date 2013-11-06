@@ -17,18 +17,18 @@ ArcadeMenu::ArcadeMenu()
 
 void ArcadeMenu::EventCallback(int id)
 {
-	Game& game = Game::GetInstance();
+	Game& game = Game::getInstance();
 	switch (id)
 	{
 		case 1:
-			game.SetNextScene(Game::SC_InGameScene);
+			game.setNextScene(Game::SC_InGameScene);
 			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
 			break;
 		case 2:
-			game.SetNextScene(Game::SC_BestScoresMenu);
+			game.setNextScene(Game::SC_BestScoresMenu);
 			break;
 		case 3:
-			game.SetNextScene(Game::SC_MainMenu);
+			game.setNextScene(Game::SC_MainMenu);
 			break;
 	}
 }
