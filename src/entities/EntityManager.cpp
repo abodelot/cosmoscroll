@@ -387,23 +387,19 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement();
 	while (elem != NULL)
 	{
-		int id;
-		if (elem->QueryIntAttribute("id", &id) != tinyxml2::XML_SUCCESS)
+		const char* id = elem->Attribute("id");
+		if (id == NULL)
 			throw Error::exception("parse error: spaceship[id] is missing");
-
-		const char* name = elem->Attribute("name");
-		if (name == NULL)
-			throw Error::exception("parse error: spaceship[name] is missing");
 
 		const char* animation = elem->Attribute("animation");
 		if (animation == NULL)
 			throw Error::exception("parse error: spaceship[animation] is missing");
 
-		int hp;
+		int hp = 0;
 		if (elem->QueryIntAttribute("hp", &hp) != tinyxml2::XML_SUCCESS)
 			throw Error::exception("parse error: spaceship[hp] is missing");
 
-		int speed;
+		int speed = 0;
 		if (elem->QueryIntAttribute("speed", &speed) != tinyxml2::XML_SUCCESS)
 			throw Error::exception("parse error: spaceship[speed] is missing");
 
@@ -413,7 +409,6 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 		// Create spaceship instance
 		Spaceship* ship = new Spaceship(getAnimation(animation), hp, speed);
 		ship->setPoints(points);
-
 		ship->setMovementPattern(GetMovementPattern(elem));
 		ship->setAttackPattern(GetAttackPattern(elem));
 
@@ -436,26 +431,24 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 			ship->getWeapon().setPosition(w_x, w_y);
 		}
 
-		spaceships_defs_[id] = ship;
+		m_spaceships[id] = ship;
 		RegisterUniqueEntity(ship);
 		elem = elem->NextSiblingElement();
 	}
 
 	RegisterUniqueEntity(new Asteroid(Asteroid::BIG));
-	return spaceships_defs_.size();
+	return m_spaceships.size();
 }
 
 
-Spaceship* EntityManager::CreateSpaceShip(int id) const
+Spaceship* EntityManager::createSpaceship(const std::string& id) const
 {
-	SpaceShipMap::const_iterator it = spaceships_defs_.find(id);
-
-	if (it != spaceships_defs_.end())
+	SpaceshipMap::const_iterator it = m_spaceships.find(id);
+	if (it != m_spaceships.end())
 	{
-		Spaceship* ship = it->second->clone();
-		return ship;
+		return it->second->clone();
 	}
-	std::cerr << "spaceship id:" << id << " is not defined" << std::endl;
+	std::cerr << "Couldn't create spaceship width id: " << id << std::endl;
 	return NULL;
 }
 

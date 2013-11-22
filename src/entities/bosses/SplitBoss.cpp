@@ -16,7 +16,7 @@ SplitBoss::SplitBoss(bool split)
 {
 	if (split)
 	{
-		setHP(250);
+		setHP(150);
 		setTexture(Resources::getTexture("entities/evil-boss.png"));
 		setTextureRect(sf::IntRect(0, 0, 242, 160));
 
@@ -29,14 +29,14 @@ SplitBoss::SplitBoss(bool split)
 	}
 	else
 	{
-		setHP(100);
+		setHP(50);
 		setTexture(Resources::getTexture("entities/evil-boss-small.png"));
 		setTextureRect(sf::IntRect(0,0,121,80));
 
-		eye_left_.init("fireball");
+		eye_left_.init("laser-pink");
 		eye_left_.setOwner(this);
 		eye_left_.setPosition(EYE_OFFSET_LEFT_SMALL);
-		eye_right_.init("fireball");
+		eye_right_.init("laser-pink");
 		eye_right_.setOwner(this);
 		eye_right_.setPosition(EYE_OFFSET_RIGHT_SMALL);
 	}

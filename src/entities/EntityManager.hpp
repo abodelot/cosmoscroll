@@ -93,11 +93,11 @@ public:
 	bool IsGameOver();
 
 	/**
-	 * Allouer un vaisseau
-	 * @param id: type du vaisseau demandé
-	 * @return vaisseau
+	 * Allocate a new Spaceship with a given profile
+	 * @param id: spaceship-profile identifier
+	 * @return new spaceship
 	 */
-	Spaceship* CreateSpaceShip(int id) const;
+	Spaceship* createSpaceship(const std::string& id) const;
 
 	/**
 	 * Obtenir une animation
@@ -165,8 +165,8 @@ private:
 	 */
 	void RespawnPlayer();
 
-	typedef std::map<int, Spaceship*> SpaceShipMap;
-	SpaceShipMap spaceships_defs_;
+	typedef std::map<std::string, Spaceship*> SpaceshipMap;
+	SpaceshipMap m_spaceships;
 
 	typedef std::map<std::string, Animation> AnimationMap;
 	AnimationMap animations_;

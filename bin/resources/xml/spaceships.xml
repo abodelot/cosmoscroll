@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <spaceships>
-	<ship id="2" name="Scoot" animation="scoot" hp="2" speed="120" move="sinus" attack="on_sight" points="1">
-		<weapon id="laser-green" x="0" y="16"/>
+	<ship id="b1" name="Scoot" animation="bandit-scoot" hp="2" speed="120" move="sinus" attack="on_sight" points="1">
+		<weapon id="laser-green" x="4" y="20"/>
 	</ship>
-	<ship id="1" name="Scoot-Circle" animation="scoot" hp="2" speed="75" move="circle" attack="on_sight" points="1" >
-		<weapon id="laser-green" x="0" y="16"/>
+	<ship id="b1c" name="Scoot" animation="bandit-scoot" hp="2" speed="75" move="circle" attack="on_sight" points="1" >
+		<weapon id="laser-green" x="4" y="20"/>
 	</ship>
-	<ship id="3" name="Interceptor" animation="interceptor" hp="8" speed="50" move="line" attack="auto_aim" points="2">
-		<weapon id="laser-green" x="0" y="32"/>
+	<ship id="b2" name="Interceptor" animation="bandit-interceptor" hp="8" speed="50" move="line" attack="auto_aim" points="2">
+		<weapon id="laser-green" x="1" y="30"/>
 	</ship>
-	<ship id="8" name="Interceptor-Circle" animation="interceptor" hp="8" speed="50" move="circle" attack="auto_aim" points="2">
-		<weapon id="laser-green" x="0" y="32"/>
+	<ship id="b2c" name="Interceptor" animation="bandit-interceptor" hp="8" speed="50" move="circle" attack="auto_aim" points="2">
+		<weapon id="laser-green" x="1" y="30"/>
 	</ship>
-	<ship id="6" name="Heavy-interceptor" animation="h-interceptor" hp="14" speed="50" move="circle" attack="auto_aim" points="5">
+	<ship id="b3" name="Gunship" animation="bandit-gunship" hp="14" speed="50" move="circle" attack="auto_aim" points="5">
+		<weapon id="laser-pink" x="3" y="34"/>
+	</ship>
+	<ship id="s1" name="Flying Saucer" animation="saucer" hp="6" speed="80" move="sinus" attack="auto_aim" points="3">
 		<weapon id="laser-pink" x="0" y="24"/>
 	</ship>
-	<ship id="4" name="Saucer" animation="saucer" hp="6" speed="80" move="sinus" attack="auto_aim" points="3">
-		<weapon id="laser-pink" x="0" y="24"/>
-	</ship>
-	<ship id="5" name="Mine" animation="mine" hp="14" move="magnet" speed="50" points="2"/>
-	<ship id="7" name="Heavy-mine" animation="h-mine" hp="24" move="magnet" speed="80" points="4"/>
+	<ship id="m1" name="Mine"   animation="mine" hp="14" move="magnet" speed="50" points="2"/>
+	<ship id="m2" name="Mine 2" animation="h-mine" hp="24" move="magnet" speed="80" points="4"/>
 </spaceships>

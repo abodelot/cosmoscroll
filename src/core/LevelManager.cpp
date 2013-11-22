@@ -234,7 +234,6 @@ void LevelManager::ParseLevel(tinyxml2::XMLElement* elem)
 
 void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 {
-	EntityManager& entity_mgr = EntityManager::getInstance();
 	const char* tag_name = elem->Value();
 	if (strcmp(tag_name, "loop") == 0)
 	{
@@ -284,7 +283,7 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 	}
 	else
 	{
-		// common attributes for all tags
+		// Parse attributes shared by all tags
 		sf::Vector2f position(0, 0);
 		position.x = Game::WIDTH - 1; // default x: screen right side
 		float time = 0.f; // default: no delay
@@ -294,11 +293,16 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 		Entity* entity = NULL;
 		if (strcmp(tag_name, "ship") == 0)
 		{
-			int id = 0;
-			elem->QueryIntAttribute("id", &id);
-			Spaceship* spaceship = entity_mgr.CreateSpaceShip(id);
-			total_points_ += spaceship->getPoints();
-			entity = spaceship;
+			// Get spaceship profile id
+			const char* id = elem->Attribute("id");
+			if (id != NULL)
+			{
+				Spaceship* spaceship = EntityManager::getInstance().createSpaceship(id);
+				if (spaceship != NULL)
+					total_points_ += spaceship->getPoints();
+
+				entity = spaceship;
+			}
 		}
 		else if (strcmp(tag_name, "asteroid") == 0)
 		{
@@ -327,10 +331,18 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 		}
 		else
 		{
-			std::cerr << "[levels] unsupported tag '" << tag_name << "' ignored" << std::endl;
+			std::cerr << "[levels] unsupported tag \"" << tag_name << "\" ignored" << std::endl;
 		}
-		entity->setPosition(position);
-		AppendToWaitingLine(entity, time);
+
+		if (entity != NULL)
+		{
+			entity->setPosition(position);
+			AppendToWaitingLine(entity, time);
+		}
+		else
+		{
+			std::cerr << "[levels] invalid entity \"" << tag_name << "\" ignored" << std::endl;
+		}
 	}
 }
 
