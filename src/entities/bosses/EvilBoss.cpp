@@ -38,12 +38,6 @@ EvilBoss::EvilBoss()
 }
 
 
-EvilBoss* EvilBoss::clone() const
-{
-	return new EvilBoss(*this);
-}
-
-
 void EvilBoss::onUpdate(float frametime)
 {
 	sf::Vector2f target_pos = target_->getCenter();

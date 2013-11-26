@@ -4,18 +4,13 @@
 #include "entities/EntityManager.hpp"
 
 
-Part::Part(int id, int hp):
+Part::Part(int id, int hp, Team team):
 	m_id(id),
 	m_destructible(false),
 	m_parent(NULL)
 {
 	setHP(hp);
-}
-
-
-Entity* Part::clone() const
-{
-	return new Part(*this);
+	setTeam(team);
 }
 
 

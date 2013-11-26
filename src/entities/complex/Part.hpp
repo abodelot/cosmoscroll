@@ -8,13 +8,10 @@ class MultiPartEntity;
 class Part: public Damageable
 {
 public:
-	Part(int id = -1, int hp = 1);
+	Part(int id = -1, int hp = 1, Team team = NEUTRAL);
 
 	// override
 	void onUpdate(float frametime);
-
-	// override
-	Entity* clone() const;
 
 	void takeDamage(int damage);
 

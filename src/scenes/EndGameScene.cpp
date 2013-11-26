@@ -1,5 +1,7 @@
 #include "EndGameScene.hpp"
 #include "core/Game.hpp"
+#include "core/Constants.hpp"
+#include "core/PlayerSave.hpp"
 #include "core/Input.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/LevelManager.hpp"
@@ -7,7 +9,6 @@
 #include "core/ParticleSystem.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Player.hpp"
-#include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
 // auto switch to game over menu after this delay
@@ -91,7 +92,7 @@ void EndGameScene::OnFocus()
 			info_.setString(I18n::templatize("endgame.end_level", "{level}", current, "{credits}", earned_credits));
 		}
 
-		Game::getPlayerSave().UpdateCredits(earned_credits);
+		PlayerSave::updateCredits(earned_credits);
 		// Unlock next level
 		if (current == levels.getLastUnlocked())
 		{
@@ -100,5 +101,5 @@ void EndGameScene::OnFocus()
 		player_dead_ = false;
 	}
 	// Centered on screen
-	info_.setPosition((Game::WIDTH - info_.getWidth()) / 2, (Game::HEIGHT - info_.getHeight()) / 2);
+	info_.setPosition((APP_WIDTH - info_.getWidth()) / 2, (APP_HEIGHT - info_.getHeight()) / 2);
 }

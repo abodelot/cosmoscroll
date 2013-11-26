@@ -1,5 +1,6 @@
 #include "IntroLevelScene.hpp"
 #include "core/Game.hpp"
+#include "core/Constants.hpp"
 #include "core/LevelManager.hpp"
 #include "utils/StringUtils.hpp"
 #include "core/Resources.hpp"
@@ -17,7 +18,7 @@ IntroLevelScene::IntroLevelScene()
 
 	title_.setTexture(Resources::getTexture("gui/cosmoscroll-logo.png"));
 	title_.setOrigin(title_.getWidth() / 2, 0);
-	title_.setPosition(Game::WIDTH / 2, 20);
+	title_.setPosition(APP_WIDTH / 2, 20);
 }
 
 
@@ -78,7 +79,7 @@ void IntroLevelScene::OnFocus()
 
 	// centered on screen
 	description_.setPosition(
-		(Game::WIDTH  - description_.getWidth())  / 2,
-		(Game::HEIGHT - description_.getHeight()) / 2
+		(APP_WIDTH  - description_.getWidth())  / 2,
+		(APP_HEIGHT - description_.getHeight()) / 2
 	);
 }

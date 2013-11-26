@@ -281,9 +281,9 @@
 			<ship id="m1" y="150" />
 			<decor id="canon" t="1"/>
 			<loop count="3">
-				<decor id="canon" t="4"/>
+				<decor id="canon" t="3"/>
 			</loop>
-			<wait t="2"/>
+			<wait t="6"/>
 			<loop count="2">
 				<ship id="b1" y="130" t="2"/>
 				<ship id="b1" y="160" t="1"/>

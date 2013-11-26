@@ -1,7 +1,7 @@
 #include <SFML/System.hpp>
 
 #include "ParticleSystem.hpp"
-#include "Game.hpp"
+#include "Constants.hpp"
 #include "SoundSystem.hpp"
 #include "utils/Math.hpp"
 #include "Resources.hpp"
@@ -214,8 +214,8 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 ParticleSystem::Star::Star(const sf::Texture& img)
 {
 	sprite_.setTexture(img);
-	float x = math::random(0, Game::WIDTH);
-	float y = math::random(0, Game::HEIGHT);
+	float x = math::random(0, APP_WIDTH);
+	float y = math::random(0, APP_HEIGHT);
 	sprite_.setPosition(x, y);
 	float scale = math::random(1.f, 2.f);
 	sprite_.setScale(scale, scale);
@@ -228,8 +228,8 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 {
 	if (sprite_.getPosition().x < 0)
 	{
-		sprite_.setX(Game::WIDTH);
-		sprite_.setY(math::random(0, Game::HEIGHT));
+		sprite_.setX(APP_WIDTH);
+		sprite_.setY(math::random(0, APP_HEIGHT));
 		speed_ = math::random(STAR_MIN_SPEED, STAR_MAX_SPEED);
 		float scale = math::random(0.5f, 1.5f);
 		sprite_.setScale(scale, scale);
@@ -242,8 +242,8 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 ParticleSystem::CenteredStar::CenteredStar(const sf::Texture& img):
 	ParticleSystem::Star(img)
 {
-	float x = Game::WIDTH / 2;
-	float y = Game::HEIGHT / 2;
+	float x = APP_WIDTH / 2;
+	float y = APP_HEIGHT / 2;
 	sprite_.setPosition(x, y);
 	float scale = math::random(0.5f, 1.5f);
 	sprite_.setScale(scale, scale);
@@ -254,12 +254,12 @@ ParticleSystem::CenteredStar::CenteredStar(const sf::Texture& img):
 
 bool ParticleSystem::CenteredStar::OnUpdate(float frametime)
 {
-	static const sf::FloatRect UNIVERSE(0, 0, Game::WIDTH, Game::HEIGHT);
+	static const sf::FloatRect UNIVERSE(0, 0, APP_WIDTH, APP_HEIGHT);
 	sf::Vector2f pos = sprite_.getPosition();
 	if (!UNIVERSE.contains(pos.x, pos.y))
 	{
-		pos.x = Game::WIDTH / 2;
-		pos.y = Game::HEIGHT / 2;
+		pos.x = APP_WIDTH / 2;
+		pos.y = APP_HEIGHT / 2;
 		speed_ = math::random(STAR_MIN_SPEED, STAR_MAX_SPEED);
 		float scale = math::random(0.5f, 1.5f);
 		sprite_.setScale(scale, scale);

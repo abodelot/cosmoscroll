@@ -23,9 +23,9 @@ GunTower::GunTower():
 	addPart(turret, img_turret.getSize().x / 2, img_turret.getSize().y / 2);
 	addPart(base, 0, BASE_OFFSET);
 
-	m_weapon.init("laser-blue");
+	m_weapon.init("laser-pink");
 	m_weapon.setOwner(this);
-	m_weapon.setPosition(img_turret.getSize().x / 2, img_turret.getSize().y / 2);
+	m_weapon.setPosition({img_turret.getSize().x / 2, img_turret.getSize().y / 2});
 }
 
 
@@ -50,10 +50,4 @@ void GunTower::onInit()
 
 	// Always positionned at bottom
 	setY(EntityManager::getInstance().getHeight() - (BASE_OFFSET + 64));
-}
-
-
-GunTower* GunTower::clone() const
-{
-	return new GunTower(*this);
 }

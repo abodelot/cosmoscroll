@@ -129,10 +129,3 @@ void SplitBoss::onDestroy()
 {
     ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 200);
 }
-
-
-SplitBoss* SplitBoss::clone() const
-{
-    return new SplitBoss(*this);
-}
-

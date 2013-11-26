@@ -4,7 +4,6 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include "Input.hpp"
-#include "PlayerSave.hpp"
 
 class BaseScene;
 
@@ -14,12 +13,6 @@ class BaseScene;
 class Game
 {
 public:
-	enum Size
-	{
-		WIDTH =  640,
-		HEIGHT = 480
-	};
-
 	enum Scene
 	{
 		SC_IntroScene,
@@ -96,8 +89,6 @@ public:
 
 	bool resourcesChecked() const;
 
-	inline static PlayerSave& getPlayerSave() { return getInstance().playersave_; }
-
 	void panelOnTop(bool top);
 
 private:
@@ -136,8 +127,6 @@ private:
 	// scènes
 	BaseScene* m_scenes[SC_COUNT];
 	BaseScene* m_current_scene;
-
-	PlayerSave playersave_;
 
 	// directories
 	std::string m_app_dir;

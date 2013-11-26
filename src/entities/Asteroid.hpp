@@ -21,13 +21,10 @@ public:
 	 */
 	Asteroid(Size size, float angle=180);
 
-	// override
-	Asteroid* clone() const;
+	// callbacks ---------------------------------------------------------------
 
-	// override
 	void onUpdate(float frametime);
 
-	// override
 	void onDestroy();
 
 private:

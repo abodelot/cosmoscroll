@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "Constants.hpp"
+#include "PlayerSave.hpp"
 #include "SoundSystem.hpp"
 #include "LevelManager.hpp"
 #include "ControlPanel.hpp"
@@ -25,11 +26,6 @@
 #define XML_ITEMS       "/xml/items.xml"
 #define XML_ANIMATIONS  "/xml/animations.xml"
 #define XML_SPACESHIPS  "/xml/spaceships.xml"
-
-// constantes de configuration de la fenêtre
-#define WIN_BPP     32
-#define WIN_FPS     60
-#define WIN_TITLE   "CosmoScroll"
 
 
 Game& Game::getInstance()
@@ -138,7 +134,7 @@ void Game::loadResources(const std::string& data_path)
 #endif
 	loadConfig(m_config_file);
 
-	m_window.setFramerateLimit(WIN_FPS);
+	m_window.setFramerateLimit(APP_FPS);
 	m_window.setMouseCursorVisible(false);
 	m_window.setKeyRepeatEnabled(false);
 	m_window.setVerticalSyncEnabled(m_vsync);
@@ -162,11 +158,6 @@ bool Game::loadConfig(const std::string& filename)
 			I18n::getInstance().loadSystemLanguage();
 		}
 
-		// high-score
-		int high_score = 0;
-		config.Get("arcade_high_score", high_score);
-		EntityManager::getInstance().SetArcadeRecord(high_score);
-
 		// fullscreen & vsync
 		config.Get("vsync", m_vsync);
 		config.Get("fullscreen", m_fullscreen);
@@ -187,8 +178,8 @@ bool Game::loadConfig(const std::string& filename)
 		// -- Keyboard and joystick bindings --
 		m_input.LoadFromConfig(config);
 
-		// -- Story mode progression --
-		playersave_.LoadFromConfig(config);
+		// -- Player progression and highscore --
+		PlayerSave::loadFromConfig(config);
 		return true;
 	}
 	I18n::getInstance().loadSystemLanguage();
@@ -205,7 +196,6 @@ void Game::writeConfig(const std::string& filename) const
 	config.Set("fullscreen", m_fullscreen);
 	config.Set("vsync", m_vsync);
 	config.Set("panel_on_top", ControlPanel::GetInstance().IsOnTop());
-	config.Set("arcade_high_score", EntityManager::getInstance().GetArcadeRecord());
 	config.Set("language", I18n::getInstance().getLangCode());
 	config.Set("screenshots", m_screenshots_dir);
 
@@ -216,7 +206,7 @@ void Game::writeConfig(const std::string& filename) const
 	m_input.SaveToConfig(config);
 
 	// Player data
-	playersave_.SaveToConfig(config);
+	PlayerSave::saveToConfig(config);
 
 	// saving configuration to file
 	config.SaveToFile(filename.c_str());
@@ -342,7 +332,7 @@ void Game::setFullscreen(bool full)
 		m_window.close();
 
 	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
-	m_window.create(sf::VideoMode(Game::WIDTH, Game::HEIGHT, WIN_BPP), WIN_TITLE, style);
+	m_window.create(sf::VideoMode(APP_WIDTH, APP_HEIGHT), APP_TITLE, style);
 	m_window.setVerticalSyncEnabled(m_vsync);
 	m_fullscreen = full;
 	if (!full)
@@ -354,7 +344,7 @@ void Game::setFullscreen(bool full)
 
 		// center window on desktop
 		sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-		m_window.setPosition(sf::Vector2i((desktop.width - WIDTH) / 2, (desktop.height - HEIGHT) / 2));
+		m_window.setPosition(sf::Vector2i((desktop.width - APP_WIDTH) / 2, (desktop.height - APP_HEIGHT) / 2));
 	}
 }
 
@@ -428,7 +418,7 @@ void Game::panelOnTop(bool top)
 	}
 	else
 	{
-		ControlPanel::GetInstance().setPosition(0, Game::HEIGHT - ControlPanel::HEIGHT);
+		ControlPanel::GetInstance().setPosition(0, APP_HEIGHT - ControlPanel::HEIGHT);
 		EntityManager::getInstance().setPosition(0, 0);
 	}
 }

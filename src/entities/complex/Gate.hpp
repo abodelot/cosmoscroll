@@ -11,7 +11,6 @@ public:
 
 	void onUpdate(float frametime);
 
-	Entity* clone() const;
 private:
 	// override
 	void onPartDestroyed(const Part& part);

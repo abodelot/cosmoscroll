@@ -2,7 +2,6 @@
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "core/Resources.hpp"
-#include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
 

@@ -19,9 +19,6 @@ public:
 
 	~Player();
 
-	// override
-	Player* clone() const;
-
 	void onEvent(const sf::Event& event);
 
 	void HandleAction(Input::Action action);
@@ -33,7 +30,7 @@ public:
 	// override
 	void takeDamage(int damage);
 
-	inline bool HasCheated() const { return konami_code_activated_; }
+	inline bool HasCheated() const { return m_konami_code_activated; }
 
 	// callbacks ---------------------------------------------------------------
 
@@ -64,7 +61,7 @@ private:
 	/**
 	 * Activer les effets du Code Konami
 	 */
-	void KonamiCodeOn();
+	void turnKonamiCodeOn();
 
 	/**
 	 * Set shield points
@@ -76,15 +73,11 @@ private:
 	 */
 	void AudibleHeatingCue();
 
-	enum
-	{
-		KONAMI_CODE_LENGTH = 10
-	};
-
-	// la séquence du Code Konami
-	Input::Action konami_code_[KONAMI_CODE_LENGTH];
-	int current_konami_event_;
-	bool konami_code_activated_;
+	// Code Konami sequence
+	static const int KONAMI_CODE_LENGTH = 10;
+	Input::Action    m_konami_code[KONAMI_CODE_LENGTH];
+	int              m_current_konami_index;
+	bool             m_konami_code_activated;
 
 	float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
 	bool overheated_;

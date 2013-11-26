@@ -1,5 +1,6 @@
 #include "IntroScene.hpp"
 #include "core/Game.hpp"
+#include "core/Constants.hpp"
 #include "core/SoundSystem.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Player.hpp"
@@ -19,7 +20,7 @@ IntroScene::IntroScene() :
 	logo.setSmooth(true);
 	title_.setTexture(logo);
 	title_.setOrigin(title_.getCenter());
-	title_.setPosition(Game::WIDTH / 2, Game::HEIGHT / 2);
+	title_.setPosition(APP_WIDTH / 2, APP_HEIGHT / 2);
 	title_.resize(title_.getWidth() * ZOOM_FACTOR, title_.getHeight() * ZOOM_FACTOR);
 
 	// Display a player ship instance in the intro scene
@@ -73,7 +74,7 @@ void IntroScene::Update(float frametime)
 	{
 		// make entity manager ready for game use and restore original size
 		entity_mgr_.Clear();
-		entity_mgr_.resize(Game::WIDTH, Game::HEIGHT - ControlPanel::HEIGHT);
+		entity_mgr_.resize(APP_WIDTH, APP_HEIGHT - ControlPanel::HEIGHT);
 		Game::getInstance().setNextScene(Game::SC_MainMenu);
 	}
 }

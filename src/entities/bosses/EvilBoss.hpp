@@ -13,8 +13,6 @@ class EvilBoss: public Damageable
 public:
 	EvilBoss();
 
-	EvilBoss* clone() const;
-
 	// override
 	void onUpdate(float frametime);
 

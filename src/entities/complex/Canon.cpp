@@ -17,7 +17,7 @@ Canon::Canon()
 
 	weapon_.init("fireball", 2);
 	weapon_.setOwner(this);
-	weapon_.setPosition(64, 8);
+	weapon_.setPosition({64, 8});
 }
 
 
@@ -33,9 +33,4 @@ void Canon::onUpdate(float frametime)
 	MultiPartEntity::onUpdate(frametime);
 	weapon_.shoot(math::PI / 2.f);
 	weapon_.onUpdate(frametime);
-}
-
-Canon* Canon::clone() const
-{
-	return new Canon(*this);
 }

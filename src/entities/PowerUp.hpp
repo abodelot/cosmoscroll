@@ -16,13 +16,11 @@ public:
 		DOUBLE_SHOT,  // shot * 2 (10s)
 		TRIPLE_SHOT,  // shot * 3 (10s)
 		SPEED,        // speed * 2 (10s)
-		SUPER_BANANA, // invincible (10s)
+		SUPER_BANANA, //
 		POWERUP_COUNT
 	};
 
 	PowerUp(Type type);
-
-	PowerUp* clone() const;
 
 	void collides(Entity& entity);
 

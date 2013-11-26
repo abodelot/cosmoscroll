@@ -9,8 +9,6 @@ class Canon: public MultiPartEntity
 public:
 	Canon();
 
-	Canon* clone() const;
-
 	void onInit();
 	void onUpdate(float frametime);
 

@@ -19,8 +19,6 @@ Weapon<T>::Weapon():
 	m_sound(NULL),
 	m_owner(NULL),
 	m_inited(false),
-	m_x(0),
-	m_y(0),
 	m_multiply(1)
 {
 }
@@ -47,9 +45,7 @@ float Weapon<T>::shoot(float angle)
 	// peut-on tirer ?
 	if (m_fire_timer <= 0.f)
 	{
-		sf::Vector2f offset = m_owner->getPosition();
-		offset.x += m_x;
-		offset.y += m_y;
+		sf::Vector2f offset = m_owner->getPosition() + m_position;
 
 		switch (m_multiply)
 		{
@@ -82,9 +78,7 @@ float Weapon<T>::shoot(float angle)
 template <class T>
 float Weapon<T>::shoot(const sf::Vector2f& target)
 {
-	sf::Vector2f pos = m_owner->getPosition();
-	pos.x += m_x;
-	pos.y += m_y;
+	sf::Vector2f pos = m_owner->getPosition() + m_position;
 	return shoot(math::angle(target, pos));
 }
 
@@ -133,16 +127,9 @@ void Weapon<T>::setSound(const sf::SoundBuffer* sound)
 template <class T>
 void Weapon<T>::setPosition(const sf::Vector2f& pos)
 {
-	m_x = pos.x;
-	m_y = pos.y;
+	m_position = pos;
 }
 
-template <class T>
-void Weapon<T>::setPosition(float x, float y)
-{
-	m_x = x;
-	m_y = y;
-}
 
 template <class T>
 void Weapon<T>::setOwner(Entity* owner)

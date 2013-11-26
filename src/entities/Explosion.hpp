@@ -13,7 +13,6 @@ public:
 	Explosion();
 
 	void collides(Entity& entity);
-	Explosion* clone() const;
 
 	void onUpdate(float frametime);
 

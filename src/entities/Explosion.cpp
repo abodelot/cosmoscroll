@@ -18,12 +18,6 @@ void Explosion::collides(Entity& entity)
 }
 
 
-Explosion* Explosion::clone() const
-{
-	return new Explosion(*this);
-}
-
-
 void Explosion::onUpdate(float frametime)
 {
 	move(-EntityManager::FOREGROUND_SPEED * frametime, 0);

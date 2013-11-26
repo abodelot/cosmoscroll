@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "LevelManager.hpp"
-#include "Game.hpp"
+#include "Constants.hpp"
 #include "Resources.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Asteroid.hpp"
@@ -285,7 +285,7 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 	{
 		// Parse attributes shared by all tags
 		sf::Vector2f position(0, 0);
-		position.x = Game::WIDTH - 1; // default x: screen right side
+		position.x = APP_WIDTH - 1; // default x: screen right side
 		float time = 0.f; // default: no delay
 		elem->QueryFloatAttribute("x", &position.x);
 		elem->QueryFloatAttribute("y", &position.y);

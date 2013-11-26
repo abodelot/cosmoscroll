@@ -1,6 +1,8 @@
 #include "ArcadeMenu.hpp"
 #include "utils/I18n.hpp"
 #include "core/Game.hpp"
+#include "core/PlayerSave.hpp"
+#include "core/ControlPanel.hpp"
 #include "entities/EntityManager.hpp"
 
 
@@ -21,8 +23,9 @@ void ArcadeMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 1:
-			game.setNextScene(Game::SC_InGameScene);
 			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
+			ControlPanel::GetInstance().setHighscore(PlayerSave::getHighscore());
+			game.setNextScene(Game::SC_InGameScene);
 			break;
 		case 2:
 			game.setNextScene(Game::SC_BestScoresMenu);

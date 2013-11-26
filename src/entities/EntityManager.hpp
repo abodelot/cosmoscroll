@@ -7,13 +7,14 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "Entity.hpp"
+#include "Animation.hpp"
 
 class ParticleSystem;
+class LevelManager;
+class Entity;
 class Spaceship;
 class Player;
-class LevelManager;
-#include "Animation.hpp"
+
 
 /**
  * Gestionnaire de la vie, l'univers et tout le reste
@@ -23,7 +24,7 @@ class EntityManager: public sf::Drawable, public sf::Transformable
 public:
 	// background image speed for parallax scrolling
 	static const int BACKGROUND_SPEED = 15;
-	static const int FOREGROUND_SPEED = 45;
+	static const int FOREGROUND_SPEED = 60;
 
 	enum Mode
 	{
@@ -122,28 +123,15 @@ public:
 	 */
 	Player* GetPlayerShip() const;
 
-	/**
-	 * Appliquer un foncteur sur chaque entité
-	 * @param functor: foncteur prenant une entité en paramètre
-	 */
-	template <class T>
-	void ApplyToEach(T& functor);
-
 	inline float GetTimer() const { return timer_; }
-
-	inline float GetArcadeRecord() const { return arcade_record_; }
-
-	inline void SetArcadeRecord(float record) { arcade_record_ = record; }
-
-	void UpdateArcadeRecord();
 
 private:
 	EntityManager();
 	EntityManager(const EntityManager&);
 	~EntityManager();
 
-	void SpawnRandomEntity();
-	void RegisterUniqueEntity(Entity* entity);
+	Entity* createRandomEntity();
+	void RegisterUniqueEntity(Spaceship* entity);
 
 	// inherited
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -174,7 +162,7 @@ private:
 	typedef std::list<Entity*> EntityList;
 	EntityList m_entities;
 
-	std::vector<Entity*> uniques_;
+	std::vector<Spaceship*> uniques_;
 
 	int m_width;
 	int m_height;
@@ -188,7 +176,6 @@ private:
 	bool (EntityManager::*more_bad_guys_)();
 	bool game_over_;
 	float timer_;
-	int arcade_record_;
 	LevelManager& levels_;
 
 	int max_droppable_index_;
@@ -212,15 +199,5 @@ private:
 	ParallaxLayer layer1_;
 	ParallaxLayer layer2_;
 };
-
-
-template <class T>
-void EntityManager::ApplyToEach(T& functor)
-{
-	for (EntityList::iterator it = m_entities.begin(); it != m_entities.end(); ++it)
-	{
-		functor(**it);
-	}
-}
 
 #endif // ENTITYMANAGER_HPP

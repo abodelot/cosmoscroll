@@ -74,7 +74,6 @@ public:
 	 * Weapon position, relative to owner's position
 	 */
 	void setPosition(const sf::Vector2f& position);
-	void setPosition(float x, float y);
 
 	/**
 	 * Weapon's owner
@@ -106,8 +105,7 @@ private:
 	const sf::SoundBuffer* m_sound;
 	Entity* m_owner;
 	bool m_inited;
-	int m_x;
-	int m_y;
+	sf::Vector2f m_position;
 	int m_multiply;
 };
 

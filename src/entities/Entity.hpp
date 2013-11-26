@@ -34,8 +34,6 @@ public:
 
 	// implement to trigger collision callbacks
 	virtual void collides(Entity& entity) = 0;
-	// implement to allow entity manager clone entities
-	virtual Entity* clone() const = 0;
 
 	/**
 	 * Register texture for pixel-perfect collision when attached to sprite

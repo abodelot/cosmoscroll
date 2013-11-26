@@ -22,12 +22,6 @@ void PowerUp::collides(Entity& entity)
 }
 
 
-PowerUp* PowerUp::clone() const
-{
-	return new PowerUp(*this);
-}
-
-
 void PowerUp::dropRandom(const sf::Vector2f& position)
 {
 	PowerUp* powerup = new PowerUp((Type) math::random(0, POWERUP_COUNT - 1));

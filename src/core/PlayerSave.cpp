@@ -4,24 +4,18 @@
 #include "items/ItemManager.hpp"
 
 
-PlayerSave::PlayerSave()
-{
-	available_credits_ = 0;
-	for (int i = 0; i < ItemData::_COUNT; ++i)
-	{
-		items_[i] = 1;
-	}
-}
+int PlayerSave::m_highscore = 0;
+int PlayerSave::m_credits = 0;
+int PlayerSave::m_items[];
 
-
-int PlayerSave::LevelOf(ItemData::Type type) const
+int PlayerSave::getItemLevel(ItemData::Type type)
 {
-	return items_[type];
+	return m_items[type];
 }
 
 
 
-void PlayerSave::SetItemLevel(ItemData::Type type, int level)
+void PlayerSave::setItemLevel(ItemData::Type type, int level)
 {
 	if (level < 1)
 		level = 1;
@@ -29,23 +23,35 @@ void PlayerSave::SetItemLevel(ItemData::Type type, int level)
 	if (ItemManager::GetInstance().GetItemData(type, level) == NULL)
 		level = 1;
 
-	items_[type] = level;
+	m_items[type] = level;
 }
 
 
-int PlayerSave::GetCredits() const
+int PlayerSave::getCredits()
 {
-	return available_credits_;
+	return m_credits;
 }
 
 
-void PlayerSave::UpdateCredits(int diff)
+void PlayerSave::updateCredits(int diff)
 {
-	available_credits_ += diff;
+	m_credits += diff;
 }
 
 
-void PlayerSave::LoadFromConfig(IniParser& config)
+int PlayerSave::getHighscore()
+{
+	return m_highscore;
+}
+
+
+void PlayerSave::setHighscore(int highscore)
+{
+	m_highscore = highscore;
+}
+
+
+void PlayerSave::loadFromConfig(IniParser& config)
 {
 	config.SeekSection("Player");
 	int level = 1;
@@ -56,29 +62,37 @@ void PlayerSave::LoadFromConfig(IniParser& config)
 	config.Get("current_level", level);
 	LevelManager::GetInstance().SetCurrent(level);
 
-	config.Get("credits",      available_credits_);
-	config.Get("lvl_laser",    items_[ItemData::WEAPON]);
-	config.Get("lvl_shield",   items_[ItemData::SHIELD]);
-	config.Get("lvl_armor",    items_[ItemData::ARMOR]);
-	config.Get("lvl_engine",   items_[ItemData::ENGINE]);
-	config.Get("lvl_heatsink", items_[ItemData::HEATSINK]);
+	config.Get("credits",          m_credits);
+	config.Get("arcade_highscore", m_highscore);
+
+	// Items levels
 	for (int i = 0; i < ItemData::_COUNT; ++i)
 	{
-		SetItemLevel((ItemData::Type) i, items_[i]);
+		m_items[i] = 1;
+	}
+	config.Get("lvl_laser",    m_items[ItemData::WEAPON]);
+	config.Get("lvl_shield",   m_items[ItemData::SHIELD]);
+	config.Get("lvl_armor",    m_items[ItemData::ARMOR]);
+	config.Get("lvl_engine",   m_items[ItemData::ENGINE]);
+	config.Get("lvl_heatsink", m_items[ItemData::HEATSINK]);
+	for (int i = 0; i < ItemData::_COUNT; ++i)
+	{
+		setItemLevel((ItemData::Type) i, m_items[i]);
 	}
 }
 
 
-void PlayerSave::SaveToConfig(IniParser& config) const
+void PlayerSave::saveToConfig(IniParser& config)
 {
 	config.SeekSection("Player");
 	config.Set("current_level", LevelManager::GetInstance().GetCurrent());
 	config.Set("last_unlocked_level", LevelManager::GetInstance().getLastUnlocked());
-	config.Set("credits", available_credits_);
-	config.Set("lvl_laser", items_[ItemData::WEAPON]);
-	config.Set("lvl_shield", items_[ItemData::SHIELD]);
-	config.Set("lvl_armor", items_[ItemData::ARMOR]);
-	config.Set("lvl_engine", items_[ItemData::ENGINE]);
-	config.Set("lvl_heatsink", items_[ItemData::HEATSINK]);
+	config.Set("credits", m_credits);
+	config.Set("arcade_highscore", m_highscore);
+	config.Set("lvl_laser",    m_items[ItemData::WEAPON]);
+	config.Set("lvl_shield",   m_items[ItemData::SHIELD]);
+	config.Set("lvl_armor",    m_items[ItemData::ARMOR]);
+	config.Set("lvl_engine",   m_items[ItemData::ENGINE]);
+	config.Set("lvl_heatsink", m_items[ItemData::HEATSINK]);
 }
 

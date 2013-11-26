@@ -31,14 +31,6 @@ Asteroid::Asteroid(Size size, float angle):
 }
 
 
-Asteroid* Asteroid::clone() const
-{
-	Asteroid* asteroid = new Asteroid(*this);
-	asteroid->setRandomImage();
-	return asteroid;
-}
-
-
 void Asteroid::onUpdate(float frametime)
 {
 	sf::Vector2f pos = getPosition();

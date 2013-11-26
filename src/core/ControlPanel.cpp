@@ -121,6 +121,12 @@ void ControlPanel::setScore(int score)
 }
 
 
+void ControlPanel::setHighscore(int highscore)
+{
+	game_info_.setString(I18n::templatize("panel.record", "{record}", highscore));
+}
+
+
 void ControlPanel::SetTimer(float seconds)
 {
 	static int previous = -1; // negative, to force update at first call
@@ -248,31 +254,31 @@ void ControlPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	states.transform *= getTransform();
 
 	// background
-	target.draw(panel_);
+	target.draw(panel_, states);
 
 	// draw progress bars
 	for (int i = 0; i < ProgressBar::_PBAR_COUNT; ++i)
 	{
-		target.draw(pbars_[i].label_);
-		target.draw(pbars_[i].bar_);
-		target.draw(pbars_[i].value_);
+		target.draw(pbars_[i].label_, states);
+		target.draw(pbars_[i].bar_, states);
+		target.draw(pbars_[i].value_, states);
 	}
-	target.draw(bar_mask_);
+	target.draw(bar_mask_, states);
 
 	// draw bonus slots
-	bs_coolers_.Show(target);
-	bs_missiles_.Show(target);
-	bs_attack_.Show(target);
-	bs_speed_.Show(target);
+	bs_coolers_.Show(target, states);
+	bs_missiles_.Show(target, states);
+	bs_attack_.Show(target, states);
+	bs_speed_.Show(target, states);
 
-	target.draw(game_info_);
-	target.draw(timer_);
-	target.draw(str_points_);
+	target.draw(game_info_, states);
+	target.draw(timer_, states);
+	target.draw(str_points_, states);
 
 	if (game_mode_ == EntityManager::MODE_STORY)
 	{
-		target.draw(level_bar_);
-		target.draw(level_cursor_);
+		target.draw(level_bar_, states);
+		target.draw(level_cursor_, states);
 	}
 }
 
@@ -422,10 +428,10 @@ void ControlPanel::PowerUpSlot::Update(float frametime)
 }
 
 
-void ControlPanel::PowerUpSlot::Show(sf::RenderTarget& target) const
+void ControlPanel::PowerUpSlot::Show(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(glow_);
-	target.draw(icon_);
-	target.draw(label_);
+	target.draw(glow_, states);
+	target.draw(icon_, states);
+	target.draw(label_, states);
 }
 

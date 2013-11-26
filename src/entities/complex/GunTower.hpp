@@ -13,8 +13,6 @@ public:
 
 	void onUpdate(float frametime);
 
-	GunTower* clone() const;
-
 private:
 	Weapon<> m_weapon;
 	Entity*  m_target;

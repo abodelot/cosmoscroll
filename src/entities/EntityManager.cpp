@@ -6,13 +6,9 @@
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
 #include "core/MessageSystem.hpp"
-#include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
 #include "core/Collisions.hpp"
-#include "utils/StringUtils.hpp"
 #include "utils/Error.hpp"
-#include "utils/I18n.hpp"
-#include "utils/Math.hpp"
 #include "tinyxml/tinyxml2.h"
 
 
@@ -74,13 +70,12 @@ EntityManager::EntityManager():
 	more_bad_guys_ = &EntityManager::MoreBadGuys_ARCADE;
 	game_over_ = false;
 	mode_ = MODE_ARCADE;
-	timer_ = arcade_record_ = 0.f;
+	timer_ = 0.f;
 
 	layer1_.scrolling_speed_ = BACKGROUND_SPEED;
 	layer2_.scrolling_speed_ = FOREGROUND_SPEED;
 
 	decor_height_ = 0;
-	setPosition(0, ControlPanel::HEIGHT); // default positon
 
 	// hack, pre-load some resources to avoid in game loading
 	Resources::getSoundBuffer("asteroid-break.ogg");
@@ -165,8 +160,6 @@ void EntityManager::InitMode(Mode mode)
 			layer2_.SetScrollingTexture(&Resources::getTexture("layers/fog.png"));
 			layer2_.setColor(math::random_color(0, 0, 20, 30, 30, 70));
 			decor_height_ = 0;
-			std::wstring game_info = I18n::templatize("panel.record", "{record}", arcade_record_);
-			ControlPanel::GetInstance().SetGameInfo(game_info);
 			particles_.AddStars();
 			SoundSystem::GetInstance().PlayMusic("spacesong.mod");
 			max_droppable_index_ = 1;
@@ -304,13 +297,6 @@ bool EntityManager::IsGameOver()
 }
 
 
-void EntityManager::UpdateArcadeRecord()
-{
-	assert(m_player->getScore() > arcade_record_);
-	arcade_record_ = m_player->getScore();
-}
-
-
 void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
@@ -428,7 +414,7 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 				throw Error::exception("parese error: spaceship > weapon[y] is missing");
 
 			ship->getWeapon().init(weapon_id);
-			ship->getWeapon().setPosition(w_x, w_y);
+			ship->getWeapon().setPosition({w_x, w_y});
 		}
 
 		m_spaceships[id] = ship;
@@ -436,7 +422,6 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 		elem = elem->NextSiblingElement();
 	}
 
-	RegisterUniqueEntity(new Asteroid(Asteroid::BIG));
 	return m_spaceships.size();
 }
 
@@ -473,34 +458,38 @@ Player* EntityManager::GetPlayerShip() const
 }
 
 
-void EntityManager::SpawnRandomEntity()
+Entity* EntityManager::createRandomEntity()
 {
-	// update index of the most valuable spwanable entity
-	max_droppable_points_ = timer_ / DROPPABLE_STEP + 1;
-
-	for (size_t i = max_droppable_index_; i < uniques_.size(); ++i)
+	if (math::random(0, 9) == 0)
 	{
-		Entity* entity = uniques_[i];
-		if (entity->getPoints() <= max_droppable_points_)
-		{
-			max_droppable_index_ = i;
-		}
-		else
-		{
-			break;
-		}
+		// Spawn asteroid
+		return new Asteroid(Asteroid::BIG);
 	}
-	Entity* entity = uniques_[math::random(0, max_droppable_index_)]->clone();
+	else
+	{
+		// Update index of the strongest spawnable spaceship
+		max_droppable_points_ = timer_ / DROPPABLE_STEP + 1;
 
-	entity->setX(m_width - 1);
-	entity->setY(math::random(0, m_height - (int) entity->getHeight()));
-	addEntity(entity);
+		for (size_t i = max_droppable_index_; i < uniques_.size(); ++i)
+		{
+			Entity* entity = uniques_[i];
+			if (entity->getPoints() <= max_droppable_points_)
+			{
+				max_droppable_index_ = i;
+			}
+			else
+			{
+				break;
+			}
+		}
+		return uniques_[math::random(0, max_droppable_index_)]->clone();
+	}
 }
 
 
-void EntityManager::RegisterUniqueEntity(Entity* entity)
+void EntityManager::RegisterUniqueEntity(Spaceship* entity)
 {
-	std::vector<Entity*>::iterator it = uniques_.begin();
+	std::vector<Spaceship*>::iterator it = uniques_.begin();
 	while (it != uniques_.end() && (**it).getPoints() < entity->getPoints())
 	{
 		++it;
@@ -516,7 +505,10 @@ bool EntityManager::MoreBadGuys_ARCADE()
 	const int START = 1;
 	if (Count() < timer_ / STEP + START)
 	{
-		SpawnRandomEntity();
+		Entity* entity = createRandomEntity();
+		entity->setX(m_width - 1);
+		entity->setY(math::random(0, m_height - (int) entity->getHeight()));
+		addEntity(entity);
 	}
 	// always false, spawn bad guys till you die
 	return false;

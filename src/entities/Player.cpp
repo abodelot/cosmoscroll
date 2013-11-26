@@ -4,7 +4,7 @@
 
 #include "Player.hpp"
 #include "EntityManager.hpp"
-#include "core/Game.hpp"
+#include "core/PlayerSave.hpp"
 #include "core/ParticleSystem.hpp"
 #include "core/MessageSystem.hpp"
 #include "core/SoundSystem.hpp"
@@ -71,19 +71,19 @@ Player::Player(const char* animation):
 	panel_.ActiveSpeedPowerUp(0);
 	panel_.ActiveAttackPowerUp(0, PowerUp::DOUBLE_SHOT);
 
-	// init Konami code
-	konami_code_[0] = Input::MOVE_UP;
-	konami_code_[1] = Input::MOVE_UP;
-	konami_code_[2] = Input::MOVE_DOWN;
-	konami_code_[3] = Input::MOVE_DOWN;
-	konami_code_[4] = Input::MOVE_LEFT;
-	konami_code_[5] = Input::MOVE_RIGHT;
-	konami_code_[6] = Input::MOVE_LEFT;
-	konami_code_[7] = Input::MOVE_RIGHT;
-	konami_code_[8] = Input::USE_MISSILE;
-	konami_code_[9] = Input::USE_LASER;
-	current_konami_event_ = 0;
-	konami_code_activated_ = false;
+	// init Konami code sequence
+	m_konami_code[0] = Input::MOVE_UP;
+	m_konami_code[1] = Input::MOVE_UP;
+	m_konami_code[2] = Input::MOVE_DOWN;
+	m_konami_code[3] = Input::MOVE_DOWN;
+	m_konami_code[4] = Input::MOVE_LEFT;
+	m_konami_code[5] = Input::MOVE_RIGHT;
+	m_konami_code[6] = Input::MOVE_LEFT;
+	m_konami_code[7] = Input::MOVE_RIGHT;
+	m_konami_code[8] = Input::USE_MISSILE;
+	m_konami_code[9] = Input::USE_LASER;
+	m_current_konami_index = 0;
+	m_konami_code_activated = false;
 
 	onInit();
 }
@@ -98,7 +98,6 @@ Player::~Player()
 
 void Player::onInit()
 {
-	const PlayerSave& save = Game::getInstance().getPlayerSave();
 	const ItemManager& items = ItemManager::GetInstance();
 
 	// score
@@ -106,12 +105,12 @@ void Player::onInit()
 	panel_.setScore(0);
 
 	// shield
-	shield_max_ = items.GetGenericItemData(ItemData::SHIELD, save.LevelOf(ItemData::SHIELD))->GetValue();
+	shield_max_ = items.GetGenericItemData(ItemData::SHIELD, PlayerSave::getItemLevel(ItemData::SHIELD))->GetValue();
 	panel_.SetMaxShield(shield_max_);
 	setShield(shield_);
 
 	// ship armor
-	int hp = items.GetGenericItemData(ItemData::ARMOR, save.LevelOf(ItemData::ARMOR))->GetValue();
+	int hp = items.GetGenericItemData(ItemData::ARMOR, PlayerSave::getItemLevel(ItemData::ARMOR))->GetValue();
 	if (getHP() == -1) // keep previous HP value unless HP wasn't initialized yet
 	{
 		setHP(hp);
@@ -121,10 +120,10 @@ void Player::onInit()
 	panel_.SetShipHP(getHP());
 
 	// engine
-	speed_max_ = items.GetGenericItemData(ItemData::ENGINE, save.LevelOf(ItemData::ENGINE))->GetValue();
+	speed_max_ = items.GetGenericItemData(ItemData::ENGINE, PlayerSave::getItemLevel(ItemData::ENGINE))->GetValue();
 
 	// heat sink
-	heat_max_ = items.GetGenericItemData(ItemData::HEATSINK, save.LevelOf(ItemData::HEATSINK))->GetValue();
+	heat_max_ = items.GetGenericItemData(ItemData::HEATSINK, PlayerSave::getItemLevel(ItemData::HEATSINK))->GetValue();
 	if (heat_ == -1) // keep previous heat value unless heat wasn't initialized yet
 	{
 		heat_ = 0.f;
@@ -133,13 +132,7 @@ void Player::onInit()
 	panel_.SetHeat(heat_);
 
 	// weapon
-	m_weapon.init("laser-red", save.LevelOf(ItemData::WEAPON));
-}
-
-
-Player* Player::clone() const
-{
-	return new Player(*this);
+	m_weapon.init("laser-red", PlayerSave::getItemLevel(ItemData::WEAPON));
 }
 
 
@@ -240,19 +233,19 @@ void Player::onEvent(const sf::Event& event)
 			break;
 	}
 
-	// konami code
-	if (action == konami_code_[current_konami_event_])
+	// Konami code
+	if (action == m_konami_code[m_current_konami_index])
 	{
-		++current_konami_event_;
-		if (current_konami_event_ == KONAMI_CODE_LENGTH)
+		++m_current_konami_index;
+		if (m_current_konami_index == KONAMI_CODE_LENGTH)
 		{
-			current_konami_event_ = 0;
-			KonamiCodeOn();
+			turnKonamiCodeOn();
+			m_current_konami_index = 0; // Reset
 		}
 	}
 	else
 	{
-		current_konami_event_ = 0;
+		m_current_konami_index = 0;
 	}
 
 }
@@ -529,9 +522,9 @@ void Player::setShield(int count)
 }
 
 
-void Player::KonamiCodeOn()
+void Player::turnKonamiCodeOn()
 {
-	konami_code_activated_ = true;
+	m_konami_code_activated = true;
 
 	// max hp
 	setHP(hp_max_);
@@ -544,12 +537,8 @@ void Player::KonamiCodeOn()
 	missiles_ = 42;
 	panel_.SetMissiles(42);
 
-	//m_weapon.setMultiply(3);
-	//m_missile_launcher.setMultiply(3);
+	m_weapon.setMultiply(3);
+	m_missile_launcher.setMultiply(3);
 
 	MessageSystem::write("For great justice!", getPosition());
-
-#ifdef DEBUG
-	//this->setCollideFlag(C_IGNORE_DAMAGE);
-#endif
 }

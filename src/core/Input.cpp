@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Input.hpp"
 #include "Game.hpp"
+#include "Constants.hpp"
 #include "Resources.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
@@ -330,8 +331,8 @@ void Input::AskUserInput(Device device, Action action)
 	prompt.setFont(Resources::getFont("Ubuntu-R.ttf"));
 	sf::FloatRect rect = prompt.getLocalBounds();
 	prompt.setPosition(
-		(int) (Game::WIDTH - rect.width) / 2,
-		(int) (Game::HEIGHT - rect.height) / 2
+		(int) (APP_WIDTH - rect.width) / 2,
+		(int) (APP_HEIGHT - rect.height) / 2
 	);
 
 	sf::Event event;

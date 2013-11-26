@@ -1,7 +1,6 @@
-#include <cassert>
-
 #include "BaseMenu.hpp"
 #include "core/Game.hpp"
+#include "core/Constants.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
 
@@ -31,7 +30,7 @@ void BaseMenu::Update(float frametime)
 	y -= SPEED * frametime;
 	if (y < 0)
 	{
-		y = Game::HEIGHT;
+		y = APP_HEIGHT;
 	}
 	scrolling_background_.setY(y);
 
@@ -67,7 +66,7 @@ void BaseMenu::SetTitle(const sf::String& text, int y)
 	title_.setFont(GetMenuFont());
 	title_.setCharacterSize(40);
 	title_.setString(text);
-	title_.setX((Game::WIDTH - title_.getWidth()) / 2);
+	title_.setX((APP_WIDTH - title_.getWidth()) / 2);
 	title_.setY(y);
 }
 

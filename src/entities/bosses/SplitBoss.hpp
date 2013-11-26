@@ -10,8 +10,6 @@ class SplitBoss: public Damageable
 public:
 	SplitBoss(bool split = true);
 
-	SplitBoss* clone() const;
-
 	// override
 	void onUpdate(float frametime);
 

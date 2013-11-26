@@ -10,11 +10,11 @@ Projectile::Projectile(Entity* emitter, float angle, const sf::Texture& image, i
 	setTeam(emitter->getTeam());
 	setRotation(-math::to_deg(angle));
 
-	// calcul du vecteur vitesse à partir de l'angle et de la vitesse
-	m_speed.x = std::cos(angle) * speed + emitter->getSpeedX();
+	// Compute constant speed vector from velocity and angle
+	m_speed.x = std::cos(angle) * speed + emitter->getSpeedX(); // hack....
 	m_speed.y = -std::sin(angle) * speed;
 
-	// origin is located at sprite center to allow rotation
+	// Set origin at sprite's center to allow rotation
 	setOrigin(getWidth() / 2, getHeight() / 2);
 }
 
@@ -22,12 +22,6 @@ Projectile::Projectile(Entity* emitter, float angle, const sf::Texture& image, i
 void Projectile::collides(Entity& entity)
 {
 	entity.onCollision(*this);
-}
-
-
-Projectile* Projectile::clone() const
-{
-	return new Projectile(*this);
 }
 
 

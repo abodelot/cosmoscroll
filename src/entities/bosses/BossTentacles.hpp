@@ -11,8 +11,6 @@ class BossTentacles: public Damageable
 public:
 	BossTentacles();
 
-	BossTentacles* clone() const;
-
 	// override
 	void onUpdate(float frametime);
 

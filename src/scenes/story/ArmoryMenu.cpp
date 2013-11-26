@@ -1,8 +1,9 @@
 #include "ArmoryMenu.hpp"
 #include "core/Game.hpp"
+#include "core/Constants.hpp"
+#include "core/PlayerSave.hpp"
 #include "core/SoundSystem.hpp"
 #include "utils/I18n.hpp"
-#include "utils/StringUtils.hpp"
 #include "scenes/ConfigButton.hpp"
 #include "items/ItemManager.hpp"
 
@@ -22,8 +23,8 @@ ArmoryMenu::ArmoryMenu()
 
 	// init dialog
 	dialog_.background = new gui::Image(this, Resources::getTexture("gui/armory-dialog.png"));
-	int x = dialog_.x = (Game::WIDTH - Dialog::WIDTH) / 2;
-	int y = dialog_.y = (Game::HEIGHT - Dialog::HEIGHT) / 2;
+	int x = dialog_.x = (APP_WIDTH - Dialog::WIDTH) / 2;
+	int y = dialog_.y = (APP_HEIGHT - Dialog::HEIGHT) / 2;
 	dialog_.background->setPosition(x, y);
 
 
@@ -87,7 +88,7 @@ void ArmoryMenu::OnFocus()
 {
 	CreditCounterBase::OnFocus();
 	lab_info_->setString(_t("armory.info"));
-	lab_info_->setPosition((Game::WIDTH - lab_info_->GetWidth()) / 2, 366);
+	lab_info_->setPosition((APP_WIDTH - lab_info_->GetWidth()) / 2, 366);
 }
 
 
@@ -108,11 +109,11 @@ void ArmoryMenu::EventCallback(int id)
 			{
 				ShowDialog(false);
 				std::wstring content = _t("armory.item_upgraded");
-				int item_level = Game::getInstance().getPlayerSave().LevelOf(current_type_);
+				int item_level = PlayerSave::getItemLevel(current_type_);
 				wstr_self_replace(content, L"{item}", _t(ItemData::TypeToString(current_type_)));
 				wstr_self_replace(content, L"{level}", std::to_wstring(item_level));
 				lab_info_->setString(content);
-				lab_info_->setPosition((Game::WIDTH - lab_info_->GetWidth()) / 2, lab_info_->getPosition().y);
+				lab_info_->setPosition((APP_WIDTH - lab_info_->GetWidth()) / 2, lab_info_->getPosition().y);
 				FocusFirstWidget();
 			}
 			break;
@@ -129,14 +130,13 @@ void ArmoryMenu::EventCallback(int id)
 
 bool ArmoryMenu::BuyItem()
 {
-	PlayerSave& playersave = Game::getInstance().getPlayerSave();
-	int level = playersave.LevelOf(current_type_) + 1;
+	int level = PlayerSave::getItemLevel(current_type_) + 1;
 	const ItemData* data = ItemManager::GetInstance().GetItemData(current_type_, level);
 
-	if (playersave.GetCredits() >= data->getPrice())
+	if (PlayerSave::getCredits() >= data->getPrice())
 	{
-		playersave.UpdateCredits(-data->getPrice());
-		playersave.SetItemLevel(current_type_, level);
+		PlayerSave::updateCredits(-data->getPrice());
+		PlayerSave::setItemLevel(current_type_, level);
 
 		items_[current_type_]->RefreshLabel(); // refresh item widget
 		CreditCounterBase::OnFocus(); // refresh credit counter
@@ -170,7 +170,7 @@ void ArmoryMenu::ShowDialog(bool visible)
 
 void ArmoryMenu::LoadItem(ItemData::Type type)
 {
-	int level = Game::getInstance().getPlayerSave().LevelOf(type);
+	int level = PlayerSave::getItemLevel(type);
 	const ItemData* data = ItemManager::GetInstance().GetItemData(type, level);
 	current_type_ = type;
 
@@ -206,7 +206,7 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 		// next item description
 		dialog_.next_level_details->setString(data->BuildDescriptionString());
 		dialog_.price->setString(I18n::templatize("item.price", "{price}", data->getPrice()));
-		if (Game::getInstance().getPlayerSave().GetCredits() >= data->getPrice())
+		if (PlayerSave::getCredits() >= data->getPrice())
 			dialog_.price->setColor(sf::Color::White);
 		else
 			dialog_.price->setColor(sf::Color(255, 128, 0));

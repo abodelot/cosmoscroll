@@ -16,7 +16,7 @@ BossTentacles::BossTentacles()
 	// init weapons
 	m_weapon.init("laser-pink");
 	m_weapon.setOwner(this);
-	m_weapon.setPosition(74, 42);
+	m_weapon.setPosition({74, 42});
 	m_weapon.setMultiply(3);
 
 
@@ -27,12 +27,6 @@ BossTentacles::BossTentacles()
 	timer_ = 0;
 
 	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("boss-tentacles"));
-}
-
-
-BossTentacles* BossTentacles::clone() const
-{
-	return new BossTentacles(*this);
 }
 
 

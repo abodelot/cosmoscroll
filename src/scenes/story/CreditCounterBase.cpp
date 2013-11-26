@@ -1,7 +1,7 @@
 #include "CreditCounterBase.hpp"
 #include "utils/I18n.hpp"
 #include "utils/StringUtils.hpp"
-#include "core/Game.hpp"
+#include "core/PlayerSave.hpp"
 
 CreditCounterBase::CreditCounterBase()
 {
@@ -18,7 +18,7 @@ void CreditCounterBase::OnFocus()
 {
 	BaseMenu::OnFocus();
 
-	int credits = Game::getPlayerSave().GetCredits();
+	int credits = PlayerSave::getCredits();
 	credit_counter_.setString(I18n::templatize("menu.story.credits", "{credits}", credits));
 }
 

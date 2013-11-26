@@ -21,12 +21,10 @@ void InGameScene::OnEvent(const sf::Event& event)
 	switch (action)
 	{
 		case Input::PANEL_UP:
-			panel_.setPosition(0, 0);
-			entities_.setPosition(0, ControlPanel::HEIGHT);
+			Game::getInstance().panelOnTop(true);
 			break;
 		case Input::PANEL_DOWN:
-			panel_.setPosition(0, Game::HEIGHT - ControlPanel::HEIGHT);
-			entities_.setPosition(0, 0);
+			Game::getInstance().panelOnTop(false);
 			break;
 		case Input::PAUSE:
 			SoundSystem::GetInstance().PauseMusic();

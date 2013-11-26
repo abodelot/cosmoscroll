@@ -19,7 +19,6 @@ public:
 	Projectile(Entity* emitter, float angle, const sf::Texture& texture, int speed, int damage);
 
 	void collides(Entity& entity);
-	Projectile* clone() const;
 
 	int getDamage() const;
 

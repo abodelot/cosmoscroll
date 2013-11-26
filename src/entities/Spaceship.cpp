@@ -93,7 +93,7 @@ void Spaceship::setAttackPattern(AttackPattern attack)
 Spaceship* Spaceship::clone() const
 {
 	Spaceship* ship = new Spaceship(*this);
-	ship->setPoints(getPoints());
+	ship->setPoints(getPoints()); // ???
 	ship->m_weapon.setOwner(ship);
 	return ship;
 }

@@ -28,6 +28,7 @@ public:
 	void SetGameInfo(const sf::String& text);
 
 	void setScore(int score);
+	void setHighscore(int highscore);
 
 	/**
 	 * @param seconds: nombre de secondes écoulées
@@ -124,7 +125,7 @@ private:
 
 		void Update(float frametime);
 
-		void Show(sf::RenderTarget& target) const;
+		void Show(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	private:
 		sf::Sprite icon_;

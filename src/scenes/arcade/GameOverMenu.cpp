@@ -2,6 +2,7 @@
 
 #include "GameOverMenu.hpp"
 #include "core/Game.hpp"
+#include "core/PlayerSave.hpp"
 #include "core/Constants.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Player.hpp"
@@ -46,11 +47,9 @@ void GameOverMenu::OnFocus()
 	EntityManager& entities = EntityManager::getInstance();
 
 	score_ = entities.GetPlayerShip()->getScore();
-
-	std::wstring text;
-	if (score_ > entities.GetArcadeRecord())
+	if (score_ > PlayerSave::getHighscore())
 	{
-		entities.UpdateArcadeRecord();
+		PlayerSave::setHighscore(score_);
 		lab_result_->setString(I18n::templatize("menu.gameover.new_record", "{score}", score_));
 	}
 	else
@@ -81,6 +80,7 @@ void GameOverMenu::EventCallback(int id)
 			break;
 		case 1:
 			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
+			ControlPanel::GetInstance().setHighscore(PlayerSave::getHighscore());
 			Game::getInstance().setNextScene(Game::SC_InGameScene);
 			break;
 		case 2:

@@ -54,12 +54,6 @@ void Gate::onUpdate(float frametime)
 }
 
 
-Entity* Gate::clone() const
-{
-	return new Gate(*this);
-}
-
-
 void Gate::onPartDestroyed(const Part& part)
 {
 	if (part.getID() == CELL_ID)
