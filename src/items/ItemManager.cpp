@@ -1,7 +1,7 @@
 #include "ItemManager.hpp"
 #include "Weapon.hpp"
-#include "tinyxml/tinyxml2.h"
 #include "utils/Error.hpp"
+#include "utils/tinyxml/tinyxml2.h"
 
 
 ItemManager& ItemManager::GetInstance()

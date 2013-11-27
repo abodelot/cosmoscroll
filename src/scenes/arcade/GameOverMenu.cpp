@@ -8,7 +8,7 @@
 #include "entities/Player.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
-#include "md5/md5.hpp"
+#include "utils/md5/md5.hpp"
 
 
 GameOverMenu::GameOverMenu()
@@ -64,7 +64,6 @@ void GameOverMenu::OnFocus()
 	txt_pseudo_->SetVisible(false);
 	but_commit_->SetVisible(false);
 }
-
 
 
 void GameOverMenu::EventCallback(int id)

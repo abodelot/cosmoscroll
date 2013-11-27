@@ -13,7 +13,7 @@
 #include "utils/I18n.hpp"
 #include "utils/FileSystem.hpp"
 #include "utils/Error.hpp"
-#include "md5/md5.hpp"
+#include "utils/md5/md5.hpp"
 #include "scenes/scenes.hpp"
 
 #include <stdexcept>

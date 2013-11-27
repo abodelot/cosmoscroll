@@ -60,7 +60,6 @@
 			<Add option="-Wextra" />
 			<Add option="-Wall" />
 			<Add directory="src/" />
-			<Add directory="extlibs/" />
 		</Compiler>
 		<Linker>
 			<Add library="sfml-graphics" />
@@ -77,10 +76,6 @@
 		<Unit filename="bin/resources/xml/items.xml" />
 		<Unit filename="bin/resources/xml/levels.xml" />
 		<Unit filename="bin/resources/xml/spaceships.xml" />
-		<Unit filename="extlibs/md5/md5.cpp" />
-		<Unit filename="extlibs/md5/md5.hpp" />
-		<Unit filename="extlibs/tinyxml/tinyxml2.cpp" />
-		<Unit filename="extlibs/tinyxml/tinyxml2.h" />
 		<Unit filename="src/core/Collisions.cpp" />
 		<Unit filename="src/core/Collisions.hpp" />
 		<Unit filename="src/core/Constants.hpp" />
@@ -246,7 +241,11 @@
 		<Unit filename="src/utils/Math.hpp" />
 		<Unit filename="src/utils/StringUtils.cpp" />
 		<Unit filename="src/utils/StringUtils.hpp" />
+		<Unit filename="src/utils/md5/md5.cpp" />
+		<Unit filename="src/utils/md5/md5.hpp" />
 		<Unit filename="src/utils/sfml_helper.hpp" />
+		<Unit filename="src/utils/tinyxml/tinyxml2.cpp" />
+		<Unit filename="src/utils/tinyxml/tinyxml2.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

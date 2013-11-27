@@ -9,7 +9,7 @@
 #include "core/Resources.hpp"
 #include "core/Collisions.hpp"
 #include "utils/Error.hpp"
-#include "tinyxml/tinyxml2.h"
+#include "utils/tinyxml/tinyxml2.h"
 
 
 /**
