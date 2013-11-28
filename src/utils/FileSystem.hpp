@@ -11,6 +11,8 @@ class FileSystem
 public:
 	static bool isDirectory(const std::string& path);
 
+	static bool isFile(const std::string& path);
+
 	static bool createDirectory(const std::string& path);
 
 	/**

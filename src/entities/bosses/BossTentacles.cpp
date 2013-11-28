@@ -8,7 +8,8 @@
 #define MAX_Y (EntityManager::getInstance().getHeight() - getHeight())
 
 
-BossTentacles::BossTentacles()
+BossTentacles::BossTentacles():
+	m_target(NULL)
 {
 	setTeam(Entity::BAD);
 	setHP(300);
@@ -19,8 +20,6 @@ BossTentacles::BossTentacles()
 	m_weapon.setPosition({74, 42});
 	m_weapon.setMultiply(3);
 
-
-	target_ = NULL;
 	move_ = INIT;
 	speed_x_ = -100;
 	speed_y_ = 0;
@@ -36,9 +35,7 @@ void BossTentacles::onUpdate(float frametime)
 
 	timer_ += frametime;
 
-	sf::Vector2f target_pos = target_->getPosition();
-	target_pos.x += target_->getWidth() / 2;
-	target_pos.y += target_->getHeight() / 2;
+	sf::Vector2f target_pos = m_target->getCenter();
 
 	m_weapon.shoot(target_pos);
 
@@ -113,6 +110,6 @@ void BossTentacles::onDestroy()
 
 void BossTentacles::onInit()
 {
-    target_ = EntityManager::getInstance().GetPlayerShip();
+    m_target = EntityManager::getInstance().GetPlayerShip();
 }
 

@@ -17,7 +17,7 @@ bool GenericItemData::LoadFromXml(tinyxml2::XMLElement* elem)
 	const char* attribute = NULL;
 	switch (GetType())
 	{
-		case ItemData::ARMOR:
+		case ItemData::HULL:
 			attribute = "hp";
 			break;
 		case ItemData::ENGINE:
@@ -49,7 +49,7 @@ std::wstring GenericItemData::BuildDescriptionString() const
 		case ItemData::HEATSINK:
 			keyword = L"{heat}";
 			break;
-		case ItemData::ARMOR:
+		case ItemData::HULL:
 			keyword = L"{hp}";
 			break;
 		case ItemData::ENGINE:

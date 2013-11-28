@@ -21,24 +21,22 @@ public:
 	Spaceship(const Animation& animation, int hp, int speed);
 	~Spaceship();
 
-	// override
-	void onInit();
-
 	void setMovementPattern(MovementPattern movement);
 
 	void setAttackPattern(AttackPattern attack);
 
-	// override
 	Spaceship* clone() const;
-
-	void onUpdate(float frametime);
-
-	void onDestroy();
 
 	Weapon<>& getWeapon() { return m_weapon; }
 
 	void setPoints(int points);
 	int getPoints() const;
+
+	// callbacks ---------------------------------------------------------------
+
+	void onInit();
+	void onUpdate(float frametime);
+	void onDestroy();
 
 private:
 	AttackPattern   m_attack;
@@ -46,7 +44,6 @@ private:
 
 	int      speed_;
 	float    base_y_;
-	float    base_x_;
 	float    angle_;
 
 	int       m_points;

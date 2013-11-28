@@ -4,7 +4,7 @@
 #include "Damageable.hpp"
 
 /**
- * Asteroid object, can be split on smaller asteroids
+ * Asteroid object, split into smaller asteroids when destroyed
  */
 class Asteroid: public Damageable
 {

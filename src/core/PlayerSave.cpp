@@ -6,13 +6,13 @@
 
 int PlayerSave::m_highscore = 0;
 int PlayerSave::m_credits = 0;
-int PlayerSave::m_items[];
+int PlayerSave::m_items[] = {0};
+PlayerSave::Initializer PlayerSave::m_init;
 
 int PlayerSave::getItemLevel(ItemData::Type type)
 {
 	return m_items[type];
 }
-
 
 
 void PlayerSave::setItemLevel(ItemData::Type type, int level)
@@ -65,14 +65,9 @@ void PlayerSave::loadFromConfig(IniParser& config)
 	config.Get("credits",          m_credits);
 	config.Get("arcade_highscore", m_highscore);
 
-	// Items levels
-	for (int i = 0; i < ItemData::_COUNT; ++i)
-	{
-		m_items[i] = 1;
-	}
 	config.Get("lvl_laser",    m_items[ItemData::WEAPON]);
 	config.Get("lvl_shield",   m_items[ItemData::SHIELD]);
-	config.Get("lvl_armor",    m_items[ItemData::ARMOR]);
+	config.Get("lvl_hull",     m_items[ItemData::HULL]);
 	config.Get("lvl_engine",   m_items[ItemData::ENGINE]);
 	config.Get("lvl_heatsink", m_items[ItemData::HEATSINK]);
 	for (int i = 0; i < ItemData::_COUNT; ++i)
@@ -91,8 +86,16 @@ void PlayerSave::saveToConfig(IniParser& config)
 	config.Set("arcade_highscore", m_highscore);
 	config.Set("lvl_laser",    m_items[ItemData::WEAPON]);
 	config.Set("lvl_shield",   m_items[ItemData::SHIELD]);
-	config.Set("lvl_armor",    m_items[ItemData::ARMOR]);
+	config.Set("lvl_hull",     m_items[ItemData::HULL]);
 	config.Set("lvl_engine",   m_items[ItemData::ENGINE]);
 	config.Set("lvl_heatsink", m_items[ItemData::HEATSINK]);
 }
 
+
+PlayerSave::Initializer::Initializer()
+{
+	for (int i = 0; i < ItemData::_COUNT; ++i)
+	{
+		m_items[i] = 1;
+	}
+}

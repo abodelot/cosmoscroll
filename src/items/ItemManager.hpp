@@ -34,11 +34,6 @@ public:
 	const ItemData* GetItemData(ItemData::Type, int level) const;
 
 	/**
-	 * Get item data from a weapon
-	 */
-	const WeaponData* GetWeaponData(const char* id, int level=1) const;
-
-	/**
 	 * Get item data from a generic item
 	 */
 	const GenericItemData* GetGenericItemData(ItemData::Type, int level) const;
@@ -47,6 +42,10 @@ private:
 	ItemManager();
 	~ItemManager();
 
+	/**
+	 * Get item data from a weapon
+	 */
+	const WeaponData* GetWeaponData(const char* id, int level=1) const;
 
 	void ParseGenericItems(tinyxml2::XMLElement* elem, const char* tagname, ItemData::Type type);
 

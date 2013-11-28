@@ -41,9 +41,9 @@
 		<heatsink level="2" heat="80" price="50" />
 		<heatsink level="3" heat="100" price="150" />
 	</heatsinks>
-	<armors>
-		<armor level="1" hp="3" />
-		<armor level="2" hp="4" price="40" />
-		<armor level="3" hp="5" price="120" />
-	</armors>
+	<hulls>
+		<hull level="1" hp="3" />
+		<hull level="2" hp="4" price="40" />
+		<hull level="3" hp="5" price="120" />
+	</hulls>
 </items>

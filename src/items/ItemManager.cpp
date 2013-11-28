@@ -13,13 +13,11 @@ ItemManager& ItemManager::GetInstance()
 
 ItemManager::ItemManager()
 {
-
 }
 
 
 ItemManager::~ItemManager()
 {
-
 }
 
 
@@ -53,7 +51,7 @@ int ItemManager::LoadItems(const std::string& filename)
 	// generic items
 	ParseGenericItems(root, "shields", ItemData::SHIELD);
 	ParseGenericItems(root, "heatsinks", ItemData::HEATSINK);
-	ParseGenericItems(root, "armors", ItemData::ARMOR);
+	ParseGenericItems(root, "hulls", ItemData::HULL);
 	ParseGenericItems(root, "engines", ItemData::ENGINE);
 	return items_.size() + weapons_.size();
 }
@@ -87,7 +85,7 @@ const WeaponData* ItemManager::GetWeaponData(const char* id, int level) const
 {
 	for (WeaponList::const_iterator it = weapons_.begin(); it != weapons_.end(); ++it)
 	{
-		if (it->getID() == id && (level == 0 || level == it->getLevel()))
+		if (it->getID() == id && (level == it->getLevel()))
 		{
 			return &(*it);
 		}
@@ -98,6 +96,7 @@ const WeaponData* ItemManager::GetWeaponData(const char* id, int level) const
 
 const GenericItemData* ItemManager::GetGenericItemData(ItemData::Type type, int level) const
 {
+	printf("Searching item %s at level %d\n", ItemData::TypeToString(type), level);
 	for (GenericItemList::const_iterator it = items_.begin(); it != items_.end(); ++it)
 	{
 		const GenericItemData* data = &(*it);

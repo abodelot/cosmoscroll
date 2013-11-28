@@ -10,7 +10,8 @@
 #define MAX_X 350
 #define MAX_Y (EntityManager::getInstance().getHeight() - getHeight())
 
-EvilBoss::EvilBoss()
+EvilBoss::EvilBoss():
+	m_target(NULL)
 {
 	setTexture(Resources::getTexture("entities/evil-boss.png"));
 	setTextureRect(sf::IntRect(0, 0, 242, 160));
@@ -30,7 +31,6 @@ EvilBoss::EvilBoss()
 	m_mouth.setOwner(this); // (this one must inited later)
 	m_mouth.setPosition(MOUTH_OFFSET);
 
-	target_ = NULL;
 	phase_ = EVIL;
 	next_ = MORE_EVIL;
 	speed_x_ = -100;
@@ -38,9 +38,15 @@ EvilBoss::EvilBoss()
 }
 
 
+void EvilBoss::onInit()
+{
+    m_target = EntityManager::getInstance().GetPlayerShip();
+}
+
+
 void EvilBoss::onUpdate(float frametime)
 {
-	sf::Vector2f target_pos = target_->getCenter();
+	sf::Vector2f target_pos = m_target->getCenter();
 
 	m_eye_left.shoot(target_pos);
 	m_eye_right.shoot(target_pos);
@@ -100,11 +106,5 @@ void EvilBoss::takeDamage(int damage)
 void EvilBoss::onDestroy()
 {
 	ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 200);
-}
-
-
-void EvilBoss::onInit()
-{
-    target_ = EntityManager::getInstance().GetPlayerShip();
 }
 

@@ -79,7 +79,6 @@ public:
 
 	virtual float getSpeedX() const { return 0.f; }
 	virtual float getSpeedY() const { return 0.f; }
-	virtual int getPoints() const { return 0;}
 
 protected:
 	void setTeam(Team team);

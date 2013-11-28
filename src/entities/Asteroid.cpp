@@ -5,10 +5,6 @@
 #include "core/Resources.hpp"
 #include "utils/Math.hpp"
 
-// division en morceaux de taille moindre
-#define BIG_SPLIT_INTO     2
-#define MEDIUM_SPLIT_INTO  4
-
 #define BASE_SPEED         80
 #define ROTATION_SPEED_MIN 40
 #define ROTATION_SPEED_MAX 160
@@ -47,7 +43,8 @@ void Asteroid::onDestroy()
 	switch (m_size)
 	{
 		case BIG:
-			for (int i = 0; i < BIG_SPLIT_INTO; ++i)
+			// Create 2 medium asteroids
+			for (int i = 0; i < 2; ++i)
 			{
 				Asteroid* asteroid = new Asteroid(MEDIUM, math::random(0, 360));
 				asteroid->setPosition(pos);
@@ -55,7 +52,8 @@ void Asteroid::onDestroy()
 			}
 			break;
 		case MEDIUM:
-			for (int i = 0; i < MEDIUM_SPLIT_INTO; ++i)
+			// Create 4 small asteroids
+			for (int i = 0; i < 4; ++i)
 			{
 				Asteroid* asteroid = new Asteroid(SMALL, math::random(0, 360));
 				asteroid->setPosition(pos);

@@ -9,15 +9,11 @@
 #include "entities/EntityManager.hpp"
 #include "items/ItemManager.hpp"
 #include "utils/IniParser.hpp"
-#include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "utils/FileSystem.hpp"
 #include "utils/Error.hpp"
 #include "utils/md5/md5.hpp"
 #include "scenes/scenes.hpp"
-
-#include <stdexcept>
-#include <sys/stat.h>
 
 // config and data files
 #define CONFIG_FILENAME   "cosmoscroll.ini"
@@ -77,19 +73,15 @@ void Game::init(const std::string& path)
 
 void Game::setConfigFile(const std::string& config_file)
 {
-	struct stat buf;
 	m_config_file = config_file;
-
-	if (!stat(m_config_file.c_str(), &buf))
+	if (FileSystem::isDirectory(config_file))
 	{
-		if (buf.st_mode & S_IFDIR)
-			(m_config_file += "/") += CONFIG_FILENAME;
-		else if (!buf.st_mode & S_IFREG)		// wtf is this file?
-			puts("Error: configuration file is nor a regular file nor a directory");
+		m_config_file = m_config_file + "/" + CONFIG_FILENAME;
 	}
-	else
-		puts("Error: couldn't stat configuration file");
-
+	else if (!FileSystem::isFile(config_file))
+	{
+		std::cerr << "Error: configuration file is nor a regular file nor a directory" << std::endl;
+	}
 }
 
 
@@ -111,16 +103,17 @@ void Game::loadResources(const std::string& data_path)
 	// load XML resources
 	try
 	{
-		printf("* checking resources purity... %49s\n",
-			 (m_resources_checked = checkResourcesPurity(resources_dir)) ? "[OK]" : "[FAILED]");
-		printf("* loading %-59s [%2d found]\n", "levels...",
-			LevelManager::GetInstance().ParseFile(resources_dir + XML_LEVELS));
-		printf("* loading %-59s [%2d found]\n", "items...",
-			ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS));
-		printf("* loading %-59s [%2d found]\n", "animations...",
-			EntityManager::getInstance().LoadAnimations(resources_dir + XML_ANIMATIONS));
-		printf("* loading %-59s [%2d found]\n", "spaceships definitions...",
-			EntityManager::getInstance().LoadSpaceShips(resources_dir + XML_SPACESHIPS));
+		printf("* checking resources md5sum...\n");
+		m_resources_checked = checkResourcesPurity(resources_dir);
+		printf("    test %s\n", m_resources_checked ? "succeeded" : "failed");
+		printf("* loading %s...\n", XML_LEVELS);
+		printf("    %d levels found\n", LevelManager::GetInstance().ParseFile(resources_dir + XML_LEVELS));
+		printf("* loading %s...\n", XML_ITEMS);
+		printf("    %d items found\n", ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS));
+		printf("* loading %s...\n", XML_ANIMATIONS);
+		printf("    %d animations found\n", EntityManager::getInstance().LoadAnimations(resources_dir + XML_ANIMATIONS));
+		printf("* loading %s\n", XML_SPACESHIPS);
+		printf("    %d spaceships found\n", EntityManager::getInstance().LoadSpaceShips(resources_dir + XML_SPACESHIPS));
 	}
 	catch (std::runtime_error& error)
 	{
@@ -296,6 +289,7 @@ void Game::setNextScene(Scene enum_scene)
 				return;
 		}
 		m_scenes[enum_scene] = new_scene;
+
 	}
 	m_current_scene = m_scenes[enum_scene];
 	m_current_scene->OnFocus();

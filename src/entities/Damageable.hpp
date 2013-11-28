@@ -4,7 +4,7 @@
 #include "Entity.hpp"
 
 /**
- *
+ * Base class for damageable entities with hit points
  */
 class Damageable: public Entity
 {

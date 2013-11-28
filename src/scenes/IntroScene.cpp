@@ -24,7 +24,7 @@ IntroScene::IntroScene() :
 	title_.resize(title_.getWidth() * ZOOM_FACTOR, title_.getHeight() * ZOOM_FACTOR);
 
 	// Display a player ship instance in the intro scene
-	ship_ = new Player("player");
+	ship_ = new Player();
 	ship_->setPosition(-200, 100);
 
 	// Allow the player ship to go beyond screen limits during the intro scene

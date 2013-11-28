@@ -22,7 +22,7 @@ ShipPartWidget::ShipPartWidget(gui::Menu* parent, ItemData::Type type):
 			x = 143;
 			y = 224;
 			break;
-		case ItemData::ARMOR:
+		case ItemData::HULL:
 			halo_.setTexture(Resources::getTexture("gui/halo-armor.png"));
 			x = 419;
 			y = 176;

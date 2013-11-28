@@ -54,6 +54,3 @@ size_t Animation::getFrameCount() const
 {
 	return m_frames.size();
 }
-
-
-

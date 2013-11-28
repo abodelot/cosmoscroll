@@ -14,15 +14,14 @@ public:
 	EvilBoss();
 
 	// override
-	void onUpdate(float frametime);
-
-	// override
 	void takeDamage(int damage);
 
-	// override
+	// callbacks ---------------------------------------------------------------
+
 	void onInit();
 
-	// override
+	void onUpdate(float frametime);
+
 	void onDestroy();
 
 private:
@@ -36,7 +35,7 @@ private:
 	Weapon<> m_eye_left;
 	Weapon<> m_eye_right;
 	Weapon<> m_mouth;
-	Entity* target_;
+	Entity*  m_target;
 };
 
 #endif // EVILBOSS_HPP

@@ -472,8 +472,8 @@ Entity* EntityManager::createRandomEntity()
 
 		for (size_t i = max_droppable_index_; i < uniques_.size(); ++i)
 		{
-			Entity* entity = uniques_[i];
-			if (entity->getPoints() <= max_droppable_points_)
+			Spaceship* spaceship = uniques_[i];
+			if (spaceship->getPoints() <= max_droppable_points_)
 			{
 				max_droppable_index_ = i;
 			}
@@ -532,7 +532,7 @@ bool EntityManager::MoreBadGuys_STORY()
 void EntityManager::RespawnPlayer()
 {
 	Clear();
-	m_player = new Player("player");
+	m_player = new Player();
 	m_player->setPosition(50, m_height / 2);
 	addEntity(m_player);
 }

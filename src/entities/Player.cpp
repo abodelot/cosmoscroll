@@ -32,13 +32,13 @@
 #define TIMED_BONUS_DURATION        10
 
 
-Player::Player(const char* animation):
+Player::Player():
 	input_(Input::GetInstance()),
 	panel_(ControlPanel::GetInstance())
 {
 	setTeam(Entity::GOOD);
 	setHP(-1);
-	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation(animation));
+	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("player"));
 
 	// init weapons
 	m_weapon.init("laser-red");
@@ -84,8 +84,6 @@ Player::Player(const char* animation):
 	m_konami_code[9] = Input::USE_LASER;
 	m_current_konami_index = 0;
 	m_konami_code_activated = false;
-
-	onInit();
 }
 
 
@@ -109,8 +107,8 @@ void Player::onInit()
 	panel_.SetMaxShield(shield_max_);
 	setShield(shield_);
 
-	// ship armor
-	int hp = items.GetGenericItemData(ItemData::ARMOR, PlayerSave::getItemLevel(ItemData::ARMOR))->GetValue();
+	// ship hull (hit points)
+	int hp = items.GetGenericItemData(ItemData::HULL, PlayerSave::getItemLevel(ItemData::HULL))->GetValue();
 	if (getHP() == -1) // keep previous HP value unless HP wasn't initialized yet
 	{
 		setHP(hp);

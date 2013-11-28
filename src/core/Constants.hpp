@@ -11,11 +11,11 @@
 #define GAME_LICENSE				"GPL"
 #define GAME_AUTHORS				L"    Alexandre Bodelot\n" \
 									L"    Arnaud Wolff"
-#define DISCLAIMER_BLOB				"This is free software; see the source for copying conditions.  There is NO\n\
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
-#define VERSION_STRING				GAME_NAME " " GAME_VERSION "\nCopyright (C) 2008-2012 project contributors.\n" \
-									DISCLAIMER_BLOB
+#define VERSION_STRING				GAME_NAME " " GAME_VERSION "\n\n" \
+                                    "Copyright (C) 2008-2013 project contributors.\n" \
+									"This is free software; see the source for copying conditions.  There is NO\n" \
+                                    "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
 // Default file paths
 #define DEFAULT_RESOURCES_DIR       "resources"

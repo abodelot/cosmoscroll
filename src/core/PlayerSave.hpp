@@ -24,6 +24,11 @@ private:
 	static int m_highscore;
 	static int m_credits;
 	static int m_items[ItemData::_COUNT];
+
+	static struct Initializer
+	{
+		Initializer();
+	} m_init;
 };
 
 #endif // PLAYERSAVE_HPP

@@ -15,13 +15,10 @@
 class Player: public Damageable
 {
 public:
-	Player(const char* animation);
-
+	Player();
 	~Player();
 
 	void onEvent(const sf::Event& event);
-
-	void HandleAction(Input::Action action);
 
 	int getScore() const;
 

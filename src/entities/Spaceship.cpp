@@ -33,7 +33,6 @@ Spaceship::Spaceship(const Animation& animation, int hp, int speed):
 	speed_ = speed;
 	m_weapon.setOwner(this);
 	base_y_ = 0;
-	base_x_ = 0;
 	angle_ = 2 * math::PI;
 }
 
@@ -49,7 +48,7 @@ void Spaceship::onInit()
 	{
 		float y = getY();
 		// Compute maximal Y position according to the wave's amplitude
-		// (So the spacship is always within the screen's boundaries)
+		// (So the spaceship is always within the screen's boundaries)
 		float y_max = EntityManager::getInstance().getHeight() - SINUS_AMPLITUDE - getHeight();
 		if (y < SINUS_AMPLITUDE)
 			base_y_ = SINUS_AMPLITUDE;

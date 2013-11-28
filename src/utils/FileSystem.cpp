@@ -25,10 +25,21 @@
 
 bool FileSystem::isDirectory(const std::string& path)
 {
-	struct stat buf;
-	if (stat(path.c_str(), &buf) == 0)
+	struct stat sb;
+	if (stat(path.c_str(), &sb) == 0)
 	{
-		return (buf.st_mode & S_IFDIR) != 0;
+		return S_ISDIR(sb.st_mode);
+	}
+	return false;
+}
+
+
+bool FileSystem::isFile(const std::string& path)
+{
+	struct stat sb;
+	if (stat(path.c_str(), &sb) == 0)
+	{
+		return S_ISREG(sb.st_mode);
 	}
 	return false;
 }
@@ -76,5 +87,3 @@ std::string FileSystem::initSettingsDirectory(const std::string& appname)
 	}
 	return config_dir;
 }
-
-

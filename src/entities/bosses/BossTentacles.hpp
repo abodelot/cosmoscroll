@@ -11,13 +11,12 @@ class BossTentacles: public Damageable
 public:
 	BossTentacles();
 
-	// override
-	void onUpdate(float frametime);
+	// callbacks ---------------------------------------------------------------
 
-	// override
 	void onInit();
 
-	// override
+	void onUpdate(float frametime);
+
 	void onDestroy();
 
 private:
@@ -35,7 +34,7 @@ private:
 	int speed_x_;
 	int speed_y_;
 	Weapon<> m_weapon;
-	Entity* target_;
+	Entity*  m_target;
 	Animator m_animator;
 };
 

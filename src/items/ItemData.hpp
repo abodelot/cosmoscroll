@@ -10,7 +10,7 @@ class ItemData
 public:
 	enum Type
 	{
-		ARMOR,
+		HULL,
 		ENGINE,
 		SHIELD,
 		HEATSINK,

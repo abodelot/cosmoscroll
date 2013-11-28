@@ -16,8 +16,8 @@ const char* ItemData::TypeToString(Type type)
 			return "item.laser";
 		case ItemData::ENGINE:
 			return "item.engine";
-		case ItemData::ARMOR:
-			return "item.armor";
+		case ItemData::HULL:
+			return "item.hull";
 		case ItemData::SHIELD:
 			return "item.shield";
 		case ItemData::HEATSINK:

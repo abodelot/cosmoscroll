@@ -96,7 +96,7 @@ void ArmoryMenu::EventCallback(int id)
 {
 	switch (id)
 	{
-		case ItemData::ARMOR:
+		case ItemData::HULL:
 		case ItemData::ENGINE:
 		case ItemData::WEAPON:
 		case ItemData::SHIELD:
