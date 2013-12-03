@@ -3,14 +3,14 @@
 
 #define APP_WIDTH                   640
 #define APP_HEIGHT                  480
-#define APP_FPS                     60
+#define APP_FPS                     100
 #define APP_TITLE                   "CosmoScroll"
 
 #define GAME_NAME					"cosmoscroll"
 #define GAME_VERSION				"0.4"
 #define GAME_LICENSE				"GPL"
-#define GAME_AUTHORS				L"    Alexandre Bodelot\n" \
-									L"    Arnaud Wolff"
+#define GAME_AUTHORS				L"Alexandre Bodelot\n" \
+									L"Arnaud Wolff"
 
 #define VERSION_STRING				GAME_NAME " " GAME_VERSION "\n\n" \
                                     "Copyright (C) 2008-2013 project contributors.\n" \

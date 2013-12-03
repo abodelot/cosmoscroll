@@ -33,17 +33,19 @@ public:
 	bool loadSystemLanguage();
 
 	/**
-	 * Get language code for the loaded language file
+	 * Get the language code currently used
 	 * @return 2 lower-case characters
 	 */
 	const char* getLangCode() const;
 
 	/**
-	 * Charger un fichier de traduction particulier
-	 * @param filename: nom du fichier à charger
+	 * Load a language file
 	 */
 	bool loadFromFile(const char* filename);
 
+	/**
+	 * Load a language file from a language code (2 chars)
+	 */
 	bool loadFromCode(const std::string& code);
 
 	/**
@@ -69,8 +71,6 @@ public:
 		str_self_replace(s, std::wstring(search2.begin(), search2.end()), std::to_wstring(value2));
 		return s;
 	}
-
-
 
 private:
 	I18n();

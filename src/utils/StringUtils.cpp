@@ -53,8 +53,6 @@ std::wstring str_sprintf(const wchar_t format[], ...)
 }
 
 
-
-
 std::string str_trim(const std::string& str)
 {
 	const char* WHITESPACES = " \t\n\r\0xb";

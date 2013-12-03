@@ -67,20 +67,19 @@ public:
 	void Update(float frametime);
 
 	/**
-	 * Ajouter une entité
-	 * @param entity: entité à ajouter
+	 * Insert an entity in the scene
 	 */
 	void addEntity(Entity* entity);
 
 	/**
-	 * Supprimer toutes les entités
+	 * Delete all managed entities
 	 */
-	void Clear();
+	void clearEntities();
 
 	/**
-	 * @return nombre d'entités
+	 * Number of managed entites
 	 */
-	int Count() const;
+	size_t count() const;
 
 	/**
 	 * Mettre fin à la partie en cours

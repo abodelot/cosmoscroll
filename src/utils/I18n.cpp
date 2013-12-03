@@ -20,16 +20,19 @@ I18n& I18n::getInstance()
 
 I18n::I18n()
 {
-	// Locale code is the 2 first charaters
-	std::string locale(setlocale(LC_ALL, NULL));
+	// Get system's locale
+	std::string locale(setlocale(LC_ALL, ""));
+	// Only the two first lower-case characters, so it's cross platform! (fr_Fr => fr, French => fr)
 	locale = str_lower(locale.substr(0, 2));
 	strcpy(m_code, locale.c_str());
+	// Reset locale
+	setlocale(LC_ALL, "C");
 }
 
 
 void I18n::setDataPath(const std::string& path)
 {
-	m_path = path + "/lang/";
+	m_path = path;
 }
 
 
@@ -54,14 +57,15 @@ const std::wstring& I18n::translate(const std::string& key) const
 
 bool I18n::loadSystemLanguage()
 {
-	if (loadFromCode(getLangCode()))
+	if (loadFromCode(m_code))
 	{
 		std::cout << "[I18n] language '" << m_code << "' loaded" << std::endl;
 		return true;
 	}
+	std::cout << "[I18n] language '" << m_code << "' not found" << std::endl;
 	if (loadFromCode(DEFAULT_LANG_CODE))
 	{
-		std::cout << "[I18n] language '" << m_code << "' not found, using default language: " << DEFAULT_LANG_CODE << std::endl;
+		std::cout << "[I18n] default language " << DEFAULT_LANG_CODE << " << loaded" << std::endl;
 		return true;
 	}
 	std::cerr <<  "[I18n] warning: couldn't load any language!" << std::endl;
@@ -79,12 +83,16 @@ bool I18n::loadFromCode(const std::string& code)
 {
 	if (code.size() == 2)
 	{
-		std::string filename = m_path + code + ".lang";
+		std::string filename = m_path + "/" + code + ".lang";
 		if (loadFromFile(filename.c_str()))
 		{
 			strcpy(m_code, code.c_str());
 			return true;
 		}
+	}
+	else
+	{
+		std::cerr << "[I18n] code " << code << " is invalid" << std::endl;
 	}
 	return false;
 }

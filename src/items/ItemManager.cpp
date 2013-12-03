@@ -96,7 +96,6 @@ const WeaponData* ItemManager::GetWeaponData(const char* id, int level) const
 
 const GenericItemData* ItemManager::GetGenericItemData(ItemData::Type type, int level) const
 {
-	printf("Searching item %s at level %d\n", ItemData::TypeToString(type), level);
 	for (GenericItemList::const_iterator it = items_.begin(); it != items_.end(); ++it)
 	{
 		const GenericItemData* data = &(*it);

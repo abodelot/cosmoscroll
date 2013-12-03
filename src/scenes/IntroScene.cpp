@@ -73,7 +73,7 @@ void IntroScene::Update(float frametime)
 	if (elapsed_ >= DURATION)
 	{
 		// make entity manager ready for game use and restore original size
-		entity_mgr_.Clear();
+		entity_mgr_.clearEntities();
 		entity_mgr_.resize(APP_WIDTH, APP_HEIGHT - ControlPanel::HEIGHT);
 		Game::getInstance().setNextScene(Game::SC_MainMenu);
 	}

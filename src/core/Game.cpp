@@ -92,7 +92,7 @@ void Game::loadResources(const std::string& data_path)
 	// init resources directory
 	std::string resources_dir = m_app_dir + data_path;
 	Resources::setDataPath(resources_dir);
-	I18n::getInstance().setDataPath(resources_dir);
+	I18n::getInstance().setDataPath(resources_dir + "/lang");
 	m_screenshots_dir = DEFAULT_SCREENSHOT_DIR;
 	MessageSystem::setFont(Resources::getFont("Ubuntu-R.ttf"));
 

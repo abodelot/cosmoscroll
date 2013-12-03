@@ -92,7 +92,7 @@ EntityManager::EntityManager():
 
 EntityManager::~EntityManager()
 {
-	Clear();
+	clearEntities();
 	for (size_t i = 0; i < uniques_.size(); ++i)
 	{
 		delete uniques_[i];
@@ -156,9 +156,10 @@ void EntityManager::InitMode(Mode mode)
 			// on démarre toujours le mode arcade avec un nouveau vaisseau
 			RespawnPlayer();
 			// no image on layer 1, fog with random color on layer 2,
-			layer1_.SetScrollingTexture(NULL);
+			layer1_.SetScrollingTexture(&Resources::getTexture("layers/blue.jpg"));
 			layer2_.SetScrollingTexture(&Resources::getTexture("layers/fog.png"));
-			layer2_.setColor(math::random_color(0, 0, 20, 30, 30, 70));
+			layer2_.setColor(math::random_color(10, 10, 10, 60, 60, 60));
+
 			decor_height_ = 0;
 			particles_.AddStars();
 			SoundSystem::GetInstance().PlayMusic("spacesong.mod");
@@ -267,11 +268,9 @@ void EntityManager::addEntity(Entity* entity)
 }
 
 
-void EntityManager::Clear()
+void EntityManager::clearEntities()
 {
-	// suppression de toutes les entités
-	for (EntityList::iterator it = m_entities.begin(); it != m_entities.end();
-		++it)
+	for (EntityList::iterator it = m_entities.begin(); it != m_entities.end(); ++it)
 	{
 		delete *it;
 	}
@@ -279,9 +278,9 @@ void EntityManager::Clear()
 }
 
 
-int EntityManager::Count() const
+size_t EntityManager::count() const
 {
-	return (int) m_entities.size();
+	return m_entities.size();
 }
 
 
@@ -503,7 +502,7 @@ bool EntityManager::MoreBadGuys_ARCADE()
 	// number of max bad guys = time / STEP + START
 	const int STEP = 8;
 	const int START = 1;
-	if (Count() < timer_ / STEP + START)
+	if (count() < timer_ / STEP + START)
 	{
 		Entity* entity = createRandomEntity();
 		entity->setX(m_width - 1);
@@ -525,13 +524,13 @@ bool EntityManager::MoreBadGuys_STORY()
 	}
 	// The current level is not completed if there are still enemies in the
 	// LevelManager's waiting line or in the EntityManager
-	return levels_.RemainingEntities() == 0 && Count() == 1; // no enemy && 1 player
+	return levels_.RemainingEntities() == 0 && count() == 1; // no enemy && 1 player
 }
 
 
 void EntityManager::RespawnPlayer()
 {
-	Clear();
+	clearEntities();
 	m_player = new Player();
 	m_player->setPosition(50, m_height / 2);
 	addEntity(m_player);
