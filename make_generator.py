@@ -10,12 +10,13 @@
 import sys
 import os
 import time
+import subprocess
 
 SRC_DIR = "src"
 MAKEFILE = "Makefile"
 TARGET = "bin/cosmoscroll"
 CFLAGS = "-Wall -Wextra -Wwrite-strings -std=c++11 -pedantic"
-LIBS = ("sfml-graphics", "sfml-window", "sfml-system", "sfml-audio", "sfml-network")
+LIBS = "sfml-graphics", "sfml-window", "sfml-system", "sfml-audio", "sfml-network"
 
 
 class MakeGenerator:
@@ -26,7 +27,7 @@ class MakeGenerator:
 		self.makefile_name = makefile_name
 		self.libs = ()
 		self.cflags = ""
-		self.searchpath = []
+		self.searchpath = "."
 
 	def set_cflags(self, cflags):
 		self.cflags = cflags
@@ -42,13 +43,13 @@ class MakeGenerator:
 	##
 	# Add a source directory in the search path
 	#
-	def add_src_dir(self, directory):
-		self.searchpath.append(directory)
+	def set_searchpath(self, directory):
+		self.searchpath = directory
 		self.add_sources(directory)
 
 
 	##
-	# Récupérer toutes les unités de compilation dans parent et ses sous-dossiers
+	# Recursive method for collecting all source files in a directory
 	#
 	def add_sources(self, parent):
 		for item in os.listdir(parent):
@@ -59,14 +60,14 @@ class MakeGenerator:
 				self.add_sources(path)
 
 	##
-	# Générer le fichier makefile
+	# Generate the make file with all dependencies
 	#
 	def write_makefile(self):
 		f = open(self.makefile_name, "w")
 		f.write(
 		"# Makefile generated on " + time.ctime() + "\n\n"
 		"CC=g++\n"
-		"CFLAGS= " + self.cflags + "".join(" -I" + d for d in self.searchpath) + "\n")
+		"CFLAGS= " + self.cflags + " -I" + self.searchpath + "\n")
 
 		# libs
 		libs_linux = " ".join("-l" + lib for lib in self.libs)
@@ -94,10 +95,18 @@ class MakeGenerator:
 		"	@$(CC) $^ -o $(EXEC) $(LDFLAGS)\n\n")
 
 		# .o
+		print "Parsing " + self.searchpath + " directory for dependencies..."
 		for source in self.sources:
+			# Search the dependencies for the current .cpp file
+			dependencies = subprocess.Popen(("g++",
+				"-I" + self.searchpath,
+				"-MM", source + ".cpp",
+				"-MT", source + ".o"), stdout=subprocess.PIPE)
+			
+			# Write the dependency line in the makefile
 			f.write(
-			source + ".o:" + source + ".cpp\n"
-			"	@echo '*' $<\n"
+			dependencies.communicate()[0] +
+			"	@echo compiling $<...\n"
 			"	@$(CC) -o $@ $< -c $(CFLAGS)\n\n")
 
 		# clean
@@ -121,7 +130,7 @@ if __name__ == "__main__":
 	makefile_name = sys.argv[1] if len(sys.argv) > 1 else MAKEFILE
 
 	m = MakeGenerator(TARGET, makefile_name)
-	m.add_src_dir(SRC_DIR)
+	m.set_searchpath(SRC_DIR)
 	m.set_libs(LIBS)
 	m.set_cflags(CFLAGS)
 	m.write_makefile()
