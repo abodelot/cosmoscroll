@@ -8,7 +8,7 @@
 #include "entities/Spaceship.hpp"
 #include "entities/bosses/SplitBoss.hpp"
 #include "entities/bosses/EvilBoss.hpp"
-#include "entities/bosses/BossTentacles.hpp"
+#include "entities/bosses/TentaculatBoss.hpp"
 #include "entities/complex/Gate.hpp"
 #include "entities/complex/Canon.hpp"
 #include "entities/complex/GunTower.hpp"
@@ -308,9 +308,9 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 		{
 			entity = new EvilBoss();
 		}
-		else if (strcmp(tag_name, "boss_tentacles") == 0)
+		else if (strcmp(tag_name, "tentaculat_boss") == 0)
 		{
-			entity = new BossTentacles();
+			entity = new TentaculatBoss();
 		}
 		else if(strcmp(tag_name,"split_boss") == 0)
 		{
