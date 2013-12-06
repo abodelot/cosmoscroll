@@ -109,13 +109,13 @@ public:
 	 * Charger les définitions XML des animations
 	 * @param filename: fichier XML des animations
 	 */
-	int LoadAnimations(const std::string& filename);
+	void loadAnimations(const std::string& filename);
 
 	/**
 	 * Charger les défintions XML des vaisseaux
 	 * @param filename: fichier XML des vaisseaux
 	 */
-	int LoadSpaceShips(const std::string& filename);
+	void loadSpaceships(const std::string& filename);
 
 	/**
 	 * Obtenir le vaisseau du joueur

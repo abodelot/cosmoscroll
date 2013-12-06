@@ -102,17 +102,17 @@ void Game::loadResources(const std::string& data_path)
 	// Load XML resources
 	try
 	{
-		printf("* checking resources md5sum...\n");
+		printf("* checking resources md5sum...");
 		m_resources_checked = checkResourcesPurity(resources_dir);
 		printf("    test %s\n", m_resources_checked ? "succeeded" : "failed");
 		printf("* loading %s...\n", XML_LEVELS);
-		printf("    %d levels found\n", LevelManager::GetInstance().ParseFile(resources_dir + XML_LEVELS));
+		LevelManager::getInstance().loadLevels(resources_dir + XML_LEVELS);
 		printf("* loading %s...\n", XML_ITEMS);
-		printf("    %d items found\n", ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS));
+		ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS);
 		printf("* loading %s...\n", XML_ANIMATIONS);
-		printf("    %d animations found\n", EntityManager::getInstance().LoadAnimations(resources_dir + XML_ANIMATIONS));
+		EntityManager::getInstance().loadAnimations(resources_dir + XML_ANIMATIONS);
 		printf("* loading %s\n", XML_SPACESHIPS);
-		printf("    %d spaceships found\n", EntityManager::getInstance().LoadSpaceShips(resources_dir + XML_SPACESHIPS));
+		EntityManager::getInstance().loadSpaceships(resources_dir + XML_SPACESHIPS);
 	}
 	catch (std::runtime_error& error)
 	{
@@ -319,10 +319,12 @@ void Game::createWindow()
 
 	int style = m_fullscreen ? sf::Style::Fullscreen : sf::Style::Close;
 	m_window.create(sf::VideoMode(APP_WIDTH, APP_HEIGHT), APP_TITLE, style);
-	m_window.setFramerateLimit(APP_FPS);
-	m_window.setMouseCursorVisible(false);
 	m_window.setKeyRepeatEnabled(false);
-	m_window.setVerticalSyncEnabled(m_vsync);
+
+	if (m_vsync)
+		m_window.setVerticalSyncEnabled(m_vsync);
+	else
+		m_window.setFramerateLimit(APP_FPS);
 
 	if (!m_fullscreen)
 	{

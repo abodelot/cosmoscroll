@@ -58,19 +58,15 @@ void IntroLevelScene::Show(sf::RenderTarget& target) const
 void IntroLevelScene::OnFocus()
 {
 	// get the description of the current level
-	LevelManager& levels = LevelManager::GetInstance();
-	int current_level = levels.GetCurrent();
+	LevelManager& levels = LevelManager::getInstance();
+	size_t current_level = levels.getCurrent();
 
-	printf("level %d\n", current_level);
+	printf("level %u\n", current_level);
 	printf("  - entities: %d\n", levels.RemainingEntities());
 	printf("  - total points: %d\n", levels.GetTotalPoints());
 	printf("  - duration: %d\" %02d'\n", levels.GetDuration() / 60, levels.GetDuration() % 60);
 
 	std::wstring intro = _t("menu.story.intro");
-	if (current_level > levels.CountLevel())
-	{
-		current_level -= levels.CountLevel();
-	}
 	wstr_self_replace(intro, L"{level}", std::to_wstring(current_level));
 	wstr_self_replace(intro, L"{description}", decode_utf8(levels.GetDescription()));
 	wstr_self_replace(intro, L"{count}", std::to_wstring(levels.RemainingEntities()));

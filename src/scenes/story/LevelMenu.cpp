@@ -7,7 +7,7 @@
 
 
 LevelMenu::LevelMenu():
-	levels_(LevelManager::GetInstance())
+	levels_(LevelManager::getInstance())
 {
 	SetTitle(_t("menu.story.title"));
 
@@ -30,24 +30,17 @@ LevelMenu::LevelMenu():
 void LevelMenu::OnFocus()
 {
 	CreditCounterBase::OnFocus();
-	int last = levels_.CountLevel();
-
-	levels_.VerifyCurrent();	// FIX: On charge dorénavant la config avant le levelmanager.
-
-	int current = levels_.GetCurrent();
-	int last_unlocked = levels_.getLastUnlocked();
-	if (last_unlocked > levels_.CountLevel())
-	{
-		last_unlocked = levels_.CountLevel();
-	}
+	size_t nb_levels = levels_.getLevelCount();
+	size_t current = levels_.getCurrent();
+	size_t last_unlocked = levels_.getLastUnlocked();
 
 	std::ostringstream progression;
-	progression << last_unlocked << "/" << last;
+	progression << last_unlocked << "/" << nb_levels;
 	lab_progresion_->setString(progression.str());
 
 	// option widget
 	opt_levels_->Clear();
-	for (int i = 1; i <= last; ++i)
+	for (size_t i = 1; i <= nb_levels; ++i)
 	{
 		bool activable = i <= last_unlocked;
 		if (activable)
@@ -68,8 +61,8 @@ void LevelMenu::EventCallback(int id)
 			break;
 		case 1: {
 			int selected_level = opt_levels_->GetSelectedOptionIndex() + 1;
-			levels_.SetCurrent(selected_level);
-			levels_.LoadCurrent();
+			levels_.setCurrent(selected_level);
+			levels_.loadCurrent();
 
 			std::wstring s = I18n::templatize("panel.level", "{level}", selected_level);
 			ControlPanel::GetInstance().SetGameInfo(s);

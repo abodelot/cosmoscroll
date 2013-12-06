@@ -17,7 +17,7 @@
 #define DEFAULT_STARS_COUNT 33
 
 
-LevelManager& LevelManager::GetInstance()
+LevelManager& LevelManager::getInstance()
 {
 	static LevelManager self;
 	return self;
@@ -38,7 +38,7 @@ LevelManager::~LevelManager()
 }
 
 
-void LevelManager::LoadCurrent()
+void LevelManager::loadCurrent()
 {
 	ParseLevel(GetLevelElement(current_level_));
 }
@@ -58,30 +58,27 @@ Entity* LevelManager::GiveNextEntity(float timer)
 	return NULL;
 }
 
-void LevelManager::SetCurrent(int level)
+
+void LevelManager::setCurrent(size_t level)
 {
+	if (level < 1 || level > last_unlocked_level_ || level > levels_.size())
+	{
+		std::cerr << " [levels] level " << level << " is undefined or stil locked, using level 1 instead" << std::endl;
+		level = 1;
+	}
 	current_level_ = level;
 }
 
-void LevelManager::VerifyCurrent(void)
-{
-	if (current_level_ < 1 || current_level_ > last_unlocked_level_ || current_level_ > (int) levels_.size())
-	{
-		std::cerr << " [levels] level " << current_level_ << " is undefined, using level 1" << std::endl;
-		current_level_ = 1;
-	}
-}
 
-
-int LevelManager::GetCurrent() const
+size_t LevelManager::getCurrent() const
 {
 	return current_level_;
 }
 
 
-int LevelManager::unlockNextLevel()
+size_t LevelManager::unlockNextLevel()
 {
-	if (last_unlocked_level_ < (int) levels_.size())
+	if (last_unlocked_level_ < levels_.size())
 	{
 		current_level_ = ++last_unlocked_level_;
 	}
@@ -89,17 +86,17 @@ int LevelManager::unlockNextLevel()
 }
 
 
-int LevelManager::getLastUnlocked() const
+size_t LevelManager::getLastUnlocked() const
 {
 	return last_unlocked_level_;
 }
 
 
-void LevelManager::setLastUnlocked(int level)
+void LevelManager::setLastUnlocked(size_t level)
 {
-	if (level < 1 || level > (int) levels_.size())
+	if (level < 1 || level > levels_.size())
 	{
-		std::cerr << " [levels] level " << level << " is undefined, using level 1" << std::endl;
+		std::cerr << " [levels] level " << level << " is undefined, using level 1 instead" << std::endl;
 		level = 1;
 	}
 	last_unlocked_level_ = level;
@@ -172,7 +169,7 @@ int LevelManager::GetTotalPoints() const
 }
 
 
-int LevelManager::CountLevel() const
+size_t LevelManager::getLevelCount() const
 {
 	return levels_.size();
 }
@@ -180,11 +177,11 @@ int LevelManager::CountLevel() const
 
 bool LevelManager::AllLevelsCompleted() const
 {
-	return last_unlocked_level_ > (int) levels_.size();
+	return last_unlocked_level_ > levels_.size();
 }
 
 
-int LevelManager::ParseFile(const std::string& file)
+void LevelManager::loadLevels(const std::string& file)
 {
 	// Open level file
 	if (doc_.LoadFile(file.c_str()) != 0)
@@ -213,7 +210,6 @@ int LevelManager::ParseFile(const std::string& file)
 		levels_.push_back(node);
 		node = node->NextSiblingElement("level");
 	}
-	return (int) levels_.size();
 }
 
 
@@ -368,10 +364,10 @@ void LevelManager::ClearWaitingLine()
 }
 
 
-tinyxml2::XMLElement* LevelManager::GetLevelElement(int level) const
+tinyxml2::XMLElement* LevelManager::GetLevelElement(size_t level) const
 {
 	--level; // index starts at 0
-	if (level < 0 || level >= (int) levels_.size())
+	if (level >= levels_.size())
 	{
 		std::cerr << "[levels] index " << level << " is not a valid level, using index 0" << std::endl;
 		level = 0;

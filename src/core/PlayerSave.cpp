@@ -56,11 +56,11 @@ void PlayerSave::loadFromConfig(IniParser& config)
 	config.SeekSection("Player");
 	int level = 1;
 	config.Get("last_unlocked_level", level);
-	LevelManager::GetInstance().setLastUnlocked(level);
+	LevelManager::getInstance().setLastUnlocked(level);
 
 	level = 1;
 	config.Get("current_level", level);
-	LevelManager::GetInstance().SetCurrent(level);
+	LevelManager::getInstance().setCurrent(level);
 
 	config.Get("credits",          m_credits);
 	config.Get("arcade_highscore", m_highscore);
@@ -80,8 +80,8 @@ void PlayerSave::loadFromConfig(IniParser& config)
 void PlayerSave::saveToConfig(IniParser& config)
 {
 	config.SeekSection("Player");
-	config.Set("current_level", LevelManager::GetInstance().GetCurrent());
-	config.Set("last_unlocked_level", LevelManager::GetInstance().getLastUnlocked());
+	config.Set("current_level", LevelManager::getInstance().getCurrent());
+	config.Set("last_unlocked_level", LevelManager::getInstance().getLastUnlocked());
 	config.Set("credits", m_credits);
 	config.Set("arcade_highscore", m_highscore);
 	config.Set("lvl_laser",    m_items[ItemData::WEAPON]);

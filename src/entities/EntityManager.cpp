@@ -65,7 +65,7 @@ EntityManager& EntityManager::getInstance()
 EntityManager::EntityManager():
 	particles_(ParticleSystem::GetInstance()),
 	m_player(NULL),
-	levels_(LevelManager::GetInstance())
+	levels_(LevelManager::getInstance())
 {
 	resize(0, 0);
 
@@ -109,7 +109,7 @@ void EntityManager::InitMode(Mode mode)
 	MessageSystem::clear();
 
 	ControlPanel::GetInstance().Init(mode);
-	LevelManager& levels = LevelManager::GetInstance();
+	LevelManager& levels = LevelManager::getInstance();
 
 	switch (mode)
 	{
@@ -315,7 +315,7 @@ void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 }
 
 
-int EntityManager::LoadAnimations(const std::string& filename)
+void EntityManager::loadAnimations(const std::string& filename)
 {
 	// chargement des animations
 	tinyxml2::XMLDocument doc;
@@ -358,11 +358,10 @@ int EntityManager::LoadAnimations(const std::string& filename)
 		}
 		elem = elem->NextSiblingElement();
 	}
-	return animations_.size();
 }
 
 
-int EntityManager::LoadSpaceShips(const std::string& filename)
+void EntityManager::loadSpaceships(const std::string& filename)
 {
 	tinyxml2::XMLDocument doc;
 	if (doc.LoadFile(filename.c_str()) != 0)
@@ -409,21 +408,21 @@ int EntityManager::LoadSpaceShips(const std::string& filename)
 				throw Error::exception("parse error: spaceship > weapon[id] is missing");
 
 			if (weapon->QueryIntAttribute("x", &w_x) != tinyxml2::XML_SUCCESS)
-				throw Error::exception("parese error: spaceship > weapon[x] is missing");
+				throw Error::exception("parse error: spaceship > weapon[x] is missing");
 
 			if (weapon->QueryIntAttribute("y", &w_y) != tinyxml2::XML_SUCCESS)
-				throw Error::exception("parese error: spaceship > weapon[y] is missing");
+				throw Error::exception("parse error: spaceship > weapon[y] is missing");
 
 			ship->getWeapon().init(weapon_id);
-			ship->getWeapon().setPosition({w_x, w_y});
+			ship->getWeapon().setPosition({(float) w_x, (float) w_y});
 		}
-
+#ifdef DEBUG
+		std::cout << "\t" << elem->Attribute("name") << " " << id << std::endl;
+#endif
 		m_spaceships[id] = ship;
 		RegisterUniqueEntity(ship);
 		elem = elem->NextSiblingElement();
 	}
-
-	return m_spaceships.size();
 }
 
 
@@ -594,6 +593,7 @@ void EntityManager::ParallaxLayer::setColor(const sf::Color& color)
 		blend_mode_ = sf::BlendAlpha;
 	}
 }
+
 
 void EntityManager::ParallaxLayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

@@ -19,14 +19,14 @@ public:
 	/**
 	 * @return instance
 	 */
-	static LevelManager& GetInstance();
+	static LevelManager& getInstance();
 
 	/**
 	 * Parse the XML file storing the levels definitions
 	 */
-	int ParseFile(const std::string& file);
+	void loadLevels(const std::string& file);
 
-	void LoadCurrent();
+	void loadCurrent();
 
 	/**
 	 * Get the next entity to be spawned in the current level
@@ -48,17 +48,16 @@ public:
 	 * Set the current level
 	 * @param level_num: level number in [1 - level_max]
 	 */
-	void SetCurrent(int level_num);
-	void VerifyCurrent(void);
-	int GetCurrent() const;
+	void setCurrent(size_t level_num);
+	size_t getCurrent() const;
 
 
 	/**
 	 * Last reached level
 	 */
-	int unlockNextLevel();
-	void setLastUnlocked(int level);
-	int getLastUnlocked() const;
+	size_t unlockNextLevel();
+	void setLastUnlocked(size_t level);
+	size_t getLastUnlocked() const;
 
 	// attributs du niveau courant
 
@@ -86,11 +85,10 @@ public:
 	 */
 	int GetDuration() const;
 
-
 	/**
 	 * Obtenir le nombre de niveaux chargés
 	 */
-	int CountLevel() const;
+	size_t getLevelCount() const;
 
 	/**
 	 * @return true si tous les niveaux sont terminés
@@ -135,7 +133,7 @@ private:
 	 * Obtenir l'élément XML d'un niveau
 	 * @return element, premier niveau si niveau inexistant
 	 */
-	tinyxml2::XMLElement* GetLevelElement(int level) const;
+	tinyxml2::XMLElement* GetLevelElement(size_t level) const;
 
 	/**
 	 * "#FF0000" -> sf::Color(255, 0, 0)
@@ -156,8 +154,8 @@ private:
 	std::map<std::string, tinyxml2::XMLElement*> functions_;
 	// liste des vaisseaux à spawner pour le niveau courant
 	std::queue<EntitySlot> waiting_line_;
-	int current_level_;
-	int last_unlocked_level_;
+	size_t current_level_;
+	size_t last_unlocked_level_;
 	int total_points_;
 };
 

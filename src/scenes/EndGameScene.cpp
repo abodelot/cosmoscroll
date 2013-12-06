@@ -78,12 +78,12 @@ void EndGameScene::OnFocus()
 	else
 	{
 		// Level completed
-		LevelManager& levels = LevelManager::GetInstance();
+		LevelManager& levels = LevelManager::getInstance();
 		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("end-level.ogg"));
 		int earned_credits = entities_.GetPlayerShip()->getScore();
-		int current = levels.GetCurrent();
+		size_t current = levels.getCurrent();
 		// if last level
-		if (current == levels.CountLevel())
+		if (current == levels.getLevelCount())
 		{
 			info_.setString(I18n::templatize("endgame.end_last_level", "{credits}", earned_credits));
 		}
