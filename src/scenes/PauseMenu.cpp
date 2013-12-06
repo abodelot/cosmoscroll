@@ -1,4 +1,5 @@
 #include "PauseMenu.hpp"
+#include "core/Input.hpp"
 #include "core/Game.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"

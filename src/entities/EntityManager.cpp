@@ -21,7 +21,8 @@ static Spaceship::AttackPattern GetAttackPattern(const tinyxml2::XMLElement* ele
 	if (elem->Attribute("attack", "on_sight")) return Spaceship::ON_SIGHT;
 	if (elem->Attribute("attack", "none")    ) return Spaceship::NONE;
 
-	std::cerr << "unknown attack pattern" << std::endl;
+	if (elem->Attribute("attack") != NULL)
+		std::cerr << "unknown attack pattern: " << elem->Attribute("attack") << std::endl;
 	return Spaceship::NONE;
 }
 
@@ -35,7 +36,8 @@ static Spaceship::MovementPattern GetMovementPattern(const tinyxml2::XMLElement*
 	if (elem->Attribute("move", "sinus") ) return Spaceship::SINUS;
 	if (elem->Attribute("move", "circle")) return Spaceship::CIRCLE;
 
-	std::cerr << "unknown movement pattern" << std::endl;
+	if (elem->Attribute("move") != NULL)
+		std::cerr << "unknown movement pattern: " << elem->Attribute("move") << std::endl;
 	return Spaceship::LINE;
 }
 

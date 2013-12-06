@@ -40,8 +40,6 @@ public:
 
 	static Input& GetInstance();
 
-	void Init();
-
 	/**
 	 * Transformer un événement en action
 	 * @param event: événement à tester
@@ -129,7 +127,7 @@ public:
 	}
 
 private:
-	Input() {};
+	Input();
 	Input(const Input&);
 
 	enum {MAX_JOY_BUTTON = 16};

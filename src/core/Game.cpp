@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "Constants.hpp"
+#include "Input.hpp"
 #include "PlayerSave.hpp"
 #include "SoundSystem.hpp"
 #include "LevelManager.hpp"
@@ -31,8 +32,7 @@ Game& Game::getInstance()
 }
 
 
-Game::Game():
-	m_input(Input::GetInstance())
+Game::Game()
 {
 	// scenes will be allocated only if requested
 	for (int i = 0; i < SC_COUNT; ++i)
@@ -87,20 +87,19 @@ void Game::setConfigFile(const std::string& config_file)
 
 void Game::loadResources(const std::string& data_path)
 {
-	m_input.Init();
-
-	// init resources directory
+	// Init resources directory
 	std::string resources_dir = m_app_dir + data_path;
 	Resources::setDataPath(resources_dir);
 	I18n::getInstance().setDataPath(resources_dir + "/lang");
 	m_screenshots_dir = DEFAULT_SCREENSHOT_DIR;
 	MessageSystem::setFont(Resources::getFont("Ubuntu-R.ttf"));
 
-	// create window and display loading screen as early as possible
+	// Create window and display loading screen as early as possible
 	m_vsync = true;
-	setFullscreen(false);
+	m_fullscreen = false;
+	createWindow();
 
-	// load XML resources
+	// Load XML resources
 	try
 	{
 		printf("* checking resources md5sum...\n");
@@ -121,26 +120,17 @@ void Game::loadResources(const std::string& data_path)
 		Error::dump();
 		quit();
 	}
-	// load config
-#ifdef DEBUG
-	printf("configuration file is: %s\n", m_config_file.c_str());
-#endif
-	loadConfig(m_config_file);
-
-	m_window.setFramerateLimit(APP_FPS);
-	m_window.setMouseCursorVisible(false);
-	m_window.setKeyRepeatEnabled(false);
-	m_window.setVerticalSyncEnabled(m_vsync);
 }
 
 
-bool Game::loadConfig(const std::string& filename)
+bool Game::loadConfig()
 {
 	IniParser config;
 	m_fullscreen = false;
 	m_vsync = true;
 
-	if (config.LoadFromFile(filename.c_str()))
+	std::cout << "* loading configuration from " << m_config_file << std::endl;
+	if (config.LoadFromFile(m_config_file.c_str()))
 	{
 		// -- General settings --
 		config.SeekSection("Settings");
@@ -155,23 +145,23 @@ bool Game::loadConfig(const std::string& filename)
 		config.Get("vsync", m_vsync);
 		config.Get("fullscreen", m_fullscreen);
 		if (m_fullscreen)
-			setFullscreen(m_fullscreen);
+			createWindow();
 
-		// panel pop
+		// Panel position
 		bool top = true;
 		config.Get("panel_on_top", top);
 		panelOnTop(top);
 
-		// screenshot directory
+		// Screenshot directory
 		config.Get("screenshots", m_screenshots_dir);
 
-		// -- Audio settings --
+		// Audio settings
 		SoundSystem::GetInstance().LoadFromConfig(config);
 
-		// -- Keyboard and joystick bindings --
-		m_input.LoadFromConfig(config);
+		// Keyboard and joystick bindings
+		Input::GetInstance().LoadFromConfig(config);
 
-		// -- Player progression and highscore --
+		// Player progression and highscore
 		PlayerSave::loadFromConfig(config);
 		return true;
 	}
@@ -180,7 +170,7 @@ bool Game::loadConfig(const std::string& filename)
 }
 
 
-void Game::writeConfig(const std::string& filename) const
+void Game::writeConfig() const
 {
 	IniParser config;
 
@@ -196,18 +186,20 @@ void Game::writeConfig(const std::string& filename) const
 	SoundSystem::GetInstance().SaveToConfig(config);
 
 	// Keyboard and joystick bindings
-	m_input.SaveToConfig(config);
+	Input::GetInstance().SaveToConfig(config);
 
 	// Player data
 	PlayerSave::saveToConfig(config);
 
-	// saving configuration to file
-	config.SaveToFile(filename.c_str());
+	// Save configuration to file
+	config.SaveToFile(m_config_file);
 }
 
 
 int Game::run()
 {
+	Input& input = Input::GetInstance();
+
 	// set the first displayed scene at launch
 	setNextScene(SC_IntroScene);
 	m_window.display();
@@ -221,7 +213,7 @@ int Game::run()
 		// 1. polling events
 		while (m_window.pollEvent(event))
 		{
-			action = m_input.EventToAction(event);
+			action = input.EventToAction(event);
 			switch (action)
 			{
 				// these events are always handled on each scene
@@ -300,7 +292,7 @@ void Game::quit()
 {
 	m_running = false;
 	SoundSystem::GetInstance().StopAll();
-	writeConfig(m_config_file);
+	writeConfig();
 }
 
 
@@ -320,26 +312,36 @@ void Game::takeScreenshot()
 }
 
 
-void Game::setFullscreen(bool full)
+void Game::createWindow()
 {
 	if (m_window.isOpen())
 		m_window.close();
 
-	int style = full ? sf::Style::Fullscreen : sf::Style::Close;
+	int style = m_fullscreen ? sf::Style::Fullscreen : sf::Style::Close;
 	m_window.create(sf::VideoMode(APP_WIDTH, APP_HEIGHT), APP_TITLE, style);
+	m_window.setFramerateLimit(APP_FPS);
+	m_window.setMouseCursorVisible(false);
+	m_window.setKeyRepeatEnabled(false);
 	m_window.setVerticalSyncEnabled(m_vsync);
-	m_fullscreen = full;
-	if (!full)
+
+	if (!m_fullscreen)
 	{
-		// set window icon
+		// Set window app icon
 		static sf::Image icon = Resources::getTexture("gui/icon.bmp").copyToImage();
 		icon.createMaskFromColor(sf::Color(0xff, 0, 0xff));
 		m_window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
-		// center window on desktop
+		// Center window on desktop
 		sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 		m_window.setPosition(sf::Vector2i((desktop.width - APP_WIDTH) / 2, (desktop.height - APP_HEIGHT) / 2));
 	}
+}
+
+
+void Game::setFullscreen(bool fullscreen)
+{
+	m_fullscreen = fullscreen;
+	createWindow();
 }
 
 

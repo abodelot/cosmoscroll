@@ -18,7 +18,7 @@ Input& Input::GetInstance()
 }
 
 
-void Input::Init()
+Input::Input()
 {
 	device_flag_ = ALL;
 

@@ -3,8 +3,6 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include "Input.hpp"
-
 class BaseScene;
 
 /**
@@ -74,9 +72,9 @@ public:
 	void setNextScene(Scene scene);
 
 	/**
-	 * Holds windowed/fullscreen display mode
+	 * Holds fullscreen mode property
 	 */
-	void setFullscreen(bool full);
+	void setFullscreen(bool fullscreen);
 	bool isFullscreen() const;
 
 	/**
@@ -91,19 +89,21 @@ public:
 
 	void panelOnTop(bool top);
 
+	/**
+	 * Load the configuration file
+	 */
+	bool loadConfig();
+
 private:
 	Game();
 	~Game();
 
-	/**
-	 * Load a configuration file
-	 */
-	bool loadConfig(const std::string& filename);
+	void createWindow();
 
 	/**
-	 * Write the configuration in a file
+	 * Save the configuration
 	 */
-	void writeConfig(const std::string& filename) const;
+	void writeConfig() const;
 
 	/**
 	 * Take a screenshot and save the image to screenshot_dir_
@@ -120,9 +120,6 @@ private:
 	bool m_vsync;
 	bool m_running;
     bool m_resources_checked;
-
-	// event manager
-	Input& m_input;
 
 	// scènes
 	BaseScene* m_scenes[SC_COUNT];

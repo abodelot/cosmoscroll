@@ -67,5 +67,6 @@ int main(int argc, char* argv[])
 		game.setConfigFile(config_file);
 	}
 	game.loadResources(res_dir);
+	game.loadConfig();
 	return game.run();
 }
