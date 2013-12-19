@@ -25,7 +25,7 @@
 #define BAR_HEAT   sf::Color(0x44, 0xc0, 0x00)
 #define BAR_OVERHEAT sf::Color(0xff, 0x88, 0x00)
 
-ControlPanel& ControlPanel::GetInstance()
+ControlPanel& ControlPanel::getInstance()
 {
 	static ControlPanel self;
 	return self;
@@ -153,12 +153,6 @@ void ControlPanel::SetTimer(float seconds)
 }
 
 
-bool ControlPanel::IsOnTop() const
-{
-	return (int) getPosition().y == 0;
-}
-
-
 void ControlPanel::SetLevelDuration(int seconds)
 {
 	level_duration_ = seconds > 0 ? seconds : 1;
@@ -241,7 +235,7 @@ void ControlPanel::ActiveAttackPowerUp(int seconds, PowerUp::Type bonus_type)
 }
 
 
-void ControlPanel::RefreshTextTranslations()
+void ControlPanel::refreshTextTranslations()
 {
 	pbars_[ProgressBar::HP].label_.setString(_t("panel.bar_hp"));
 	pbars_[ProgressBar::SHIELD].label_.setString(_t("panel.bar_shield"));
@@ -266,10 +260,10 @@ void ControlPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(bar_mask_, states);
 
 	// draw bonus slots
-	bs_coolers_.Show(target, states);
-	bs_missiles_.Show(target, states);
-	bs_attack_.Show(target, states);
-	bs_speed_.Show(target, states);
+	target.draw(bs_coolers_, states);
+	target.draw(bs_missiles_, states);
+	target.draw(bs_attack_, states);
+	target.draw(bs_speed_, states);
 
 	target.draw(game_info_, states);
 	target.draw(timer_, states);
@@ -428,7 +422,7 @@ void ControlPanel::PowerUpSlot::Update(float frametime)
 }
 
 
-void ControlPanel::PowerUpSlot::Show(sf::RenderTarget& target, sf::RenderStates states) const
+void ControlPanel::PowerUpSlot::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(glow_, states);
 	target.draw(icon_, states);

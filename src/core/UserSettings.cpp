@@ -1,21 +1,23 @@
-#include "PlayerSave.hpp"
+#include "UserSettings.hpp"
 #include "LevelManager.hpp"
 #include "utils/IniParser.hpp"
+#include "utils/I18n.hpp"
 #include "items/ItemManager.hpp"
 
+bool UserSettings::panel_on_top = true;
 
-int PlayerSave::m_highscore = 0;
-int PlayerSave::m_credits = 0;
-int PlayerSave::m_items[] = {0};
-PlayerSave::Initializer PlayerSave::m_init;
+int UserSettings::m_highscore = 0;
+int UserSettings::m_credits = 0;
+int UserSettings::m_items[] = {0};
+UserSettings::Initializer UserSettings::m_init;
 
-int PlayerSave::getItemLevel(ItemData::Type type)
+int UserSettings::getItemLevel(ItemData::Type type)
 {
 	return m_items[type];
 }
 
 
-void PlayerSave::setItemLevel(ItemData::Type type, int level)
+void UserSettings::setItemLevel(ItemData::Type type, int level)
 {
 	if (level < 1)
 		level = 1;
@@ -27,32 +29,43 @@ void PlayerSave::setItemLevel(ItemData::Type type, int level)
 }
 
 
-int PlayerSave::getCredits()
+int UserSettings::getCredits()
 {
 	return m_credits;
 }
 
 
-void PlayerSave::updateCredits(int diff)
+void UserSettings::updateCredits(int diff)
 {
 	m_credits += diff;
 }
 
 
-int PlayerSave::getHighscore()
+int UserSettings::getHighscore()
 {
 	return m_highscore;
 }
 
 
-void PlayerSave::setHighscore(int highscore)
+void UserSettings::setHighscore(int highscore)
 {
 	m_highscore = highscore;
 }
 
 
-void PlayerSave::loadFromConfig(IniParser& config)
+void UserSettings::loadFromConfig(IniParser& config)
 {
+	config.SeekSection("Settings");
+	// language
+	std::string lang = config.Get("language");
+	if (lang.empty() || !I18n::getInstance().loadFromCode(lang))
+	{
+		I18n::getInstance().loadSystemLanguage();
+	}
+
+	// Panel position
+	config.Get("panel_on_top", panel_on_top);
+
 	config.SeekSection("Player");
 	int level = 1;
 	config.Get("last_unlocked_level", level);
@@ -77,8 +90,12 @@ void PlayerSave::loadFromConfig(IniParser& config)
 }
 
 
-void PlayerSave::saveToConfig(IniParser& config)
+void UserSettings::saveToConfig(IniParser& config)
 {
+	config.SeekSection("Settings");
+	config.Set("panel_on_top", panel_on_top);
+	config.Set("language", I18n::getInstance().getLangCode());
+
 	config.SeekSection("Player");
 	config.Set("current_level", LevelManager::getInstance().getCurrent());
 	config.Set("last_unlocked_level", LevelManager::getInstance().getLastUnlocked());
@@ -92,7 +109,7 @@ void PlayerSave::saveToConfig(IniParser& config)
 }
 
 
-PlayerSave::Initializer::Initializer()
+UserSettings::Initializer::Initializer()
 {
 	for (int i = 0; i < ItemData::_COUNT; ++i)
 	{

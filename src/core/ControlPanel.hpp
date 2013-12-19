@@ -16,7 +16,7 @@ public:
 	// height in pixels, width is Game::WIDTH
 	enum { HEIGHT = 56 };
 
-	static ControlPanel& GetInstance();
+	static ControlPanel& getInstance();
 
 	void Init(EntityManager::Mode mode);
 
@@ -34,9 +34,6 @@ public:
 	 * @param seconds: nombre de secondes écoulées
 	 */
 	void SetTimer(float seconds);
-
-	/// @return true si le panel est en haut de l'écran
-	bool IsOnTop() const;
 
 	// Set durée du niveau courant, en secondes
 	void SetLevelDuration(int seconds);
@@ -78,15 +75,13 @@ public:
 
 	void ActiveAttackPowerUp(int seconds, PowerUp::Type bonus_type);
 
-	void RefreshTextTranslations();
+	void refreshTextTranslations();
 
 private:
 	ControlPanel();
 	ControlPanel(const ControlPanel& other);
 
-	// inherited
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	struct ProgressBar
 	{
@@ -112,7 +107,7 @@ private:
 		int max_value_;
 	};
 
-	class PowerUpSlot
+	class PowerUpSlot: public sf::Drawable
 	{
 	public:
 		enum Type { COUNTER, TIMER };
@@ -125,9 +120,9 @@ private:
 
 		void Update(float frametime);
 
-		void Show(sf::RenderTarget& target, sf::RenderStates states) const;
-
 	private:
+		void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
 		sf::Sprite icon_;
 		sf::Text label_;
 		sf::Sprite glow_;

@@ -34,7 +34,7 @@ Input::Input()
 		key_to_action_[i] = Input::COUNT;
 	}
 
-	for (int i = 0; i < MAX_JOY_BUTTON; ++i)
+	for (unsigned int i = 0; i < MAX_JOY_BUTTON; ++i)
 	{
 		joybutton_to_action_[i] = Input::COUNT;
 	}

@@ -4,11 +4,10 @@
 
 #include "Player.hpp"
 #include "EntityManager.hpp"
-#include "core/PlayerSave.hpp"
+#include "core/UserSettings.hpp"
 #include "core/ParticleSystem.hpp"
 #include "core/MessageSystem.hpp"
 #include "core/SoundSystem.hpp"
-#include "core/PlayerSave.hpp"
 #include "core/Resources.hpp"
 #include "items/ItemManager.hpp"
 #include "utils/I18n.hpp"
@@ -34,7 +33,7 @@
 
 Player::Player():
 	input_(Input::GetInstance()),
-	panel_(ControlPanel::GetInstance())
+	panel_(ControlPanel::getInstance())
 {
 	setTeam(Entity::GOOD);
 	setHP(-1);
@@ -103,12 +102,12 @@ void Player::onInit()
 	panel_.setScore(0);
 
 	// shield
-	shield_max_ = items.GetGenericItemData(ItemData::SHIELD, PlayerSave::getItemLevel(ItemData::SHIELD))->GetValue();
+	shield_max_ = items.GetGenericItemData(ItemData::SHIELD, UserSettings::getItemLevel(ItemData::SHIELD))->GetValue();
 	panel_.SetMaxShield(shield_max_);
 	setShield(shield_);
 
 	// ship hull (hit points)
-	int hp = items.GetGenericItemData(ItemData::HULL, PlayerSave::getItemLevel(ItemData::HULL))->GetValue();
+	int hp = items.GetGenericItemData(ItemData::HULL, UserSettings::getItemLevel(ItemData::HULL))->GetValue();
 	if (getHP() == -1) // keep previous HP value unless HP wasn't initialized yet
 	{
 		setHP(hp);
@@ -118,10 +117,10 @@ void Player::onInit()
 	panel_.SetShipHP(getHP());
 
 	// engine
-	speed_max_ = items.GetGenericItemData(ItemData::ENGINE, PlayerSave::getItemLevel(ItemData::ENGINE))->GetValue();
+	speed_max_ = items.GetGenericItemData(ItemData::ENGINE, UserSettings::getItemLevel(ItemData::ENGINE))->GetValue();
 
 	// heat sink
-	heat_max_ = items.GetGenericItemData(ItemData::HEATSINK, PlayerSave::getItemLevel(ItemData::HEATSINK))->GetValue();
+	heat_max_ = items.GetGenericItemData(ItemData::HEATSINK, UserSettings::getItemLevel(ItemData::HEATSINK))->GetValue();
 	if (heat_ == -1) // keep previous heat value unless heat wasn't initialized yet
 	{
 		heat_ = 0.f;
@@ -130,7 +129,7 @@ void Player::onInit()
 	panel_.SetHeat(heat_);
 
 	// weapon
-	m_weapon.init("laser-red", PlayerSave::getItemLevel(ItemData::WEAPON));
+	m_weapon.init("laser-red", UserSettings::getItemLevel(ItemData::WEAPON));
 }
 
 

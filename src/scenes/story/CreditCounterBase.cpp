@@ -1,7 +1,8 @@
 #include "CreditCounterBase.hpp"
 #include "utils/I18n.hpp"
 #include "utils/StringUtils.hpp"
-#include "core/PlayerSave.hpp"
+#include "core/UserSettings.hpp"
+#include "core/Resources.hpp"
 
 CreditCounterBase::CreditCounterBase()
 {
@@ -9,7 +10,7 @@ CreditCounterBase::CreditCounterBase()
 	credit_counter_bg_.setTexture(Resources::getTexture("gui/credit-counter.png"));
 
 	credit_counter_.setPosition(460, 100);
-	credit_counter_.setFont(GetMenuFont());
+	credit_counter_.setFont(Resources::getFont("hemi-head.ttf"));
 	credit_counter_.setCharacterSize(18);
 }
 
@@ -18,7 +19,7 @@ void CreditCounterBase::OnFocus()
 {
 	BaseMenu::OnFocus();
 
-	int credits = PlayerSave::getCredits();
+	int credits = UserSettings::getCredits();
 	credit_counter_.setString(I18n::templatize("menu.story.credits", "{credits}", credits));
 }
 

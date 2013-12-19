@@ -1,7 +1,7 @@
 #include "ArcadeMenu.hpp"
 #include "utils/I18n.hpp"
 #include "core/Game.hpp"
-#include "core/PlayerSave.hpp"
+#include "core/UserSettings.hpp"
 #include "core/ControlPanel.hpp"
 #include "entities/EntityManager.hpp"
 
@@ -24,7 +24,7 @@ void ArcadeMenu::EventCallback(int id)
 	{
 		case 1:
 			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
-			ControlPanel::GetInstance().setHighscore(PlayerSave::getHighscore());
+			ControlPanel::getInstance().setHighscore(UserSettings::getHighscore());
 			game.setNextScene(Game::SC_InGameScene);
 			break;
 		case 2:

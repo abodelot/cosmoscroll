@@ -1,16 +1,15 @@
 #include "Game.hpp"
 #include "Constants.hpp"
 #include "Input.hpp"
-#include "PlayerSave.hpp"
+#include "UserSettings.hpp"
 #include "SoundSystem.hpp"
 #include "LevelManager.hpp"
-#include "ControlPanel.hpp"
 #include "Resources.hpp"
 #include "MessageSystem.hpp"
 #include "entities/EntityManager.hpp"
 #include "items/ItemManager.hpp"
-#include "utils/IniParser.hpp"
 #include "utils/I18n.hpp"
+#include "utils/IniParser.hpp"
 #include "utils/FileSystem.hpp"
 #include "utils/Error.hpp"
 #include "utils/md5/md5.hpp"
@@ -32,7 +31,10 @@ Game& Game::getInstance()
 }
 
 
-Game::Game()
+Game::Game():
+	m_fullscreen(false),
+	m_vsync(true),
+	m_running(true)
 {
 	// scenes will be allocated only if requested
 	for (int i = 0; i < SC_COUNT; ++i)
@@ -40,7 +42,6 @@ Game::Game()
 		m_scenes[i] = NULL;
 	}
 	m_current_scene = NULL;
-	m_running = true;
 
 	// default config location
 	m_config_file = FileSystem::initSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
@@ -90,14 +91,19 @@ void Game::loadResources(const std::string& data_path)
 	// Init resources directory
 	std::string resources_dir = m_app_dir + data_path;
 	Resources::setDataPath(resources_dir);
-	I18n::getInstance().setDataPath(resources_dir + "/lang");
-	m_screenshots_dir = DEFAULT_SCREENSHOT_DIR;
-	MessageSystem::setFont(Resources::getFont("Ubuntu-R.ttf"));
 
-	// Create window and display loading screen as early as possible
-	m_vsync = true;
-	m_fullscreen = false;
-	createWindow();
+	// Splash screen
+	sf::Sprite s(Resources::getTexture("gui/cosmoscroll-logo.png"));
+	m_window.create(sf::VideoMode(s.getTextureRect().width, s.getTextureRect().height), APP_TITLE, sf::Style::None);
+	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+	m_window.setPosition({(desktop.width - m_window.getSize().x) / 2,
+	                      (desktop.height - m_window.getSize().y) / 2});
+
+	m_window.draw(s);
+	m_window.display();
+
+	I18n::getInstance().setDataPath(resources_dir + "/lang");
+	MessageSystem::setFont(Resources::getFont("Ubuntu-R.ttf"));
 
 	// Load XML resources
 	try
@@ -125,44 +131,24 @@ void Game::loadResources(const std::string& data_path)
 
 bool Game::loadConfig()
 {
-	IniParser config;
-	m_fullscreen = false;
-	m_vsync = true;
-
 	std::cout << "* loading configuration from " << m_config_file << std::endl;
+
+	IniParser config;
 	if (config.LoadFromFile(m_config_file.c_str()))
 	{
-		// -- General settings --
-		config.SeekSection("Settings");
-		// language
-		std::string lang = config.Get("language");
-		if (lang.empty() || !I18n::getInstance().loadFromCode(lang))
-		{
-			I18n::getInstance().loadSystemLanguage();
-		}
-
-		// fullscreen & vsync
+		// Window
+		config.SeekSection("Window");
 		config.Get("vsync", m_vsync);
 		config.Get("fullscreen", m_fullscreen);
-		if (m_fullscreen)
-			createWindow();
 
-		// Panel position
-		bool top = true;
-		config.Get("panel_on_top", top);
-		panelOnTop(top);
-
-		// Screenshot directory
-		config.Get("screenshots", m_screenshots_dir);
+		// User settings & player attributes
+		UserSettings::loadFromConfig(config);
 
 		// Audio settings
 		SoundSystem::GetInstance().LoadFromConfig(config);
 
 		// Keyboard and joystick bindings
 		Input::GetInstance().LoadFromConfig(config);
-
-		// Player progression and highscore
-		PlayerSave::loadFromConfig(config);
 		return true;
 	}
 	I18n::getInstance().loadSystemLanguage();
@@ -174,22 +160,19 @@ void Game::writeConfig() const
 {
 	IniParser config;
 
-	// General Settings
-	config.SeekSection("Settings");
+	// Window
+	config.SeekSection("Window");
 	config.Set("fullscreen", m_fullscreen);
 	config.Set("vsync", m_vsync);
-	config.Set("panel_on_top", ControlPanel::GetInstance().IsOnTop());
-	config.Set("language", I18n::getInstance().getLangCode());
-	config.Set("screenshots", m_screenshots_dir);
+
+	// User settings & player attributes
+	UserSettings::saveToConfig(config);
 
 	// Audio settings
 	SoundSystem::GetInstance().SaveToConfig(config);
 
 	// Keyboard and joystick bindings
 	Input::GetInstance().SaveToConfig(config);
-
-	// Player data
-	PlayerSave::saveToConfig(config);
 
 	// Save configuration to file
 	config.SaveToFile(m_config_file);
@@ -198,42 +181,40 @@ void Game::writeConfig() const
 
 int Game::run()
 {
+	createWindow();
 	Input& input = Input::GetInstance();
 
-	// set the first displayed scene at launch
+	// Set the first displayed scene at launch
 	setNextScene(SC_IntroScene);
-	m_window.display();
 
-	// game main loop which handle the current scene
-	sf::Event event;
-	Input::Action action;
 	sf::Clock clock;
 	while (m_running)
 	{
-		// 1. polling events
+		// Poll events
+		sf::Event event;
 		while (m_window.pollEvent(event))
 		{
-			action = input.EventToAction(event);
+			Input::Action action = input.EventToAction(event);
 			switch (action)
 			{
-				// these events are always handled on each scene
+				// These events are always handled on each scene
 				case Input::EXIT_APP:
 					quit();
 					break;
 				case Input::TAKE_SCREENSHOT:
 					takeScreenshot();
 					break;
-				// other events are send to the current scene
+				// Other events are send to the current scene
 				default:
 					m_current_scene->OnEvent(event);
 					break;
 			}
 		}
-		// 2. updating the current scene
+		// Update the current scene
 		m_window.clear();
 		m_current_scene->Update(clock.restart().asSeconds());
 
-		// 3. displaying the current scene
+		// Display the current scene
 		m_current_scene->Show(m_window);
 		m_window.display();
 	}
@@ -296,16 +277,17 @@ void Game::quit()
 }
 
 
-void Game::takeScreenshot()
+void Game::takeScreenshot() const
 {
 	// Create screenshots directory if it doesn't exist yet
-	if (!FileSystem::isDirectory(m_screenshots_dir))
-		FileSystem::createDirectory(m_screenshots_dir);
+	std::string screenshot_dir = m_app_dir + DEFAULT_SCREENSHOT_DIR;
+	if (!FileSystem::isDirectory(screenshot_dir))
+		FileSystem::createDirectory(screenshot_dir);
 
 	char current_time[20]; // YYYY-MM-DD_HH-MM-SS + \0
 	time_t t = time(NULL);
 	strftime(current_time, sizeof current_time, "%Y-%m-%d_%H-%M-%S", localtime(&t));
-	std::string filename = m_screenshots_dir + "/" + current_time + ".png";
+	std::string filename = screenshot_dir + "/" + current_time + ".png";
 
 	if (m_window.capture().saveToFile(filename))
 		std::cout << "screenshot saved to " << filename << std::endl;
@@ -328,14 +310,14 @@ void Game::createWindow()
 
 	if (!m_fullscreen)
 	{
+		// Center window on desktop
+		sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+		m_window.setPosition(sf::Vector2i((desktop.width - APP_WIDTH) / 2, (desktop.height - APP_HEIGHT) / 2));
+
 		// Set window app icon
 		static sf::Image icon = Resources::getTexture("gui/icon.bmp").copyToImage();
 		icon.createMaskFromColor(sf::Color(0xff, 0, 0xff));
 		m_window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-
-		// Center window on desktop
-		sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-		m_window.setPosition(sf::Vector2i((desktop.width - APP_WIDTH) / 2, (desktop.height - APP_HEIGHT) / 2));
 	}
 }
 
@@ -368,7 +350,7 @@ bool Game::isVerticalSync() const
 
 void Game::reloadScenes()
 {
-	// delete allocated scenes, except the current one
+	// Delete all allocated scenes but the current one
 	for (int i = 0; i < SC_COUNT; ++i)
 	{
 		if (m_scenes[i] != NULL && m_scenes[i] != m_current_scene)
@@ -405,19 +387,3 @@ bool Game::resourcesChecked() const
 {
 	return m_resources_checked;
 }
-
-
-void Game::panelOnTop(bool top)
-{
-	if (top)
-	{
-		ControlPanel::GetInstance().setPosition(0, 0);
-		EntityManager::getInstance().setPosition(0, ControlPanel::HEIGHT);
-	}
-	else
-	{
-		ControlPanel::GetInstance().setPosition(0, APP_HEIGHT - ControlPanel::HEIGHT);
-		EntityManager::getInstance().setPosition(0, 0);
-	}
-}
-

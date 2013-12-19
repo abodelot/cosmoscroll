@@ -1,7 +1,8 @@
 #include "EndGameScene.hpp"
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
-#include "core/PlayerSave.hpp"
+#include "core/Resources.hpp"
+#include "core/UserSettings.hpp"
 #include "core/Input.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/LevelManager.hpp"
@@ -21,7 +22,7 @@ EndGameScene::EndGameScene():
 	timer_ = 0.f;
 	info_.setCharacterSize(40);
 	info_.setColor(sf::Color::White);
-	info_.setFont(GetMenuFont());
+	info_.setFont(Resources::getFont("hemi-head.ttf"));
 	player_dead_ = false;
 }
 
@@ -59,7 +60,7 @@ void EndGameScene::Update(float frametime)
 
 void EndGameScene::Show(sf::RenderTarget& target) const
 {
-	target.draw(ControlPanel::GetInstance());
+	target.draw(ControlPanel::getInstance());
 	target.draw(entities_);
 	target.draw(info_);
 }
@@ -92,7 +93,7 @@ void EndGameScene::OnFocus()
 			info_.setString(I18n::templatize("endgame.end_level", "{level}", current, "{credits}", earned_credits));
 		}
 
-		PlayerSave::updateCredits(earned_credits);
+		UserSettings::updateCredits(earned_credits);
 		// Unlock next level
 		if (current == levels.getLastUnlocked())
 		{

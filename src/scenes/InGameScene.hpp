@@ -23,6 +23,8 @@ public:
 	void Show(sf::RenderTarget& target) const override;
 
 private:
+	void setPanelOnTop(bool top);
+
 	EntityManager& entities_;
 	ControlPanel& panel_;
 };

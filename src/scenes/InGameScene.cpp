@@ -1,5 +1,7 @@
 #include "InGameScene.hpp"
 #include "core/Game.hpp"
+#include "core/Constants.hpp"
+#include "core/UserSettings.hpp"
 #include "core/Input.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/SoundSystem.hpp"
@@ -9,7 +11,7 @@
 
 InGameScene::InGameScene():
 	entities_(EntityManager::getInstance()),
-	panel_(ControlPanel::GetInstance())
+	panel_(ControlPanel::getInstance())
 {
 }
 
@@ -21,10 +23,10 @@ void InGameScene::OnEvent(const sf::Event& event)
 	switch (action)
 	{
 		case Input::PANEL_UP:
-			Game::getInstance().panelOnTop(true);
+			setPanelOnTop(true);
 			break;
 		case Input::PANEL_DOWN:
-			Game::getInstance().panelOnTop(false);
+			setPanelOnTop(false);
 			break;
 		case Input::PAUSE:
 			SoundSystem::GetInstance().PauseMusic();
@@ -64,4 +66,22 @@ void InGameScene::OnFocus()
 {
 	Game::getInstance().getWindow().setMouseCursorVisible(false);
 	Game::getInstance().getWindow().setKeyRepeatEnabled(false);
+
+	setPanelOnTop(UserSettings::panel_on_top);
+}
+
+
+void InGameScene::setPanelOnTop(bool top)
+{
+	if (top)
+	{
+		panel_.setPosition(0, 0);
+		entities_.setPosition(0, ControlPanel::HEIGHT);
+	}
+	else
+	{
+		panel_.setPosition(0, APP_HEIGHT - ControlPanel::HEIGHT);
+		entities_.getInstance().setPosition(0, 0);
+	}
+	UserSettings::panel_on_top = top;
 }

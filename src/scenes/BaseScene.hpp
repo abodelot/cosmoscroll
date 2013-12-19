@@ -2,7 +2,6 @@
 #define BASESCENE_HPP
 
 #include <SFML/Graphics.hpp>
-#include "core/Resources.hpp"
 
 /**
  * Base de toutes les scènes affichées à l'écran
@@ -33,9 +32,6 @@ public:
 	virtual void OnFocus() {}
 
 	virtual ~BaseScene() {}
-
-protected:
-	inline const sf::Font& GetMenuFont() const {return Resources::getFont("hemi-head.ttf");}
 };
 
 #endif // BASESCENE_HPP

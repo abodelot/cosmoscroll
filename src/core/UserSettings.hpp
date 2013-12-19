@@ -1,11 +1,11 @@
-#ifndef PLAYERSAVE_HPP
-#define PLAYERSAVE_HPP
+#ifndef USERSETTINGS_HPP
+#define USERSETTINGS_HPP
 
 #include "items/ItemData.hpp"
 
 class IniParser;
 
-class PlayerSave
+class UserSettings
 {
 public:
 	static void loadFromConfig(IniParser& config);
@@ -20,6 +20,9 @@ public:
 	static int getHighscore();
 	static void setHighscore(int highscore);
 
+	// Settings
+	static bool panel_on_top;
+
 private:
 	static int m_highscore;
 	static int m_credits;
@@ -31,4 +34,4 @@ private:
 	} m_init;
 };
 
-#endif // PLAYERSAVE_HPP
+#endif // USERSETTINGS_HPP

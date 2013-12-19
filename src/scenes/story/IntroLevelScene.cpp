@@ -2,7 +2,6 @@
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "core/LevelManager.hpp"
-#include "utils/StringUtils.hpp"
 #include "core/Resources.hpp"
 #include "entities/EntityManager.hpp"
 #include "utils/I18n.hpp"
@@ -13,7 +12,7 @@ IntroLevelScene::IntroLevelScene()
 	background_.setTexture(Resources::getTexture("gui/background.png"));
 
 	description_.setColor(sf::Color::White);
-	description_.setFont(GetMenuFont());
+	description_.setFont(Resources::getFont("hemi-head.ttf"));
 	description_.setCharacterSize(35);
 
 	title_.setTexture(Resources::getTexture("gui/cosmoscroll-logo.png"));

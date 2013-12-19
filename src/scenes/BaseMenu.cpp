@@ -12,7 +12,7 @@ BaseMenu::BaseMenu(): gui::Menu(global_style_)
 	SetBackground(sf::Sprite(Resources::getTexture("gui/main-screen.png")));
 	scrolling_background_.setTexture(Resources::getTexture("gui/background.png"));
 
-	GetWidgetStyle().global_font = &GetMenuFont();
+	GetWidgetStyle().global_font = &Resources::getFont("hemi-head.ttf");
 }
 
 
@@ -63,7 +63,7 @@ void BaseMenu::OnFocus()
 
 void BaseMenu::SetTitle(const sf::String& text, int y)
 {
-	title_.setFont(GetMenuFont());
+	title_.setFont(*GetWidgetStyle().global_font);
 	title_.setCharacterSize(40);
 	title_.setString(text);
 	title_.setX((APP_WIDTH - title_.getWidth()) / 2);

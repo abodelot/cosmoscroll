@@ -1,7 +1,8 @@
 #include "ArmoryMenu.hpp"
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
-#include "core/PlayerSave.hpp"
+#include "core/UserSettings.hpp"
+#include "core/Resources.hpp"
 #include "core/SoundSystem.hpp"
 #include "utils/I18n.hpp"
 #include "scenes/ConfigButton.hpp"
@@ -109,7 +110,7 @@ void ArmoryMenu::EventCallback(int id)
 			{
 				ShowDialog(false);
 				std::wstring content = _t("armory.item_upgraded");
-				int item_level = PlayerSave::getItemLevel(current_type_);
+				int item_level = UserSettings::getItemLevel(current_type_);
 				wstr_self_replace(content, L"{item}", _t(ItemData::TypeToString(current_type_)));
 				wstr_self_replace(content, L"{level}", std::to_wstring(item_level));
 				lab_info_->setString(content);
@@ -130,13 +131,13 @@ void ArmoryMenu::EventCallback(int id)
 
 bool ArmoryMenu::BuyItem()
 {
-	int level = PlayerSave::getItemLevel(current_type_) + 1;
+	int level = UserSettings::getItemLevel(current_type_) + 1;
 	const ItemData* data = ItemManager::GetInstance().GetItemData(current_type_, level);
 
-	if (PlayerSave::getCredits() >= data->getPrice())
+	if (UserSettings::getCredits() >= data->getPrice())
 	{
-		PlayerSave::updateCredits(-data->getPrice());
-		PlayerSave::setItemLevel(current_type_, level);
+		UserSettings::updateCredits(-data->getPrice());
+		UserSettings::setItemLevel(current_type_, level);
 
 		items_[current_type_]->RefreshLabel(); // refresh item widget
 		CreditCounterBase::OnFocus(); // refresh credit counter
@@ -170,7 +171,7 @@ void ArmoryMenu::ShowDialog(bool visible)
 
 void ArmoryMenu::LoadItem(ItemData::Type type)
 {
-	int level = PlayerSave::getItemLevel(type);
+	int level = UserSettings::getItemLevel(type);
 	const ItemData* data = ItemManager::GetInstance().GetItemData(type, level);
 	current_type_ = type;
 
@@ -206,7 +207,7 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 		// next item description
 		dialog_.next_level_details->setString(data->BuildDescriptionString());
 		dialog_.price->setString(I18n::templatize("item.price", "{price}", data->getPrice()));
-		if (PlayerSave::getCredits() >= data->getPrice())
+		if (UserSettings::getCredits() >= data->getPrice())
 			dialog_.price->setColor(sf::Color::White);
 		else
 			dialog_.price->setColor(sf::Color(255, 128, 0));

@@ -65,7 +65,7 @@ void LevelMenu::EventCallback(int id)
 			levels_.initCurrentLevel();
 
 			std::wstring s = I18n::templatize("panel.level", "{level}", selected_level);
-			ControlPanel::GetInstance().SetGameInfo(s);
+			ControlPanel::getInstance().SetGameInfo(s);
 			Game::getInstance().setNextScene(Game::SC_IntroLevelScene);
 			}
 			break;

@@ -1,25 +1,25 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-#define APP_WIDTH                   640
-#define APP_HEIGHT                  480
-#define APP_FPS                     100
-#define APP_TITLE                   "CosmoScroll"
+#define APP_WIDTH                640
+#define APP_HEIGHT               480
+#define APP_FPS                  60
+#define APP_TITLE                "CosmoScroll"
 
-#define GAME_NAME					"cosmoscroll"
-#define GAME_VERSION				"0.4"
-#define GAME_LICENSE				"GPL"
-#define GAME_AUTHORS				L"Alexandre Bodelot\n" \
-									L"Arnaud Wolff"
+#define GAME_NAME                "cosmoscroll"
+#define GAME_VERSION             "0.4"
+#define GAME_LICENSE             "GPL"
+#define GAME_AUTHORS             L"Alexandre Bodelot\n" \
+                                 L"Arnaud Wolff"
 
-#define VERSION_STRING				GAME_NAME " " GAME_VERSION "\n\n" \
-                                    "Copyright (C) 2008-2013 project contributors.\n" \
-									"This is free software; see the source for copying conditions.  There is NO\n" \
-                                    "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+#define VERSION_STRING           GAME_NAME " " GAME_VERSION "\n\n" \
+                                 "Copyright (C) 2008-2013 project contributors.\n" \
+                                 "This is free software; see the source for copying conditions.  There is NO\n" \
+                                 "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
 // Default file paths
-#define DEFAULT_RESOURCES_DIR       "resources"
-#define DEFAULT_SCREENSHOT_DIR      "screenshots"
+#define DEFAULT_RESOURCES_DIR    "resources"
+#define DEFAULT_SCREENSHOT_DIR   "screenshots"
 
 // Leaderboard server
 #define COSMO_SERVER_HOSTNAME "http://perkypenguin.free.fr"

@@ -108,13 +108,13 @@ void EntityManager::InitMode(Mode mode)
 	particles_.Clear();
 	MessageSystem::clear();
 
-	ControlPanel::GetInstance().Init(mode);
+	ControlPanel::getInstance().Init(mode);
 	LevelManager& levels = LevelManager::getInstance();
 
 	switch (mode)
 	{
 		case MODE_STORY:
-			ControlPanel::GetInstance().SetLevelDuration(levels_.getDuration());
+			ControlPanel::getInstance().SetLevelDuration(levels_.getDuration());
 			more_bad_guys_ = &EntityManager::MoreBadGuys_STORY;
 			// le vaisseau du joueur est conservé d'un niveau à l'autre
 			if (mode_ != MODE_STORY || m_player == NULL || m_player->getHP() <= 0)

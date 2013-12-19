@@ -92,12 +92,12 @@
 		<Unit filename="src/core/MessageSystem.hpp" />
 		<Unit filename="src/core/ParticleSystem.cpp" />
 		<Unit filename="src/core/ParticleSystem.hpp" />
-		<Unit filename="src/core/PlayerSave.cpp" />
-		<Unit filename="src/core/PlayerSave.hpp" />
 		<Unit filename="src/core/Resources.cpp" />
 		<Unit filename="src/core/Resources.hpp" />
 		<Unit filename="src/core/SoundSystem.cpp" />
 		<Unit filename="src/core/SoundSystem.hpp" />
+		<Unit filename="src/core/UserSettings.cpp" />
+		<Unit filename="src/core/UserSettings.hpp" />
 		<Unit filename="src/entities/Animation.cpp" />
 		<Unit filename="src/entities/Animation.hpp" />
 		<Unit filename="src/entities/Animator.cpp" />

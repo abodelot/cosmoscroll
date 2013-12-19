@@ -54,7 +54,7 @@ void SettingsMenu::EventCallback(int id)
 			I18n::getInstance().loadFromCode(opt_languages_->GetSelectedOption());
 			// delete other scenes
 			Game::getInstance().reloadScenes();
-			ControlPanel::GetInstance().RefreshTextTranslations();
+			ControlPanel::getInstance().refreshTextTranslations();
 			// re-load i18ned texts
 			SetTitle(_t("menu.settings.title"));
 			form_.GetLabelAt(0)->setString(_t("menu.settings.fullscreen"));

@@ -130,7 +130,7 @@ private:
 	Input();
 	Input(const Input&);
 
-	enum {MAX_JOY_BUTTON = 16};
+	static const unsigned int MAX_JOY_BUTTON = 16;
 
 	// keyboard bindings
 	Action key_to_action_[sf::Keyboard::KeyCount];

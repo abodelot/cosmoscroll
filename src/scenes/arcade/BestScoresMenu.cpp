@@ -2,9 +2,9 @@
 
 #include "BestScoresMenu.hpp"
 #include "core/Game.hpp"
+#include "core/Resources.hpp"
 #include "core/Constants.hpp"
 #include "utils/I18n.hpp"
-#include "utils/StringUtils.hpp"
 
 
 BestScoresMenu::BestScoresMenu()

@@ -62,7 +62,7 @@ void PauseMenu::Update(float frametime)
 
 void PauseMenu::Show(sf::RenderTarget& target) const
 {
-	target.draw(ControlPanel::GetInstance());
+	target.draw(ControlPanel::getInstance());
 	target.draw(EntityManager::getInstance());
 	target.draw(GetTitle());
 	gui::Menu::Show(target);

@@ -87,8 +87,6 @@ public:
 
 	bool resourcesChecked() const;
 
-	void panelOnTop(bool top);
-
 	/**
 	 * Load the configuration file
 	 */
@@ -108,7 +106,7 @@ private:
 	/**
 	 * Take a screenshot and save the image to screenshot_dir_
 	 */
-	void takeScreenshot(void);
+	void takeScreenshot() const;
 
 	/**
 	 * Check game data files are unaltered
@@ -125,9 +123,7 @@ private:
 	BaseScene* m_scenes[SC_COUNT];
 	BaseScene* m_current_scene;
 
-	// directories
-	std::string m_app_dir;
-	std::string m_screenshots_dir;
+	std::string m_app_dir; // Directory from which application is running
 	std::string m_config_file;
 };
 
