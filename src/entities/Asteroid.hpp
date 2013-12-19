@@ -15,7 +15,6 @@ public:
 	};
 
 	/**
-	 * @param pos: initial position
 	 * @param size: size type
 	 * @param angle: movement direction
 	 */

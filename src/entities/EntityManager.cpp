@@ -114,7 +114,7 @@ void EntityManager::InitMode(Mode mode)
 	switch (mode)
 	{
 		case MODE_STORY:
-			ControlPanel::GetInstance().SetLevelDuration(levels_.GetDuration());
+			ControlPanel::GetInstance().SetLevelDuration(levels_.getDuration());
 			more_bad_guys_ = &EntityManager::MoreBadGuys_STORY;
 			// le vaisseau du joueur est conservé d'un niveau à l'autre
 			if (mode_ != MODE_STORY || m_player == NULL || m_player->getHP() <= 0)
@@ -139,13 +139,13 @@ void EntityManager::InitMode(Mode mode)
 				m_player->setPosition(0, m_height / 2);
 				m_player->onInit();
 			}
-			layer1_.SetScrollingTexture(levels.GetLayerImage1());
-			layer2_.SetScrollingTexture(levels.GetLayerImage2());
-			layer2_.setColor(levels.GetLayerColor());
-			decor_height_ = levels.GetDecorHeight();
-			particles_.AddStars(levels.GetStarsCount());
+			layer1_.SetScrollingTexture(levels.getLayerImage1());
+			layer2_.SetScrollingTexture(levels.getLayerImage2());
+			layer2_.setColor(levels.getLayerColor());
+			decor_height_ = levels.getDecorHeight();
+			particles_.AddStars(levels.getStarsCount());
 			{
-				const char* music_name = levels.GetMusic();
+				const char* music_name = levels.getMusicName();
 				if (music_name != NULL)
 					SoundSystem::GetInstance().PlayMusic(music_name);
 				else
@@ -517,15 +517,17 @@ bool EntityManager::MoreBadGuys_ARCADE()
 
 bool EntityManager::MoreBadGuys_STORY()
 {
-	Entity* p = levels_.GiveNextEntity(timer_);
-	while (p != NULL)
+	// Move entities from the spawn queue to the EntityManager
+	Entity* next = levels_.spawnNextEntity(timer_);
+	while (next != NULL)
 	{
-		addEntity(p);
-		p = levels_.GiveNextEntity(timer_);
+		addEntity(next);
+		next = levels_.spawnNextEntity(timer_);
 	}
-	// The current level is not completed if there are still enemies in the
-	// LevelManager's waiting line or in the EntityManager
-	return levels_.RemainingEntities() == 0 && count() == 1; // no enemy && 1 player
+
+	// The current level is completed when there is no remaining entities in the
+	// LevelManager's spawn queue and Player is the only entity still active
+	return levels_.getSpawnQueueSize() == 0 && count() == 1;
 }
 
 

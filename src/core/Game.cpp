@@ -106,7 +106,7 @@ void Game::loadResources(const std::string& data_path)
 		m_resources_checked = checkResourcesPurity(resources_dir);
 		printf("    test %s\n", m_resources_checked ? "succeeded" : "failed");
 		printf("* loading %s...\n", XML_LEVELS);
-		LevelManager::getInstance().loadLevels(resources_dir + XML_LEVELS);
+		LevelManager::getInstance().loadLevelFile(resources_dir + XML_LEVELS);
 		printf("* loading %s...\n", XML_ITEMS);
 		ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS);
 		printf("* loading %s...\n", XML_ANIMATIONS);

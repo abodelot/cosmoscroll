@@ -11,95 +11,89 @@
 class Entity;
 
 /**
- * Singleton du gestionnaire de niveaux (file d'attente des unités à venir)
+ * XML level file parser
  */
 class LevelManager
 {
 public:
 	/**
-	 * @return instance
+	 * @return unique instance
 	 */
 	static LevelManager& getInstance();
 
 	/**
-	 * Parse the XML file storing the levels definitions
+	 * Load the XML file storing the levels definitions
 	 */
-	void loadLevels(const std::string& file);
-
-	void loadCurrent();
+	void loadLevelFile(const std::string& path);
 
 	/**
-	 * Get the next entity to be spawned in the current level
-	 * @param timer: elapsed time (seconds) in the level
+	 * Parse the current level definition and allocate entities in the spawn queue
+	 */
+	void initCurrentLevel();
+
+	/**
+	 * Spawn the next entity in the current level
+	 * @param elapsed_time: elapsed time in seconds in the level
 	 * @return entity if any, or NULL
 	 */
-	Entity* GiveNextEntity(float timer);
+	Entity* spawnNextEntity(float elapsed_time);
 
 	/**
-	 * Size of the waiting line in the current level
+	 * Size of the spawn queue for the current level
 	 * @return number of remaining entities
 	 */
-	inline int RemainingEntities() const
-	{
-		return waiting_line_.size();
-	};
+	size_t getSpawnQueueSize() const;
 
 	/**
 	 * Set the current level
-	 * @param level_num: level number in [1 - level_max]
+	 * @param level: level number, between 1 and getLastUnlocked()
 	 */
 	void setCurrent(size_t level_num);
 	size_t getCurrent() const;
 
-
 	/**
 	 * Last reached level
+	 * @param level: level number, between 1 and getLevelCount()
 	 */
 	size_t unlockNextLevel();
 	void setLastUnlocked(size_t level);
 	size_t getLastUnlocked() const;
 
-	// attributs du niveau courant
-
 	/**
-	 * Obtenir la description d'un niveau
-	 * @return chaîne de description
-	 */
-	const char* GetDescription() const;
-
-	/**
-	 * Get scrolling background image used in current level
-	 * @return image, or NULL if none
-	 */
-	const sf::Texture* GetLayerImage1() const;
-	const sf::Texture* GetLayerImage2() const;
-	sf::Color GetLayerColor() const;
-
-	int GetDecorHeight() const;
-	int GetStarsCount() const;
-
-	const char* GetMusic() const;
-
-	/**
-	 * Durée du niveau en secondes
-	 */
-	int GetDuration() const;
-
-	/**
-	 * Obtenir le nombre de niveaux chargés
+	 * Get number of levels available
 	 */
 	size_t getLevelCount() const;
 
 	/**
-	 * @return true si tous les niveaux sont terminés
+	 * Retrieve attributes from the currently loaded level
 	 */
-	bool AllLevelsCompleted() const;
 
-	/**
-	 * Total des points disponibles dans le niveau courant
-	 * @return points
-	 */
-	int GetTotalPoints() const;
+	// Text description
+	const char* getDescription() const;
+
+	// Bottom background image
+	const sf::Texture* getLayerImage1() const;
+
+	// Top background image
+	const sf::Texture* getLayerImage2() const;
+
+	// Optionnal color for background image
+	sf::Color getLayerColor() const;
+
+	// Size in pixel at the top and bottom of the screen occupied by decor
+	int getDecorHeight() const;
+
+	// Scrolling stars quantity
+	int getStarsCount() const;
+
+	// Background music file
+	const char* getMusicName() const;
+
+	// Current level duration in seconds
+	float getDuration() const;
+
+	// Total amount of points available in the current level
+	int getTotalPoints() const;
 
 private:
 	LevelManager();
@@ -107,57 +101,46 @@ private:
 	~LevelManager();
 
 	/**
-	 * Parser un niveau
-	 * @param elem: noeud XML contenant le niveau
+	 * Recursive method for parsing entities in an XML tree
 	 */
-	void ParseLevel(tinyxml2::XMLElement* elem);
+	void parseEntities(const tinyxml2::XMLElement* elem);
 
 	/**
-	 * Parser un élément de niveau
+	 * Add an entity in the spawn queue
+	 * @param entity: entity to append
+	 * @param delay: time to wait since the last inserted entity
 	 */
-	void ParseEntity(tinyxml2::XMLElement* elem);
+	void appendToSpawnQueue(Entity* entity, float time);
 
 	/**
-	 * Ajouter une entité à la file d'attente
-	 * @param entity: entité à ajouter en fin de queue
-	 * @param time: temps de l'apparition relatif au temps de la dernière entité
+	 * Delete all allocated entities in the spawn queue
 	 */
-	void AppendToWaitingLine(Entity* entity, float time);
+	void resetSpawnQueue();
 
 	/**
-	 * Supprimer toutes les entités en file d'attente
+	 * Get the XML node of the current level
 	 */
-	void ClearWaitingLine();
+	const tinyxml2::XMLElement* getCurrentLevelElement() const;
 
-	/**
-	 * Obtenir l'élément XML d'un niveau
-	 * @return element, premier niveau si niveau inexistant
-	 */
-	tinyxml2::XMLElement* GetLevelElement(size_t level) const;
+	typedef std::vector<const tinyxml2::XMLElement*> NodeVector;
+	typedef std::map<std::string, const tinyxml2::XMLElement*> NodeMap;
 
-	/**
-	 * "#FF0000" -> sf::Color(255, 0, 0)
-	 */
-	static sf::Color HexaToColor(const std::string& hexcolor);
+	tinyxml2::XMLDocument m_xml_doc;
+	NodeVector            m_levels; // Ordered array of level nodes
+	NodeMap               m_functions; // Function nodes, indexed by their name
+	size_t                m_current_level;
+	size_t                m_last_unlocked_level;
 
+	// Spawn entity at spawntime
 	struct EntitySlot
 	{
 		Entity* entity;
 		float spawntime;
 	};
 
-	float last_insert_time_;
-	tinyxml2::XMLDocument doc_;
-	// Level definition nodes
-	std::vector<tinyxml2::XMLElement*> levels_;
-	// Functions declarations nodes
-	std::map<std::string, tinyxml2::XMLElement*> functions_;
-	// liste des vaisseaux à spawner pour le niveau courant
-	std::queue<EntitySlot> waiting_line_;
-	size_t current_level_;
-	size_t last_unlocked_level_;
-	int total_points_;
+	std::queue<EntitySlot> m_spawn_queue;
+	float                  m_last_insert_time;
+	int                    m_total_points;
 };
 
 #endif // LEVELMANAGER_HPP
-

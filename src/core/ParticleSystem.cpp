@@ -99,11 +99,6 @@ void ParticleSystem::AddSmoke(int count, const sf::Sprite* handle)
 }
 
 
-/*template <class TParticle>
-void ParticleSystem::RemoveLinkedBy(const sf::Sprite* handle)
-{
-}*/
-
 void ParticleSystem::RemoveShield(const sf::Sprite* handle)
 {
 	ParticleList::iterator it;
@@ -208,8 +203,8 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 
 
 // Star
-#define STAR_MIN_SPEED       30.0f
-#define STAR_MAX_SPEED       900.0f
+#define STAR_MIN_SPEED       10.0f
+#define STAR_MAX_SPEED       300.0f
 
 ParticleSystem::Star::Star(const sf::Texture& img)
 {

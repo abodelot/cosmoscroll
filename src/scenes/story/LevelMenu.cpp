@@ -62,7 +62,7 @@ void LevelMenu::EventCallback(int id)
 		case 1: {
 			int selected_level = opt_levels_->GetSelectedOptionIndex() + 1;
 			levels_.setCurrent(selected_level);
-			levels_.loadCurrent();
+			levels_.initCurrentLevel();
 
 			std::wstring s = I18n::templatize("panel.level", "{level}", selected_level);
 			ControlPanel::GetInstance().SetGameInfo(s);

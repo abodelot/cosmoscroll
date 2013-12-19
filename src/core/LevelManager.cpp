@@ -13,8 +13,7 @@
 #include "entities/complex/Canon.hpp"
 #include "entities/complex/GunTower.hpp"
 #include "utils/Error.hpp"
-
-#define DEFAULT_STARS_COUNT 33
+#include "utils/sfml_helper.hpp"
 
 
 LevelManager& LevelManager::getInstance()
@@ -24,172 +23,30 @@ LevelManager& LevelManager::getInstance()
 }
 
 
-LevelManager::LevelManager()
+LevelManager::LevelManager():
+	m_current_level(1),
+	m_last_unlocked_level(1),
+	m_last_insert_time(0.f),
+	m_total_points(0)
 {
-	last_insert_time_ = 0.f;
-	current_level_ = last_unlocked_level_ = 1;
-	total_points_ = 0;
 }
 
 
 LevelManager::~LevelManager()
 {
-	ClearWaitingLine();
+	resetSpawnQueue();
 }
 
 
-void LevelManager::loadCurrent()
-{
-	ParseLevel(GetLevelElement(current_level_));
-}
-
-
-Entity* LevelManager::GiveNextEntity(float timer)
-{
-	if (!waiting_line_.empty())
-	{
-		if (waiting_line_.front().spawntime < timer)
-		{
-			Entity* next = waiting_line_.front().entity;
-			waiting_line_.pop();
-			return next;
-		}
-	}
-	return NULL;
-}
-
-
-void LevelManager::setCurrent(size_t level)
-{
-	if (level < 1 || level > last_unlocked_level_ || level > levels_.size())
-	{
-		std::cerr << " [levels] level " << level << " is undefined or stil locked, using level 1 instead" << std::endl;
-		level = 1;
-	}
-	current_level_ = level;
-}
-
-
-size_t LevelManager::getCurrent() const
-{
-	return current_level_;
-}
-
-
-size_t LevelManager::unlockNextLevel()
-{
-	if (last_unlocked_level_ < levels_.size())
-	{
-		current_level_ = ++last_unlocked_level_;
-	}
-	return current_level_;
-}
-
-
-size_t LevelManager::getLastUnlocked() const
-{
-	return last_unlocked_level_;
-}
-
-
-void LevelManager::setLastUnlocked(size_t level)
-{
-	if (level < 1 || level > levels_.size())
-	{
-		std::cerr << " [levels] level " << level << " is undefined, using level 1 instead" << std::endl;
-		level = 1;
-	}
-	last_unlocked_level_ = level;
-}
-
-
-const char* LevelManager::GetDescription() const
-{
-	return GetLevelElement(current_level_)->Attribute("desc");
-}
-
-
-const sf::Texture* LevelManager::GetLayerImage1() const
-{
-
-	const char* p = GetLevelElement(current_level_)->Attribute("layer1");
-	return p != NULL ? &Resources::getTexture(p) : NULL;
-}
-
-
-const sf::Texture* LevelManager::GetLayerImage2() const
-{
-	const char* p = GetLevelElement(current_level_)->Attribute("layer2");
-	return p != NULL ? &Resources::getTexture(p) : NULL;
-}
-
-
-sf::Color LevelManager::GetLayerColor() const
-{
-	const char* p = GetLevelElement(current_level_)->Attribute("color");
-	return p != NULL ? HexaToColor(p) : sf::Color::White;
-}
-
-
-int LevelManager::GetDecorHeight() const
-{
-	int height = 0;
-	GetLevelElement(current_level_)->QueryIntAttribute("decor_height", &height);
-	return height;
-}
-
-
-int LevelManager::GetStarsCount() const
-{
-	int nb_stars = DEFAULT_STARS_COUNT;
-	GetLevelElement(current_level_)->QueryIntAttribute("stars", &nb_stars);
-	return nb_stars;
-}
-
-
-const char* LevelManager::GetMusic() const
-{
-	return GetLevelElement(current_level_)->Attribute("music");
-}
-
-
-int LevelManager::GetDuration() const
-{
-	if (waiting_line_.empty())
-	{
-		return 0;
-	}
-	return waiting_line_.back().spawntime;
-}
-
-
-int LevelManager::GetTotalPoints() const
-{
-	return total_points_;
-}
-
-
-size_t LevelManager::getLevelCount() const
-{
-	return levels_.size();
-}
-
-
-bool LevelManager::AllLevelsCompleted() const
-{
-	return last_unlocked_level_ > levels_.size();
-}
-
-
-void LevelManager::loadLevels(const std::string& file)
+void LevelManager::loadLevelFile(const std::string& path)
 {
 	// Open level file
-	if (doc_.LoadFile(file.c_str()) != 0)
+	if (m_xml_doc.LoadFile(path.c_str()) != 0)
 	{
-		Error::log << "Cannot load levels:\n" << file << "\n" << doc_.GetErrorStr1();
+		Error::log << "Cannot load levels:\n" << path << "\n" << m_xml_doc.GetErrorStr1();
 		throw Error::exception();
 	}
-	tinyxml2::XMLElement* root = doc_.RootElement();
+	tinyxml2::XMLElement* root = m_xml_doc.RootElement();
 
 	// Parse function nodes
 	tinyxml2::XMLElement* node = root->FirstChildElement("functions")->FirstChildElement();
@@ -197,9 +54,9 @@ void LevelManager::loadLevels(const std::string& file)
 	{
 		const char* name = node->Attribute("name");
 		if (name != NULL)
-			functions_[name] = node;
+			m_functions[name] = node;
 		else
-			puts("warning: function doesn't have a proper name");
+			std::cerr << "[levels] a function without a name has been ignored" << std::endl;
 		node = node->NextSiblingElement();
 	}
 
@@ -207,63 +64,193 @@ void LevelManager::loadLevels(const std::string& file)
 	node = root->FirstChildElement("levels")->FirstChildElement("level");
 	while (node != NULL)
 	{
-		levels_.push_back(node);
+		m_levels.push_back(node);
 		node = node->NextSiblingElement("level");
 	}
 }
 
 
-void LevelManager::ParseLevel(tinyxml2::XMLElement* elem)
+void LevelManager::initCurrentLevel()
 {
-	ClearWaitingLine();
-	last_insert_time_ = 0.f;
-	total_points_ = 0;
+	resetSpawnQueue();
 
-	elem = elem->FirstChildElement();
+	const tinyxml2::XMLElement* elem = getCurrentLevelElement()->FirstChildElement();
 	while (elem)
 	{
-		ParseEntity(elem);
+		parseEntities(elem);
 		elem = elem->NextSiblingElement();
 	}
 }
 
 
-void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
+Entity* LevelManager::spawnNextEntity(float elapsed_time)
+{
+	if (!m_spawn_queue.empty() && m_spawn_queue.front().spawntime < elapsed_time)
+	{
+		Entity* entity = m_spawn_queue.front().entity;
+		m_spawn_queue.pop();
+		return entity;
+	}
+	return NULL;
+}
+
+
+size_t LevelManager::getSpawnQueueSize() const
+{
+	return m_spawn_queue.size();
+}
+
+
+void LevelManager::setCurrent(size_t level)
+{
+	if (level < 1 || level > m_last_unlocked_level || level > m_levels.size())
+	{
+		std::cerr << " [levels] level " << level << " is undefined or still locked, using level 1 instead" << std::endl;
+		level = 1;
+	}
+	m_current_level = level;
+}
+
+
+size_t LevelManager::getCurrent() const
+{
+	return m_current_level;
+}
+
+
+size_t LevelManager::unlockNextLevel()
+{
+	if (m_last_unlocked_level < m_levels.size())
+	{
+		m_current_level = ++m_last_unlocked_level;
+	}
+	return m_current_level;
+}
+
+
+size_t LevelManager::getLastUnlocked() const
+{
+	return m_last_unlocked_level;
+}
+
+
+void LevelManager::setLastUnlocked(size_t level)
+{
+	if (level < 1 || level > m_levels.size())
+	{
+		std::cerr << " [levels] level " << level << " is undefined, using level 1 instead" << std::endl;
+		level = 1;
+	}
+	m_last_unlocked_level = level;
+}
+
+
+size_t LevelManager::getLevelCount() const
+{
+	return m_levels.size();
+}
+
+
+const char* LevelManager::getDescription() const
+{
+	return getCurrentLevelElement()->Attribute("desc");
+}
+
+
+const sf::Texture* LevelManager::getLayerImage1() const
+{
+
+	const char* p = getCurrentLevelElement()->Attribute("layer1");
+	return p != NULL ? &Resources::getTexture(p) : NULL;
+}
+
+
+const sf::Texture* LevelManager::getLayerImage2() const
+{
+	const char* p = getCurrentLevelElement()->Attribute("layer2");
+	return p != NULL ? &Resources::getTexture(p) : NULL;
+}
+
+
+sf::Color LevelManager::getLayerColor() const
+{
+	const char* p = getCurrentLevelElement()->Attribute("color");
+	return p != NULL ? xsf::hexa_to_color(p) : sf::Color::White;
+}
+
+
+int LevelManager::getDecorHeight() const
+{
+	int height = 0;
+	getCurrentLevelElement()->QueryIntAttribute("decor_height", &height);
+	return height;
+}
+
+
+int LevelManager::getStarsCount() const
+{
+	int nb_stars = 0;
+	getCurrentLevelElement()->QueryIntAttribute("stars", &nb_stars);
+	return nb_stars;
+}
+
+
+const char* LevelManager::getMusicName() const
+{
+	return getCurrentLevelElement()->Attribute("music");
+}
+
+
+float LevelManager::getDuration() const
+{
+	return m_spawn_queue.empty() ? 0 : m_spawn_queue.back().spawntime;
+}
+
+
+int LevelManager::getTotalPoints() const
+{
+	return m_total_points;
+}
+
+
+void LevelManager::parseEntities(const tinyxml2::XMLElement* elem)
 {
 	const char* tag_name = elem->Value();
+	// Loop tag: repeat the inner tags 'count' times
 	if (strcmp(tag_name, "loop") == 0)
 	{
 		int count = 0;
 		elem->QueryIntAttribute("count", &count);
 		while (count > 0)
 		{
-			tinyxml2::XMLElement* child = elem->FirstChildElement();
+			const tinyxml2::XMLElement* child = elem->FirstChildElement();
 			while (child != NULL)
 			{
-				ParseEntity(child);
+				parseEntities(child);
 				child = child->NextSiblingElement();
 			}
 			--count;
 		}
 	}
+	// Call tag: insert the inner tags from a function node
 	else if (strcmp(tag_name, "call") == 0)
 	{
 		const char* func_name = elem->Attribute("func");
 		if (func_name != NULL)
 		{
-			std::map<std::string, tinyxml2::XMLElement*>::iterator it = functions_.find(func_name);
-			if (it != functions_.end())
+			NodeMap::const_iterator it = m_functions.find(func_name);
+			if (it != m_functions.end())
 			{
-				tinyxml2::XMLElement* child	= it->second->FirstChildElement();
+				const tinyxml2::XMLElement* child = it->second->FirstChildElement();
 				while (child != NULL)
 				{
-					ParseEntity(child);
+					parseEntities(child);
 					child = child->NextSiblingElement();
 				}
 			}
 			else
 			{
-				std::cerr << "[levels] invalid function '" << func_name << "' in 'call' tag" << std::endl;
+				std::cerr << "[levels] undefined function '" << func_name << "' in 'call' tag" << std::endl;
 			}
 		}
 		else
@@ -271,18 +258,19 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 			std::cerr << "[levels] 'func' attribute missing in 'call' tag" << std::endl;
 		}
 	}
+	// Wait tag: delay the next entity
 	else if (strcmp(tag_name, "wait") == 0)
 	{
 		float t = 0.f;
 		elem->QueryFloatAttribute("t", &t);
-		last_insert_time_ += t;
+		m_last_insert_time += t;
 	}
+	// Entity tags
 	else
 	{
 		// Parse attributes shared by all tags
-		sf::Vector2f position(0, 0);
-		position.x = APP_WIDTH - 1; // default x: screen right side
-		float time = 0.f; // default: no delay
+		sf::Vector2f position(APP_WIDTH - 1.f, 0.f); // default x: screen right side
+		float time = 0.f; // default time: no delay
 		elem->QueryFloatAttribute("x", &position.x);
 		elem->QueryFloatAttribute("y", &position.y);
 		elem->QueryFloatAttribute("t", &time);
@@ -295,7 +283,7 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 			{
 				Spaceship* spaceship = EntityManager::getInstance().createSpaceship(id);
 				if (spaceship != NULL)
-					total_points_ += spaceship->getPoints();
+					m_total_points += spaceship->getPoints();
 
 				entity = spaceship;
 			}
@@ -312,7 +300,7 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 		{
 			entity = new TentaculatBoss();
 		}
-		else if(strcmp(tag_name,"split_boss") == 0)
+		else if (strcmp(tag_name,"split_boss") == 0)
 		{
 		    entity = new SplitBoss();
 		}
@@ -324,66 +312,52 @@ void LevelManager::ParseEntity(tinyxml2::XMLElement* elem)
 				entity = new Canon();
 			else if (elem->Attribute("id", "guntower"))
 				entity = new GunTower();
+			else
+				std::cerr << "[levels] unknown decor id '" << elem->Attribute("id") << "' ignored" << std::endl;
 		}
 		else
 		{
-			std::cerr << "[levels] unsupported tag \"" << tag_name << "\" ignored" << std::endl;
+			std::cerr << "[levels] unknown tag '" << tag_name << "' ignored" << std::endl;
 		}
 
 		if (entity != NULL)
 		{
 			entity->setPosition(position);
-			AppendToWaitingLine(entity, time);
+			appendToSpawnQueue(entity, time);
 		}
 		else
 		{
-			std::cerr << "[levels] invalid entity \"" << tag_name << "\" ignored" << std::endl;
+			std::cerr << "[levels] invalid entity '" << tag_name << "' ignored" << std::endl;
 		}
 	}
 }
 
 
-void LevelManager::AppendToWaitingLine(Entity* entity, float time)
+void LevelManager::appendToSpawnQueue(Entity* entity, float delay)
 {
 	EntitySlot slot;
 	slot.entity = entity;
-	last_insert_time_ += time;
-	slot.spawntime = last_insert_time_;
-	waiting_line_.push(slot);
+	m_last_insert_time += delay;
+	slot.spawntime = m_last_insert_time;
+	m_spawn_queue.push(slot);
 }
 
 
-void LevelManager::ClearWaitingLine()
+void LevelManager::resetSpawnQueue()
 {
-	// Delete remaining entities in the waiting line
-	while (!waiting_line_.empty())
+	// Delete remaining entities in the spawn queue
+	while (!m_spawn_queue.empty())
 	{
-		delete waiting_line_.front().entity;
-		waiting_line_.pop();
+		delete m_spawn_queue.front().entity;
+		m_spawn_queue.pop();
 	}
+
+	m_last_insert_time = 0.f;
+	m_total_points = 0;
 }
 
 
-tinyxml2::XMLElement* LevelManager::GetLevelElement(size_t level) const
+const tinyxml2::XMLElement* LevelManager::getCurrentLevelElement() const
 {
-	--level; // index starts at 0
-	if (level >= levels_.size())
-	{
-		std::cerr << "[levels] index " << level << " is not a valid level, using index 0" << std::endl;
-		level = 0;
-	}
-	return levels_[level];
-}
-
-
-sf::Color LevelManager::HexaToColor(const std::string& hexcolor)
-{
-	sf::Color color = sf::Color::Black;
-	if (hexcolor.size() == 7)
-	{
-		color.r = strtoul(hexcolor.substr(1, 2).c_str(), NULL, 16);
-		color.g = strtoul(hexcolor.substr(3, 2).c_str(), NULL, 16);
-		color.b = strtoul(hexcolor.substr(5, 2).c_str(), NULL, 16);
-	}
-	return color;
+	return m_levels.at(m_current_level - 1);
 }

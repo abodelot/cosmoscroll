@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <levelset>
 	<functions>
-		<def name="caps_x3">
+		<def name="b1_triad">
 			<ship id="b1c" y="200" t="2.5"/>
 			<ship id="b1c" y="150" t="1"/>
 			<ship id="b1c" y="250"/>
@@ -28,10 +28,10 @@
 			<ship id="b1" y="80"/>
 			<ship id="b1" y="320"/>
 		</def>
-		<def name="c_scoot_triad">
-			<ship id="b2c" y="100" t="1" />
-			<ship id="b2c" y="150"  />
-			<ship id="b2c" y="200"  />
+		<def name="b2_triad">
+			<ship id="b2c" y="200" t="2"/>
+			<ship id="b2c" y="150" t="1"/>
+			<ship id="b2c" y="250"/>
 		</def>
 		<def name="c_scoot_line_3">
 			<ship id="b2c" y="100" t="1" />
@@ -73,12 +73,14 @@
 		<!-- LVL1 -->
 		<level desc="First encounter." stars="30" layer1="layers/blue.jpg" layer2="layers/fog.png" color="#002060" music="aurora.mod">
 			<loop count="2">
-				<call func="caps_x3"/>
+				<call func="b1_triad"/>
 			</loop>
 			<ship id="b1" y="100" t="4"/>
 			<ship id="b1" y="300" t="1.5"/>
+			<ship id="b1" y="220"/>
+			<wait t="2"/>
 			<loop count="2">
-				<call func="caps_x3"/>
+				<call func="b1_triad"/>
 			</loop>
 			<ship id="b1" y="50" t="4"/>
 			<ship id="b1" y="250" t="1.5"/>
@@ -88,13 +90,17 @@
 			<asteroid y="280" t="0.5"/>
 			<asteroid y="70" t="2"/>
 			<asteroid y="200" t="0.5"/>
-			<call func="caps_x3"/>
+			<ship id="b2" y="100" t="1"/>
+			<ship id="b2" y="300" t="2"/>
+			<asteroid y="180" t="0.5"/>
+			<call func="b1_triad"/>
 			<loop count="2">
 				<ship id="b1" y="100" t="4.3"/>
 				<ship id="b1c" y="110" t="2.3"/>
 				<ship id="b1" y="200"/>
 				<ship id="b1c" y="280" t="1"/>
 				<ship id="b1" y="300"/>
+				<ship id="b1" y="90" t="1"/>
 			</loop>
 			<call func="caps_x5"/>
 			<ship id="b1" y="80" t="1"/>
@@ -102,8 +108,9 @@
 			<ship id="b1" y="100" t="1"/>
 			<ship id="b1" y="100" t="1"/>
 			<ship id="b1" y="300" t="1"/>
-			<call func="caps_x3"/>
-			<call func="c_scoot_line_3"/>
+			<call func="b1_triad"/>
+			<wait t="3"/>
+			<call func="b2_triad"/>
 		</level>
 
 		<!-- LVL2 -->
@@ -159,12 +166,12 @@
 			<ship id="b2" y="200" t="2"/>
 			<ship id="b2" y="100" t="3"/>
 			<ship id="b2" y="300" t="3"/>
-			<call func="c_scoot_triad"/>
+			<call func="b2_triad"/>
 			<split_boss y="170" t="8" />
 		</level>
 
 		<!-- LVL3 -->
-		<level desc="Inside the bandits' lair (part 1)" layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0" music="back_in_1982.mod">
+		<level desc="Inside the bandits' lair (part 1)" layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" music="back_in_1982.mod">
 			<ship id="b1" y="100" t="2"/>
 			<ship id="b1" y="150" />
 			<ship id="b1" y="200" t="2"/>
@@ -242,7 +249,7 @@
 		</level>
 
 		<!-- LVL4 -->
-		<level desc="Inside the bandits' lair (part 2)" layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" stars="0" music="back_in_1982.mod">
+		<level desc="Inside the bandits' lair (part 2)" layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" music="back_in_1982.mod">
 			<ship id="m1" y="120" t="1"/>
 			<decor id="guntower" t="2"/>
 			<ship id="b1" y="200" t="5"/>
@@ -359,7 +366,7 @@
 			<ship id="s1" y="310" t="2"/>
 			<ship id="s1" y="100" t="1"/>
 			<ship id="s1" y="150" t="2"/>
-			<call func="c_scoot_triad"/>
+			<call func="b2_triad"/>
 		</level>
 
 		<!-- LVL6 (saucers, miniboss x2) -->

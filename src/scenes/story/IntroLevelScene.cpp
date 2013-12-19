@@ -57,23 +57,24 @@ void IntroLevelScene::Show(sf::RenderTarget& target) const
 
 void IntroLevelScene::OnFocus()
 {
-	// get the description of the current level
 	LevelManager& levels = LevelManager::getInstance();
 	size_t current_level = levels.getCurrent();
 
+#ifdef DEBUG
 	printf("level %u\n", current_level);
-	printf("  - entities: %d\n", levels.RemainingEntities());
-	printf("  - total points: %d\n", levels.GetTotalPoints());
-	printf("  - duration: %d\" %02d'\n", levels.GetDuration() / 60, levels.GetDuration() % 60);
-
+	printf(" - entities:     %d\n", levels.getSpawnQueueSize());
+	printf(" - total points: %d\n", levels.getTotalPoints());
+	printf(" - duration:     %02d:%02d\n", (int) levels.getDuration() / 60, (int) levels.getDuration() % 60);
+#endif
+	// Get current level's attributes
 	std::wstring intro = _t("menu.story.intro");
 	wstr_self_replace(intro, L"{level}", std::to_wstring(current_level));
-	wstr_self_replace(intro, L"{description}", decode_utf8(levels.GetDescription()));
-	wstr_self_replace(intro, L"{count}", std::to_wstring(levels.RemainingEntities()));
+	wstr_self_replace(intro, L"{description}", decode_utf8(levels.getDescription()));
+	wstr_self_replace(intro, L"{count}", std::to_wstring(levels.getSpawnQueueSize()));
 	wstr_self_replace(intro, L"\\n", L"\n");
 	description_.setString(intro);
 
-	// centered on screen
+	// Center description on screen
 	description_.setPosition(
 		(APP_WIDTH  - description_.getWidth())  / 2,
 		(APP_HEIGHT - description_.getHeight()) / 2

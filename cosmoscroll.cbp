@@ -122,12 +122,12 @@
 		<Unit filename="src/entities/Projectile.hpp" />
 		<Unit filename="src/entities/Spaceship.cpp" />
 		<Unit filename="src/entities/Spaceship.hpp" />
-		<Unit filename="src/entities/bosses/BossTentacles.cpp" />
-		<Unit filename="src/entities/bosses/BossTentacles.hpp" />
 		<Unit filename="src/entities/bosses/EvilBoss.cpp" />
 		<Unit filename="src/entities/bosses/EvilBoss.hpp" />
 		<Unit filename="src/entities/bosses/SplitBoss.cpp" />
 		<Unit filename="src/entities/bosses/SplitBoss.hpp" />
+		<Unit filename="src/entities/bosses/TentaculatBoss.cpp" />
+		<Unit filename="src/entities/bosses/TentaculatBoss.hpp" />
 		<Unit filename="src/entities/complex/Canon.cpp" />
 		<Unit filename="src/entities/complex/Canon.hpp" />
 		<Unit filename="src/entities/complex/Gate.cpp" />
