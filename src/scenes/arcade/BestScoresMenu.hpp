@@ -7,15 +7,13 @@ class BestScoresMenu: public BaseMenu
 {
 public:
 	BestScoresMenu();
-	// inherited
-	void OnFocus();
 
+	void OnFocus() override;
 	void Update(float frametime);
 	void Show(sf::RenderTarget& target) const;
 
 private:
-	// inherited
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 
 	gui::BitmapString* lab_content_;
 	enum QueryStatus

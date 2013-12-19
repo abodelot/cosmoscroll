@@ -11,11 +11,9 @@ class GenericItemData: public ItemData
 public:
 	GenericItemData(ItemData::Type type);
 
-	// override
-	bool LoadFromXml(tinyxml2::XMLElement* elem);
+	bool LoadFromXml(tinyxml2::XMLElement* elem) override;
 
-	// override
-	std::wstring BuildDescriptionString() const;
+	std::wstring BuildDescriptionString() const override;
 
 	int GetValue() const;
 

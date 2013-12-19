@@ -12,8 +12,7 @@ public:
 	void onUpdate(float frametime);
 
 private:
-	// override
-	void onPartDestroyed(const Part& part);
+	void onPartDestroyed(const Part& part) override;
 
 	int energy_cells_;
 	float door_timer_;

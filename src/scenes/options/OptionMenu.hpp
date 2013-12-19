@@ -9,8 +9,7 @@ public:
 	OptionMenu();
 
 private:
-	// inherited
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 };
 
 #endif // OPTIONMENU_HPP

@@ -8,12 +8,10 @@ class GameOverMenu: public BaseMenu
 public:
 	GameOverMenu();
 
-	// inherited
 	void OnFocus();
 
 private:
-	// inherited
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 
 	void UploadScore();
 

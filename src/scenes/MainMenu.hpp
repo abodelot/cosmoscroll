@@ -11,12 +11,10 @@ class MainMenu: public BaseMenu
 public:
 	MainMenu();
 
-	// override
-	void Show(sf::RenderTarget& target) const;
+	void Show(sf::RenderTarget& target) const override;
 
 private:
-	// override
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 
 	xsf::Sprite title_;
 };

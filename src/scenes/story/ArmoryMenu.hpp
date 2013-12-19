@@ -10,11 +10,10 @@ class ArmoryMenu: public CreditCounterBase
 public:
 	ArmoryMenu();
 
-	void OnFocus();
+	void OnFocus() override;
 
 private:
-	// override
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 
 	void ShowDialog(bool visible);
 

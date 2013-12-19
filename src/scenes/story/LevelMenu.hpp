@@ -10,12 +10,10 @@ class LevelMenu: public CreditCounterBase
 public:
 	LevelMenu();
 
-	// override
-	void OnFocus();
+	void OnFocus() override;
 
 private:
-	// override
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 
 	sf::Text title_;
 	LevelManager& levels_;

@@ -11,17 +11,13 @@ class EndGameScene: public BaseScene
 public:
 	EndGameScene();
 
-	// inherited
-	void OnEvent(const sf::Event& event);
+	void OnEvent(const sf::Event& event) override;
 
-	// inherited
-	void Update(float frametime);
+	void Update(float frametime) override;
 
-	// inherited
-	void Show(sf::RenderTarget& target) const;
+	void Show(sf::RenderTarget& target) const override;
 
-	// inherited
-	void OnFocus();
+	void OnFocus() override;
 
 private:
 	float timer_;

@@ -66,6 +66,13 @@ ShipPartWidget::ShipPartWidget(gui::Menu* parent, ItemData::Type type):
 }
 
 
+void ShipPartWidget::RefreshLabel()
+{
+	m_text_name.setString(_t(ItemData::TypeToString(type_)));
+	m_text_level.setString(I18n::templatize("armory.item_level", "{level}", PlayerSave::getItemLevel(type_)));
+}
+
+
 void ShipPartWidget::OnKeyPressed(sf::Keyboard::Key code)
 {
 	if (code == sf::Keyboard::Return)
@@ -78,13 +85,6 @@ void ShipPartWidget::OnKeyPressed(sf::Keyboard::Key code)
 void ShipPartWidget::OnMouseClicked(int, int)
 {
 	CallTheCallback();
-}
-
-
-void ShipPartWidget::RefreshLabel()
-{
-	m_text_name.setString(_t(ItemData::TypeToString(type_)));
-	m_text_level.setString(I18n::templatize("armory.item_level", "{level}", PlayerSave::getItemLevel(type_)));
 }
 
 

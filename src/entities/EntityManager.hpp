@@ -132,8 +132,7 @@ private:
 	Entity* createRandomEntity();
 	void RegisterUniqueEntity(Spaceship* entity);
 
-	// inherited
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	/**
 	 * Spawner les prochains éléments du jeu en mode Arcade

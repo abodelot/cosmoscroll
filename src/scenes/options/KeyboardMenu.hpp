@@ -12,13 +12,10 @@ class KeyboardMenu: public BaseMenu
 public:
 	KeyboardMenu();
 
-	// inherited
 	void OnFocus();
 
 private:
-
-	// inherited
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 
 	void AddRow(gui::FormLayout& form, Input::Action action, gui::Button** button);
 	const char* GetKeyLabel(Input::Action action) const;

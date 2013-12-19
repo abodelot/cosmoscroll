@@ -4,7 +4,7 @@
 #include "gui/Button.hpp"
 
 /**
- * Bouton avec un style avancé (120px * 40px)
+ * Sprite-based button for menus
  */
 class CosmoButton: public gui::Button
 {
@@ -12,14 +12,12 @@ public:
 	CosmoButton(gui::Menu* owner, const sf::String& text);
 
 protected:
-	// override
-	void OnStateChanged(gui::State::EState state);
-	// override
-	void OnCallbackTriggered();
+	void OnStateChanged(gui::State::EState state) override;
+
+	void OnCallbackTriggered() override;
 
 private:
-	// override
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	static const sf::Texture* img_;
 

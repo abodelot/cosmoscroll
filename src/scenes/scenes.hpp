@@ -1,7 +1,7 @@
 #ifndef SCENES_HPP
 #define SCENES_HPP
 
-// toutes les scènes et tous les menus du jeu
+// Game states
 #include "scenes/IntroScene.hpp"
 #include "scenes/InGameScene.hpp"
 #include "scenes/EndGameScene.hpp"

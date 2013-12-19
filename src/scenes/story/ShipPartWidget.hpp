@@ -9,17 +9,17 @@ class ShipPartWidget: public gui::Widget
 public:
 	ShipPartWidget(gui::Menu* parent, ItemData::Type type);
 
-	// inherited callbacks
-	void OnKeyPressed(sf::Keyboard::Key code);
-	void OnMouseClicked(int x, int y);
-
 	/**
 	 * Refresh label content (name and level)
 	 */
 	void RefreshLabel();
 
+	// callbacks ---------------------------------------------------------------
+	void OnKeyPressed(sf::Keyboard::Key code) override;
+	void OnMouseClicked(int x, int y) override;
+
 private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	ItemData::Type type_;
 	xsf::Text m_text_name;

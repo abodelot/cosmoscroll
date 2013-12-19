@@ -19,8 +19,7 @@ public:
 
 	virtual void onPartDestroyed(const Part&) {};
 
-	// override
-	float getSpeedX() const;
+	float getSpeedX() const override;
 
 
 protected:
@@ -41,8 +40,7 @@ protected:
 	 */
 	int destroyPartByID(int id);
 
-	// override
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
 	typedef std::vector<Part> PartVector;

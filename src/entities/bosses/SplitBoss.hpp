@@ -10,17 +10,13 @@ class SplitBoss: public Damageable
 public:
 	SplitBoss(bool split = true);
 
-	// override
-	void onUpdate(float frametime);
+	void onUpdate(float frametime) override;
 
-	// override
-	void takeDamage(int damage);
+	void takeDamage(int damage) override;
 
-	// override
-	void onInit();
+	void onInit() override;
 
-	// override
-	void onDestroy();
+	void onDestroy() override;
 
 private :
 	int speed_x_,speed_y_;

@@ -24,8 +24,7 @@ public:
 
 	void updateScore(int diff);
 
-	// override
-	void takeDamage(int damage);
+	void takeDamage(int damage) override;
 
 	inline bool HasCheated() const { return m_konami_code_activated; }
 

@@ -12,11 +12,10 @@ class CreditCounterBase: public BaseMenu
 public:
 	CreditCounterBase();
 
-	// override
-	void OnFocus();
+	void OnFocus() override;
 
-	// override
-	void Show(sf::RenderTarget& target) const;
+	void Show(sf::RenderTarget& target) const override;
+
 private:
 	sf::Sprite credit_counter_bg_;
 	sf::Text credit_counter_;

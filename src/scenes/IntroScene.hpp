@@ -15,14 +15,11 @@ class IntroScene: public BaseScene
 public:
 	IntroScene();
 
-	// inherited
-	void OnEvent(const sf::Event& event);
+	void OnEvent(const sf::Event& event) override;
 
-	// inherited
-	void Update(float frametime);
+	void Update(float frametime) override;
 
-	// inherited
-	void Show(sf::RenderTarget& target) const;
+	void Show(sf::RenderTarget& target) const override;
 
 private:
 	float elapsed_;

@@ -12,16 +12,13 @@ class JoystickMenu: public BaseMenu
 public:
 	JoystickMenu();
 
-	// inherited
-	void OnFocus();
+	void OnFocus() override;
 
 private:
-
 	void AddRow(gui::FormLayout& form, Input::Action action, gui::Button** button);
 	std::wstring GetButtonLabel(Input::Action action) const;
 
-	// inherited
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 
 	gui::Button* but_weapon_;
 	gui::Button* but_missile_;

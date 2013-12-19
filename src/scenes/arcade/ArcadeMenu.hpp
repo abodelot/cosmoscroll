@@ -7,9 +7,9 @@ class ArcadeMenu: public BaseMenu
 {
 public:
 	ArcadeMenu();
+
 private:
-	// override
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 };
 
 #endif // ARCADEMENU_HPP

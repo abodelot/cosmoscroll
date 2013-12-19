@@ -8,10 +8,8 @@ class AboutMenu: public BaseMenu
 public:
 	AboutMenu();
 
-
 private:
-	// inherited
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 };
 
 #endif // ABOUTMENU_HPP

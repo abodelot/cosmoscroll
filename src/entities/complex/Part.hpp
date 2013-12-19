@@ -10,10 +10,9 @@ class Part: public Damageable
 public:
 	Part(int id = -1, int hp = 1, Team team = NEUTRAL);
 
-	// override
-	void onUpdate(float frametime);
+	void onUpdate(float frametime) override;
 
-	void takeDamage(int damage);
+	void takeDamage(int damage) override;
 
 	int getID() const;
 
@@ -21,7 +20,7 @@ public:
 
 	void setParent(MultiPartEntity* parent);
 
-	void onDestroy();
+	void onDestroy() override;
 
 private:
 	int  m_id;

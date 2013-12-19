@@ -12,14 +12,11 @@ class IntroLevelScene: public BaseScene
 public:
 	IntroLevelScene();
 
-	// inherited
-	void OnEvent(const sf::Event& event);
+	void OnEvent(const sf::Event& event) override;
 
-	// inherited
-	void Show(sf::RenderTarget& target) const;
+	void OnFocus() override;
 
-	// inherited
-	void OnFocus();
+	void Show(sf::RenderTarget& target) const override;
 
 private:
 	xsf::Text description_;

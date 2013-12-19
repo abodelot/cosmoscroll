@@ -7,24 +7,20 @@ class EntityManager;
 class ControlPanel;
 
 /**
- * Scène du déroulement du jeu
+ * Playing state
  */
 class InGameScene: public BaseScene
 {
 public:
 	InGameScene();
 
-	// inherited
-	void OnEvent(const sf::Event& event);
+	void OnEvent(const sf::Event& event) override;
 
-	// inherited
-	void Update(float frametime);
+	void OnFocus() override;
 
-	// inherited
-	void Show(sf::RenderTarget& target) const;
+	void Update(float frametime) override;
 
-	// inherited
-	void OnFocus();
+	void Show(sf::RenderTarget& target) const override;
 
 private:
 	EntityManager& entities_;

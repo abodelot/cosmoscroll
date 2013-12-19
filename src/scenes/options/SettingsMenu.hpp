@@ -9,7 +9,7 @@ public:
 	SettingsMenu();
 
 private:
-	void EventCallback(int id);
+	void EventCallback(int id) override;
 
 	gui::CheckBox* cb_fullscreen_;
 	gui::CheckBox* cb_vsync_;

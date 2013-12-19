@@ -13,16 +13,15 @@ class EvilBoss: public Damageable
 public:
 	EvilBoss();
 
-	// override
-	void takeDamage(int damage);
+	void takeDamage(int damage) override;
 
 	// callbacks ---------------------------------------------------------------
 
-	void onInit();
+	void onInit() override;
 
-	void onUpdate(float frametime);
+	void onUpdate(float frametime) override;
 
-	void onDestroy();
+	void onDestroy() override;
 
 private:
 	enum Phase
