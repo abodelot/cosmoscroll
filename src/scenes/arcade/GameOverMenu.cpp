@@ -43,7 +43,6 @@ GameOverMenu::GameOverMenu()
 
 void GameOverMenu::OnFocus()
 {
-	BaseMenu::OnFocus();
 	EntityManager& entities = EntityManager::getInstance();
 
 	score_ = entities.GetPlayerShip()->getScore();

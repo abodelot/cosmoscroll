@@ -23,7 +23,6 @@ private:
 	float timer_;
 	xsf::Text info_;
 	EntityManager& entities_;
-	bool player_dead_;
 };
 
 #endif // ENDGAMESCENE_HPP

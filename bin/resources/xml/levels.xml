@@ -311,7 +311,7 @@
 			<ship id="b2" y="160"/>
 			<wait t="5"/>
 			<call func="interceptors_5"/>
-			<boss_tentacles y="210" t="10"/>
+			<tentaculat_boss y="210" t="10"/>
 		</level>
 
 		<!-- LVL5 (scoot pyramids) -->
@@ -413,8 +413,8 @@
 				<ship id="s1" y="130" t="1"/>
 				<ship id="s1" y="160" t="1"/>
 			</loop>
-			<boss_tentacles y="120" t="5"/>
-			<boss_tentacles y="290" t="10"/>
+			<tentaculat_boss y="120" t="5"/>
+			<tentaculat_boss y="290" t="10"/>
 		</level>
 
 		<!-- LVL7 (saucers, interceptors, heavy interceptors) -->

@@ -10,7 +10,7 @@
 #include "../gui/gui.hpp"
 
 /**
- * Menu navigable pour sélectionner un choix
+ * Base class for scenes with interactive gui
  */
 class BaseMenu: public BaseScene, public gui::Menu
 {
@@ -18,8 +18,6 @@ public:
 	BaseMenu();
 
 	void OnEvent(const sf::Event& event) override;
-
-	void OnFocus() override;
 
 	void Update(float frametime) override;
 

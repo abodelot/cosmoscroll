@@ -1,8 +1,8 @@
 #include "LevelMenu.hpp"
 #include "core/Game.hpp"
+#include "core/UserSettings.hpp"
 #include "core/LevelManager.hpp"
 #include "core/ControlPanel.hpp"
-#include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
 
@@ -10,6 +10,7 @@ LevelMenu::LevelMenu():
 	levels_(LevelManager::getInstance())
 {
 	SetTitle(_t("menu.story.title"));
+	m_credits = new CreditCounterWidget(this);
 
 	gui::FormLayout form(90, 120);
 	form.SetSpacing(10, 16);
@@ -29,7 +30,7 @@ LevelMenu::LevelMenu():
 
 void LevelMenu::OnFocus()
 {
-	CreditCounterBase::OnFocus();
+	m_credits->setCredits(UserSettings::getCredits());
 	size_t nb_levels = levels_.getLevelCount();
 	size_t current = levels_.getCurrent();
 	size_t last_unlocked = levels_.getLastUnlocked();

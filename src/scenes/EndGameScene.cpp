@@ -23,7 +23,6 @@ EndGameScene::EndGameScene():
 	info_.setCharacterSize(40);
 	info_.setColor(sf::Color::White);
 	info_.setFont(Resources::getFont("hemi-head.ttf"));
-	player_dead_ = false;
 }
 
 
@@ -48,10 +47,10 @@ void EndGameScene::Update(float frametime)
 		Game::getInstance().setNextScene(next);
 	}
 
-	if (player_dead_)
+	Player* player = entities_.GetPlayerShip();
+	if (player->isDead())
 	{
 		// Falling animation
-		Player* player = EntityManager::getInstance().GetPlayerShip();
 		player->move(-100 * frametime, 100 * frametime);
 		player->rotate(-60 * frametime);
 	}
@@ -74,7 +73,6 @@ void EndGameScene::OnFocus()
 	{
 		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("game-over.ogg"));
 		info_.setString(_t("endgame.game_over"));
-		player_dead_ = true;
 	}
 	else
 	{
@@ -99,8 +97,10 @@ void EndGameScene::OnFocus()
 		{
 			levels.unlockNextLevel();
 		}
-		player_dead_ = false;
 	}
 	// Centered on screen
 	info_.setPosition((APP_WIDTH - info_.getWidth()) / 2, (APP_HEIGHT - info_.getHeight()) / 2);
+
+	Game::getInstance().getWindow().setMouseCursorVisible(true);
+	Game::getInstance().getWindow().setKeyRepeatEnabled(true);
 }

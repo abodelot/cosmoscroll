@@ -1,5 +1,4 @@
 #include "BaseMenu.hpp"
-#include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
@@ -50,14 +49,6 @@ void BaseMenu::Show(sf::RenderTarget& target) const
 	// drawing gui
 	gui::Menu::Show(target);
 	target.draw(title_);
-}
-
-
-void BaseMenu::OnFocus()
-{
-	// for user-friendly menus
-	Game::getInstance().getWindow().setMouseCursorVisible(true);
-	Game::getInstance().getWindow().setKeyRepeatEnabled(true);
 }
 
 

@@ -39,6 +39,15 @@ void InGameScene::OnEvent(const sf::Event& event)
 }
 
 
+void InGameScene::OnFocus()
+{
+	Game::getInstance().getWindow().setMouseCursorVisible(false);
+	Game::getInstance().getWindow().setKeyRepeatEnabled(false);
+
+	setPanelOnTop(UserSettings::panel_on_top);
+}
+
+
 void InGameScene::Update(float frametime)
 {
 	if (entities_.IsGameOver())
@@ -59,15 +68,6 @@ void InGameScene::Show(sf::RenderTarget& target) const
 {
 	target.draw(entities_);
 	target.draw(panel_);
-}
-
-
-void InGameScene::OnFocus()
-{
-	Game::getInstance().getWindow().setMouseCursorVisible(false);
-	Game::getInstance().getWindow().setKeyRepeatEnabled(false);
-
-	setPanelOnTop(UserSettings::panel_on_top);
 }
 
 

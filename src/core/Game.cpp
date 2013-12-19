@@ -98,7 +98,6 @@ void Game::loadResources(const std::string& data_path)
 	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
 	m_window.setPosition({(desktop.width - m_window.getSize().x) / 2,
 	                      (desktop.height - m_window.getSize().y) / 2});
-
 	m_window.draw(s);
 	m_window.display();
 

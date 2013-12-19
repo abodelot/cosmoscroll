@@ -1,11 +1,12 @@
 #ifndef ARMORY_HPP
 #define ARMORY_HPP
 
-#include "CreditCounterBase.hpp"
+#include "scenes/BaseMenu.hpp"
+#include "CreditCounterWidget.hpp"
 #include "ShipPartWidget.hpp"
 
 
-class ArmoryMenu: public CreditCounterBase
+class ArmoryMenu: public BaseMenu
 {
 public:
 	ArmoryMenu();
@@ -38,6 +39,7 @@ private:
 	} dialog_;
 
 	ShipPartWidget* items_[ItemData::_COUNT];
+	CreditCounterWidget* m_credits;
 	gui::Label* lab_info_;
 	ItemData::Type current_type_;
 };

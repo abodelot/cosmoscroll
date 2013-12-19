@@ -219,8 +219,8 @@
 		<Unit filename="src/scenes/scenes.hpp" />
 		<Unit filename="src/scenes/story/ArmoryMenu.cpp" />
 		<Unit filename="src/scenes/story/ArmoryMenu.hpp" />
-		<Unit filename="src/scenes/story/CreditCounterBase.cpp" />
-		<Unit filename="src/scenes/story/CreditCounterBase.hpp" />
+		<Unit filename="src/scenes/story/CreditCounterWidget.cpp" />
+		<Unit filename="src/scenes/story/CreditCounterWidget.hpp" />
 		<Unit filename="src/scenes/story/IntroLevelScene.cpp" />
 		<Unit filename="src/scenes/story/IntroLevelScene.hpp" />
 		<Unit filename="src/scenes/story/LevelMenu.cpp" />

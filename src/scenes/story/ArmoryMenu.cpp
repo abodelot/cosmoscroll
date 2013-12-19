@@ -22,6 +22,8 @@ ArmoryMenu::ArmoryMenu()
 		items_[i] = new ShipPartWidget(this, (ItemData::Type) i);
 	}
 
+	m_credits = new CreditCounterWidget(this);
+
 	// init dialog
 	dialog_.background = new gui::Image(this, Resources::getTexture("gui/armory-dialog.png"));
 	int x = dialog_.x = (APP_WIDTH - Dialog::WIDTH) / 2;
@@ -87,7 +89,7 @@ ArmoryMenu::ArmoryMenu()
 
 void ArmoryMenu::OnFocus()
 {
-	CreditCounterBase::OnFocus();
+	m_credits->setCredits(UserSettings::getCredits());
 	lab_info_->setString(_t("armory.info"));
 	lab_info_->setPosition((APP_WIDTH - lab_info_->GetWidth()) / 2, 366);
 }
@@ -140,7 +142,7 @@ bool ArmoryMenu::BuyItem()
 		UserSettings::setItemLevel(current_type_, level);
 
 		items_[current_type_]->RefreshLabel(); // refresh item widget
-		CreditCounterBase::OnFocus(); // refresh credit counter
+		m_credits->setCredits(UserSettings::getCredits());
 
 		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("cash-register.ogg"));
 		return true;
