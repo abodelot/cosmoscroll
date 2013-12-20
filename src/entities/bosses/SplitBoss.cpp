@@ -121,7 +121,7 @@ void SplitBoss::takeDamage(int damage)
 
 void SplitBoss::onInit()
 {
-    target_ = EntityManager::getInstance().GetPlayerShip();
+    target_ = EntityManager::getInstance().getPlayer();
 }
 
 

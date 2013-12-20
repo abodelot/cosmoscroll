@@ -35,7 +35,7 @@ void InGameScene::OnEvent(const sf::Event& event)
 		default:
 			break;
 	}
-	entities_.GetPlayerShip()->onEvent(event);
+	entities_.getPlayer()->onEvent(event);
 }
 
 

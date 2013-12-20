@@ -45,7 +45,7 @@ void GameOverMenu::OnFocus()
 {
 	EntityManager& entities = EntityManager::getInstance();
 
-	score_ = entities.GetPlayerShip()->getScore();
+	score_ = entities.getPlayer()->getScore();
 	if (score_ > UserSettings::getHighscore())
 	{
 		UserSettings::setHighscore(score_);
@@ -85,7 +85,7 @@ void GameOverMenu::EventCallback(int id)
 			Game::getInstance().setNextScene(Game::SC_MainMenu);
 			break;
 		case 3:
-			if (EntityManager::getInstance().GetPlayerShip()->HasCheated())
+			if (EntityManager::getInstance().getPlayer()->HasCheated())
 			{
 				lab_result_->setCharacterSize(20);
 				lab_result_->setString(_t("menu.gameover.error_cheat"));

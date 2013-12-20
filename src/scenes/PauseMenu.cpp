@@ -35,6 +35,13 @@ void PauseMenu::OnEvent(const sf::Event& event)
 }
 
 
+void PauseMenu::OnFocus()
+{
+	Game::getInstance().getWindow().setMouseCursorVisible(true);
+	Game::getInstance().getWindow().setKeyRepeatEnabled(true);
+}
+
+
 void PauseMenu::EventCallback(int id)
 {
 	Game& game = Game::getInstance();

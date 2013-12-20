@@ -91,8 +91,8 @@ menu.about.licence = License:
 
 # End of game
 endgame.game_over = Game Over
-endgame.end_level = Level {level} cleared!\nCredits earned: +{credits}
-endgame.end_last_level = Congratulations!\n\nYou've finished the game!\nCredits earned: +{credits}
+endgame.level_completed = Level {level} cleared!\nCredits earned: +{credits}
+endgame.last_level_completed = Congratulations!\n\nYou've finished the game!\nCredits earned: +{credits}
 
 # Control panel
 panel.bar_hp = Hull

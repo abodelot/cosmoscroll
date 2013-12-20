@@ -40,7 +40,7 @@ EvilBoss::EvilBoss():
 
 void EvilBoss::onInit()
 {
-    m_target = EntityManager::getInstance().GetPlayerShip();
+    m_target = EntityManager::getInstance().getPlayer();
 }
 
 

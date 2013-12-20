@@ -27,7 +27,7 @@ void Missile::onDestroy()
 	{
 		float angle = math::random(m_angle - math::PI / 2, m_angle + math::PI / 2);
 		int speed = math::random(200, 600);
-		Projectile* p = new Projectile(EntityManager::getInstance().GetPlayerShip(), angle,
+		Projectile* p = new Projectile(EntityManager::getInstance().getPlayer(), angle,
 			Resources::getTexture("ammo/laser-red.png"), speed, 10);
 		p->setPosition(getPosition());
 		EntityManager::getInstance().addEntity(p);

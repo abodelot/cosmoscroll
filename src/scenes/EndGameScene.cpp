@@ -12,17 +12,16 @@
 #include "entities/Player.hpp"
 #include "utils/I18n.hpp"
 
-// auto switch to game over menu after this delay
-#define DURATION 7
+// Switch to next menu after this delay
+#define SCREEN_DURATION 7
 
 
 EndGameScene::EndGameScene():
-	entities_(EntityManager::getInstance())
+	m_entities(EntityManager::getInstance())
 {
-	timer_ = 0.f;
-	info_.setCharacterSize(40);
-	info_.setColor(sf::Color::White);
-	info_.setFont(Resources::getFont("hemi-head.ttf"));
+	m_text.setCharacterSize(40);
+	m_text.setColor(sf::Color::White);
+	m_text.setFont(Resources::getFont("hemi-head.ttf"));
 }
 
 
@@ -30,77 +29,81 @@ void EndGameScene::OnEvent(const sf::Event& event)
 {
 	Input::Action action = Input::GetInstance().EventToAction(event);
 	if (action == Input::ENTER)
+		goNextScreen();
+}
+
+
+void EndGameScene::OnFocus()
+{
+	m_started_at.restart();
+
+	if (m_entities.getPlayer()->isDead())
 	{
-		timer_ = DURATION;
+		SoundSystem::GetInstance().PlaySound("game-over.ogg");
+		m_text.setString(_t("endgame.game_over"));
 	}
+	else
+	{
+		// Level completed, collect $$$
+		SoundSystem::GetInstance().PlaySound("end-level.ogg");
+		int earned_credits = m_entities.getPlayer()->getScore();
+		UserSettings::updateCredits(earned_credits);
+
+		LevelManager& levels = LevelManager::getInstance();
+		size_t current = levels.getCurrent();
+		// If last level completed
+		if (current == levels.getLevelCount())
+		{
+			m_text.setString(I18n::templatize("endgame.last_level_completed", "{credits}", earned_credits));
+		}
+		else
+		{
+			m_text.setString(I18n::templatize("endgame.level_completed", "{level}", current, "{credits}", earned_credits));
+			// Unlock next level
+			if (current == levels.getLastUnlocked())
+			{
+				levels.unlockNextLevel();
+			}
+		}
+	}
+	// Center text on screen
+	float width = m_text.getLocalBounds().width;
+	float height = m_text.getLocalBounds().height;
+	m_text.setPosition((APP_WIDTH - width) / 2, (APP_HEIGHT - height) / 2);
+
+	Game::getInstance().getWindow().setMouseCursorVisible(true);
+	Game::getInstance().getWindow().setKeyRepeatEnabled(true);
 }
 
 
 void EndGameScene::Update(float frametime)
 {
-	timer_ += frametime;
-	ParticleSystem::GetInstance().Update(frametime);
-	if (timer_ >= DURATION)
-	{
-		Game::Scene next = entities_.GetMode() == EntityManager::MODE_STORY ?
-			Game::SC_LevelMenu : Game::SC_GameOverMenu;
-		Game::getInstance().setNextScene(next);
-	}
-
-	Player* player = entities_.GetPlayerShip();
+	Player* player = m_entities.getPlayer();
 	if (player->isDead())
 	{
 		// Falling animation
 		player->move(-100 * frametime, 100 * frametime);
 		player->rotate(-60 * frametime);
 	}
+	ParticleSystem::GetInstance().Update(frametime);
+
+	if (m_started_at.getElapsedTime().asSeconds() >= SCREEN_DURATION)
+		goNextScreen();
 }
 
 
 void EndGameScene::Show(sf::RenderTarget& target) const
 {
 	target.draw(ControlPanel::getInstance());
-	target.draw(entities_);
-	target.draw(info_);
+	target.draw(m_entities);
+	target.draw(m_text);
 }
 
 
-void EndGameScene::OnFocus()
+void EndGameScene::goNextScreen() const
 {
-	timer_ = 0.f;
-
-	if (entities_.GetPlayerShip()->isDead())
-	{
-		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("game-over.ogg"));
-		info_.setString(_t("endgame.game_over"));
-	}
+	if (m_entities.GetMode() == EntityManager::MODE_STORY)
+		Game::getInstance().setNextScene(Game::SC_LevelMenu);
 	else
-	{
-		// Level completed
-		LevelManager& levels = LevelManager::getInstance();
-		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("end-level.ogg"));
-		int earned_credits = entities_.GetPlayerShip()->getScore();
-		size_t current = levels.getCurrent();
-		// if last level
-		if (current == levels.getLevelCount())
-		{
-			info_.setString(I18n::templatize("endgame.end_last_level", "{credits}", earned_credits));
-		}
-		else
-		{
-			info_.setString(I18n::templatize("endgame.end_level", "{level}", current, "{credits}", earned_credits));
-		}
-
-		UserSettings::updateCredits(earned_credits);
-		// Unlock next level
-		if (current == levels.getLastUnlocked())
-		{
-			levels.unlockNextLevel();
-		}
-	}
-	// Centered on screen
-	info_.setPosition((APP_WIDTH - info_.getWidth()) / 2, (APP_HEIGHT - info_.getHeight()) / 2);
-
-	Game::getInstance().getWindow().setMouseCursorVisible(true);
-	Game::getInstance().getWindow().setKeyRepeatEnabled(true);
+		Game::getInstance().setNextScene(Game::SC_GameOverMenu);
 }

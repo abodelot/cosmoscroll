@@ -46,7 +46,7 @@ void GunTower::onUpdate(float frametime)
 
 void GunTower::onInit()
 {
-	m_target = EntityManager::getInstance().GetPlayerShip();
+	m_target = EntityManager::getInstance().getPlayer();
 
 	// Always positionned at bottom
 	setY(EntityManager::getInstance().getHeight() - (BASE_OFFSET + 64));

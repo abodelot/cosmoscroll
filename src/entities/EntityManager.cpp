@@ -451,7 +451,7 @@ const Animation& EntityManager::getAnimation(const std::string& key) const
 }
 
 
-Player* EntityManager::GetPlayerShip() const
+Player* EntityManager::getPlayer() const
 {
 	assert(m_player != NULL);
 	return m_player;

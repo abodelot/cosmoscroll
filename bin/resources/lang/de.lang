@@ -92,8 +92,8 @@ menu.about.licence = Lizenz:
 
 # End of game
 endgame.game_over = Game Over
-endgame.end_level = Level {level} abgeschlossen!\nKredits genannt: +{credits}
-endgame.end_last_level = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\nKredits genannt: +{credits}
+endgame.level_completed = Level {level} abgeschlossen!\nKredits genannt: +{credits}
+endgame.last_level_completed = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\nKredits genannt: +{credits}
 
 # Control panel
 panel.bar_hp = Schiff

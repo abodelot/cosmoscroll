@@ -91,8 +91,8 @@ menu.about.licence = Licence :
 
 # Fin de jeu
 endgame.game_over = Game Over
-endgame.end_level = Niveau {level} terminé !\nCrédits gagnés : +{credits}
-endgame.end_last_level = Félicitations !\n\nVous avez terminé le jeu!\nCrédit gagnés : +{credits}
+endgame.level_completed = Niveau {level} terminé !\nCrédits gagnés : +{credits}
+endgame.last_level_completed = Félicitations !\n\nVous avez terminé le jeu!\nCrédit gagnés : +{credits}
 
 # Panneau de contrôle
 panel.bar_hp = Coque

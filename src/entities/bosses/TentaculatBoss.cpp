@@ -30,7 +30,7 @@ TentaculatBoss::TentaculatBoss():
 
 void TentaculatBoss::onInit()
 {
-    m_target = EntityManager::getInstance().GetPlayerShip();
+    m_target = EntityManager::getInstance().getPlayer();
 }
 
 

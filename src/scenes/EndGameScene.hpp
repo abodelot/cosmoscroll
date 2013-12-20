@@ -2,7 +2,6 @@
 #define ENDGAMESCENE_HPP
 
 #include "BaseScene.hpp"
-#include "utils/sfml_helper.hpp"
 
 class EntityManager;
 
@@ -13,16 +12,18 @@ public:
 
 	void OnEvent(const sf::Event& event) override;
 
+	void OnFocus() override;
+
 	void Update(float frametime) override;
 
 	void Show(sf::RenderTarget& target) const override;
 
-	void OnFocus() override;
-
 private:
-	float timer_;
-	xsf::Text info_;
-	EntityManager& entities_;
+	void goNextScreen() const;
+
+	sf::Clock            m_started_at;
+	sf::Text             m_text;
+	const EntityManager& m_entities;
 };
 
 #endif // ENDGAMESCENE_HPP

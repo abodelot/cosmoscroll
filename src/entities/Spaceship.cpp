@@ -73,7 +73,7 @@ void Spaceship::onInit()
 		setY(base_y_);
 	}
 
-	m_target = EntityManager::getInstance().GetPlayerShip();
+	m_target = EntityManager::getInstance().getPlayer();
 }
 
 
@@ -191,7 +191,7 @@ void Spaceship::onDestroy()
 		PowerUp::dropRandom(getPosition());
 	}
 
-	EntityManager::getInstance().GetPlayerShip()->updateScore(m_points);
+	EntityManager::getInstance().getPlayer()->updateScore(m_points);
 	MessageSystem::write("+" + std::to_string(m_points), getPosition(), sf::Color(255, 128, 0));
 }
 

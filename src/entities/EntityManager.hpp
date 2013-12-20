@@ -118,9 +118,9 @@ public:
 	void loadSpaceships(const std::string& filename);
 
 	/**
-	 * Obtenir le vaisseau du joueur
+	 * Get player entity
 	 */
-	Player* GetPlayerShip() const;
+	Player* getPlayer() const;
 
 	inline float GetTimer() const { return timer_; }
 
