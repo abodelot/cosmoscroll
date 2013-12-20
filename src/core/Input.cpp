@@ -1,10 +1,6 @@
 #include <cstdio>
 #include <SFML/Graphics.hpp>
 #include "Input.hpp"
-#include "Game.hpp"
-#include "Constants.hpp"
-#include "Resources.hpp"
-#include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "utils/IniParser.hpp"
 
@@ -22,14 +18,14 @@ Input::Input()
 {
 	device_flag_ = ALL;
 
-	// unset bindings for everything
-	for (int i = 0; i < Input::COUNT; ++i)
+	// Unset bindings for everything
+	for (size_t i = 0; i < Input::COUNT; ++i)
 	{
 		action_to_key_[i] = sf::Keyboard::Unknown;
 		action_to_joybutton_[i] = MAX_JOY_BUTTON;
 	}
 
-	for (int i = 0; i < sf::Keyboard::KeyCount; ++i)
+	for (size_t i = 0; i < sf::Keyboard::KeyCount; ++i)
 	{
 		key_to_action_[i] = Input::COUNT;
 	}
@@ -39,7 +35,7 @@ Input::Input()
 		joybutton_to_action_[i] = Input::COUNT;
 	}
 
-	// default keyboard binding
+	// Default keyboard binding
 	SetKeyboardBind(sf::Keyboard::Return,   ENTER);
 	SetKeyboardBind(sf::Keyboard::Up,       MOVE_UP);
 	SetKeyboardBind(sf::Keyboard::Down,     MOVE_DOWN);
@@ -53,7 +49,7 @@ Input::Input()
 	SetKeyboardBind(sf::Keyboard::A,        USE_MISSILE);
 	SetKeyboardBind(sf::Keyboard::F1,       TAKE_SCREENSHOT);
 
-	// default joystick binding
+	// Default joystick binding
 	SetJoystickBind(0, ENTER);
 	SetJoystickBind(1, PAUSE);
 	SetJoystickBind(6, USE_LASER);
@@ -126,17 +122,17 @@ void Input::SetKeyboardBind(sf::Keyboard::Key key, Action action)
 {
 	if (action < Input::COUNT && key < sf::Keyboard::KeyCount)
 	{
-		sf::Keyboard::Key old_key = action_to_key_[action];
-		if (old_key != sf::Keyboard::KeyCount)
-		{
-			key_to_action_[old_key] = COUNT;
-		}
+		// If key is already taken by another action, unset it
+		for (size_t i = 0; i < Input::COUNT; ++i)
+			if (action_to_key_[i] == key && i != action)
+				action_to_key_[i] = sf::Keyboard::Unknown;
+
 		action_to_key_[action] = key;
 		key_to_action_[key] = action;
 	}
 	else
 	{
-		fprintf(stderr, "error: bad keyboard binding ignored\n");
+		fprintf(stderr, "[Input] bad keyboard binding ignored\n");
 	}
 }
 
@@ -144,7 +140,7 @@ void Input::SetKeyboardBind(sf::Keyboard::Key key, Action action)
 sf::Keyboard::Key Input::GetKeyboardBind(Action action)
 {
 	return action < Input::COUNT ?
-		action_to_key_[action] : sf::Keyboard::KeyCount;
+		action_to_key_[action] : sf::Keyboard::Unknown;
 }
 
 
@@ -152,12 +148,17 @@ void Input::SetJoystickBind(unsigned int joybutton, Action action)
 {
 	if (action < Input::COUNT && joybutton < MAX_JOY_BUTTON)
 	{
+		// If button is already taken by another action, unset it
+		for (size_t i = 0; i < Input::COUNT; ++i)
+			if (action_to_joybutton_[i] == joybutton && i != action)
+				action_to_joybutton_[i] = MAX_JOY_BUTTON;
+
 		action_to_joybutton_[action] = joybutton;
 		joybutton_to_action_[joybutton] = action;
 	}
 	else
 	{
-		fprintf(stderr, "error: bad joystick binding ignored\n");
+		fprintf(stderr, "[Input] bad joystick binding ignored (button %u, action %u)\n", joybutton, action);
 	}
 }
 
@@ -302,69 +303,24 @@ const char* Input::KeyToString(int key)
 		case sf::Keyboard::F15: return "F15";
 		case sf::Keyboard::Pause: return "Pause";
 	}
-	return "<Unknown key>";
+	return "<Unknown>";
+}
+
+
+std::wstring Input::ButtonToString(unsigned int button)
+{
+	if (button >= MAX_JOY_BUTTON)
+		return L"<Unknown>";
+
+	std::wostringstream oss;
+	oss << _t("menu.joystick.button") << L" " << button;
+	return oss.str();
 }
 
 
 void Input::SetDevices(unsigned int flag)
 {
 	device_flag_ = flag;
-}
-
-
-void Input::AskUserInput(Device device, Action action)
-{
-	sf::String s;
-	if (device == Input::KEYBOARD)
-	{
-		s = _t("input.press_key");
-	}
-	else if (device == Input::JOYSTICK)
-	{
-		s = _t("input.press_button");
-	}
-	s += L" '" + Input::ActionToString(action) + L"'\n\n" + _t("input.cancel");
-
-	sf::Text prompt;
-	prompt.setString(s);
-	prompt.setColor(sf::Color::White);
-	prompt.setFont(Resources::getFont("Ubuntu-R.ttf"));
-	sf::FloatRect rect = prompt.getLocalBounds();
-	prompt.setPosition(
-		(int) (APP_WIDTH - rect.width) / 2,
-		(int) (APP_HEIGHT - rect.height) / 2
-	);
-
-	sf::Event event;
-	bool running = true;
-	sf::RenderWindow& app = Game::getInstance().getWindow();
-	while (running)
-	{
-		while (app.pollEvent(event))
-		{
-			if (event.type == sf::Event::KeyPressed)
-			{
-				if (event.key.code == sf::Keyboard::Escape)
-				{
-					running = false;
-				}
-				else if (device == Input::KEYBOARD)
-				{
-					running = false;
-					SetKeyboardBind(event.key.code, action);
-				}
-			}
-			else if (event.type == sf::Event::JoystickButtonPressed
-				&& device == Input::JOYSTICK)
-			{
-				running = false;
-				SetJoystickBind(event.joystickButton.button, action);
-			}
-		}
-		app.clear();
-		app.draw(prompt);
-		app.display();
-	}
 }
 
 

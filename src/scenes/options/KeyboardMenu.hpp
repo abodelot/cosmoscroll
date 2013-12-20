@@ -2,6 +2,7 @@
 #define KEYBOARDMENU_HPP
 
 #include "scenes/BaseMenu.hpp"
+#include "scenes/ConfigButton.hpp"
 #include "core/Input.hpp"
 
 /**
@@ -12,21 +13,22 @@ class KeyboardMenu: public BaseMenu
 public:
 	KeyboardMenu();
 
+	void OnEvent(const sf::Event& event);
 	void OnFocus();
 
 private:
 	void EventCallback(int id) override;
 
-	void AddRow(gui::FormLayout& form, Input::Action action, gui::Button** button);
-	const char* GetKeyLabel(Input::Action action) const;
+	ConfigButton* addRow(gui::FormLayout& form, Input::Action action);
 
-	gui::Button* but_up_;
-	gui::Button* but_down_;
-	gui::Button* but_left_;
-	gui::Button* but_right_;
-	gui::Button* but_weapon_;
-	gui::Button* but_cooler_;
-	gui::Button* but_missile_;
+	ConfigButton* m_triggered;
+	ConfigButton* but_up_;
+	ConfigButton* but_down_;
+	ConfigButton* but_left_;
+	ConfigButton* but_right_;
+	ConfigButton* but_weapon_;
+	ConfigButton* but_cooler_;
+	ConfigButton* but_missile_;
 };
 
 #endif // KEYBOARDMENU_HPP

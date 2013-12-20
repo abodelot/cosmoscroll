@@ -1,76 +1,97 @@
-#include <sstream>
-
 #include "JoystickMenu.hpp"
 #include "core/Game.hpp"
-#include "core/Input.hpp"
-#include "scenes/ConfigButton.hpp"
-#include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 
 
-JoystickMenu::JoystickMenu()
+JoystickMenu::JoystickMenu():
+	m_triggered(NULL)
 {
 	SetTitle(_t("menu.joystick.title"));
 
-	gui::FormLayout form(110, 110);
+	gui::FormLayout form(110, 120);
 	form.SetSpacing(20, 16);
-	AddRow(form, Input::USE_LASER, &but_weapon_);
-	AddRow(form, Input::USE_MISSILE, &but_missile_);
-	AddRow(form, Input::USE_COOLER, &but_cooler_);
-	AddRow(form, Input::PAUSE, &but_pause_);
+	but_weapon_  = addRow(form, Input::USE_LASER);
+	but_missile_ = addRow(form, Input::USE_MISSILE);
+	but_cooler_  = addRow(form, Input::USE_COOLER);
+	but_pause_   = addRow(form, Input::PAUSE);
 
 	sl_joystick_ = new gui::Slider(this, 160);
 	sl_joystick_->SetCallbackID(9000);
 	form.AddRow(_t("menu.joystick.sensitivity"), sl_joystick_);
 
-	gui::Button* b = new CosmoButton(this, _t("menu.back"));
-	b->setPosition(210, 410);
-	b->SetCallbackID(9001);
+	gui::Button* back = new CosmoButton(this, _t("menu.back"));
+	back->setPosition(210, 410);
+	back->SetCallbackID(9001);
+}
+
+
+void JoystickMenu::OnEvent(const sf::Event& event)
+{
+	if (m_triggered != NULL)
+	{
+		// By-pass GUI event handler
+		if (event.type == sf::Event::JoystickButtonPressed)
+		{
+			// Binding action to pressed button
+			Input::Action action = m_triggered->getAction();
+			Input::GetInstance().SetJoystickBind(event.joystickButton.button, action);
+			OnFocus();
+		}
+		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+		{
+			// Cancel input and reset button label
+			m_triggered->setJoystickLabel();
+			m_triggered = NULL;
+		}
+	}
+	else
+	{
+		gui::Menu::OnEvent(event);
+	}
 }
 
 
 void JoystickMenu::OnFocus()
 {
-	BaseMenu::OnFocus();
-	but_weapon_->setString(GetButtonLabel(Input::USE_LASER));
-	but_missile_->setString(GetButtonLabel(Input::USE_MISSILE));
-	but_cooler_->setString(GetButtonLabel(Input::USE_COOLER));
-	but_pause_->setString(GetButtonLabel(Input::PAUSE));
+	m_triggered = NULL;
+	// Refresh labels
+	but_weapon_->setJoystickLabel();
+	but_missile_->setJoystickLabel();
+	but_cooler_->setJoystickLabel();
+	but_pause_->setJoystickLabel();
 
 	sl_joystick_->SetValue(100 - Input::GetInstance().GetSensitivity());
-}
-
-void JoystickMenu::AddRow(gui::FormLayout& form, Input::Action action, gui::Button** button)
-{
-	*button = new ConfigButton(this, GetButtonLabel(action));
-	(*button)->SetCallbackID(action);
-
-	form.AddRow(Input::ActionToString(action), *button);
-}
-
-
-std::wstring JoystickMenu::GetButtonLabel(Input::Action action) const
-{
-	std::wostringstream oss;
-	oss << _t("menu.joystick.button") << L" " << Input::GetInstance().GetJoystickBind(action);
-	return oss.str();
 }
 
 
 void JoystickMenu::EventCallback(int id)
 {
-	Input& input = Input::GetInstance();
+	// Input::Action enumerations are used as widget ids
 	switch (id)
 	{
+		case Input::USE_LASER:   m_triggered = but_weapon_;  break;
+		case Input::USE_COOLER:  m_triggered = but_cooler_;  break;
+		case Input::USE_MISSILE: m_triggered = but_missile_; break;
+		case Input::PAUSE:       m_triggered = but_pause_;   break;
 		case 9000:
-			input.SetSensitivity(100 - sl_joystick_->GetValue());
+			Input::GetInstance().SetSensitivity(100 - sl_joystick_->GetValue());
 			break;
 		case 9001:
 			Game::getInstance().setNextScene(Game::SC_OptionMenu);
 			break;
-		default:
-			// Input::Action enumerations are used as menu ids
-			input.AskUserInput(Input::JOYSTICK, (Input::Action) id);
-			OnFocus();
 	}
+	// We are now waiting for user input
+	if (m_triggered != NULL)
+	{
+		m_triggered->setString(". . .");
+	}
+}
+
+
+ConfigButton* JoystickMenu::addRow(gui::FormLayout& form, Input::Action action)
+{
+	ConfigButton* button = new ConfigButton(this, action);
+	button->setJoystickLabel();
+	form.AddRow(Input::ActionToString(action), button);
+	return button;
 }

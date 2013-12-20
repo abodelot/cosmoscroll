@@ -126,11 +126,6 @@ action.pause = Pause
 action.cooler = Nutze Kühlerbonus
 action.missile = Nutze Raketenbonus
 
-# Ask input
-input.press_key = Drücke eine Taste um eine Aktion\ndafür festzulegen
-input.press_button = Drücke einen Joystickknopf um eine Aktion\ndafür festzulegen
-input.cancel = (drücke Escape um abzubrechen)
-
 # Items
 item.shield = Energie Schild
 item.shield_info = Schutzpunkte: {points}

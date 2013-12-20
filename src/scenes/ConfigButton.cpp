@@ -4,23 +4,35 @@
 #define BUT_W 120
 #define BUT_H 25
 
-const sf::Texture* ConfigButton::img_ = NULL;
 
-ConfigButton::ConfigButton(gui::Menu* owner, const sf::String& text) :
-	gui::Button(owner, text, BUT_W, BUT_H)
+ConfigButton::ConfigButton(gui::Menu* owner, Input::Action action):
+	gui::Button(owner, "", BUT_W, BUT_H),
+	m_action(action)
 {
-	if (img_ == NULL)
-	{
-		img_ = &Resources::getTexture("gui/button-config.png");
-	}
-
-	background_.setTexture(*img_);
-	background_.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
-	background_.resize(BUT_W, BUT_H);
-
+	m_background.setTexture(Resources::getTexture("gui/button-config.png"));
+	m_background.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
 	SetTextPadding(0, -2);
 	SetAlign(gui::Align::CENTER);
+	SetCallbackID(action);
 	OnStateChanged(GetState());
+}
+
+
+void ConfigButton::setKeyboardLabel()
+{
+	setString(Input::KeyToString(Input::GetInstance().GetKeyboardBind(m_action)));
+}
+
+
+void ConfigButton::setJoystickLabel()
+{
+	setString(Input::ButtonToString(Input::GetInstance().GetJoystickBind(m_action)));
+}
+
+
+Input::Action ConfigButton::getAction() const
+{
+	return m_action;
 }
 
 
@@ -29,13 +41,13 @@ void ConfigButton::OnStateChanged(gui::State::EState state)
 	switch (state)
 	{
 		case gui::State::DEFAULT:
-			background_.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
+			m_background.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
 			break;
 		case gui::State::HOVERED:
-			background_.setTextureRect(sf::IntRect(0, BUT_H, BUT_W, BUT_H));
+			m_background.setTextureRect(sf::IntRect(0, BUT_H, BUT_W, BUT_H));
 			break;
 		case gui::State::FOCUSED:
-			background_.setTextureRect(sf::IntRect(0, BUT_H * 2, BUT_W, BUT_H));
+			m_background.setTextureRect(sf::IntRect(0, BUT_H * 2, BUT_W, BUT_H));
 			break;
 		default:
 			break;
@@ -52,7 +64,7 @@ void ConfigButton::OnCallbackTriggered()
 void ConfigButton::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
-	target.draw(background_, states);
+	target.draw(m_background, states);
 	target.draw((gui::Button) *this);
 }
 

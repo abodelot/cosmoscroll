@@ -71,11 +71,13 @@ ArmoryMenu::ArmoryMenu()
 	dialog_.price->setCharacterSize(14);
 	layout_right.Add(dialog_.price);
 
-	dialog_.but_buy = new ConfigButton(this, _t("armory.buy"));
+	dialog_.but_buy = new ConfigButton(this);
+	dialog_.but_buy->setString(_t("armory.buy"));
 	dialog_.but_buy->SetCallbackID(100);
 	layout_right.Add(dialog_.but_buy);
 
-	dialog_.but_back = new ConfigButton(this, _t("menu.cancel"));
+	dialog_.but_back = new ConfigButton(this);
+	dialog_.but_back->setString(_t("menu.cancel"));
 	dialog_.but_back->SetCallbackID(101);
 	layout_right.Add(dialog_.but_back);
 

@@ -92,18 +92,13 @@ public:
 	 */
 	static const char* KeyToString(int key);
 
+	static std::wstring ButtonToString(unsigned int button);
+
 	/**
 	 * Définir les périphériques à activer
 	 * @param flag: bitmask des périphériques
 	 */
 	void SetDevices(unsigned int flag);
-
-	/**
-	 * Saisi d'un binding par l'utilisateur
-	 * @param device: périphérique à tester
-	 * @param action: action dont le binding doit être modifié
-	 */
-	void AskUserInput(Device device, Action action);
 
 	/**
 	 * Sensibilité du contrôleur de jeu
@@ -143,7 +138,6 @@ private:
 	int device_flag_;
 	int sensitivity_;
 };
-
 
 std::istream& operator>>(std::istream& in, sf::Keyboard::Key& code);
 

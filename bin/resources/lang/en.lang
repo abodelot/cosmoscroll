@@ -125,11 +125,6 @@ action.pause = Pause
 action.cooler = Use Cooler bonus
 action.missile = Use Missile bonus
 
-# Ask input
-input.press_key = Press a key to define action
-input.press_button = Press a joystick button to define\naction
-input.cancel = (press Escape to cancel)
-
 # Items
 item.shield = Force shield
 item.shield_info = Protection points: {points}

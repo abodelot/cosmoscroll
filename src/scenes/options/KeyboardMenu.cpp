@@ -1,71 +1,101 @@
 #include "KeyboardMenu.hpp"
-#include "scenes/ConfigButton.hpp"
 #include "core/Game.hpp"
 #include "utils/I18n.hpp"
-#include "utils/StringUtils.hpp"
 
 
-KeyboardMenu::KeyboardMenu()
+KeyboardMenu::KeyboardMenu():
+	m_triggered(NULL)
 {
 	SetTitle(_t("menu.keyboard.title"));
 
-	gui::FormLayout form(100, 100);
-	form.SetSpacing(30, 5);
-	AddRow(form, Input::MOVE_UP,      &but_up_);
-	AddRow(form, Input::MOVE_DOWN,    &but_down_);
-	AddRow(form, Input::MOVE_LEFT,    &but_left_);
-	AddRow(form, Input::MOVE_RIGHT,   &but_right_);
-	AddRow(form, Input::USE_LASER,    &but_weapon_);
-	AddRow(form, Input::USE_COOLER,   &but_cooler_);
-	AddRow(form, Input::USE_MISSILE,  &but_missile_);
+	gui::FormLayout form(80, 120);
+	form.SetSpacing(60, 10);
+	but_up_      = addRow(form, Input::MOVE_UP);
+	but_down_    = addRow(form, Input::MOVE_DOWN);
+	but_left_    = addRow(form, Input::MOVE_LEFT);
+	but_right_   = addRow(form, Input::MOVE_RIGHT);
+	but_weapon_  = addRow(form, Input::USE_LASER);
+	but_cooler_  = addRow(form, Input::USE_COOLER);
+	but_missile_ = addRow(form, Input::USE_MISSILE);
 
-	gui::Button* b = new CosmoButton(this, _t("menu.back"));
-	b->setPosition(210, 410);
-	b->SetCallbackID(9000);
+	gui::Button* back = new CosmoButton(this, _t("menu.back"));
+	back->setPosition(210, 410);
+	back->SetCallbackID(9000);
+}
+
+
+void KeyboardMenu::OnEvent(const sf::Event& event)
+{
+	if (m_triggered != NULL)
+	{
+		// By-pass GUI event handler
+		if (event.type == sf::Event::KeyPressed)
+		{
+			if (event.key.code != sf::Keyboard::Escape)
+			{
+				// Bind action to pressed key
+				Input::Action action = m_triggered->getAction();
+				Input::GetInstance().SetKeyboardBind(event.key.code, action);
+				OnFocus();
+			}
+			else
+			{
+				// Cancel input and reset button label
+				m_triggered->setKeyboardLabel();
+				m_triggered = NULL;
+			}
+		}
+	}
+	else
+	{
+		gui::Menu::OnEvent(event);
+	}
 }
 
 
 void KeyboardMenu::OnFocus()
 {
-	BaseMenu::OnFocus();
-	but_up_->setString(GetKeyLabel(Input::MOVE_UP));
-	but_down_->setString(GetKeyLabel(Input::MOVE_DOWN));
-	but_left_->setString(GetKeyLabel(Input::MOVE_LEFT));
-	but_right_->setString(GetKeyLabel(Input::MOVE_RIGHT));
-	but_weapon_->setString(GetKeyLabel(Input::USE_LASER));
-	but_cooler_->setString(GetKeyLabel(Input::USE_COOLER));
-	but_missile_->setString(GetKeyLabel(Input::USE_MISSILE));
+	m_triggered = NULL;
+	// Refresh labels
+	but_up_->setKeyboardLabel();
+	but_up_->setKeyboardLabel();
+	but_down_->setKeyboardLabel();
+	but_left_->setKeyboardLabel();
+	but_right_->setKeyboardLabel();
+	but_weapon_->setKeyboardLabel();
+	but_cooler_->setKeyboardLabel();
+	but_missile_->setKeyboardLabel();
 }
-
 
 
 void KeyboardMenu::EventCallback(int id)
 {
-	if (id == 9000)
+	// Input::Action enumerations are used as widget ids
+	switch (id)
 	{
-		Game::getInstance().setNextScene(Game::SC_OptionMenu);
+		case Input::MOVE_UP:     m_triggered = but_up_;      break;
+		case Input::MOVE_DOWN:   m_triggered = but_down_;    break;
+		case Input::MOVE_LEFT:   m_triggered = but_left_;    break;
+		case Input::MOVE_RIGHT:  m_triggered = but_right_;   break;
+		case Input::USE_LASER:   m_triggered = but_weapon_;  break;
+		case Input::USE_COOLER:  m_triggered = but_cooler_;  break;
+		case Input::USE_MISSILE: m_triggered = but_missile_; break;
+		case 9000:
+			Game::getInstance().setNextScene(Game::SC_OptionMenu);
+			break;
 	}
-	else
+	// We are now waiting for user input
+	if (m_triggered != NULL)
 	{
-		// Input::Action enumerations are used as menu ids
-		Input& input = Input::GetInstance();
-		input.AskUserInput(Input::KEYBOARD, (Input::Action) id);
-		OnFocus();
+		m_triggered->setString(". . .");
 	}
 }
 
 
-void KeyboardMenu::AddRow(gui::FormLayout& form, Input::Action action, gui::Button** button)
+ConfigButton* KeyboardMenu::addRow(gui::FormLayout& form, Input::Action action)
 {
-	*button = new ConfigButton(this, GetKeyLabel(action));
-	(*button)->SetCallbackID(action);
-
-	form.AddRow(Input::ActionToString(action), *button);
+	ConfigButton* button = new ConfigButton(this, action);
+	button->setKeyboardLabel();
+	form.AddRow(Input::ActionToString(action), button);
+	return button;
 }
-
-
-const char* KeyboardMenu::GetKeyLabel(Input::Action action) const
-{
-	return Input::KeyToString(Input::GetInstance().GetKeyboardBind(action));
-}
-

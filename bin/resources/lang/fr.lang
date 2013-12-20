@@ -125,11 +125,6 @@ action.pause = Pause
 action.cooler = Utiliser bonus Glaçon
 action.missile = Utiliser bonus Missile
 
-# Ask input
-input.press_key = Appuyez sur une touche du clavier\npour définir l'action
-input.press_button = Appuyez sur un bouton du contrôleur\npour définir l'action
-input.cancel = (Échap pour annuler)
-
 # Items
 item.shield = Bouclier énergétique
 item.shield_info = Points de protection : {points}
