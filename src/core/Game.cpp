@@ -102,7 +102,7 @@ void Game::loadResources(const std::string& data_path)
 	m_window.display();
 
 	I18n::getInstance().setDataPath(resources_dir + "/lang");
-	MessageSystem::setFont(Resources::getFont("Ubuntu-R.ttf"));
+	MessageSystem::setFont(Resources::getFont("Vera.ttf"));
 
 	// Load XML resources
 	try

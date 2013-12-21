@@ -13,7 +13,6 @@
 
 GameOverMenu::GameOverMenu()
 {
-	LoadBitmapFont(Resources::getTexture("gui/mono12-black.png"), 10, 10);
 	SetTitle(_t("menu.gameover.title"));
 
 	score_ = 0;
@@ -21,7 +20,8 @@ GameOverMenu::GameOverMenu()
 	lab_result_->setCharacterSize(30);
 
 	lab_pseudo_ = new gui::Label(this, _t("menu.gameover.pseudo"), 100, 200);
-	txt_pseudo_ = new gui::TextBox(this, 210, 200, 30);
+
+	txt_pseudo_ = new gui::TextBox(this, 210, 200, 30, 40);
 	txt_pseudo_->SetCallbackID(3);
 
 	but_commit_ = new CosmoButton(this, _t("menu.submit"));

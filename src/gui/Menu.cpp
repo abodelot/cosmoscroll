@@ -9,7 +9,6 @@ Menu::Menu(WidgetStyle& style)
 {
 	focus_ = NULL;
 	focus_index_ = -1;
-	bitfont_ = NULL;
 	hovered_widget_ = NULL;
 	theme_ = &style;
 }
@@ -219,22 +218,6 @@ void Menu::SetBackground(const sf::Sprite& sprite)
 
 
 void Menu::EventCallback(int) {}
-
-
-void Menu::LoadBitmapFont(const sf::Texture& image, int width, int height)
-{
-	if (bitfont_ != NULL)
-	{
-		delete bitfont_;
-	}
-	bitfont_ = new BitmapFont(image, width, height);
-}
-
-
-BitmapFont* Menu::GetBitmapFont() const
-{
-	return bitfont_;
-}
 
 
 WidgetStyle& Menu::GetWidgetStyle()

@@ -6,7 +6,6 @@
 
 #include "Widget.hpp"
 #include "WidgetStyle.hpp"
-#include "BitmapFont.hpp"
 
 
 namespace gui
@@ -35,10 +34,6 @@ public:
 	 * Fond du menu
 	 */
 	void SetBackground(const sf::Sprite& sprite);
-
-	void LoadBitmapFont(const sf::Texture& image, int width, int height);
-
-	BitmapFont* GetBitmapFont() const;
 
 	/**
 	 * Méthode appelée lorsqu'un widget du menu déclenche un événement
@@ -99,7 +94,6 @@ private:
 	Widget* focus_;
 	Widget* hovered_widget_;
 	sf::Sprite background_;
-	BitmapFont* bitfont_;
 
 	WidgetStyle* theme_;
 };

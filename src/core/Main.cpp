@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 			return usage(argv[0]);
 		else if (arg == "-c" || arg == "--config")
 			config_file = get_arg(i, argv);
-		else if (arg == "-r" || arg == "--resources")
+		else if (arg == "-r" || arg == "--res")
 			res_dir = get_arg(i, argv);
 	}
 

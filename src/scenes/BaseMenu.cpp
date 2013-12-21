@@ -12,6 +12,7 @@ BaseMenu::BaseMenu(): gui::Menu(global_style_)
 	scrolling_background_.setTexture(Resources::getTexture("gui/background.png"));
 
 	GetWidgetStyle().global_font = &Resources::getFont("hemi-head.ttf");
+	GetWidgetStyle().global_fixed_font = &Resources::getFont("VeraMono.ttf");
 }
 
 
@@ -72,5 +73,3 @@ void BaseMenu::OnWidgetFocused()
 {
 	SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("menu-select.ogg"));
 }
-
-

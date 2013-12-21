@@ -5,7 +5,7 @@
 #include "utils/StringUtils.hpp"
 
 
-ShipPartWidget::ShipPartWidget(gui::Menu* parent, ItemData::Type type):
+ShipPartWidget::ShipPartWidget(gui::Menu* parent, ItemData::Type type, const sf::Font& font):
 	gui::Widget(parent, true)
 {
 	type_ = type;
@@ -45,12 +45,12 @@ ShipPartWidget::ShipPartWidget(gui::Menu* parent, ItemData::Type type):
 	SetCallbackID(type);
 
 	// label centered on halo sprite
-	m_text_name.setFont(Resources::getFont("Ubuntu-R.ttf"));
+	m_text_name.setFont(font);
 	m_text_name.setStyle(sf::Text::Bold);
 	m_text_name.setCharacterSize(12);
 	m_text_name.setColor(sf::Color::White);
 
-	m_text_level.setFont(Resources::getFont("Ubuntu-R.ttf"));
+	m_text_level.setFont(font);
 	m_text_level.setCharacterSize(12);
 	m_text_level.setColor(sf::Color::Yellow);
 

@@ -11,6 +11,7 @@ WidgetStyle::WidgetStyle()
 {
 	global_text_size = 20;
 	global_font = NULL;
+	global_fixed_font = NULL;
 	global_border_color = sf::Color(0x44, 0x44, 0x44);
 
 	label_text_color = sf::Color::White;
@@ -34,6 +35,7 @@ WidgetStyle::WidgetStyle()
 	optlist_bg_color = DEFAULT_BG_COLOR;
 	optlist_bg_color_focus = FOCUS_BG_COLOR;
 
-	textbox_bg_color = DEFAULT_BG_COLOR;
-	textbox_bg_color_focus = FOCUS_BG_COLOR;
+	textbox_color = sf::Color::Black;
+	textbox_bg_color = sf::Color(0xcc, 0xcc, 0xcc);
+	textbox_bg_color_focus = sf::Color::White;
 }

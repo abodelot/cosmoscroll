@@ -35,7 +35,7 @@ ControlPanel& ControlPanel::getInstance()
 ControlPanel::ControlPanel()
 {
 	panel_.setTexture(Resources::getTexture("gui/score-board.png"));
-	const sf::Font& font = Resources::getFont("Ubuntu-R.ttf");
+	const sf::Font& font = Resources::getFont("Vera.ttf");
 
 	// init progress bar
 	pbars_[ProgressBar::HP].Init(_t("panel.bar_hp"), font, BAR_SHIP);
@@ -51,16 +51,16 @@ ControlPanel::ControlPanel()
 	bar_mask_.setPosition(101, 6);
 
 	// init bonus counters
-	bs_coolers_.Init(PowerUp::COOLER, PowerUpSlot::COUNTER);
+	bs_coolers_.Init(PowerUp::COOLER, PowerUpSlot::COUNTER, font);
 	bs_coolers_.setPosition(256, 8);
 
-	bs_missiles_.Init(PowerUp::MISSILE, PowerUpSlot::COUNTER);
+	bs_missiles_.Init(PowerUp::MISSILE, PowerUpSlot::COUNTER, font);
 	bs_missiles_.setPosition(256, 31);
 
-	bs_attack_.Init(PowerUp::DOUBLE_SHOT, PowerUpSlot::TIMER);
+	bs_attack_.Init(PowerUp::DOUBLE_SHOT, PowerUpSlot::TIMER, font);
 	bs_attack_.setPosition(334, 8);
 
-	bs_speed_.Init(PowerUp::SPEED, PowerUpSlot::TIMER);
+	bs_speed_.Init(PowerUp::SPEED, PowerUpSlot::TIMER, font);
 	bs_speed_.setPosition(334, 31);
 
 	// right container
@@ -230,7 +230,7 @@ void ControlPanel::ActiveSpeedPowerUp(int seconds)
 
 void ControlPanel::ActiveAttackPowerUp(int seconds, PowerUp::Type bonus_type)
 {
-	bs_attack_.Init(bonus_type, PowerUpSlot::TIMER);
+	bs_attack_.icon_.setTextureRect(PowerUp::getTextureRect(bonus_type));
 	bs_attack_.SetValue(seconds);
 }
 
@@ -324,7 +324,7 @@ void ControlPanel::ProgressBar::SetValue(int value)
 
 // PowerUpSlot ------------------------------------------------------------------
 
-void ControlPanel::PowerUpSlot::Init(PowerUp::Type bonus_type, Type type)
+void ControlPanel::PowerUpSlot::Init(PowerUp::Type bonus_type, Type type, const sf::Font& font)
 {
 	icon_.setTexture(Resources::getTexture("entities/bonus.png"));
 	icon_.setTextureRect(PowerUp::getTextureRect(bonus_type));
@@ -332,7 +332,7 @@ void ControlPanel::PowerUpSlot::Init(PowerUp::Type bonus_type, Type type)
 	label_.setCharacterSize(TEXT_SIZE);
 	label_.setColor(sf::Color::White);
 	label_.setString(type == COUNTER ? "x 0" : "-");
-	label_.setFont(Resources::getFont("Ubuntu-R.ttf"));
+	label_.setFont(font);
 
 	glow_.setTexture(Resources::getTexture("gui/bonus-glow.png"));
 	glow_.setColor(sf::Color(255, 255, 255, 0));

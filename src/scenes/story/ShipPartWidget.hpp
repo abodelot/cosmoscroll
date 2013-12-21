@@ -7,7 +7,7 @@
 class ShipPartWidget: public gui::Widget
 {
 public:
-	ShipPartWidget(gui::Menu* parent, ItemData::Type type);
+	ShipPartWidget(gui::Menu* parent, ItemData::Type type, const sf::Font& font);
 
 	/**
 	 * Refresh label content (name and level)

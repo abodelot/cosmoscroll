@@ -138,10 +138,6 @@
 		<Unit filename="src/entities/complex/MultiPartEntity.hpp" />
 		<Unit filename="src/entities/complex/Part.cpp" />
 		<Unit filename="src/entities/complex/Part.hpp" />
-		<Unit filename="src/gui/BitmapFont.cpp" />
-		<Unit filename="src/gui/BitmapFont.hpp" />
-		<Unit filename="src/gui/BitmapString.cpp" />
-		<Unit filename="src/gui/BitmapString.hpp" />
 		<Unit filename="src/gui/Button.cpp" />
 		<Unit filename="src/gui/Button.hpp" />
 		<Unit filename="src/gui/CheckBox.cpp" />

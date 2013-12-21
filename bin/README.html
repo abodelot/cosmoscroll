@@ -83,7 +83,7 @@ var current_tab = -1;
 
 	<body onload="show_lang('en')">
 
-<h1><img src="data/images/gui/cosmoscroll-logo.png" alt="CosmoScroll" /></h1>
+<h1><img src="resources/images/gui/cosmoscroll-logo.png" alt="CosmoScroll" /></h1>
 
 <div id="tabs">
 	<a href="javascript:show_lang('en')" id="tab-en">English</a>
@@ -115,7 +115,7 @@ var current_tab = -1;
 	<h2 id="howto-play-en">How to play?</h2>
 
 	<h3>Game modes</h3>
-	<p>CosmoScroll comes in two flavors:</p>
+	<p>CosmoScroll comes with two game modes:</p>
 	<ul>
 		<li>
 			<b>Story Mode:</b><br />
@@ -210,9 +210,9 @@ var current_tab = -1;
 			If it is a regular file, it will use it as an alternate configuration file.</td>
 		</tr>
 		<tr>
-			<td>-data <em>&lt;path&gt;</em></td>
+			<td>-res <em>&lt;path&gt;</em></td>
 			<td>Override resources directory default location.<br />
-			Use this option if you want to install CosmoScroll exectuable in a different directory than the resources one.</td>
+			Use this option if you want to install CosmoScroll exectuable and the "resources" directory in different locations.</td>
 		</tr>
 		<tr>
 			<td>-version</td>
@@ -230,7 +230,7 @@ var current_tab = -1;
 	If possible, please clearly mention the steps to reproduce the bug.
 	</p>
 	<p>You can also contact the main developer of CosmoScroll (<a href="mailto:alexandre.bodelot@gmail.com">alexandre.bodelot@gmail.com</a>) if you want to submit a feature suggestion, it will be welcomed!</p>
-	<p>If CosmoScroll isn't available in your native language, you can translate it by providing the language file (see <code>data/lang/</code> directory) and send it to the CosmoScroll team for inclusion in further releases.</p>
+	<p>If CosmoScroll isn't available in your native language, you can translate it by providing the language file (see <code>resources/lang/</code> directory) and send it to the CosmoScroll team for inclusion in further releases.</p>
 
 	<h2 id="howto-compile-en">How to compile the game from source?</h2>
 
@@ -241,10 +241,9 @@ var current_tab = -1;
 		<li><a href="http://www.sfml-dev.org/">SFML</a>, version 2.0</li>
 		<li><a href="http://dumb.sourceforge.net/">libdumb</a> (for Debian/Ubuntu, simply install <code>libdumb1-dev</code> package)</li>
 	</ul>
-	<p>The easiest way to get the source code is to checkout the project's <a href="http://code.google.com/p/cosmoscroll/source/checkout">SVN server</a> (follow instructions on this page).</p>
-	<p>A project file for Code::Blocks (<code>cosmoscroll.cbp</code>) is provided in order to compile the game from this IDE.<br />
-	A makefile generator written in Python is provided as well (<code>make_generator.py</code>)<br />
-	The generated makefile enables compilation on Linux and Mac OS.
+	<p>The easiest way to get the source code is to checkout the project's <a href="http://code.google.com/p/cosmoscroll/source/checkout">git repository</a> (follow instructions on this page).</p>
+	<p>You can compile the game with Code::Blocks IDE as a project file is already provided (<code>cosmoscroll.cbp</code>).<br />
+	The makefile generator (<code>make_generator.py</code>, written in Python) can also produce UNIX makefiles (work with both Linux and Mac OS).
 	</p>
 
 	<h2 id="credits-en">Credits</h2>
@@ -276,8 +275,9 @@ var current_tab = -1;
 		</li>
 		<li><b>Fonts:</b>
 			<ul>
-				<li>hemi-head.tff: <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
-				<li>Ubuntu-R.tff: <a href="http://font.ubuntu.com/">font.ubuntu.com</a></li>
+				<li>hemi-head.tff: <a href="http://www.dafont.com/hemi-head.font">Typodermic Fonts Inc.</a></li>
+				<li>Vera.ttf: <a href="http://www.dafont.com/bitstream-vera-sans.font">Gnome Project</a></li>
+				<li>VeraMono.ttf: <a href="http://www.dafont.com/bitstream-vera-mono.font">Gnome Project</a></li>
 			</ul>
 		</li>
 	</ul>
@@ -416,9 +416,9 @@ var current_tab = -1;
 			Si c'est un fichier, le jeu l'utilisera comme fichier de configuration alternatif.</td>
 		</tr>
 		<tr>
-			<td>-data <em>&lt;chemin&gt;</em></td>
+			<td>-res <em>&lt;chemin&gt;</em></td>
 			<td>Indiquer l'emplacement du répertoire des ressources.<br />
-			Utiliser cette option si vous voulez installer l'exécutable de CosmoScroll dans un répertoire différent de celui des ressources.</td>
+			Utiliser cette option si vous voulez installer l'exécutable de CosmoScroll et le répertoire "resources" dans différents endroits.</td>
 		</tr>
 		<tr>
 			<td>-version</td>
@@ -440,7 +440,7 @@ var current_tab = -1;
 		<li><a href="http://www.sfml-dev.org/">SFML</a>, version 2.0</li>
 		<li><a href="http://dumb.sourceforge.net/">libdumb</a> (pour Debian/Ubuntu, installer le paquet <code>libdumb1-dev</code>)</li>
 	</ul>
-	<p>Le moyen le plus simple de récupérer les sources est de faire un checkout sur le <a href="http://code.google.com/p/cosmoscroll/source/checkout">serveur SVN</a> du projet (reportez-vous aux instructions de la page).</p>
+	<p>Le moyen le plus simple de récupérer les sources est de faire un checkout sur le <a href="http://code.google.com/p/cosmoscroll/source/checkout">dépôt git</a> du projet (reportez-vous aux instructions de la page).</p>
 	<p>Un fichier projet Code::Blocks (<code>cosmoscroll.cbp</code>) est fourni et permet de compiler le jeu depuis cet IDE.<br />
 	Un générateur de makefile en Python est également fourni avec les sources du projet (<code>make_generator.py</code>)<br />
 	Le makefile généré permet de compiler le jeu sous Linux et Mac OS.
@@ -452,7 +452,7 @@ var current_tab = -1;
 	Une description permettant de reproduire le problème serait également appréciée.
 	</p>
 	<p>Vous pouvez aussi contacter le développeur principal de CosmoScroll (<a href="mailto:alexandre.bodelot@gmail.com">alexandre.bodelot@gmail.com</a>) si vous avez une suggestion d'amélioration, elle sera la bienvenue !</p>
-	<p>Si CosmoScroll n'est pas disponible dans votre langue, vous pouvez fournir un ficher de traduction (voir le répertoire <code>data/lang/</code>) et l'envoyer à l'équipe pour l'inclure dans les prochaines versions.</p>
+	<p>Si CosmoScroll n'est pas disponible dans votre langue, vous pouvez fournir un ficher de traduction (voir le répertoire <code>resources/lang/</code>) et l'envoyer à l'équipe pour l'inclure dans les prochaines versions.</p>
 	<h2 id="credits-fr">Crédits</h2>
 
 	<ul>
@@ -482,8 +482,9 @@ var current_tab = -1;
 		</li>
 		<li><b>Polices :</b>
 			<ul>
-				<li>hemi-head.tff : <a href="http://www.myfonts.com/fonts/larabie/hemi-head-426/">larabie</a></li>
-				<li>Ubuntu-R.tff : <a href="http://font.ubuntu.com/">font.ubuntu.com</a></li>
+				<li>hemi-head.tff : <a href="http://www.dafont.com/hemi-head.font">Typodermic Fonts Inc.</a></li>
+				<li>Vera.ttf : <a href="http://www.dafont.com/bitstream-vera-sans.font">Gnome Project</a></li>
+				<li>VeraMono.ttf : <a href="http://www.dafont.com/bitstream-vera-mono.font">Gnome Project</a></li>
 			</ul>
 		</li>
 	</ul>
@@ -503,9 +504,8 @@ var current_tab = -1;
 <p>
 	<em>Note: there is NO CHEAT CODE in this game.</em><br />
 	<span style="color: white;">
-	Congratulations! You found the mighty <b>KONAMI CODE</b>!<br />
-	Type the following sequence while playing to active it:<br />
-	[Up] - [Up] - [Down] - [Down] - [Left] - [Right] - [Left] - [Right] - [Weapon 2] - [Weapon 1]</span>
+	Type the following sequence while playing to activate the <b>KONAMI CODE</b>:<br />
+	[Up] - [Up] - [Down] - [Down] - [Left] - [Right] - [Left] - [Right] - [UseMissile] - [UseLaser]</span>
 </p>
     </body>
 </html>

@@ -15,11 +15,12 @@ ArmoryMenu::ArmoryMenu()
 	current_type_ = ItemData::_UNSET;
 	lab_info_ = new gui::Label(this, "");
 
+	const sf::Font& font = Resources::getFont("Vera.ttf");
 	// ship GUI
 	new gui::Image(this, Resources::getTexture("gui/armory-ship-view.png"));
 	for (int i = 0; i < ItemData::_COUNT; ++i)
 	{
-		items_[i] = new ShipPartWidget(this, (ItemData::Type) i);
+		items_[i] = new ShipPartWidget(this, (ItemData::Type) i, font);
 	}
 
 	m_credits = new CreditCounterWidget(this);
@@ -36,7 +37,7 @@ ArmoryMenu::ArmoryMenu()
 	// left side
 	gui::VBoxLayout layout_left(x + 30, y + 40);
 	layout_left.SetSpacing(0, 1);
-	const sf::Font& font = Resources::getFont("Ubuntu-R.ttf");
+
 
 	dialog_.current_level = new gui::Label(this, "1");
 	dialog_.current_level->setFont(font);

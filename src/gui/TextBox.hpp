@@ -2,7 +2,6 @@
 #define GUI_TEXTBOX_HPP
 
 #include "Widget.hpp"
-#include "BitmapString.hpp"
 
 namespace gui
 {
@@ -19,7 +18,7 @@ public:
 	 * @param visible_chars: nombre de caratères visibles en largeur
 	 * @param max_length: taille maximum de la saisie (-1 : pas de limite)
 	 */
-	TextBox(Menu* owner, int x, int y, int visible_chars = 10,
+	TextBox(Menu* owner, int x, int y, size_t visible_chars = 10,
 		int max_length = -1);
 
 	void setString(const sf::String& text);
@@ -66,20 +65,21 @@ private:
 	//void Debug() const;
 
 	sf::RectangleShape box_;
-	BitmapString display_text_;
+	sf::Text display_text_;
 	std::string text_;
 	sf::RectangleShape cursor_;
 	// position du curseur
 	int cursor_pos_;
 	float cursor_timer_;
 	// nombre de caractères visible (équivalent à la longueur de la box)
-	int visible_chars_;
+	size_t visible_chars_;
 	// taille maximum de la saisie
 	int max_length_;
 	// nombre de caractères hors de la box à gauche
 	int left_offset_;
 	// à idem à droite
 	int right_offset_;
+	sf::Vector2i char_size_;
 };
 
 }

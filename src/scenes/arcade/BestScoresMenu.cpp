@@ -14,10 +14,9 @@ BestScoresMenu::BestScoresMenu()
 	b->setPosition(210, 420);
 	b->SetCallbackID(1);
 
-	LoadBitmapFont(Resources::getTexture("gui/mono12-white.png"), 10, 10);
-	lab_content_ = new gui::BitmapString(*GetBitmapFont());
-	lab_content_->setPosition(120, 100);
-
+	m_content.setCharacterSize(16);
+	m_content.setFont(Resources::getFont("VeraMono.ttf"));
+	m_content.setPosition(120, 100);
 	querying_ = NOT_STARTED;
 }
 
@@ -62,13 +61,13 @@ void BestScoresMenu::Update(float frametime)
 	switch (response.getStatus())
 	{
 		case sf::Http::Response::Ok:
-			lab_content_->setString(response.getBody());
+			m_content.setString(response.getBody());
 			break;
 		case sf::Http::Response::ConnectionFailed:
-			lab_content_->setString("Error: couldn't connect to server");
+			m_content.setString("Error: couldn't connect to server");
 			break;
 		default:
-			lab_content_->setString("Error: server did not properly respond (" + std::to_string(response.getStatus()) + ")");
+			m_content.setString("Error: server did not properly respond (" + std::to_string(response.getStatus()) + ")");
 			break;
 	}
 	querying_ = DONE;
@@ -78,12 +77,12 @@ void BestScoresMenu::Update(float frametime)
 void BestScoresMenu::Show(sf::RenderTarget& target) const
 {
 	BaseMenu::Show(target);
-	target.draw(*lab_content_);
+	target.draw(m_content);
 }
 
 
 void BestScoresMenu::OnFocus()
 {
-	lab_content_->setString("Please wait...");
+	m_content.setString("Please wait ...");
 	querying_ = NOT_STARTED;
 }

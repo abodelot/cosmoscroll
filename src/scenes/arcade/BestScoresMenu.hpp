@@ -9,13 +9,14 @@ public:
 	BestScoresMenu();
 
 	void OnFocus() override;
-	void Update(float frametime);
-	void Show(sf::RenderTarget& target) const;
+	void Update(float frametime) override;
+	void Show(sf::RenderTarget& target) const override;
 
 private:
 	void EventCallback(int id) override;
 
-	gui::BitmapString* lab_content_;
+	sf::Text m_content;
+
 	enum QueryStatus
 	{
 		NOT_STARTED,

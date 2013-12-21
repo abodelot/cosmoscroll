@@ -13,27 +13,36 @@
 using namespace gui;
 
 
-TextBox::TextBox(Menu* owner, int x, int y, int visible_chars, int max_length):
-	Widget(owner, true),
-	display_text_(*owner->GetBitmapFont())
+TextBox::TextBox(Menu* owner, int x, int y, size_t visible_chars, int max_length):
+	Widget(owner, true)
 {
+	const WidgetStyle& style = owner->GetWidgetStyle();
+	display_text_.setFont(*style.global_fixed_font);
+	display_text_.setColor(style.textbox_color);
+	display_text_.setCharacterSize(16);
+
 	visible_chars_ = visible_chars;
 	max_length_ = max_length;
 	left_offset_ = right_offset_ = 0;
-	int height = display_text_.getFont().GetCharHeight() + PADDING * 2;
-	int width = display_text_.getFont().GetCharWidth() * visible_chars + PADDING * 2;
 
-	box_.setSize(sf::Vector2f(width, height));
+	// Fixed font, using glyph for character 0
+	const sf::Glyph& glyph = display_text_.getFont()->getGlyph(0, display_text_.getCharacterSize(), false);
+	char_size_ = sf::Vector2i(glyph.bounds.width, glyph.bounds.height);
+
+	float box_height = char_size_.y + PADDING * 2;
+	float box_width = char_size_.x * visible_chars + PADDING * 2;
+
+	box_.setSize(sf::Vector2f(box_width, box_height));
 	box_.setOutlineThickness(OUTLINE);
-	box_.setOutlineColor(owner->GetWidgetStyle().global_border_color);
+	box_.setOutlineColor(style.global_border_color);
 
 	display_text_.setPosition(PADDING, PADDING);
 
-	cursor_.setSize(sf::Vector2f(CURSOR_WIDTH, height - PADDING * 2));
+	cursor_.setSize(sf::Vector2f(CURSOR_WIDTH, box_height - PADDING * 2));
 	SetCursor(0);
 
 	setPosition(x, y);
-	Resize(width, height);
+	Resize(box_width, box_height);
 	OnStateChanged(GetState());
 }
 
@@ -51,11 +60,7 @@ void TextBox::setString(const sf::String& text)
 	if (diff > 0)
 	{
 		right_offset_ = diff;
-		display_text_.Clear();
-		for (int i = 0; i < visible_chars_; ++i)
-		{
-			display_text_.AppendChar(text_[i]);
-		}
+		display_text_.setString(text_.substr(0, visible_chars_));
 	}
 	else
 	{
@@ -85,19 +90,23 @@ void TextBox::Update(float frametime)
 
 void TextBox::OnTextEntered(sf::Uint32 unicode)
 {
-	if (unicode >= BitmapFont::FIRST_CHAR && unicode <= BitmapFont::LAST_CHAR)
+	if (isprint(unicode))
 	{
 		if (max_length_ == -1 || (int) text_.length() < max_length_)
 		{
-			// insertion dans la string d'affichage
-			display_text_.InsertChar((char) unicode, cursor_pos_);
+			// insertion du char dans la string d'affichage
+			sf::String str = display_text_.getString();
+			str.insert(cursor_pos_, unicode);
+			display_text_.setString(str);
+
 			// calcul de la position dans la string réelle
 			int position = GetRealCursorPosition();
 			text_.insert(position, 1, (char) unicode);
-			// si le texte est trop long pour la box
-			if (display_text_.Length() > visible_chars_)
+			// si le texte est trop long pour la box, suppr 1er char
+			if (display_text_.getString().getSize() > visible_chars_)
 			{
-				display_text_.RemoveChar(0);
+				str.erase(0);
+				display_text_.setString(str);
 				++left_offset_;
 			}
 			else
@@ -118,17 +127,23 @@ void TextBox::OnKeyPressed(sf::Keyboard::Key key)
 			if (cursor_pos_ > 0)
 			{
 				text_.erase(GetRealCursorPosition() - 1, 1);
-				display_text_.RemoveChar(cursor_pos_ - 1);
+				sf::String str2 = display_text_.getString();
+				str2.erase(cursor_pos_ - 1);
+				display_text_.setString(str2);
 				if (left_offset_ > 0)
 				{
 					// le dernier caractère à gauche de la box est inséré au début
-					display_text_.InsertChar(text_[left_offset_ - 1], 0);
+					sf::String str = display_text_.getString();
+					str.insert(0, text_[left_offset_ - 1]);
+					display_text_.setString(str);
 					--left_offset_;
 				}
 				else if (right_offset_ > 0)
 				{
 					// le premier caratère à droite de la box est inséré à la fin
-					display_text_.AppendChar(text_[text_.length() - right_offset_]);
+					sf::String str = display_text_.getString();
+					str.insert(str.getSize(), text_[text_.length() - right_offset_]);
+					display_text_.setString(str);
 					--right_offset_;
 					SetCursor(cursor_pos_ - 1);
 				}
@@ -140,22 +155,24 @@ void TextBox::OnKeyPressed(sf::Keyboard::Key key)
 			break;
 		case sf::Keyboard::Delete:
 			// supprimer le caractère après le curseur
-			if (cursor_pos_ < display_text_.Length())
+			if (cursor_pos_ < display_text_.getString().getSize())
 			{
 				text_.erase(GetRealCursorPosition(), 1);
-				display_text_.RemoveChar(cursor_pos_);
+				sf::String str = display_text_.getString();
+				str.erase(cursor_pos_);
 				if (right_offset_ > 0)
 				{
 					// le premier caratère à droite de la box est inséré à la fin
-					display_text_.AppendChar(text_[text_.length() - right_offset_]);
+					str.insert(str.getSize(), text_[text_.length() - right_offset_]);
 					--right_offset_;
 				}
 				else if (left_offset_ > 0)
 				{
 					// le dernier caractère à gauche de la box est inséré au début
-					display_text_.InsertChar(text_[left_offset_ - 1], 0);
+					str.insert(0, text_[left_offset_ - 1]);
 					--left_offset_;
 				}
+				display_text_.setString(str);
 			}
 			break;
 		case sf::Keyboard::Left:
@@ -178,7 +195,7 @@ void TextBox::OnKeyPressed(sf::Keyboard::Key key)
 			{
 				ShiftRight();
 			}
-			SetCursor(display_text_.Length());
+			SetCursor(display_text_.getString().getSize());
 			break;
 		case sf::Keyboard::Return:
 			CallTheCallback();
@@ -192,15 +209,12 @@ void TextBox::OnKeyPressed(sf::Keyboard::Key key)
 void TextBox::OnMouseClicked(int x, int y)
 {
 	(void) y;
-	// todo: semble marcher, vérifier sous valgrind
-	int letter_width = display_text_.getFont().GetCharWidth();
-	int pos = x / letter_width;
-	if (pos > display_text_.Length())
+	int pos = x / char_size_.x;
+	if (pos > display_text_.getString().getSize())
 	{
-		pos = display_text_.Length();
+		pos = display_text_.getString().getSize();
 	}
-//	cursor_.SetX(pos * letter_width);
-	cursor_pos_ = pos;
+	SetCursor(pos);
 }
 
 
@@ -236,22 +250,20 @@ void TextBox::SetCursor(int position)
 {
 	if (position == 1 && left_offset_ > 0)
 	{
-		// il y a des caractères cachés à gauche de la box, on empêche le
-		// curseur d'aller plus à gauche
+		// il y a des caractères cachés à gauche de la box, on empêche le curseur d'aller plus à gauche
 		ShiftLeft();
 	}
 	else if (position == visible_chars_ && right_offset_ > 0)
 	{
-		// il a des caractères cachés à droite de la box, on empêche le curseur
-		// d'aller plus à droite
+		// il a des caractères cachés à droite de la box, on empêche le curseur d'aller plus à droite
 		ShiftRight();
 	}
-	else if (position >= 0 && position < display_text_.Length() + 1)
+	else if (position >= 0 && position < display_text_.getString().getSize() + 1)
 	{
 		// le curseur n'est pas à une extrêmité de la box
 		cursor_timer_ = 0.f;
 		cursor_pos_ = position;
-		cursor_.setPosition(position * display_text_.getFont().GetCharWidth(), PADDING);
+		cursor_.setPosition(PADDING + position * char_size_.x, PADDING);
 	}
 }
 
@@ -265,9 +277,11 @@ int TextBox::GetRealCursorPosition() const
 void TextBox::ShiftLeft()
 {
 	// ab[cdef]gh => a[bcde]fgh
-	display_text_.RemoveChar(-1);
+	sf::String str = display_text_.getString();
+	str.erase(str.getSize() - 1);
 	// le dernier caractère à gauche est réinséré
-	display_text_.InsertChar(text_[left_offset_ - 1], 0);
+	str.insert(0, text_[left_offset_ - 1]);
+	display_text_.setString(str);
 	++right_offset_;
 	--left_offset_;
 }
@@ -276,20 +290,11 @@ void TextBox::ShiftLeft()
 void TextBox::ShiftRight()
 {
 	// ab[cdef]gh => abc[defg]h
-	display_text_.RemoveChar(0);
+	sf::String str = display_text_.getString();
+	str.erase(0);
 	// le premier caractère à droite est réinséré
-	display_text_.AppendChar(text_[text_.length() - right_offset_]);
+	str.insert(str.getSize(), text_[text_.length() - right_offset_]);
+	display_text_.setString(str);
 	--right_offset_;
 	++left_offset_;
 }
-
-/*
-#include <iostream>
-void TextBox::Debug() const
-{
-	std::cout << "real text is:      '" << text_ << "' (" <<  text_.length() << ")" << std::endl;
-	std::cout << "displayed text is: '" << display_text_.GetText() << "' (" << display_text_.Length() << ")" << std::endl;
-	std::cout << "cursor is at pos:  " << cursor_pos_ << std::endl;
-	std::cout << "left offset is:    " << left_offset_ << ", right offset is " << right_offset_ << std::endl;
-	std::cout << "----------------------------------------------" << std::endl;
-}*/

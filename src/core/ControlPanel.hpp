@@ -109,10 +109,11 @@ private:
 
 	class PowerUpSlot: public sf::Drawable
 	{
+	friend class ControlPanel;
 	public:
 		enum Type { COUNTER, TIMER };
 
-		void Init(PowerUp::Type bonus_type, Type type);
+		void Init(PowerUp::Type bonus_type, Type type, const sf::Font& font);
 		// set widget position
 		void setPosition(int x, int y);
 

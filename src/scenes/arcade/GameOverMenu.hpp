@@ -8,7 +8,7 @@ class GameOverMenu: public BaseMenu
 public:
 	GameOverMenu();
 
-	void OnFocus();
+	void OnFocus() override;
 
 private:
 	void EventCallback(int id) override;

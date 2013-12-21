@@ -14,6 +14,7 @@ public:
 	// global
 	int global_text_size;
 	const sf::Font* global_font;
+	const sf::Font* global_fixed_font;
 	sf::Color global_border_color;
 
 	// label
@@ -43,6 +44,7 @@ public:
 	sf::Color optlist_bg_color_focus;
 
 	// textbox
+	sf::Color textbox_color;
 	sf::Color textbox_bg_color;
 	sf::Color textbox_bg_color_focus;
 };
