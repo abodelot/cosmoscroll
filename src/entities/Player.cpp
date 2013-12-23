@@ -343,9 +343,6 @@ void Player::onUpdate(float frametime)
 			}
 		}
 	}
-	// update weapons
-	m_weapon.onUpdate(frametime);
-	m_missile_launcher.onUpdate(frametime);
 
 	updateDamageFlash(frametime);
 }

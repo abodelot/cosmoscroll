@@ -61,15 +61,14 @@ void IntroLevelScene::OnFocus()
 
 #ifdef DEBUG
 	printf("level %u\n", current_level);
-	printf(" - entities:     %d\n", levels.getSpawnQueueSize());
 	printf(" - total points: %d\n", levels.getTotalPoints());
+	printf(" - entities:     %d\n", levels.getSpawnQueueSize());
 	printf(" - duration:     %02d:%02d\n", (int) levels.getDuration() / 60, (int) levels.getDuration() % 60);
 #endif
 	// Get current level's attributes
 	std::wstring intro = _t("menu.story.intro");
 	wstr_self_replace(intro, L"{level}", std::to_wstring(current_level));
 	wstr_self_replace(intro, L"{description}", decode_utf8(levels.getDescription()));
-	wstr_self_replace(intro, L"{count}", std::to_wstring(levels.getSpawnQueueSize()));
 	wstr_self_replace(intro, L"\\n", L"\n");
 	description_.setString(intro);
 

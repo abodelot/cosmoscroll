@@ -177,8 +177,6 @@ void Spaceship::onUpdate(float frametime)
 			break;
 	}
 
-	m_weapon.onUpdate(frametime);
-
 	updateDamageFlash(frametime);
 }
 

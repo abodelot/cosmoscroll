@@ -97,7 +97,6 @@ void TentaculatBoss::onUpdate(float frametime)
 			break;
 	}
 	move(m_speed.x * frametime, m_speed.y * frametime);
-	m_weapon.onUpdate(frametime);
 	updateDamageFlash(frametime);
 }
 

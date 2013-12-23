@@ -10,8 +10,7 @@
 
 template <class T>
 Weapon<T>::Weapon():
-	m_fire_rate(0),
-	m_fire_timer(0.f),
+	m_fire_delay(1.f),
 	m_heat_cost(0),
 	m_velocity(0),
 	m_damage(0),
@@ -43,7 +42,7 @@ float Weapon<T>::shoot(float angle)
 	static SoundSystem& sound_sys = SoundSystem::GetInstance();
 
 	// peut-on tirer ?
-	if (m_fire_timer <= 0.f)
+	if (m_last_shot_at.getElapsedTime().asSeconds() >= m_fire_delay)
 	{
 		sf::Vector2f offset = m_owner->getPosition() + m_position;
 
@@ -69,7 +68,7 @@ float Weapon<T>::shoot(float angle)
 		{
 			sound_sys.PlaySound(*m_sound);
 		}
-		m_fire_timer = m_fire_rate;
+		m_last_shot_at.restart();
 		return m_heat_cost;
 	}
 	return 0.f;
@@ -83,12 +82,6 @@ float Weapon<T>::shoot(const sf::Vector2f& target)
 }
 
 template <class T>
-void Weapon<T>::onUpdate(float frametime)
-{
-	m_fire_timer -= frametime;
-}
-
-template <class T>
 void Weapon<T>::setTexture(const sf::Texture* texture)
 {
 	m_texture = texture;
@@ -97,7 +90,7 @@ void Weapon<T>::setTexture(const sf::Texture* texture)
 template <class T>
 void Weapon<T>::setFireRate(float shot_per_sec)
 {
-	m_fire_rate = 1 / shot_per_sec;
+	m_fire_delay = 1 / shot_per_sec;
 }
 
 template <class T>
@@ -140,7 +133,7 @@ void Weapon<T>::setOwner(Entity* owner)
 template <class T>
 bool Weapon<T>::isReady() const
 {
-	return m_fire_timer <= 0;
+	return m_last_shot_at.getElapsedTime().asSeconds() >= m_fire_delay;
 }
 
 template <class T>

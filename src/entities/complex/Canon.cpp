@@ -32,5 +32,4 @@ void Canon::onUpdate(float frametime)
 {
 	MultiPartEntity::onUpdate(frametime);
 	weapon_.shoot(math::PI / 2.f);
-	weapon_.onUpdate(frametime);
 }

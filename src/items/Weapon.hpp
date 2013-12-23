@@ -38,8 +38,6 @@ public:
 	float shoot(float angle);
 	float shoot(const sf::Vector2f& target);
 
-	void onUpdate(float frametime);
-
 	/**
 	 * Texture used for the projectiles
 	 */
@@ -90,23 +88,18 @@ public:
 protected:
 	void createProjectile(const sf::Vector2f& offset, float angle);
 
-
-
 private:
-	float m_fire_rate;
-	// timer "compte à rebours" pour que la cadence de tir soit indépendante
-	// du nombre de FPS. Si <= 0, on peut tirer. Si tir, timer reinitialisé.
-	// le timer est mis à jour à chaque frame dans Update
-	float m_fire_timer;
-	float m_heat_cost;
-	int   m_velocity;
-	int   m_damage;
+	sf::Clock m_last_shot_at; // Store time for last shot
+	float     m_fire_delay;   // Time to wait between next shot
+	float     m_heat_cost;
+	int       m_velocity;
+	int       m_damage;
 	const sf::Texture*     m_texture;
 	const sf::SoundBuffer* m_sound;
-	Entity* m_owner;
-	bool m_inited;
-	sf::Vector2f m_position;
-	int m_multiply;
+	Entity*                m_owner;
+	bool                   m_inited;
+	sf::Vector2f           m_position;
+	int                    m_multiply;
 };
 
 #include "Weapon.inl"

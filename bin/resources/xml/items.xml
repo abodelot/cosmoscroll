@@ -2,27 +2,25 @@
 <items>
 	<weapons>
 		<class id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg">
-			<weapon level="1" heat_cost="1.5" fire_rate="10" damage="1" speed="400" />
-			<weapon level="2" heat_cost="1.9" fire_rate="10" damage="2" speed="420" price="50" />
-			<weapon level="3" heat_cost="2.3" fire_rate="10" damage="3" speed="440" price="200" />
-		</class>
-		<class id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg">
-			<weapon level="1" heat_cost="1" fire_rate="4" damage="1" speed="340" />
-			<weapon level="2" heat_cost="1" fire_rate="8" damage="1" speed="360" price="50" />
-			<weapon level="3" heat_cost="1" fire_rate="12" damage="1" speed="400" price="200" />
+			<weapon level="1" heat_cost="1.5" fire_rate="8" damage="1" speed="400" />
+			<weapon level="2" heat_cost="1.9" fire_rate="8" damage="2" speed="420" price="50" />
+			<weapon level="3" heat_cost="2.3" fire_rate="8" damage="3" speed="440" price="200" />
 		</class>
 		<class id="laser-green" image="ammo/laser-green.png" sound="laser-green.ogg">
-			<weapon level="1" heat_cost="5" fire_rate="2" damage="1" speed="320" />
+			<weapon level="1" heat_cost="1" fire_rate="2" damage="1" speed="320" />
 		</class>
 		<class id="laser-pink" image="ammo/laser-pink.png" sound="laser-pink.ogg">
-			<weapon level="1" heat_cost="5" fire_rate="1" damage="2" speed="400" />
+			<weapon level="1" heat_cost="1" fire_rate="1" damage="2" speed="340" />
+		</class>
+		<class id="laser-blue" image="ammo/laser-blue.png" sound="laser-blue.ogg">
+			<weapon level="1" heat_cost="1" fire_rate="1" damage="3" speed="380" />
 		</class>
 		<class id="fireball" image="ammo/fireball.png" sound="canon.ogg">
 			<weapon level="1" heat_cost="0" fire_rate="0.7" damage="6" speed="430"/>
-			<weapon level="2" heat_cost="0" fire_rate="1.2" damage="20" speed="200" />
+			<weapon level="2" heat_cost="0" fire_rate="1.5" damage="20" speed="300" />
 		</class>
 		<class id="missile" image="ammo/missile.png" sound="missile-gasfire.ogg">
-			<weapon level="1" heat_cost="0" fire_rate="0.4" damage="10" speed="300" />
+			<weapon level="1" heat_cost="0" fire_rate="0.5" damage="10" speed="300" />
 		</class>
 	</weapons>
 	<shields>

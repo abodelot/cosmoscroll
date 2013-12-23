@@ -89,12 +89,7 @@ void SplitBoss::onUpdate(float frametime)
 		speed_y_ *= -1;
 	}
 
-    //Normal Movement
-
     sf::Sprite::move(speed_x_*frametime , speed_y_*frametime);
-
-	eye_left_.onUpdate(frametime);
-	eye_right_.onUpdate(frametime);
 
 	updateDamageFlash(frametime);
 }

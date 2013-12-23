@@ -3,10 +3,10 @@
 	<functions>
 		<def name="b1_triad">
 			<ship id="b1c" y="200" t="2.5"/>
-			<ship id="b1c" y="150" t="1"/>
-			<ship id="b1c" y="250"/>
+			<ship id="b1c" y="130" t="1"/>
+			<ship id="b1c" y="270"/>
 		</def>
-		<def name="caps_x5">
+		<def name="b1c_quint">
 			<ship id="b1c" y="200" t="2.5"/>
 			<ship id="b1c" y="140" t="1"/>
 			<ship id="b1c" y="260"/>
@@ -72,27 +72,37 @@
 	<levels>
 		<!-- LVL1 -->
 		<level desc="First encounter." stars="30" layer1="layers/blue.jpg" layer2="layers/fog.png" color="#002060" music="aurora.mod">
+			<ship id="b1" y="200" t="1"/>
 			<loop count="2">
+				<wait t="1"/>
 				<call func="b1_triad"/>
 			</loop>
-			<ship id="b1" y="100" t="4"/>
-			<ship id="b1" y="300" t="1.5"/>
+			<ship id="b1" y="100" t="5"/>
+			<ship id="b1" y="300"/>
+			<ship id="b1" y="140" t="1.5"/>
+			<ship id="b1" y="260"/>
+			<ship id="b1" y="180" t="1.5"/>
 			<ship id="b1" y="220"/>
 			<wait t="2"/>
 			<loop count="2">
 				<call func="b1_triad"/>
 			</loop>
 			<ship id="b1" y="50" t="4"/>
+			<asteroid y="380" t="0.5"/>
 			<ship id="b1" y="250" t="1.5"/>
 			<ship id="b1" y="150" t="1.5"/>
 			<ship id="b1" y="350" t="1.5"/>
-			<asteroid y="130" t="4"/>
+			<asteroid y="130" t="2"/>
 			<asteroid y="280" t="0.5"/>
-			<asteroid y="70" t="2"/>
+			<asteroid y="70" t="0.5"/>
 			<asteroid y="200" t="0.5"/>
-			<ship id="b2" y="100" t="1"/>
+			<ship id="b2" y="100" t="2"/>
+			<asteroid y="240" t="0.5"/>
 			<ship id="b2" y="300" t="2"/>
 			<asteroid y="180" t="0.5"/>
+			<asteroid y="320" t="0.5"/>
+			<ship id="b2" y="200" t="2"/>
+			<wait t="4"/>
 			<call func="b1_triad"/>
 			<loop count="2">
 				<ship id="b1" y="100" t="4.3"/>
@@ -102,13 +112,15 @@
 				<ship id="b1" y="300"/>
 				<ship id="b1" y="90" t="1"/>
 			</loop>
-			<call func="caps_x5"/>
-			<ship id="b1" y="80" t="1"/>
+			<call func="b1c_quint"/>
+			<ship id="b1" y="80" t="3"/>
 			<ship id="b1" y="280" t="1"/>
 			<ship id="b1" y="100" t="1"/>
 			<ship id="b1" y="100" t="1"/>
 			<ship id="b1" y="300" t="1"/>
 			<call func="b1_triad"/>
+			<wait t="2"/>
+			<call func="b1c_quint"/>
 			<wait t="3"/>
 			<call func="b2_triad"/>
 		</level>
@@ -116,12 +128,12 @@
 		<!-- LVL2 -->
 		<level desc="Ahoi captain of space!" layer1="layers/blue.jpg" layer2="layers/fog.png" color="#003070" stars="40" music="ground_zero.mod">
 			<loop count="2">
-				<call func="caps_x5"/>
+				<call func="b1c_quint"/>
 				<ship id="b1" y="450" t="2"/>
 				<ship id="b1" y="100" />
 				<ship id="b1" y="300" t="1"/>
 				<ship id="b1" y="120"/>
-				<call func="caps_x5"/>
+				<call func="b1c_quint"/>
 				<call func="scoot_line_3"/>
 				<call func="scoot_line_3"/>
 			</loop>
@@ -134,14 +146,15 @@
 			<ship id="b1" y="270" t="2"/>
 			<ship id="b1" y="170" t="2"/>
 			<asteroid y="113" t="4"/>
-			<asteroid y="312"/>
+			<asteroid y="312" t="0.5"/>
+			<asteroid y="40" t="0.5"/>
 			<asteroid y="185" t="2"/>
 			<asteroid y="368" t="1"/>
 			<asteroid y="249" t="0.5"/>
 			<asteroid y="19" t="1"/>
 			<asteroid y="150" t="1"/>
-			<asteroid y="230"/>
-			<ship id="b1" y="310" t="3"/>
+			<asteroid y="230" t="0.5"/>
+			<ship id="b1" y="310" t="2"/>
 			<ship id="b1" y="270" t="2"/>
 			<ship id="b1" y="170" t="1"/>
 			<ship id="b1c" y="320" t="2"/>
@@ -167,6 +180,8 @@
 			<ship id="b2" y="100" t="3"/>
 			<ship id="b2" y="300" t="3"/>
 			<call func="b2_triad"/>
+			<wait t="3" />
+			<call func="b2_triad" />
 			<split_boss y="170" t="8" />
 		</level>
 
@@ -178,14 +193,13 @@
 			<ship id="b1" y="250" />
 			<ship id="b1" y="205" t="1"/>
 			<ship id="b1" y="290" t="1"/>
-
 			<decor id="gate" y="0" t="2"/>
 			<ship id="b2" y="200" t="7"/>
 			<ship id="b2" y="100" t="2"/>
-
 			<decor id="canon" t="2"/>
-			<decor id="canon" t="5"/>
-			<ship id="b1" y="200" t="6"/>
+			<decor id="canon" t="4"/>
+			<decor id="canon" t="4"/>
+			<ship id="b1" y="200" t="7"/>
 			<ship id="b1" y="100"/>
 			<call func="scoot_line_3"/>
 			<ship id="b2" y="200" t="4"/>
@@ -201,22 +215,24 @@
 			<ship id="b2" y="260" t="1.2"/>
 			<wait t="3"/>
 			<loop count="2">
-				<ship id="b1c" y="70" t="1.0"/>
-				<ship id="b1c" y="100"/>
-				<ship id="b1c" y="130"/>
-				<ship id="b1c" y="160"/>
+				<ship id="b1c" y="90" t="1"/>
+				<ship id="b1c" y="120"/>
+				<ship id="b1c" y="150"/>
+				<ship id="b1c" y="180"/>
 			</loop>
+			<wait t="1"/>
 			<loop count="2">
-				<ship id="b1c" y="260" t="1.0"/>
-				<ship id="b1c" y="290"/>
-				<ship id="b1c" y="320"/>
-				<ship id="b1c" y="350"/>
+				<ship id="b1c" y="160" t="1"/>
+				<ship id="b1c" y="190"/>
+				<ship id="b1c" y="220"/>
+				<ship id="b1c" y="250"/>
 			</loop>
+			<wait t="1"/>
 			<loop count="2">
-				<ship id="b1c" y="70" t="1.0"/>
-				<ship id="b1c" y="100"/>
-				<ship id="b1c" y="130"/>
-				<ship id="b1c" y="160"/>
+				<ship id="b1c" y="240" t="1"/>
+				<ship id="b1c" y="270"/>
+				<ship id="b1c" y="300"/>
+				<ship id="b1c" y="330"/>
 			</loop>
 			<ship id="b2" y="340" t="5.2"/>
 			<ship id="b2" y="140" t="1.2"/>
@@ -246,6 +262,10 @@
 				<ship id="b2" y="100" t="0.5"/>
 			</loop>
 			<call func="c_scoot_line_3"/>
+			<decor id="gate" t="2"/>
+			<decor id="canon" t="3"/>
+			<wait t="2"/>
+			<call func="b2_triad"/>
 		</level>
 
 		<!-- LVL4 -->
@@ -256,17 +276,14 @@
 			<ship id="b2" y="60" t="1"/>
 			<ship id="b2" y="80" t="2"/>
 			<ship id="b1" y="305" t="1"/>
-			<ship id="b1" y="142" t="2"/>
+			<ship id="b2" y="142" t="2"/>
 			<ship id="b1" y="236" t="2"/>
 			<decor id="gate" t="2"/>
-
 			<ship id="b2" y="200" t="6"/>
 			<ship id="b2" y="240" t="2"/>
 			<ship id="b2" y="160"/>
-
 			<wait t="4"/>
 			<call func="interceptors_5"/>
-
 			<decor id="gate" y="0"/>
 			<wait t="3"/>
 			<ship id="b2" y="200" t="5"/>
@@ -292,15 +309,16 @@
 			</loop>
 			<wait t="6"/>
 			<loop count="2">
-				<ship id="b1" y="130" t="2"/>
+				<ship id="b1" y="130" t="1.5"/>
 				<ship id="b1" y="160" t="1"/>
-				<ship id="m1" y="100"/>
+				<ship id="m1" y="100" t="0.5"/>
 				<ship id="b1" y="130" t="1"/>
 				<ship id="b1" y="160" t="1"/>
-				<ship id="m1" y="100"/>
+				<ship id="m1" y="100" t="0.5"/>
+				<ship id="m1" y="220" t="0.5"/>
 			</loop>
-			<ship id="b1" y="120" t="4"/>
-			<ship id="b2" y="300" t="4"/>
+			<wait t="2"/>
+			<call func="b2_triad"/>
 			<loop count="2">
 				<wait t="3"/>
 				<call func="interceptors_5"/>
@@ -329,10 +347,10 @@
 			<ship id="b1" y="200" t="2"/>
 
 			<loop count="2">
-				<ship id="b2" y="100" t="3.0"/>
-				<ship id="b2" y="280" t="0.5" />
-				<ship id="s1" y="140" t="0.5"/>
-				<ship id="s1" y="310" t="0.5"/>
+				<ship id="b2" y="100" t="3"/>
+				<ship id="b2" y="280"/>
+				<ship id="s1" y="140" t="1"/>
+				<ship id="s1" y="310"/>
 			</loop>
 
 			<ship id="b1" y="200" t="6"/>
@@ -481,35 +499,38 @@
 				<ship id="b3" y="210" t="1" />
 				<ship id="b3" y="250" t="1" />
 			</loop>
+			<ship id="b3" t="4" y="200"/>
+			<ship id="b3" t="2" y="100"/>
+			<ship id="b3" y="300"/>
 		</level>
 
 		<!-- LVL8 -->
 		<level desc="Take me to your leader." layer1="layers/green.jpg" layer2="layers/fog.png" color="#003000" stars="70" music="spacesong.mod">
 			<wait t="1"/>
 			<loop count="3">
-				<ship id="m1" y="270" t="1" />
+				<ship id="m1" y="90" t="1"/>
+				<ship id="m2" y="210" t="1"/>
+				<ship id="m2" y="90" t="1"/>
+				<ship id="m1" y="210" t="1"/>
 			</loop>
-			<wait t="3" />
-			<loop count="3">
-				<ship id="m2" y="300" t="1" />
-			</loop>
-
-			<ship id="b2" y="270" t="4"/>
+			<ship id="b3" y="270" t="5"/>
 			<ship id="b3" y="170" t="2"/>
-			<ship id="b2" y="370" t="1"/>
-			<call func="scoot_line_3"/>
-			<call func="scoot_line_5"/>
+			<ship id="b3" y="370" t="1"/>
+			<ship id="b3" t="4" y="200"/>
+			<ship id="b3" t="2" y="100"/>
+			<ship id="b3" y="300"/>
+			<wait t="2"/>
 			<call func="saucers_12"/>
 			<asteroid y="120" t="2"/>
 			<asteroid y="310" t="0.5"/>
 			<asteroid y="205" t="0.5"/>
-			<ship id="m1" y="130"/>
-			<ship id="m1" y="260" t="0.5"/>
+			<ship id="m2" y="130"/>
+			<ship id="m2" y="260" t="0.5"/>
 			<ship id="b2" y="370" t="2"/>
 			<ship id="s1" y="170" t="2"/>
 			<ship id="s1" y="300" t="1"/>
 			<ship id="s1" y="200" t="1"/>
-			<ship id="m1" y="70"/>
+			<ship id="m2" y="70"/>
 			<call func="interceptors_7"/>
 			<ship id="b3" y="170" t="2"/>
 			<ship id="b2" y="40" t="1"/>

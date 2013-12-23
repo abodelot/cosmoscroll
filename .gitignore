@@ -5,6 +5,9 @@ cosmoscroll.depend
 # Executable
 bin/cosmoscroll
 
+# Screenshots
+bin/screenshots
+
 # Compiled object files
 *.o
 
