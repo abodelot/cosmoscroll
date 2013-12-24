@@ -5,7 +5,7 @@
 #define BUT_H 25
 
 
-ConfigButton::ConfigButton(gui::Menu* owner, Input::Action action):
+ConfigButton::ConfigButton(gui::Menu* owner, Action::ID action):
 	gui::Button(owner, "", BUT_W, BUT_H),
 	m_action(action)
 {
@@ -20,17 +20,17 @@ ConfigButton::ConfigButton(gui::Menu* owner, Input::Action action):
 
 void ConfigButton::setKeyboardLabel()
 {
-	setString(Input::KeyToString(Input::GetInstance().GetKeyboardBind(m_action)));
+	setString(Input::keyToString(Input::getKeyBinding(m_action)));
 }
 
 
 void ConfigButton::setJoystickLabel()
 {
-	setString(Input::ButtonToString(Input::GetInstance().GetJoystickBind(m_action)));
+	setString(Input::buttonToString(Input::getButtonBinding(m_action)));
 }
 
 
-Input::Action ConfigButton::getAction() const
+Action::ID ConfigButton::getAction() const
 {
 	return m_action;
 }

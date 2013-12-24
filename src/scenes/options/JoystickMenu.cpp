@@ -10,10 +10,10 @@ JoystickMenu::JoystickMenu():
 
 	gui::FormLayout form(110, 120);
 	form.SetSpacing(20, 16);
-	but_weapon_  = addRow(form, Input::USE_LASER);
-	but_missile_ = addRow(form, Input::USE_MISSILE);
-	but_cooler_  = addRow(form, Input::USE_COOLER);
-	but_pause_   = addRow(form, Input::PAUSE);
+	but_weapon_  = addRow(form, Action::USE_LASER);
+	but_missile_ = addRow(form, Action::USE_MISSILE);
+	but_cooler_  = addRow(form, Action::USE_COOLER);
+	but_pause_   = addRow(form, Action::PAUSE);
 
 	sl_joystick_ = new gui::Slider(this, 160);
 	sl_joystick_->SetCallbackID(9000);
@@ -33,8 +33,8 @@ void JoystickMenu::OnEvent(const sf::Event& event)
 		if (event.type == sf::Event::JoystickButtonPressed)
 		{
 			// Binding action to pressed button
-			Input::Action action = m_triggered->getAction();
-			Input::GetInstance().SetJoystickBind(event.joystickButton.button, action);
+			Action::ID action = m_triggered->getAction();
+			Input::setButtonBinding(event.joystickButton.button, action);
 			OnFocus();
 		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
@@ -60,7 +60,7 @@ void JoystickMenu::OnFocus()
 	but_cooler_->setJoystickLabel();
 	but_pause_->setJoystickLabel();
 
-	sl_joystick_->SetValue(100 - Input::GetInstance().GetSensitivity());
+	sl_joystick_->SetValue(100 - Input::getJoystickDeadzone());
 }
 
 
@@ -69,12 +69,12 @@ void JoystickMenu::EventCallback(int id)
 	// Input::Action enumerations are used as widget ids
 	switch (id)
 	{
-		case Input::USE_LASER:   m_triggered = but_weapon_;  break;
-		case Input::USE_COOLER:  m_triggered = but_cooler_;  break;
-		case Input::USE_MISSILE: m_triggered = but_missile_; break;
-		case Input::PAUSE:       m_triggered = but_pause_;   break;
+		case Action::USE_LASER:   m_triggered = but_weapon_;  break;
+		case Action::USE_COOLER:  m_triggered = but_cooler_;  break;
+		case Action::USE_MISSILE: m_triggered = but_missile_; break;
+		case Action::PAUSE:       m_triggered = but_pause_;   break;
 		case 9000:
-			Input::GetInstance().SetSensitivity(100 - sl_joystick_->GetValue());
+			Input::setJoystickDeadzone(100 - sl_joystick_->GetValue());
 			break;
 		case 9001:
 			Game::getInstance().setNextScene(Game::SC_OptionMenu);
@@ -88,10 +88,10 @@ void JoystickMenu::EventCallback(int id)
 }
 
 
-ConfigButton* JoystickMenu::addRow(gui::FormLayout& form, Input::Action action)
+ConfigButton* JoystickMenu::addRow(gui::FormLayout& form, Action::ID action)
 {
 	ConfigButton* button = new ConfigButton(this, action);
 	button->setJoystickLabel();
-	form.AddRow(Input::ActionToString(action), button);
+	form.AddRow(Action::toString(action), button);
 	return button;
 }

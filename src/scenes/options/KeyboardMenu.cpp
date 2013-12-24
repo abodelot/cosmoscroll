@@ -10,13 +10,13 @@ KeyboardMenu::KeyboardMenu():
 
 	gui::FormLayout form(80, 120);
 	form.SetSpacing(60, 10);
-	but_up_      = addRow(form, Input::MOVE_UP);
-	but_down_    = addRow(form, Input::MOVE_DOWN);
-	but_left_    = addRow(form, Input::MOVE_LEFT);
-	but_right_   = addRow(form, Input::MOVE_RIGHT);
-	but_weapon_  = addRow(form, Input::USE_LASER);
-	but_cooler_  = addRow(form, Input::USE_COOLER);
-	but_missile_ = addRow(form, Input::USE_MISSILE);
+	but_up_      = addRow(form, Action::UP);
+	but_down_    = addRow(form, Action::DOWN);
+	but_left_    = addRow(form, Action::LEFT);
+	but_right_   = addRow(form, Action::RIGHT);
+	but_weapon_  = addRow(form, Action::USE_LASER);
+	but_cooler_  = addRow(form, Action::USE_COOLER);
+	but_missile_ = addRow(form, Action::USE_MISSILE);
 
 	gui::Button* back = new CosmoButton(this, _t("menu.back"));
 	back->setPosition(210, 410);
@@ -34,8 +34,8 @@ void KeyboardMenu::OnEvent(const sf::Event& event)
 			if (event.key.code != sf::Keyboard::Escape)
 			{
 				// Bind action to pressed key
-				Input::Action action = m_triggered->getAction();
-				Input::GetInstance().SetKeyboardBind(event.key.code, action);
+				Action::ID action = m_triggered->getAction();
+				Input::setKeyBinding(event.key.code, action);
 				OnFocus();
 			}
 			else
@@ -73,13 +73,13 @@ void KeyboardMenu::EventCallback(int id)
 	// Input::Action enumerations are used as widget ids
 	switch (id)
 	{
-		case Input::MOVE_UP:     m_triggered = but_up_;      break;
-		case Input::MOVE_DOWN:   m_triggered = but_down_;    break;
-		case Input::MOVE_LEFT:   m_triggered = but_left_;    break;
-		case Input::MOVE_RIGHT:  m_triggered = but_right_;   break;
-		case Input::USE_LASER:   m_triggered = but_weapon_;  break;
-		case Input::USE_COOLER:  m_triggered = but_cooler_;  break;
-		case Input::USE_MISSILE: m_triggered = but_missile_; break;
+		case Action::UP:          m_triggered = but_up_;      break;
+		case Action::DOWN:        m_triggered = but_down_;    break;
+		case Action::LEFT:        m_triggered = but_left_;    break;
+		case Action::RIGHT:       m_triggered = but_right_;   break;
+		case Action::USE_LASER:   m_triggered = but_weapon_;  break;
+		case Action::USE_COOLER:  m_triggered = but_cooler_;  break;
+		case Action::USE_MISSILE: m_triggered = but_missile_; break;
 		case 9000:
 			Game::getInstance().setNextScene(Game::SC_OptionMenu);
 			break;
@@ -92,10 +92,10 @@ void KeyboardMenu::EventCallback(int id)
 }
 
 
-ConfigButton* KeyboardMenu::addRow(gui::FormLayout& form, Input::Action action)
+ConfigButton* KeyboardMenu::addRow(gui::FormLayout& form, Action::ID action)
 {
 	ConfigButton* button = new ConfigButton(this, action);
 	button->setKeyboardLabel();
-	form.AddRow(Input::ActionToString(action), button);
+	form.AddRow(Action::toString(action), button);
 	return button;
 }

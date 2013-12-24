@@ -37,11 +37,10 @@ IntroScene::IntroScene() :
 
 void IntroScene::OnEvent(const sf::Event& event)
 {
-	Input::Action action = Input::GetInstance().EventToAction(event);
+	Action::ID action = Input::feedEvent(event);
 	switch (action)
 	{
-		case Input::ENTER:
-		case Input::PAUSE:
+		case Action::VALIDATE:
 			elapsed_ = DURATION;
 			break;
 		default:

@@ -27,8 +27,8 @@ EndGameScene::EndGameScene():
 
 void EndGameScene::OnEvent(const sf::Event& event)
 {
-	Input::Action action = Input::GetInstance().EventToAction(event);
-	if (action == Input::ENTER)
+	Action::ID action = Input::feedEvent(event);
+	if (action == Action::VALIDATE)
 		goNextScreen();
 }
 

@@ -1,400 +1,340 @@
-#include <cstdio>
-#include <SFML/Graphics.hpp>
+#include <sstream>
+#include <iostream>
 #include "Input.hpp"
 #include "utils/I18n.hpp"
-#include "utils/IniParser.hpp"
 
-#define JOY_ID			 0
+Input::KeyMap    Input::s_keys;
+Input::ButtonMap Input::s_buttons;
+Input::ActionMap Input::s_pressed;
+int              Input::s_joystick_deadzone = 50;
+Input::Init      Input::s_ctor;
 
 
-Input& Input::GetInstance()
+Input::Init::Init()
 {
-	static Input self;
-	return self;
+	// Default keyboard layout
+	Input::setKeyBinding(sf::Keyboard::Return,   Action::VALIDATE);
+	Input::setKeyBinding(sf::Keyboard::Up,       Action::UP);
+	Input::setKeyBinding(sf::Keyboard::Down,     Action::DOWN);
+	Input::setKeyBinding(sf::Keyboard::Left,     Action::LEFT);
+	Input::setKeyBinding(sf::Keyboard::Right,    Action::RIGHT);
+	Input::setKeyBinding(sf::Keyboard::PageUp,   Action::PANEL_UP);
+	Input::setKeyBinding(sf::Keyboard::PageDown, Action::PANEL_DOWN);
+	Input::setKeyBinding(sf::Keyboard::Escape,   Action::PAUSE);
+	Input::setKeyBinding(sf::Keyboard::Space,    Action::USE_LASER);
+	Input::setKeyBinding(sf::Keyboard::LControl, Action::USE_COOLER);
+	Input::setKeyBinding(sf::Keyboard::A,        Action::USE_MISSILE);
+	Input::setKeyBinding(sf::Keyboard::F1,       Action::TAKE_SCREENSHOT);
+
+	// Default joystick layout
+	Input::setButtonBinding(0, Action::VALIDATE);
+	Input::setButtonBinding(1, Action::PAUSE);
+	Input::setButtonBinding(6, Action::USE_LASER);
+	Input::setButtonBinding(2, Action::USE_COOLER);
+	Input::setButtonBinding(3, Action::USE_MISSILE);
 }
 
 
-Input::Input()
-{
-	device_flag_ = ALL;
-
-	// Unset bindings for everything
-	for (size_t i = 0; i < Input::COUNT; ++i)
-	{
-		action_to_key_[i] = sf::Keyboard::Unknown;
-		action_to_joybutton_[i] = MAX_JOY_BUTTON;
-	}
-
-	for (size_t i = 0; i < sf::Keyboard::KeyCount; ++i)
-	{
-		key_to_action_[i] = Input::COUNT;
-	}
-
-	for (unsigned int i = 0; i < MAX_JOY_BUTTON; ++i)
-	{
-		joybutton_to_action_[i] = Input::COUNT;
-	}
-
-	// Default keyboard binding
-	SetKeyboardBind(sf::Keyboard::Return,   ENTER);
-	SetKeyboardBind(sf::Keyboard::Up,       MOVE_UP);
-	SetKeyboardBind(sf::Keyboard::Down,     MOVE_DOWN);
-	SetKeyboardBind(sf::Keyboard::Left,     MOVE_LEFT);
-	SetKeyboardBind(sf::Keyboard::Right,    MOVE_RIGHT);
-	SetKeyboardBind(sf::Keyboard::PageUp,   PANEL_UP);
-	SetKeyboardBind(sf::Keyboard::PageDown, PANEL_DOWN);
-	SetKeyboardBind(sf::Keyboard::Escape,   PAUSE);
-	SetKeyboardBind(sf::Keyboard::Space,    USE_LASER);
-	SetKeyboardBind(sf::Keyboard::LControl, USE_COOLER);
-	SetKeyboardBind(sf::Keyboard::A,        USE_MISSILE);
-	SetKeyboardBind(sf::Keyboard::F1,       TAKE_SCREENSHOT);
-
-	// Default joystick binding
-	SetJoystickBind(0, ENTER);
-	SetJoystickBind(1, PAUSE);
-	SetJoystickBind(6, USE_LASER);
-	SetJoystickBind(2, USE_COOLER);
-	SetJoystickBind(3, USE_MISSILE);
-
-	sensitivity_ = 50;
-}
-
-
-Input::Action Input::EventToAction(const sf::Event& event)
+Action::ID Input::feedEvent(const sf::Event& event)
 {
 	switch (event.type)
 	{
 		case sf::Event::KeyPressed:
-			return (device_flag_ & Input::KEYBOARD ) ?
-				key_to_action_[event.key.code] : Input::COUNT;
-
+		{
+			KeyMap::const_iterator it = s_keys.find(event.key.code);
+			if (it != s_keys.end())
+			{
+				s_pressed[it->second] = true;
+				return it->second;
+			}
+			break;
+		}
+		case sf::Event::KeyReleased:
+		{
+			KeyMap::const_iterator it = s_keys.find(event.key.code);
+			if (it != s_keys.end())
+			{
+				s_pressed[it->second] = false;
+			}
+			break;
+		}
 		case sf::Event::JoystickButtonPressed:
-			return (device_flag_ & Input::JOYSTICK) ?
-				joybutton_to_action_[event.joystickButton.button] : Input::COUNT;
+		{
+			ButtonMap::const_iterator it = s_buttons.find(event.joystickButton.button);
+			if (it != s_buttons.end())
+			{
+				s_pressed[it->second] = true;
+				return it->second;
+			}
+			break;
+		}
+		case sf::Event::JoystickButtonReleased:
+		{
+			ButtonMap::const_iterator it = s_buttons.find(event.joystickButton.button);
+			if (it != s_buttons.end())
+			{
+				s_pressed[it->second] = false;
+			}
+			break;
+		}
+		case sf::Event::JoystickMoved:
+			if (event.joystickMove.axis == sf::Joystick::X)
+			{
+				if (event.joystickMove.position > s_joystick_deadzone)
+				{
+					s_pressed[Action::RIGHT] = true;
+					return Action::RIGHT;
+				}
+				s_pressed[Action::RIGHT] = false;
 
+				if (event.joystickMove.position < -s_joystick_deadzone)
+				{
+					s_pressed[Action::LEFT] = true;
+					return Action::LEFT;
+				}
+				s_pressed[Action::LEFT] = false;
+			}
+			else if (event.joystickMove.axis == sf::Joystick::Y)
+			{
+				if (event.joystickMove.position > s_joystick_deadzone)
+				{
+					s_pressed[Action::DOWN] = true;
+					return Action::DOWN;
+				}
+				s_pressed[Action::DOWN] = false;
+
+				if (event.joystickMove.position < -s_joystick_deadzone)
+				{
+					s_pressed[Action::UP] = true;
+					return Action::UP;
+				}
+				s_pressed[Action::UP] = false;
+			}
+			break;
 		case sf::Event::Closed:
-			return EXIT_APP;
-
+			return Action::EXIT_APP;
 		case sf::Event::LostFocus:
-			return PAUSE;
-
+			return Action::PAUSE;
 		default:
 			break;
 	}
-	return COUNT;
+	return Action::NONE;
 }
 
 
-bool Input::HasInput(Action action)
+bool Input::isPressed(Action::ID action)
 {
-	if ((device_flag_ & KEYBOARD) && sf::Keyboard::isKeyPressed(action_to_key_[action]))
-	{
-		return true;
-	}
-	if (device_flag_ & JOYSTICK)
-	{
-		if (sf::Joystick::isButtonPressed(JOY_ID, action_to_joybutton_[action]))
-		{
-			return true;
-		}
-		if (action == Input::MOVE_UP)
-		{
-			return sf::Joystick::getAxisPosition(JOY_ID, sf::Joystick::Y) < -sensitivity_;
-		}
-		if (action == Input::MOVE_DOWN)
-		{
-			return sf::Joystick::getAxisPosition(JOY_ID, sf::Joystick::Y) > sensitivity_;
-		}
-		if (action == Input::MOVE_LEFT)
-		{
-			return sf::Joystick::getAxisPosition(JOY_ID, sf::Joystick::X) < -sensitivity_;
-		}
-		if (action == Input::MOVE_RIGHT)
-		{
-			return sf::Joystick::getAxisPosition(JOY_ID, sf::Joystick::X) > sensitivity_;
-		}
-	}
-	return false;
+	return s_pressed[action];
 }
 
 
-void Input::SetKeyboardBind(sf::Keyboard::Key key, Action action)
+void Input::setKeyBinding(sf::Keyboard::Key key, Action::ID action)
 {
-	if (action < Input::COUNT && key < sf::Keyboard::KeyCount)
+	if (key < sf::Keyboard::KeyCount)
 	{
-		// If key is already taken by another action, unset it
-		for (size_t i = 0; i < Input::COUNT; ++i)
-			if (action_to_key_[i] == key && i != action)
-				action_to_key_[i] = sf::Keyboard::Unknown;
-
-		action_to_key_[action] = key;
-		key_to_action_[key] = action;
+		// Disable old key
+		s_keys[getKeyBinding(action)] = Action::NONE;
+		// Bind new key
+		s_keys[key] = action;
+		s_pressed[action] = false;
 	}
 	else
 	{
-		fprintf(stderr, "[Input] bad keyboard binding ignored\n");
+		std::cerr << "[Input] invalid key binding ignored: " << key << std::endl;
 	}
 }
 
 
-sf::Keyboard::Key Input::GetKeyboardBind(Action action)
+sf::Keyboard::Key Input::getKeyBinding(Action::ID action)
 {
-	return action < Input::COUNT ?
-		action_to_key_[action] : sf::Keyboard::Unknown;
+	for (auto& item: s_keys)
+	{
+		if (item.second == action)
+			return item.first;
+	}
+	return sf::Keyboard::Unknown;
 }
 
 
-void Input::SetJoystickBind(unsigned int joybutton, Action action)
+void Input::setButtonBinding(unsigned int joystick_button, Action::ID action)
 {
-	if (action < Input::COUNT && joybutton < MAX_JOY_BUTTON)
+	if (joystick_button < sf::Joystick::ButtonCount)
 	{
-		// If button is already taken by another action, unset it
-		for (size_t i = 0; i < Input::COUNT; ++i)
-			if (action_to_joybutton_[i] == joybutton && i != action)
-				action_to_joybutton_[i] = MAX_JOY_BUTTON;
-
-		action_to_joybutton_[action] = joybutton;
-		joybutton_to_action_[joybutton] = action;
+		// Disable old button
+		s_buttons[getButtonBinding(action)] = Action::NONE;
+		// Bind new button
+		s_buttons[joystick_button] = action;
+		s_pressed[action] = false;
 	}
 	else
 	{
-		fprintf(stderr, "[Input] bad joystick binding ignored (button %u, action %u)\n", joybutton, action);
+		std::cerr << "[Input] invalid joystick button binding ignored:"  << joystick_button << std::endl;
 	}
 }
 
 
-unsigned int Input::GetJoystickBind(Action action)
+unsigned int Input::getButtonBinding(Action::ID action)
 {
-	return action < Input::COUNT ?
-		action_to_joybutton_[action] : MAX_JOY_BUTTON;
-}
-
-
-const std::wstring& Input::ActionToString(Action action)
-{
-	switch (action)
+	for (auto& item: s_buttons)
 	{
-		case PAUSE:
-			return _t("action.pause");
-		case MOVE_UP:
-			return _t("action.up");
-		case MOVE_DOWN:
-			return _t("action.down");
-		case MOVE_LEFT:
-			return _t("action.left");
-		case MOVE_RIGHT:
-			return _t("action.right");
-		case USE_LASER:
-			return _t("action.laser");
-		case USE_COOLER:
-			return _t("action.cooler");
-		case USE_MISSILE:
-			return _t("action.missile");
-		default:
-			break;
+		if (item.second == action)
+			return item.first;
 	}
-	return _t("action.unknown");
+	return sf::Joystick::ButtonCount;
 }
 
 
-const char* Input::KeyToString(int key)
+void Input::setJoystickDeadzone(int dead_zone)
+{
+	s_joystick_deadzone = dead_zone;
+}
+
+
+int Input::getJoystickDeadzone()
+{
+	return s_joystick_deadzone;
+}
+
+
+const char* Input::keyToString(sf::Keyboard::Key key)
 {
 	switch (key)
 	{
-		case sf::Keyboard::A: return "A";
-		case sf::Keyboard::B: return "B";
-		case sf::Keyboard::C: return "C";
-		case sf::Keyboard::D: return "D";
-		case sf::Keyboard::E: return "E";
-		case sf::Keyboard::F: return "F";
-		case sf::Keyboard::G: return "G";
-		case sf::Keyboard::H: return "H";
-		case sf::Keyboard::I: return "I";
-		case sf::Keyboard::J: return "J";
-		case sf::Keyboard::K: return "K";
-		case sf::Keyboard::L: return "L";
-		case sf::Keyboard::M: return "M";
-		case sf::Keyboard::N: return "N";
-		case sf::Keyboard::O: return "O";
-		case sf::Keyboard::P: return "P";
-		case sf::Keyboard::Q: return "Q";
-		case sf::Keyboard::R: return "R";
-		case sf::Keyboard::S: return "S";
-		case sf::Keyboard::T: return "T";
-		case sf::Keyboard::U: return "U";
-		case sf::Keyboard::V: return "V";
-		case sf::Keyboard::W: return "W";
-		case sf::Keyboard::X: return "X";
-		case sf::Keyboard::Y: return "Y";
-		case sf::Keyboard::Z: return "Z";
-		case sf::Keyboard::Num0: return "Num 0";
-		case sf::Keyboard::Num1: return "Num 1";
-		case sf::Keyboard::Num2: return "Num 2";
-		case sf::Keyboard::Num3: return "Num 3";
-		case sf::Keyboard::Num4: return "Num 4";
-		case sf::Keyboard::Num5: return "Num 5";
-		case sf::Keyboard::Num6: return "Num 6";
-		case sf::Keyboard::Num7: return "Num 7";
-		case sf::Keyboard::Num8: return "Num 8";
-		case sf::Keyboard::Num9: return "Num 9";
-		case sf::Keyboard::Escape: return "Escape";
-		case sf::Keyboard::LControl: return "Left Control";
-		case sf::Keyboard::LShift: return "Left Shift";
-		case sf::Keyboard::LAlt: return "Left Alt";
-		case sf::Keyboard::LSystem: return "Left System";
-		case sf::Keyboard::RControl: return "Right Control";
-		case sf::Keyboard::RShift: return "Right Shift";
-		case sf::Keyboard::RAlt: return "RAlt";
-		case sf::Keyboard::RSystem: return "Right System";
-		case sf::Keyboard::Menu: return "Menu";
-		case sf::Keyboard::LBracket: return "Left Bracket";
-		case sf::Keyboard::RBracket: return "Right Bracket";
-		case sf::Keyboard::SemiColon: return "Semi Colon";
-		case sf::Keyboard::Comma: return "Comma";
-		case sf::Keyboard::Period: return "Period";
-		case sf::Keyboard::Quote: return "Quote";
-		case sf::Keyboard::Slash: return "Slash";
-		case sf::Keyboard::BackSlash: return "Back Slash";
-		case sf::Keyboard::Tilde: return "Tilde";
-		case sf::Keyboard::Equal: return "Equal";
-		case sf::Keyboard::Dash: return "Dash";
-		case sf::Keyboard::Space: return "Space";
-		case sf::Keyboard::Return: return "Return";
+		case sf::Keyboard::Unknown:   return "Unknown";
+		case sf::Keyboard::A:         return "A";
+		case sf::Keyboard::B:         return "B";
+		case sf::Keyboard::C:         return "C";
+		case sf::Keyboard::D:         return "D";
+		case sf::Keyboard::E:         return "E";
+		case sf::Keyboard::F:         return "F";
+		case sf::Keyboard::G:         return "G";
+		case sf::Keyboard::H:         return "H";
+		case sf::Keyboard::I:         return "I";
+		case sf::Keyboard::J:         return "J";
+		case sf::Keyboard::K:         return "K";
+		case sf::Keyboard::L:         return "L";
+		case sf::Keyboard::M:         return "M";
+		case sf::Keyboard::N:         return "N";
+		case sf::Keyboard::O:         return "O";
+		case sf::Keyboard::P:         return "P";
+		case sf::Keyboard::Q:         return "Q";
+		case sf::Keyboard::R:         return "R";
+		case sf::Keyboard::S:         return "S";
+		case sf::Keyboard::T:         return "T";
+		case sf::Keyboard::U:         return "U";
+		case sf::Keyboard::V:         return "V";
+		case sf::Keyboard::W:         return "W";
+		case sf::Keyboard::X:         return "X";
+		case sf::Keyboard::Y:         return "Y";
+		case sf::Keyboard::Z:         return "Z";
+		case sf::Keyboard::Num0:      return "0";
+		case sf::Keyboard::Num1:      return "1";
+		case sf::Keyboard::Num2:      return "2";
+		case sf::Keyboard::Num3:      return "3";
+		case sf::Keyboard::Num4:      return "4";
+		case sf::Keyboard::Num5:      return "5";
+		case sf::Keyboard::Num6:      return "6";
+		case sf::Keyboard::Num7:      return "7";
+		case sf::Keyboard::Num8:      return "8";
+		case sf::Keyboard::Num9:      return "9";
+		case sf::Keyboard::Escape:    return "Escape";
+		case sf::Keyboard::LControl:  return "Left Control";
+		case sf::Keyboard::LShift:    return "Left Shift";
+		case sf::Keyboard::LAlt:      return "Left Alt";
+		case sf::Keyboard::LSystem:   return "Left System";
+		case sf::Keyboard::RControl:  return "Right Control";
+		case sf::Keyboard::RShift:    return "Right Shift";
+		case sf::Keyboard::RAlt:      return "Right Alt";
+		case sf::Keyboard::RSystem:   return "Right System";
+		case sf::Keyboard::Menu:      return "Menu";
+		case sf::Keyboard::LBracket:  return "[";
+		case sf::Keyboard::RBracket:  return "]";
+		case sf::Keyboard::SemiColon: return ";";
+		case sf::Keyboard::Comma:     return ",";
+		case sf::Keyboard::Period:    return ".";
+		case sf::Keyboard::Quote:     return "'";
+		case sf::Keyboard::Slash:     return "/";
+		case sf::Keyboard::BackSlash: return "\\";
+		case sf::Keyboard::Tilde:     return "~";
+		case sf::Keyboard::Equal:     return "=";
+		case sf::Keyboard::Dash:      return "Dash";
+		case sf::Keyboard::Space:     return "Space";
+		case sf::Keyboard::Return:    return "Return";
 		case sf::Keyboard::BackSpace: return "Backspace";
-		case sf::Keyboard::Tab: return "Tab";
-		case sf::Keyboard::PageUp: return "Page Up";
-		case sf::Keyboard::PageDown: return "Page Down";
-		case sf::Keyboard::End: return "End";
-		case sf::Keyboard::Home: return "Home";
-		case sf::Keyboard::Insert: return "Insert";
-		case sf::Keyboard::Delete: return "Delete";
-		case sf::Keyboard::Add: return "Add";
-		case sf::Keyboard::Subtract: return "Subtract";
-		case sf::Keyboard::Multiply: return "Multiply";
-		case sf::Keyboard::Divide: return "Divide";
-		case sf::Keyboard::Left: return "Left";
-		case sf::Keyboard::Right: return "Right";
-		case sf::Keyboard::Up: return "Up";
-		case sf::Keyboard::Down: return "Down";
-		case sf::Keyboard::Numpad0: return "Numpad 0";
-		case sf::Keyboard::Numpad1: return "Numpad 1";
-		case sf::Keyboard::Numpad2: return "Numpad 2";
-		case sf::Keyboard::Numpad3: return "Numpad 3";
-		case sf::Keyboard::Numpad4: return "Numpad 4";
-		case sf::Keyboard::Numpad5: return "Numpad 5";
-		case sf::Keyboard::Numpad6: return "Numpad 6";
-		case sf::Keyboard::Numpad7: return "Numpad 7";
-		case sf::Keyboard::Numpad8: return "Numpad 8";
-		case sf::Keyboard::Numpad9: return "Numpad 9";
-		case sf::Keyboard::F1: return "F1";
-		case sf::Keyboard::F2: return "F2";
-		case sf::Keyboard::F3: return "F3";
-		case sf::Keyboard::F4: return "F4";
-		case sf::Keyboard::F5: return "F5";
-		case sf::Keyboard::F6: return "F6";
-		case sf::Keyboard::F7: return "F7";
-		case sf::Keyboard::F8: return "F8";
-		case sf::Keyboard::F9: return "F9";
-		case sf::Keyboard::F10: return "F10";
-		case sf::Keyboard::F11: return "F11";
-		case sf::Keyboard::F12: return "F12";
-		case sf::Keyboard::F13: return "F13";
-		case sf::Keyboard::F14: return "F14";
-		case sf::Keyboard::F15: return "F15";
-		case sf::Keyboard::Pause: return "Pause";
+		case sf::Keyboard::Tab:       return "Tab";
+		case sf::Keyboard::PageUp:    return "Page Up";
+		case sf::Keyboard::PageDown:  return "Page Down";
+		case sf::Keyboard::End:       return "End";
+		case sf::Keyboard::Home:      return "Home";
+		case sf::Keyboard::Insert:    return "Insert";
+		case sf::Keyboard::Delete:    return "Delete";
+		case sf::Keyboard::Add:       return "Add";
+		case sf::Keyboard::Subtract:  return "Subtract";
+		case sf::Keyboard::Multiply:  return "Multiply";
+		case sf::Keyboard::Divide:    return "Divide";
+		case sf::Keyboard::Left:      return "Left";
+		case sf::Keyboard::Right:     return "Right";
+		case sf::Keyboard::Up:        return "Up";
+		case sf::Keyboard::Down:      return "Down";
+		case sf::Keyboard::Numpad0:   return "Numpad 0";
+		case sf::Keyboard::Numpad1:   return "Numpad 1";
+		case sf::Keyboard::Numpad2:   return "Numpad 2";
+		case sf::Keyboard::Numpad3:   return "Numpad 3";
+		case sf::Keyboard::Numpad4:   return "Numpad 4";
+		case sf::Keyboard::Numpad5:   return "Numpad 5";
+		case sf::Keyboard::Numpad6:   return "Numpad 6";
+		case sf::Keyboard::Numpad7:   return "Numpad 7";
+		case sf::Keyboard::Numpad8:   return "Numpad 8";
+		case sf::Keyboard::Numpad9:   return "Numpad 9";
+		case sf::Keyboard::F1:        return "F1";
+		case sf::Keyboard::F2:        return "F2";
+		case sf::Keyboard::F3:        return "F3";
+		case sf::Keyboard::F4:        return "F4";
+		case sf::Keyboard::F5:        return "F5";
+		case sf::Keyboard::F6:        return "F6";
+		case sf::Keyboard::F7:        return "F7";
+		case sf::Keyboard::F8:        return "F8";
+		case sf::Keyboard::F9:        return "F9";
+		case sf::Keyboard::F10:       return "F10";
+		case sf::Keyboard::F11:       return "F11";
+		case sf::Keyboard::F12:       return "F12";
+		case sf::Keyboard::F13:       return "F13";
+		case sf::Keyboard::F14:       return "F14";
+		case sf::Keyboard::F15:       return "F15";
+		case sf::Keyboard::Pause:     return "Pause";
+		case sf::Keyboard::KeyCount:  break;
 	}
-	return "<Unknown>";
+	return "<Invalid Key>";
 }
 
 
-std::wstring Input::ButtonToString(unsigned int button)
+std::wstring Input::buttonToString(unsigned int button)
 {
-	if (button >= MAX_JOY_BUTTON)
-		return L"<Unknown>";
-
-	std::wostringstream oss;
-	oss << _t("menu.joystick.button") << L" " << button;
-	return oss.str();
-}
-
-
-void Input::SetDevices(unsigned int flag)
-{
-	device_flag_ = flag;
-}
-
-
-int Input::GetSensitivity() const
-{
-	return sensitivity_;
-}
-
-
-void Input::SetSensitivity(int sensitivity)
-{
-	if (sensitivity < 0)
+	if (button < sf::Joystick::ButtonCount)
 	{
-		sensitivity = 0;
+		std::wostringstream oss;
+		oss << _t("menu.joystick.button") << L' ' << button;
+		return oss.str();
 	}
-	else if (sensitivity > 99)
+	return L"<Invalid Button>";
+}
+
+
+const std::wstring& Action::toString(Action::ID action)
+{
+	switch (action)
 	{
-		sensitivity = 99;
+		case Action::PAUSE:       return _t("action.pause");
+		case Action::UP:          return _t("action.up");
+		case Action::DOWN:        return _t("action.down");
+		case Action::LEFT:        return _t("action.left");
+		case Action::RIGHT:       return _t("action.right");
+		case Action::USE_LASER:   return _t("action.laser");
+		case Action::USE_COOLER:  return _t("action.cooler");
+		case Action::USE_MISSILE: return _t("action.missile");
+		default: break;
 	}
-	sensitivity_ = sensitivity;
-}
-
-
-void Input::LoadFromConfig(IniParser& config)
-{
-	config.SeekSection("Keyboard");
-	sf::Keyboard::Key key;
-	if (config.Get("move_up", key))
-		SetKeyboardBind(key, MOVE_UP);
-	if (config.Get("move_down", key))
-		SetKeyboardBind(key, MOVE_DOWN);
-	if (config.Get("move_left", key))
-		SetKeyboardBind(key, MOVE_LEFT);
-	if (config.Get("move_right", key))
-		SetKeyboardBind(key, MOVE_RIGHT);
-	if (config.Get("laser", key))
-		SetKeyboardBind(key, USE_LASER);
-	if (config.Get("use_cooler", key))
-		SetKeyboardBind(key, USE_COOLER);
-	if (config.Get("use_missile", key))
-		SetKeyboardBind(key, USE_MISSILE);
-
-	config.SeekSection("Joystick");
-	unsigned int button;
-	if (config.Get("pause", button))
-		SetJoystickBind(button, PAUSE);
-	if (config.Get("laser", button))
-		SetJoystickBind(button, USE_LASER);
-	if (config.Get("use_cooler", button))
-		SetJoystickBind(button, USE_COOLER);
-	if (config.Get("use_missile", button))
-		SetJoystickBind(button, USE_MISSILE);
-
-	config.Get("sensitivity", sensitivity_);
-}
-
-
-void Input::SaveToConfig(IniParser& config) const
-{
-	config.SeekSection("Keyboard");
-	config.Set("move_up",     action_to_key_[MOVE_UP]);
-	config.Set("move_down",   action_to_key_[MOVE_DOWN]);
-	config.Set("move_left",   action_to_key_[MOVE_LEFT]);
-	config.Set("move_right",  action_to_key_[MOVE_RIGHT]);
-	config.Set("laser",       action_to_key_[USE_LASER]);
-	config.Set("use_cooler",  action_to_key_[USE_COOLER]);
-	config.Set("use_missile", action_to_key_[USE_MISSILE]);
-
-	config.SeekSection("Joystick");
-	config.Set("pause",       action_to_joybutton_[PAUSE]);
-	config.Set("laser",       action_to_joybutton_[USE_LASER]);
-	config.Set("use_cooler",  action_to_joybutton_[USE_COOLER]);
-	config.Set("use_missile", action_to_joybutton_[USE_MISSILE]);
-	config.Set("sensitivity", sensitivity_);
+	return _t("action.unknown");
 }
 
 
@@ -405,4 +345,3 @@ std::istream& operator>>(std::istream& in, sf::Keyboard::Key& code)
 	code = static_cast<sf::Keyboard::Key>(i);
 	return in;
 }
-

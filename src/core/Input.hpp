@@ -1,145 +1,99 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
+#include <map>
 #include <SFML/Window.hpp>
 
+class Action
+{
+public:
+	enum ID
+	{
+		NONE,
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT,
+		USE_LASER,
+		USE_MISSILE,
+		USE_COOLER,
+		TAKE_SCREENSHOT,
+		PAUSE,
+		EXIT_APP,
+		PANEL_UP,
+		PANEL_DOWN,
+		VALIDATE
+	};
 
-class IniParser;
+	static const std::wstring& toString(ID action);
+};
 
-/**
- * Association des événements issus des périphériques aux actions du jeu
- */
 class Input
 {
 public:
-	enum Action
-	{
-		PAUSE,
-		TAKE_SCREENSHOT,
-		PANEL_UP,
-		PANEL_DOWN,
-		MOVE_UP,
-		MOVE_DOWN,
-		MOVE_LEFT,
-		MOVE_RIGHT,
-		USE_LASER,
-		USE_COOLER,
-		USE_MISSILE,
-		ENTER,
-		EXIT_APP,
-
-		COUNT // do not use
-	};
-
-	enum Device
-	{
-		KEYBOARD = 1 << 1,
-		JOYSTICK = 1 << 2,
-		ALL      = KEYBOARD | JOYSTICK
-	};
-
-	static Input& GetInstance();
+	/**
+	 * Give an event to process
+	 * @return action matching the event
+	 */
+	static Action::ID feedEvent(const sf::Event& event);
 
 	/**
-	 * Transformer un événement en action
-	 * @param event: événement à tester
-	 * @return action correspondante
+	 * Check if the key or the button binded to an action is hold down
 	 */
-	Action EventToAction(const sf::Event& event);
+	static bool isPressed(Action::ID action);
 
 	/**
-	 * Tester si une action est entrée
+	 * Bind a key to an action
 	 */
-	bool HasInput(Action action);
+	static void setKeyBinding(sf::Keyboard::Key key, Action::ID action);
 
 	/**
-	 * Définir un binding clavier
-	 * @param key: touche à attacher
-	 * @param action: action à attacher
+	 * Get the key binded to an action
 	 */
-	void SetKeyboardBind(sf::Keyboard::Key key, Action action);
+	static sf::Keyboard::Key getKeyBinding(Action::ID action);
 
 	/**
-	 * Obtenir un binding clavier
-	 * @param action: action à tester
-	 * @return touche attachée
+	 * Bind a joystick button to an action
 	 */
-	sf::Keyboard::Key GetKeyboardBind(Action action);
+	static void setButtonBinding(unsigned int joystick_button, Action::ID action);
 
 	/**
-	 * Définir un binding joystick
-	 * @param joybutton: numéro du bouton à attacher
-	 * @param action: action à attacher
+	 * Get the joystick button binded to an action
 	 */
-	void SetJoystickBind(unsigned int joybutton, Action action);
+	static unsigned int getButtonBinding(Action::ID action);
 
 	/**
-	 * Obtenir un binding joystick
-	 * @param action: action à tester
-	 * @return numéro du bouton attaché
+	 * Set the amount the analog joystick must be tilted before triggering action
 	 */
-	unsigned int GetJoystickBind(Action action);
+	static void setJoystickDeadzone(int dead_zone);
 
 	/**
-	 * Obtenir le nom d'une action
+	 * Get the amount the analog joystick must be tilted before triggering action
 	 */
-	static const std::wstring& ActionToString(Action action);
+	static int getJoystickDeadzone();
 
 	/**
-	 * Obtenir le nom d'une touche
-	 * @param key: key code sfml de la touche
-	 * @return nom (en anglais)
+	 * Get string representation of a key
 	 */
-	static const char* KeyToString(int key);
-
-	static std::wstring ButtonToString(unsigned int button);
+	static const char* keyToString(sf::Keyboard::Key key);
 
 	/**
-	 * Définir les périphériques à activer
-	 * @param flag: bitmask des périphériques
+	 * Get string representation of a joystick button
 	 */
-	void SetDevices(unsigned int flag);
-
-	/**
-	 * Sensibilité du contrôleur de jeu
-	 */
-	int GetSensitivity() const;
-	void SetSensitivity(int sensitivity);
-
-	/**
-	 * Charger une configuration de bindings
-	 */
-	void LoadFromConfig(IniParser& config);
-
-	/**
-	 * Sauvegarder les bindings dans une configuration
-	 */
-	void SaveToConfig(IniParser& config) const;
-
-	sf::Keyboard::Key keyForAction(Action action) const
-	{
-		return action_to_key_[action];
-	}
+	static std::wstring buttonToString(unsigned int button);
 
 private:
-	Input();
-	Input(const Input&);
+	typedef std::map<sf::Keyboard::Key, Action::ID> KeyMap;
+	typedef std::map<unsigned int, Action::ID> ButtonMap;
+	typedef std::map<Action::ID, bool> ActionMap;
+	static KeyMap       s_keys;
+	static ButtonMap    s_buttons;
+	static ActionMap    s_pressed;
+	static int s_joystick_deadzone;
 
-	static const unsigned int MAX_JOY_BUTTON = 16;
-
-	// keyboard bindings
-	Action key_to_action_[sf::Keyboard::KeyCount];
-	sf::Keyboard::Key action_to_key_[COUNT];
-
-	// joystick bindings
-	Action joybutton_to_action_[MAX_JOY_BUTTON];
-	unsigned int action_to_joybutton_[COUNT];
-
-	int device_flag_;
-	int sensitivity_;
+	static struct Init { Init(); } s_ctor; // Static ctor
 };
 
 std::istream& operator>>(std::istream& in, sf::Keyboard::Key& code);
 
 #endif // INPUT_HPP
-

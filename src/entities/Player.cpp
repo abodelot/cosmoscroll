@@ -32,7 +32,6 @@
 
 
 Player::Player():
-	input_(Input::GetInstance()),
 	panel_(ControlPanel::getInstance())
 {
 	setTeam(Entity::GOOD);
@@ -71,16 +70,16 @@ Player::Player():
 	panel_.ActiveAttackPowerUp(0, PowerUp::DOUBLE_SHOT);
 
 	// init Konami code sequence
-	m_konami_code[0] = Input::MOVE_UP;
-	m_konami_code[1] = Input::MOVE_UP;
-	m_konami_code[2] = Input::MOVE_DOWN;
-	m_konami_code[3] = Input::MOVE_DOWN;
-	m_konami_code[4] = Input::MOVE_LEFT;
-	m_konami_code[5] = Input::MOVE_RIGHT;
-	m_konami_code[6] = Input::MOVE_LEFT;
-	m_konami_code[7] = Input::MOVE_RIGHT;
-	m_konami_code[8] = Input::USE_MISSILE;
-	m_konami_code[9] = Input::USE_LASER;
+	m_konami_code[0] = Action::UP;
+	m_konami_code[1] = Action::UP;
+	m_konami_code[2] = Action::DOWN;
+	m_konami_code[3] = Action::DOWN;
+	m_konami_code[4] = Action::LEFT;
+	m_konami_code[5] = Action::RIGHT;
+	m_konami_code[6] = Action::LEFT;
+	m_konami_code[7] = Action::RIGHT;
+	m_konami_code[8] = Action::USE_MISSILE;
+	m_konami_code[9] = Action::USE_LASER;
 	m_current_konami_index = 0;
 	m_konami_code_activated = false;
 }
@@ -171,14 +170,14 @@ void Player::onEvent(const sf::Event& event)
 	switch (event.type)
 	{
 		case sf::Event::KeyPressed:
-			if (input_.keyForAction(Input::MOVE_UP) == event.key.code)
+			if (Input::getKeyBinding(Action::UP) == event.key.code)
 				m_animator.setAnimation(*this, manager.getAnimation("player-up"));
-			else if (input_.keyForAction(Input::MOVE_DOWN) == event.key.code)
+			else if (Input::getKeyBinding(Action::DOWN) == event.key.code)
 				m_animator.setAnimation(*this, manager.getAnimation("player-down"));
 			break;
 		case sf::Event::KeyReleased:
-			if (input_.keyForAction(Input::MOVE_UP) == event.key.code ||
-				input_.keyForAction(Input::MOVE_DOWN) == event.key.code)
+			if (Input::getKeyBinding(Action::UP)   == event.key.code ||
+				Input::getKeyBinding(Action::DOWN) == event.key.code)
 			{
 				m_animator.setAnimation(*this, manager.getAnimation("player"));
 			}
@@ -187,10 +186,10 @@ void Player::onEvent(const sf::Event& event)
 			break;
 	}
 
-	Input::Action action = input_.EventToAction(event);
+	Action::ID action = Input::feedEvent(event);
 	switch (action)
 	{
-		case Input::USE_COOLER:
+		case Action::USE_COOLER:
 			if (coolers_ > 0)
 			{
 				SoundSystem::GetInstance().PlaySound("cooler.ogg");
@@ -206,7 +205,7 @@ void Player::onEvent(const sf::Event& event)
 				SoundSystem::GetInstance().PlaySound("disabled.ogg");
 			}
 			break;
-		case Input::USE_MISSILE:
+		case Action::USE_MISSILE:
 			if (missiles_ > 0 && m_missile_launcher.isReady())
 			{
 				--missiles_;
@@ -218,15 +217,16 @@ void Player::onEvent(const sf::Event& event)
 				SoundSystem::GetInstance().PlaySound("disabled.ogg");
 			}
 			break;
-		case Input::USE_LASER:
+		case Action::USE_LASER:
 			if (overheated_)
 			{
 				SoundSystem::GetInstance().PlaySound("disabled.ogg");
 			}
 			break;
-		case Input::COUNT: // filter non-events // TODO: wat?
+		case Action::NONE:
 			return;
 		default:
+			// Continue because others actions may belong to the Konami Code
 			break;
 	}
 
@@ -259,7 +259,7 @@ void Player::onUpdate(float frametime)
 	if (!overheated_)
 	{
 		float h = 0.f;
-		if (input_.HasInput(Input::USE_LASER))
+		if (Input::isPressed(Action::USE_LASER))
 		{
 			h += m_weapon.shoot(0);
 		}
@@ -466,19 +466,19 @@ void Player::onDestroy()
 void Player::Computemove(float)
 {
 	speed_x_ = speed_y_ = 0;
-	if (input_.HasInput(Input::MOVE_UP))
+	if (Input::isPressed(Action::UP))
 	{
 		speed_y_ = -speed_max_;
 	}
-	else if (input_.HasInput(Input::MOVE_DOWN))
+	else if (Input::isPressed(Action::DOWN))
 	{
 		speed_y_ = speed_max_;
 	}
-	if (input_.HasInput(Input::MOVE_LEFT))
+	if (Input::isPressed(Action::LEFT))
 	{
 		speed_x_ = -speed_max_;
 	}
-	else if (input_.HasInput(Input::MOVE_RIGHT))
+	else if (Input::isPressed(Action::RIGHT))
 	{
 		speed_x_ = speed_max_;
 	}

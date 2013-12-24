@@ -24,14 +24,11 @@ public:
 	static bool panel_on_top;
 
 private:
-	static int m_highscore;
-	static int m_credits;
-	static int m_items[ItemData::_COUNT];
+	static int s_highscore;
+	static int s_credits;
+	static int s_items[ItemData::_COUNT];
 
-	static struct Initializer
-	{
-		Initializer();
-	} m_init;
+	static struct Init { Init(); } s_ctor;
 };
 
 #endif // USERSETTINGS_HPP

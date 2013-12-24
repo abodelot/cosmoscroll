@@ -1,19 +1,29 @@
 #include "UserSettings.hpp"
 #include "LevelManager.hpp"
+#include "Input.hpp"
 #include "utils/IniParser.hpp"
 #include "utils/I18n.hpp"
 #include "items/ItemManager.hpp"
 
 bool UserSettings::panel_on_top = true;
 
-int UserSettings::m_highscore = 0;
-int UserSettings::m_credits = 0;
-int UserSettings::m_items[] = {0};
-UserSettings::Initializer UserSettings::m_init;
+int UserSettings::s_highscore = 0;
+int UserSettings::s_credits = 0;
+int UserSettings::s_items[] = {0};
+UserSettings::Init UserSettings::s_ctor;
+
+UserSettings::Init::Init()
+{
+	for (int i = 0; i < ItemData::_COUNT; ++i)
+	{
+		s_items[i] = 1;
+	}
+}
+
 
 int UserSettings::getItemLevel(ItemData::Type type)
 {
-	return m_items[type];
+	return s_items[type];
 }
 
 
@@ -25,31 +35,31 @@ void UserSettings::setItemLevel(ItemData::Type type, int level)
 	if (ItemManager::GetInstance().GetItemData(type, level) == NULL)
 		level = 1;
 
-	m_items[type] = level;
+	s_items[type] = level;
 }
 
 
 int UserSettings::getCredits()
 {
-	return m_credits;
+	return s_credits;
 }
 
 
 void UserSettings::updateCredits(int diff)
 {
-	m_credits += diff;
+	s_credits += diff;
 }
 
 
 int UserSettings::getHighscore()
 {
-	return m_highscore;
+	return s_highscore;
 }
 
 
 void UserSettings::setHighscore(int highscore)
 {
-	m_highscore = highscore;
+	s_highscore = highscore;
 }
 
 
@@ -75,18 +85,50 @@ void UserSettings::loadFromConfig(IniParser& config)
 	config.Get("current_level", level);
 	LevelManager::getInstance().setCurrent(level);
 
-	config.Get("credits",          m_credits);
-	config.Get("arcade_highscore", m_highscore);
+	config.Get("credits",          s_credits);
+	config.Get("arcade_highscore", s_highscore);
 
-	config.Get("lvl_laser",    m_items[ItemData::WEAPON]);
-	config.Get("lvl_shield",   m_items[ItemData::SHIELD]);
-	config.Get("lvl_hull",     m_items[ItemData::HULL]);
-	config.Get("lvl_engine",   m_items[ItemData::ENGINE]);
-	config.Get("lvl_heatsink", m_items[ItemData::HEATSINK]);
+	config.Get("lvl_laser",    s_items[ItemData::WEAPON]);
+	config.Get("lvl_shield",   s_items[ItemData::SHIELD]);
+	config.Get("lvl_hull",     s_items[ItemData::HULL]);
+	config.Get("lvl_engine",   s_items[ItemData::ENGINE]);
+	config.Get("lvl_heatsink", s_items[ItemData::HEATSINK]);
 	for (int i = 0; i < ItemData::_COUNT; ++i)
 	{
-		setItemLevel((ItemData::Type) i, m_items[i]);
+		setItemLevel((ItemData::Type) i, s_items[i]);
 	}
+
+	config.SeekSection("Keyboard");
+	sf::Keyboard::Key key;
+	if (config.Get("move_up", key))
+		Input::setKeyBinding(key, Action::UP);
+	if (config.Get("move_down", key))
+		Input::setKeyBinding(key, Action::DOWN);
+	if (config.Get("move_left", key))
+		Input::setKeyBinding(key, Action::LEFT);
+	if (config.Get("move_right", key))
+		Input::setKeyBinding(key, Action::RIGHT);
+	if (config.Get("laser", key))
+		Input::setKeyBinding(key, Action::USE_LASER);
+	if (config.Get("use_cooler", key))
+		Input::setKeyBinding(key, Action::USE_COOLER);
+	if (config.Get("use_missile", key))
+		Input::setKeyBinding(key, Action::USE_MISSILE);
+
+	config.SeekSection("Joystick");
+	unsigned int button;
+	if (config.Get("pause", button))
+		Input::setButtonBinding(button, Action::PAUSE);
+	if (config.Get("laser", button))
+		Input::setButtonBinding(button, Action::USE_LASER);
+	if (config.Get("use_cooler", button))
+		Input::setButtonBinding(button, Action::USE_COOLER);
+	if (config.Get("use_missile", button))
+		Input::setButtonBinding(button, Action::USE_MISSILE);
+
+	int deadzone;
+	if (config.Get("sensitivity", deadzone))
+		Input::setJoystickDeadzone(deadzone);
 }
 
 
@@ -99,20 +141,27 @@ void UserSettings::saveToConfig(IniParser& config)
 	config.SeekSection("Player");
 	config.Set("current_level", LevelManager::getInstance().getCurrent());
 	config.Set("last_unlocked_level", LevelManager::getInstance().getLastUnlocked());
-	config.Set("credits", m_credits);
-	config.Set("arcade_highscore", m_highscore);
-	config.Set("lvl_laser",    m_items[ItemData::WEAPON]);
-	config.Set("lvl_shield",   m_items[ItemData::SHIELD]);
-	config.Set("lvl_hull",     m_items[ItemData::HULL]);
-	config.Set("lvl_engine",   m_items[ItemData::ENGINE]);
-	config.Set("lvl_heatsink", m_items[ItemData::HEATSINK]);
-}
+	config.Set("credits", s_credits);
+	config.Set("arcade_highscore", s_highscore);
+	config.Set("lvl_laser",    s_items[ItemData::WEAPON]);
+	config.Set("lvl_shield",   s_items[ItemData::SHIELD]);
+	config.Set("lvl_hull",     s_items[ItemData::HULL]);
+	config.Set("lvl_engine",   s_items[ItemData::ENGINE]);
+	config.Set("lvl_heatsink", s_items[ItemData::HEATSINK]);
 
+	config.SeekSection("Keyboard");
+	config.Set("move_up",     Input::getKeyBinding(Action::UP));
+	config.Set("move_down",   Input::getKeyBinding(Action::DOWN));
+	config.Set("move_left",   Input::getKeyBinding(Action::LEFT));
+	config.Set("move_right",  Input::getKeyBinding(Action::RIGHT));
+	config.Set("laser",       Input::getKeyBinding(Action::USE_LASER));
+	config.Set("use_cooler",  Input::getKeyBinding(Action::USE_COOLER));
+	config.Set("use_missile", Input::getKeyBinding(Action::USE_MISSILE));
 
-UserSettings::Initializer::Initializer()
-{
-	for (int i = 0; i < ItemData::_COUNT; ++i)
-	{
-		m_items[i] = 1;
-	}
+	config.SeekSection("Joystick");
+	config.Set("pause",       Input::getButtonBinding(Action::PAUSE));
+	config.Set("laser",       Input::getButtonBinding(Action::USE_LASER));
+	config.Set("use_cooler",  Input::getButtonBinding(Action::USE_COOLER));
+	config.Set("use_missile", Input::getButtonBinding(Action::USE_MISSILE));
+	config.Set("sensitivity", Input::getJoystickDeadzone());
 }

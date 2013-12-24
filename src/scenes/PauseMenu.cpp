@@ -22,8 +22,8 @@ PauseMenu::PauseMenu()
 
 void PauseMenu::OnEvent(const sf::Event& event)
 {
-	Input::Action action = Input::GetInstance().EventToAction(event);
-	if (action == Input::PAUSE && event.type != sf::Event::LostFocus) // resume
+	Action::ID action = Input::feedEvent(event);
+	if (action == Action::PAUSE && event.type != sf::Event::LostFocus) // resume
 	{
 		Game::getInstance().setNextScene(Game::SC_InGameScene);
 		SoundSystem::GetInstance().PlayMusic();

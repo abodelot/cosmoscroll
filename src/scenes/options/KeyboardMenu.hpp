@@ -19,7 +19,7 @@ public:
 private:
 	void EventCallback(int id) override;
 
-	ConfigButton* addRow(gui::FormLayout& form, Input::Action action);
+	ConfigButton* addRow(gui::FormLayout& form, Action::ID action);
 
 	ConfigButton* m_triggered;
 	ConfigButton* but_up_;

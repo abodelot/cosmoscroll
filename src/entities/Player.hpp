@@ -71,7 +71,7 @@ private:
 
 	// Code Konami sequence
 	static const int KONAMI_CODE_LENGTH = 10;
-	Input::Action    m_konami_code[KONAMI_CODE_LENGTH];
+	Action::ID       m_konami_code[KONAMI_CODE_LENGTH];
 	int              m_current_konami_index;
 	bool             m_konami_code_activated;
 
@@ -85,7 +85,6 @@ private:
 	float speed_x_, speed_y_;
 	int speed_max_;
 
-	Input& input_;
 	ControlPanel& panel_;
 	Weapon<>        m_weapon;
 	Weapon<Missile> m_missile_launcher;

@@ -1,6 +1,5 @@
 #include "Game.hpp"
 #include "Constants.hpp"
-#include "Input.hpp"
 #include "UserSettings.hpp"
 #include "SoundSystem.hpp"
 #include "LevelManager.hpp"
@@ -145,9 +144,6 @@ bool Game::loadConfig()
 
 		// Audio settings
 		SoundSystem::GetInstance().LoadFromConfig(config);
-
-		// Keyboard and joystick bindings
-		Input::GetInstance().LoadFromConfig(config);
 		return true;
 	}
 	I18n::getInstance().loadSystemLanguage();
@@ -170,9 +166,6 @@ void Game::writeConfig() const
 	// Audio settings
 	SoundSystem::GetInstance().SaveToConfig(config);
 
-	// Keyboard and joystick bindings
-	Input::GetInstance().SaveToConfig(config);
-
 	// Save configuration to file
 	config.SaveToFile(m_config_file);
 }
@@ -181,7 +174,6 @@ void Game::writeConfig() const
 int Game::run()
 {
 	createWindow();
-	Input& input = Input::GetInstance();
 
 	// Set the first displayed scene at launch
 	setNextScene(SC_IntroScene);
@@ -193,14 +185,14 @@ int Game::run()
 		sf::Event event;
 		while (m_window.pollEvent(event))
 		{
-			Input::Action action = input.EventToAction(event);
+			Action::ID action = Input::feedEvent(event);
 			switch (action)
 			{
 				// These events are always handled on each scene
-				case Input::EXIT_APP:
+				case Action::EXIT_APP:
 					quit();
 					break;
-				case Input::TAKE_SCREENSHOT:
+				case Action::TAKE_SCREENSHOT:
 					takeScreenshot();
 					break;
 				// Other events are send to the current scene

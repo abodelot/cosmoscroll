@@ -18,17 +18,16 @@ InGameScene::InGameScene():
 
 void InGameScene::OnEvent(const sf::Event& event)
 {
-	static Input& input = Input::GetInstance();
-	Input::Action action = input.EventToAction(event);
+	Action::ID action = Input::feedEvent(event);
 	switch (action)
 	{
-		case Input::PANEL_UP:
+		case Action::PANEL_UP:
 			setPanelOnTop(true);
 			break;
-		case Input::PANEL_DOWN:
+		case Action::PANEL_DOWN:
 			setPanelOnTop(false);
 			break;
-		case Input::PAUSE:
+		case Action::PAUSE:
 			SoundSystem::GetInstance().PauseMusic();
 			Game::getInstance().setNextScene(Game::SC_PauseMenu);
 			break;
