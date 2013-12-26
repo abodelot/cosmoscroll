@@ -70,7 +70,7 @@ void UserSettings::loadFromConfig(IniParser& config)
 	std::string lang = config.Get("language");
 	if (lang.empty() || !I18n::getInstance().loadFromCode(lang))
 	{
-		I18n::getInstance().loadSystemLanguage();
+		I18n::getInstance().loadFromLocale();
 	}
 
 	// Panel position
@@ -136,7 +136,7 @@ void UserSettings::saveToConfig(IniParser& config)
 {
 	config.SeekSection("Settings");
 	config.Set("panel_on_top", panel_on_top);
-	config.Set("language", I18n::getInstance().getLangCode());
+	config.Set("language", I18n::getInstance().getCurrentLanguage());
 
 	config.SeekSection("Player");
 	config.Set("current_level", LevelManager::getInstance().getCurrent());

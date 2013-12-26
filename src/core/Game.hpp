@@ -41,28 +41,32 @@ public:
 	 */
 	void init(const std::string& path);
 
-	/**
-	 * Override location of the configuration file
-	 * Must be called before Init
-	 * @param config_file: directory of file
-	 */
-	void setConfigFile(const std::string& config_file);
-
 	void loadResources(const std::string& data_dir);
 
 	/**
-	 * Lancer une partie de CosmoScroll
+	 * Override location of the configuration file
+	 * @param config_path: directory of file
+	 */
+	void setConfigFile(const std::string& config_path);
+
+	/**
+	 * Load the configuration file
+	 */
+	bool loadConfig();
+
+	/**
+	 * Enter application main loop
 	 * @return error code
 	 */
 	int run();
 
 	/**
-	 * @return application rendering window
+	 * Get application rendering window
 	 */
 	sf::RenderWindow& getWindow();
 
 	/**
-	 * Quit CosmoScroll
+	 * Save settings and exit application
 	 */
 	void quit();
 
@@ -70,6 +74,8 @@ public:
 	 * Indiquer la prochaine scène à afficher
 	 */
 	void setNextScene(Scene scene);
+
+	void reloadScenes();
 
 	/**
 	 * Holds fullscreen mode property
@@ -83,14 +89,10 @@ public:
 	void setVerticalSync(bool vsync);
 	bool isVerticalSync() const;
 
-	void reloadScenes();
-
-	bool resourcesChecked() const;
-
 	/**
-	 * Load the configuration file
+	 * Check is game resources have been modified (see MD5 checksums)
 	 */
-	bool loadConfig();
+	bool resourcesChecked() const;
 
 private:
 	Game();

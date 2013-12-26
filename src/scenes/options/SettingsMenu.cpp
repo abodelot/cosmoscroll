@@ -27,7 +27,7 @@ SettingsMenu::SettingsMenu()
 	opt_languages_->AddOption(L"Français", "fr");
 	opt_languages_->AddOption(L"Deutsch",  "de");
 
-	opt_languages_->SelectByValue(I18n::getInstance().getLangCode());
+	opt_languages_->SelectByValue(I18n::getInstance().getCurrentLanguage());
 	opt_languages_->SetCallbackID(3);
 	form_.AddRow(_t("menu.settings.language"), opt_languages_);
 

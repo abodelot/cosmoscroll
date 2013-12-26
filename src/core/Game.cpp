@@ -35,14 +35,14 @@ Game::Game():
 	m_vsync(true),
 	m_running(true)
 {
-	// scenes will be allocated only if requested
+	// Scenes will be allocated only if requested
 	for (int i = 0; i < SC_COUNT; ++i)
 	{
 		m_scenes[i] = NULL;
 	}
 	m_current_scene = NULL;
 
-	// default config location
+	// Default configuration file location
 	m_config_file = FileSystem::initSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
 }
 
@@ -51,7 +51,7 @@ Game::~Game()
 {
 	m_window.close();
 
-	// delete allocated scenes
+	// Delete allocated scenes
 	for (int i = 0; i < SC_COUNT; ++i)
 	{
 		if (m_scenes[i] != NULL)
@@ -71,20 +71,6 @@ void Game::init(const std::string& path)
 }
 
 
-void Game::setConfigFile(const std::string& config_file)
-{
-	m_config_file = config_file;
-	if (FileSystem::isDirectory(config_file))
-	{
-		m_config_file = m_config_file + "/" + CONFIG_FILENAME;
-	}
-	else if (!FileSystem::isFile(config_file))
-	{
-		std::cerr << "Error: configuration file is nor a regular file nor a directory" << std::endl;
-	}
-}
-
-
 void Game::loadResources(const std::string& data_path)
 {
 	// Init resources directory
@@ -100,6 +86,7 @@ void Game::loadResources(const std::string& data_path)
 	m_window.draw(s);
 	m_window.display();
 
+	// Init other modules
 	I18n::getInstance().setDataPath(resources_dir + "/lang");
 	MessageSystem::setFont(Resources::getFont("Vera.ttf"));
 
@@ -108,14 +95,14 @@ void Game::loadResources(const std::string& data_path)
 	{
 		printf("* checking resources md5sum...");
 		m_resources_checked = checkResourcesPurity(resources_dir);
-		printf("    test %s\n", m_resources_checked ? "succeeded" : "failed");
+		printf("\t[test %s]\n", m_resources_checked ? "succeeded" : "failed");
 		printf("* loading %s...\n", XML_LEVELS);
 		LevelManager::getInstance().loadLevelFile(resources_dir + XML_LEVELS);
 		printf("* loading %s...\n", XML_ITEMS);
 		ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS);
 		printf("* loading %s...\n", XML_ANIMATIONS);
 		EntityManager::getInstance().loadAnimations(resources_dir + XML_ANIMATIONS);
-		printf("* loading %s\n", XML_SPACESHIPS);
+		printf("* loading %s...\n", XML_SPACESHIPS);
 		EntityManager::getInstance().loadSpaceships(resources_dir + XML_SPACESHIPS);
 	}
 	catch (std::runtime_error& error)
@@ -127,13 +114,22 @@ void Game::loadResources(const std::string& data_path)
 }
 
 
+void Game::setConfigFile(const std::string& config_path)
+{
+	if (FileSystem::isFile(config_path))
+		m_config_file = config_path;
+
+	else if (FileSystem::isDirectory(config_path))
+		m_config_file = config_path + "/" + CONFIG_FILENAME;
+}
+
+
 bool Game::loadConfig()
 {
-	std::cout << "* loading configuration from " << m_config_file << std::endl;
-
 	IniParser config;
 	if (config.LoadFromFile(m_config_file.c_str()))
 	{
+		std::cout << "* loading configuration from " << m_config_file << std::endl;
 		// Window
 		config.SeekSection("Window");
 		config.Get("vsync", m_vsync);
@@ -146,7 +142,8 @@ bool Game::loadConfig()
 		SoundSystem::GetInstance().LoadFromConfig(config);
 		return true;
 	}
-	I18n::getInstance().loadSystemLanguage();
+	std::cout << "no configuration loaded, using default settings" << std::endl;
+	I18n::getInstance().loadFromLocale();
 	return false;
 }
 
@@ -167,7 +164,8 @@ void Game::writeConfig() const
 	SoundSystem::GetInstance().SaveToConfig(config);
 
 	// Save configuration to file
-	config.SaveToFile(m_config_file);
+	if (config.SaveToFile(m_config_file))
+		std::cout << "* configuration saved to " << m_config_file << std::endl;
 }
 
 

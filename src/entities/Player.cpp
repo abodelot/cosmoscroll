@@ -166,20 +166,14 @@ void Player::AudibleHeatingCue()
 
 void Player::onEvent(const sf::Event& event)
 {
-	EntityManager& manager = EntityManager::getInstance();
+	const EntityManager& entities = EntityManager::getInstance();
 	switch (event.type)
 	{
-		case sf::Event::KeyPressed:
-			if (Input::getKeyBinding(Action::UP) == event.key.code)
-				m_animator.setAnimation(*this, manager.getAnimation("player-up"));
-			else if (Input::getKeyBinding(Action::DOWN) == event.key.code)
-				m_animator.setAnimation(*this, manager.getAnimation("player-down"));
-			break;
 		case sf::Event::KeyReleased:
 			if (Input::getKeyBinding(Action::UP)   == event.key.code ||
 				Input::getKeyBinding(Action::DOWN) == event.key.code)
 			{
-				m_animator.setAnimation(*this, manager.getAnimation("player"));
+				m_animator.setAnimation(*this, entities.getAnimation("player"));
 			}
 			break;
 		default:
@@ -189,6 +183,12 @@ void Player::onEvent(const sf::Event& event)
 	Action::ID action = Input::feedEvent(event);
 	switch (action)
 	{
+		case Action::UP:
+			m_animator.setAnimation(*this, entities.getAnimation("player-up"));
+			break;
+		case Action::DOWN:
+			m_animator.setAnimation(*this, entities.getAnimation("player-down"));
+			break;
 		case Action::USE_COOLER:
 			if (coolers_ > 0)
 			{

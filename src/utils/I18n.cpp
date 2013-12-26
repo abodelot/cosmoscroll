@@ -1,10 +1,8 @@
 #include <clocale>
-#include <cstring>
 #include <fstream>
 #include <iostream>
 
 #include "I18n.hpp"
-#include "StringUtils.hpp"
 
 #define TOKEN_SEPARATOR   '='
 #define TOKEN_COMMENT     '#'
@@ -20,13 +18,8 @@ I18n& I18n::getInstance()
 
 I18n::I18n()
 {
-	// Get system's locale
-	std::string locale(setlocale(LC_ALL, ""));
-	// Only the two first lower-case characters, so it's cross platform! (fr_Fr => fr, French => fr)
-	locale = str_lower(locale.substr(0, 2));
-	strcpy(m_code, locale.c_str());
-	// Reset locale
-	setlocale(LC_ALL, "C");
+    for (int i = 0; i < 3; ++i)
+		m_code[i] = '\0';
 }
 
 
@@ -36,64 +29,65 @@ void I18n::setDataPath(const std::string& path)
 }
 
 
-const std::wstring& I18n::translate(const char* key) const
+const std::wstring& I18n::translate(const std::string& key) const
 {
 	TextMap::const_iterator it = m_content.find(key);
 	if (it == m_content.end())
 	{
-		std::cerr << "[I18n] no translation found for key \"" << key << "\" (" << m_code << ")" << std::endl;
-		static std::wstring error(L"key not found");
+		std::cerr << "[I18n] no translation found for key '" << key << "' (" << m_code << ")" << std::endl;
+		static std::wstring error(L"text not found");
 		return error;
 	}
 	return it->second;
 }
 
 
-const std::wstring& I18n::translate(const std::string& key) const
-{
-	return translate(key.c_str());
-}
-
-
-bool I18n::loadSystemLanguage()
-{
-	if (loadFromCode(m_code))
-	{
-		std::cout << "[I18n] language '" << m_code << "' loaded" << std::endl;
-		return true;
-	}
-	std::cout << "[I18n] language '" << m_code << "' not found" << std::endl;
-	if (loadFromCode(DEFAULT_LANG_CODE))
-	{
-		std::cout << "[I18n] default language " << DEFAULT_LANG_CODE << " << loaded" << std::endl;
-		return true;
-	}
-	std::cerr <<  "[I18n] warning: couldn't load any language!" << std::endl;
-	return false;
-}
-
-
-const char* I18n::getLangCode() const
+const char* I18n::getCurrentLanguage() const
 {
 	return m_code;
 }
 
 
+bool I18n::loadFromLocale()
+{
+	// Get system's locale, keep only the first two characters and make them lower-case
+	// It's somewhat cross-platform! ("fr_Fr" => "fr", "French" => "fr")
+	std::string locale(setlocale(LC_ALL, ""));
+	locale = str_lower(locale.substr(0, 2));
+
+	// Reset locale so other functions are not impacted
+	setlocale(LC_ALL, "C");
+
+	if (loadFromCode(locale))
+		return true;
+
+	if (loadFromCode(DEFAULT_LANG_CODE))
+		return true;
+
+	std::cerr <<  "[I18n] warning: couldn't load any language!" << std::endl;
+	return false;
+}
+
+
+
+
+
 bool I18n::loadFromCode(const std::string& code)
 {
-	if (code.size() == 2)
+	if (code.size() == 2 && code[0] >= 'a' && code[0] <= 'z' && code[1] >= 'a' && code[1] <= 'z')
 	{
 		std::string filename = m_path + "/" + code + ".lang";
 		if (loadFromFile(filename.c_str()))
 		{
-			strcpy(m_code, code.c_str());
+			m_code[0] = code[0];
+			m_code[1] = code[1];
+			std::cout << "[I18n] language '" << code << "' loaded" << std::endl;
 			return true;
 		}
+		std::cerr << "[I18n] no translation file found for code '" << code << "'" << std::endl;
+		return false;
 	}
-	else
-	{
-		std::cerr << "[I18n] code " << code << " is invalid" << std::endl;
-	}
+	std::cerr << "[I18n] '" << code << "' is not a valid language code" << std::endl;
 	return false;
 }
 
@@ -120,7 +114,7 @@ bool I18n::loadFromFile(const char* filename)
 				std::string text = str_trim(line.substr(pos + 1));
 				str_self_replace<std::string>(text, "\\n", "\n");
 
-				// convert to wide string
+				// Decode utf-8 and convert to wide string
 				m_content[key] = decode_utf8(text);
 			}
 			else
