@@ -2,7 +2,6 @@
 #define GUI_WIDGET_HPP
 
 #include <SFML/Graphics.hpp>
-#include "utils/sfml_helper.hpp"
 
 namespace gui
 {

@@ -35,13 +35,6 @@ SoundSystem::SoundSystem():
 {
 	SetMusicVolume(DEFAULT_VOLUME);
 	SetSoundVolume(DEFAULT_VOLUME);
-	DumbMusic::initDumb();
-}
-
-
-SoundSystem::~SoundSystem()
-{
-	DumbMusic::exitDumb();
 }
 
 

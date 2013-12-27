@@ -2,6 +2,7 @@
 #define GUI_LABEL_HPP
 
 #include "Widget.hpp"
+#include "utils/sfml_helper.hpp"
 
 namespace gui
 {

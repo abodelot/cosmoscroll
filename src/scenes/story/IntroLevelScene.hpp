@@ -2,7 +2,6 @@
 #define INTROLEVELSCENE_HPP
 
 #include "scenes/BaseScene.hpp"
-#include "utils/sfml_helper.hpp"
 
 /**
  * Scène d'introduction avant le début d'un niveau
@@ -19,9 +18,10 @@ public:
 	void Show(sf::RenderTarget& target) const override;
 
 private:
-	xsf::Text description_;
-	xsf::Sprite background_;
-	xsf::Sprite title_;
+	sf::Sprite m_background;
+	sf::Sprite m_title;
+	sf::Text   m_level_text;
+	sf::Text   m_quote_text;
 };
 
 #endif // INTROLEVELSCENE_HPP

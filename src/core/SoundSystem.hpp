@@ -3,7 +3,7 @@
 
 #include <string>
 #include <SFML/Audio.hpp>
-#include "utils/DumbMusic.hpp"
+#include "utils/ModMusic.hpp"
 
 class IniParser;
 
@@ -62,13 +62,12 @@ public:
 private:
 	SoundSystem();
 	SoundSystem(const SoundSystem&);
-	~SoundSystem();
 
 	enum {MAX_SOUNDS = 20};
 
 	sf::Sound sounds_[MAX_SOUNDS];
 	int last_used_;
-	DumbMusic music_;
+	ModMusic music_;
 	std::string music_name_;
 	int music_volume_;
 	int sound_volume_;

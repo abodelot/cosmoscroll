@@ -223,8 +223,6 @@
 		<Unit filename="src/scenes/story/LevelMenu.hpp" />
 		<Unit filename="src/scenes/story/ShipPartWidget.cpp" />
 		<Unit filename="src/scenes/story/ShipPartWidget.hpp" />
-		<Unit filename="src/utils/DumbMusic.cpp" />
-		<Unit filename="src/utils/DumbMusic.hpp" />
 		<Unit filename="src/utils/Error.cpp" />
 		<Unit filename="src/utils/Error.hpp" />
 		<Unit filename="src/utils/FileSystem.cpp" />
@@ -235,6 +233,8 @@
 		<Unit filename="src/utils/IniParser.hpp" />
 		<Unit filename="src/utils/Math.cpp" />
 		<Unit filename="src/utils/Math.hpp" />
+		<Unit filename="src/utils/ModMusic.cpp" />
+		<Unit filename="src/utils/ModMusic.hpp" />
 		<Unit filename="src/utils/StringUtils.cpp" />
 		<Unit filename="src/utils/StringUtils.hpp" />
 		<Unit filename="src/utils/md5/md5.cpp" />

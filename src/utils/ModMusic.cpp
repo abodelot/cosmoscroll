@@ -1,34 +1,38 @@
 #include <cstring>
-#include "DumbMusic.hpp"
+#include <iostream>
+#include <dumb.h>
+#include "ModMusic.hpp"
+
+ModMusic::Init ModMusic::s_init;
 
 
-void DumbMusic::initDumb()
+ModMusic::Init::Init()
 {
-	// Must be called before trying to open a file
+	// Load DUMB library, must be called before trying to open a file
 	dumb_register_stdfiles();
 }
 
 
-void DumbMusic::exitDumb()
+ModMusic::Init::~Init()
 {
 	dumb_exit();
 }
 
 
-DumbMusic::DumbMusic():
+ModMusic::ModMusic():
 	m_module(NULL),
 	m_player(NULL)
 {
 }
 
 
-DumbMusic::~DumbMusic()
+ModMusic::~ModMusic()
 {
 	close();
 }
 
 
-bool DumbMusic::openFromFile(const std::string& filename)
+bool ModMusic::openFromFile(const std::string& filename)
 {
 	close();
 
@@ -52,18 +56,20 @@ bool DumbMusic::openFromFile(const std::string& filename)
 		initialize(NB_CHANNELS, SAMPLING_RATE);
 		return true;
 	}
+	std::cerr << "Failed to open module file: " << filename << std::endl;
 	return false;
 }
 
 
-sf::Time DumbMusic::getDuration() const
+sf::Time ModMusic::getDuration() const
 {
 	// 65536 represents one second
+	// Warning: 'duh_get_length' doesn't work if 'dumb_load_*_quick' is used in openFromFile
 	return sf::seconds(static_cast<float>(duh_get_length(m_module) / 65536));
 }
 
 
-void DumbMusic::close()
+void ModMusic::close()
 {
 	if (m_player != NULL)
 	{
@@ -78,7 +84,7 @@ void DumbMusic::close()
 }
 
 
-void DumbMusic::onSeek(sf::Time timeOffset)
+void ModMusic::onSeek(sf::Time timeOffset)
 {
 	// When specifying the position, 0 represents the start of the DUH, and 65536 represents one second.
 	long pos = static_cast<long>(timeOffset.asSeconds() * 65536);
@@ -86,7 +92,7 @@ void DumbMusic::onSeek(sf::Time timeOffset)
 }
 
 
-bool DumbMusic::onGetData(Chunk& data)
+bool ModMusic::onGetData(Chunk& data)
 {
 	// Use delta to control the speed of the output signal. If you pass 1.0f, the resultant signal
 	// will be suitable for a 65536-Hz sampling rate (which isn't a commonly used rate).

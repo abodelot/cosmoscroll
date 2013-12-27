@@ -3,6 +3,7 @@
 
 #include "gui/Widget.hpp"
 #include "items/ItemData.hpp"
+#include "utils/sfml_helper.hpp"
 
 class ShipPartWidget: public gui::Widget
 {

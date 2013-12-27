@@ -2,6 +2,7 @@
 #define GUI_BUTTON_HPP
 
 #include "Widget.hpp"
+#include "utils/sfml_helper.hpp"
 
 namespace gui
 {

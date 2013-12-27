@@ -17,7 +17,7 @@ menu.story.title = Mode Histoire
 menu.story.credits = Crédits :\n{credits}
 menu.story.select = Sélectionnez un niveau :
 menu.story.progression = Avancement :
-menu.story.intro = Niveau {level}\n\n{description}
+menu.story.level = Niveau {number}
 menu.story.play = Jouer
 menu.story.armory = Armurerie
 

@@ -151,9 +151,9 @@ size_t LevelManager::getLevelCount() const
 }
 
 
-const char* LevelManager::getDescription() const
+const char* LevelManager::getQuote() const
 {
-	return getCurrentLevelElement()->Attribute("desc");
+	return getCurrentLevelElement()->Attribute("quote");
 }
 
 

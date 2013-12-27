@@ -5,6 +5,7 @@
 #include <string>
 
 #include "Widget.hpp"
+#include "utils/sfml_helper.hpp"
 
 namespace gui
 {
@@ -27,9 +28,6 @@ public:
 	int GetNbItems() const;
 
 	std::string GetOptionAt(int index) const;
-
-
-
 
 	/**
 	 * Get option index currently selected (first is 0)

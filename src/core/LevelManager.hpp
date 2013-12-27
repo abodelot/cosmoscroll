@@ -69,7 +69,7 @@ public:
 	 */
 
 	// Text description
-	const char* getDescription() const;
+	const char* getQuote() const;
 
 	// Bottom background image
 	const sf::Texture* getLayerImage1() const;

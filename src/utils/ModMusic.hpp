@@ -1,29 +1,21 @@
-#ifndef DUMBMUSIC_HPP
-#define DUMBMUSIC_HPP
+#ifndef MODMUSIC_HPP
+#define MODMUSIC_HPP
 
-#include <dumb.h>
-#include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
 
+// DUMB library forward declarations
+class DUH;
+class DUH_SIGRENDERER;
+
 /**
- * SFML wrapper around DUMB library for playing module music files
+ * SFML wrapper around DUMB library for playing module music files (mod, s3m, xm, it)
  */
-class DumbMusic: public sf::SoundStream
+class ModMusic: public sf::SoundStream
 {
 public:
-	/**
-	 * Load DUMB library
-	 */
-	static void initDumb();
+	ModMusic();
 
-	/**
-	 * Unload DUMB library
-	 */
-	static void exitDumb();
-
-	DumbMusic();
-
-	~DumbMusic();
+	~ModMusic();
 
 	/**
 	 * Open a music from an audio file
@@ -36,9 +28,15 @@ public:
 	sf::Time getDuration() const;
 
 private:
+	static struct Init
+	{
+		Init();  // static ctor
+		~Init(); // static dtor
+	} s_init;
+
 	static const int SAMPLING_RATE = 44100;
 	static const int BUFFER_SIZE   = SAMPLING_RATE;
-	static const int NB_CHANNELS   = 2; // stereo
+	static const int NB_CHANNELS   = 2; // Stereo
 
 	void close();
 
@@ -52,4 +50,4 @@ private:
 };
 
 
-#endif // DUMBMUSIC_HPP
+#endif // MODMUSIC_HPP

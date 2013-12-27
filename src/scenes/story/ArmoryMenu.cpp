@@ -181,8 +181,7 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 	current_type_ = type;
 
 	// dialog title
-	std::wstring text = _t(data->TypeToString());
-	dialog_.lab_item->setString(text);
+	dialog_.lab_item->setString(_t(data->TypeToString()));
 	int x = (Dialog::WIDTH - dialog_.lab_item->GetWidth()) / 2;
 	dialog_.lab_item->setPosition(dialog_.x + x, dialog_.lab_item->getPosition().y);
 
@@ -199,8 +198,7 @@ void ArmoryMenu::LoadItem(ItemData::Type type)
 	// last level reached
 	if (data == NULL)
 	{
-		text = _t("armory.max_level");
-		dialog_.next_level->setString(text);
+		dialog_.next_level->setString(_t("armory.max_level"));
 		dialog_.next_level_details->setString("");
 		dialog_.price->setString("");
 		dialog_.but_buy->SetVisible(false);
