@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "entities/EntityManager.hpp"
-#include "utils/sfml_helper.hpp"
+#include "utils/SFML_Helper.hpp"
 
 /**
  * Moteur de particules pour gérer des effets graphiques (singleton)

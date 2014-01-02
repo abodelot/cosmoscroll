@@ -12,7 +12,7 @@
 
 Asteroid::Asteroid(Size size, float angle):
 	m_size(size),
-	m_rotation_speed(math::random(ROTATION_SPEED_MIN, ROTATION_SPEED_MAX))
+	m_rotation_speed(xsf::random(ROTATION_SPEED_MIN, ROTATION_SPEED_MAX))
 {
 	setHP(size * 2 + 1);
 	setRandomImage();
@@ -46,7 +46,7 @@ void Asteroid::onDestroy()
 			// Create 2 medium asteroids
 			for (int i = 0; i < 2; ++i)
 			{
-				Asteroid* asteroid = new Asteroid(MEDIUM, math::random(0, 360));
+				Asteroid* asteroid = new Asteroid(MEDIUM, xsf::random(0, 360));
 				asteroid->setPosition(pos);
 				EntityManager::getInstance().addEntity(asteroid);
 			}
@@ -55,7 +55,7 @@ void Asteroid::onDestroy()
 			// Create 4 small asteroids
 			for (int i = 0; i < 4; ++i)
 			{
-				Asteroid* asteroid = new Asteroid(SMALL, math::random(0, 360));
+				Asteroid* asteroid = new Asteroid(SMALL, xsf::random(0, 360));
 				asteroid->setPosition(pos);
 				EntityManager::getInstance().addEntity(asteroid);
 			}
@@ -75,17 +75,17 @@ void Asteroid::setRandomImage()
 	{
 		case SMALL:
 			setTexture(Resources::getTexture("entities/asteroid-small.png"));
-			x = math::random(0, 3) * 16; // 4 sprites
+			x = xsf::random(0, 3) * 16; // 4 sprites
 			setTextureRect(sf::IntRect(x, 0, 16, 16));
 			break;
 		case MEDIUM:
 			setTexture(Resources::getTexture("entities/asteroid-medium.png"));
-			x = math::random(0, 2) * 32; // 3 sprites
+			x = xsf::random(0, 2) * 32; // 3 sprites
 			setTextureRect(sf::IntRect(x, 0, 32, 32));
 			break;
 		case BIG:
 			setTexture(Resources::getTexture("entities/asteroid-big.png"));
-			x = math::random(0, 2) * 48; // 3 sprites
+			x = xsf::random(0, 2) * 48; // 3 sprites
 			setTextureRect(sf::IntRect(x, 0, 48, 48));
 			break;
 	}

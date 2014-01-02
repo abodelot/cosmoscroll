@@ -13,7 +13,7 @@ ShipPartWidget::ShipPartWidget(gui::Menu* parent, ItemData::Type type, const sf:
 	switch (type)
 	{
 		case ItemData::WEAPON:
-			halo_.setTexture(Resources::getTexture("gui/halo-laser1.png"));
+			halo_.setTexture(Resources::getTexture("gui/halo-laser.png"));
 			x = 496;
 			y = 252;
 			break;

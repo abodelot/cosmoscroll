@@ -456,10 +456,7 @@ void Player::onCollision(PowerUp& powerup)
 void Player::onDestroy()
 {
 	setColor(sf::Color::White); // clear red flash
-	EntityManager& manager = EntityManager::getInstance();
-	m_animator.setAnimation(*this, manager.getAnimation("player-destroyed"));
-
-	manager.TerminateGame();
+	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("player-destroyed"));
 }
 
 

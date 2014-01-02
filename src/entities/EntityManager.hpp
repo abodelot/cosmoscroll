@@ -23,7 +23,7 @@ class EntityManager: public sf::Drawable, public sf::Transformable
 {
 public:
 	// background image speed for parallax scrolling
-	static const int BACKGROUND_SPEED = 15;
+	static const int BACKGROUND_SPEED = 20;
 	static const int FOREGROUND_SPEED = 60;
 
 	enum Mode
@@ -61,8 +61,7 @@ public:
 	inline int getHeight() const{return m_height;};
 
 	/**
-	 * Mettre à jour les entités
-	 * @param frametime: temps de la frame courante
+	 * Update managed entities and resolve collisions
 	 */
 	void Update(float frametime);
 
@@ -82,11 +81,6 @@ public:
 	size_t count() const;
 
 	/**
-	 * Mettre fin à la partie en cours
-	 */
-	void TerminateGame();
-
-	/**
 	 * Tester si le jeu est terminé
 	 * @return true si game over
 	 */
@@ -100,20 +94,19 @@ public:
 	Spaceship* createSpaceship(const std::string& id) const;
 
 	/**
-	 * Obtenir une animation
-	 * @param key: identifiant de l'animation
+	 * Get an animation from its id
 	 */
 	const Animation& getAnimation(const std::string& key) const;
 
 	/**
-	 * Charger les définitions XML des animations
-	 * @param filename: fichier XML des animations
+	 * Load animation definitions
+	 * @param filename: path to XML file
 	 */
 	void loadAnimations(const std::string& filename);
 
 	/**
-	 * Charger les défintions XML des vaisseaux
-	 * @param filename: fichier XML des vaisseaux
+	 * Load spaceship definitions
+	 * @param filename: path to XML file
 	 */
 	void loadSpaceships(const std::string& filename);
 
@@ -135,16 +128,16 @@ private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	/**
-	 * Spawner les prochains éléments du jeu en mode Arcade
-	 * @return true si jeu terminé
+	 * Spawn randomly next entities, using Arcade Mode
+	 * @return true if there are entities left
 	 */
-	bool MoreBadGuys_ARCADE();
+	bool arcadeModeCallback();
 
 	/**
-	 * Spawner les prochains éléments du jeu en mode Story
-	 * @return true si jeu terminé
+	 * Spawn next entities in the level, using Story Mode
+	 * @return true if there are entities left
 	 */
-	bool MoreBadGuys_STORY();
+	bool storyModeCallback();
 
 	/**
 	 * Ré-allouer le vaisseau du joueur
@@ -172,26 +165,29 @@ private:
 
 	Player* m_player;
 	bool (EntityManager::*more_bad_guys_)();
-	bool game_over_;
 	float timer_;
-	LevelManager& levels_;
+	LevelManager& m_levels;
 
 	int max_droppable_index_;
 	int max_droppable_points_;
 
-	struct ParallaxLayer: public sf::Drawable
+	class ParallaxLayer: public sf::Drawable
 	{
-		float scrolling_speed_;
-		const sf::Texture* m_texture;
-		sf::Sprite background_;
-		sf::Sprite background2_;
-		sf::BlendMode blend_mode_;
+	public:
+		friend class EntityManager;
 
 		ParallaxLayer();
-		void OnUpdate(float frametime);
-		void SetScrollingTexture(const sf::Texture* image);
+		void scroll(float frametime);
+		void setTexture(const sf::Texture& texture);
 		void setColor(const sf::Color& color);
-		void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+	private:
+		void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+		float         m_speed;
+		sf::Sprite    m_background;
+		sf::Sprite    m_background2;
+		sf::BlendMode m_blend_mode;
 	};
 
 	ParallaxLayer layer1_;

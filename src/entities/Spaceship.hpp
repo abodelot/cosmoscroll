@@ -34,22 +34,22 @@ public:
 
 	// callbacks ---------------------------------------------------------------
 
-	void onInit();
-	void onUpdate(float frametime);
-	void onDestroy();
+	void onInit() override;
+	void onUpdate(float frametime) override;
+	void onDestroy() override;
 
 private:
 	AttackPattern   m_attack;
 	MovementPattern m_movement;
 
-	int      speed_;
-	float    base_y_;
-	float    angle_;
-
 	int       m_points;
 	Weapon<>  m_weapon;
 	Entity*   m_target;
 	Animator  m_animator;
+
+	int       m_speed;
+	float     m_origin_y;
+	float     m_angle;
 };
 
 

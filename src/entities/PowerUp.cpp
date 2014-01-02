@@ -3,6 +3,7 @@
 #include "core/Resources.hpp"
 #include "utils/I18n.hpp"
 #include "utils/Math.hpp"
+#include "utils/SFML_Helper.hpp"
 
 #define POWERUP_SPEED 100
 #define SIZE          16
@@ -24,7 +25,7 @@ void PowerUp::collides(Entity& entity)
 
 void PowerUp::dropRandom(const sf::Vector2f& position)
 {
-	PowerUp* powerup = new PowerUp((Type) math::random(0, POWERUP_COUNT - 1));
+	PowerUp* powerup = new PowerUp((Type) xsf::random(0, POWERUP_COUNT - 1));
 	powerup->setPosition(position);
 	EntityManager::getInstance().addEntity(powerup);
 }

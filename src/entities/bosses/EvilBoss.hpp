@@ -24,7 +24,7 @@ public:
 private:
 	enum State
 	{
-		EVIL = 600, MORE_EVIL = 400, DAMN_EVIL = 200
+		EVIL = 900, MORE_EVIL = 600, DAMN_EVIL = 300
 	};
 
 	State        m_state;

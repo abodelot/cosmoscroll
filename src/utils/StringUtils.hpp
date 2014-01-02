@@ -30,11 +30,10 @@ template <typename T>
 inline int str_self_replace(T& target, const T& look_for, const T& replace_by)
 {
 	int cpt = 0;
-	size_t pos = 0;
+	size_t pos = target.find(look_for, 0);
 	size_t step = replace_by.size();
 	size_t offset = look_for.size();
 
-	pos = target.find(look_for, pos);
 	while (pos != std::string::npos)
 	{
 		target.replace(pos, offset, replace_by);

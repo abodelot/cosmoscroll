@@ -15,7 +15,7 @@
 #define SINUS_FREQUENCE 0.02
 
 // circle movement settings
-#define CIRCLE_START_AT 400
+#define CIRCLE_X_START  400
 #define CIRCLE_RADIUS   60
 #define CIRCLE_ROTATION_SPEED (math::PI * 0.8)
 
@@ -23,17 +23,17 @@ Spaceship::Spaceship(const Animation& animation, int hp, int speed):
 	m_attack(NONE),
 	m_movement(LINE),
 	m_points(1),
-	m_target(NULL)
+	m_target(NULL),
+	m_speed(speed),
+	m_origin_y(0.f),
+	m_angle(0.f)
 {
 	setTexture(animation.getTexture());
 	setTeam(Entity::BAD);
 	setHP(hp);
 	m_animator.setAnimation(*this, animation);
 
-	speed_ = speed;
 	m_weapon.setOwner(this);
-	base_y_ = 0;
-	angle_ = 2 * math::PI;
 }
 
 
@@ -51,26 +51,26 @@ void Spaceship::onInit()
 		// (So the spaceship is always within the screen's boundaries)
 		float y_max = EntityManager::getInstance().getHeight() - SINUS_AMPLITUDE - getHeight();
 		if (y < SINUS_AMPLITUDE)
-			base_y_ = SINUS_AMPLITUDE;
+			m_origin_y = SINUS_AMPLITUDE;
 		else if (y > y_max)
-			base_y_ = y_max;
+			m_origin_y = y_max;
 		else
-			base_y_ = y;
+			m_origin_y = y;
 
-		setY(base_y_);
+		setY(m_origin_y);
 	}
 	else if (m_movement == CIRCLE)
 	{
 		float y = getY();
 		float y_max = EntityManager::getInstance().getHeight() - CIRCLE_RADIUS - getHeight();
 		if (y < CIRCLE_RADIUS)
-			base_y_ = CIRCLE_RADIUS;
+			m_origin_y = CIRCLE_RADIUS;
 		else if (y > y_max)
-			base_y_ = y_max;
+			m_origin_y = y_max;
 		else
-			base_y_ = y;
+			m_origin_y = y;
 
-		setY(base_y_);
+		setY(m_origin_y);
 	}
 
 	m_target = EntityManager::getInstance().getPlayer();
@@ -103,14 +103,12 @@ void Spaceship::onUpdate(float frametime)
 	m_animator.updateSubRect(*this, frametime);
 
 	// Apply movement pattern
-	float delta = speed_ * frametime;
+	float delta = m_speed * frametime;
 	switch (m_movement)
 	{
 		case LINE:
-		{
 			move(-delta, 0);
-		}
-		break;
+			break;
 		case MAGNET:
 		{
 			sf::Vector2f player_pos = m_target->getCenter();
@@ -128,32 +126,30 @@ void Spaceship::onUpdate(float frametime)
 				move(0, -delta);
 			else if (y_diff < -5)
 				move(0, delta);
+			break;
 		}
-		break;
 		case SINUS:
 		{
 			sf::Vector2f pos = getPosition();
-			pos.x += -speed_ * frametime;
-			pos.y = std::sin(pos.x * SINUS_FREQUENCE) * SINUS_AMPLITUDE + base_y_;
+			pos.x -= delta;
+			pos.y = std::sin(pos.x * SINUS_FREQUENCE) * SINUS_AMPLITUDE + m_origin_y;
 			setPosition(pos);
+			break;
 		}
-		break;
 		case CIRCLE:
-		{
-			if (getX() > CIRCLE_START_AT + CIRCLE_RADIUS)
+			if (getX() > CIRCLE_X_START + CIRCLE_RADIUS)
 			{
 				move(-delta, 0);
 			}
 			else
 			{
-				sf::Vector2f pos(CIRCLE_START_AT, base_y_);
-				angle_ += CIRCLE_ROTATION_SPEED * frametime;
-				pos.x += CIRCLE_RADIUS * std::cos(angle_);
-				pos.y -= CIRCLE_RADIUS * std::sin(angle_);
+				sf::Vector2f pos(CIRCLE_X_START, m_origin_y);
+				m_angle += CIRCLE_ROTATION_SPEED * frametime;
+				pos.x += CIRCLE_RADIUS * std::cos(m_angle);
+				pos.y -= CIRCLE_RADIUS * std::sin(m_angle);
 				setPosition(pos);
 			}
-		}
-		break;
+			break;
 	}
 
 	switch (m_attack)
@@ -161,7 +157,6 @@ void Spaceship::onUpdate(float frametime)
 		case AUTO_AIM:
 			m_weapon.shoot(m_target->getCenter());
 			break;
-
 		case ON_SIGHT:
 		{
 			float my_y = getCenter().y;
@@ -171,8 +166,8 @@ void Spaceship::onUpdate(float frametime)
 			{
 				m_weapon.shoot(-math::PI);
 			}
-		}
 			break;
+		}
 		case NONE:
 			break;
 	}
@@ -184,7 +179,7 @@ void Spaceship::onUpdate(float frametime)
 void Spaceship::onDestroy()
 {
 	Damageable::onDestroy();
-	if (math::random(1, DROP_LUCK) == 1)
+	if (xsf::random(1, DROP_LUCK) == 1)
 	{
 		PowerUp::dropRandom(getPosition());
 	}

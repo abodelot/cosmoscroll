@@ -2,30 +2,14 @@
 #define MATH_HPP
 
 #include <SFML/System/Vector2.hpp>
-#include <SFML/Graphics/Color.hpp>
 #include <cmath>
-#include <cstdlib>
-
 
 namespace math
 {
 
 extern const float PI;
-extern unsigned int seed;
 
 // misc helpers
-
-template <class T>
-inline T max(T a, T b)
-{
-	return a > b ? a : b;
-}
-
-template <class T>
-inline T min(T a, T b)
-{
-	return a < b ? a : b;
-}
 
 template <class T>
 inline T clamp(T value, T max, T min)
@@ -33,18 +17,6 @@ inline T clamp(T value, T max, T min)
 	return value < max ? max : (value > min ? value : min);
 }
 
-
-inline int random(int begin, int end)
-{
-	return std::rand() % (end - begin + 1) + begin;
-}
-
-inline float random(float begin, float end)
-{
-	return static_cast<float>(std::rand()) / RAND_MAX * (end - begin) + begin;
-}
-
-void set_seed(unsigned int seed);
 
 // 2D helpers
 
@@ -82,8 +54,6 @@ inline float distance(const sf::Vector2f& p1, const sf::Vector2f& p2 = sf::Vecto
 
 
 float angle(const sf::Vector2f& p1, const sf::Vector2f& p2);
-
-sf::Color random_color(sf::Uint8 min_r=0, sf::Uint8 min_g=0, sf::Uint8 min_b=0, sf::Uint8 max_r=255, sf::Uint8 max_g=255, sf::Uint8 max_b=255);
 
 }
 

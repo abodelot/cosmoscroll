@@ -182,11 +182,11 @@ ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset, const sf::Texture& img)
 	sprite_.setTexture(img);
 	sprite_.setPosition(offset);
 	//sprite_.SetBlendMode(sf::Blend::Add);
-	angle_ = math::random(-math::PI, math::PI);
+	angle_ = xsf::random(-math::PI, math::PI);
 	sprite_.setRotation(-math::to_deg(angle_));
-	float scale = math::random(0.5f, 1.2f);
+	float scale = xsf::random(0.5f, 1.2f);
 	sprite_.setScale(scale, scale);
-	lifetime_ = math::random(FIERY_MIN_LIFETIME, FIERY_MAX_LIFETIME);
+	lifetime_ = xsf::random(FIERY_MIN_LIFETIME, FIERY_MAX_LIFETIME);
 	timer_ = 0.f;
 }
 
@@ -209,13 +209,13 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 ParticleSystem::Star::Star(const sf::Texture& img)
 {
 	sprite_.setTexture(img);
-	float x = math::random(0, APP_WIDTH);
-	float y = math::random(0, APP_HEIGHT);
+	float x = xsf::random(0, APP_WIDTH);
+	float y = xsf::random(0, APP_HEIGHT);
 	sprite_.setPosition(x, y);
-	float scale = math::random(1.f, 2.f);
+	float scale = xsf::random(1.f, 2.f);
 	sprite_.setScale(scale, scale);
-	sprite_.setColor(math::random_color(200, 200, 200, 255, 255, 255));
-	speed_ = (int) (math::random(STAR_MIN_SPEED, STAR_MAX_SPEED));
+	sprite_.setColor(xsf::random_color(200, 200, 200, 255, 255, 255));
+	speed_ = (int) (xsf::random(STAR_MIN_SPEED, STAR_MAX_SPEED));
 }
 
 
@@ -224,9 +224,9 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 	if (sprite_.getPosition().x < 0)
 	{
 		sprite_.setX(APP_WIDTH);
-		sprite_.setY(math::random(0, APP_HEIGHT));
-		speed_ = math::random(STAR_MIN_SPEED, STAR_MAX_SPEED);
-		float scale = math::random(0.5f, 1.5f);
+		sprite_.setY(xsf::random(0, APP_HEIGHT));
+		speed_ = xsf::random(STAR_MIN_SPEED, STAR_MAX_SPEED);
+		float scale = xsf::random(0.5f, 1.5f);
 		sprite_.setScale(scale, scale);
 	}
 	sprite_.move(-speed_ * frametime, 0);
@@ -240,10 +240,10 @@ ParticleSystem::CenteredStar::CenteredStar(const sf::Texture& img):
 	float x = APP_WIDTH / 2;
 	float y = APP_HEIGHT / 2;
 	sprite_.setPosition(x, y);
-	float scale = math::random(0.5f, 1.5f);
+	float scale = xsf::random(0.5f, 1.5f);
 	sprite_.setScale(scale, scale);
-	speed_ = (int) (math::random(STAR_MIN_SPEED, STAR_MAX_SPEED));
-	angle_ = math::random(-math::PI, math::PI);
+	speed_ = (int) (xsf::random(STAR_MIN_SPEED, STAR_MAX_SPEED));
+	angle_ = xsf::random(-math::PI, math::PI);
 }
 
 
@@ -255,10 +255,10 @@ bool ParticleSystem::CenteredStar::OnUpdate(float frametime)
 	{
 		pos.x = APP_WIDTH / 2;
 		pos.y = APP_HEIGHT / 2;
-		speed_ = math::random(STAR_MIN_SPEED, STAR_MAX_SPEED);
-		float scale = math::random(0.5f, 1.5f);
+		speed_ = xsf::random(STAR_MIN_SPEED, STAR_MAX_SPEED);
+		float scale = xsf::random(0.5f, 1.5f);
 		sprite_.setScale(scale, scale);
-		angle_ = math::random(-math::PI, math::PI);
+		angle_ = xsf::random(-math::PI, math::PI);
 	}
 
 	math::translate(pos, angle_, speed_ * frametime);
@@ -312,15 +312,15 @@ ParticleSystem::Smoke::Smoke(const sf::Texture& img, const sf::Sprite* handle)
 	const sf::Vector2f& pos = handle->getPosition();
 	sprite_.setPosition(pos.x, pos.y);
 	sprite_.setTexture(img);
-	float size = math::random(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
+	float size = xsf::random(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
 	sprite_.setScale(size, size);
-	float angle = math::random(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
-	float base_speed = math::random(SMOKE_MIN_SPEED, SMOKE_MAX_SPEED);
+	float angle = xsf::random(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
+	float base_speed = xsf::random(SMOKE_MIN_SPEED, SMOKE_MAX_SPEED);
 	vspeed_.x = std::cos(angle) * base_speed;
 	vspeed_.y = -std::sin(angle) * base_speed;
 	y_offset_ = (handle_->getTextureRect().height - sprite_.getHeight()) / 2;
 
-	timer_ = math::random(0.f, SMOKE_MAX_LIFETIME);
+	timer_ = xsf::random(0.f, SMOKE_MAX_LIFETIME);
 }
 
 
@@ -336,8 +336,8 @@ bool ParticleSystem::Smoke::OnUpdate(float frametime)
 		{
 			return true;
 		}
-		timer_ = math::random(0.f, SMOKE_MAX_LIFETIME);
-		float size = math::random(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
+		timer_ = xsf::random(0.f, SMOKE_MAX_LIFETIME);
+		float size = xsf::random(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
 		sprite_.setScale(size, size);
 		sprite_.setPosition(handle_->getPosition().x, handle_->getPosition().y + y_offset_);
 	}

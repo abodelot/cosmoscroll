@@ -2,7 +2,7 @@
 #define INTROSCENE_HPP
 
 #include "BaseScene.hpp"
-#include "utils/sfml_helper.hpp"
+#include "utils/SFML_Helper.hpp"
 
 class EntityManager;
 class Player;

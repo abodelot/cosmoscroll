@@ -13,7 +13,7 @@
                          L"Arnaud Wolff"
 
 #define VERSION_STRING   GAME_NAME " " GAME_VERSION "\n\n" \
-                         "Copyright (C) 2008-2013 project contributors.\n" \
+                         "Copyright (C) 2008-2014 project contributors.\n" \
                          "This is free software; see the source for copying conditions.  There is NO\n" \
                          "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 

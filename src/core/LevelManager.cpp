@@ -14,7 +14,7 @@
 #include "entities/decors/Canon.hpp"
 #include "entities/decors/GunTower.hpp"
 #include "utils/Error.hpp"
-#include "utils/sfml_helper.hpp"
+#include "utils/SFML_Helper.hpp"
 
 
 LevelManager& LevelManager::getInstance()
@@ -160,7 +160,6 @@ const char* LevelManager::getQuote() const
 
 const sf::Texture* LevelManager::getLayerImage1() const
 {
-
 	const char* p = getCurrentLevelElement()->Attribute("layer1");
 	return p != NULL ? &Resources::getTexture(p) : NULL;
 }

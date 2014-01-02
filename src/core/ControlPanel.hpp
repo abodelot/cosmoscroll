@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "entities/EntityManager.hpp"
 #include "entities/PowerUp.hpp"
-#include "utils/sfml_helper.hpp"
+#include "utils/SFML_Helper.hpp"
 
 
 /**
