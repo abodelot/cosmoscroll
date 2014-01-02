@@ -9,6 +9,9 @@
 
 
 TentaculatBoss::TentaculatBoss():
+	m_state(INIT),
+	m_timer(0.f),
+	m_speed(-100.f, 0.f),
 	m_target(NULL)
 {
 	setTeam(Entity::BAD);
@@ -19,10 +22,6 @@ TentaculatBoss::TentaculatBoss():
 	m_weapon.setOwner(this);
 	m_weapon.setPosition({74, 42});
 	m_weapon.setMultiply(3);
-
-	m_move = INIT;
-	m_speed = {-100.f, 0.f};
-	m_timer = 0;
 
 	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("boss-tentacles"));
 }
@@ -44,13 +43,13 @@ void TentaculatBoss::onUpdate(float frametime)
 	m_weapon.shoot(target_pos);
 
 	sf::Vector2f pos = getPosition();
-	switch (m_move)
+	switch (m_state)
 	{
 		case INIT:
 			if (pos.x < MAX_X)
 			{
 				setX(MAX_X);
-				m_move = LURK;
+				m_state = LURK;
 				m_speed = {0.f, 120.f};
 			}
 			break;
@@ -64,7 +63,7 @@ void TentaculatBoss::onUpdate(float frametime)
 			if ((int) m_timer > 10)
 			{
 				m_timer = 0.f;
-				m_move = IDLE;
+				m_state = IDLE;
 				m_speed = {0.f, 0.f};
 			}
 			break;
@@ -72,7 +71,7 @@ void TentaculatBoss::onUpdate(float frametime)
 			if ((int) m_timer > 2)
 			{
 				m_timer = 0.f;
-				m_move = CHARGE;
+				m_state = CHARGE;
 				float angle = math::angle(target_pos, pos);
 				m_speed.x = std::cos(angle) * 350;
 				m_speed.y = -std::sin(angle) * 350;
@@ -91,7 +90,7 @@ void TentaculatBoss::onUpdate(float frametime)
 			else if ((int) pos.x > MAX_X)
 			{
 				setX(MAX_X);
-				m_move = LURK;
+				m_state = LURK;
 				m_speed = {0.f, 120.f};
 			}
 			break;
@@ -103,6 +102,5 @@ void TentaculatBoss::onUpdate(float frametime)
 
 void TentaculatBoss::onDestroy()
 {
-	sf::Vector2f pos = getCenter();
-	ParticleSystem::GetInstance().GreenImpactSfx(pos, 100);
+	ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 100);
 }

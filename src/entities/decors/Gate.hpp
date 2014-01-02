@@ -1,7 +1,7 @@
 #ifndef GATE_HPP
 #define GATE_HPP
 
-#include "MultiPartEntity.hpp"
+#include "entities/MultiPartEntity.hpp"
 
 
 class Gate: public MultiPartEntity

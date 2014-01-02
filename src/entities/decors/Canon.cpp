@@ -1,23 +1,24 @@
 #include "Canon.hpp"
-#include "Part.hpp"
 #include "entities/EntityManager.hpp"
 #include "core/Resources.hpp"
 #include "utils/Math.hpp"
+
 
 Canon::Canon()
 {
 	Part base;
 	base.setTexture(Resources::getTexture("entities/decor-bottom.png"));
+	base.setDestructible(false);
+	addPart(base, 0, 18);
 
 	Part top(1);
 	top.setTexture(Resources::getTexture("entities/decor-canon.png"));
-
-	addPart(base, 0, 18);
+	top.setDestructible(false);
 	addPart(top, (base.getWidth() - top.getWidth()) / 2, 0);
 
-	weapon_.init("fireball", 2);
-	weapon_.setOwner(this);
-	weapon_.setPosition({64, 8});
+	m_weapon.init("fireball", 2);
+	m_weapon.setOwner(this);
+	m_weapon.setPosition({64, 8});
 }
 
 
@@ -30,6 +31,8 @@ void Canon::onInit()
 
 void Canon::onUpdate(float frametime)
 {
-	MultiPartEntity::onUpdate(frametime);
-	weapon_.shoot(math::PI / 2.f);
+	move(-EntityManager::FOREGROUND_SPEED * frametime, 0.f);
+	updateParts(frametime);
+
+	m_weapon.shoot(math::PI / 2.f);
 }

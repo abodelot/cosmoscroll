@@ -3,6 +3,7 @@
 #include "core/Resources.hpp"
 #include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
+#include "utils/tinyxml/tinyxml2.h"
 
 
 WeaponData::WeaponData():

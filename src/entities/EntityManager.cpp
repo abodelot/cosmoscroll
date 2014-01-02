@@ -326,20 +326,22 @@ void EntityManager::loadAnimations(const std::string& filename)
 	}
 
 	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement();
-	// attributs
-	int width, height, count;
-	float delay = 0.f;
-	const char* name;
-	const char* img;
 	while (elem != NULL)
 	{
+		// attributs
 		bool ok = true;
+		const char* name;
 		ok &= ((name = elem->Attribute("name")) != NULL);
+		const char* img;
 		ok &= ((img = elem->Attribute("img")) != NULL);
+		int width, height, count;
 		ok &= (elem->QueryIntAttribute("width", &width) == tinyxml2::XML_SUCCESS);
 		ok &= (elem->QueryIntAttribute("height", &height) == tinyxml2::XML_SUCCESS);
 		ok &= (elem->QueryIntAttribute("count", &count) == tinyxml2::XML_SUCCESS);
+		float delay = 0.f;
 		ok &= (elem->QueryFloatAttribute("delay", &delay) == tinyxml2::XML_SUCCESS);
+		bool reverse = false;
+		elem->QueryBoolAttribute("reverse", &reverse);
 		int x = 0, y = 0;
 		elem->QueryIntAttribute("x", &x);
 		elem->QueryIntAttribute("y", &y);
@@ -349,8 +351,12 @@ void EntityManager::loadAnimations(const std::string& filename)
 			// construction de l'animation
 			Animation* anim = &animations_[name];
 			for (int i = 0; i < count; ++i)
-			{
 				anim->addFrame({x + i * width, y, width, height});
+
+			if (reverse)
+			{
+				for (int i = count - 2; i >= 0; --i)
+					anim->addFrame({x + i * width, y, width, height});
 			}
 			anim->setDelay(delay);
 			anim->setTexture(Resources::getTexture(img));

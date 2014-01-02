@@ -184,7 +184,7 @@
 			<call func="b2_triad"/>
 			<wait t="3" />
 			<call func="b2_triad" />
-			<split_boss y="170" t="8" />
+			<boss id="split" y="170" t="8" />
 		</level>
 
 		<!-- LVL3 -->
@@ -333,7 +333,7 @@
 			<ship id="b2" y="160"/>
 			<wait t="5"/>
 			<call func="interceptors_5"/>
-			<tentaculat_boss y="210" t="10"/>
+			<boss id="tentaculat" y="210" t="10"/>
 		</level>
 
 		<!-- LVL5 (scoot pyramids) -->
@@ -390,6 +390,7 @@
 			<ship id="s1" y="100" t="1"/>
 			<ship id="s1" y="150" t="2"/>
 			<call func="b2_triad"/>
+			<boss id="brain" t="6" y="200" />
 		</level>
 
 		<!-- LVL6 (saucers, miniboss x2) -->
@@ -437,8 +438,8 @@
 				<ship id="s1" y="130" t="1"/>
 				<ship id="s1" y="160" t="1"/>
 			</loop>
-			<tentaculat_boss y="120" t="5"/>
-			<tentaculat_boss y="290" t="10"/>
+			<boss id="tentaculat" y="120" t="5"/>
+			<boss id="tentaculat" y="290" t="10"/>
 		</level>
 
 		<!-- LVL7 (saucers, interceptors, heavy interceptors) -->
@@ -550,7 +551,7 @@
 			<ship id="b3" y="100" t="1"/>
 			<ship id="b3" y="300" t="1"/>
 			<ship id="b3" y="200" t="1"/>
-			<evilboss y="170" t="8"/>
+			<boss id="evil" y="170" t="8"/>
 		</level>
 	</levels>
 </levelset>

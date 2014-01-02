@@ -12,22 +12,14 @@ public:
 
 	// callbacks ---------------------------------------------------------------
 
-	void onInit();
-
-	void onUpdate(float frametime);
-
-	void onDestroy();
+	void onInit() override;
+	void onUpdate(float frametime) override;
+	void onDestroy() override;
 
 private:
-	enum Move
-	{
-		INIT,
-		LURK,
-		IDLE,
-		CHARGE
-	};
+	enum State { INIT, LURK, IDLE, CHARGE };
 
-	Move         m_move;
+	State        m_state;
 	float        m_timer;
 	sf::Vector2f m_speed;
 	Weapon<>     m_weapon;

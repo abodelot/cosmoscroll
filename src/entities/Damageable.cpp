@@ -4,7 +4,7 @@
 #include "EntityManager.hpp"
 #include "core/ParticleSystem.hpp"
 
-#define FLASH_DELAY 0.5f
+#define FLASH_DELAY 0.3f
 
 
 Damageable::Damageable():
@@ -61,9 +61,9 @@ void Damageable::takeDamage(int damage)
 	{
 		kill();
 	}
-	else if (m_flash_timer <= 0)
+	else
 	{
-		m_flash_timer = FLASH_DELAY;
+		initDamageFlash();
 	}
 }
 
@@ -83,6 +83,13 @@ void Damageable::setHP(int hp)
 int Damageable::updateHP(int diff)
 {
 	return m_hp += diff;
+}
+
+
+void Damageable::initDamageFlash()
+{
+	if (m_flash_timer <= 0)
+		m_flash_timer = FLASH_DELAY;
 }
 
 

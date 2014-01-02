@@ -2,7 +2,11 @@
 #define ITEMDATA_HPP
 
 #include <string>
-#include "utils/tinyxml/tinyxml2.h"
+
+namespace tinyxml2
+{
+class XMLElement;
+}
 
 
 class ItemData

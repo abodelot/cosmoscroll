@@ -23,9 +23,11 @@ public:
 	void onCollision(Projectile& projectile);
 	void onDestroy();
 
+	void initDamageFlash();
 protected:
 	void setHP(int hp);
 	int updateHP(int diff);
+
 
 	void updateDamageFlash(float frametime);
 

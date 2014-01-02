@@ -18,23 +18,22 @@ public:
 	// callbacks ---------------------------------------------------------------
 
 	void onInit() override;
-
 	void onUpdate(float frametime) override;
-
 	void onDestroy() override;
 
 private:
-	enum Phase
+	enum State
 	{
 		EVIL = 600, MORE_EVIL = 400, DAMN_EVIL = 200
 	};
 
-	Phase phase_, next_;
-	int speed_x_, speed_y_;
-	Weapon<> m_eye_left;
-	Weapon<> m_eye_right;
-	Weapon<> m_mouth;
-	Entity*  m_target;
+	State        m_state;
+	State        m_next_state;
+	sf::Vector2f m_speed;
+	Weapon<>     m_eye_left;
+	Weapon<>     m_eye_right;
+	Weapon<>     m_mouth;
+	Entity*      m_target;
 };
 
 #endif // EVILBOSS_HPP

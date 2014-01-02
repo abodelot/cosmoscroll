@@ -7,10 +7,14 @@
 #define EYE_OFFSET_RIGHT  sf::Vector2f(190, 55)
 #define MOUTH_OFFSET      sf::Vector2f(143, 128)
 
-#define MAX_X 350
-#define MAX_Y (EntityManager::getInstance().getHeight() - getHeight())
+#define MAX_X  350.f
+#define MIN_Y  60.f
+#define MAX_Y  (EntityManager::getInstance().getHeight() - getHeight() - 60.f)
 
 EvilBoss::EvilBoss():
+	m_state(EVIL),
+	m_next_state(MORE_EVIL),
+	m_speed(-100.f, 70.f),
 	m_target(NULL)
 {
 	setTexture(Resources::getTexture("entities/evil-boss.png"));
@@ -18,7 +22,7 @@ EvilBoss::EvilBoss():
 	setTeam(Entity::BAD);
 	setHP(EVIL);
 
-	// init weapons
+	// Init weapons
 	m_eye_left.init("fireball");
 	m_eye_left.setOwner(this);
 	m_eye_left.setPosition(EYE_OFFSET_LEFT);
@@ -30,11 +34,6 @@ EvilBoss::EvilBoss():
 
 	m_mouth.setOwner(this); // (this one must inited later)
 	m_mouth.setPosition(MOUTH_OFFSET);
-
-	phase_ = EVIL;
-	next_ = MORE_EVIL;
-	speed_x_ = -100;
-	speed_y_ = 70;
 }
 
 
@@ -57,17 +56,17 @@ void EvilBoss::onUpdate(float frametime)
 	}
 
 	const sf::Vector2f& pos = getPosition();
-	if ((int) pos.y < 60 || (int) pos.y > MAX_Y - 60)
+	if ((int) pos.y < MIN_Y || (int) pos.y > MAX_Y)
 	{
-		if      ((int) pos.y < 60)         setY(60);
-		else if ((int) pos.y > MAX_Y - 60) setY(MAX_Y - 60);
-		speed_y_ *= -1;
+		if      (pos.y < MIN_Y) setY(MIN_Y);
+		else if (pos.y > MAX_Y) setY(MAX_Y);
+		m_speed.y *= -1;
 	}
-	sf::Sprite::move(0, speed_y_ * frametime);
+	move(0, m_speed.y * frametime);
 
 	if (pos.x > MAX_X)
 	{
-		sf::Sprite::move(speed_x_ * frametime, 0);
+		move(m_speed.x * frametime, 0);
 	}
 
 	updateDamageFlash(frametime);
@@ -77,15 +76,15 @@ void EvilBoss::onUpdate(float frametime)
 void EvilBoss::takeDamage(int damage)
 {
 	Damageable::takeDamage(damage);
-	if (getHP() < next_ && getHP() > 0 && phase_ != next_)
+	if (getHP() < m_next_state && getHP() > 0 && m_state != m_next_state)
 	{
-		phase_ = next_;
-		switch (phase_)
+		m_state = m_next_state;
+		switch (m_state)
 		{
 			case MORE_EVIL:
 				setTextureRect(sf::IntRect(242, 0, 242, 160));
 				m_mouth.init("laser-pink");
-				next_ = DAMN_EVIL;
+				m_next_state = DAMN_EVIL;
 				break;
 			case DAMN_EVIL:
 				setTextureRect(sf::IntRect(242 * 2, 0, 242, 160));
@@ -104,4 +103,3 @@ void EvilBoss::onDestroy()
 {
 	ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 200);
 }
-

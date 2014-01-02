@@ -9,9 +9,10 @@
 #include "entities/bosses/SplitBoss.hpp"
 #include "entities/bosses/EvilBoss.hpp"
 #include "entities/bosses/TentaculatBoss.hpp"
-#include "entities/complex/Gate.hpp"
-#include "entities/complex/Canon.hpp"
-#include "entities/complex/GunTower.hpp"
+#include "entities/bosses/BrainBoss.hpp"
+#include "entities/decors/Gate.hpp"
+#include "entities/decors/Canon.hpp"
+#include "entities/decors/GunTower.hpp"
 #include "utils/Error.hpp"
 #include "utils/sfml_helper.hpp"
 
@@ -292,26 +293,20 @@ void LevelManager::parseEntities(const tinyxml2::XMLElement* elem)
 		{
 			entity = new Asteroid(Asteroid::BIG);
 		}
-		else if (strcmp(tag_name, "evilboss") == 0)
+		else if (strcmp(tag_name, "boss") == 0)
 		{
-			entity = new EvilBoss();
-		}
-		else if (strcmp(tag_name, "tentaculat_boss") == 0)
-		{
-			entity = new TentaculatBoss();
-		}
-		else if (strcmp(tag_name,"split_boss") == 0)
-		{
-		    entity = new SplitBoss();
+			if      (elem->Attribute("id", "tentaculat")) entity = new TentaculatBoss();
+			else if (elem->Attribute("id", "split"))      entity = new SplitBoss();
+			else if (elem->Attribute("id", "brain"))      entity = new BrainBoss();
+			else if (elem->Attribute("id", "evil"))       entity = new EvilBoss();
+			else
+				std::cerr << "[levels] unknown boss id '" << elem->Attribute("id") << "' ignored" << std::endl;
 		}
 		else if (strcmp(tag_name, "decor") == 0)
 		{
-			if (elem->Attribute("id", "gate"))
-				entity = new Gate();
-			else if (elem->Attribute("id", "canon"))
-				entity = new Canon();
-			else if (elem->Attribute("id", "guntower"))
-				entity = new GunTower();
+			if      (elem->Attribute("id", "gate"))      entity = new Gate();
+			else if (elem->Attribute("id", "canon"))     entity = new Canon();
+			else if (elem->Attribute("id", "guntower"))  entity = new GunTower();
 			else
 				std::cerr << "[levels] unknown decor id '" << elem->Attribute("id") << "' ignored" << std::endl;
 		}

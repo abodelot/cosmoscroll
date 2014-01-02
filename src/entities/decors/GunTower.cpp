@@ -13,10 +13,11 @@ GunTower::GunTower():
 	m_target(NULL)
 {
 	Part base(BASE_ID);
+	base.setDestructible(false);
 	base.setTexture(Resources::getTexture("entities/guntower-base.png"));
 
 	Part turret(CANON_ID, 20);
-	turret.setDestructible(true);
+
 	const sf::Texture& img_turret = Resources::getTexture("entities/guntower-turret.png");
 	turret.setTexture(img_turret);
 	turret.setOrigin(img_turret.getSize().x / 2, img_turret.getSize().y / 2);
@@ -31,7 +32,8 @@ GunTower::GunTower():
 
 void GunTower::onUpdate(float frametime)
 {
-	MultiPartEntity::onUpdate(frametime);
+	move(-EntityManager::FOREGROUND_SPEED * frametime, 0.f);
+	updateParts(frametime);
 
 	// Rotate turret toward player
 	Part& turret = getPartAt(0);

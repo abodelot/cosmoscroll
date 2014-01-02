@@ -1,7 +1,7 @@
 #ifndef GUN_TOWER_HPP
 #define GUN_TOWER_HPP
 
-#include "MultiPartEntity.hpp"
+#include "entities/MultiPartEntity.hpp"
 #include "items/Weapon.hpp"
 
 class GunTower: public MultiPartEntity

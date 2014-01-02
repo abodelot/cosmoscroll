@@ -1,4 +1,5 @@
 #include "ItemData.hpp"
+#include "utils/tinyxml/tinyxml2.h"
 
 ItemData::ItemData()
 {

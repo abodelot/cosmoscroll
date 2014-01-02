@@ -1,6 +1,7 @@
 #include "GenericItemData.hpp"
 #include "utils/I18n.hpp"
 #include "utils/StringUtils.hpp"
+#include "utils/tinyxml/tinyxml2.h"
 
 
 GenericItemData::GenericItemData(ItemData::Type type)
