@@ -13,6 +13,17 @@ class Projectile;
 class Entity: public sf::Sprite
 {
 public:
+	struct BoundingBox
+	{
+		BoundingBox();
+		BoundingBox(float l, float t, float r, float b);
+
+		float left;
+		float top;
+		float right;
+		float bottom;
+	};
+
 	enum Team
 	{
 		GOOD, NEUTRAL, BAD
@@ -64,6 +75,8 @@ public:
 	virtual void onCollision(Projectile&) {}
 
 	// helpers -----------------------------------------------------------------
+
+	BoundingBox getBoundingBox() const;
 
 	inline float getWidth() const  { return getTextureRect().width; }
 	inline float getHeight() const { return getTextureRect().height; }

@@ -18,7 +18,7 @@ EvilBoss::EvilBoss():
 	m_target(NULL)
 {
 	setTexture(Resources::getTexture("entities/evil-boss.png"));
-	setTextureRect(sf::IntRect(0, 0, 242, 160));
+	setTextureRect(sf::IntRect(0, 0, 240, 160));
 	setTeam(Entity::BAD);
 	setHP(EVIL);
 
@@ -82,12 +82,12 @@ void EvilBoss::takeDamage(int damage)
 		switch (m_state)
 		{
 			case MORE_EVIL:
-				setTextureRect(sf::IntRect(242, 0, 242, 160));
+				setTextureRect(sf::IntRect(240, 0, 240, 160));
 				m_mouth.init("laser-pink");
 				m_next_state = DAMN_EVIL;
 				break;
 			case DAMN_EVIL:
-				setTextureRect(sf::IntRect(242 * 2, 0, 242, 160));
+				setTextureRect(sf::IntRect(240 * 2, 0, 240, 160));
 				m_mouth.setMultiply(3);
 				m_eye_left.setMultiply(3);
 				m_eye_right.setMultiply(3);

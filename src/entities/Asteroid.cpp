@@ -6,8 +6,8 @@
 #include "utils/Math.hpp"
 
 #define BASE_SPEED         80
-#define ROTATION_SPEED_MIN 40
-#define ROTATION_SPEED_MAX 160
+#define ROTATION_SPEED_MIN 10
+#define ROTATION_SPEED_MAX 80
 
 
 Asteroid::Asteroid(Size size, float angle):
@@ -15,6 +15,7 @@ Asteroid::Asteroid(Size size, float angle):
 	m_rotation_speed(xsf::random(ROTATION_SPEED_MIN, ROTATION_SPEED_MAX))
 {
 	setHP(size * 2 + 1);
+	setTexture(Resources::getTexture("entities/asteroids.png"));
 	setRandomImage();
 
 	// Compute speed vector from angle and velocity
@@ -43,8 +44,8 @@ void Asteroid::onDestroy()
 	switch (m_size)
 	{
 		case BIG:
-			// Create 2 medium asteroids
-			for (int i = 0; i < 2; ++i)
+			// Create 3 medium asteroids
+			for (int i = 0; i < 3; ++i)
 			{
 				Asteroid* asteroid = new Asteroid(MEDIUM, xsf::random(0, 360));
 				asteroid->setPosition(pos);
@@ -52,8 +53,8 @@ void Asteroid::onDestroy()
 			}
 			break;
 		case MEDIUM:
-			// Create 4 small asteroids
-			for (int i = 0; i < 4; ++i)
+			// Create 3 small asteroids
+			for (int i = 0; i < 3; ++i)
 			{
 				Asteroid* asteroid = new Asteroid(SMALL, xsf::random(0, 360));
 				asteroid->setPosition(pos);
@@ -70,23 +71,18 @@ void Asteroid::onDestroy()
 
 void Asteroid::setRandomImage()
 {
-	int x = 0;
+
+	int x = xsf::random(0, 5); // nb sprites = 6
 	switch (m_size)
 	{
-		case SMALL:
-			setTexture(Resources::getTexture("entities/asteroid-small.png"));
-			x = xsf::random(0, 3) * 16; // 4 sprites
-			setTextureRect(sf::IntRect(x, 0, 16, 16));
+		case BIG:
+			setTextureRect(sf::IntRect(0 + x * 64, 0, 64, 64)); // 64px
 			break;
 		case MEDIUM:
-			setTexture(Resources::getTexture("entities/asteroid-medium.png"));
-			x = xsf::random(0, 2) * 32; // 3 sprites
-			setTextureRect(sf::IntRect(x, 0, 32, 32));
+			setTextureRect(sf::IntRect(0 + x * 32, 64, 32, 32)); // 32px
 			break;
-		case BIG:
-			setTexture(Resources::getTexture("entities/asteroid-big.png"));
-			x = xsf::random(0, 2) * 48; // 3 sprites
-			setTextureRect(sf::IntRect(x, 0, 48, 48));
+		case SMALL:
+			setTextureRect(sf::IntRect(192 + x * 16, 64, 16, 16)); // 16px
 			break;
 	}
 }

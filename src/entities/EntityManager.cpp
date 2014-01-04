@@ -200,6 +200,7 @@ void EntityManager::Update(float frametime)
 	{
 		Entity& entity = **it;
 		entity.onUpdate(frametime);
+		Entity::BoundingBox box = entity.getBoundingBox();
 
 		if (entity.isDead())
 		{
@@ -207,8 +208,7 @@ void EntityManager::Update(float frametime)
 			delete *it;
 			it = m_entities.erase(it);
 		}
-		else if (entity.getY() + entity.getHeight() < 0 || entity.getY() > m_height ||
-				 entity.getX() + entity.getWidth() < 0 || entity.getX() > m_width)
+		else if (box.right < 0 || box.bottom < 0 || box.left > m_width || box.top > m_height)
 		{
 			// Remove entities outside the entity manager
 			delete *it;
@@ -507,6 +507,7 @@ bool EntityManager::arcadeModeCallback()
 		Entity* entity = createRandomEntity();
 		entity->setX(m_width - 1);
 		entity->setY(xsf::random(0, m_height - (int) entity->getHeight()));
+		entity->move(entity->getOrigin());
 		addEntity(entity);
 	}
 	// Always true, spawn infinite entities, player will die eventually... :o)
@@ -520,6 +521,7 @@ bool EntityManager::storyModeCallback()
 	Entity* next = m_levels.spawnNextEntity(timer_);
 	while (next != NULL)
 	{
+		next->move(next->getOrigin());
 		addEntity(next);
 		next = m_levels.spawnNextEntity(timer_);
 	}

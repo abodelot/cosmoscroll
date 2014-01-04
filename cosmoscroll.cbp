@@ -235,11 +235,12 @@
 		<Unit filename="src/utils/Math.hpp" />
 		<Unit filename="src/utils/ModMusic.cpp" />
 		<Unit filename="src/utils/ModMusic.hpp" />
+		<Unit filename="src/utils/SFML_Helper.cpp" />
+		<Unit filename="src/utils/SFML_Helper.hpp" />
 		<Unit filename="src/utils/StringUtils.cpp" />
 		<Unit filename="src/utils/StringUtils.hpp" />
 		<Unit filename="src/utils/md5/md5.cpp" />
 		<Unit filename="src/utils/md5/md5.hpp" />
-		<Unit filename="src/utils/sfml_helper.hpp" />
 		<Unit filename="src/utils/tinyxml/tinyxml2.cpp" />
 		<Unit filename="src/utils/tinyxml/tinyxml2.h" />
 		<Extensions>
