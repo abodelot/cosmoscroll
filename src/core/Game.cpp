@@ -240,7 +240,6 @@ void Game::setNextScene(Scene enum_scene)
 			CASE_SCENE(AboutMenu);
 			CASE_SCENE(LevelMenu);
 			CASE_SCENE(ArmoryMenu);
-			CASE_SCENE(IntroLevelScene);
 			CASE_SCENE(OptionMenu);
 			CASE_SCENE(KeyboardMenu);
 			CASE_SCENE(JoystickMenu);

@@ -71,8 +71,7 @@
 	</functions>
 	<levels>
 		<!-- LVL1 -->
-		<level layer1="layers/blue.jpg" layer2="layers/fog.png" color="#002060" stars="30" music="tempested.mod"
-		quote="Be careful out there.\n\n-- Lieutenant John Harper">
+		<level layer1="layers/blue.jpg" layer2="layers/fog.png" color="#002060" stars="30" music="tempested.mod">
 			<ship id="b1" y="200" t="2"/>
 			<loop count="2">
 				<wait t="1"/>
@@ -127,8 +126,7 @@
 		</level>
 
 		<!-- LVL2 -->
-		<level layer1="layers/blue.jpg" layer2="layers/fog.png" color="#003070" stars="40" music="ground_zero.mod"
-		quote="Now toddle off\nand fly your flying machine!\n\n-- Paula Trent">
+		<level layer1="layers/blue.jpg" layer2="layers/fog.png" color="#003070" stars="40" music="ground_zero.mod">
 			<loop count="2">
 				<call func="b1c_quint"/>
 				<ship id="b1" y="450" t="2"/>
@@ -188,8 +186,7 @@
 		</level>
 
 		<!-- LVL3 -->
-		<level layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" music="6sievert.mod"
-		quote="I'll bet my badge that we haven't\nseen the last of those weirdies.\n\n-- Lieutenant John Harper">
+		<level layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" music="6sievert.mod">
 			<ship id="b1" y="100" t="2"/>
 			<ship id="b1" y="150" />
 			<ship id="b1" y="200" t="2"/>
@@ -272,8 +269,7 @@
 		</level>
 
 		<!-- LVL4 -->
-		<level layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" music="virtual_journey.mod"
-		quote="Atmospheric conditions in\nouter space often interfere\nwith transmitting.\n\n-- General Roberts">
+		<level layer1="layers/mechanical.png" layer2="layers/mechanical-top.png" decor_height="24" music="virtual_journey.mod">
 			<ship id="m1" y="120" t="1"/>
 			<decor id="guntower" t="2"/>
 			<ship id="b1" y="200" t="5"/>
@@ -337,8 +333,7 @@
 		</level>
 
 		<!-- LVL5 (scoot pyramids) -->
-		<level layer1="layers/purple.jpg" layer2="layers/fog.png" stars="50" color="#150005" music="hungry.mod"
-		quote="A flying saucer?\nYou mean the kind from up there?\n\n-- Paula Trent">
+		<level layer1="layers/purple.jpg" layer2="layers/fog.png" stars="50" color="#150005" music="hungry.mod">
 			<asteroid y="100" t="1.0"/>
 			<asteroid y="170" t="0.5"/>
 			<asteroid y="360" t="0.5"/>
@@ -394,8 +389,7 @@
 		</level>
 
 		<!-- LVL6 (saucers, miniboss x2) -->
-		<level layer1="layers/purple.jpg" layer2="layers/fog.png" color="#150005" stars="35" music="back_in_1982.mod"
-		quote="The saucers are up there,\nThe graveyard is out there.\n\n-- Paula Trent">
+		<level layer1="layers/purple.jpg" layer2="layers/fog.png" color="#150005" stars="35" music="back_in_1982.mod">
 			<asteroid y="160" t="4"/>
 			<ship id="m1" y="90"/>
 			<asteroid y="230" t="0.5"/>
@@ -443,8 +437,7 @@
 		</level>
 
 		<!-- LVL7 (saucers, interceptors, heavy interceptors) -->
-		<level layer1="layers/green.jpg" layer2="layers/fog.png" color="#003000" stars="40" music="toxisystem.mod"
-		quote="Can you see or measure an atom?\nYet you can explode one.\n\n-- Eros">
+		<level layer1="layers/green.jpg" layer2="layers/fog.png" color="#003000" stars="40" music="toxisystem.mod">
 			<loop count="2">
 				<asteroid y="140" t="4.0"/>
 				<asteroid y="300" t="0.5"/>
@@ -513,8 +506,7 @@
 		</level>
 
 		<!-- LVL8 -->
-		<level layer1="layers/green.jpg" layer2="layers/fog.png" color="#003000" stars="70" music="spacesong.mod"
-		quote="Perhaps, on your way home,\nsomeone will pass you in the dark,\nand you will never know it...\nfor they will be from outer space.\n\n-- Criswell">
+		<level layer1="layers/green.jpg" layer2="layers/fog.png" color="#003000" stars="70" music="spacesong.mod">
 			<wait t="1"/>
 			<loop count="3">
 				<ship id="m1" y="90" t="1"/>

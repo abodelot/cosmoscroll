@@ -7,7 +7,7 @@
 
 
 LevelMenu::LevelMenu():
-	levels_(LevelManager::getInstance())
+	m_levels(LevelManager::getInstance())
 {
 	SetTitle(_t("menu.story.title"));
 	m_credits = new CreditCounterWidget(this);
@@ -15,11 +15,11 @@ LevelMenu::LevelMenu():
 	gui::FormLayout form(90, 120);
 	form.SetSpacing(10, 16);
 
-	opt_levels_ = new gui::OptionList(this);
-	form.AddRow(_t("menu.story.select"), opt_levels_);
+	m_opt_levels = new gui::OptionList(this);
+	form.AddRow(_t("menu.story.select"), m_opt_levels);
 
-	lab_progresion_ = new gui::Label(this, "");
-	form.AddRow(_t("menu.story.progression"), lab_progresion_);
+	m_lab_progresion = new gui::Label(this, "");
+	form.AddRow(_t("menu.story.progression"), m_lab_progresion);
 
 	gui::VBoxLayout layout(210, 240);
 	layout.Add(new CosmoButton(this, _t("menu.story.play")))->SetCallbackID(1);
@@ -31,25 +31,25 @@ LevelMenu::LevelMenu():
 void LevelMenu::OnFocus()
 {
 	m_credits->setCredits(UserSettings::getCredits());
-	size_t nb_levels = levels_.getLevelCount();
-	size_t current = levels_.getCurrent();
-	size_t last_unlocked = levels_.getLastUnlocked();
+	size_t nb_levels = m_levels.getLevelCount();
+	size_t current = m_levels.getCurrent();
+	size_t last_unlocked = m_levels.getLastUnlocked();
 
 	std::ostringstream progression;
 	progression << last_unlocked << "/" << nb_levels;
-	lab_progresion_->setString(progression.str());
+	m_lab_progresion->setString(progression.str());
 
 	// option widget
-	opt_levels_->Clear();
+	m_opt_levels->Clear();
 	for (size_t i = 1; i <= nb_levels; ++i)
 	{
 		bool activable = i <= last_unlocked;
 		if (activable)
 		{
-			opt_levels_->AddOption(std::to_string(i));
+			m_opt_levels->AddOption(std::to_string(i));
 		}
 	}
-	opt_levels_->Select(current - 1);
+	m_opt_levels->Select(current - 1);
 }
 
 
@@ -57,19 +57,34 @@ void LevelMenu::EventCallback(int id)
 {
 	switch (id)
 	{
+		// Back to main menu
 		case 0:
 			Game::getInstance().setNextScene(Game::SC_MainMenu);
 			break;
-		case 1: {
-			int selected_level = opt_levels_->GetSelectedOptionIndex() + 1;
-			levels_.setCurrent(selected_level);
-			levels_.initCurrentLevel();
 
+		// Launch selected level
+		case 1:
+		{
+			int selected_level = m_opt_levels->GetSelectedOptionIndex() + 1;
+			// Load selected level in the level manager
+			m_levels.setCurrent(selected_level);
+			m_levels.initCurrentLevel();
+
+#ifdef DEBUG
+	printf("level %u (music: %s)\n", selected_level, m_levels.getMusicName());
+	printf(" - available points: %d\n", m_levels.getTotalPoints());
+	printf(" - entities:         %d\n", m_levels.getSpawnQueueSize());
+	printf(" - duration:      %02d:%02d\n", (int) m_levels.getDuration() / 60, (int) m_levels.getDuration() % 60);
+#endif
+			// Init control panel
 			std::wstring s = I18n::templatize("panel.level", "{level}", selected_level);
 			ControlPanel::getInstance().SetGameInfo(s);
-			Game::getInstance().setNextScene(Game::SC_IntroLevelScene);
-			}
+			// Init entity manager
+			EntityManager::getInstance().InitMode(EntityManager::MODE_STORY);
+			Game::getInstance().setNextScene(Game::SC_InGameScene);
 			break;
+		}
+		// Armory menu
 		case 2:
 			Game::getInstance().setNextScene(Game::SC_ArmoryMenu);
 			break;

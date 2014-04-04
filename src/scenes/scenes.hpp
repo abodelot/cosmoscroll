@@ -14,7 +14,6 @@
 #include "scenes/arcade/BestScoresMenu.hpp"
 #include "scenes/story/LevelMenu.hpp"
 #include "scenes/story/ArmoryMenu.hpp"
-#include "scenes/story/IntroLevelScene.hpp"
 #include "scenes/options/OptionMenu.hpp"
 #include "scenes/options/KeyboardMenu.hpp"
 #include "scenes/options/JoystickMenu.hpp"

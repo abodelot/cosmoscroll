@@ -24,7 +24,6 @@ public:
 		SC_AboutMenu,
 		SC_LevelMenu,
 		SC_ArmoryMenu,
-		SC_IntroLevelScene,
 		SC_OptionMenu,
 		SC_KeyboardMenu,
 		SC_JoystickMenu,

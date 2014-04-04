@@ -19,7 +19,7 @@ void MessageSystem::write(const sf::String& str, const sf::Vector2f& pos, const 
 {
 	Node* node = new Node;
 	node->text.setFont(*s_font);
-	node->text.setCharacterSize(12);
+	node->text.setCharacterSize(10);
 	node->text.setString(str);
 	node->text.setPosition(pos);
 	node->text.setColor(color);
