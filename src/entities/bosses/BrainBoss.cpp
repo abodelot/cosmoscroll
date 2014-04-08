@@ -21,7 +21,7 @@ BrainBoss::BrainBoss():
 	brain.setDestructible(false);
 	addPart(brain, 0, 0);
 
-	Part eye(ID_EYE, 250);
+	Part eye(ID_EYE, 200);
 	m_eye_animator.setAnimation(eye, EntityManager::getInstance().getAnimation("brain-boss-eye"));
 	addPart(eye, 0, 30);
 
@@ -68,10 +68,12 @@ void BrainBoss::onUpdate(float frametime)
 			break;
 		}
 		case WAIT:
-			if (m_state_timer > 3.f)
+			if (m_state_timer > 4.f)
 			{
 				m_state_timer = 0.f;
 				m_state = WAIT_ATTACK;
+				if (getPartAt(1).getHP() < 100)
+					m_weapon.setMultiply(3);
 				m_weapon.setFireRate(12);
 			}
 			break;
@@ -81,6 +83,7 @@ void BrainBoss::onUpdate(float frametime)
 			{
 				m_state_timer = 0.f;
 				m_state = MOVE;
+				m_weapon.setMultiply(1);
 				m_weapon.setFireRate(4);
 			}
 			break;
@@ -90,10 +93,12 @@ void BrainBoss::onUpdate(float frametime)
 
 void BrainBoss::onPartDamaged(const Part& part)
 {
-	// Flash the whole entity when eye is damaged
+	// Flash the brain when eye is damaged
 	if (part.getID() == ID_EYE)
 	{
 		getPartAt(0).initDamageFlash();
+		// Keep the eye wide open
+		getPartAt(1).setTextureRect(m_eye_animator.getAnimation()->getFrame(5));
 	}
 }
 

@@ -128,8 +128,8 @@
 		<Unit filename="src/entities/bosses/BrainBoss.hpp" />
 		<Unit filename="src/entities/bosses/EvilBoss.cpp" />
 		<Unit filename="src/entities/bosses/EvilBoss.hpp" />
-		<Unit filename="src/entities/bosses/SplitBoss.cpp" />
-		<Unit filename="src/entities/bosses/SplitBoss.hpp" />
+		<Unit filename="src/entities/bosses/FlyingSaucerBoss.cpp" />
+		<Unit filename="src/entities/bosses/FlyingSaucerBoss.hpp" />
 		<Unit filename="src/entities/bosses/TentaculatBoss.cpp" />
 		<Unit filename="src/entities/bosses/TentaculatBoss.hpp" />
 		<Unit filename="src/entities/decors/Canon.cpp" />

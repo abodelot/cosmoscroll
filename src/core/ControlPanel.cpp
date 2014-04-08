@@ -326,7 +326,7 @@ void ControlPanel::ProgressBar::SetValue(int value)
 
 void ControlPanel::PowerUpSlot::Init(PowerUp::Type bonus_type, Type type, const sf::Font& font)
 {
-	icon_.setTexture(Resources::getTexture("entities/bonus.png"));
+	icon_.setTexture(Resources::getTexture("entities/power-ups.png"));
 	icon_.setTextureRect(PowerUp::getTextureRect(bonus_type));
 
 	label_.setCharacterSize(TEXT_SIZE);

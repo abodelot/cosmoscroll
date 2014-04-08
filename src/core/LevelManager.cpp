@@ -6,7 +6,7 @@
 #include "entities/EntityManager.hpp"
 #include "entities/Asteroid.hpp"
 #include "entities/Spaceship.hpp"
-#include "entities/bosses/SplitBoss.hpp"
+#include "entities/bosses/FlyingSaucerBoss.hpp"
 #include "entities/bosses/EvilBoss.hpp"
 #include "entities/bosses/TentaculatBoss.hpp"
 #include "entities/bosses/BrainBoss.hpp"
@@ -294,10 +294,10 @@ void LevelManager::parseEntities(const tinyxml2::XMLElement* elem)
 		}
 		else if (strcmp(tag_name, "boss") == 0)
 		{
-			if      (elem->Attribute("id", "tentaculat")) entity = new TentaculatBoss();
-			else if (elem->Attribute("id", "split"))      entity = new SplitBoss();
-			else if (elem->Attribute("id", "brain"))      entity = new BrainBoss();
-			else if (elem->Attribute("id", "evil"))       entity = new EvilBoss();
+			if      (elem->Attribute("id", "tentaculat"))    entity = new TentaculatBoss();
+			else if (elem->Attribute("id", "flying-saucer")) entity = new FlyingSaucerBoss();
+			else if (elem->Attribute("id", "brain"))         entity = new BrainBoss();
+			else if (elem->Attribute("id", "evil"))          entity = new EvilBoss();
 			else
 				std::cerr << "[levels] unknown boss id '" << elem->Attribute("id") << "' ignored" << std::endl;
 		}
