@@ -76,10 +76,10 @@ bool WeaponData::loadFromXml(tinyxml2::XMLElement* elem)
 
 std::wstring WeaponData::BuildDescriptionString() const
 {
-	std::wstring s = _t("item.weapon_info");
+	std::wstring s = _t("item.laser_info");
 	wstr_self_replace(s, L"{speed}", std::to_wstring(speed_));
 	wstr_self_replace(s, L"{dmg}", std::to_wstring(damage_));
-	wstr_self_replace(s, L"{rate}", std::to_wstring(fire_rate_));
+	wstr_self_replace(s, L"{rate}", std::to_wstring((int) fire_rate_));
 	return s;
 }
 

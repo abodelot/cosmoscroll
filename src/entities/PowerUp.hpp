@@ -3,7 +3,9 @@
 
 #include "Entity.hpp"
 
-
+/**
+ * Passive entity, can be picked up by the player
+ */
 class PowerUp: public Entity
 {
 public:

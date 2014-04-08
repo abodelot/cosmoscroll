@@ -12,7 +12,7 @@
 PowerUp::PowerUp(Type type):
 	m_type(type)
 {
-	setTexture(Resources::getTexture("entities/bonus.png"));
+	setTexture(Resources::getTexture("entities/power-ups.png"));
 	setTextureRect(getTextureRect(type));
 }
 
@@ -36,25 +36,25 @@ const std::wstring& PowerUp::getDescription() const
 	switch (m_type)
 	{
 		case HEALTH:
-			return _t("bonus.hp");
+			return _t("powerup.repair");
 		case SHIELD:
-			return _t("bonus.shield");
+			return _t("powerup.shield");
 		case COOLER:
-			return _t("bonus.cooler");
+			return _t("powerup.cooler");
 		case MISSILE:
-			return _t("bonus.missile");
+			return _t("powerup.missile");
 		case DOUBLE_SHOT:
-			return _t("bonus.double_shot");
+			return _t("powerup.double_shot");
 		case TRIPLE_SHOT:
-			return _t("bonus.triple_shot");
+			return _t("powerup.triple_shot");
 		case SPEED:
-			return _t("bonus.speed");
+			return _t("powerup.speed");
 		case SUPER_BANANA:
-			return _t("bonus.banana");
+			return _t("powerup.banana");
 		default:
 			break;
 	}
-	return _t("bonus.unknown");
+	return _t("error");
 }
 
 
@@ -66,7 +66,7 @@ PowerUp::Type PowerUp::getType() const
 
 sf::IntRect PowerUp::getTextureRect(Type type)
 {
-	// Bonus::Type enumeration has the same order than the spritesheet
+	// PowerUp::Type enumeration has the same order than the spritesheet
 	return sf::IntRect(type * SIZE, 0, SIZE, SIZE);
 }
 

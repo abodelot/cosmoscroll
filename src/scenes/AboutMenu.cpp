@@ -19,7 +19,7 @@ AboutMenu::AboutMenu()
 	about_text->setPosition(120, 100);
 	about_text->setCharacterSize(30);
 
-	new gui::Image(this, Resources::getTexture("gui/libs-logo.png"), 430, 110);
+	new gui::Image(this, Resources::getTexture("gui/libs-logo.png"), 410, 110);
 
 	gui::Button* b = new CosmoButton(this, _t("menu.back"));
 	b->setPosition(210, 340);

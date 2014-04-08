@@ -105,15 +105,15 @@ panel.record = Rekord: {record}
 panel.timer = Zeit: {min}:{sec}
 panel.points = Punkte: {points}
 
-# Bonus
-bonus.hp = Lebenspunkte
-bonus.shield = Schirm
-bonus.cooler = Kühler
-bonus.missile = Rakete
-bonus.double_shot = Doppelschuss
-bonus.triple_shot = Tripelschuss
-bonus.speed = Speed
-bonus.banana = Super Banana!
+# Power-ups
+powerup.repair = Lebenspunkte
+powerup.shield = Schirm
+powerup.cooler = Eiswürfel
+powerup.missile = Rakete
+powerup.double_shot = Doppelschuss
+powerup.triple_shot = Tripelschuss
+powerup.speed = Speed
+powerup.banana = Super Banana!
 
 # Actions
 action.up = Hoch
@@ -121,17 +121,15 @@ action.down = Runter
 action.left = Links
 action.right = Rechts
 action.laser = Laserkanone
-action.plasma = Plasma-Kanone
 action.pause = Pause
-action.cooler = Nutze Kühlerbonus
-action.missile = Nutze Raketenbonus
+action.cooler = Nutze Eiswürfel
+action.missile = Nutze Raketen
 
 # Items
 item.shield = Energie Schild
 item.shield_info = Schutzpunkte: {points}
 item.laser = Laserkanone
-item.plasma = Plasma-Kanone
-item.weapon_info = Damage: {dmg}\nGeschwindigkeit: {speed}\nRate: {rate} Schuss/s
+item.laser_info = Damage: {dmg}\nGeschwindigkeit: {speed}\nRate: {rate} Schuss/s
 item.engine = Motor
 item.engine_info = Geschwindigkeit: {speed}
 item.heatsink = Heatsink

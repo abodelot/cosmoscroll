@@ -16,9 +16,6 @@ class Entity;
 class LevelManager
 {
 public:
-	/**
-	 * @return unique instance
-	 */
 	static LevelManager& getInstance();
 
 	/**
@@ -68,31 +65,31 @@ public:
 	 * Retrieve attributes from the currently loaded level
 	 */
 
-	// Text description
+	/// Text description
 	const char* getQuote() const;
 
-	// Bottom background image
+	/// Bottom background image
 	const sf::Texture* getLayerImage1() const;
 
-	// Top background image
+	/// Top background image
 	const sf::Texture* getLayerImage2() const;
 
-	// Optionnal color for background image
+	/// Optionnal color for background image
 	sf::Color getLayerColor() const;
 
-	// Size in pixel at the top and bottom of the screen occupied by decor
+	/// Size in pixel at the top and bottom of the screen occupied by decor
 	int getDecorHeight() const;
 
-	// Scrolling stars quantity
+	/// Scrolling stars quantity
 	int getStarsCount() const;
 
-	// Background music file
+	/// Background music file
 	const char* getMusicName() const;
 
-	// Current level duration in seconds
+	/// Current level duration in seconds
 	float getDuration() const;
 
-	// Total amount of points available in the current level
+	/// Total amount of points available in the current level
 	int getTotalPoints() const;
 
 private:

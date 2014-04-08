@@ -10,7 +10,7 @@
 
 #define PROG_BAR_WIDTH       110
 #define PROG_BAR_HEIGHT      10
-#define PROG_BAR_TEXT_LENGTH 60   // longueur du texte
+#define PROG_BAR_TEXT_LENGTH 60   // label length (pixels) on progress bars
 
 #define Y_LINE_1       10 // Y première ligne
 #define Y_LINE_2       30 // Y deuxième ligne
