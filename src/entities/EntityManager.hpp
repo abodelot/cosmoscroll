@@ -24,7 +24,7 @@ class EntityManager: public sf::Drawable, public sf::Transformable
 public:
 	// background image speed for parallax scrolling
 	static const int BACKGROUND_SPEED = 20;
-	static const int FOREGROUND_SPEED = 60;
+	static const int FOREGROUND_SPEED = 80;
 
 	enum Mode
 	{

@@ -92,16 +92,17 @@
 			<ship id="b1" y="250" t="1.5"/>
 			<ship id="b1" y="150" t="1.5"/>
 			<ship id="b1" y="350" t="1.5"/>
+			<ship id="b1c" y="200" t="1"/>
 			<asteroid y="130" t="2"/>
 			<asteroid y="280" t="0.5"/>
 			<asteroid y="70" t="0.5"/>
 			<asteroid y="200" t="0.5"/>
-			<ship id="b2" y="100" t="2"/>
+			<ship id="m1" y="100" t="2"/>
 			<asteroid y="240" t="0.5"/>
-			<ship id="b2" y="300" t="2"/>
+			<ship id="m1" y="300" t="2"/>
 			<asteroid y="180" t="0.5"/>
 			<asteroid y="320" t="0.5"/>
-			<ship id="b2" y="200" t="2"/>
+			<ship id="m1" y="200" t="2"/>
 			<wait t="4"/>
 			<call func="b1_triad"/>
 			<loop count="2">
@@ -120,9 +121,11 @@
 			<ship id="b1" y="300" t="1"/>
 			<call func="b1_triad"/>
 			<wait t="2"/>
+			<ship id="b1c" y="50"/>
 			<call func="b1c_quint"/>
-			<wait t="3"/>
-			<call func="b2_triad"/>
+			<ship id="b2c" y="200" t="5"/>
+			<ship id="b2c" y="150" t="2"/>
+			<ship id="b2c" y="250"/>
 		</level>
 
 		<!-- LVL2 -->
@@ -197,8 +200,8 @@
 			<ship id="b2" y="200" t="7"/>
 			<ship id="b2" y="100" t="2"/>
 			<decor id="canon" t="2"/>
-			<decor id="canon" t="4"/>
-			<decor id="canon" t="4"/>
+			<decor id="canon" t="3"/>
+			<decor id="canon" t="3"/>
 			<ship id="b1" y="200" t="7"/>
 			<ship id="b1" y="100"/>
 			<call func="scoot_line_3"/>
@@ -213,7 +216,7 @@
 			<ship id="b2" y="100" t="1.2"/>
 			<ship id="b2" y="30" t="1.2"/>
 			<ship id="b2" y="260" t="1.2"/>
-			<wait t="3"/>
+			<wait t="4"/>
 			<loop count="2">
 				<ship id="b1c" y="90" t="1"/>
 				<ship id="b1c" y="120"/>
@@ -234,7 +237,7 @@
 				<ship id="b1c" y="300"/>
 				<ship id="b1c" y="330"/>
 			</loop>
-			<ship id="b2" y="340" t="5.2"/>
+			<ship id="b2" y="340" t="6"/>
 			<ship id="b2" y="140" t="1.2"/>
 			<ship id="b2" y="300" t="1.2"/>
 			<ship id="b2" y="220" t="1.2"/>
@@ -250,7 +253,7 @@
 			<ship id="b2" y="280" t="1.2"/>
 			<ship id="b1" y="300" t="1.2"/>
 			<ship id="b2" y="340" t="1.2"/>
-			<decor id="gate" y="0"/>
+			<decor id="gate" y="0" t="1"/>
 			<ship id="b2" y="250" t="7"/>
 			<ship id="b2" y="100" t="3"/>
 			<ship id="b1" y="200"/>
@@ -284,9 +287,8 @@
 			<ship id="b2" y="160"/>
 			<wait t="4"/>
 			<call func="interceptors_5"/>
-			<decor id="gate" y="0"/>
-			<wait t="3"/>
-			<ship id="b2" y="200" t="5"/>
+			<decor id="gate" y="0" t="1"/>
+			<ship id="b2" y="200" t="7"/>
 			<ship id="b2" y="240" t="2"/>
 			<decor id="guntower" />
 			<ship id="b2" y="160"/>
@@ -305,7 +307,7 @@
 			<ship id="m1" y="150" />
 			<decor id="canon" t="1"/>
 			<loop count="3">
-				<decor id="canon" t="3"/>
+				<decor id="canon" t="2"/>
 			</loop>
 			<wait t="6"/>
 			<loop count="2">
@@ -323,7 +325,7 @@
 				<wait t="3"/>
 				<call func="interceptors_5"/>
 			</loop>
-			<decor id="gate" y="0"/>
+			<decor id="gate" y="0" t="1"/>
 			<ship id="b2" y="200" t="6"/>
 			<ship id="b2" y="240" t="2"/>
 			<ship id="b2" y="160"/>

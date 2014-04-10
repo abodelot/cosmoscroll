@@ -32,7 +32,7 @@ Game& Game::getInstance()
 
 Game::Game():
 	m_fullscreen(false),
-	m_vsync(true),
+	m_vsync(false),
 	m_running(true)
 {
 	// Scenes will be allocated only if requested
@@ -78,11 +78,10 @@ void Game::loadResources(const std::string& data_path)
 	Resources::setDataPath(resources_dir);
 
 	// Splash screen
+	createWindow();
 	sf::Sprite s(Resources::getTexture("gui/cosmoscroll-logo.png"));
-	m_window.create(sf::VideoMode(s.getTextureRect().width, s.getTextureRect().height), APP_TITLE, sf::Style::None);
-	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-	m_window.setPosition({(desktop.width - m_window.getSize().x) / 2,
-	                      (desktop.height - m_window.getSize().y) / 2});
+	s.setPosition({(APP_WIDTH - s.getTextureRect().width) / 2.f,
+				   (APP_HEIGHT - s.getTextureRect().height) / 2.f});
 	m_window.draw(s);
 	m_window.display();
 
@@ -135,6 +134,13 @@ bool Game::loadConfig()
 		config.Get("vsync", m_vsync);
 		config.Get("fullscreen", m_fullscreen);
 
+		if (m_vsync)
+			m_window.setVerticalSyncEnabled(m_vsync);
+
+		// Recreate the window if fullscreen
+		if (m_fullscreen)
+			createWindow();
+
 		// User settings & player attributes
 		UserSettings::loadFromConfig(config);
 
@@ -171,8 +177,6 @@ void Game::writeConfig() const
 
 int Game::run()
 {
-	createWindow();
-
 	// Set the first displayed scene at launch
 	setNextScene(SC_IntroScene);
 

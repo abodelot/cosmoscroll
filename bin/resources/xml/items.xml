@@ -7,7 +7,7 @@
 			<weapon level="3" heat_cost="2.3" fire_rate="8" damage="3" speed="440" price="200" />
 		</class>
 		<class id="laser-green" image="ammo/laser-green.png" sound="laser-green.ogg">
-			<weapon level="1" heat_cost="1" fire_rate="2" damage="1" speed="320" />
+			<weapon level="1" heat_cost="1" fire_rate="2" damage="1" speed="300" />
 		</class>
 		<class id="laser-pink" image="ammo/laser-pink.png" sound="laser-pink.ogg">
 			<weapon level="1" heat_cost="1" fire_rate="1" damage="2" speed="340" />
@@ -24,10 +24,9 @@
 		</class>
 	</weapons>
 	<shields>
-		<shield level="1" points="2" />
-		<shield level="2" points="3" price="100" />
-		<shield level="3" points="4" price="200" />
-		<shield level="4" points="5" price="350" />
+		<shield level="1" points="3" />
+		<shield level="2" points="4" price="100" />
+		<shield level="3" points="5" price="200" />
 	</shields>
 	<engines>
 		<engine level="1" speed="180" />
