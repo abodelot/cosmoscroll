@@ -1,6 +1,7 @@
 #include "CreditCounterWidget.hpp"
 #include "gui/Menu.hpp"
 #include "utils/I18n.hpp"
+#include "utils/SFML_Helper.hpp"
 #include "core/Resources.hpp"
 
 CreditCounterWidget::CreditCounterWidget(gui::Menu* parent):
@@ -8,9 +9,14 @@ CreditCounterWidget::CreditCounterWidget(gui::Menu* parent):
 {
 	m_background.setTexture(Resources::getTexture("gui/credit-counter.png"));
 
-	m_credits.setFont(*parent->GetWidgetStyle().global_font);
-	m_credits.setCharacterSize(18);
-	m_credits.setPosition(16, 10);
+	m_credit_label.setFont(*parent->GetWidgetStyle().global_font);
+	m_credit_label.setCharacterSize(18);
+	m_credit_label.setString(_t("menu.story.credits"));
+	m_credit_label.setPosition((sfh::width(m_background) - sfh::width(m_credit_label)) / 2, 10);
+
+	m_credit_value.setFont(*parent->GetWidgetStyle().global_font);
+	m_credit_value.setCharacterSize(20);
+
 
 	setPosition(444, 90);
 }
@@ -18,7 +24,8 @@ CreditCounterWidget::CreditCounterWidget(gui::Menu* parent):
 
 void CreditCounterWidget::setCredits(int credits)
 {
-	m_credits.setString(I18n::templatize("menu.story.credits", "{credits}", credits));
+	m_credit_value.setString(std::to_string(credits));
+	m_credit_value.setPosition((sfh::width(m_background) - sfh::width(m_credit_value)) / 2, 26);
 }
 
 
@@ -26,5 +33,6 @@ void CreditCounterWidget::draw(sf::RenderTarget& target, sf::RenderStates states
 {
 	states.transform *= getTransform();
 	target.draw(m_background, states);
-	target.draw(m_credits, states);
+	target.draw(m_credit_label, states);
+	target.draw(m_credit_value, states);
 }

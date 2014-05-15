@@ -15,7 +15,7 @@ menu.main.quit = Beenden
 
 # Story menu
 menu.story.title = Story-Modus
-menu.story.credits = Kredits:\n{credits}
+menu.story.credits = Kredits:
 menu.story.select = Wählen Sie ein Level:
 menu.story.progression = Fortschritt:
 menu.story.level = Level {number}
@@ -29,8 +29,7 @@ armory.item_current_level = Aktuelle Ebene: {level}
 armory.item_next_level = Nächste Ebene: {level}
 armory.max_level = Max Ebene erreicht
 armory.buy = Kaufen
-armory.info = Select eine Komponente am verbessern
-armory.item_upgraded = {item} Ebene {level} gekauft
+armory.upgrade_item = Upgrade auf Ebene {level}
 
 # Pause menu
 menu.pause.title = Pause
@@ -129,11 +128,11 @@ action.missile = Nutze Raketen
 item.shield = Energie Schild
 item.shield_info = Schutzpunkte: {points}
 item.laser = Laserkanone
-item.laser_info = Damage: {dmg}\nGeschwindigkeit: {speed}\nRate: {rate} Schuss/s
+item.laser_info = Damage: {dmg}
 item.engine = Motor
 item.engine_info = Geschwindigkeit: {speed}
 item.heatsink = Heatsink
 item.heatsink_info = max Hitze: {heat}
 item.hull = Panzerung
-item.hull_info = Lebenspunkte: {hp}
+item.hull_info = Trefferpunkte: {hp}
 item.price = Preis: {price} Kredits

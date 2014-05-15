@@ -2,9 +2,9 @@
 <items>
 	<weapons>
 		<class id="laser-red" image="ammo/laser-red.png" sound="laser-red.ogg">
-			<weapon level="1" heat_cost="1.5" fire_rate="8" damage="1" speed="400" />
+			<weapon level="1" heat_cost="1.5" fire_rate="8" damage="1" speed="420" />
 			<weapon level="2" heat_cost="1.9" fire_rate="8" damage="2" speed="420" price="50" />
-			<weapon level="3" heat_cost="2.3" fire_rate="8" damage="3" speed="440" price="200" />
+			<weapon level="3" heat_cost="2.3" fire_rate="8" damage="3" speed="420" price="200" />
 		</class>
 		<class id="laser-green" image="ammo/laser-green.png" sound="laser-green.ogg">
 			<weapon level="1" heat_cost="1" fire_rate="2" damage="1" speed="300" />

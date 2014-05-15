@@ -1,6 +1,21 @@
 #include <ctime>
 #include "SFML_Helper.hpp"
 
+namespace sfh
+{
+
+sf::Vector2f size(const sf::Sprite& sprite)
+{
+	const sf::IntRect& rect = sprite.getTextureRect();
+	return sf::Vector2f(rect.width * sprite.getScale().x, rect.height * sprite.getScale().y);
+}
+
+
+
+
+}
+
+
 namespace xsf
 {
 

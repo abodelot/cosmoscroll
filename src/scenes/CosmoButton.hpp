@@ -21,7 +21,7 @@ private:
 
 	static const sf::Texture* img_;
 
-	xsf::Sprite background_;
+	sf::Sprite background_;
 };
 
 #endif // COSMOBUTTON_HPP

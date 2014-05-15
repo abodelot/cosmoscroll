@@ -17,7 +17,8 @@ private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	sf::Sprite m_background;
-	sf::Text   m_credits;
+	sf::Text   m_credit_label;
+	sf::Text   m_credit_value;
 };
 
 #endif // CREDITCOUNTERWIDGET_HPP

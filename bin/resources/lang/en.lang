@@ -14,7 +14,7 @@ menu.main.quit = Quit
 
 # Story menu
 menu.story.title = Story mode
-menu.story.credits = Credits:\n{credits}
+menu.story.credits = Credits:
 menu.story.select = Select a level:
 menu.story.progression = Progression:
 menu.story.level = Level {number}
@@ -28,8 +28,7 @@ armory.item_current_level = Current level: {level}
 armory.item_next_level = Next level: {level}
 armory.max_level = Max level reached
 armory.buy = Buy
-armory.info = Select a component to upgrade
-armory.item_upgraded = {item} level {level} acquired
+armory.upgrade_item = Upgrade to level {level}
 
 # Pause menu
 menu.pause.title = Paused
@@ -128,11 +127,11 @@ action.missile = Use Missile
 item.shield = Force shield
 item.shield_info = Protection points: {points}
 item.laser = Laser cannon
-item.laser_info = Damage: {dmg}\nSpeed: {speed}\nRate of fire: {rate} round/s
+item.laser_info = Damage: {dmg}
 item.engine = Engine
 item.engine_info = Speed: {speed}
 item.heatsink = Heat sink
 item.heatsink_info = Max heat: {heat}
 item.hull = Ship hull
-item.hull_info = Health points: {hp}
+item.hull_info = Hit points: {hp}
 item.price = Price: {price} credits

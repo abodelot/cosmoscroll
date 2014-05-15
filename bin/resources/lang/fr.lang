@@ -14,7 +14,7 @@ menu.main.quit = Quitter
 
 # Menu Histoire
 menu.story.title = Mode Histoire
-menu.story.credits = Crédits :\n{credits}
+menu.story.credits = Crédits :
 menu.story.select = Sélectionnez un niveau :
 menu.story.progression = Avancement :
 menu.story.level = Niveau {number}
@@ -28,8 +28,7 @@ armory.item_current_level = Niveau actuel : {level}
 armory.item_next_level = Prochain niveau : {level}
 armory.max_level = Niveau max atteint
 armory.buy = Acheter
-armory.info = Sélectionnez un composant à améliorer
-armory.item_upgraded = {item} niveau {level} acheté
+armory.upgrade_item = Passer au niveau {level}
 
 # Menu pause
 menu.pause.title = Pause
@@ -128,7 +127,7 @@ action.missile = Utiliser Missile
 item.shield = Bouclier énergétique
 item.shield_info = Points de protection : {points}
 item.laser = Canon laser
-item.laser_info = Dégâts : {dmg}\nVitesse : {speed}\nCadence de tir : {rate} coups/s
+item.laser_info = Dégâts : {dmg}
 item.engine = Moteur
 item.engine_info = Vitesse : {speed}
 item.heatsink = Dissipateur thermique

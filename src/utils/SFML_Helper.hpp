@@ -4,6 +4,38 @@
 #include <cstdlib>
 #include <SFML/Graphics.hpp>
 
+namespace sfh
+{
+
+sf::Vector2f size(const sf::Sprite& sprite);
+
+template <class T>
+float width(const T& obj)
+{
+	return obj.getLocalBounds().width * obj.getScale().x;
+}
+
+template <class T>
+inline float height(const T& obj)
+{
+	return obj.getLocalBounds().height * obj.getScale().y;
+}
+
+template <class T>
+float right(const T& obj)
+{
+	return obj.getPosition().x + width(obj);
+}
+
+template <class T>
+inline float bottom(const T& obj)
+{
+	return obj.getPosition().y + height(obj);
+}
+
+}
+
+
 namespace xsf
 {
 

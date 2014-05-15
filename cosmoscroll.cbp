@@ -219,8 +219,8 @@
 		<Unit filename="src/scenes/story/CreditCounterWidget.hpp" />
 		<Unit filename="src/scenes/story/LevelMenu.cpp" />
 		<Unit filename="src/scenes/story/LevelMenu.hpp" />
-		<Unit filename="src/scenes/story/ShipPartWidget.cpp" />
-		<Unit filename="src/scenes/story/ShipPartWidget.hpp" />
+		<Unit filename="src/scenes/story/ShipItemWidget.cpp" />
+		<Unit filename="src/scenes/story/ShipItemWidget.hpp" />
 		<Unit filename="src/utils/Error.cpp" />
 		<Unit filename="src/utils/Error.hpp" />
 		<Unit filename="src/utils/FileSystem.cpp" />

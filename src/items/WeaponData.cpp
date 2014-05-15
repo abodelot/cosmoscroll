@@ -1,7 +1,6 @@
 #include "WeaponData.hpp"
 #include "Weapon.hpp"
 #include "core/Resources.hpp"
-#include "utils/StringUtils.hpp"
 #include "utils/I18n.hpp"
 #include "utils/tinyxml/tinyxml2.h"
 
@@ -76,11 +75,12 @@ bool WeaponData::loadFromXml(tinyxml2::XMLElement* elem)
 
 std::wstring WeaponData::BuildDescriptionString() const
 {
-	std::wstring s = _t("item.laser_info");
-	wstr_self_replace(s, L"{speed}", std::to_wstring(speed_));
-	wstr_self_replace(s, L"{dmg}", std::to_wstring(damage_));
-	wstr_self_replace(s, L"{rate}", std::to_wstring((int) fire_rate_));
-	return s;
+	// Hide other properties (?)
+	//wstr_self_replace(s, L"{speed}", std::to_wstring(speed_));
+	//wstr_self_replace(s, L"{dmg}", std::to_wstring(damage_));
+	//wstr_self_replace(s, L"{rate}", std::to_wstring((int) fire_rate_));
+
+	return I18n::templatize("item.laser_info", "{dmg}", damage_);
 }
 
 

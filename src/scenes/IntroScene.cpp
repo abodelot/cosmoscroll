@@ -66,8 +66,7 @@ void IntroScene::Update(float frametime)
 	ship_->move(170 * frametime, 25 * frametime);
 	title_.scale(0.99, 0.99); // FIXME: make this FPS rate independant
 	// fading
-	title_.setColor(sf::Color(255, 255, 255,
-		(sf::Uint8) (255 * elapsed_ / DURATION)));
+	title_.setColor(sf::Color(255, 255, 255, (sf::Uint8) (255 * elapsed_ / DURATION)));
 
 	if (elapsed_ >= DURATION)
 	{
