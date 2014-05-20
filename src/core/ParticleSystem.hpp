@@ -5,7 +5,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "entities/EntityManager.hpp"
-#include "utils/SFML_Helper.hpp"
 
 /**
  * Moteur de particules pour gérer des effets graphiques (singleton)
@@ -121,7 +120,7 @@ private:
 		}
 	protected:
 		int speed_;
-		xsf::Sprite sprite_;
+		sf::Sprite sprite_;
 	};
 
 	class CenteredStar: public Star
@@ -156,7 +155,7 @@ private:
 		}
 	private:
 		const sf::Sprite* handle_; // hack... le sprite cible sert de handle
-		xsf::Sprite sprite_;
+		sf::Sprite sprite_;
 		float angle_; // en radians
 	};
 
@@ -180,7 +179,7 @@ private:
 		}
 	private:
 		int y_offset_;
-		xsf::Sprite sprite_;
+		sf::Sprite sprite_;
 		const sf::Sprite* handle_;
 		float timer_;
 		sf::Vector2f vspeed_;

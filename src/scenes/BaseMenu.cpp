@@ -2,6 +2,7 @@
 #include "core/Constants.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
+#include "utils/SFML_Helper.hpp"
 
 
 gui::WidgetStyle BaseMenu::global_style_;
@@ -32,7 +33,7 @@ void BaseMenu::Update(float frametime)
 	{
 		y = APP_HEIGHT;
 	}
-	scrolling_background_.setY(y);
+	scrolling_background_.setPosition(0, y);
 
 	// updating gui
 	gui::Menu::Update(frametime);
@@ -43,7 +44,7 @@ void BaseMenu::Show(sf::RenderTarget& target) const
 {
 	// drawing background twice for scrolling purpose
 	target.draw(scrolling_background_);
-	scrolling_background_.setOrigin(0.f, scrolling_background_.getHeight());
+	scrolling_background_.setOrigin(0.f, sfh::height(scrolling_background_));
 	target.draw(scrolling_background_);
 	scrolling_background_.setOrigin(0.f, 0.f);
 
@@ -58,7 +59,7 @@ void BaseMenu::SetTitle(const sf::String& text, int y)
 	title_.setFont(*GetWidgetStyle().global_font);
 	title_.setCharacterSize(40);
 	title_.setString(text);
-	title_.setPosition((APP_WIDTH - title_.getWidth()) / 2, y);
+	title_.setPosition((APP_WIDTH - sfh::width(title_)) / 2, y);
 }
 
 

@@ -2,7 +2,6 @@
 #define GUI_LABEL_HPP
 
 #include "Widget.hpp"
-#include "utils/SFML_Helper.hpp"
 
 namespace gui
 {
@@ -34,7 +33,7 @@ private:
 	// inherited
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	xsf::Text text_;
+	sf::Text text_;
 };
 
 }

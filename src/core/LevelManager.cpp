@@ -175,7 +175,7 @@ const sf::Texture* LevelManager::getLayerImage2() const
 sf::Color LevelManager::getLayerColor() const
 {
 	const char* p = getCurrentLevelElement()->Attribute("color");
-	return p != NULL ? xsf::hexa_to_color(p) : sf::Color::White;
+	return p != NULL ? sfh::hexa_to_color(p) : sf::Color::White;
 }
 
 

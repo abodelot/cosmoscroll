@@ -3,6 +3,7 @@
 #include "core/ParticleSystem.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
+#include "utils/SFML_Helper.hpp"
 #include "utils/Math.hpp"
 
 #define BASE_SPEED         80
@@ -12,7 +13,7 @@
 
 Asteroid::Asteroid(Size size, float angle):
 	m_size(size),
-	m_rotation_speed(xsf::random(ROTATION_SPEED_MIN, ROTATION_SPEED_MAX))
+	m_rotation_speed(sfh::random(ROTATION_SPEED_MIN, ROTATION_SPEED_MAX))
 {
 	setHP(size * 2 + 1);
 	setTexture(Resources::getTexture("entities/asteroids.png"));
@@ -47,7 +48,7 @@ void Asteroid::onDestroy()
 			// Create 3 medium asteroids
 			for (int i = 0; i < 3; ++i)
 			{
-				Asteroid* asteroid = new Asteroid(MEDIUM, xsf::random(0, 360));
+				Asteroid* asteroid = new Asteroid(MEDIUM, sfh::random(0, 360));
 				asteroid->setPosition(pos);
 				EntityManager::getInstance().addEntity(asteroid);
 			}
@@ -56,7 +57,7 @@ void Asteroid::onDestroy()
 			// Create 3 small asteroids
 			for (int i = 0; i < 3; ++i)
 			{
-				Asteroid* asteroid = new Asteroid(SMALL, xsf::random(0, 360));
+				Asteroid* asteroid = new Asteroid(SMALL, sfh::random(0, 360));
 				asteroid->setPosition(pos);
 				EntityManager::getInstance().addEntity(asteroid);
 			}
@@ -72,7 +73,7 @@ void Asteroid::onDestroy()
 void Asteroid::setRandomImage()
 {
 
-	int x = xsf::random(0, 5); // nb sprites = 6
+	int x = sfh::random(0, 5); // nb sprites = 6
 	switch (m_size)
 	{
 		case BIG:

@@ -2,6 +2,7 @@
 
 #include "OptionList.hpp"
 #include "Menu.hpp"
+#include "utils/SFML_Helper.hpp"
 
 #define ARROW_MIN_SCALE   0.5f
 #define ARROW_MAX_SCALE   1.1f
@@ -86,7 +87,7 @@ void OptionList::AddOption(const sf::String& option)
 
 void OptionList::AddOption(const sf::String& option, const std::string& value)
 {
-	xsf::Text str;
+	sf::Text str;
 	str.setString(option);
 	str.setCharacterSize(text_size_);
 	str.setColor(GetOwner()->GetWidgetStyle().label_text_color);
@@ -97,14 +98,14 @@ void OptionList::AddOption(const sf::String& option, const std::string& value)
 		current_opt_ = 0;
 	}
 	// resize widget if needed
-	int width = str.getWidth();
+	int width = sfh::width(str);
 	if (width > (int) max_opt_width_)
 	{
 		max_opt_width_ = width;
 		BuildBoxes();
 	}
-	str.setX(ComputeIndentAlign(str));
-	std::pair<xsf::Text, std::string> pair(str, value);
+	str.setPosition(ComputeIndentAlign(str));
+	std::pair<sf::Text, std::string> pair(str, value);
 	options_.push_back(pair);
 }
 
@@ -172,10 +173,9 @@ void OptionList::Clear()
 void OptionList::SetAlign(Align::EAlign align)
 {
 	align_ = align;
-	for (std::vector<std::pair<xsf::Text, std::string> >::iterator it = options_.begin();
-		it != options_.end(); ++it)
+	for (std::vector<Item>::iterator it = options_.begin(); it != options_.end(); ++it)
 	{
-		it->first.setX(ComputeIndentAlign(it->first));
+		it->first.setPosition(ComputeIndentAlign(it->first));
 	}
 }
 
@@ -260,19 +260,22 @@ void OptionList::Update(float frametime)
 }
 
 
-int OptionList::ComputeIndentAlign(const xsf::Text& option) const
+sf::Vector2f OptionList::ComputeIndentAlign(const sf::Text& option) const
 {
-	int base = text_size_ + BOX_PADDING * 3;
+	int x = text_size_ + BOX_PADDING * 3;
+	int y = (GetHeight() - sfh::height(option)) / 2;
 	switch (align_)
 	{
-		case Align::LEFT:
-			return base;
 		case Align::CENTER:
-			return base + (max_opt_width_ - option.getWidth()) / 2;
+			x += (max_opt_width_ - sfh::width(option)) / 2;
+			break;
 		case Align::RIGHT:
-			return base + max_opt_width_ - option.getWidth();
+			x += max_opt_width_ - sfh::width(option);
+			break;
+		default:
+			break;
 	}
-	return 0;
+	return sf::Vector2f(x, y);
 }
 
 

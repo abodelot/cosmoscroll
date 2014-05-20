@@ -1,5 +1,6 @@
 #include "Label.hpp"
 #include "Menu.hpp"
+#include "utils/SFML_Helper.hpp"
 
 using namespace gui;
 
@@ -15,14 +16,14 @@ Label::Label(Menu* owner, const sf::String& text, int x, int y) :
 	text_.setPosition(0, 0);
 
 	setPosition(x, y);
-	Resize(text_.getWidth(), text_.getHeight());
+	Resize(sfh::width(text_), sfh::height(text_));
 }
 
 
 void Label::setString(const sf::String& text)
 {
 	text_.setString(text);
-	Resize(text_.getWidth(), text_.getHeight());
+	Resize(sfh::width(text_), sfh::height(text_));
 }
 
 

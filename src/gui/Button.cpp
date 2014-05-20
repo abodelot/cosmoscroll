@@ -1,5 +1,6 @@
 #include "Button.hpp"
 #include "Menu.hpp"
+#include "utils/SFML_Helper.hpp"
 
 using namespace gui;
 
@@ -10,8 +11,8 @@ Button::Button(Menu* owner, const sf::String& text, int w, int h) :
 	text_.setString(text);
 
 	// calcul du coin inférieur droit
-	int width = w == -1 ? text_.getWidth() : w;
-	int height = h == -1 ? text_.getHeight() : h;
+	int width = w == -1 ? sfh::width(text_) : w;
+	int height = h == -1 ? sfh::height(text_) : h;
 
 	Resize(width, height);
 	SetAlign(Align::CENTER);
@@ -39,18 +40,20 @@ void Button::SetTextPadding(int x, int y)
 
 void Button::SetAlign(Align::EAlign align)
 {
+	float x = 0;
 	switch (align)
 	{
 		case Align::LEFT:
-			text_.setX(0);
+			x = 0;
 			break;
 		case Align::RIGHT:
-			text_.setX(GetWidth() - text_.getWidth());
+			x = GetWidth() - sfh::width(text_);
 			break;
 		case Align::CENTER:
-			text_.setX((GetWidth() - text_.getWidth()) / 2);
+			x = (GetWidth() - sfh::width(text_)) / 2;
 			break;
 	}
+	text_.setPosition((int) x, (int) (GetHeight() - sfh::height(text_)) / 2);
 	align_ = align;
 }
 

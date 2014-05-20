@@ -4,12 +4,13 @@
 #include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
 #include "utils/I18n.hpp"
+#include "utils/SFML_Helper.hpp"
 
 
 MainMenu::MainMenu()
 {
 	title_.setTexture(Resources::getTexture("gui/cosmoscroll-logo.png"));
-	title_.setPosition((APP_WIDTH - title_.getWidth()) / 2, 12);
+	title_.setPosition((APP_WIDTH - sfh::width(title_)) / 2, 12);
 
 	gui::VBoxLayout layout(210, 120);
 	layout.SetSpacing(0, 10);

@@ -4,8 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include "entities/EntityManager.hpp"
 #include "entities/PowerUp.hpp"
-#include "utils/SFML_Helper.hpp"
-
 
 /**
  * HUD: panel displaying various data about player status, current level, ...
@@ -100,10 +98,10 @@ private:
 		// position de l'ensemble label/bar
 		void setPosition(int x, int y);
 
-		xsf::Text label_;
+		sf::Text label_;
 
 		sf::RectangleShape bar_;
-		xsf::Text value_;
+		sf::Text value_;
 		int max_value_;
 	};
 
@@ -145,8 +143,8 @@ private:
 	EntityManager::Mode game_mode_;
 	// story
 	int level_duration_;
-	xsf::Sprite level_cursor_;
-	xsf::Sprite level_bar_;
+	sf::Sprite level_cursor_;
+	sf::Sprite level_bar_;
 	// arcade
 	sf::Text str_points_;
 	sf::Sprite bar_mask_;

@@ -25,7 +25,7 @@ void PowerUp::collides(Entity& entity)
 
 void PowerUp::dropRandom(const sf::Vector2f& position)
 {
-	PowerUp* powerup = new PowerUp((Type) xsf::random(0, POWERUP_COUNT - 1));
+	PowerUp* powerup = new PowerUp((Type) sfh::random(0, POWERUP_COUNT - 1));
 	powerup->setPosition(position);
 	EntityManager::getInstance().addEntity(powerup);
 }

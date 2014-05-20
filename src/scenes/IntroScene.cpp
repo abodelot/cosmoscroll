@@ -2,9 +2,10 @@
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "core/SoundSystem.hpp"
+#include "core/Resources.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Player.hpp"
-#include "core/Resources.hpp"
+#include "utils/SFML_Helper.hpp"
 
 #define DURATION    6.f
 #define JINGLE_TIME 2.f
@@ -19,9 +20,9 @@ IntroScene::IntroScene() :
 	sf::Texture& logo = Resources::getTexture("gui/cosmoscroll-logo.png");
 	logo.setSmooth(true);
 	title_.setTexture(logo);
-	title_.setOrigin(title_.getCenter());
+	title_.setOrigin(sfh::getCenter(title_));
 	title_.setPosition(APP_WIDTH / 2, APP_HEIGHT / 2);
-	title_.resize(title_.getWidth() * ZOOM_FACTOR, title_.getHeight() * ZOOM_FACTOR);
+	sfh::resize(title_, sfh::width(title_) * ZOOM_FACTOR, sfh::height(title_) * ZOOM_FACTOR);
 
 	// Display a player ship instance in the intro scene
 	ship_ = new Player();

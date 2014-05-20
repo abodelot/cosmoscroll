@@ -3,7 +3,7 @@
 #include "Player.hpp"
 
 #include "utils/Math.hpp"
-#include "utils/StringUtils.hpp"
+#include "utils/SFML_Helper.hpp"
 #include "core/ParticleSystem.hpp"
 #include "core/MessageSystem.hpp"
 
@@ -179,7 +179,7 @@ void Spaceship::onUpdate(float frametime)
 void Spaceship::onDestroy()
 {
 	Damageable::onDestroy();
-	if (xsf::random(1, DROP_LUCK) == 1)
+	if (sfh::random(1, DROP_LUCK) == 1)
 	{
 		PowerUp::dropRandom(getPosition());
 	}

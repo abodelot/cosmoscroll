@@ -5,7 +5,6 @@
 #include <string>
 
 #include "Widget.hpp"
-#include "utils/SFML_Helper.hpp"
 
 namespace gui
 {
@@ -75,7 +74,7 @@ private:
 	/**
 	 * Calculer l'indentation d'une option selon l'alignement courant
 	 */
-	int ComputeIndentAlign(const xsf::Text& option) const;
+	sf::Vector2f ComputeIndentAlign(const sf::Text& option) const;
 
 	int PreviousIndex() const;
 	int NextIndex() const;
@@ -84,7 +83,7 @@ private:
 	sf::RectangleShape inside_box_;
 	sf::ConvexShape left_arrow_;
 	sf::ConvexShape right_arrow_;
-	typedef std::pair<xsf::Text, std::string> Item;
+	typedef std::pair<sf::Text, std::string> Item;
 	std::vector<Item> options_;
 	int current_opt_;
 	size_t max_opt_width_;

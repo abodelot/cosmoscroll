@@ -3,7 +3,7 @@
 #include "ControlPanel.hpp"
 #include "core/Resources.hpp"
 #include "utils/StringUtils.hpp"
-
+#include "utils/SFML_Helper.hpp"
 #include "utils/I18n.hpp"
 
 #define BONUS_LENGTH 25   // offset label bonus slot
@@ -91,7 +91,7 @@ void ControlPanel::Init(EntityManager::Mode mode)
 	switch (mode)
 	{
 		case EntityManager::MODE_STORY:
-			level_cursor_.setX(LEVEL_BAR_X);
+			sfh::setX(level_cursor_, LEVEL_BAR_X);
 			break;
 		default:
 			break;
@@ -144,10 +144,10 @@ void ControlPanel::SetTimer(float seconds)
 		previous = rounded;
 		if (game_mode_ == EntityManager::MODE_STORY)
 		{
-			int max_progress = level_bar_.getWidth() - level_cursor_.getWidth();
+			int max_progress = sfh::width(level_bar_) - sfh::width(level_cursor_);
 			int progress = max_progress * rounded / level_duration_;
 			int x = LEVEL_BAR_X + (progress > max_progress ? max_progress : progress);
-			level_cursor_.setX(x);
+			sfh::setX(level_cursor_, x);
 		}
 	}
 }
@@ -319,7 +319,7 @@ void ControlPanel::ProgressBar::SetValue(int value)
 	// display {value}/{max_value}
 	value_.setString(std::to_string(value) + "/" + std::to_string(max_value_));
 	// center text on progress bar
-	value_.setX(bar_.getPosition().x + (int) (PROG_BAR_WIDTH - value_.getWidth()) / 2);
+	sfh::setX(value_, bar_.getPosition().x + (int) (PROG_BAR_WIDTH - sfh::width(value_)) / 2);
 }
 
 // PowerUpSlot ------------------------------------------------------------------

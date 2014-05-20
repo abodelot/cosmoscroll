@@ -35,8 +35,8 @@ protected:
 	void OnWidgetFocused() override;
 
 private:
-	xsf::Text title_;
-	mutable xsf::Sprite scrolling_background_;
+	sf::Text title_;
+	mutable sf::Sprite scrolling_background_;
 	static gui::WidgetStyle global_style_;
 };
 

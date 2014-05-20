@@ -4,6 +4,8 @@
 namespace sfh
 {
 
+// Transformable ---------------------------------------------------------------
+
 sf::Vector2f size(const sf::Sprite& sprite)
 {
 	const sf::IntRect& rect = sprite.getTextureRect();
@@ -11,23 +13,55 @@ sf::Vector2f size(const sf::Sprite& sprite)
 }
 
 
+void resize(sf::Sprite& sprite, float width, float height)
+{
+	int local_width  = sprite.getTextureRect().width;
+	int local_height = sprite.getTextureRect().height;
 
-
+	if ((local_width > 0) && (local_height > 0))
+		sprite.setScale(width / local_width, height / local_height);
 }
 
 
-namespace xsf
+sf::Vector2f getCenter(const sf::Sprite& sprite)
 {
+	sf::Vector2f center = sprite.getPosition();
+	center.x += sprite.getTextureRect().width  / 2.f;
+	center.y += sprite.getTextureRect().height / 2.f;
+	return center;
+}
 
-// Set the random numbers sequence seed with the current system time, so that it is always different
+
+void resize(sf::Text& text, float width, float height)
+{
+	int local_width  = text.getLocalBounds().width;
+	int local_height = text.getLocalBounds().height;
+
+	if ((local_width > 0) && (local_height > 0))
+		text.setScale(width / local_width, height / local_height);
+}
+
+
+sf::Vector2f getCenter(const sf::Text& text)
+{
+	sf::Vector2f center = text.getPosition();
+	center.x += text.getLocalBounds().width  / 2.f;
+	center.y += text.getLocalBounds().height / 2.f;
+	return center;
+}
+
+
+// Randomizer ------------------------------------------------------------------
+
 unsigned int static set_random_seed()
 {
+	// Set the random numbers sequence seed with the current system time, so that it is always different
 	unsigned int seed = static_cast<unsigned int>(time(NULL));
 	srand(seed);
 	return seed;
 }
-unsigned int seed = set_random_seed();
 
+unsigned int seed = set_random_seed();
 
 void set_seed(unsigned int s)
 {
@@ -35,6 +69,7 @@ void set_seed(unsigned int s)
     seed = s;
 }
 
+// Color -----------------------------------------------------------------------
 
 sf::Color hexa_to_color(const std::string& hexcolor)
 {
