@@ -162,24 +162,19 @@ void SoundSystem::StopAll()
 
 void SoundSystem::LoadFromConfig(IniParser& config)
 {
-	config.SeekSection("Audio");
-
-	config.Get("enable_music", enable_music_);
-	config.Get("enable_sound", enable_sound_);
-
-	if (config.Get("music_volume", music_volume_))
-		SetMusicVolume(music_volume_);
-
-	if (config.Get("sound_volume", sound_volume_))
-		SetSoundVolume(sound_volume_);
+	config.seekSection("Audio");
+	enable_music_ = config.get("enable_music", enable_music_);
+	enable_sound_ = config.get("enable_sound", enable_sound_);
+    SetMusicVolume(config.get("music_volume", music_volume_));
+	SetSoundVolume(config.get("sound_volume", sound_volume_));
 }
 
 
 void SoundSystem::SaveToConfig(IniParser& config)
 {
-	config.SeekSection("Audio");
-	config.Set("enable_music", enable_music_);
-	config.Set("music_volume", music_volume_);
-	config.Set("enable_sound", enable_sound_);
-	config.Set("sound_volume", sound_volume_);
+	config.seekSection("Audio");
+	config.set("enable_music", enable_music_);
+	config.set("music_volume", music_volume_);
+	config.set("enable_sound", enable_sound_);
+	config.set("sound_volume", sound_volume_);
 }

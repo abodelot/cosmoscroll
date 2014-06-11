@@ -65,103 +65,86 @@ void UserSettings::setHighscore(int highscore)
 
 void UserSettings::loadFromConfig(IniParser& config)
 {
-	config.SeekSection("Settings");
+	config.seekSection("Settings");
 	// language
-	std::string lang = config.Get("language");
+	std::string lang = config.get("language");
 	if (lang.empty() || !I18n::getInstance().loadFromCode(lang))
 	{
 		I18n::getInstance().loadFromLocale();
 	}
 
 	// Panel position
-	config.Get("panel_on_top", panel_on_top);
+	panel_on_top = config.get("panel_on_top", panel_on_top);
 
-	config.SeekSection("Player");
-	int level = 1;
-	config.Get("last_unlocked_level", level);
+	config.seekSection("Player");
+
+	int level = config.get("last_unlocked_level", 1);
 	LevelManager::getInstance().setLastUnlocked(level);
 
-	level = 1;
-	config.Get("current_level", level);
+	level = config.get("current_level", 1);
 	LevelManager::getInstance().setCurrent(level);
 
-	config.Get("credits",          s_credits);
-	config.Get("arcade_highscore", s_highscore);
+	s_credits = config.get("credits", 0);
+	s_highscore = config.get("arcade_highscore", 0);
 
-	config.Get("lvl_laser",    s_items[ItemData::WEAPON]);
-	config.Get("lvl_shield",   s_items[ItemData::SHIELD]);
-	config.Get("lvl_hull",     s_items[ItemData::HULL]);
-	config.Get("lvl_engine",   s_items[ItemData::ENGINE]);
-	config.Get("lvl_heatsink", s_items[ItemData::HEATSINK]);
+	s_items[ItemData::WEAPON] =   config.get("lvl_laser", 1);
+	s_items[ItemData::SHIELD] =   config.get("lvl_shield", 1);
+	s_items[ItemData::HULL] =     config.get("lvl_hull", 1);
+	s_items[ItemData::ENGINE] =   config.get("lvl_engine", 1);
+	s_items[ItemData::HEATSINK] = config.get("lvl_heatsink", 1);
 	for (int i = 0; i < ItemData::_COUNT; ++i)
 	{
 		setItemLevel((ItemData::Type) i, s_items[i]);
 	}
 
-	config.SeekSection("Keyboard");
-	sf::Keyboard::Key key;
-	if (config.Get("move_up", key))
-		Input::setKeyBinding(key, Action::UP);
-	if (config.Get("move_down", key))
-		Input::setKeyBinding(key, Action::DOWN);
-	if (config.Get("move_left", key))
-		Input::setKeyBinding(key, Action::LEFT);
-	if (config.Get("move_right", key))
-		Input::setKeyBinding(key, Action::RIGHT);
-	if (config.Get("laser", key))
-		Input::setKeyBinding(key, Action::USE_LASER);
-	if (config.Get("use_cooler", key))
-		Input::setKeyBinding(key, Action::USE_COOLER);
-	if (config.Get("use_missile", key))
-		Input::setKeyBinding(key, Action::USE_MISSILE);
+	config.seekSection("Keyboard");
+	Input::setKeyBinding(config.get("move_up",    Input::getKeyBinding(Action::UP)), Action::UP);
+	Input::setKeyBinding(config.get("move_down",  Input::getKeyBinding(Action::DOWN)), Action::DOWN);
+	Input::setKeyBinding(config.get("move_left",  Input::getKeyBinding(Action::LEFT)), Action::LEFT);
+	Input::setKeyBinding(config.get("move_right", Input::getKeyBinding(Action::RIGHT)), Action::RIGHT);
+	Input::setKeyBinding(config.get("laser",      Input::getKeyBinding(Action::USE_LASER)), Action::USE_LASER);
+	Input::setKeyBinding(config.get("cooler",     Input::getKeyBinding(Action::USE_COOLER)), Action::USE_COOLER);
+	Input::setKeyBinding(config.get("missile",    Input::getKeyBinding(Action::USE_MISSILE)), Action::USE_MISSILE);
 
-	config.SeekSection("Joystick");
-	unsigned int button;
-	if (config.Get("pause", button))
-		Input::setButtonBinding(button, Action::PAUSE);
-	if (config.Get("laser", button))
-		Input::setButtonBinding(button, Action::USE_LASER);
-	if (config.Get("use_cooler", button))
-		Input::setButtonBinding(button, Action::USE_COOLER);
-	if (config.Get("use_missile", button))
-		Input::setButtonBinding(button, Action::USE_MISSILE);
-
-	int deadzone;
-	if (config.Get("sensitivity", deadzone))
-		Input::setJoystickDeadzone(deadzone);
+	config.seekSection("Joystick");
+	Input::setButtonBinding(config.get("pause",   Input::getButtonBinding(Action::PAUSE)), Action::PAUSE);
+	Input::setButtonBinding(config.get("laser",   Input::getButtonBinding(Action::USE_LASER)), Action::USE_LASER);
+	Input::setButtonBinding(config.get("cooler",  Input::getButtonBinding(Action::USE_COOLER)), Action::USE_COOLER);
+	Input::setButtonBinding(config.get("missile", Input::getButtonBinding(Action::USE_MISSILE)), Action::USE_MISSILE);
+	Input::setJoystickDeadzone(config.get("sensitivity", Input::getJoystickDeadzone()));
 }
 
 
 void UserSettings::saveToConfig(IniParser& config)
 {
-	config.SeekSection("Settings");
-	config.Set("panel_on_top", panel_on_top);
-	config.Set("language", I18n::getInstance().getCurrentLanguage());
+	config.seekSection("Settings");
+	config.set("panel_on_top", panel_on_top);
+	config.set("language", I18n::getInstance().getCurrentLanguage());
 
-	config.SeekSection("Player");
-	config.Set("current_level", LevelManager::getInstance().getCurrent());
-	config.Set("last_unlocked_level", LevelManager::getInstance().getLastUnlocked());
-	config.Set("credits", s_credits);
-	config.Set("arcade_highscore", s_highscore);
-	config.Set("lvl_laser",    s_items[ItemData::WEAPON]);
-	config.Set("lvl_shield",   s_items[ItemData::SHIELD]);
-	config.Set("lvl_hull",     s_items[ItemData::HULL]);
-	config.Set("lvl_engine",   s_items[ItemData::ENGINE]);
-	config.Set("lvl_heatsink", s_items[ItemData::HEATSINK]);
+	config.seekSection("Player");
+	config.set("current_level",       LevelManager::getInstance().getCurrent());
+	config.set("last_unlocked_level", LevelManager::getInstance().getLastUnlocked());
+	config.set("credits",             s_credits);
+	config.set("arcade_highscore",    s_highscore);
+	config.set("lvl_laser",    s_items[ItemData::WEAPON]);
+	config.set("lvl_shield",   s_items[ItemData::SHIELD]);
+	config.set("lvl_hull",     s_items[ItemData::HULL]);
+	config.set("lvl_engine",   s_items[ItemData::ENGINE]);
+	config.set("lvl_heatsink", s_items[ItemData::HEATSINK]);
 
-	config.SeekSection("Keyboard");
-	config.Set("move_up",     Input::getKeyBinding(Action::UP));
-	config.Set("move_down",   Input::getKeyBinding(Action::DOWN));
-	config.Set("move_left",   Input::getKeyBinding(Action::LEFT));
-	config.Set("move_right",  Input::getKeyBinding(Action::RIGHT));
-	config.Set("laser",       Input::getKeyBinding(Action::USE_LASER));
-	config.Set("use_cooler",  Input::getKeyBinding(Action::USE_COOLER));
-	config.Set("use_missile", Input::getKeyBinding(Action::USE_MISSILE));
+	config.seekSection("Keyboard");
+	config.set("move_up",    Input::getKeyBinding(Action::UP));
+	config.set("move_down",  Input::getKeyBinding(Action::DOWN));
+	config.set("move_left",  Input::getKeyBinding(Action::LEFT));
+	config.set("move_right", Input::getKeyBinding(Action::RIGHT));
+	config.set("laser",      Input::getKeyBinding(Action::USE_LASER));
+	config.set("cooler",     Input::getKeyBinding(Action::USE_COOLER));
+	config.set("missile",    Input::getKeyBinding(Action::USE_MISSILE));
 
-	config.SeekSection("Joystick");
-	config.Set("pause",       Input::getButtonBinding(Action::PAUSE));
-	config.Set("laser",       Input::getButtonBinding(Action::USE_LASER));
-	config.Set("use_cooler",  Input::getButtonBinding(Action::USE_COOLER));
-	config.Set("use_missile", Input::getButtonBinding(Action::USE_MISSILE));
-	config.Set("sensitivity", Input::getJoystickDeadzone());
+	config.seekSection("Joystick");
+	config.set("pause",       Input::getButtonBinding(Action::PAUSE));
+	config.set("laser",       Input::getButtonBinding(Action::USE_LASER));
+	config.set("cooler",      Input::getButtonBinding(Action::USE_COOLER));
+	config.set("missile",     Input::getButtonBinding(Action::USE_MISSILE));
+	config.set("sensitivity", Input::getJoystickDeadzone());
 }

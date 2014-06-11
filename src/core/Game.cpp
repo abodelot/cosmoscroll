@@ -92,16 +92,16 @@ void Game::loadResources(const std::string& data_path)
 	// Load XML resources
 	try
 	{
-		printf("* checking resources md5sum...");
+		std::cout << "* checking resources md5sum...";
 		m_resources_checked = checkResourcesPurity(resources_dir);
-		printf("\t[test %s]\n", m_resources_checked ? "succeeded" : "failed");
-		printf("* loading %s...\n", XML_LEVELS);
+		std::cout <<  (m_resources_checked ? "succeeded" : "failed") << std::endl;
+		std::cout << "* loading " << XML_LEVELS << "..." << std::endl;
 		LevelManager::getInstance().loadLevelFile(resources_dir + XML_LEVELS);
-		printf("* loading %s...\n", XML_ITEMS);
+		std::cout << "* loading " << XML_ITEMS << "..." << std::endl;
 		ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS);
-		printf("* loading %s...\n", XML_ANIMATIONS);
+		std::cout << "* loading " << XML_ANIMATIONS << "..." << std::endl;
 		EntityManager::getInstance().loadAnimations(resources_dir + XML_ANIMATIONS);
-		printf("* loading %s...\n", XML_SPACESHIPS);
+		std::cout << "* loading " << XML_SPACESHIPS << "..." << std::endl;
 		EntityManager::getInstance().loadSpaceships(resources_dir + XML_SPACESHIPS);
 	}
 	catch (std::runtime_error& error)
@@ -126,13 +126,13 @@ void Game::setConfigFile(const std::string& config_path)
 bool Game::loadConfig()
 {
 	IniParser config;
-	if (config.LoadFromFile(m_config_file.c_str()))
+	if (config.load(m_config_file.c_str()))
 	{
 		std::cout << "* loading configuration from " << m_config_file << std::endl;
 		// Window
-		config.SeekSection("Window");
-		config.Get("vsync", m_vsync);
-		config.Get("fullscreen", m_fullscreen);
+		config.seekSection("Window");
+		m_vsync = config.get("vsync", m_vsync);
+		m_fullscreen = config.get("fullscreen", m_fullscreen);
 
 		if (m_vsync)
 			m_window.setVerticalSyncEnabled(m_vsync);
@@ -159,9 +159,9 @@ void Game::writeConfig() const
 	IniParser config;
 
 	// Window
-	config.SeekSection("Window");
-	config.Set("fullscreen", m_fullscreen);
-	config.Set("vsync", m_vsync);
+	config.seekSection("Window");
+	config.set("fullscreen", m_fullscreen);
+	config.set("vsync", m_vsync);
 
 	// User settings & player attributes
 	UserSettings::saveToConfig(config);
@@ -170,7 +170,7 @@ void Game::writeConfig() const
 	SoundSystem::GetInstance().SaveToConfig(config);
 
 	// Save configuration to file
-	if (config.SaveToFile(m_config_file))
+	if (config.save(m_config_file))
 		std::cout << "* configuration saved to " << m_config_file << std::endl;
 }
 
