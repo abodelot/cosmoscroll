@@ -9,20 +9,20 @@
 class FileSystem
 {
 public:
-    /**
-     * @return true if path is a directory
-     */
+	/**
+	 * @return true if path is a directory
+	 */
 	static bool isDirectory(const std::string& path);
 
 	/**
-     * @return true if path is a regular file
-     */
+	 * @return true if path is a regular file
+	 */
 	static bool isFile(const std::string& path);
 
-    /**
-     * Create a directory
-     * @return true if directory successfully created
-     */
+	/**
+	 * Create a directory
+	 * @return true if directory successfully created
+	 */
 	static bool createDirectory(const std::string& name);
 
 	/**

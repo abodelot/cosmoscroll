@@ -78,7 +78,7 @@ template <class T>
 float Weapon<T>::shoot(const sf::Vector2f& target)
 {
 	sf::Vector2f pos = m_owner->getPosition() + m_position;
-	return shoot(math::angle(target, pos));
+	return shoot(math::angle(pos, target));
 }
 
 template <class T>

@@ -8,7 +8,7 @@ Projectile::Projectile(Entity* emitter, float angle, const sf::Texture& image, i
 {
 	setTexture(image);
 	setTeam(emitter->getTeam());
-	setRotation(-math::to_deg(angle));
+	setRotation(-math::to_degrees(angle));
 
 	// Compute constant speed vector from velocity and angle
 	m_speed.x = std::cos(angle) * speed + emitter->getSpeedX(); // hack....

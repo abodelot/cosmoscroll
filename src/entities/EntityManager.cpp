@@ -9,7 +9,6 @@
 #include "core/Resources.hpp"
 #include "core/Collisions.hpp"
 #include "utils/Error.hpp"
-#include "utils/SFML_Helper.hpp"
 #include "utils/tinyxml/tinyxml2.h"
 
 
@@ -159,7 +158,7 @@ void EntityManager::InitMode(Mode mode)
 			// fog with random color on layer 2,
 			layer1_.setTexture(Resources::getTexture("layers/blue.jpg"));
 			layer2_.setTexture(Resources::getTexture("layers/fog.png"));
-			layer2_.setColor(sfh::random_color(10, 10, 10, 60, 60, 60));
+			layer2_.setColor(sf::Color(math::rand(10, 60), math::rand(10, 60), math::rand(10, 60)));
 
 			decor_height_ = 0;
 			particles_.AddStars();
@@ -460,7 +459,7 @@ Player* EntityManager::getPlayer() const
 
 Entity* EntityManager::createRandomEntity()
 {
-	if (sfh::random(0, 9) == 0)
+	if (math::rand(0, 9) == 0)
 	{
 		// Spawn asteroid
 		return new Asteroid(Asteroid::BIG);
@@ -482,7 +481,7 @@ Entity* EntityManager::createRandomEntity()
 				break;
 			}
 		}
-		return uniques_[sfh::random(0, max_droppable_index_)]->clone();
+		return uniques_[math::rand(0, max_droppable_index_)]->clone();
 	}
 }
 
@@ -507,7 +506,7 @@ bool EntityManager::arcadeModeCallback()
 	{
 		Entity* entity = createRandomEntity();
 		entity->setX(m_width - 1);
-		entity->setY(sfh::random(0, m_height - (int) entity->getHeight()));
+		entity->setY(math::rand(0, m_height - (int) entity->getHeight()));
 		entity->move(entity->getOrigin());
 		addEntity(entity);
 	}

@@ -89,10 +89,4 @@ sf::Color hexa_to_color(const std::string& hexcolor)
 	return color;
 }
 
-
-sf::Color random_color(sf::Uint8 min_r, sf::Uint8 min_g, sf::Uint8 min_b, sf::Uint8 max_r, sf::Uint8 max_g, sf::Uint8 max_b)
-{
-	return sf::Color(random(min_r, max_r), random(min_g, max_g), random(min_b, max_b));
-}
-
 }

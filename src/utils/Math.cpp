@@ -1,24 +1,38 @@
+#include <ctime>
 #include "Math.hpp"
 
 namespace math
 {
 
-const float PI = 3.14159265f;
-
-float angle(const sf::Vector2f& p1, const sf::Vector2f& p2)
+// Set the random numbers sequence seed with the current system time, so that it is always different
+unsigned int static set_random_seed()
 {
-	float x = p1.x - p2.x;
-	if (x == 0.f)
-	{
-		return 0.f;
-	}
-	float y = p1.y - p2.y;
-	float radians = std::atan(-y / x);
-	if (p2.x > p1.x)
-	{
-		radians += PI;
-	}
-	return radians;
+	unsigned int seed = static_cast<unsigned int>(time(NULL));
+	std::srand(seed);
+	return seed;
+}
+
+
+const float PI = 3.14159265f;
+unsigned int seed = set_random_seed();
+
+
+int rand(int begin, int end)
+{
+	return std::rand() % (end - begin + 1) + begin;
+}
+
+
+float rand(float begin, float end)
+{
+	return static_cast<float>(std::rand()) / RAND_MAX * (end - begin) + begin;
+}
+
+
+void set_seed(unsigned int s)
+{
+    std::srand(s);
+    seed = s;
 }
 
 }

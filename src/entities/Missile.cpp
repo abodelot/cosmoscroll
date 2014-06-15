@@ -4,7 +4,6 @@
 #include "core/ParticleSystem.hpp"
 #include "core/Resources.hpp"
 #include "utils/Math.hpp"
-#include "utils/SFML_Helper.hpp"
 
 
 Missile::Missile(Entity* emitter, float angle, const sf::Texture& image, int speed, int damage):
@@ -26,8 +25,8 @@ void Missile::onDestroy()
 	ParticleSystem::GetInstance().ImpactSfx(getPosition(), 100);
 	for (int i = 0; i < 20; ++i)
 	{
-		float angle = sfh::random(m_angle - math::PI / 2, m_angle + math::PI / 2);
-		int speed = sfh::random(200, 600);
+		float angle = math::rand(m_angle - math::PI / 2, m_angle + math::PI / 2);
+		int speed = math::rand(200, 600);
 		Projectile* p = new Projectile(EntityManager::getInstance().getPlayer(), angle,
 			Resources::getTexture("ammo/laser-red.png"), speed, 10);
 		p->setPosition(getPosition());

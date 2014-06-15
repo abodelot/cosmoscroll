@@ -39,7 +39,7 @@ void GunTower::onUpdate(float frametime)
 	Part& turret = getPartAt(0);
 	if (!turret.isDead())
 	{
-		turret.setRotation(180 - math::to_deg(math::angle(m_target->getPosition(), getPosition())));
+		turret.setRotation(180 - math::to_degrees(math::angle(getPosition(), m_target->getPosition())));
 		m_weapon.shoot(m_target->getCenter());
 	}
 }

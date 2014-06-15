@@ -3,10 +3,8 @@
 #include "core/Resources.hpp"
 #include "utils/I18n.hpp"
 #include "utils/Math.hpp"
-#include "utils/SFML_Helper.hpp"
 
 #define POWERUP_SPEED 100
-#define SIZE          16
 
 
 PowerUp::PowerUp(Type type):
@@ -25,7 +23,7 @@ void PowerUp::collides(Entity& entity)
 
 void PowerUp::dropRandom(const sf::Vector2f& position)
 {
-	PowerUp* powerup = new PowerUp((Type) sfh::random(0, POWERUP_COUNT - 1));
+	PowerUp* powerup = new PowerUp((Type) math::rand(0, POWERUP_COUNT - 1));
 	powerup->setPosition(position);
 	EntityManager::getInstance().addEntity(powerup);
 }
@@ -66,8 +64,8 @@ PowerUp::Type PowerUp::getType() const
 
 sf::IntRect PowerUp::getTextureRect(Type type)
 {
-	// PowerUp::Type enumeration has the same order than the spritesheet
-	return sf::IntRect(type * SIZE, 0, SIZE, SIZE);
+	// PowerUp::Type enumeration has the same order than the spritesheet (16x16 resolution)
+	return sf::IntRect(type * 16, 0, 16, 16);
 }
 
 // callbacks -------------------------------------------------------------------

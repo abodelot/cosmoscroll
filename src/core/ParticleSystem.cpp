@@ -1,12 +1,9 @@
-#include <SFML/System.hpp>
-
 #include "ParticleSystem.hpp"
 #include "Constants.hpp"
 #include "SoundSystem.hpp"
 #include "utils/SFML_Helper.hpp"
 #include "utils/Math.hpp"
 #include "Resources.hpp"
-
 
 
 ParticleSystem& ParticleSystem::GetInstance()
@@ -183,11 +180,11 @@ ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset, const sf::Texture& img)
 	sprite_.setTexture(img);
 	sprite_.setPosition(offset);
 	//sprite_.SetBlendMode(sf::Blend::Add);
-	angle_ = sfh::random(-math::PI, math::PI);
-	sprite_.setRotation(-math::to_deg(angle_));
-	float scale = sfh::random(0.5f, 1.2f);
+	angle_ = math::rand(-math::PI, math::PI);
+	sprite_.setRotation(-math::to_degrees(angle_));
+	float scale = math::rand(0.5f, 1.2f);
 	sprite_.setScale(scale, scale);
-	lifetime_ = sfh::random(FIERY_MIN_LIFETIME, FIERY_MAX_LIFETIME);
+	lifetime_ = math::rand(FIERY_MIN_LIFETIME, FIERY_MAX_LIFETIME);
 	timer_ = 0.f;
 }
 
@@ -210,13 +207,13 @@ bool ParticleSystem::Fiery::OnUpdate(float frametime)
 ParticleSystem::Star::Star(const sf::Texture& img)
 {
 	sprite_.setTexture(img);
-	float x = sfh::random(0, APP_WIDTH);
-	float y = sfh::random(0, APP_HEIGHT);
+	float x = math::rand(0, APP_WIDTH);
+	float y = math::rand(0, APP_HEIGHT);
 	sprite_.setPosition(x, y);
-	float scale = sfh::random(1.f, 2.f);
+	float scale = math::rand(1.f, 2.f);
 	sprite_.setScale(scale, scale);
-	sprite_.setColor(sfh::random_color(200, 200, 200, 255, 255, 255));
-	speed_ = (int) (sfh::random(STAR_MIN_SPEED, STAR_MAX_SPEED));
+	sprite_.setColor(sf::Color(220, 220, 220));
+	speed_ = (int) (math::rand(STAR_MIN_SPEED, STAR_MAX_SPEED));
 }
 
 
@@ -224,9 +221,9 @@ bool ParticleSystem::Star::OnUpdate(float frametime)
 {
 	if (sprite_.getPosition().x < 0)
 	{
-		sprite_.setPosition(APP_WIDTH, sfh::random(0, APP_HEIGHT));
-		speed_ = sfh::random(STAR_MIN_SPEED, STAR_MAX_SPEED);
-		float scale = sfh::random(0.5f, 1.5f);
+		sprite_.setPosition(APP_WIDTH, math::rand(0, APP_HEIGHT));
+		speed_ = math::rand(STAR_MIN_SPEED, STAR_MAX_SPEED);
+		float scale = math::rand(0.5f, 1.5f);
 		sprite_.setScale(scale, scale);
 	}
 	sprite_.move(-speed_ * frametime, 0);
@@ -240,10 +237,10 @@ ParticleSystem::CenteredStar::CenteredStar(const sf::Texture& img):
 	float x = APP_WIDTH / 2;
 	float y = APP_HEIGHT / 2;
 	sprite_.setPosition(x, y);
-	float scale = sfh::random(0.5f, 1.5f);
+	float scale = math::rand(0.5f, 1.5f);
 	sprite_.setScale(scale, scale);
-	speed_ = (int) (sfh::random(STAR_MIN_SPEED, STAR_MAX_SPEED));
-	angle_ = sfh::random(-math::PI, math::PI);
+	speed_ = (int) (math::rand(STAR_MIN_SPEED, STAR_MAX_SPEED));
+	angle_ = math::rand(-math::PI, math::PI);
 }
 
 
@@ -255,10 +252,10 @@ bool ParticleSystem::CenteredStar::OnUpdate(float frametime)
 	{
 		pos.x = APP_WIDTH / 2;
 		pos.y = APP_HEIGHT / 2;
-		speed_ = sfh::random(STAR_MIN_SPEED, STAR_MAX_SPEED);
-		float scale = sfh::random(0.5f, 1.5f);
+		speed_ = math::rand(STAR_MIN_SPEED, STAR_MAX_SPEED);
+		float scale = math::rand(0.5f, 1.5f);
 		sprite_.setScale(scale, scale);
-		angle_ = sfh::random(-math::PI, math::PI);
+		angle_ = math::rand(-math::PI, math::PI);
 	}
 
 	math::translate(pos, angle_, speed_ * frametime);
@@ -278,7 +275,7 @@ ParticleSystem::ShieldParticle::ShieldParticle(const sf::Sprite* handle,
 	handle_ = handle;
 
 	angle_ = angle;
-	sprite_.setRotation(-math::to_deg(angle + 0.5 * math::PI));
+	sprite_.setRotation(-math::to_degrees(angle + 0.5 * math::PI));
 }
 
 
@@ -291,7 +288,7 @@ bool ParticleSystem::ShieldParticle::OnUpdate(float frametime)
 	offset.x = offset.x + (SHIELD_RADIUS) * std::cos(angle_) + frametime;
 	offset.y = offset.y - (SHIELD_RADIUS) * std::sin(angle_) + frametime;
 	sprite_.setPosition(offset);
-	sprite_.setRotation(-math::to_deg(angle_ + (0.5 * math::PI)));
+	sprite_.setRotation(-math::to_degrees(angle_ + (0.5 * math::PI)));
 	return false;
 }
 
@@ -312,15 +309,15 @@ ParticleSystem::Smoke::Smoke(const sf::Texture& img, const sf::Sprite* handle)
 	const sf::Vector2f& pos = handle->getPosition();
 	sprite_.setPosition(pos.x, pos.y);
 	sprite_.setTexture(img);
-	float size = sfh::random(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
+	float size = math::rand(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
 	sprite_.setScale(size, size);
-	float angle = sfh::random(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
-	float base_speed = sfh::random(SMOKE_MIN_SPEED, SMOKE_MAX_SPEED);
+	float angle = math::rand(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
+	float base_speed = math::rand(SMOKE_MIN_SPEED, SMOKE_MAX_SPEED);
 	vspeed_.x = std::cos(angle) * base_speed;
 	vspeed_.y = -std::sin(angle) * base_speed;
 	y_offset_ = (sfh::height(*handle_) - sfh::height(sprite_)) / 2;
 
-	timer_ = sfh::random(0.f, SMOKE_MAX_LIFETIME);
+	timer_ = math::rand(0.f, SMOKE_MAX_LIFETIME);
 }
 
 
@@ -336,8 +333,8 @@ bool ParticleSystem::Smoke::OnUpdate(float frametime)
 		{
 			return true;
 		}
-		timer_ = sfh::random(0.f, SMOKE_MAX_LIFETIME);
-		float size = sfh::random(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
+		timer_ = math::rand(0.f, SMOKE_MAX_LIFETIME);
+		float size = math::rand(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
 		sprite_.setScale(size, size);
 		sprite_.setPosition(handle_->getPosition().x, handle_->getPosition().y + y_offset_);
 	}
