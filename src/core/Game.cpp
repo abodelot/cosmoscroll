@@ -10,7 +10,6 @@
 #include "utils/I18n.hpp"
 #include "utils/IniParser.hpp"
 #include "utils/FileSystem.hpp"
-#include "utils/Error.hpp"
 #include "utils/md5/md5.hpp"
 #include "scenes/scenes.hpp"
 
@@ -90,26 +89,21 @@ void Game::loadResources(const std::string& data_path)
 	MessageSystem::setFont(Resources::getFont("Vera.ttf"));
 
 	// Load XML resources
-	try
-	{
-		std::cout << "* checking resources md5sum...";
-		m_resources_checked = checkResourcesPurity(resources_dir);
-		std::cout <<  (m_resources_checked ? "succeeded" : "failed") << std::endl;
-		std::cout << "* loading " << XML_LEVELS << "..." << std::endl;
-		LevelManager::getInstance().loadLevelFile(resources_dir + XML_LEVELS);
-		std::cout << "* loading " << XML_ITEMS << "..." << std::endl;
-		ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS);
-		std::cout << "* loading " << XML_ANIMATIONS << "..." << std::endl;
-		EntityManager::getInstance().loadAnimations(resources_dir + XML_ANIMATIONS);
-		std::cout << "* loading " << XML_SPACESHIPS << "..." << std::endl;
-		EntityManager::getInstance().loadSpaceships(resources_dir + XML_SPACESHIPS);
-	}
-	catch (std::runtime_error& error)
-	{
-		std::cerr << error.what() << std::endl;
-		Error::dump();
-		quit();
-	}
+	std::cout << "* checking resources md5sum...";
+	m_resources_checked = checkResourcesPurity(resources_dir);
+	std::cout <<  (m_resources_checked ? "succeeded" : "failed") << std::endl;
+
+	std::cout << "* loading " << XML_LEVELS << "..." << std::endl;
+	LevelManager::getInstance().loadLevelFile(resources_dir + XML_LEVELS);
+
+	std::cout << "* loading " << XML_ITEMS << "..." << std::endl;
+	ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS);
+
+	std::cout << "* loading " << XML_ANIMATIONS << "..." << std::endl;
+	EntityManager::getInstance().loadAnimations(resources_dir + XML_ANIMATIONS);
+
+	std::cout << "* loading " << XML_SPACESHIPS << "..." << std::endl;
+	EntityManager::getInstance().loadSpaceships(resources_dir + XML_SPACESHIPS);
 }
 
 

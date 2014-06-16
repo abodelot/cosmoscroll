@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <stdexcept>
 #include "LevelManager.hpp"
 #include "Constants.hpp"
 #include "Resources.hpp"
@@ -13,7 +13,6 @@
 #include "entities/decors/Gate.hpp"
 #include "entities/decors/Canon.hpp"
 #include "entities/decors/GunTower.hpp"
-#include "utils/Error.hpp"
 #include "utils/SFML_Helper.hpp"
 
 
@@ -44,9 +43,10 @@ void LevelManager::loadLevelFile(const std::string& path)
 	// Open level file
 	if (m_xml_doc.LoadFile(path.c_str()) != 0)
 	{
-		Error::log << "Cannot load levels:\n" << path << "\n" << m_xml_doc.GetErrorStr1();
-		throw Error::exception();
+		std::string error = "Cannot load levels from " + path + ": " + m_xml_doc.GetErrorStr1();
+		throw std::runtime_error(error);
 	}
+
 	tinyxml2::XMLElement* root = m_xml_doc.RootElement();
 
 	// Parse function nodes

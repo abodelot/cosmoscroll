@@ -1,6 +1,6 @@
+#include <stdexcept>
 #include "ItemManager.hpp"
 #include "Weapon.hpp"
-#include "utils/Error.hpp"
 #include "utils/tinyxml/tinyxml2.h"
 
 
@@ -26,8 +26,8 @@ int ItemManager::LoadItems(const std::string& filename)
 	tinyxml2::XMLDocument doc;
 	if (doc.LoadFile(filename.c_str()) != 0)
 	{
-		Error::log << "Cannot load items definitions:\n" << filename << "\n" << doc.GetErrorStr1() << "\n";
-		throw Error::exception();
+		std::string error = "Cannot load items from " + filename + ": " + doc.GetErrorStr1();
+		throw std::runtime_error(error);
 	}
 
 	tinyxml2::XMLElement* root = doc.RootElement();
