@@ -109,21 +109,11 @@ void Spaceship::onUpdate(float frametime)
 			break;
 		case MAGNET:
 		{
-			sf::Vector2f player_pos = m_target->getCenter();
-			sf::Vector2f my_pos = getCenter();
+			sf::Vector2f pos = getPosition();
 
-			float x_diff = my_pos.x - player_pos.x;
-			float y_diff = my_pos.y - player_pos.y;
-
-			if (x_diff > 5)
-				move(-delta, 0);
-			else if (x_diff < -5)
-				move(delta, 0);
-
-			if (y_diff > 5)
-				move(0, -delta);
-			else if (y_diff < -5)
-				move(0, delta);
+			// Translate position towards target's position
+			math::translate(pos, math::angle(pos, m_target->getPosition()), delta);
+			setPosition(pos);
 			break;
 		}
 		case SINUS:

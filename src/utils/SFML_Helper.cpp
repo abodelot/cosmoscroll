@@ -50,25 +50,6 @@ sf::Vector2f getCenter(const sf::Text& text)
 	return center;
 }
 
-
-// Randomizer ------------------------------------------------------------------
-
-unsigned int static set_random_seed()
-{
-	// Set the random numbers sequence seed with the current system time, so that it is always different
-	unsigned int seed = static_cast<unsigned int>(time(NULL));
-	srand(seed);
-	return seed;
-}
-
-unsigned int seed = set_random_seed();
-
-void set_seed(unsigned int s)
-{
-    srand(s);
-    seed = s;
-}
-
 // Color -----------------------------------------------------------------------
 
 sf::Color hexa_to_color(const std::string& hexcolor)
