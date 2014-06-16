@@ -137,9 +137,16 @@ void EntityManager::InitMode(Mode mode)
 				m_player->setPosition(0, m_height / 2);
 				m_player->onInit();
 			}
-			layer1_.setTexture(*m_levels.getLayerImage1());
-			layer2_.setTexture(*m_levels.getLayerImage2());
-			layer2_.setColor(m_levels.getLayerColor());
+			// Set background images
+			if (m_levels.getBottomLayer())
+				layer1_.setTexture(*m_levels.getBottomLayer());
+
+			if (m_levels.getTopLayer())
+			{
+				layer2_.setTexture(*m_levels.getTopLayer());
+				layer2_.setColor(m_levels.getLayerColor());
+			}
+
 			decor_height_ = m_levels.getDecorHeight();
 			particles_.AddStars(m_levels.getStarsCount());
 			{

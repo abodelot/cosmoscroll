@@ -65,14 +65,11 @@ public:
 	 * Retrieve attributes from the currently loaded level
 	 */
 
-	/// Text description
-	const char* getQuote() const;
-
 	/// Bottom background image
-	const sf::Texture* getLayerImage1() const;
+	const sf::Texture* getBottomLayer() const;
 
 	/// Top background image
-	const sf::Texture* getLayerImage2() const;
+	const sf::Texture* getTopLayer() const;
 
 	/// Optionnal color for background image
 	sf::Color getLayerColor() const;

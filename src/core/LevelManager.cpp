@@ -152,20 +152,14 @@ size_t LevelManager::getLevelCount() const
 }
 
 
-const char* LevelManager::getQuote() const
-{
-	return getCurrentLevelElement()->Attribute("quote");
-}
-
-
-const sf::Texture* LevelManager::getLayerImage1() const
+const sf::Texture* LevelManager::getBottomLayer() const
 {
 	const char* p = getCurrentLevelElement()->Attribute("layer1");
 	return p != NULL ? &Resources::getTexture(p) : NULL;
 }
 
 
-const sf::Texture* LevelManager::getLayerImage2() const
+const sf::Texture* LevelManager::getTopLayer() const
 {
 	const char* p = getCurrentLevelElement()->Attribute("layer2");
 	return p != NULL ? &Resources::getTexture(p) : NULL;
