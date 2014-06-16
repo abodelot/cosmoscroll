@@ -8,8 +8,8 @@
 #include <SFML/Graphics.hpp>
 
 #include "Animation.hpp"
+#include "core/ParticleSystem.hpp"
 
-class ParticleSystem;
 class LevelManager;
 class Entity;
 class Spaceship;
@@ -117,6 +117,9 @@ public:
 
 	inline float GetTimer() const { return timer_; }
 
+	void createImpactParticles(const sf::Vector2f& pos, size_t count);
+	void createGreenParticles(const sf::Vector2f& pos, size_t count);
+
 private:
 	EntityManager();
 	EntityManager(const EntityManager&);
@@ -161,7 +164,18 @@ private:
 
 	Mode mode_;
 
-	ParticleSystem& particles_;
+	class StarsEmitter: public ParticleSystem::Emitter
+	{
+	protected:
+		void onParticleUpdated(ParticleSystem::Particle& particle, float) const override;
+
+		void onParticleCreated(ParticleSystem::Particle& particle) const override;
+	};
+
+	ParticleSystem&         m_particles;
+	ParticleSystem::Emitter m_impact_emitter;
+	ParticleSystem::Emitter m_green_emitter;
+	StarsEmitter            m_stars_emitter;
 
 	Player* m_player;
 	bool (EntityManager::*more_bad_guys_)();

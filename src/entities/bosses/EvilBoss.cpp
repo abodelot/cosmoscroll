@@ -1,6 +1,5 @@
 #include "EvilBoss.hpp"
 #include "entities/Player.hpp"
-#include "core/ParticleSystem.hpp"
 #include "core/Resources.hpp"
 
 #define EYE_OFFSET_LEFT   sf::Vector2f(105, 55)
@@ -101,5 +100,5 @@ void EvilBoss::takeDamage(int damage)
 
 void EvilBoss::onDestroy()
 {
-	ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 200);
+	EntityManager::getInstance().createGreenParticles(getCenter(), 200);
 }

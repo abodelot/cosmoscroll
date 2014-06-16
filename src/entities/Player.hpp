@@ -7,6 +7,7 @@
 #include "Missile.hpp"
 #include "core/Input.hpp"
 #include "core/ControlPanel.hpp"
+#include "core/ParticleSystem.hpp"
 #include "items/Weapon.hpp"
 
 /**
@@ -47,17 +48,15 @@ private:
 		TIMED_BONUS_COUNT
 	};
 
-	void Computemove(float frametime);
-
 	/**
 	 * Désactiver un bonus à effet temporaire
 	 */
 	void DisableTimedPowerUp(TimedPowerUp tbonus);
 
 	/**
-	 * Activer les effets du Code Konami
+	 * Apply some upgrades when konami code sequence is activated
 	 */
-	void turnKonamiCodeOn();
+	void applyKonamiCode();
 
 	/**
 	 * Set shield points
@@ -82,8 +81,7 @@ private:
 	int coolers_, missiles_;
 	int shield_, shield_max_;
 	int hp_max_;
-	float speed_x_, speed_y_;
-	int speed_max_;
+	float m_speed;
 
 	ControlPanel& panel_;
 	Weapon<>        m_weapon;
@@ -91,6 +89,19 @@ private:
 
 	Animator m_animator;
 	int      m_score;
+
+	class ShieldEmitter: public ParticleSystem::Emitter
+	{
+	public:
+		void createParticles(size_t count);
+
+		void onParticleUpdated(ParticleSystem::Particle& particle, float frametime) const override;
+	};
+
+	ShieldEmitter           m_shield_emitter;
+	ParticleSystem::Emitter m_smoke_emitter;
+	ParticleSystem::Emitter m_snowflakes_emitter;
+	ParticleSystem::Emitter m_powerup_emitter;
 };
 
 #endif // PLAYER_HPP

@@ -37,7 +37,7 @@ void Damageable::onCollision(Projectile& projectile)
 	{
 		takeDamage(projectile.getDamage());
 		// Destroy projectile
-		ParticleSystem::GetInstance().ImpactSfx(projectile.getPosition(), 10);
+		EntityManager::getInstance().createImpactParticles(projectile.getPosition(), 10);
 		projectile.kill();
 	}
 }

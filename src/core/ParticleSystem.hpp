@@ -1,194 +1,210 @@
-#ifndef PARTICLESYSTEM_HPP
-#define PARTICLESYSTEM_HPP
+#ifndef PARTICLE_SYSTEM_HPP
+#define PARTICLE_SYSTEM_HPP
 
+#include <map>
 #include <list>
 #include <SFML/Graphics.hpp>
 
-#include "entities/EntityManager.hpp"
-
 /**
- * Moteur de particules pour gérer des effets graphiques (singleton)
+ * ParticleSystem is singleton which stores, updates and draws particles
  */
-class ParticleSystem: public sf::Drawable
+class ParticleSystem: public sf::Drawable, sf::NonCopyable
 {
 public:
-	/**
-	 * Récupérer l'instance unique
-	 */
-	static ParticleSystem& GetInstance();
+	class Particle;
 
 	/**
-	 * Add an effect in the scene
-	 * @param pos: sfx origin
-	 * @param count: number of particles
+	 * Emitters launch particles and control their properties over their lifetime
 	 */
-	void ImpactSfx(const sf::Vector2f& pos, int count);
-	void GreenImpactSfx(const sf::Vector2f& pos, int count);
-	void FierySfx(const sf::Vector2f& pos, int count);
-	void SnowflakeSfx(const sf::Vector2f& pos, int count);
+	class Emitter
+	{
+	public:
+		Emitter();
+		virtual ~Emitter();
 
+		/**
+		 * Duration of a particle
+		 * @param duration: time to live in seconds. set to 0 for persistent particle.
+		 */
+		void setLifetime(float duration);
+
+		/**
+		 * If looping is enabled, particle will not be removed after its lifetime expired and be reset instead
+		 */
+		void setLooping(bool looping);
+		bool isLooping() const;
+
+		/**
+		 * Set the particle color (default: white)
+		 * If two colors are used, particle will fade from \p start to \p end color
+		 */
+		void setParticleColor(const sf::Color& color);
+		void setParticleColor(const sf::Color& start, const sf::Color& end);
+
+		/**
+		 * Set the particle direction (default: [0:360])
+		 * @param variation: angle can vary from angle - variation to angle + variation
+		 */
+		void setAngle(float angle, float variation = 0.f);
+
+		/**
+		 * Set the particle speed
+		 * @param variation: speed can vary from speed - variation to speed + variation
+		 */
+		void setSpeed(float speed, float variation = 0.f);
+
+		/**
+		 * Particle scale (default: 1)
+		 * Particles will scale from \p start to \p end
+		 */
+		void setScale(float start, float end = 1.f);
+
+		/**
+		 * Set the texture rect for the particles
+		 * If a texture is set in the particle system, whole texture is used by default.
+		 * Otherwise, particles default to a 1px wide square.
+		 */
+		void setTextureRect(const sf::IntRect& rect);
+		const sf::IntRect& getTextureRect() const;
+
+		/**
+		 * Create particles linked to this emitter in the particle system
+		 */
+		void createParticles(size_t count = 100);
+
+		/**
+		 * Remove all particles emitted by this emitter
+		 */
+		void clearParticles() const;
+
+		/**
+		 * Reset a particle with this emitter's properties
+		 * @param particle: particle to be initialized
+		 */
+		void resetParticle(Particle& particle) const;
+
+		/**
+		 * Set the emitter position (where particles will be spawn at)
+		 */
+		void setPosition(const sf::Vector2f& position);
+		void setPosition(float x, float y);
+		const sf::Vector2f& getPosition() const;
+
+		/**
+		 * Move the emitter position
+		 */
+		void move(const sf::Vector2f& delta);
+		void move(float dx, float dy);
+
+		/**
+		 * Compute color transition between start color and end color
+		 */
+		sf::Color modulateColor(float lifespan, float elapsed) const;
+
+		/**
+		 * Compute scale transition between start scale and end scale
+		 */
+		float modulateScale(float lifespan, float elapsed) const;
+
+		/**
+		 * Override this method to implement a new behavior when particle is inserted in the particle system
+		 */
+		virtual void onParticleCreated(Particle&) const {};
+
+		/**
+		 * Override this method to implement a new behavior when particle is updated
+		 */
+		virtual void onParticleUpdated(Particle&, float) const {};
+
+	private:
+		sf::Vector2f m_position;
+		bool         m_looping;
+		float        m_lifetime;
+		sf::Color    m_start_color;
+		sf::Color    m_end_color;
+		float        m_start_scale;
+		float        m_end_scale;
+		float        m_angle;
+		float        m_angle_variation;
+		float        m_speed;
+		float        m_speed_variation;
+		sf::IntRect  m_texture_rect;
+	};
+
+	// -------------------------------------------------------------------------
 
 	/**
-	 * Ajouter des étoiles défilantes dans la scène
-	 * @param count: nombre d'étoiles
+	 * A single particle in the particle system
 	 */
-	void AddStars(int count = 33);
+	struct Particle
+	{
+		Particle(const ParticleSystem::Emitter& e);
 
-	void AddCenteredStars(int count);
+		const Emitter&  emitter;
+		sf::Vector2f    position;
+		float           angle;
+		sf::Vector2f    velocity;
+		float           lifespan;
+		float           elapsed;
+	};
 
-	void AddShield(int count, const sf::Sprite* handle);
-	void RemoveShield(const sf::Sprite* handle);
-
-	void AddSmoke(int count, const sf::Sprite* handle);
-	void ClearSmoke(const sf::Sprite* handle);
-
+	// -------------------------------------------------------------------------
 
 	/**
-	 * Mise à jour des particules (déplacement)
+	 * Get singleton instance
 	 */
-	void Update(float frametime);
+	static ParticleSystem& getInstance();
 
 	/**
-	 * Suppression de toutes les particules
+	 * Attach a texture to the particle system
+	 * All the particles are rendered using the same texture
 	 */
-	void Clear();
+	void setTexture(const sf::Texture* texture);
+	const sf::Texture* getTexture() const;
 
+	/**
+	 * Set the blend mode in the particle system
+	 * All the particles will be rendered using the same blend mode
+	 */
+	void setBlendMode(const sf::BlendMode& blendMode);
+	const sf::BlendMode& getBlendMode() const;
+
+	/**
+	 * Delete all particles emitted by a given emitter
+	 */
+	void removeByEmitter(const Emitter& emitter);
+
+	/**
+	 * Insert a new particle in the particle system
+	 */
+	void addParticle(const Particle& particle);
+
+	/**
+	 * Update all particles
+	 */
+	void update(float frametime);
+
+	/**
+	 * Delete all particles
+	 */
+	void clear();
 
 private:
-	ParticleSystem();
-	ParticleSystem(const ParticleSystem& other);
-	ParticleSystem& operator=(const ParticleSystem& other);
+    ParticleSystem();
 	~ParticleSystem();
 
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	/**
-	 * Particule abstraite
-	 */
-	class Particle: public sf::Drawable
-	{
-	public:
-		/**
-		 * Animation de la particule lors de l'update du ParticleSystem
-		 * @return true si la particule est morte, sinon false
-		 */
-		virtual bool OnUpdate(float frametime) = 0;
-		virtual ~Particle() {};
+	typedef std::list<Particle> ParticleList;
+	ParticleList         m_particles;
 
-		/**
-		 * Affichage de la particule
-		 */
-		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
-	};
+	typedef std::map<std::string, Emitter> EmitterMap;
+	EmitterMap           m_emitters;
 
-
-	/**
-	 * Impact d'une explosion
-	 */
-	class Fiery: public Particle
-	{
-	public:
-		Fiery(const sf::Vector2f& offset, const sf::Texture& img);
-		~Fiery() {};
-		bool OnUpdate(float frametime);
-
-		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
-		{
-			target.draw(sprite_, states);
-		}
-	private:
-		sf::Sprite sprite_;
-		float angle_; // en radians
-		float timer_;
-		float lifetime_;
-	};
-
-
-	/**
-	 * Étoile défilante
-	 */
-	class Star: public Particle
-	{
-	public:
-		Star(const sf::Texture& img);
-		~Star() {};
-		bool OnUpdate(float frametime);
-
-		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
-		{
-			target.draw(sprite_, states);
-		}
-	protected:
-		int speed_;
-		sf::Sprite sprite_;
-	};
-
-	class CenteredStar: public Star
-	{
-	public:
-		CenteredStar(const sf::Texture& img);
-		~CenteredStar() {};
-		bool OnUpdate(float frametime);
-
-	private:
-		float angle_;
-	};
-
-	/**
-	 * Particule liée à un objet externe au ParticleSystem (non autonome)
-	 */
-	class ShieldParticle: public Particle
-	{
-	public:
-		ShieldParticle(const sf::Sprite* handle, float angle);
-		~ShieldParticle() {};
-		bool OnUpdate(float frametime);
-
-		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
-		{
-			target.draw(sprite_, states);
-		}
-
-		inline const sf::Sprite* GetHandle() const
-		{
-			return handle_;
-		}
-	private:
-		const sf::Sprite* handle_; // hack... le sprite cible sert de handle
-		sf::Sprite sprite_;
-		float angle_; // en radians
-	};
-
-	class Smoke: public Particle
-	{
-	public:
-		Smoke(const sf::Texture& img, const sf::Sprite* handle);
-		~Smoke() { }
-		bool OnUpdate(float frametime);
-		inline void draw(sf::RenderTarget& target, sf::RenderStates states) const
-		{
-			target.draw(sprite_, states);
-		}
-		const sf::Sprite* GetHandle() const
-		{
-			return handle_;
-		}
-		void SetHandle(const sf::Sprite* handle)
-		{
-			handle_ = handle;
-		}
-	private:
-		int y_offset_;
-		sf::Sprite sprite_;
-		const sf::Sprite* handle_;
-		float timer_;
-		sf::Vector2f vspeed_;
-	};
-
-	typedef std::list<Particle*> ParticleList;
-
-	ParticleList particles_;
+	sf::VertexArray      m_vertices;
+	const sf::Texture*   m_texture;
+	const sf::BlendMode& m_blendMode;
 };
 
-#endif // PARTICLESYSTEM_HPP
+#endif // PARTICLE_SYSTEM_HPP
 

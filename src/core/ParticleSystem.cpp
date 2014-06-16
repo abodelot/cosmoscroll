@@ -1,112 +1,245 @@
 #include "ParticleSystem.hpp"
-#include "Constants.hpp"
-#include "SoundSystem.hpp"
-#include "utils/SFML_Helper.hpp"
 #include "utils/Math.hpp"
-#include "Resources.hpp"
 
 
-ParticleSystem& ParticleSystem::GetInstance()
+// ParticleSystem::Emitter -----------------------------------------------------
+
+ParticleSystem::Emitter::Emitter():
+	m_looping(false),
+	m_lifetime(5),
+	m_start_color(sf::Color::White),
+	m_end_color(sf::Color(0, 0, 0, 0)),
+	m_start_scale(1),
+	m_end_scale(1),
+	m_angle(0),
+	m_angle_variation(math::PI * 2),
+	m_speed(100),
+	m_speed_variation(50)
+{
+	const sf::Texture* texture = ParticleSystem::getInstance().getTexture();
+	if (texture != NULL)
+	{
+		// If particle system already provides a texture, use the whole texture
+		m_texture_rect.width = texture->getSize().x;
+		m_texture_rect.height = texture->getSize().y;
+	}
+	else
+	{
+		// Otherwise, particles are just 1 pixel-wide
+		m_texture_rect.width = 1;
+		m_texture_rect.height = 1;
+	}
+}
+
+
+ParticleSystem::Emitter::~Emitter()
+{
+	clearParticles();
+}
+
+
+void ParticleSystem::Emitter::setLifetime(float duration)
+{
+	m_lifetime = duration;
+}
+
+
+void ParticleSystem::Emitter::setLooping(bool looping)
+{
+	m_looping = looping;
+}
+
+
+bool ParticleSystem::Emitter::isLooping() const
+{
+	return m_looping;
+}
+
+
+void ParticleSystem::Emitter::setParticleColor(const sf::Color& color)
+{
+	m_start_color = color;
+}
+
+
+void ParticleSystem::Emitter::setParticleColor(const sf::Color& start, const sf::Color& end)
+{
+	m_start_color = start;
+	m_end_color = end;
+}
+
+
+void ParticleSystem::Emitter::setAngle(float angle, float variation)
+{
+	m_angle = angle;
+	m_angle_variation = variation;
+}
+
+
+void ParticleSystem::Emitter::setSpeed(float speed, float variation)
+{
+	m_speed = speed;
+	m_speed_variation = variation;
+}
+
+
+void ParticleSystem::Emitter::setScale(float start, float end)
+{
+	m_start_scale = start;
+	m_end_scale = end;
+}
+
+
+void ParticleSystem::Emitter::setTextureRect(const sf::IntRect& rect)
+{
+	m_texture_rect = rect;
+}
+
+
+const sf::IntRect& ParticleSystem::Emitter::getTextureRect() const
+{
+	return m_texture_rect;
+}
+
+
+sf::Color ParticleSystem::Emitter::modulateColor(float lifespan, float elapsed) const
+{
+	if (lifespan)
+		return sf::Color(
+			m_start_color.r + (elapsed * (m_end_color.r - m_start_color.r) / lifespan),
+			m_start_color.g + (elapsed * (m_end_color.g - m_start_color.g) / lifespan),
+			m_start_color.b + (elapsed * (m_end_color.b - m_start_color.b) / lifespan),
+			m_start_color.a + (elapsed * (m_end_color.a - m_start_color.a) / lifespan)
+		);
+
+	return m_start_color;
+}
+
+
+float ParticleSystem::Emitter::modulateScale(float lifespan, float elapsed) const
+{
+	if (lifespan)
+		return m_start_scale + (elapsed * (m_end_scale - m_start_scale) / lifespan);
+
+	return m_start_scale;
+}
+
+
+void ParticleSystem::Emitter::createParticles(size_t count)
+{
+	ParticleSystem& particleSystem = ParticleSystem::getInstance();
+
+	// Insert 'count' particles in the particle system
+	for (size_t i = 0; i < count; ++i)
+	{
+		Particle p(*this);
+		resetParticle(p);
+		particleSystem.addParticle(p);
+	}
+}
+
+
+void ParticleSystem::Emitter::clearParticles() const
+{
+	ParticleSystem::getInstance().removeByEmitter(*this);
+}
+
+
+void ParticleSystem::Emitter::resetParticle(Particle& particle) const
+{
+	// Set position adjusted to particle width and height
+	particle.position = sf::Vector2f(m_position.x - m_texture_rect.width / 2,
+									 m_position.y - m_texture_rect.height / 2);
+
+	// Set random angle
+	particle.angle = math::rand(m_angle - m_angle_variation, m_angle + m_angle_variation);
+
+	// Set random velocity vector
+	float speed = math::rand(m_speed - m_speed_variation, m_speed + m_speed_variation);
+	particle.velocity = sf::Vector2f(speed * std::cos(particle.angle), speed * -std::sin(particle.angle));
+
+	// Set random lifetime
+	particle.lifespan = m_lifetime == 0.f ? 0.f : math::rand(0.f, m_lifetime);
+	particle.elapsed = 0.f;
+
+	onParticleCreated(particle);
+}
+
+
+void ParticleSystem::Emitter::setPosition(const sf::Vector2f& position)
+{
+	m_position = position;
+}
+
+
+void ParticleSystem::Emitter::setPosition(float x, float y)
+{
+	m_position.x = x;
+	m_position.y = y;
+}
+
+
+const sf::Vector2f& ParticleSystem::Emitter::getPosition() const
+{
+	return m_position;
+}
+
+
+void ParticleSystem::Emitter::move(float dx, float dy)
+{
+	m_position.x += dx;
+	m_position.y += dy;
+}
+
+// ParticleSystem --------------------------------------------------------------
+
+ParticleSystem& ParticleSystem::getInstance()
 {
 	static ParticleSystem self;
 	return self;
 }
 
 
-ParticleSystem::ParticleSystem()
+ParticleSystem::ParticleSystem():
+	m_vertices(sf::Quads, 4000),
+	m_texture(NULL),
+	m_blendMode(sf::BlendAlpha)
 {
 }
 
 
 ParticleSystem::~ParticleSystem()
 {
-	Clear();
+	clear();
 }
 
 
-void ParticleSystem::ImpactSfx(const sf::Vector2f& pos, int count)
+void ParticleSystem::setTexture(const sf::Texture* texture)
 {
-	static const sf::Texture& img = Resources::getTexture("particles/impact.png");
-	for (; count > 0; --count)
-		particles_.push_front(new Fiery(pos, img));
+	m_texture = texture;
 }
 
 
-void ParticleSystem::GreenImpactSfx(const sf::Vector2f& pos, int count)
+const sf::Texture* ParticleSystem::getTexture() const
 {
-	static const sf::Texture& img = Resources::getTexture("particles/impact-green.png");
-	for (;count > 0; --count)
-		particles_.push_front(new Fiery(pos, img));
-	SoundSystem::GetInstance().PlaySound("boom.ogg");
+	return m_texture;
 }
 
 
-void ParticleSystem::FierySfx(const sf::Vector2f& pos, int count)
+void ParticleSystem::addParticle(const Particle& particle)
 {
-	static const sf::Texture& fiery = Resources::getTexture("particles/fiery.png");
-	for (; count > 0; --count)
-		particles_.push_front(new Fiery(pos, fiery));
+	m_particles.push_back(particle);
 }
 
 
-void ParticleSystem::SnowflakeSfx(const sf::Vector2f& pos, int count)
+void ParticleSystem::removeByEmitter(const Emitter& emitter)
 {
-	static const sf::Texture& snowflake = Resources::getTexture("particles/snowflake.png");
-	for (; count > 0; --count)
-		particles_.push_front(new Fiery(pos, snowflake));
-}
-
-
-void ParticleSystem::AddStars(int count)
-{
-	const sf::Texture& img = Resources::getTexture("particles/star.png");
-	for (; count > 0; --count)
+	for (ParticleList::iterator it = m_particles.begin(); it != m_particles.end();)
 	{
-		particles_.push_front(new Star(img));
-	}
-}
-
-
-void ParticleSystem::AddCenteredStars(int count)
-{
-	const sf::Texture& img = Resources::getTexture("particles/star.png");
-	for (; count > 0; --count)
-	{
-		particles_.push_front(new CenteredStar(img));
-	}
-}
-
-
-void ParticleSystem::AddShield(int count, const sf::Sprite* handle)
-{
-	float angle = 2 * math::PI / count;
-	for (int i = 0; i < count; ++i)
-	{
-		particles_.push_front(new ShieldParticle(handle, angle * (i + 1)));
-	}
-}
-
-
-void ParticleSystem::AddSmoke(int count, const sf::Sprite* handle)
-{
-	const sf::Texture& img = Resources::getTexture("particles/smoke.png");
-	for (int i = 0; i < count; ++i)
-	{
-		particles_.push_front(new Smoke(img, handle));
-	}
-}
-
-
-void ParticleSystem::RemoveShield(const sf::Sprite* handle)
-{
-	ParticleList::iterator it;
-	for (it = particles_.begin(); it != particles_.end();)
-	{
-		ShieldParticle* p = dynamic_cast<ShieldParticle*>(*it);
-		if (p != NULL && p->GetHandle() == handle)
+		if (&(it->emitter) == &emitter)
 		{
-			delete *it;
-			it = particles_.erase(it);
+			// Delete particle
+			it = m_particles.erase(it);
 		}
 		else
 		{
@@ -116,250 +249,110 @@ void ParticleSystem::RemoveShield(const sf::Sprite* handle)
 }
 
 
-void ParticleSystem::ClearSmoke(const sf::Sprite* handle)
+void ParticleSystem::update(float frametime)
 {
-	for (ParticleList::iterator it = particles_.begin();
-		it != particles_.end(); ++it)
+	m_vertices.clear();
+
+	for (ParticleList::iterator it = m_particles.begin(); it != m_particles.end();)
 	{
-		Smoke* p = dynamic_cast<Smoke*>(*it);
-		if (p != NULL && p->GetHandle() == handle)
+		Particle& p = *it;
+		p.elapsed += frametime;
+		p.emitter.onParticleUpdated(p, frametime);
+
+		// If particle is still alive
+		if (p.lifespan == 0.f || p.elapsed < p.lifespan)
 		{
-			p->SetHandle(NULL);
+			// Update position
+			p.position.x += p.velocity.x * frametime;
+			p.position.y += p.velocity.y * frametime;
+
+			// Update color
+			sf::Color color = p.emitter.modulateColor(p.lifespan, p.elapsed);
+
+			// Each particle is a quad
+			sf::Vertex vertices[4];
+
+			// Compute the texture coords
+			const sf::IntRect& r = p.emitter.getTextureRect();
+			vertices[0].texCoords = sf::Vector2f(r.left,           r.top);
+			vertices[1].texCoords = sf::Vector2f(r.left,           r.top + r.height);
+			vertices[2].texCoords = sf::Vector2f(r.left + r.width, r.top + r.height);
+			vertices[3].texCoords = sf::Vector2f(r.left + r.width, r.top);
+
+			// Compute the position (top, left, bottom, right)
+			float scale = p.emitter.modulateScale(p.lifespan, p.elapsed);
+			float right = p.position.x + r.width * scale;
+			float bottom = p.position.y + r.height * scale;
+			vertices[0].position  = sf::Vector2f(p.position.x, p.position.y);
+			vertices[1].position  = sf::Vector2f(p.position.x, bottom);
+			vertices[2].position  = sf::Vector2f(right,        bottom);
+			vertices[3].position  = sf::Vector2f(right,        p.position.y);
+
+
+			// Each point is rotated around the particle center
+			sf::Vector2f center(p.position.x + r.width / 2, p.position.y + r.height / 2);
+			float sin = -std::sin(p.angle);
+			float cos =  std::cos(p.angle);
+
+			for (int i = 0; i < 4; ++i)
+			{
+				sf::Vertex& vertex = vertices[i];
+
+				// Update color
+				vertex.color = color;
+
+				// Translate point back to origin
+				vertex.position.x -= center.x;
+				vertex.position.y -= center.y;
+
+				// Rotate point
+				float x = vertex.position.x * cos - vertex.position.y * sin;
+				float y = vertex.position.x * sin + vertex.position.y * cos;
+
+				// Translate point back
+				vertex.position.x = x + center.x;
+				vertex.position.y = y + center.y;
+
+				m_vertices.append(vertex);
+			}
+			++it;
+		}
+		else
+		{
+			if (p.emitter.isLooping())
+			{
+				// Reset the particle and continue iteration
+				p.emitter.resetParticle(p);
+				++it;
+			}
+			else
+			{
+				// Delete the current particle and continue iteration
+				it = m_particles.erase(it);
+			}
 		}
 	}
 }
 
 
-void ParticleSystem::Update(float frametime)
+void ParticleSystem::clear()
 {
-	ParticleList::iterator it;
-	for (it = particles_.begin(); it != particles_.end();)
-	{
-		if ((*it)->OnUpdate(frametime))
-		{
-			delete *it;
-			it = particles_.erase(it);
-		}
-		else
-		{
-			++it;
-		}
-	}
+	m_particles.clear();
+	m_vertices.clear();
 }
 
 
 void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	ParticleList::const_iterator it = particles_.begin();
-	for (; it != particles_.end(); ++it)
-	{
-		target.draw(**it, states);
-	}
+	states.texture = m_texture;
+	states.blendMode = m_blendMode;
+	target.draw(m_vertices, states);
 }
 
 
-void ParticleSystem::Clear()
+// ParticleSystem::Particle ----------------------------------------------------
+
+ParticleSystem::Particle::Particle(const ParticleSystem::Emitter& e):
+	emitter(e)
 {
-	ParticleList::iterator it;
-	for (it = particles_.begin(); it != particles_.end(); ++it)
-	{
-		delete *it;
-	}
-	particles_.clear();
 }
-
-// particles -------------------------------------------------------------------
-
-// Fiery
-#define FIERY_VELOCITY          150
-#define FIERY_MIN_LIFETIME      1.0f
-#define FIERY_MAX_LIFETIME      4.0f
-
-ParticleSystem::Fiery::Fiery(const sf::Vector2f& offset, const sf::Texture& img)
-{
-	sprite_.setTexture(img);
-	sprite_.setPosition(offset);
-	//sprite_.SetBlendMode(sf::Blend::Add);
-	angle_ = math::rand(-math::PI, math::PI);
-	sprite_.setRotation(-math::to_degrees(angle_));
-	float scale = math::rand(0.5f, 1.2f);
-	sprite_.setScale(scale, scale);
-	lifetime_ = math::rand(FIERY_MIN_LIFETIME, FIERY_MAX_LIFETIME);
-	timer_ = 0.f;
-}
-
-
-bool ParticleSystem::Fiery::OnUpdate(float frametime)
-{
-	timer_ += frametime;
-	float speed = (lifetime_ - timer_) * FIERY_VELOCITY * frametime;
-	sprite_.move(speed * std::cos(angle_), -speed * std::sin(angle_));
-	// transparence
-	sprite_.setColor(sf::Color(255, 255, 255, (int) (255 - 255 * timer_ / lifetime_)));
-	return timer_ >= lifetime_;
-}
-
-
-// Star
-#define STAR_MIN_SPEED       10.0f
-#define STAR_MAX_SPEED       300.0f
-
-ParticleSystem::Star::Star(const sf::Texture& img)
-{
-	sprite_.setTexture(img);
-	float x = math::rand(0, APP_WIDTH);
-	float y = math::rand(0, APP_HEIGHT);
-	sprite_.setPosition(x, y);
-	float scale = math::rand(1.f, 2.f);
-	sprite_.setScale(scale, scale);
-	sprite_.setColor(sf::Color(220, 220, 220));
-	speed_ = (int) (math::rand(STAR_MIN_SPEED, STAR_MAX_SPEED));
-}
-
-
-bool ParticleSystem::Star::OnUpdate(float frametime)
-{
-	if (sprite_.getPosition().x < 0)
-	{
-		sprite_.setPosition(APP_WIDTH, math::rand(0, APP_HEIGHT));
-		speed_ = math::rand(STAR_MIN_SPEED, STAR_MAX_SPEED);
-		float scale = math::rand(0.5f, 1.5f);
-		sprite_.setScale(scale, scale);
-	}
-	sprite_.move(-speed_ * frametime, 0);
-	return false;
-}
-
-
-ParticleSystem::CenteredStar::CenteredStar(const sf::Texture& img):
-	ParticleSystem::Star(img)
-{
-	float x = APP_WIDTH / 2;
-	float y = APP_HEIGHT / 2;
-	sprite_.setPosition(x, y);
-	float scale = math::rand(0.5f, 1.5f);
-	sprite_.setScale(scale, scale);
-	speed_ = (int) (math::rand(STAR_MIN_SPEED, STAR_MAX_SPEED));
-	angle_ = math::rand(-math::PI, math::PI);
-}
-
-
-bool ParticleSystem::CenteredStar::OnUpdate(float frametime)
-{
-	static const sf::FloatRect UNIVERSE(0, 0, APP_WIDTH, APP_HEIGHT);
-	sf::Vector2f pos = sprite_.getPosition();
-	if (!UNIVERSE.contains(pos.x, pos.y))
-	{
-		pos.x = APP_WIDTH / 2;
-		pos.y = APP_HEIGHT / 2;
-		speed_ = math::rand(STAR_MIN_SPEED, STAR_MAX_SPEED);
-		float scale = math::rand(0.5f, 1.5f);
-		sprite_.setScale(scale, scale);
-		angle_ = math::rand(-math::PI, math::PI);
-	}
-
-	math::translate(pos, angle_, speed_ * frametime);
-	sprite_.setPosition(pos);
-	return false;
-}
-
-
-// distance vaisseau <-> particule (plus elle est éloignée, plus elle va vite)
-#define SHIELD_RADIUS 42
-
-ParticleSystem::ShieldParticle::ShieldParticle(const sf::Sprite* handle,
-	float angle)
-{
-	sprite_.setTexture(Resources::getTexture("particles/shield.png"));
-	sprite_.setOrigin(sfh::getCenter(sprite_));
-	handle_ = handle;
-
-	angle_ = angle;
-	sprite_.setRotation(-math::to_degrees(angle + 0.5 * math::PI));
-}
-
-
-bool ParticleSystem::ShieldParticle::OnUpdate(float frametime)
-{
-	sf::Vector2f offset = handle_->getPosition();
-	angle_ += (2 * math::PI * frametime); // rotation de 2 * PI par seconde
-	offset.x += handle_->getTextureRect().width / 2;
-	offset.y += handle_->getTextureRect().height / 2;
-	offset.x = offset.x + (SHIELD_RADIUS) * std::cos(angle_) + frametime;
-	offset.y = offset.y - (SHIELD_RADIUS) * std::sin(angle_) + frametime;
-	sprite_.setPosition(offset);
-	sprite_.setRotation(-math::to_degrees(angle_ + (0.5 * math::PI)));
-	return false;
-}
-
-
-// SmokeParticle
-#define SMOKE_MAX_LIFETIME 2.5f
-#define SMOKE_MIN_SPEED  50
-#define SMOKE_MAX_SPEED  100
-#define SMOKE_MIN_SIZE     0.5f
-#define SMOKE_MAX_SIZE     1.2f
-#define SMOKE_MIN_ANGLE    (math::PI - 0.5f)
-#define SMOKE_MAX_ANGLE    (math::PI + 0.5f)
-
-
-ParticleSystem::Smoke::Smoke(const sf::Texture& img, const sf::Sprite* handle)
-{
-	handle_ = handle;
-	const sf::Vector2f& pos = handle->getPosition();
-	sprite_.setPosition(pos.x, pos.y);
-	sprite_.setTexture(img);
-	float size = math::rand(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
-	sprite_.setScale(size, size);
-	float angle = math::rand(SMOKE_MIN_ANGLE, SMOKE_MAX_ANGLE);
-	float base_speed = math::rand(SMOKE_MIN_SPEED, SMOKE_MAX_SPEED);
-	vspeed_.x = std::cos(angle) * base_speed;
-	vspeed_.y = -std::sin(angle) * base_speed;
-	y_offset_ = (sfh::height(*handle_) - sfh::height(sprite_)) / 2;
-
-	timer_ = math::rand(0.f, SMOKE_MAX_LIFETIME);
-}
-
-
-bool ParticleSystem::Smoke::OnUpdate(float frametime)
-{
-	timer_ += frametime;
-	float size = sprite_.getScale().x;
-	size += frametime * 0.5;
-	sprite_.setScale(size, size);
-	if (timer_ >= SMOKE_MAX_LIFETIME)
-	{
-		if (handle_ == NULL)
-		{
-			return true;
-		}
-		timer_ = math::rand(0.f, SMOKE_MAX_LIFETIME);
-		float size = math::rand(SMOKE_MIN_SIZE, SMOKE_MAX_SIZE);
-		sprite_.setScale(size, size);
-		sprite_.setPosition(handle_->getPosition().x, handle_->getPosition().y + y_offset_);
-	}
-
-
-	//sf::Vector2f pos = sprite_.getPosition();
-	//int speed = (int) ((SMOKE_MAX_LIFETIME - timer_) * SMOKE_BASE_SPEED * frametime);
-
-	sprite_.move(vspeed_.x * frametime, vspeed_.y * frametime);
-	//sprite_.setPosition(pos);
-	sprite_.setColor(sf::Color(255, 255, 255, (sf::Uint8) (255 - 255 * timer_ / SMOKE_MAX_LIFETIME)));
-
-	return false;
-}
-
-
-/*
-	// MAGNET STUFF
-	sf::Vector2f offset = handle_->getPosition();
-	sf::Vector2f myp = sprite_.getPosition();
-	offset.x = offset.x + (handle_->GetSize().x / 2) + sf::Randomizer::Random(-100, 100);
-	offset.y = offset.y + (handle_->GetSize().y / 2) + sf::Randomizer::Random(-100, 100);
-	angle_ = math::angle(offset, myp);
-	float d = math::distance(myp, offset) * 2;
-	float dist =  d * frametime;
-	math::translate(myp, angle_, dist);
-	sprite_.setPosition(myp);
-*/

@@ -63,7 +63,7 @@ void PauseMenu::EventCallback(int id)
 
 void PauseMenu::Update(float frametime)
 {
-	ParticleSystem::GetInstance().Update(frametime);
+	ParticleSystem::getInstance().update(frametime);
 }
 
 

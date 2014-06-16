@@ -298,10 +298,10 @@ void ControlPanel::ProgressBar::Init(const sf::String& text, const sf::Font& fon
 
 void ControlPanel::ProgressBar::setPosition(int x, int y)
 {
-	label_.setPosition(x, y - TEXT_PADDING_Y);
+	label_.setPosition(x, y - 2);
 	int x_bar = x + PROG_BAR_TEXT_LENGTH;
 	bar_.setPosition(x_bar, y);
-	value_.setPosition(x_bar + 40, y - TEXT_PADDING_Y);
+	value_.setPosition(x_bar + 40, y - 2);
 }
 
 

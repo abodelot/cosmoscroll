@@ -5,7 +5,6 @@
 #include "Player.hpp"
 #include "EntityManager.hpp"
 #include "core/UserSettings.hpp"
-#include "core/ParticleSystem.hpp"
 #include "core/MessageSystem.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
@@ -32,13 +31,14 @@
 
 
 Player::Player():
-	panel_(ControlPanel::getInstance())
+	panel_(ControlPanel::getInstance()),
+	m_speed(0.f)
 {
 	setTeam(Entity::GOOD);
 	setHP(-1);
 	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("player"));
 
-	// init weapons
+	// Init weapons
 	m_weapon.init("laser-red");
 	m_weapon.setOwner(this);
 	m_weapon.setPosition(WEAPON_POSITION);
@@ -54,22 +54,20 @@ Player::Player():
 	shield_ = 0;
 	heat_ = -1;
 
-	speed_x_ = speed_y_ = 0.f;
-
-	// init timed bonus
+	// Init timed bonus
 	for (int i = 0; i < TIMED_BONUS_COUNT; ++i)
 	{
 		bonus_[i] = 0.f;
 	}
 
-	// init control panel
+	// Init control panel
 	panel_.SetCoolers(coolers_);
 	panel_.SetMissiles(missiles_);
 	panel_.SetOverheat(false);
 	panel_.ActiveSpeedPowerUp(0);
 	panel_.ActiveAttackPowerUp(0, PowerUp::DOUBLE_SHOT);
 
-	// init Konami code sequence
+	// Init Konami code sequence
 	m_konami_code[0] = Action::UP;
 	m_konami_code[1] = Action::UP;
 	m_konami_code[2] = Action::DOWN;
@@ -82,13 +80,29 @@ Player::Player():
 	m_konami_code[9] = Action::USE_LASER;
 	m_current_konami_index = 0;
 	m_konami_code_activated = false;
+
+	// Init particles emitters
+	m_shield_emitter.setTextureRect(sf::IntRect(40, 0, 8, 8));
+	m_shield_emitter.setLifetime(0);
+
+	m_smoke_emitter.setTextureRect(sf::IntRect(0, 0, 16, 16));
+	m_smoke_emitter.setLooping(true);
+	m_smoke_emitter.setSpeed(50, 25);
+	m_smoke_emitter.setLifetime(1.5);
+	m_smoke_emitter.setAngle(-math::PI, 0.5);
+	m_smoke_emitter.setScale(0.5, 1.5);
+
+	m_snowflakes_emitter.setTextureRect(sf::IntRect(16, 0, 16, 16));
+	m_snowflakes_emitter.setScale(0.2, 1.5);
+
+	m_powerup_emitter.setTextureRect(sf::IntRect(32, 0, 8, 8));
 }
 
 
 Player::~Player()
 {
-	ParticleSystem::GetInstance().RemoveShield(this);
-	ParticleSystem::GetInstance().ClearSmoke(this);
+	m_smoke_emitter.clearParticles();
+	m_shield_emitter.clearParticles();
 }
 
 
@@ -116,7 +130,7 @@ void Player::onInit()
 	panel_.SetShipHP(getHP());
 
 	// engine
-	speed_max_ = items.GetGenericItemData(ItemData::ENGINE, UserSettings::getItemLevel(ItemData::ENGINE))->GetValue();
+	m_speed = items.GetGenericItemData(ItemData::ENGINE, UserSettings::getItemLevel(ItemData::ENGINE))->GetValue();
 
 	// heat sink
 	heat_max_ = items.GetGenericItemData(ItemData::HEATSINK, UserSettings::getItemLevel(ItemData::HEATSINK))->GetValue();
@@ -192,8 +206,11 @@ void Player::onEvent(const sf::Event& event)
 		case Action::USE_COOLER:
 			if (coolers_ > 0)
 			{
+				// Play sound effect and launch particles
 				SoundSystem::GetInstance().PlaySound("cooler.ogg");
-				ParticleSystem::GetInstance().SnowflakeSfx(getCenter(), 40);
+				m_snowflakes_emitter.setPosition(getCenter());
+				m_snowflakes_emitter.createParticles(40);
+
 				--coolers_;
 				panel_.SetCoolers(coolers_);
 				heat_ = 0.f;
@@ -236,7 +253,7 @@ void Player::onEvent(const sf::Event& event)
 		++m_current_konami_index;
 		if (m_current_konami_index == KONAMI_CODE_LENGTH)
 		{
-			turnKonamiCodeOn();
+			applyKonamiCode();
 			m_current_konami_index = 0; // Reset
 		}
 	}
@@ -275,35 +292,42 @@ void Player::onUpdate(float frametime)
 			AudibleHeatingCue();
 	}
 
-
-	// moving
-	Computemove(frametime);
+	// Compute position
 	sf::Vector2f pos = getPosition();
-	pos.y = pos.y + speed_y_ * frametime;
-	pos.x = pos.x + speed_x_ * frametime;
+	float delta = m_speed * frametime;
 
+	if (Input::isPressed(Action::UP))
+		pos.y -= delta;
+
+	if (Input::isPressed(Action::DOWN))
+		pos.y += delta;
+
+	if (Input::isPressed(Action::LEFT))
+		pos.x -= delta;
+
+	if (Input::isPressed(Action::RIGHT))
+		pos.x += delta;
+
+	// Ensure new position is within screen's limits
 	const int X_BOUND = manager.getWidth() - getWidth();
 	const int Y_BOUND = manager.getHeight() - getHeight();
 
 	if (pos.y < 0)
-	{
 		pos.y = 0;
-	}
 	else if (pos.y > Y_BOUND)
-	{
 		pos.y = Y_BOUND;
-	}
-	if (pos.x < 0)
-	{
-		pos.x = 0;
-	}
-	else if (pos.x > X_BOUND)
-	{
-		pos.x = X_BOUND;
-	}
-	setPosition(pos);
 
-	// shield regeneration
+	if (pos.x < 0)
+		pos.x = 0;
+	else if (pos.x > X_BOUND)
+		pos.x = X_BOUND;
+
+	// Apply new position
+	setPosition(pos);
+	m_smoke_emitter.setPosition(getX(), getY() + getHeight() / 2);
+	m_shield_emitter.setPosition(getCenter());
+
+	// Regenerate shield
 	if (shield_ < shield_max_)
 	{
 		shield_timer_ += frametime;
@@ -314,7 +338,7 @@ void Player::onUpdate(float frametime)
 		}
 	}
 
-	// cooling
+	// Cooling heatsink
 	if (heat_ > 0.f)
 	{
 		heat_ -= frametime * heat_max_ / COOLING_DELAY;
@@ -330,7 +354,7 @@ void Player::onUpdate(float frametime)
 	}
 	panel_.SetHeat(static_cast<int>(heat_));
 
-	// timer bonus
+	// Decrase powerups timers
 	for (int i = 0; i < TIMED_BONUS_COUNT; ++i)
 	{
 		if (bonus_[i] > 0)
@@ -353,20 +377,14 @@ void Player::takeDamage(int damage)
 	if (damage == 0)
 		return;
 
-	static ParticleSystem& p = ParticleSystem::GetInstance();
 	if (shield_ > 0)
 	{
 		shield_ -= damage;
-		SoundSystem::GetInstance().PlaySound("shield-damage.ogg");
-		p.RemoveShield(this);
-		if (shield_ > 0)
-		{
-			p.AddShield(shield_, this);
-		}
-		else
-		{
+		if (shield_ < 0)
 			shield_ = 0;
-		}
+
+		SoundSystem::GetInstance().PlaySound("shield-damage.ogg");
+		m_shield_emitter.createParticles(shield_);
 		panel_.SetShield(shield_);
 	}
 	else
@@ -404,15 +422,16 @@ void Player::onCollision(PowerUp& powerup)
 		case PowerUp::SPEED:
 			if (bonus_[T_SPEED] == 0)
 			{
-				speed_max_ *= BONUS_SPEED_FACTOR;
-				ParticleSystem::GetInstance().AddSmoke(96, this);
+				m_speed *= BONUS_SPEED_FACTOR;
+				m_smoke_emitter.createParticles(120);
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
 			panel_.ActiveSpeedPowerUp(bonus_[T_SPEED]);
 			break;
 		// immediate bonus
 		case PowerUp::SUPER_BANANA:
-			ParticleSystem::GetInstance().FierySfx(getCenter(), 50);
+			m_powerup_emitter.setPosition(getCenter());
+			m_powerup_emitter.createParticles(50);
 			setHP(hp_max_);
 			panel_.SetShipHP(hp_max_);
 			setShield(shield_max_);
@@ -460,28 +479,6 @@ void Player::onDestroy()
 }
 
 
-void Player::Computemove(float)
-{
-	speed_x_ = speed_y_ = 0;
-	if (Input::isPressed(Action::UP))
-	{
-		speed_y_ = -speed_max_;
-	}
-	else if (Input::isPressed(Action::DOWN))
-	{
-		speed_y_ = speed_max_;
-	}
-	if (Input::isPressed(Action::LEFT))
-	{
-		speed_x_ = -speed_max_;
-	}
-	else if (Input::isPressed(Action::RIGHT))
-	{
-		speed_x_ = speed_max_;
-	}
-}
-
-
 void Player::DisableTimedPowerUp(TimedPowerUp tbonus)
 {
 	switch (tbonus)
@@ -491,8 +488,8 @@ void Player::DisableTimedPowerUp(TimedPowerUp tbonus)
 			m_weapon.setMultiply(1);
 			break;
 		case T_SPEED:
-			speed_max_ /= BONUS_SPEED_FACTOR;
-			ParticleSystem::GetInstance().ClearSmoke(this);
+			m_speed /= BONUS_SPEED_FACTOR;
+			m_smoke_emitter.clearParticles();
 			break;
 		default:
 			break;
@@ -504,23 +501,23 @@ void Player::DisableTimedPowerUp(TimedPowerUp tbonus)
 void Player::setShield(int count)
 {
 	shield_ = count;
-	// update particles
-	ParticleSystem& p = ParticleSystem::GetInstance();
-	p.RemoveShield(this);
-	p.AddShield(shield_, this);
-	// update panel count
-	panel_.SetShield(shield_);
+	// Update particles
+	m_shield_emitter.createParticles(count);
+
+	// Update panel count
+	panel_.SetShield(count);
 }
 
 
-void Player::turnKonamiCodeOn()
+void Player::applyKonamiCode()
 {
 	m_konami_code_activated = true;
 
-	// max hp
+	// Set max hp
 	setHP(hp_max_);
 	panel_.SetShipHP(hp_max_);
-	// max shield
+
+	// Set max shield
 	setShield(shield_max_);
 
 	coolers_ = 42;
@@ -531,5 +528,36 @@ void Player::turnKonamiCodeOn()
 	m_weapon.setMultiply(3);
 	m_missile_launcher.setMultiply(3);
 
-	MessageSystem::write("For great justice!", getPosition());
+	MessageSystem::write("KONAMI CODE ON", getPosition());
+	m_powerup_emitter.setPosition(getCenter());
+	m_powerup_emitter.createParticles(50);
+}
+
+// Shield::Emitter -------------------------------------------------------------
+
+void Player::ShieldEmitter::createParticles(size_t count)
+{
+	// Remove all previous particles
+	clearParticles();
+
+	float angle = 2 * math::PI / count;
+
+	for (int i = 0; i < count; ++i)
+	{
+		ParticleSystem::Particle p(*this);
+		resetParticle(p);
+		p.angle = angle * (i + 1);
+		ParticleSystem::getInstance().addParticle(p);
+	}
+}
+
+
+void Player::ShieldEmitter::onParticleUpdated(ParticleSystem::Particle& particle, float frametime) const
+{
+	sf::Vector2f circle_center = getPosition();
+	// Rotation de 2 * PI par seconde
+	particle.angle += std::fmod((2 * math::PI * frametime), 2 * math::PI);
+	const float SHIELD_RADIUS = 42.f;
+	particle.position.x = circle_center.x + (SHIELD_RADIUS) * std::cos(particle.angle);
+	particle.position.y = circle_center.y - (SHIELD_RADIUS) * std::sin(particle.angle);
 }

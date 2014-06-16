@@ -70,7 +70,6 @@ void FlyingSaucerBoss::onUpdate(float frametime)
 void FlyingSaucerBoss::takeDamage(int damage)
 {
 	Damageable::takeDamage(damage);
-
 }
 
 

@@ -63,7 +63,7 @@ EntityManager& EntityManager::getInstance()
 
 
 EntityManager::EntityManager():
-	particles_(ParticleSystem::GetInstance()),
+	m_particles(ParticleSystem::getInstance()),
 	m_player(NULL),
 	m_levels(LevelManager::getInstance())
 {
@@ -88,6 +88,20 @@ EntityManager::EntityManager():
 	Resources::getSoundBuffer("power-up.ogg");
 	Resources::getSoundBuffer("ship-damage.ogg");
 	Resources::getSoundBuffer("shield-damage.ogg");
+
+	// Init particles emitters
+	m_particles.setTexture(&Resources::getTexture("particles/particles.png"));
+	m_stars_emitter.setTextureRect(sf::IntRect(32, 9, 3, 3));
+	m_stars_emitter.setLifetime(0);
+	m_stars_emitter.setSpeed(150, 150);
+	m_stars_emitter.setAngle(-math::PI);
+
+	m_impact_emitter.setTextureRect(sf::IntRect(32, 8, 8, 1));
+	m_impact_emitter.setScale(1.5, 0.5);
+	m_impact_emitter.setSpeed(200, 50);
+	m_impact_emitter.setLifetime(3);
+
+	m_green_emitter.setTextureRect(sf::IntRect(40, 8, 8, 8));
 }
 
 
@@ -104,7 +118,7 @@ EntityManager::~EntityManager()
 void EntityManager::InitMode(Mode mode)
 {
 	// re-init particles
-	particles_.Clear();
+	m_particles.clear();
 	MessageSystem::clear();
 
 	ControlPanel::getInstance().Init(mode);
@@ -148,13 +162,16 @@ void EntityManager::InitMode(Mode mode)
 			}
 
 			decor_height_ = m_levels.getDecorHeight();
-			particles_.AddStars(m_levels.getStarsCount());
+			m_stars_emitter.createParticles(m_levels.getStarsCount());
+
+			// Set background music
+			if (m_levels.getMusicName() != NULL)
 			{
-				const char* music_name = m_levels.getMusicName();
-				if (music_name != NULL)
-					SoundSystem::GetInstance().PlayMusic(music_name);
-				else
-					SoundSystem::GetInstance().StopMusic();
+				SoundSystem::GetInstance().PlayMusic(m_levels.getMusicName());
+			}
+			else
+			{
+				SoundSystem::GetInstance().StopMusic();
 			}
 			break;
 
@@ -168,7 +185,7 @@ void EntityManager::InitMode(Mode mode)
 			layer2_.setColor(sf::Color(math::rand(10, 60), math::rand(10, 60), math::rand(10, 60)));
 
 			decor_height_ = 0;
-			particles_.AddStars();
+			m_stars_emitter.createParticles(math::rand(50, 100));
 			SoundSystem::GetInstance().PlayMusic("spacesong.mod");
 			max_droppable_index_ = 1;
 			max_droppable_points_ = 0;
@@ -187,14 +204,8 @@ EntityManager::Mode EntityManager::GetMode() const
 
 void EntityManager::resize(int width, int height)
 {
-	if (width < 0)
-		width = 0;
-
-	if (height < 0)
-		height = 0;
-
-	m_width = width;
-	m_height = height;
+	m_width = std::max(0, width);
+	m_height = std::max(0, height);
 }
 
 
@@ -254,7 +265,7 @@ void EntityManager::Update(float frametime)
 		}
 	}
 
-	particles_.Update(frametime);
+	m_particles.update(frametime);
 	MessageSystem::update(frametime);
 
 	// parallax scrolling
@@ -303,7 +314,7 @@ void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 	target.draw(layer2_, states);
 
 	// Draw effects
-	target.draw(particles_, states);
+	target.draw(m_particles, states);
 	MessageSystem::show(target, states);
 
 	// Draw managed entities
@@ -547,6 +558,37 @@ void EntityManager::RespawnPlayer()
 	addEntity(m_player);
 }
 
+
+void EntityManager::createImpactParticles(const sf::Vector2f& pos, size_t count)
+{
+	m_impact_emitter.setPosition(pos);
+	m_impact_emitter.createParticles(count);
+}
+
+
+void EntityManager::createGreenParticles(const sf::Vector2f& pos, size_t count)
+{
+	m_green_emitter.setPosition(pos);
+	m_green_emitter.createParticles(count);
+}
+
+// StarsEmitter ----------------------------------------------------------------
+
+void EntityManager::StarsEmitter::onParticleCreated(ParticleSystem::Particle& particle) const
+{
+	particle.position = sf::Vector2f(math::rand(0, EntityManager::getInstance().getWidth()),
+	                                 math::rand(0, EntityManager::getInstance().getHeight()));
+}
+
+
+void EntityManager::StarsEmitter::onParticleUpdated(ParticleSystem::Particle& particle, float) const
+{
+	if (particle.position.x < 0)
+	{
+		resetParticle(particle);
+		particle.position.x = EntityManager::getInstance().getWidth();
+	}
+}
 
 // ParallaxLayer ---------------------------------------------------------------
 

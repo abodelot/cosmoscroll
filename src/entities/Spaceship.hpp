@@ -2,8 +2,8 @@
 #define SPACESHIP_HPP
 
 #include "Damageable.hpp"
-#include "items/Weapon.hpp"
 #include "Animator.hpp"
+#include "items/Weapon.hpp"
 
 class Spaceship: public Damageable
 {

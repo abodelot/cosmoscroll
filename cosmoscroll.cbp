@@ -221,8 +221,6 @@
 		<Unit filename="src/scenes/story/LevelMenu.hpp" />
 		<Unit filename="src/scenes/story/ShipItemWidget.cpp" />
 		<Unit filename="src/scenes/story/ShipItemWidget.hpp" />
-		<Unit filename="src/utils/Error.cpp" />
-		<Unit filename="src/utils/Error.hpp" />
 		<Unit filename="src/utils/FileSystem.cpp" />
 		<Unit filename="src/utils/FileSystem.hpp" />
 		<Unit filename="src/utils/I18n.cpp" />

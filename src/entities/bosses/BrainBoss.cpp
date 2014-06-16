@@ -1,7 +1,6 @@
 #include "BrainBoss.hpp"
 #include "entities/EntityManager.hpp"
 #include "core/Resources.hpp"
-#include "core/ParticleSystem.hpp"
 
 #define ID_BRAIN 1
 #define ID_EYE   2
@@ -108,6 +107,6 @@ void BrainBoss::onPartDestroyed(const Part& part)
 	if (part.getID() == ID_EYE)
 	{
 		kill();
-		ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 100);
+		EntityManager::getInstance().createGreenParticles(getCenter(), 100);
 	}
 }

@@ -85,7 +85,7 @@ void EndGameScene::Update(float frametime)
 		player->move(-100 * frametime, 100 * frametime);
 		player->rotate(-60 * frametime);
 	}
-	ParticleSystem::GetInstance().Update(frametime);
+	ParticleSystem::getInstance().update(frametime);
 
 	if (m_started_at.getElapsedTime().asSeconds() >= SCREEN_DURATION)
 		goNextScreen();

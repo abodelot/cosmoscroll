@@ -1,6 +1,5 @@
 #include "TentaculatBoss.hpp"
 #include "entities/EntityManager.hpp"
-#include "core/ParticleSystem.hpp"
 #include "entities/Player.hpp"
 #include "utils/Math.hpp"
 
@@ -72,7 +71,7 @@ void TentaculatBoss::onUpdate(float frametime)
 			{
 				m_timer = 0.f;
 				m_state = CHARGE;
-				float angle = math::angle(target_pos, pos);
+				float angle = math::angle(pos, target_pos);
 				m_speed.x = std::cos(angle) * 350;
 				m_speed.y = -std::sin(angle) * 350;
 			}
@@ -102,5 +101,5 @@ void TentaculatBoss::onUpdate(float frametime)
 
 void TentaculatBoss::onDestroy()
 {
-	ParticleSystem::GetInstance().GreenImpactSfx(getCenter(), 100);
+	EntityManager::getInstance().createGreenParticles(getCenter(), 100);
 }
