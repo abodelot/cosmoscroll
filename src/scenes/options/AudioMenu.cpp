@@ -7,28 +7,27 @@
 AudioMenu::AudioMenu()
 {
 	SetTitle(_t("menu.audio.title"));
-	SoundSystem& sound = SoundSystem::GetInstance();
 
 	gui::FormLayout form(60, 120);
 	form.SetSpacing(40, 20);
 
 	cb_music_ = new gui::CheckBox(this);
-	cb_music_->Check(sound.IsMusicEnabled());
+	cb_music_->Check(SoundSystem::isMusicEnabled());
 	cb_music_->SetCallbackID(2);
 	form.AddRow(_t("menu.audio.enable_music"), cb_music_);
 
 	sl_music_vol_ = new gui::Slider(this, 200);
-	sl_music_vol_->SetValue(sound.GetMusicVolume());
+	sl_music_vol_->SetValue(SoundSystem::getMusicVolume());
 	sl_music_vol_->SetCallbackID(3);
 	form.AddRow(_t("menu.audio.music_volume"), sl_music_vol_);
 
 	cb_sound_ = new gui::CheckBox(this);
-	cb_sound_->Check(sound.IsSoundEnabled());
+	cb_sound_->Check(SoundSystem::isSoundEnabled());
 	cb_sound_->SetCallbackID(4);
 	form.AddRow(_t("menu.audio.enable_sound"), cb_sound_);
 
 	sl_sound_vol_ = new gui::Slider(this, 200);
-	sl_sound_vol_->SetValue(sound.GetSoundVolume());
+	sl_sound_vol_->SetValue(SoundSystem::getSoundVolume());
 	sl_sound_vol_->SetCallbackID(5);
 	form.AddRow(_t("menu.audio.sound_volume"), sl_sound_vol_);
 
@@ -40,23 +39,22 @@ AudioMenu::AudioMenu()
 
 void AudioMenu::EventCallback(int id)
 {
-	SoundSystem& sound = SoundSystem::GetInstance();
 	switch (id)
 	{
 		case 0:
 			Game::getInstance().setNextScene(Game::SC_OptionMenu);
 			break;
 		case 2:
-			sound.EnableMusic(cb_music_->Checked());
+			SoundSystem::enableMusic(cb_music_->Checked());
 			break;
 		case 3:
-			sound.SetMusicVolume(sl_music_vol_->GetValue());
+			SoundSystem::setMusicVolume(sl_music_vol_->GetValue());
 			break;
 		case 4:
-			sound.EnableSound(cb_sound_->Checked());
+			SoundSystem::enableSound(cb_sound_->Checked());
 			break;
 		case 5:
-			sound.SetSoundVolume(sl_sound_vol_->GetValue());
+			SoundSystem::setSoundVolume(sl_sound_vol_->GetValue());
 			break;
 	}
 }

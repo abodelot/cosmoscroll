@@ -147,4 +147,27 @@ void UserSettings::saveToConfig(IniParser& config)
 	config.set("cooler",      Input::getButtonBinding(Action::USE_COOLER));
 	config.set("missile",     Input::getButtonBinding(Action::USE_MISSILE));
 	config.set("sensitivity", Input::getJoystickDeadzone());
+
+
+	/*
+
+void SoundSystem::LoadFromConfig(IniParser& config)
+{
+	config.seekSection("Audio");
+	enable_music_ = config.get("enable_music", enable_music_);
+	enable_sound_ = config.get("enable_sound", enable_sound_);
+    SetMusicVolume(config.get("music_volume", music_volume_));
+	SetSoundVolume(config.get("sound_volume", sound_volume_));
+}
+
+
+void SoundSystem::SaveToConfig(IniParser& config)
+{
+	config.seekSection("Audio");
+	config.set("enable_music", enable_music_);
+	config.set("music_volume", music_volume_);
+	config.set("enable_sound", enable_sound_);
+	config.set("sound_volume", sound_volume_);
+}
+*/
 }

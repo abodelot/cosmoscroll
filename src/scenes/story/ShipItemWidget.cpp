@@ -58,7 +58,7 @@ void ShipItemWidget::OnStateChanged(gui::State::EState state)
 	case gui::State::FOCUSED:
 		m_background.setTextureRect(sf::IntRect(0, 60, 340, 60));
 		m_txt_name.setColor(sf::Color(0, 255, 255));
-		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("menu-select.ogg"));
+		SoundSystem::playSound("menu-select.ogg");
 		break;
 	default:
 		break;
@@ -132,10 +132,10 @@ bool ShipItemWidget::buyNextLevel() const
 		UserSettings::updateCredits(-data->getPrice());
 		UserSettings::setItemLevel(m_type, next_level);
 
-		SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("cash-register.ogg"));
+		SoundSystem::playSound("cash-register.ogg");
 		return true;
 	}
-	SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("disabled.ogg"));
+	SoundSystem::playSound("disabled.ogg");
 	return false;
 }
 

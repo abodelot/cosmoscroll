@@ -39,7 +39,6 @@ template <class T>
 float Weapon<T>::shoot(float angle)
 {
 	assert(m_inited);
-	static SoundSystem& sound_sys = SoundSystem::GetInstance();
 
 	// peut-on tirer ?
 	if (m_last_shot_at.getElapsedTime().asSeconds() >= m_fire_delay)
@@ -66,7 +65,7 @@ float Weapon<T>::shoot(float angle)
 
 		if (m_sound != NULL)
 		{
-			sound_sys.PlaySound(*m_sound);
+			SoundSystem::playSound(*m_sound);
 		}
 		m_last_shot_at.restart();
 		return m_heat_cost;

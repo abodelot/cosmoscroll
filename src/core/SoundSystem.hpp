@@ -1,78 +1,69 @@
 #ifndef SOUNDSYSTEM_HPP
 #define SOUNDSYSTEM_HPP
 
-#include <string>
 #include <SFML/Audio.hpp>
 #include "utils/ModMusic.hpp"
 
-class IniParser;
-
+/**
+ * Static class for playing sound effects and music
+ */
 class SoundSystem
 {
 public:
-	static SoundSystem& GetInstance();
-
 	/**
 	 * Control music
 	 */
-	void PlayMusic(const std::string& music_name);
-	void PlayMusic();
-	void StopMusic();
-	void PauseMusic();
-
-
-	/**
-	 * Jouer un son
-	 */
-	void PlaySound(const sf::SoundBuffer& soundbuffer);
-	void PlaySound(const std::string& sound_name);
+	static bool openMusicFromFile(const std::string& path);
+	static void playMusic();
+	static void stopMusic();
+	static void pauseMusic();
 
 	/**
-	 * Volume de la musique
+	 * Play a sound effect
+	 * @param name: sound buffer filename in the Resources class loader
 	 */
-	void SetMusicVolume(int volume);
-	inline int GetMusicVolume() const { return music_volume_; }
+	static void playSound(const std::string& name, float pitch = 1.f);
+	static void playSound(const sf::SoundBuffer& soundbuffer, float pitch = 1.f);
 
 	/**
-	 * Volume des sons
+	 * Control music volume
 	 */
-	void SetSoundVolume(int volume);
-	inline int GetSoundVolume() const { return sound_volume_; }
+	static void setMusicVolume(int volume);
+	static int getMusicVolume();
 
 	/**
-	 * Activer/désactiver la musique
+	 * Control sound effects volume
 	 */
-	void EnableMusic(bool enabled);
-	bool IsMusicEnabled() const;
+	static void setSoundVolume(int volume);
+	static int getSoundVolume();
 
 	/**
-	 * Activer/désactiver les sons
+	 * Turn music on/off
 	 */
-	void EnableSound(bool enabled);
-	bool IsSoundEnabled() const;
+	static void enableMusic(bool enabled);
+	static bool isMusicEnabled();
 
 	/**
-	 * Arrêter la lecture de tous les ressources utilisées
+	 * Turn sound effects on/off
 	 */
-	void StopAll();
+	static void enableSound(bool enabled);
+	static bool isSoundEnabled();
 
-	void LoadFromConfig(IniParser& config);
-	void SaveToConfig(IniParser& config);
+	/**
+	 * Stop music and sound effects
+	 */
+	static void stopAll();
 
 private:
-	SoundSystem();
-	SoundSystem(const SoundSystem&);
+	static const int MAX_SOUNDS = 20;
 
-	enum {MAX_SOUNDS = 20};
-
-	sf::Sound sounds_[MAX_SOUNDS];
-	int last_used_;
-	ModMusic music_;
-	std::string music_name_;
-	int music_volume_;
-	int sound_volume_;
-	bool enable_music_;
-	bool enable_sound_;
+	static sf::Sound   m_sounds[MAX_SOUNDS];
+	static int         m_last_sound_played;
+	static ModMusic    m_music;
+	static int         m_music_volume;
+	static int         m_sound_volume;
+	static bool        m_enable_music;
+	static bool        m_enable_sound;
 };
 
 #endif // SOUNDSYSTEM_HPP

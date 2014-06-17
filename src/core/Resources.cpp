@@ -7,7 +7,7 @@ Resources::FontMap    Resources::m_fonts;
 Resources::SoundMap   Resources::m_sounds;
 
 
-void Resources::setDataPath(const std::string& path)
+void Resources::setSearchPath(const std::string& path)
 {
 	if (!path.empty())
 	{
@@ -16,7 +16,7 @@ void Resources::setDataPath(const std::string& path)
 }
 
 
-const std::string& Resources::getDataPath()
+const std::string& Resources::getSearchPath()
 {
 	return m_path;
 }
@@ -54,10 +54,8 @@ sf::SoundBuffer& Resources::getSoundBuffer(const std::string& name)
 	if (it == m_sounds.end())
 	{
 		sf::SoundBuffer& sound = m_sounds[name];
-		sound.loadFromFile(m_path + "/sound/" + name);
+		sound.loadFromFile(m_path + "/sounds/" + name);
 		return sound;
 	}
 	return it->second;
 }
-
-

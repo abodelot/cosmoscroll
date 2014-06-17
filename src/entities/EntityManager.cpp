@@ -167,29 +167,37 @@ void EntityManager::InitMode(Mode mode)
 			// Set background music
 			if (m_levels.getMusicName() != NULL)
 			{
-				SoundSystem::GetInstance().PlayMusic(m_levels.getMusicName());
+				std::string filename = Resources::getSearchPath() + "/music/" + m_levels.getMusicName();
+				SoundSystem::openMusicFromFile(filename);
+				SoundSystem::playMusic();
 			}
 			else
 			{
-				SoundSystem::GetInstance().StopMusic();
+				SoundSystem::stopMusic();
 			}
 			break;
 
 		case MODE_ARCADE:
+		{
 			more_bad_guys_ = &EntityManager::arcadeModeCallback;
 			// on démarre toujours le mode arcade avec un nouveau vaisseau
 			RespawnPlayer();
 			// fog with random color on layer 2,
+			sf::Color color(math::rand(0, 40), math::rand(0, 40), math::rand(20, 60));
 			layer1_.setTexture(Resources::getTexture("layers/blue.jpg"));
+			layer1_.setColor(color);
 			layer2_.setTexture(Resources::getTexture("layers/fog.png"));
-			layer2_.setColor(sf::Color(math::rand(10, 60), math::rand(10, 60), math::rand(10, 60)));
+			layer2_.setColor(color);
 
 			decor_height_ = 0;
 			m_stars_emitter.createParticles(math::rand(50, 100));
-			SoundSystem::GetInstance().PlayMusic("spacesong.mod");
+			SoundSystem::openMusicFromFile(Resources::getSearchPath() + "/music/spacesong.mod");
+			SoundSystem::playMusic();
+
 			max_droppable_index_ = 1;
 			max_droppable_points_ = 0;
 			break;
+		}
 	}
 	mode_ = mode;
 	timer_ = 0.f;

@@ -9,18 +9,37 @@
 #include <SFML/Audio/SoundBuffer.hpp>
 
 /**
- * Static class for loading and managing resources
+ * Static class for loading and storing resources
  */
 class Resources
 {
 public:
-	static void setDataPath(const std::string& path);
-	static const std::string& getDataPath();
+	/**
+	 * Set path where resources are located
+	 */
+	static void setSearchPath(const std::string& path);
 
+	/**
+	 * Get path where resources are located
+	 */
+	static const std::string& getSearchPath();
+
+	/**
+	 * Retrieve a texture in the 'images' directory
+	 * @param name: texture filename
+	 */
 	static sf::Texture& getTexture(const std::string& name);
 
+	/**
+	 * Retrieve a font in the 'fonts' directory
+	 * @param name: font filename
+	 */
 	static sf::Font& getFont(const std::string& name);
 
+	/**
+	 * Retrieve a sound buffer in the 'sounds' directory
+	 * @param name: sound buffer filename
+	 */
 	static sf::SoundBuffer& getSoundBuffer(const std::string& name);
 
 private:
@@ -37,4 +56,3 @@ private:
 };
 
 #endif // RESOURCES_HPP
-

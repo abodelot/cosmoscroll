@@ -6,7 +6,7 @@
 Explosion::Explosion()
 {
 	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("explosion"));
-	SoundSystem::GetInstance().PlaySound("boom.ogg");
+	SoundSystem::playSound("boom.ogg");
 
 	setOrigin(getWidth() / 2, getHeight() / 2);
 }

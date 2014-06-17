@@ -31,8 +31,8 @@
 
 
 Player::Player():
-	panel_(ControlPanel::getInstance()),
-	m_speed(0.f)
+	m_speed(0.f),
+	panel_(ControlPanel::getInstance())
 {
 	setTeam(Entity::GOOD);
 	setHP(-1);
@@ -168,7 +168,7 @@ void Player::AudibleHeatingCue()
 	float heat_pct_ = heat_ / heat_max_;
 	if (current_step < nb_steps && heat_pct_ > h_steps[current_step])
 	{
-		SoundSystem::GetInstance().PlaySound("overheat.ogg");
+		SoundSystem::playSound("overheat.ogg");
 		++current_step;
 	}
 	else if (current_step > 0 && heat_pct_ < h_steps[current_step -1])
@@ -207,7 +207,7 @@ void Player::onEvent(const sf::Event& event)
 			if (coolers_ > 0)
 			{
 				// Play sound effect and launch particles
-				SoundSystem::GetInstance().PlaySound("cooler.ogg");
+				SoundSystem::playSound("cooler.ogg");
 				m_snowflakes_emitter.setPosition(getCenter());
 				m_snowflakes_emitter.createParticles(40);
 
@@ -219,7 +219,7 @@ void Player::onEvent(const sf::Event& event)
 			}
 			else
 			{
-				SoundSystem::GetInstance().PlaySound("disabled.ogg");
+				SoundSystem::playSound("disabled.ogg");
 			}
 			break;
 		case Action::USE_MISSILE:
@@ -231,13 +231,13 @@ void Player::onEvent(const sf::Event& event)
 			}
 			else
 			{
-				SoundSystem::GetInstance().PlaySound("disabled.ogg");
+				SoundSystem::playSound("disabled.ogg");
 			}
 			break;
 		case Action::USE_LASER:
 			if (overheated_)
 			{
-				SoundSystem::GetInstance().PlaySound("disabled.ogg");
+				SoundSystem::playSound("disabled.ogg");
 			}
 			break;
 		case Action::NONE:
@@ -383,14 +383,14 @@ void Player::takeDamage(int damage)
 		if (shield_ < 0)
 			shield_ = 0;
 
-		SoundSystem::GetInstance().PlaySound("shield-damage.ogg");
+		SoundSystem::playSound("shield-damage.ogg");
 		m_shield_emitter.createParticles(shield_);
 		panel_.SetShield(shield_);
 	}
 	else
 	{
 		Damageable::takeDamage(damage);
-		SoundSystem::GetInstance().PlaySound("ship-damage.ogg");
+		SoundSystem::playSound("ship-damage.ogg");
 		panel_.SetShipHP(getHP());
 	}
 }
@@ -468,7 +468,7 @@ void Player::onCollision(PowerUp& powerup)
 
 	powerup.kill();
 	MessageSystem::write(powerup.getDescription(), powerup.getPosition());
-	SoundSystem::GetInstance().PlaySound("power-up.ogg");
+	SoundSystem::playSound("power-up.ogg");
 }
 
 
@@ -542,7 +542,7 @@ void Player::ShieldEmitter::createParticles(size_t count)
 
 	float angle = 2 * math::PI / count;
 
-	for (int i = 0; i < count; ++i)
+	for (size_t i = 0; i < count; ++i)
 	{
 		ParticleSystem::Particle p(*this);
 		resetParticle(p);

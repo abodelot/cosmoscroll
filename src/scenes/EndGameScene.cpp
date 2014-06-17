@@ -39,13 +39,13 @@ void EndGameScene::OnFocus()
 
 	if (m_entities.getPlayer()->isDead())
 	{
-		SoundSystem::GetInstance().PlaySound("game-over.ogg");
+		SoundSystem::playSound("game-over.ogg");
 		m_text.setString(_t("endgame.game_over"));
 	}
 	else
 	{
 		// Level completed, collect $$$
-		SoundSystem::GetInstance().PlaySound("end-level.ogg");
+		SoundSystem::playSound("end-level.ogg");
 		int earned_credits = m_entities.getPlayer()->getScore();
 		UserSettings::updateCredits(earned_credits);
 

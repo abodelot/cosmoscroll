@@ -63,7 +63,7 @@ void Asteroid::onDestroy()
 		default:
 			break;
 	}
-	SoundSystem::GetInstance().PlaySound("asteroid-break.ogg");
+	SoundSystem::playSound("asteroid-break.ogg");
 	EntityManager::getInstance().createImpactParticles(getPosition(), 10);
 }
 

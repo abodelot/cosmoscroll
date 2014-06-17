@@ -33,7 +33,7 @@ void CosmoButton::OnStateChanged(gui::State::EState state)
 			break;
 		case gui::State::HOVERED:
 			background_.setTextureRect(sf::IntRect(0, 40, BUT_W, BUT_H));
-			SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("menu-select.ogg"));
+			SoundSystem::playSound("menu-select.ogg");
 			break;
 		case gui::State::FOCUSED:
 			background_.setTextureRect(sf::IntRect(0, 80, BUT_W, BUT_H));
@@ -47,7 +47,7 @@ void CosmoButton::OnStateChanged(gui::State::EState state)
 
 void CosmoButton::OnCallbackTriggered()
 {
-	SoundSystem::GetInstance().PlaySound(Resources::getSoundBuffer("menu-valid.ogg"));
+	SoundSystem::playSound("menu-valid.ogg");
 }
 
 

@@ -26,7 +26,7 @@ void PauseMenu::OnEvent(const sf::Event& event)
 	if (action == Action::PAUSE && event.type != sf::Event::LostFocus) // resume
 	{
 		Game::getInstance().setNextScene(Game::SC_InGameScene);
-		SoundSystem::GetInstance().PlayMusic();
+		SoundSystem::playMusic();
 	}
 	else
 	{
@@ -49,7 +49,7 @@ void PauseMenu::EventCallback(int id)
 	{
 		case 1:
 			game.setNextScene(Game::SC_InGameScene);
-			SoundSystem::GetInstance().PlayMusic();
+			SoundSystem::playMusic();
 			break;
 		case 2:
 			game.setNextScene(Game::SC_MainMenu);

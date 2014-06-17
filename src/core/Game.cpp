@@ -74,7 +74,7 @@ void Game::loadResources(const std::string& data_path)
 {
 	// Init resources directory
 	std::string resources_dir = m_app_dir + data_path;
-	Resources::setDataPath(resources_dir);
+	Resources::setSearchPath(resources_dir);
 
 	// Splash screen
 	createWindow();
@@ -139,7 +139,7 @@ bool Game::loadConfig()
 		UserSettings::loadFromConfig(config);
 
 		// Audio settings
-		SoundSystem::GetInstance().LoadFromConfig(config);
+		//SoundSystem::getInstance().LoadFromConfig(config);
 		return true;
 	}
 	std::cout << "no configuration loaded, using default settings" << std::endl;
@@ -161,7 +161,7 @@ void Game::writeConfig() const
 	UserSettings::saveToConfig(config);
 
 	// Audio settings
-	SoundSystem::GetInstance().SaveToConfig(config);
+	//SoundSystem::getInstance().SaveToConfig(config);
 
 	// Save configuration to file
 	if (config.save(m_config_file))
@@ -258,7 +258,7 @@ void Game::setNextScene(Scene enum_scene)
 void Game::quit()
 {
 	m_running = false;
-	SoundSystem::GetInstance().StopAll();
+	SoundSystem::stopAll();
 	writeConfig();
 }
 

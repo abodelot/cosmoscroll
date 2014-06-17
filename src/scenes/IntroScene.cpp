@@ -60,7 +60,7 @@ void IntroScene::Update(float frametime)
 	if (!jingle_played && elapsed_ >= JINGLE_TIME)
 	{
 		jingle_played = true;
-		SoundSystem::GetInstance().PlaySound("title.ogg");
+		SoundSystem::playSound("title.ogg");
 	}
 
 	entity_mgr_.Update(frametime);

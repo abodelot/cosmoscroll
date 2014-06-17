@@ -28,7 +28,7 @@ void InGameScene::OnEvent(const sf::Event& event)
 			setPanelOnTop(false);
 			break;
 		case Action::PAUSE:
-			SoundSystem::GetInstance().PauseMusic();
+			SoundSystem::pauseMusic();
 			Game::getInstance().setNextScene(Game::SC_PauseMenu);
 			break;
 		default:
@@ -51,7 +51,7 @@ void InGameScene::Update(float frametime)
 {
 	if (entities_.IsGameOver())
 	{
-		SoundSystem::GetInstance().StopMusic();
+		SoundSystem::stopMusic();
 		Game::getInstance().setNextScene(Game::SC_EndGameScene);
 	}
 	else

@@ -1,180 +1,149 @@
-#include <iostream>
-
 #include "SoundSystem.hpp"
 #include "Resources.hpp"
-#include "utils/IniParser.hpp"
 
-#define DEFAULT_VOLUME 40
 
+sf::Sound     SoundSystem::m_sounds[MAX_SOUNDS];
+int           SoundSystem::m_last_sound_played = 0;
+ModMusic      SoundSystem::m_music;
+int           SoundSystem::m_music_volume = 100;
+int           SoundSystem::m_sound_volume = 100;
+bool          SoundSystem::m_enable_music = true;
+bool          SoundSystem::m_enable_sound = true;
 
 template <class T>
-static inline void ensure_range(T& value, T min, T max)
+static inline void clamp(T& value, T min, T max)
 {
 	if (value > max)
-	{
 		value = max;
-	}
 	else if (value < min)
-	{
 		value = min;
+}
+
+
+bool SoundSystem::openMusicFromFile(const std::string& path)
+{
+	stopMusic();
+	m_music.openFromFile(path);
+	m_music.setLoop(true);
+	m_music.setVolume(m_music_volume);
+}
+
+
+void SoundSystem::playMusic()
+{
+	if (m_enable_music)
+	{
+		m_music.play();
 	}
 }
 
 
-SoundSystem& SoundSystem::GetInstance()
+void SoundSystem::stopMusic()
 {
-	static SoundSystem self;
-	return self;
+	m_music.stop();
 }
 
 
-SoundSystem::SoundSystem():
-	last_used_(0),
-	enable_music_(true),
-	enable_sound_(true)
+void SoundSystem::pauseMusic()
 {
-	SetMusicVolume(DEFAULT_VOLUME);
-	SetSoundVolume(DEFAULT_VOLUME);
+	m_music.pause();
 }
 
 
-void SoundSystem::PlayMusic(const std::string& music_name)
+void SoundSystem::playSound(const std::string& name, float pitch)
 {
-	if (enable_music_)
+	playSound(Resources::getSoundBuffer(name), pitch);
+}
+
+
+void SoundSystem::playSound(const sf::SoundBuffer& soundbuffer, float pitch)
+{
+	if (m_enable_sound)
 	{
-		if (music_.getStatus() == sf::Music::Playing && music_name == music_name_)
-			return;
-
-		music_name_ = music_name;
-		StopMusic();
-		music_.openFromFile(Resources::getDataPath() + "/music/" + music_name);
-		music_.setVolume(music_volume_);
-		music_.play();
-	}
-}
-
-
-void SoundSystem::PlayMusic()
-{
-	if (enable_music_)
-	{
-		music_.play();
-	}
-}
-
-
-void SoundSystem::StopMusic()
-{
-	music_.stop();
-}
-
-
-void SoundSystem::PauseMusic()
-{
-	music_.pause();
-}
-
-
-void SoundSystem::PlaySound(const sf::SoundBuffer& soundbuffer)
-{
-	if (enable_sound_)
-	{
-		if (last_used_ == MAX_SOUNDS)
+		if (m_last_sound_played == MAX_SOUNDS)
 		{
-			last_used_ = 0;
+			m_last_sound_played = 0;
 		}
-		sf::Sound& sound = sounds_[last_used_];
+		sf::Sound& sound = m_sounds[m_last_sound_played];
 		if (sound.getStatus() == sf::Sound::Playing)
 		{
 			sound.stop();
 		}
 		sound.setBuffer(soundbuffer);
+		sound.setPitch(pitch);
 		sound.play();
-		++last_used_;
+		++m_last_sound_played;
 	}
 }
 
 
-void SoundSystem::PlaySound(const std::string& sound_name)
+void SoundSystem::setMusicVolume(int volume)
 {
-	PlaySound(Resources::getSoundBuffer(sound_name));
+	clamp(volume, 0, 100);
+	m_music_volume = volume;
+	m_music.setVolume(volume);
 }
 
 
-void SoundSystem::SetMusicVolume(int volume)
+int SoundSystem::getMusicVolume()
 {
-	ensure_range(volume, 0, 100);
-	music_volume_ = volume;
-	music_.setVolume(volume);
+	return m_music_volume;
 }
 
 
-void SoundSystem::SetSoundVolume(int volume)
+void SoundSystem::setSoundVolume(int volume)
 {
-	ensure_range(volume, 0, 100);
-	sound_volume_ = volume;
+	clamp(volume, 0, 100);
+	m_sound_volume = volume;
 	for (int i = 0; i < MAX_SOUNDS; ++i)
 	{
-		sounds_[i].setVolume(volume);
+		m_sounds[i].setVolume(volume);
 	}
 }
 
-void SoundSystem::EnableMusic(bool enabled)
+
+int SoundSystem::getSoundVolume()
 {
-	enable_music_ = enabled;
+	return m_sound_volume;
+}
+
+
+void SoundSystem::enableMusic(bool enabled)
+{
+	m_enable_music = enabled;
 	if (!enabled)
-	{
-		StopMusic();
-	}
+		stopMusic();
+	else
+		m_music.play();
 }
 
 
-void SoundSystem::EnableSound(bool enabled)
+void SoundSystem::enableSound(bool enabled)
 {
-	enable_sound_ = enabled;
+	m_enable_sound = enabled;
 }
 
 
-bool SoundSystem::IsMusicEnabled() const
+bool SoundSystem::isMusicEnabled()
 {
-	return enable_music_;
+	return m_enable_music;
 }
 
 
-bool SoundSystem::IsSoundEnabled() const
+bool SoundSystem::isSoundEnabled()
 {
-	return enable_sound_;
+	return m_enable_sound;
 }
 
 
-void SoundSystem::StopAll()
+void SoundSystem::stopAll()
 {
 	for (int i = 0; i < MAX_SOUNDS; ++i)
 	{
-		if (sounds_[i].getStatus() == sf::Sound::Playing)
+		if (m_sounds[i].getStatus() == sf::Sound::Playing)
 		{
-			sounds_[i].stop();
+			m_sounds[i].stop();
 		}
 	}
-	StopMusic();
-}
-
-
-void SoundSystem::LoadFromConfig(IniParser& config)
-{
-	config.seekSection("Audio");
-	enable_music_ = config.get("enable_music", enable_music_);
-	enable_sound_ = config.get("enable_sound", enable_sound_);
-    SetMusicVolume(config.get("music_volume", music_volume_));
-	SetSoundVolume(config.get("sound_volume", sound_volume_));
-}
-
-
-void SoundSystem::SaveToConfig(IniParser& config)
-{
-	config.seekSection("Audio");
-	config.set("enable_music", enable_music_);
-	config.set("music_volume", music_volume_);
-	config.set("enable_sound", enable_sound_);
-	config.set("sound_volume", sound_volume_);
+	stopMusic();
 }

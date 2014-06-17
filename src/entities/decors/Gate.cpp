@@ -66,7 +66,7 @@ void Gate::onPartDestroyed(const Part& part)
 		if (energy_cells_ == 0)
 		{
 			door_timer_ = DOOR_DELAY;
-			SoundSystem::GetInstance().PlaySound("door-opening.ogg");
+			SoundSystem::playSound("door-opening.ogg");
 		}
 	}
 }
