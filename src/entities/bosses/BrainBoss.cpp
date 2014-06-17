@@ -107,6 +107,8 @@ void BrainBoss::onPartDestroyed(const Part& part)
 	if (part.getID() == ID_EYE)
 	{
 		kill();
-		EntityManager::getInstance().createGreenParticles(getCenter(), 100);
+		EntityManager::getInstance().createGreenParticles(getCenter(), 150);
+		// Low-pitched explosion
+		SoundSystem::playSound("boom.ogg", 0.3f);
 	}
 }

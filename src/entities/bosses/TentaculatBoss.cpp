@@ -101,5 +101,7 @@ void TentaculatBoss::onUpdate(float frametime)
 
 void TentaculatBoss::onDestroy()
 {
-	EntityManager::getInstance().createGreenParticles(getCenter(), 100);
+	EntityManager::getInstance().createGreenParticles(getCenter(), 150);
+	// Low-pitched explosion
+	SoundSystem::playSound("boom.ogg", 0.3f);
 }

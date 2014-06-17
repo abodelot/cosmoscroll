@@ -159,21 +159,23 @@ void Player::updateScore(int diff)
 }
 
 
-void Player::AudibleHeatingCue()
+void Player::overheatAudioHint() const
 {
-	static float h_steps[] = {.50f, .65f, .80f, .90f};
-	static int nb_steps = sizeof (h_steps) / sizeof (float);
-	static int current_step = 0;
+	static float thresholds[] = {.50f, .60f, .70f, .80f, .90f};
+	static int thresholds_count = sizeof (thresholds) / sizeof (float);
+	static int current_index = 0;
 
-	float heat_pct_ = heat_ / heat_max_;
-	if (current_step < nb_steps && heat_pct_ > h_steps[current_step])
+	// Get heat value between 0 and 1
+	float heat_percent = heat_ / heat_max_;
+	if (current_index < thresholds_count && heat_percent > thresholds[current_index])
 	{
-		SoundSystem::playSound("overheat.ogg");
-		++current_step;
+		// New threshold reached
+		SoundSystem::playSound("overheat.ogg", 0.4 + thresholds[current_index]);
+		++current_index;
 	}
-	else if (current_step > 0 && heat_pct_ < h_steps[current_step -1])
+	else if (current_index > 0 && heat_percent < thresholds[current_index -1])
 	{
-		--current_step;
+		--current_index;
 	}
 }
 
@@ -289,7 +291,7 @@ void Player::onUpdate(float frametime)
 			MessageSystem::write(_t("panel.overheat"), getPosition());
 		}
 		if (h > 0)
-			AudibleHeatingCue();
+			overheatAudioHint();
 	}
 
 	// Compute position

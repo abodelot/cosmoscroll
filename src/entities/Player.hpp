@@ -64,9 +64,9 @@ private:
 	void setShield(int shield);
 
 	/**
-	 * Faire beeper l'indicateur de surchauffe
+	 * Warn the player if heat has reached a given threshold by playing an audio signal
 	 */
-	void AudibleHeatingCue();
+	void overheatAudioHint() const;
 
 	// Code Konami sequence
 	static const int KONAMI_CODE_LENGTH = 10;

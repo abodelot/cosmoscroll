@@ -100,5 +100,7 @@ void EvilBoss::takeDamage(int damage)
 
 void EvilBoss::onDestroy()
 {
-	EntityManager::getInstance().createGreenParticles(getCenter(), 200);
+	EntityManager::getInstance().createGreenParticles(getCenter(), 300);
+	// Low-pitched explosion
+	SoundSystem::playSound("boom.ogg", 0.2f);
 }
