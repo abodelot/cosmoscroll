@@ -1,9 +1,9 @@
 #include "Game.hpp"
 #include "Constants.hpp"
 #include "UserSettings.hpp"
-#include "SoundSystem.hpp"
 #include "LevelManager.hpp"
 #include "Resources.hpp"
+#include "SoundSystem.hpp"
 #include "MessageSystem.hpp"
 #include "entities/EntityManager.hpp"
 #include "items/ItemManager.hpp"
@@ -135,11 +135,8 @@ bool Game::loadConfig()
 		if (m_fullscreen)
 			createWindow();
 
-		// User settings & player attributes
+		// Load user settings and player progression
 		UserSettings::loadFromConfig(config);
-
-		// Audio settings
-		//SoundSystem::getInstance().LoadFromConfig(config);
 		return true;
 	}
 	std::cout << "no configuration loaded, using default settings" << std::endl;
@@ -157,11 +154,8 @@ void Game::writeConfig() const
 	config.set("fullscreen", m_fullscreen);
 	config.set("vsync", m_vsync);
 
-	// User settings & player attributes
+	// Save user settings and player progression
 	UserSettings::saveToConfig(config);
-
-	// Audio settings
-	//SoundSystem::getInstance().SaveToConfig(config);
 
 	// Save configuration to file
 	if (config.save(m_config_file))

@@ -113,8 +113,6 @@ void SoundSystem::enableMusic(bool enabled)
 	m_enable_music = enabled;
 	if (!enabled)
 		stopMusic();
-	else
-		m_music.play();
 }
 
 

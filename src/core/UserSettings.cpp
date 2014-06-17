@@ -1,6 +1,7 @@
 #include "UserSettings.hpp"
 #include "LevelManager.hpp"
 #include "Input.hpp"
+#include "SoundSystem.hpp"
 #include "utils/IniParser.hpp"
 #include "utils/I18n.hpp"
 #include "items/ItemManager.hpp"
@@ -112,6 +113,12 @@ void UserSettings::loadFromConfig(IniParser& config)
 	Input::setButtonBinding(config.get("cooler",  Input::getButtonBinding(Action::USE_COOLER)), Action::USE_COOLER);
 	Input::setButtonBinding(config.get("missile", Input::getButtonBinding(Action::USE_MISSILE)), Action::USE_MISSILE);
 	Input::setJoystickDeadzone(config.get("sensitivity", Input::getJoystickDeadzone()));
+
+	config.seekSection("Audio");
+	SoundSystem::enableMusic(config.get("enable_music", true));
+	SoundSystem::setMusicVolume(config.get("music_volume", 100));
+	SoundSystem::enableSound(config.get("enable_sound", true));
+	SoundSystem::setSoundVolume(config.get("sound_volume", 100));
 }
 
 
@@ -148,26 +155,9 @@ void UserSettings::saveToConfig(IniParser& config)
 	config.set("missile",     Input::getButtonBinding(Action::USE_MISSILE));
 	config.set("sensitivity", Input::getJoystickDeadzone());
 
-
-	/*
-
-void SoundSystem::LoadFromConfig(IniParser& config)
-{
 	config.seekSection("Audio");
-	enable_music_ = config.get("enable_music", enable_music_);
-	enable_sound_ = config.get("enable_sound", enable_sound_);
-    SetMusicVolume(config.get("music_volume", music_volume_));
-	SetSoundVolume(config.get("sound_volume", sound_volume_));
-}
-
-
-void SoundSystem::SaveToConfig(IniParser& config)
-{
-	config.seekSection("Audio");
-	config.set("enable_music", enable_music_);
-	config.set("music_volume", music_volume_);
-	config.set("enable_sound", enable_sound_);
-	config.set("sound_volume", sound_volume_);
-}
-*/
+	config.set("enable_music", SoundSystem::isMusicEnabled());
+	config.set("music_volume", SoundSystem::getMusicVolume());
+	config.set("enable_sound", SoundSystem::isSoundEnabled());
+	config.set("sound_volume", SoundSystem::getSoundVolume());
 }
