@@ -29,10 +29,7 @@ Asteroid::Asteroid(Size size, float angle):
 
 void Asteroid::onUpdate(float frametime)
 {
-	sf::Vector2f pos = getPosition();
-	pos.x += m_speed.x * frametime;
-	pos.y += m_speed.y * frametime;
-	setPosition(pos);
+	move(m_speed.x * frametime, m_speed.y * frametime);
 	rotate(m_rotation_speed * frametime);
 }
 
@@ -50,6 +47,7 @@ void Asteroid::onDestroy()
 				asteroid->setPosition(pos);
 				EntityManager::getInstance().addEntity(asteroid);
 			}
+			SoundSystem::playSound("asteroid-break.ogg", 0.5f);
 			break;
 		case MEDIUM:
 			// Create 3 small asteroids
@@ -59,29 +57,30 @@ void Asteroid::onDestroy()
 				asteroid->setPosition(pos);
 				EntityManager::getInstance().addEntity(asteroid);
 			}
+			SoundSystem::playSound("asteroid-break.ogg", 0.75f);
 			break;
 		default:
+			SoundSystem::playSound("asteroid-break.ogg", 1.f);
 			break;
 	}
-	SoundSystem::playSound("asteroid-break.ogg");
 	EntityManager::getInstance().createImpactParticles(getPosition(), 10);
 }
 
 
 void Asteroid::setRandomImage()
 {
-
-	int x = math::rand(0, 5); // nb sprites = 6
+	// Pick a random sprite (each size has 6 sprites)
+	int x = math::rand(0, 5);
 	switch (m_size)
 	{
 		case BIG:
-			setTextureRect(sf::IntRect(0 + x * 64, 0, 64, 64)); // 64px
+			setTextureRect(sf::IntRect(0 + x * 48, 0, 48, 48)); // 48*48px
 			break;
 		case MEDIUM:
-			setTextureRect(sf::IntRect(0 + x * 32, 64, 32, 32)); // 32px
+			setTextureRect(sf::IntRect(0 + x * 32, 48, 32, 32)); // 32*32px
 			break;
 		case SMALL:
-			setTextureRect(sf::IntRect(192 + x * 16, 64, 16, 16)); // 16px
+			setTextureRect(sf::IntRect(192 + x * 16, 48, 16, 16)); // 16*16px
 			break;
 	}
 }
