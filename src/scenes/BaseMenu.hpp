@@ -25,9 +25,7 @@ public:
 
 protected:
 	/**
-	 * Indiquer le titre du menu (aucun par défaut)
-	 * @param text: contenu du titre
-	 * @param y: décalage axe Y
+	 * Set menu title (top of the screen)
 	 */
 	void SetTitle(const sf::String& text, int y = 20);
 	const sf::Text& GetTitle() const;

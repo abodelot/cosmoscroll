@@ -4,7 +4,7 @@
 #include "BaseMenu.hpp"
 
 /**
- * Menu principal de l'application
+ * Application main menu
  */
 class MainMenu: public BaseMenu
 {

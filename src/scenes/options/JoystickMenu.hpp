@@ -6,7 +6,7 @@
 #include "core/Input.hpp"
 
 /**
- * Menu de configuration du joystick
+ * Joystick layout configuration menu
  */
 class JoystickMenu: public BaseMenu
 {

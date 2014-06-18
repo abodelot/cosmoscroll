@@ -92,10 +92,10 @@ private:
 
 		void Init(const sf::String& text, const sf::Font& font, const sf::Color& color);
 
-		// redimensionne la barre
+		// Set progress bar value
 		void SetValue(int value);
 
-		// position de l'ensemble label/bar
+		// Set widget position
 		void setPosition(int x, int y);
 
 		sf::Text label_;
@@ -138,7 +138,7 @@ private:
 
 	sf::Text timer_;
 	sf::Text game_info_;
-	sf::Sprite panel_;
+	sf::Sprite m_background;
 
 	EntityManager::Mode game_mode_;
 	// story

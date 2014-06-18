@@ -8,29 +8,29 @@
 #include "utils/SFML_Helper.hpp"
 
 #define DURATION    6.f
-#define JINGLE_TIME 2.f
-#define ZOOM_FACTOR 7
+#define JINGLE_TIME 3.f
+#define ZOOM_FACTOR 3
 
 
-IntroScene::IntroScene() :
-	entity_mgr_(EntityManager::getInstance())
+IntroScene::IntroScene():
+	m_entities(EntityManager::getInstance())
 {
-	background_.setTexture(Resources::getTexture("gui/background.png"));
+	m_background.setTexture(Resources::getTexture("gui/background.png"));
 
 	sf::Texture& logo = Resources::getTexture("gui/cosmoscroll-logo.png");
 	logo.setSmooth(true);
-	title_.setTexture(logo);
-	title_.setOrigin(sfh::getCenter(title_));
-	title_.setPosition(APP_WIDTH / 2, APP_HEIGHT / 2);
-	sfh::resize(title_, sfh::width(title_) * ZOOM_FACTOR, sfh::height(title_) * ZOOM_FACTOR);
+	m_title.setTexture(logo);
+	m_title.setOrigin(sfh::getCenter(m_title));
+	m_title.setPosition(APP_WIDTH / 2, APP_HEIGHT / 2);
 
 	// Display a player ship instance in the intro scene
 	ship_ = new Player();
-	ship_->setPosition(-200, 100);
+	ship_->setPosition(0, 100);
 
 	// Allow the player ship to go beyond screen limits during the intro scene
-	entity_mgr_.resize(1000, 1000);
-	entity_mgr_.addEntity(ship_);
+	m_entities.setPosition(-500, 0);
+	m_entities.resize(2000, 2000);
+	m_entities.addEntity(ship_);
 
 	elapsed_ = 0.f;
 }
@@ -63,17 +63,23 @@ void IntroScene::Update(float frametime)
 		SoundSystem::playSound("title.ogg");
 	}
 
-	entity_mgr_.Update(frametime);
-	ship_->move(170 * frametime, 25 * frametime);
-	title_.scale(0.99, 0.99); // FIXME: make this FPS rate independant
-	// fading
-	title_.setColor(sf::Color(255, 255, 255, (sf::Uint8) (255 * elapsed_ / DURATION)));
+	m_entities.update(frametime);
+	ship_->move(200 * frametime, 30 * frametime);
+
+	// Zooming
+	sf::IntRect rect = m_title.getTextureRect();
+	float width = rect.width * ZOOM_FACTOR * (DURATION - elapsed_) / DURATION;
+	float height = rect.height * ZOOM_FACTOR * (DURATION - elapsed_) / DURATION;
+	sfh::resize(m_title, width, height);
+
+	// Fading
+	m_title.setColor(sf::Color(255, 255, 255, (sf::Uint8) (255 * elapsed_ / DURATION)));
 
 	if (elapsed_ >= DURATION)
 	{
 		// make entity manager ready for game use and restore original size
-		entity_mgr_.clearEntities();
-		entity_mgr_.resize(APP_WIDTH, APP_HEIGHT - ControlPanel::HEIGHT);
+		m_entities.clearEntities();
+		m_entities.resize(APP_WIDTH, APP_HEIGHT - ControlPanel::HEIGHT);
 		Game::getInstance().setNextScene(Game::SC_MainMenu);
 	}
 }
@@ -81,9 +87,9 @@ void IntroScene::Update(float frametime)
 
 void IntroScene::Show(sf::RenderTarget& target) const
 {
-	target.draw(background_);
-	target.draw(entity_mgr_);
-	target.draw(title_);
+	target.draw(m_background);
+	target.draw(m_entities);
+	target.draw(m_title);
 }
 
 

@@ -4,34 +4,33 @@
 #include <SFML/Graphics.hpp>
 
 /**
- * Base de toutes les scènes affichées à l'écran
+ * Base interface for scenes
  */
 class BaseScene
 {
 public:
+	virtual ~BaseScene() {}
+
 	/**
-	 * Réagir à un événement
+	 * On event callback
 	 */
 	virtual void OnEvent(const sf::Event& event) = 0;
 
 	/**
-	 * Mettre la scène à jour
-	 * @param frametime: temps de la frame courante
+	 * On focus callback (this scene became the current one)
+	 */
+	virtual void OnFocus() {}
+
+	/**
+	 * Update scene
+	 * @param frametime: time elapsed in the current frame
 	 */
 	virtual void Update(float frametime) { (void) frametime; }
 
 	/**
-	 * Afficher la scène et tous ses éléments
-	 * @param target: cible de rendu pour l'affichage
+	 * Display scene
 	 */
 	virtual void Show(sf::RenderTarget& target) const = 0;
-
-	/**
-	 * Notifier la scène qu'elle est la scène courante
-	 */
-	virtual void OnFocus() {}
-
-	virtual ~BaseScene() {}
 };
 
 #endif // BASESCENE_HPP

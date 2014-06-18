@@ -10,8 +10,8 @@
 
 
 InGameScene::InGameScene():
-	entities_(EntityManager::getInstance()),
-	panel_(ControlPanel::getInstance())
+	m_entities(EntityManager::getInstance()),
+	m_panel(ControlPanel::getInstance())
 {
 }
 
@@ -34,7 +34,7 @@ void InGameScene::OnEvent(const sf::Event& event)
 		default:
 			break;
 	}
-	entities_.getPlayer()->onEvent(event);
+	m_entities.getPlayer()->onEvent(event);
 }
 
 
@@ -49,24 +49,24 @@ void InGameScene::OnFocus()
 
 void InGameScene::Update(float frametime)
 {
-	if (entities_.IsGameOver())
+	if (m_entities.spawnBadGuys())
 	{
 		SoundSystem::stopMusic();
 		Game::getInstance().setNextScene(Game::SC_EndGameScene);
 	}
 	else
 	{
-		entities_.Update(frametime);
-		panel_.Update(frametime);
-		panel_.SetTimer(entities_.GetTimer());
+		m_entities.update(frametime);
+		m_panel.Update(frametime);
+		m_panel.SetTimer(m_entities.GetTimer());
 	}
 }
 
 
 void InGameScene::Show(sf::RenderTarget& target) const
 {
-	target.draw(entities_);
-	target.draw(panel_);
+	target.draw(m_entities);
+	target.draw(m_panel);
 }
 
 
@@ -74,13 +74,13 @@ void InGameScene::setPanelOnTop(bool top)
 {
 	if (top)
 	{
-		panel_.setPosition(0, 0);
-		entities_.setPosition(0, ControlPanel::HEIGHT);
+		m_panel.setPosition(0, 0);
+		m_entities.setPosition(0, ControlPanel::HEIGHT);
 	}
 	else
 	{
-		panel_.setPosition(0, APP_HEIGHT - ControlPanel::HEIGHT);
-		entities_.getInstance().setPosition(0, 0);
+		m_panel.setPosition(0, APP_HEIGHT - ControlPanel::HEIGHT);
+		m_entities.getInstance().setPosition(0, 0);
 	}
 	UserSettings::panel_on_top = top;
 }

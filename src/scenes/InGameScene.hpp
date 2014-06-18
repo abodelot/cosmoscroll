@@ -25,8 +25,8 @@ public:
 private:
 	void setPanelOnTop(bool top);
 
-	EntityManager& entities_;
-	ControlPanel& panel_;
+	EntityManager& m_entities;
+	ControlPanel&  m_panel;
 };
 
 #endif // INGAMESCENE_HPP

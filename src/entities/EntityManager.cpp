@@ -217,7 +217,7 @@ void EntityManager::resize(int width, int height)
 }
 
 
-void EntityManager::Update(float frametime)
+void EntityManager::update(float frametime)
 {
 	EntityList::iterator it, it2;
 
@@ -307,7 +307,7 @@ size_t EntityManager::count() const
 }
 
 
-bool EntityManager::IsGameOver()
+bool EntityManager::spawnBadGuys()
 {
 	return !(this->*more_bad_guys_)() || m_player == NULL || m_player->isDead();
 }

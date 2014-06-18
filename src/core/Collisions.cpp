@@ -3,7 +3,7 @@
 Collisions::ImageMap Collisions::images_;
 
 
-// gets to the alpha component of pixelsPtr[x,y] (Picture width being provided)
+// Gets to the alpha component of pixelsPtr[x,y] (Picture width being provided)
 #define ALPHACOMP(buf, width, x, y) (buf[((x) + (y) * (width)) * 4 + 3])
 
 bool Collisions::pixelPerfectTest(const sf::Sprite& a, const sf::Sprite& b)
@@ -18,7 +18,7 @@ bool Collisions::pixelPerfectTest(const sf::Sprite& a, const sf::Sprite& b)
 
 	sf::IntRect overlap;
 
-	// if overlapping rectangles
+	// If overlapping rectangles
 	if (rect_a.intersects(rect_b, overlap))
 	{
 		if (a.getTexture() == NULL || b.getTexture() == NULL)

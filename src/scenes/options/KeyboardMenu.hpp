@@ -6,7 +6,7 @@
 #include "core/Input.hpp"
 
 /**
- * Menu de configuration du clavier
+ * Keyboard layout configuration menu
  */
 class KeyboardMenu: public BaseMenu
 {

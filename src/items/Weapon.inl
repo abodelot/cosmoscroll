@@ -40,7 +40,7 @@ float Weapon<T>::shoot(float angle)
 {
 	assert(m_inited);
 
-	// peut-on tirer ?
+	// If ready for next round
 	if (m_last_shot_at.getElapsedTime().asSeconds() >= m_fire_delay)
 	{
 		sf::Vector2f offset = m_owner->getPosition() + m_position;

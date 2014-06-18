@@ -70,7 +70,7 @@ public:
 	void quit();
 
 	/**
-	 * Indiquer la prochaine scène à afficher
+	 * Set next scene to be displayed
 	 */
 	void setNextScene(Scene scene);
 
@@ -120,7 +120,7 @@ private:
 	bool m_running;
     bool m_resources_checked;
 
-	// scènes
+	// scenes
 	BaseScene* m_scenes[SC_COUNT];
 	BaseScene* m_current_scene;
 

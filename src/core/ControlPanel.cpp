@@ -12,9 +12,9 @@
 #define PROG_BAR_HEIGHT      10
 #define PROG_BAR_TEXT_LENGTH 60   // label length (pixels) on progress bars
 
-#define Y_LINE_1       10 // Y première ligne
-#define Y_LINE_2       30 // Y deuxième ligne
-#define TEXT_PADDING_Y 3  // décalage du texte en Y
+#define Y_LINE_1       10 // Y first line
+#define Y_LINE_2       30 // Y second line
+#define TEXT_PADDING_Y 3  // Y text offset
 #define TEXT_SIZE      12
 
 #define LEVEL_BAR_X 425
@@ -32,9 +32,9 @@ ControlPanel& ControlPanel::getInstance()
 }
 
 
-ControlPanel::ControlPanel()
+ControlPanel::ControlPanel():
+	m_background(Resources::getTexture("gui/score-board.png"))
 {
-	panel_.setTexture(Resources::getTexture("gui/score-board.png"));
 	const sf::Font& font = Resources::getFont("Vera.ttf");
 
 	// init progress bar
@@ -247,10 +247,10 @@ void ControlPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 
-	// background
-	target.draw(panel_, states);
+	// Draw background
+	target.draw(m_background, states);
 
-	// draw progress bars
+	// Draw progress bars
 	for (int i = 0; i < ProgressBar::_PBAR_COUNT; ++i)
 	{
 		target.draw(pbars_[i].label_, states);
@@ -259,7 +259,7 @@ void ControlPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 	target.draw(bar_mask_, states);
 
-	// draw bonus slots
+	// Draw bonus slots
 	target.draw(bs_coolers_, states);
 	target.draw(bs_missiles_, states);
 	target.draw(bs_attack_, states);

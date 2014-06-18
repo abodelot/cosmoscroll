@@ -46,24 +46,30 @@ public:
 	Mode GetMode() const;
 
 	/**
-	 * Dimensions de l'univers
+	 * Resize the universe dimensions
 	 */
 	void resize(int width, int height);
 
 	/**
-	 * @return largeur de l'univers
+	 * @return universe width
 	 */
 	inline int getWidth() const {return m_width;};
 
 	/**
-	 * @return hauteur de l'univers
+	 * @return universe height
 	 */
 	inline int getHeight() const{return m_height;};
 
 	/**
+	 * Spawn next enemies
+	 * @return true if game over
+	 */
+	bool spawnBadGuys();
+
+	/**
 	 * Update managed entities and resolve collisions
 	 */
-	void Update(float frametime);
+	void update(float frametime);
 
 	/**
 	 * Insert an entity in the scene
@@ -80,11 +86,6 @@ public:
 	 */
 	size_t count() const;
 
-	/**
-	 * Tester si le jeu est terminé
-	 * @return true si game over
-	 */
-	bool IsGameOver();
 
 	/**
 	 * Allocate a new Spaceship with a given profile
@@ -143,7 +144,7 @@ private:
 	bool storyModeCallback();
 
 	/**
-	 * Ré-allouer le vaisseau du joueur
+	 * Re-allocate player
 	 */
 	void RespawnPlayer();
 

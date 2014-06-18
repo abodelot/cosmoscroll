@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include "StringUtils.hpp"
-
+/*
 #ifdef __MINGW32__
 #define vswprintf _vsnwprintf
 #endif
@@ -51,7 +51,7 @@ std::wstring str_sprintf(const wchar_t format[], ...)
 	delete [] buffer;
 	return str;
 }
-
+*/
 
 std::string str_trim(const std::string& str)
 {

@@ -7,7 +7,7 @@ class EntityManager;
 class Player;
 
 /**
- * Nice interactive splash screen at start =)
+ * Interactive splash screen displayed at game launch
  */
 class IntroScene: public BaseScene
 {
@@ -22,9 +22,9 @@ public:
 
 private:
 	float elapsed_;
-	sf::Sprite background_;
-	sf::Sprite title_;
-	EntityManager& entity_mgr_;
+	sf::Sprite m_background;
+	sf::Sprite m_title;
+	EntityManager& m_entities;
 	Player* ship_;
 };
 

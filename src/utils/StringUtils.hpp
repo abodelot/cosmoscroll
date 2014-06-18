@@ -5,16 +5,15 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+
 /**
- * Construire une std::string formatée "à la printf"
- * @param format: formatage de la chaîne
+ * Build a string with printf formatting
+ * @param format: string format
  * @param ...: arguments
- * @return string formée
+ * @return string
  */
 //std::string str_sprintf(const char format[], ...);
 //std::wstring str_sprintf(const wchar_t format[], ...);
-
-
 
 #define wstr_self_replace str_self_replace<std::wstring>
 #define wstr_replace      str_replace<std::wstring>

@@ -44,7 +44,7 @@ public:
 	void setTexture(const sf::Texture* texture);
 
 	/**
-	 * Amount of projectiles per second
+	 * Projectile count per second
 	 */
 	void setFireRate(float shot_per_sec);
 
