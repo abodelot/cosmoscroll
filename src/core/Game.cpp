@@ -42,7 +42,7 @@ Game::Game():
 	m_current_scene = NULL;
 
 	// Default configuration file location
-	m_config_file = FileSystem::initSettingsDirectory(GAME_NAME) + "/" + CONFIG_FILENAME;
+	m_config_file = FileSystem::initSettingsDirectory(COSMOSCROLL_DIRECTORY) + "/" + CONFIG_FILENAME;
 }
 
 

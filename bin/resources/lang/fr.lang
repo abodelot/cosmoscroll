@@ -1,4 +1,5 @@
 ## FRENCH
+## translated by Cosmoscroll team
 
 menu.back = Retour
 menu.back_main_menu = Retour menu principal
@@ -84,8 +85,9 @@ menu.settings.language = Langue :
 
 # Menu à propos
 menu.about.title = À propos de CosmoScroll
+menu.about.contact = Contact :
+menu.about.website = Site web :
 menu.about.version = Version :
-menu.about.authors = Auteurs :
 menu.about.licence = Licence :
 
 # Fin de jeu

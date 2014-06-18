@@ -6,13 +6,14 @@
 #define APP_FPS          60
 #define APP_TITLE        "CosmoScroll"
 
-#define GAME_NAME        "cosmoscroll"
-#define GAME_VERSION     "0.4"
-#define GAME_LICENSE     "GPL"
-#define GAME_AUTHORS     L"Alexandre Bodelot\n" \
-                         L"Arnaud Wolff"
+#define APP_AUTHOR      "Alexandre Bodelot <alexandre.bodelot@gmail.com>"
+#define APP_VERSION     "0.4"
+#define APP_LICENSE     "GPL 3"
 
-#define VERSION_STRING   GAME_NAME " " GAME_VERSION "\n\n" \
+#define COSMOSCROLL_DIRECTORY "cosmoscroll"
+#define COSMOSCROLL_WEBSITE   "http://cosmoscroll.googlecode.com"
+
+#define VERSION_STRING   APP_TITLE " " APP_VERSION "\n\n" \
                          "Copyright (C) 2008-2014 project contributors.\n" \
                          "This is free software; see the source for copying conditions.  There is NO\n" \
                          "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"

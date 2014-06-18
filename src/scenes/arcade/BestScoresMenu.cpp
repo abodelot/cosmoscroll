@@ -53,7 +53,7 @@ void BestScoresMenu::Update(float frametime)
 	request.setMethod(sf::Http::Request::Get);
 	std::string uri = COSMO_SERVER_URI;
 	uri += "?version=";
-	uri += GAME_VERSION;
+	uri += APP_VERSION;
 	request.setUri(uri);
 
 	// Send it and get the response returned by the server

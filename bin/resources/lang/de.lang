@@ -85,8 +85,9 @@ menu.settings.language = Sprache:
 
 # About menu
 menu.about.title = Über CosmoScroll
+menu.about.contact = Kontakt:
+menu.about.website = Webseite:
 menu.about.version = Version:
-menu.about.authors = Autoren:
 menu.about.licence = Lizenz:
 
 # End of game

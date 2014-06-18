@@ -126,7 +126,7 @@ void GameOverMenu::UploadScore()
 	std::string body = "name=" + str_name
 	                 + "&score=" + str_score
 	                 + "&key=" + key.GetHash()
-	                 + "&version=" + GAME_VERSION;
+	                 + "&version=" + APP_VERSION;
 	request.setBody(body);
 
 	// Send it and get the response returned by the server

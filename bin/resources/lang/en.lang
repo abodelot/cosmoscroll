@@ -1,4 +1,5 @@
 ## ENGLISH
+## Translation reference
 
 menu.back = Back
 menu.back_main_menu = Back to main menu
@@ -84,8 +85,9 @@ menu.settings.language = Language:
 
 # About menu
 menu.about.title = About CosmoScroll
+menu.about.contact = Contact:
+menu.about.website = Website:
 menu.about.version = Version:
-menu.about.authors = Authors:
 menu.about.licence = License:
 
 # End of game
