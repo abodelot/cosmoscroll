@@ -49,8 +49,8 @@ menu.gameover.title = Game Over
 menu.gameover.pseudo = Dein Name:
 menu.gameover.send_score = Sende meinen Score
 menu.gameover.play_again = Noch einmal spielen
-menu.gameover.new_record = Dein Score: {score}\n    Neuer Highscore!
-menu.gameover.no_record = Dein Score: {score}\n    Streng dich an!
+menu.gameover.new_record = Dein Score: {score}\nGlückwunsch, Neuer Highscore!
+menu.gameover.no_record = Dein Score: {score}\nStreng dich an!
 menu.gameover.error_cheat = Upload verweigert: Du hast gecheated!
 menu.gameover.error_altered_res = Upload verweigert: Spielressourcen wurden modifiziert!
 
@@ -92,8 +92,8 @@ menu.about.licence = Lizenz:
 
 # End of game
 endgame.game_over = Game Over
-endgame.level_completed = Level {level} abgeschlossen!\nKredits genannt: +{credits}
-endgame.last_level_completed = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\nKredits genannt: +{credits}
+endgame.level_completed = Level {level} abgeschlossen!\nKredits: +{credits}
+endgame.last_level_completed = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\nKredits: +{credits}
 
 # Control panel
 panel.bar_hp = Schiff

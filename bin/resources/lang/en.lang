@@ -49,8 +49,8 @@ menu.gameover.title = Game Over
 menu.gameover.send_score = Send my score
 menu.gameover.pseudo = Your name:
 menu.gameover.play_again = Play again
-menu.gameover.new_record = Your score: {score}\n    New High Score!
-menu.gameover.no_record = Your score: {score}\n    Try harder!
+menu.gameover.new_record = Your score: {score}\nCongratulations, new High Score!
+menu.gameover.no_record = Your score: {score}\nPlease try again!
 menu.gameover.error_cheat = Upload denied: you've cheated!
 menu.gameover.error_altered_res = Upload denied: game resources have been modified
 
@@ -92,8 +92,8 @@ menu.about.licence = License:
 
 # End of game
 endgame.game_over = Game Over
-endgame.level_completed = Level {level} cleared!\nCredits earned: +{credits}
-endgame.last_level_completed = Congratulations!\n\nYou've finished the game!\nCredits earned: +{credits}
+endgame.level_completed = Level {level} cleared!\nCredits: +{credits}
+endgame.last_level_completed = Congratulations!\n\nYou've finished the game!\nCredits: +{credits}
 
 # Control panel
 panel.bar_hp = Hull

@@ -59,7 +59,7 @@ void BaseMenu::SetTitle(const sf::String& text, int y)
 	title_.setFont(*GetWidgetStyle().global_font);
 	title_.setCharacterSize(40);
 	title_.setString(text);
-	title_.setPosition((APP_WIDTH - sfh::width(title_)) / 2, y);
+	title_.setPosition((int) (APP_WIDTH - sfh::width(title_)) / 2, y);
 }
 
 

@@ -125,7 +125,7 @@ private:
 	BaseScene* m_current_scene;
 
 	std::string m_app_dir; // Directory from which application is running
-	std::string m_config_file;
+	std::string m_config_filename;
 };
 
 #endif // GAME_HPP

@@ -42,7 +42,7 @@ Game::Game():
 	m_current_scene = NULL;
 
 	// Default configuration file location
-	m_config_file = FileSystem::initSettingsDirectory(COSMOSCROLL_DIRECTORY) + "/" + CONFIG_FILENAME;
+	m_config_filename = FileSystem::initSettingsDirectory(COSMOSCROLL_DIRECTORY) + "/" + CONFIG_FILENAME;
 }
 
 
@@ -109,20 +109,20 @@ void Game::loadResources(const std::string& data_path)
 
 void Game::setConfigFile(const std::string& config_path)
 {
-	if (FileSystem::isFile(config_path))
-		m_config_file = config_path;
+	if (FileSystem::isDirectory(config_path))
+		m_config_filename = config_path + "/" + CONFIG_FILENAME;
 
-	else if (FileSystem::isDirectory(config_path))
-		m_config_file = config_path + "/" + CONFIG_FILENAME;
+	else
+		m_config_filename = config_path;
 }
 
 
 bool Game::loadConfig()
 {
 	IniParser config;
-	if (config.load(m_config_file.c_str()))
+	if (config.load(m_config_filename))
 	{
-		std::cout << "* loading configuration from " << m_config_file << std::endl;
+		std::cout << "* loading configuration from " << m_config_filename << std::endl;
 		// Window
 		config.seekSection("Window");
 		m_vsync = config.get("vsync", m_vsync);
@@ -139,7 +139,7 @@ bool Game::loadConfig()
 		UserSettings::loadFromConfig(config);
 		return true;
 	}
-	std::cout << "no configuration loaded, using default settings" << std::endl;
+	std::cout << "Couldn't load configuration file '" << m_config_filename << "', using default settings" << std::endl;
 	I18n::getInstance().loadFromLocale();
 	return false;
 }
@@ -158,8 +158,8 @@ void Game::writeConfig() const
 	UserSettings::saveToConfig(config);
 
 	// Save configuration to file
-	if (config.save(m_config_file))
-		std::cout << "* configuration saved to " << m_config_file << std::endl;
+	if (config.save(m_config_filename))
+		std::cout << "* configuration saved to " << m_config_filename << std::endl;
 }
 
 

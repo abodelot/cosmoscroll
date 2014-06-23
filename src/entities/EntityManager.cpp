@@ -135,7 +135,7 @@ void EntityManager::InitMode(Mode mode)
 			}
 			else
 			{
-				// suppression de toutes les unités, sauf le joueur
+				// Delete all entities but player
 				for (EntityList::iterator it = m_entities.begin(); it != m_entities.end();)
 				{
 					if (*it != m_player)
@@ -153,7 +153,10 @@ void EntityManager::InitMode(Mode mode)
 			}
 			// Set background images
 			if (m_levels.getBottomLayer())
+			{
 				layer1_.setTexture(*m_levels.getBottomLayer());
+				layer1_.setColor(sf::Color::White);
+			}
 
 			if (m_levels.getTopLayer())
 			{

@@ -5,7 +5,7 @@ OBJDIR   := obj
 OBJ      := $(SRC:%.cpp=$(OBJDIR)/%.o)
 
 CC       := g++
-CFLAGS   := -I$(SRCDIR) -std=c++11 -pedantic -Wall -Wextra -Wwrite-strings -O2 -fomit-frame-pointer
+CFLAGS   := -I$(SRCDIR) -std=c++11 -pedantic -Wall -Wextra -Wwrite-strings -O2
 UNAME    := $(shell uname)
 # Linker requires a different syntax on MacOS
 ifeq (UNAME, "Darwin")
@@ -17,7 +17,7 @@ endif
 
 $(TARGET): $(OBJ)
 	@echo "\033[1;33mlinking\033[0m $@"
-	@$(CC) $(LDFLAGS) -o $@ $^ 
+	@$(CC) $(LDFLAGS) -o $@ $^
 	@echo "\033[1;32mDone!\033[0m"
 
 $(OBJDIR)/%.o: %.cpp
