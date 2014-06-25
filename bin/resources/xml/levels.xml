@@ -181,9 +181,9 @@
 			<call func="scoot_line_5"/>
 			<ship id="b2" y="200" t="2"/>
 			<ship id="b2" y="100" t="3"/>
-			<ship id="b2" y="300" t="3"/>
+			<ship id="b2" y="300" t="4"/>
 			<call func="b2_triad"/>
-			<wait t="3" />
+			<wait t="4" />
 			<call func="b2_triad" />
 			<boss id="brain" y="170" t="8" />
 		</level>
@@ -287,7 +287,7 @@
 			<ship id="b2" y="160"/>
 			<wait t="4"/>
 			<call func="interceptors_5"/>
-			<decor id="gate" y="0" t="1"/>
+			<decor id="gate" t="2"/>
 			<ship id="b2" y="200" t="7"/>
 			<ship id="b2" y="240" t="2"/>
 			<decor id="guntower" />
@@ -408,9 +408,15 @@
 				<ship id="b1" y="300" t="0.5" />
 			</loop>
 			<wait t="3.5"/>
-			<loop count="3">
-				<call func="saucers_12"/>
-			</loop>
+			<call func="saucers_12"/>
+			<ship id="s1" y="10" t="1"/>
+			<ship id="s1" y="180" t="1.5"/>
+			<ship id="s1" y="120" t="0.5"/>
+			<ship id="s1" y="240" t="3"/>
+			<ship id="s1" y="180"/>
+			<ship id="s1" y="300"/>
+			<ship id="s1" y="200" t="1"/>
+			<call func="saucers_12"/>
 			<loop count="2">
 				<ship id="m1" y="200" t="4"/>
 				<asteroid y="120"/>

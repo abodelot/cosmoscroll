@@ -11,6 +11,7 @@
 	<anim name="mine"        img="entities/mine.png"          width="32" height="32" count="2" delay="0.2" />
 	<anim name="h-mine"      img="entities/mine-heavy.png"    width="48" height="48" count="2" delay="0.2" />
 	<anim name="explosion"   img="entities/explosion.png"     width="64" height="64" count="11" delay="0.12" />
-	<anim name="boss-tentacles" img="entities/boss-tentacles.png" width="140" height="100" count="6" delay="0.12"/>
+	<anim name="boss-tentacles" img="entities/boss-tentacles.png" width="140" height="100" count="6" delay="0.12" />
 	<anim name="brain-boss-eye" img="entities/brain-boss.png" y="96" width="16" height="16" count="6" delay="0.2" reverse="true" />
+	<anim name="energy-cell" img="entities/decor-energy-cell.png" width="32" height="64" count="3" delay="0.1" />
 </animations>

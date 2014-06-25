@@ -2,7 +2,7 @@
 #define GATE_HPP
 
 #include "entities/MultiPartEntity.hpp"
-
+#include "entities/Animator.hpp"
 
 class Gate: public MultiPartEntity
 {
@@ -14,9 +14,11 @@ public:
 private:
 	void onPartDestroyed(const Part& part) override;
 
-	int energy_cells_;
-	float door_timer_;
-	float door_full_height_;
+	int m_energy_cells_count;
+	float m_door_timer;
+	float m_door_height;
+	Animator m_cell_animator1;
+	Animator m_cell_animator2;
 };
 
 
