@@ -42,9 +42,6 @@ void InGameScene::OnEvent(const sf::Event& event)
 		case sf::Event::KeyReleased:
 			m_entities.getPlayer()->onActionUp(Input::matchKey(event.key.code));
 			break;
-		case sf::Event::JoystickButtonReleased:
-			m_entities.getPlayer()->onActionUp(Input::matchButton(event.joystickButton.button));
-			break;
 		case sf::Event::LostFocus:
 			Game::getInstance().setNextScene(Game::SC_PauseMenu);
 			break;

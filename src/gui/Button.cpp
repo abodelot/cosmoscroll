@@ -32,6 +32,12 @@ void Button::setString(const sf::String& text)
 }
 
 
+void Button::setColor(const sf::Color& color)
+{
+	text_.setColor(color);
+}
+
+
 void Button::SetTextPadding(int x, int y)
 {
 	text_.setPosition(x, y);

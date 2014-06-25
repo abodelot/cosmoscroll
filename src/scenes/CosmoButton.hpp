@@ -19,9 +19,7 @@ protected:
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	static const sf::Texture* img_;
-
-	sf::Sprite background_;
+	sf::Sprite m_background;
 };
 
 #endif // COSMOBUTTON_HPP

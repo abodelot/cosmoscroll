@@ -24,7 +24,9 @@ public:
 	/**
 	 * Indiquer le texte affiché sur le bouton
 	 */
-	virtual void setString(const sf::String& text);
+	void setString(const sf::String& text);
+
+	void setColor(const sf::Color& color);
 
 	void SetTextPadding(int x, int y);
 

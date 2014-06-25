@@ -2,21 +2,15 @@
 #include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
 
-#define BUT_W 220
-#define BUT_H 40
+const int BUTTON_WIDTH  = 220;
+const int BUTTON_HEIGHT = 40;
 
-const sf::Texture* CosmoButton::img_ = NULL;
 
 CosmoButton::CosmoButton(gui::Menu* owner, const sf::String& text) :
-	gui::Button(owner, text, BUT_W, BUT_H)
+	gui::Button(owner, text, BUTTON_WIDTH, BUTTON_HEIGHT),
+	m_background(Resources::getTexture("gui/button.png"))
 {
-	if (img_ == NULL)
-	{
-		img_ = &Resources::getTexture("gui/button.png");
-	}
-
-	background_.setTexture(*img_);
-	background_.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
+	m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
 
 	SetTextPadding(0, 8);
 	SetAlign(gui::Align::CENTER);
@@ -29,14 +23,14 @@ void CosmoButton::OnStateChanged(gui::State::EState state)
 	switch (state)
 	{
 		case gui::State::DEFAULT:
-			background_.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
+			m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
 			break;
 		case gui::State::HOVERED:
-			background_.setTextureRect(sf::IntRect(0, 40, BUT_W, BUT_H));
+			m_background.setTextureRect(sf::IntRect(0, BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT));
 			SoundSystem::playSound("menu-select.ogg");
 			break;
 		case gui::State::FOCUSED:
-			background_.setTextureRect(sf::IntRect(0, 80, BUT_W, BUT_H));
+			m_background.setTextureRect(sf::IntRect(0, BUTTON_HEIGHT * 2, BUTTON_WIDTH, BUTTON_HEIGHT));
 			break;
 		default:
 			break;
@@ -54,6 +48,6 @@ void CosmoButton::OnCallbackTriggered()
 void CosmoButton::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
-	target.draw(background_, states);
+	target.draw(m_background, states);
 	target.draw((gui::Button) *this);
 }

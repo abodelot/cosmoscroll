@@ -231,17 +231,14 @@ void Player::onActionDown(Action::ID action)
 		case Action::USE_LASER:
 			if (overheated_)
 			{
-				SoundSystem::playSound("disabled.ogg", 0.9);
+				SoundSystem::playSound("disabled.ogg");
 			}
 			break;
-		case Action::NONE:
-			return;
 		default:
-			// Continue because others actions may belong to the Konami Code
 			break;
 	}
 
-	// Konami code
+	// Detect Konami code sequence
 	if (action == m_konami_code[m_current_konami_index])
 	{
 		++m_current_konami_index;

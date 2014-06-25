@@ -30,6 +30,7 @@ private:
 
 	sf::Sprite m_background;
 	Action::ID m_action;
+	bool       m_error;
 };
 
 

@@ -1,16 +1,18 @@
 #include "ConfigButton.hpp"
 #include "core/Resources.hpp"
 
-#define BUT_W 120
-#define BUT_H 25
+const int       BUTTON_WIDTH  = 120;
+const int       BUTTON_HEIGHT = 25;
+const sf::Color ERROR_COLOR   = sf::Color(255, 220, 0);
 
 
 ConfigButton::ConfigButton(gui::Menu* owner, Action::ID action):
-	gui::Button(owner, "", BUT_W, BUT_H),
-	m_action(action)
+	gui::Button(owner, "", BUTTON_WIDTH, BUTTON_HEIGHT),
+	m_action(action),
+	m_error(false)
 {
 	m_background.setTexture(Resources::getTexture("gui/button-config.png"));
-	m_background.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
+	m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
 	SetTextPadding(0, -2);
 	SetAlign(gui::Align::CENTER);
 	SetCallbackID(action);
@@ -20,13 +22,23 @@ ConfigButton::ConfigButton(gui::Menu* owner, Action::ID action):
 
 void ConfigButton::setKeyboardLabel()
 {
-	setString(Input::keyToString(Input::getKeyBinding(m_action)));
+	sf::Keyboard::Key key = Input::getKeyBinding(m_action);
+	setString(Input::keyToString(key));
+
+	// Check for error and refresh label
+	m_error = key == sf::Keyboard::Unknown;
+	OnStateChanged(GetState());
 }
 
 
 void ConfigButton::setJoystickLabel()
 {
-	setString(Input::buttonToString(Input::getButtonBinding(m_action)));
+	unsigned int button = Input::getButtonBinding(m_action);
+	setString(Input::buttonToString(button));
+
+	// Check for error and refresh label
+	m_error = button == sf::Joystick::ButtonCount;
+	OnStateChanged(GetState());
 }
 
 
@@ -38,21 +50,27 @@ Action::ID ConfigButton::getAction() const
 
 void ConfigButton::OnStateChanged(gui::State::EState state)
 {
+	gui::Button::OnStateChanged(state);
 	switch (state)
 	{
 		case gui::State::DEFAULT:
-			m_background.setTextureRect(sf::IntRect(0, 0, BUT_W, BUT_H));
+			m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
 			break;
 		case gui::State::HOVERED:
-			m_background.setTextureRect(sf::IntRect(0, BUT_H, BUT_W, BUT_H));
+			m_background.setTextureRect(sf::IntRect(0, BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT));
 			break;
 		case gui::State::FOCUSED:
-			m_background.setTextureRect(sf::IntRect(0, BUT_H * 2, BUT_W, BUT_H));
+			m_background.setTextureRect(sf::IntRect(0, BUTTON_HEIGHT * 2, BUTTON_WIDTH, BUTTON_HEIGHT));
 			break;
 		default:
 			break;
 	}
-	gui::Button::OnStateChanged(state);
+
+	if (m_error)
+	{
+		// Override label color when binding is invalid
+		setColor(ERROR_COLOR);
+	}
 }
 
 

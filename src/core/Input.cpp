@@ -176,7 +176,7 @@ void Input::setButtonBinding(unsigned int joystick_button, Action::ID action)
 	}
 	else
 	{
-		std::cerr << "[Input] invalid joystick button binding ignored:"  << joystick_button << std::endl;
+		std::cerr << "[Input] invalid joystick button binding ignored: "  << joystick_button << std::endl;
 	}
 }
 
@@ -208,7 +208,6 @@ const char* Input::keyToString(sf::Keyboard::Key key)
 {
 	switch (key)
 	{
-		case sf::Keyboard::Unknown:   return "Unknown";
 		case sf::Keyboard::A:         return "A";
 		case sf::Keyboard::B:         return "B";
 		case sf::Keyboard::C:         return "C";
@@ -310,9 +309,10 @@ const char* Input::keyToString(sf::Keyboard::Key key)
 		case sf::Keyboard::F14:       return "F14";
 		case sf::Keyboard::F15:       return "F15";
 		case sf::Keyboard::Pause:     return "Pause";
+		case sf::Keyboard::Unknown:   break;
 		case sf::Keyboard::KeyCount:  break;
 	}
-	return "<Invalid Key>";
+	return "Invalid";
 }
 
 
@@ -324,7 +324,7 @@ std::wstring Input::buttonToString(unsigned int button)
 		oss << _t("menu.joystick.button") << L' ' << button;
 		return oss.str();
 	}
-	return L"<Invalid Button>";
+	return L"Invalid";
 }
 
 
