@@ -4,7 +4,6 @@
 #include "core/UserSettings.hpp"
 #include "core/Input.hpp"
 #include "core/ControlPanel.hpp"
-#include "core/SoundSystem.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Player.hpp"
 
@@ -21,6 +20,8 @@ void InGameScene::OnEvent(const sf::Event& event)
 	Action::ID action = Input::feedEvent(event);
 	switch (action)
 	{
+		case Action::NONE:
+			break;
 		case Action::PANEL_UP:
 			setPanelOnTop(true);
 			break;
@@ -28,13 +29,28 @@ void InGameScene::OnEvent(const sf::Event& event)
 			setPanelOnTop(false);
 			break;
 		case Action::PAUSE:
-			SoundSystem::pauseMusic();
+			Game::getInstance().setNextScene(Game::SC_PauseMenu);
+			break;
+		default:
+			m_entities.getPlayer()->onActionDown(action);
+			break;
+	}
+
+	// Handle some special cases for player animations and window focus
+	switch (event.type)
+	{
+		case sf::Event::KeyReleased:
+			m_entities.getPlayer()->onActionUp(Input::matchKey(event.key.code));
+			break;
+		case sf::Event::JoystickButtonReleased:
+			m_entities.getPlayer()->onActionUp(Input::matchButton(event.joystickButton.button));
+			break;
+		case sf::Event::LostFocus:
 			Game::getInstance().setNextScene(Game::SC_PauseMenu);
 			break;
 		default:
 			break;
 	}
-	m_entities.getPlayer()->onEvent(event);
 }
 
 
@@ -51,7 +67,6 @@ void InGameScene::Update(float frametime)
 {
 	if (m_entities.spawnBadGuys())
 	{
-		SoundSystem::stopMusic();
 		Game::getInstance().setNextScene(Game::SC_EndGameScene);
 	}
 	else

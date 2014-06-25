@@ -23,10 +23,11 @@ PauseMenu::PauseMenu()
 void PauseMenu::OnEvent(const sf::Event& event)
 {
 	Action::ID action = Input::feedEvent(event);
-	if (action == Action::PAUSE && event.type != sf::Event::LostFocus) // resume
+	if (action == Action::PAUSE)
 	{
-		Game::getInstance().setNextScene(Game::SC_InGameScene);
+		 // Resume game
 		SoundSystem::playMusic();
+		Game::getInstance().setNextScene(Game::SC_InGameScene);
 	}
 	else
 	{
@@ -39,6 +40,8 @@ void PauseMenu::OnFocus()
 {
 	Game::getInstance().getWindow().setMouseCursorVisible(true);
 	Game::getInstance().getWindow().setKeyRepeatEnabled(true);
+
+	SoundSystem::pauseMusic();
 }
 
 

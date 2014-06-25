@@ -32,11 +32,18 @@
 
 Player::Player():
 	m_speed(0.f),
-	panel_(ControlPanel::getInstance())
+	panel_(ControlPanel::getInstance()),
+	// Preload animations
+	m_animation_up(EntityManager::getInstance().getAnimation("player-up")),
+	m_animation_down(EntityManager::getInstance().getAnimation("player-down")),
+	m_animation_normal(EntityManager::getInstance().getAnimation("player")),
+	m_score(0)
 {
 	setTeam(Entity::GOOD);
 	setHP(-1);
-	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("player"));
+
+	// Init sprite texture
+	m_animator.setAnimation(*this, m_animation_normal);
 
 	// Init weapons
 	m_weapon.init("laser-red");
@@ -180,30 +187,15 @@ void Player::overheatAudioHint() const
 }
 
 
-void Player::onEvent(const sf::Event& event)
+void Player::onActionDown(Action::ID action)
 {
-	const EntityManager& entities = EntityManager::getInstance();
-	switch (event.type)
-	{
-		case sf::Event::KeyReleased:
-			if (Input::getKeyBinding(Action::UP)   == event.key.code ||
-				Input::getKeyBinding(Action::DOWN) == event.key.code)
-			{
-				m_animator.setAnimation(*this, entities.getAnimation("player"));
-			}
-			break;
-		default:
-			break;
-	}
-
-	Action::ID action = Input::feedEvent(event);
 	switch (action)
 	{
 		case Action::UP:
-			m_animator.setAnimation(*this, entities.getAnimation("player-up"));
+			m_animator.setAnimation(*this, m_animation_up);
 			break;
 		case Action::DOWN:
-			m_animator.setAnimation(*this, entities.getAnimation("player-down"));
+			m_animator.setAnimation(*this, m_animation_down);
 			break;
 		case Action::USE_COOLER:
 			if (coolers_ > 0)
@@ -239,7 +231,7 @@ void Player::onEvent(const sf::Event& event)
 		case Action::USE_LASER:
 			if (overheated_)
 			{
-				SoundSystem::playSound("disabled.ogg");
+				SoundSystem::playSound("disabled.ogg", 0.9);
 			}
 			break;
 		case Action::NONE:
@@ -263,7 +255,20 @@ void Player::onEvent(const sf::Event& event)
 	{
 		m_current_konami_index = 0;
 	}
+}
 
+
+void Player::onActionUp(Action::ID action)
+{
+	switch (action)
+	{
+		case Action::UP:
+		case Action::DOWN:
+			m_animator.setAnimation(*this, m_animation_normal);
+			break;
+		default:
+			break;
+	}
 }
 
 
@@ -271,10 +276,10 @@ void Player::onUpdate(float frametime)
 {
 	static const EntityManager& manager = EntityManager::getInstance();
 
-	// animation
+	// Animation
 	m_animator.updateSubRect(*this, frametime);
 
-	// weapons
+	// Weapons
 	if (!overheated_)
 	{
 		float h = 0.f;

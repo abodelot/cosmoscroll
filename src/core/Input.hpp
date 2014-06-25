@@ -33,9 +33,21 @@ class Input
 public:
 	/**
 	 * Give an event to process
-	 * @return action matching the event
+	 * @return action ID matching the event
 	 */
 	static Action::ID feedEvent(const sf::Event& event);
+
+	/**
+	 * Get action matching a given key
+	 * @return matching action ID, or NONE
+	 */
+	static Action::ID matchKey(sf::Keyboard::Key key);
+
+	/**
+	 * Get action matching a given joystick button
+	 * @return matching action ID, or NONE
+	 */
+	static Action::ID matchButton(unsigned int button);
 
 	/**
 	 * Check if the key or the button binded to an action is hold down

@@ -35,46 +35,54 @@ Input::Init::Init()
 }
 
 
+Action::ID Input::matchKey(sf::Keyboard::Key key)
+{
+	KeyMap::const_iterator it = s_keys.find(key);
+	return it != s_keys.end() ? it->second : Action::NONE;
+}
+
+
+Action::ID Input::matchButton(unsigned int button)
+{
+	ButtonMap::const_iterator it = s_buttons.find(button);
+	return it != s_buttons.end() ? it->second : Action::NONE;
+}
+
+
 Action::ID Input::feedEvent(const sf::Event& event)
 {
 	switch (event.type)
 	{
 		case sf::Event::KeyPressed:
 		{
-			KeyMap::const_iterator it = s_keys.find(event.key.code);
-			if (it != s_keys.end())
-			{
-				s_pressed[it->second] = true;
-				return it->second;
-			}
-			break;
+			Action::ID action = matchKey(event.key.code);
+			if (action != Action::NONE)
+				s_pressed[action] = true;
+
+			return action;
 		}
 		case sf::Event::KeyReleased:
 		{
-			KeyMap::const_iterator it = s_keys.find(event.key.code);
-			if (it != s_keys.end())
-			{
-				s_pressed[it->second] = false;
-			}
+			Action::ID action = matchKey(event.key.code);
+			if (action != Action::NONE)
+				s_pressed[action] = false;
+
 			break;
 		}
 		case sf::Event::JoystickButtonPressed:
 		{
-			ButtonMap::const_iterator it = s_buttons.find(event.joystickButton.button);
-			if (it != s_buttons.end())
-			{
-				s_pressed[it->second] = true;
-				return it->second;
-			}
-			break;
+			Action::ID action = matchButton(event.joystickButton.button);
+			if (action != Action::NONE)
+				s_pressed[action] = true;
+
+			return action;
 		}
 		case sf::Event::JoystickButtonReleased:
 		{
-			ButtonMap::const_iterator it = s_buttons.find(event.joystickButton.button);
-			if (it != s_buttons.end())
-			{
-				s_pressed[it->second] = false;
-			}
+			Action::ID action = matchButton(event.joystickButton.button);
+			if (action != Action::NONE)
+				s_pressed[action] = false;
+
 			break;
 		}
 		case sf::Event::JoystickMoved:
@@ -111,10 +119,10 @@ Action::ID Input::feedEvent(const sf::Event& event)
 				s_pressed[Action::UP] = false;
 			}
 			break;
+
 		case sf::Event::Closed:
 			return Action::EXIT_APP;
-		case sf::Event::LostFocus:
-			return Action::PAUSE;
+
 		default:
 			break;
 	}

@@ -35,6 +35,7 @@ void EndGameScene::OnEvent(const sf::Event& event)
 
 void EndGameScene::OnFocus()
 {
+	SoundSystem::stopMusic();
 	m_started_at.restart();
 
 	if (m_entities.getPlayer()->isDead())

@@ -19,6 +19,10 @@ public:
 	Player();
 	~Player();
 
+	void onActionDown(Action::ID action);
+
+	void onActionUp(Action::ID action);
+
 	void onEvent(const sf::Event& event);
 
 	int getScore() const;
@@ -49,7 +53,7 @@ private:
 	};
 
 	/**
-	 * Désactiver un bonus à effet temporaire
+	 * Unapply a powerup when duration is elapsed
 	 */
 	void DisableTimedPowerUp(TimedPowerUp tbonus);
 
@@ -87,8 +91,12 @@ private:
 	Weapon<>        m_weapon;
 	Weapon<Missile> m_missile_launcher;
 
-	Animator m_animator;
-	int      m_score;
+	Animator         m_animator;
+	const Animation& m_animation_up;
+	const Animation& m_animation_down;
+	const Animation& m_animation_normal;
+
+	int              m_score;
 
 	class ShieldEmitter: public ParticleSystem::Emitter
 	{
