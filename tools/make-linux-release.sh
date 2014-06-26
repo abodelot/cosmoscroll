@@ -1,5 +1,5 @@
 #!/bin/sh
-# Stand-alone release builder for Linux 
+# Stand-alone release builder for Linux
 
 # Go to root directory of the git repository
 ROOT_PATH=$(git rev-parse --show-cdup)
@@ -8,36 +8,31 @@ if [ $ROOT_PATH ]; then
 fi
 
 # Get project name from directory
-PROJECT_NAME=$(basename $(pwd) | tr '[A-Z]' '[a-z'])
+PROJECT_NAME=$(basename $(pwd))
 
-# Ask which version to build (will be included in filename)
-read -p "Enter version number: " VERSION
+# Extract version number from latest tag (v0.1 => 0.1)
+VERSION=$(git describe --tags --abbrev=0 | cut -c2-)
 
-# Name of the directory which will contain the release
-ARCH=$(uname -m)
-KERNEL=$(uname -s | tr '[A-Z]' '[a-z]')
-TARGET_NAME="$PROJECT_NAME"_"$VERSION"-"$KERNEL"_"$ARCH"
-echo Packaging $TARGET_NAME.tar.gz ...
+# Directory in which the release will be packaged
+PACKAGE_NAME="$PROJECT_NAME"_"$VERSION"-linux_32bits
+echo Packaging "$PACKAGE_NAME.tar.gz" ...
 
-# Find SFML libraries
-for i in /usr/lib /usr/local/lib; do
-	SFML_LIBS=$i/libsfml*
-	files=$(ls $SFML_LIBS* 2> /dev/null | wc -l)
-	if [ $files != "0" ]; then
-		break
-	fi
-done
-
-# Copy SFML libraries
+# Copy dependencies
 mkdir bin/lib
-cp $SFML_LIBS bin/lib
+cp /usr/local/lib/libsfml-graphics.so.2 bin/lib
+cp /usr/local/lib/libsfml-window.so.2 bin/lib
+cp /usr/local/lib/libsfml-system.so.2 bin/lib
+cp /usr/local/lib/libsfml-audio.so.2 bin/lib
+cp /usr/local/lib/libsfml-network.so.2 bin/lib
+cp /usr/lib/i386-linux-gnu/libGLEW.so.1.7 bin/lib
+cp /usr/lib/i386-linux-gnu/libdumb.so.1 bin/lib
 
 # Copy launcher script
 cp tools/run.sh bin
 
 # Create the tarball from bin directory and give it a proper name
-tar -czf $TARGET_NAME.tar.gz bin/ --transform s/bin/$TARGET_NAME/ 
-echo $TARGET_NAME.tar.gz generated
+tar -czf $PACKAGE_NAME.tar.gz bin/ --transform s/bin/$PACKAGE_NAME/
+echo Done!
 
 # Clean up the mess created in the bin/ directory
 rm bin/run.sh
