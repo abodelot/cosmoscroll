@@ -15,11 +15,6 @@
 #define WEAPON_POSITION             sf::Vector2f(54, 24)
 
 #define BONUS_SPEED_FACTOR 1.5
-#define COOLER_DEFAULT              0
-#define COOLER_MAX                  3
-
-#define MISSILES_DEFAULT            0
-#define MISSILES_MAX                3
 
 // time to wait from overheat to heat 0 (seconds)
 #define COOLING_DELAY              10
@@ -28,10 +23,14 @@
 #define SHIELD_RECOVERY_DELAY       6
 
 #define TIMED_BONUS_DURATION        10
+const int MAX_MISSILES = 5;
+const int MAX_ICECUBES = 5;
 
 
 Player::Player():
 	m_speed(0.f),
+	m_missiles(0),
+	m_icecubes(0),
 	panel_(ControlPanel::getInstance()),
 	// Preload animations
 	m_animation_up(EntityManager::getInstance().getAnimation("player-up")),
@@ -54,8 +53,6 @@ Player::Player():
 	m_missile_launcher.setOwner(this);
 	m_missile_launcher.setPosition(WEAPON_POSITION);
 
-	coolers_ = COOLER_DEFAULT;
-	missiles_ = MISSILES_DEFAULT;
 	overheated_ = false;
 	shield_timer_ = 0;
 	shield_ = 0;
@@ -68,8 +65,8 @@ Player::Player():
 	}
 
 	// Init control panel
-	panel_.SetCoolers(coolers_);
-	panel_.SetMissiles(missiles_);
+	panel_.SetCoolers(m_icecubes);
+	panel_.SetMissiles(m_missiles);
 	panel_.SetOverheat(false);
 	panel_.ActiveSpeedPowerUp(0);
 	panel_.ActiveAttackPowerUp(0, PowerUp::DOUBLE_SHOT);
@@ -198,15 +195,16 @@ void Player::onActionDown(Action::ID action)
 			m_animator.setAnimation(*this, m_animation_down);
 			break;
 		case Action::USE_COOLER:
-			if (coolers_ > 0)
+			if (m_icecubes > 0)
 			{
 				// Play sound effect and launch particles
 				SoundSystem::playSound("cooler.ogg");
 				m_snowflakes_emitter.setPosition(getCenter());
 				m_snowflakes_emitter.createParticles(40);
 
-				--coolers_;
-				panel_.SetCoolers(coolers_);
+				// Reset heat
+				--m_icecubes;
+				panel_.SetCoolers(--m_icecubes);
 				heat_ = 0.f;
 				overheated_ = false;
 				panel_.SetOverheat(false);
@@ -217,10 +215,9 @@ void Player::onActionDown(Action::ID action)
 			}
 			break;
 		case Action::USE_MISSILE:
-			if (missiles_ > 0 && m_missile_launcher.isReady())
+			if (m_missiles > 0 && m_missile_launcher.isReady())
 			{
-				--missiles_;
-				panel_.SetMissiles(missiles_);
+				panel_.SetMissiles(--m_missiles);
 				m_missile_launcher.shoot(0);
 			}
 			else
@@ -407,22 +404,22 @@ void Player::onCollision(PowerUp& powerup)
 		// timed bonus
 		case PowerUp::DOUBLE_SHOT:
 			if (bonus_[T_DOUBLESHOT] == 0)
-			{
 				m_weapon.setMultiply(2);
-			}
+
 			bonus_[T_TRISHOT] = 0;
 			bonus_[T_DOUBLESHOT] += TIMED_BONUS_DURATION;
 			panel_.ActiveAttackPowerUp(bonus_[T_DOUBLESHOT], powerup.getType());
 			break;
+
 		case PowerUp::TRIPLE_SHOT:
 			if (bonus_[T_TRISHOT] == 0)
-			{
 				m_weapon.setMultiply(3);
-			}
+
 			bonus_[T_DOUBLESHOT] = 0;
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
 			panel_.ActiveAttackPowerUp(bonus_[T_TRISHOT], powerup.getType());
 			break;
+
 		case PowerUp::SPEED:
 			if (bonus_[T_SPEED] == 0)
 			{
@@ -432,40 +429,42 @@ void Player::onCollision(PowerUp& powerup)
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
 			panel_.ActiveSpeedPowerUp(bonus_[T_SPEED]);
 			break;
+
 		// immediate bonus
-		case PowerUp::SUPER_BANANA:
-			m_powerup_emitter.setPosition(getCenter());
-			m_powerup_emitter.createParticles(50);
+		case PowerUp::REPAIR:
+			if (getHP() < hp_max_)
+				panel_.SetShipHP(updateHP(1));
+			break;
+
+		case PowerUp::FULL_REPAIR:
 			setHP(hp_max_);
 			panel_.SetShipHP(hp_max_);
-			setShield(shield_max_);
+			m_powerup_emitter.setPosition(getCenter());
+			m_powerup_emitter.createParticles(50);
 			break;
-		case PowerUp::HEALTH:
-			if (getHP() < hp_max_)
-			{
-				panel_.SetShipHP(updateHP(1));
-			}
-			break;
+
 		case PowerUp::SHIELD:
 			if (shield_ < shield_max_)
-			{
 				setShield(shield_ + 1);
-			}
 			break;
-		case PowerUp::COOLER:
-			if (coolers_ < COOLER_MAX)
-			{
-				++coolers_;
-				panel_.SetCoolers(coolers_);
-			}
+
+		case PowerUp::FULL_SHIELD:
+			setShield(shield_max_);
+			panel_.SetShield(shield_max_);
+			m_powerup_emitter.setPosition(getCenter());
+			m_powerup_emitter.createParticles(50);
 			break;
+
+		case PowerUp::ICECUBE:
+			if (m_icecubes < MAX_ICECUBES)
+				panel_.SetCoolers(++m_icecubes);
+			break;
+
 		case PowerUp::MISSILE:
-			if (missiles_ < MISSILES_MAX)
-			{
-				++missiles_;
-				panel_.SetMissiles(missiles_);
-			}
+			if (m_missiles < MAX_MISSILES)
+				panel_.SetMissiles(++m_missiles);
 			break;
+
 		default:
 			break;
 	}
@@ -518,15 +517,19 @@ void Player::applyKonamiCode()
 	m_konami_code_activated = true;
 
 	// Set max hp
+	hp_max_ = 10;
+	panel_.SetMaxShipHP(hp_max_);
 	setHP(hp_max_);
 	panel_.SetShipHP(hp_max_);
 
 	// Set max shield
+	shield_max_ = 10;
+	panel_.SetMaxShield(shield_max_);
 	setShield(shield_max_);
 
-	coolers_ = 42;
+	m_icecubes = 42;
 	panel_.SetCoolers(42);
-	missiles_ = 42;
+	m_missiles = 42;
 	panel_.SetMissiles(42);
 
 	m_weapon.setMultiply(3);

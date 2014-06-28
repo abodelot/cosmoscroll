@@ -88,11 +88,12 @@ void Game::loadResources(const std::string& data_path)
 	I18n::getInstance().setDataPath(resources_dir + "/lang");
 	MessageSystem::setFont(Resources::getFont("Vera.ttf"));
 
-	// Load XML resources
-	std::cout << "* checking resources md5sum...";
+	// Check against MD5
 	m_resources_checked = checkResourcesPurity(resources_dir);
-	std::cout <<  (m_resources_checked ? "succeeded" : "failed") << std::endl;
+	if (!m_resources_checked)
+		std::cerr << "* warning: MD5 checksum failed" << std::endl;
 
+	// Load XML resources
 	std::cout << "* loading " << XML_LEVELS << "..." << std::endl;
 	LevelManager::getInstance().loadLevelFile(resources_dir + XML_LEVELS);
 

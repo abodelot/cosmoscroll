@@ -25,19 +25,19 @@ public:
 	static const std::string& getSearchPath();
 
 	/**
-	 * Retrieve a texture in the 'images' directory
+	 * Get a texture from the 'images' directory
 	 * @param name: texture filename
 	 */
 	static sf::Texture& getTexture(const std::string& name);
 
 	/**
-	 * Retrieve a font in the 'fonts' directory
+	 * Get a font from the 'fonts' directory
 	 * @param name: font filename
 	 */
 	static sf::Font& getFont(const std::string& name);
 
 	/**
-	 * Retrieve a sound buffer in the 'sounds' directory
+	 * Get a sound buffer from the 'sounds' directory
 	 * @param name: sound buffer filename
 	 */
 	static sf::SoundBuffer& getSoundBuffer(const std::string& name);

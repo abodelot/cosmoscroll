@@ -51,7 +51,7 @@ ControlPanel::ControlPanel():
 	bar_mask_.setPosition(101, 6);
 
 	// init bonus counters
-	bs_coolers_.Init(PowerUp::COOLER, PowerUpSlot::COUNTER, font);
+	bs_coolers_.Init(PowerUp::ICECUBE, PowerUpSlot::COUNTER, font);
 	bs_coolers_.setPosition(256, 8);
 
 	bs_missiles_.Init(PowerUp::MISSILE, PowerUpSlot::COUNTER, font);

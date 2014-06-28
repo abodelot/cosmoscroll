@@ -50,13 +50,13 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < argc; ++i)
 	{
 		std::string arg = argv[i];
-		if (arg == "-v" || arg == "--version")
+		if (arg == "-v" || arg == "-version")
 			return version();
-		else if (arg == "-h" || arg == "--help")
+		else if (arg == "-h" || arg == "-help")
 			return usage(argv[0]);
-		else if (arg == "-c" || arg == "--config")
+		else if (arg == "-c" || arg == "-config")
 			config_file = get_arg(i, argv);
-		else if (arg == "-r" || arg == "--res")
+		else if (arg == "-r" || arg == "-res")
 			res_dir = get_arg(i, argv);
 	}
 

@@ -105,7 +105,6 @@ var current_tab = -1;
 		<li><a href="#bug-found-en">I've found a bug! / I've a feature suggestion!</a></li>
 		<li><a href="#howto-compile-en">How to compile the game from source?</a></li>
 		<li><a href="#credits-en">Credits</a></li>
-		<li><a href="#history-en">Release history</a></li>
 	</ul>
 
 	<h2 id="howto-play-en">How to play?</h2>
@@ -132,10 +131,10 @@ var current_tab = -1;
 		</tr>
 		<tr>
 			<td>Move spaceship</td>
-			<td>Directional arrows (up, down, left, right)</td>
+			<td>Up, down, left, right arrows</td>
 		</tr>
 		<tr>
-			<td>Main weapon</td>
+			<td>Fire</td>
 			<td>Space</td>
 		</tr>
 		<tr>
@@ -169,19 +168,20 @@ var current_tab = -1;
 	<h3>Power-ups</h3>
 	<p>Power-ups are randomly dropped when an enemy is destroyed.</p>
 	<ul>
-		<li><b>HP</b>: restores 1 health point.</li>
-		<li><b>Shield</b>: restores 1 shield point.</li>
-		<li><b>Cooler</b>: gives +1 <em>Cooler</em>. Use a cooler to instantly cancel over-heat. You can store up to 3 coolers.</li>
-		<li><b>Missile</b>: gives +1 <em>Missile</em>. A deadly weapon with a large damage zone. You can store up to 3 missiles.</li>
-		<li><b>Double shot</b>: doubles your weapons for 10 seconds (cannot be combined with <em>triple shot</em>)</li>
-		<li><b>Triple shot</b>: triples your weapons for 10 seconds (cannot be combined with <em>double shot</em>).</li>
-		<li><b>Speed</b>: increases your speed for 10 seconds</li>
-		<li><b>Super Banana</b>: restores all health points and all shield points</li>
+		<li><b>Repair</b>: Restores 1 health point.</li>
+		<li><b>Full repair</b>: Restores all health points.</li>
+		<li><b>Shield</b>: Restores 1 shield point.</li>
+		<li><b>Full shield</b>: Restores all shield points.</li>
+		<li><b>Ice cube</b>: Gives +1 ice cube . Use an ice cube to instantly cool down the weapon system and cancel over-heat. You can store up to 5 ice cubes.</li>
+		<li><b>Missile</b>: Gives +1 missile. One shot of this deadly weapon can destroy many enemies. You can store up to 5 missiles.</li>
+		<li><b>Double shot</b>: Doubles weapon ammo for 10 seconds (cannot be combined with <em>triple shot</em>)</li>
+		<li><b>Triple shot</b>: Triples weapon ammo for 10 seconds (cannot be combined with <em>double shot</em>).</li>
+		<li><b>Speed</b>: Increases speed for 10 seconds</li>
 	</ul>
 
 	<h2 id="configuration-en">Where is the configuration file?</h2>
 
-	<p>CosmoScroll saves your configuration in the settings directory, according to your operating system:</p>
+	<p>CosmoScroll saves your configuration in your application settings directory, using your operating system's convention:</p>
 	<ul>
 		<li><b>Windows:</b> <code>Application Data/cosmoscroll/cosmoscroll.ini</code></li>
 		<li><b>Linux:</b> <code>~/.config/cosmoscroll/cosmoscroll.ini</code></li>
@@ -202,8 +202,7 @@ var current_tab = -1;
 		<tr>
 			<td>-config <em>&lt;path&gt;</em></td>
 			<td>Override configuration file default location.<br />
-			If <em>path</em> is a directory, the game will look for a configuration file named <em>cosmoscroll.ini</em> (or create it if it doesn't exist).<br />
-			If it is a regular file, it will use it as an alternate configuration file.</td>
+			The game will use <em>path</em>e for loading (if it already exists) and saving the settings file. If <em>path</em> is a directory, the game will look for a configuration file named <code>cosmoscroll.ini</code> inside.
 		</tr>
 		<tr>
 			<td>-res <em>&lt;path&gt;</em></td>
@@ -220,13 +219,13 @@ var current_tab = -1;
 		</tr>
 	</table>
 
-	<h2 id="bug-found-en">I've found a bug! / I've a feature suggestion!</h2>
+	<h2 id="bug-found-en">Bug report / feedback / features suggestion</h2>
 
 	<p>If you have encountered a problem while playing CosmoScroll, please report it on the <a href="http://code.google.com/p/cosmoscroll/issues/list">bug tracker</a> (if the issue has not been reported yet).<br />
 	If possible, please clearly mention the steps to reproduce the bug.
 	</p>
 	<p>You can also contact the main developer of CosmoScroll (<a href="mailto:alexandre.bodelot@gmail.com">alexandre.bodelot@gmail.com</a>) if you want to submit a feature suggestion, it will be welcomed!</p>
-	<p>If CosmoScroll isn't available in your native language, you can translate it by providing the language file (see <code>resources/lang/</code> directory) and send it to the CosmoScroll team for inclusion in further releases.</p>
+	<p>If CosmoScroll isn't available in your native language, you can write a new language file (see the <a href="http://github.com/abodelot/cosmoscroll/wiki/Internationalization">internationalization guide</a>) and send it to the CosmoScroll team for inclusion in further releases.</p>
 
 	<h2 id="howto-compile-en">How to compile the game from source?</h2>
 
@@ -272,16 +271,6 @@ var current_tab = -1;
 			</ul>
 		</li>
 	</ul>
-
-	<h2 id="history-en">Release history</h2>
-
-	<ul>
-		<li><b>v0.4</b> : 2012-07-22</li>
-		<li><b>v0.3</b> : 2011-05-24</li>
-		<li><b>v0.2</b> : 2010-03-13</li>
-		<li><b>v0.1</b> : 2008-12-17</li>
-	</ul>
-	<p>Old versions are still available in the <a href="http://code.google.com/p/cosmoscroll/downloads/list?can=4">deprecated</a> category.</p>
 </div>
 
 
@@ -305,7 +294,6 @@ var current_tab = -1;
 		<li><a href="#bug-found-fr">J'ai trouvé un bug / Je veux soumettre une idée</a></li>
 		<li><a href="#howto-compile-fr">Comment compiler le jeu depuis les sources ?</a></li>
 		<li><a href="#credits-fr">Crédits</a></li>
-		<li><a href="#history-fr">Historique des versions</a></li>
 	</ul>
 
 	<h2 id="howto-play-fr">Comment jouer ?</h2>
@@ -335,7 +323,7 @@ var current_tab = -1;
 			<td>Flèches directionnelles (haut, bas, gauche, droite)</td>
 		</tr>
 		<tr>
-			<td>Tir principal</td>
+			<td>Tirer</td>
 			<td>Espace</td>
 		</tr>
 		<tr>
@@ -369,14 +357,15 @@ var current_tab = -1;
 
 	<h3>Bonus</h3>
 	<ul>
-		<li><b>Point de vie</b> : restaure 1 point de vie du vaisseau.</li>
-		<li><b>Bouclier</b> : restaure 1 point de bouclier.</li>
-		<li><b>Glaçon</b> : donne +1 <em>Glaçon</em>. Utiliser un glaçon permet d'annuler les effets de la surchauffe. Jusqu'à 3 glaçons peuvent être cumulés.</li>
-		<li><b>Missile</b> : donne +1 <em>Missile</em>. Arme très puissante avec une large zone de dégâts. Jusqu'à 3 missiles peuvent être cumulés. </li>
-		<li><b>Double tir</b> : double vos tirs pendant 10 secondes.</li>
-		<li><b>Triple tir</b> : triple vos tirs pendant 10 secondes.</li>
-		<li><b>Vitesse</b> : multiplie par 2 votre vitesse pendant 10 secondes</li>
-		<li><b>Super Banane</b> : restaure tous les points de vie et points de bouclier</li>
+		<li><b>Réparation</b> : Restaure 1 point de vie du vaisseau.</li>
+		<li><b>Réparation totale</b> : Restaure tous les points de vie.</li>
+		<li><b>Bouclier</b> : Restaure 1 point de bouclier.</li>
+		<li><b>Bouclier total</b> : Restaure tout le bouclier.</li>
+		<li><b>Glaçon</b> : Donne +1 glaçon. Utiliser un glaçon permet d'annuler les effets de la surchauffe. Jusqu'à 5 glaçons peuvent être cumulés.</li>
+		<li><b>Missile</b> : Donne +1 missile. Arme très puissante avev dégâts multiples. Jusqu'à 5 missiles peuvent être cumulés. </li>
+		<li><b>Double tir</b> : Double les tirs pendant 10 secondes.</li>
+		<li><b>Triple tir</b> : Triple les tirs pendant 10 secondes.</li>
+		<li><b>Vitesse</b> : Augmente la vitesse pendant 10 secondes.</li>
 	</ul>
 
 	<h2 id="configuration-fr">Où se trouve le fichier de configuration ?</h2>
@@ -441,7 +430,7 @@ var current_tab = -1;
 	Une description permettant de reproduire le problème serait également appréciée.
 	</p>
 	<p>Vous pouvez aussi contacter le développeur principal de CosmoScroll (<a href="mailto:alexandre.bodelot@gmail.com">alexandre.bodelot@gmail.com</a>) si vous avez une suggestion d'amélioration, elle sera la bienvenue !</p>
-	<p>Si CosmoScroll n'est pas disponible dans votre langue, vous pouvez fournir un ficher de traduction (voir le répertoire <code>resources/lang/</code>) et l'envoyer à l'équipe pour l'inclure dans les prochaines versions.</p>
+
 	<h2 id="credits-fr">Crédits</h2>
 
 	<ul>
@@ -473,16 +462,6 @@ var current_tab = -1;
 			</ul>
 		</li>
 	</ul>
-
-	<h2 id="history-fr">Historique des versions</h2>
-
-	<ul>
-		<li><b>v0.4</b> : 2012-07-22</li>
-		<li><b>v0.3</b> : 2011-05-24</li>
-		<li><b>v0.2</b> : 2010-03-13</li>
-		<li><b>v0.1</b> : 2008-12-17</li>
-	</ul>
-	<p>Les anciennes versions restent disponibles dans la section <a href="http://code.google.com/p/cosmoscroll/downloads/list?can=4">Deprecated</a> des téléchargements.</p>
 </div>
 
 

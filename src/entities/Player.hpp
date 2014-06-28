@@ -82,10 +82,11 @@ private:
 	bool overheated_;
 	float heat_, heat_max_;
 	float shield_timer_;
-	int coolers_, missiles_;
 	int shield_, shield_max_;
 	int hp_max_;
 	float m_speed;
+	int   m_missiles;
+	int   m_icecubes;
 
 	ControlPanel& panel_;
 	Weapon<>        m_weapon;

@@ -11,15 +11,16 @@ class PowerUp: public Entity
 public:
 	enum Type
 	{
-		HEALTH,       // +1 hp
+		REPAIR,       // +1 hp
+		FULL_REPAIR,  // Restore all hp
 		SHIELD,       // +1 shield
-		COOLER,       // +1 cooler
-		MISSILE,      // +1 cooler
-		DOUBLE_SHOT,  // shot * 2 (10s)
-		TRIPLE_SHOT,  // shot * 3 (10s)
-		SPEED,        // speed * 2 (10s)
-		SUPER_BANANA, //
-		POWERUP_COUNT
+		FULL_SHIELD,  // Restore all shield
+		ICECUBE,      // +1 icecube
+		MISSILE,      // +1 missile
+		DOUBLE_SHOT,  // Double bullets (10s)
+		TRIPLE_SHOT,  // Triple bullets (10s)
+		SPEED,        // Increase speed (10s)
+		_COUNT        // INTERNAL USE
 	};
 
 	PowerUp(Type type);

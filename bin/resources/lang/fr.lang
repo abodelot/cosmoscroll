@@ -106,14 +106,15 @@ panel.timer = Temps : {min}:{sec}
 panel.points = Points : {points}
 
 # Power-ups
-powerup.repair = Point de coque
+powerup.repair = Réparation
+powerup.full_repair = Réparation totale
 powerup.shield = Bouclier
-powerup.cooler = Glaçon
+powerup.full_shield = Bouclier total
+powerup.icecube = Glaçon
 powerup.missile = Missile
 powerup.double_shot = Double tir
 powerup.triple_shot = Triple tir
 powerup.speed = Vitesse
-powerup.banana = Super Banane !
 
 # Actions
 action.up = Haut
