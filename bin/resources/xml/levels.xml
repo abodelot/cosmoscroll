@@ -30,7 +30,7 @@
 		</def>
 		<def name="b2_triad">
 			<ship id="b2c" y="200" t="2"/>
-			<ship id="b2c" y="150" t="1"/>
+			<ship id="b2c" y="150" t="1.5"/>
 			<ship id="b2c" y="250"/>
 		</def>
 		<def name="c_scoot_line_3">
@@ -54,18 +54,18 @@
 		</def>
 		<def name="interceptors_5">
 			<ship id="b2" y="190"/>
-			<ship id="b2" y="270" t="1"/>
+			<ship id="b2" y="270" t="1.5"/>
 			<ship id="b2" y="110"/>
-			<ship id="b2" y="350" t="1"/>
+			<ship id="b2" y="350" t="1.5"/>
 			<ship id="b2" y="30"/>
 		</def>
 		<def name="interceptors_7">
 			<ship id="b2" y="190"/>
-			<ship id="b2" y="250" t="1"/>
+			<ship id="b2" y="250" t="1.5"/>
 			<ship id="b2" y="130"/>
-			<ship id="b2" y="310" t="1"/>
+			<ship id="b2" y="310" t="1.5"/>
 			<ship id="b2" y="70"/>
-			<ship id="b2" y="370" t="1"/>
+			<ship id="b2" y="370" t="1.5"/>
 			<ship id="b2" y="10"/>
 		</def>
 	</functions>
@@ -179,13 +179,13 @@
 			<ship id="b1" y="150" t="1"/>
 			<ship id="b1" y="350"/>
 			<call func="scoot_line_5"/>
-			<ship id="b2" y="200" t="2"/>
-			<ship id="b2" y="100" t="3"/>
+			<ship id="b2" y="200" t="4"/>
+			<ship id="b2" y="100" t="4"/>
 			<ship id="b2" y="300" t="4"/>
 			<call func="b2_triad"/>
 			<wait t="4" />
 			<call func="b2_triad" />
-			<boss id="brain" y="170" t="8" />
+			<boss id="brain" y="170" t="9" />
 		</level>
 
 		<!-- LVL3 -->

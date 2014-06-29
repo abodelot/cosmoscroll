@@ -68,14 +68,13 @@ const ItemData* ItemManager::GetItemData(ItemData::Type type, int level) const
 	for (WeaponList::const_iterator it = weapons_.begin(); it != weapons_.end(); ++it)
 	{
 		data = &(*it);
-		if (data->GetType() == type && data->getLevel() == level)
+		if (data->getType() == type && data->getLevel() == level)
 		{
 			return data;
 		}
 	}
 #ifdef DEBUG
-	std::cout << "[ItemManager] item not found: " << ItemData::TypeToString(type)
-		<< " (level " << level << ")" << std::endl;
+	std::cout << "[ItemManager] item not found: " << ItemData::TypeToString(type) << ", level " << level << std::endl;
 #endif
 	return NULL;
 }
@@ -99,7 +98,7 @@ const GenericItemData* ItemManager::GetGenericItemData(ItemData::Type type, int 
 	for (GenericItemList::const_iterator it = items_.begin(); it != items_.end(); ++it)
 	{
 		const GenericItemData* data = &(*it);
-		if (data->GetType() == type && data->getLevel() == level)
+		if (data->getType() == type && data->getLevel() == level)
 		{
 			return data;
 		}

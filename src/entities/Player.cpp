@@ -19,9 +19,6 @@
 // time to wait from overheat to heat 0 (seconds)
 #define COOLING_DELAY              10
 
-// time to wait before earning another shield point (seconds)
-#define SHIELD_RECOVERY_DELAY       6
-
 #define TIMED_BONUS_DURATION        10
 const int MAX_MISSILES = 5;
 const int MAX_ICECUBES = 5;
@@ -39,7 +36,7 @@ Player::Player():
 	m_score(0)
 {
 	setTeam(Entity::GOOD);
-	setHP(-1);
+	setHP(1);
 
 	// Init sprite texture
 	m_animator.setAnimation(*this, m_animation_normal);
@@ -56,7 +53,7 @@ Player::Player():
 	overheated_ = false;
 	shield_timer_ = 0;
 	shield_ = 0;
-	heat_ = -1;
+	heat_ = 0;
 
 	// Init timed bonus
 	for (int i = 0; i < TIMED_BONUS_COUNT; ++i)
@@ -114,38 +111,31 @@ void Player::onInit()
 {
 	const ItemManager& items = ItemManager::GetInstance();
 
-	// score
+	// Reset score
 	m_score = 0;
 	panel_.setScore(0);
 
-	// shield
+	// Check new shield item
 	shield_max_ = items.GetGenericItemData(ItemData::SHIELD, UserSettings::getItemLevel(ItemData::SHIELD))->GetValue();
 	panel_.SetMaxShield(shield_max_);
-	setShield(shield_);
+	setShield(shield_); // Keep previous shield value
 
-	// ship hull (hit points)
-	int hp = items.GetGenericItemData(ItemData::HULL, UserSettings::getItemLevel(ItemData::HULL))->GetValue();
-	if (getHP() == -1) // keep previous HP value unless HP wasn't initialized yet
-	{
-		setHP(hp);
-	}
-	hp_max_ = hp;
-	panel_.SetMaxShipHP(hp);
+	// Check hull item
+	hp_max_ = items.GetGenericItemData(ItemData::HULL, UserSettings::getItemLevel(ItemData::HULL))->GetValue();
+	panel_.SetMaxShipHP(hp_max_);
+	setHP(hp_max_); // Repair spaceship
 	panel_.SetShipHP(getHP());
 
-	// engine
+	// Check engine item
 	m_speed = items.GetGenericItemData(ItemData::ENGINE, UserSettings::getItemLevel(ItemData::ENGINE))->GetValue();
 
-	// heat sink
+	// Check heatsink item
 	heat_max_ = items.GetGenericItemData(ItemData::HEATSINK, UserSettings::getItemLevel(ItemData::HEATSINK))->GetValue();
-	if (heat_ == -1) // keep previous heat value unless heat wasn't initialized yet
-	{
-		heat_ = 0.f;
-	}
 	panel_.SetMaxHeat(heat_max_);
+	heat_ = 0; // Force cooldown
 	panel_.SetHeat(heat_);
 
-	// weapon
+	// Check weapon item
 	m_weapon.init("laser-red", UserSettings::getItemLevel(ItemData::WEAPON));
 }
 
@@ -203,7 +193,6 @@ void Player::onActionDown(Action::ID action)
 				m_snowflakes_emitter.createParticles(40);
 
 				// Reset heat
-				--m_icecubes;
 				panel_.SetCoolers(--m_icecubes);
 				heat_ = 0.f;
 				overheated_ = false;
@@ -327,17 +316,6 @@ void Player::onUpdate(float frametime)
 	setPosition(pos);
 	m_smoke_emitter.setPosition(getX(), getY() + getHeight() / 2);
 	m_shield_emitter.setPosition(getCenter());
-
-	// Regenerate shield
-	if (shield_ < shield_max_)
-	{
-		shield_timer_ += frametime;
-		if (shield_timer_ >= SHIELD_RECOVERY_DELAY)
-		{
-			setShield(shield_ + 1);
-			shield_timer_ = 0.f;
-		}
-	}
 
 	// Cooling heatsink
 	if (heat_ > 0.f)

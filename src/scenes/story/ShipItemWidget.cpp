@@ -87,15 +87,15 @@ void ShipItemWidget::refresh()
 	// Get current item level
 	m_level = UserSettings::getItemLevel(m_type);
 	m_txt_level.setString(I18n::templatize("armory.item_level", "{level}", m_level));
-	const ItemData* data = ItemManager::GetInstance().GetItemData(m_type, m_level);
-	m_txt_description.setString(data->BuildDescriptionString());
+	const ItemData* item = ItemManager::GetInstance().GetItemData(m_type, m_level);
+	m_txt_description.setString(item->getDescription());
 
 	// Get next item level
 	int next_level = m_level + 1;
-	data = ItemManager::GetInstance().GetItemData(m_type, next_level);
+	item = ItemManager::GetInstance().GetItemData(m_type, next_level);
 
 	// No next item => last level reached
-	if (data == NULL)
+	if (item == NULL)
 	{
 		m_txt_upgrade.setString(_t("armory.max_level"));
 		m_txt_upgrade.setStyle(sf::Text::Italic);
@@ -105,8 +105,8 @@ void ShipItemWidget::refresh()
 	else
 	{
 		m_txt_upgrade.setString(I18n::templatize("armory.upgrade_item", "{level}", next_level));
-		m_txt_price.setString(I18n::templatize("item.price", "{price}", data->getPrice()));
-		if (UserSettings::getCredits() >= data->getPrice())
+		m_txt_price.setString(I18n::templatize("item.price", "{price}", item->getPrice()));
+		if (UserSettings::getCredits() >= item->getPrice())
 		{
 			m_txt_price.setColor(sf::Color::Green);
 		}

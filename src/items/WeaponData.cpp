@@ -6,6 +6,7 @@
 
 
 WeaponData::WeaponData():
+	ItemData(ItemData::WEAPON),
 	m_texture(NULL)
 {
 	sound_ = NULL;
@@ -24,9 +25,7 @@ bool WeaponData::loadClassFromXml(tinyxml2::XMLElement* elem)
 		std::cerr << "weapon id is missing (ignored)" << std::endl;
 		return false;
 	}
-
 	id_ = p;
-	SetType(ItemData::WEAPON);
 
 	// image
 	p = elem->Attribute("image");
@@ -73,7 +72,7 @@ bool WeaponData::loadFromXml(tinyxml2::XMLElement* elem)
 }
 
 
-std::wstring WeaponData::BuildDescriptionString() const
+std::wstring WeaponData::getDescription() const
 {
 	// Hide other properties (?)
 	//wstr_self_replace(s, L"{speed}", std::to_wstring(speed_));

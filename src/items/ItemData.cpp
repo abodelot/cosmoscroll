@@ -1,11 +1,12 @@
 #include "ItemData.hpp"
 #include "utils/tinyxml/tinyxml2.h"
 
-ItemData::ItemData()
+
+ItemData::ItemData(Type type):
+	m_type(type),
+	m_level(0),
+	m_price(0)
 {
-	price_ = 0;
-	level_ = 0;
-	type_ = _UNSET;
 }
 
 
@@ -32,25 +33,31 @@ const char* ItemData::TypeToString(Type type)
 
 const char* ItemData::TypeToString() const
 {
-	return ItemData::TypeToString(type_);
+	return ItemData::TypeToString(m_type);
 }
 
 
 bool ItemData::LoadFromXml(tinyxml2::XMLElement* elem)
 {
-	elem->QueryIntAttribute("price", &price_);
-	elem->QueryIntAttribute("level", &level_);
+	elem->QueryIntAttribute("price", &m_price);
+	elem->QueryIntAttribute("level", &m_level);
 	return true;
 }
 
 
-int ItemData::getPrice() const
+ItemData::Type ItemData::getType() const
 {
-	return price_;
+	return m_type;
 }
 
 
 int ItemData::getLevel() const
 {
-	return level_;
+	return m_level;
+}
+
+
+int ItemData::getPrice() const
+{
+	return m_price;
 }

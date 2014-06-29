@@ -17,7 +17,7 @@ public:
 	bool loadClassFromXml(tinyxml2::XMLElement* elem);
 	bool loadFromXml(tinyxml2::XMLElement* elem);
 
-	std::wstring BuildDescriptionString() const override;
+	std::wstring getDescription() const override;
 
 	const std::string& getID() const;
 

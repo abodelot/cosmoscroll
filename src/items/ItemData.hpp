@@ -23,7 +23,7 @@ public:
 		_UNSET
 	};
 
-	ItemData();
+	ItemData(Type type);
 
 	static const char* TypeToString(Type type);
 
@@ -31,19 +31,18 @@ public:
 
 	virtual bool LoadFromXml(tinyxml2::XMLElement* elem);
 
-	int getPrice() const;
+	Type getType() const;
+
 	int getLevel() const;
 
-	inline Type GetType() const { return type_; }
-	void SetType(Type type) { type_ = type; }
+	int getPrice() const;
 
-	virtual std::wstring BuildDescriptionString() const = 0;
-
+	virtual std::wstring getDescription() const = 0;
 
 private:
-	int price_;
-	int level_;
-	Type type_;
+	Type m_type;
+	int m_level;
+	int m_price;
 };
 
 #endif // ITEMDATA_HPP

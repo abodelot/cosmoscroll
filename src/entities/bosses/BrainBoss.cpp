@@ -20,11 +20,11 @@ BrainBoss::BrainBoss():
 	brain.setDestructible(false);
 	addPart(brain, 0, 0);
 
-	Part eye(ID_EYE, 200);
+	Part eye(ID_EYE, 150);
 	m_eye_animator.setAnimation(eye, EntityManager::getInstance().getAnimation("brain-boss-eye"));
 	addPart(eye, 0, 30);
 
-	m_weapon.init("laser-pink");
+	m_weapon.init("laser-green");
 	m_weapon.setFireRate(4);
 	m_weapon.setOwner(this);
 	m_weapon.setPosition(sf::Vector2f(8, 38));

@@ -16,7 +16,7 @@ GunTower::GunTower():
 	base.setDestructible(false);
 	base.setTexture(Resources::getTexture("entities/guntower-base.png"));
 
-	Part turret(CANON_ID, 20);
+	Part turret(CANON_ID, 16);
 
 	const sf::Texture& img_turret = Resources::getTexture("entities/guntower-turret.png");
 	turret.setTexture(img_turret);

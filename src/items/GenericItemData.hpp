@@ -13,7 +13,7 @@ public:
 
 	bool LoadFromXml(tinyxml2::XMLElement* elem) override;
 
-	std::wstring BuildDescriptionString() const override;
+	std::wstring getDescription() const override;
 
 	int GetValue() const;
 
