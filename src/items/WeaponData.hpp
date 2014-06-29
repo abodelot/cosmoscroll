@@ -6,7 +6,7 @@
 #include "ItemData.hpp"
 #include "entities/Projectile.hpp"
 
-template <class T>
+
 class Weapon;
 
 class WeaponData: public ItemData
@@ -21,8 +21,7 @@ public:
 
 	const std::string& getID() const;
 
-	template <class T>
-	void InitWeapon(Weapon<T>& weapon) const;
+	void InitWeapon(Weapon& weapon) const;
 
 private:
 	std::string id_;         // weapon name
@@ -33,16 +32,5 @@ private:
 	const sf::Texture* m_texture; // hit image
 	const sf::SoundBuffer* sound_; // sfx
 };
-
-template <class T>
-void WeaponData::InitWeapon(Weapon<T>& weapon) const
-{
-	weapon.setTexture(m_texture);
-	weapon.setFireRate(fire_rate_);
-	weapon.setHeatCost(heat_cost_);
-	weapon.setDamage(damage_);
-	weapon.setVelociy(speed_);
-	weapon.setSound(sound_);
-}
 
 #endif // WEAPONDATA_HPP

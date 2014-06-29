@@ -2,7 +2,7 @@
 #define GUN_TOWER_HPP
 
 #include "entities/MultiPartEntity.hpp"
-#include "items/Weapon.hpp"
+#include "entities/Weapon.hpp"
 
 class GunTower: public MultiPartEntity
 {
@@ -14,7 +14,7 @@ public:
 	void onUpdate(float frametime);
 
 private:
-	Weapon<> m_weapon;
+	Weapon   m_weapon;
 	Entity*  m_target;
 };
 

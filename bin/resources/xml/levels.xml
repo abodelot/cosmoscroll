@@ -516,7 +516,7 @@
 		<!-- LVL8 -->
 		<level layer1="layers/green.jpg" layer2="layers/fog.png" color="#003000" stars="70" music="spacesong.mod">
 			<wait t="1"/>
-			<loop count="3">
+			<!--<loop count="3">
 				<ship id="m1" y="90" t="1"/>
 				<ship id="m2" y="210" t="1"/>
 				<ship id="m2" y="90" t="1"/>
@@ -550,7 +550,7 @@
 			<ship id="m2" y="240" t="2"/>
 			<ship id="b3" y="100" t="1"/>
 			<ship id="b3" y="300" t="1"/>
-			<ship id="b3" y="200" t="1"/>
+			<ship id="b3" y="200" t="1"/>-->
 			<boss id="evil" y="170" t="8"/>
 		</level>
 	</levels>

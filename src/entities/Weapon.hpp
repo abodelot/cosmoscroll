@@ -4,16 +4,18 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
-#include "entities/Projectile.hpp"
+#include "Projectile.hpp"
+#include "utils/Math.hpp"
+#include "core/SoundSystem.hpp"
 
 class Entity;
 
 
 /**
- * Represents a weapon and can throw bullet entities in the entity manager.
+ * Represents a weapon and can throw projectiles
  * Must be associated to an owner entity.
  */
-template <class T = Projectile>
+
 class Weapon
 {
 public:
@@ -33,9 +35,15 @@ public:
 	/**
 	 * Throw a projectile
 	 * @param angle: projectile direction (radians)
-	 * @param pos: projectile target (angle will be computed)
 	 */
+	template <class T = Projectile>
 	float shoot(float angle);
+
+	/**
+	 * Throw a projectile
+	 * @param target: targeted entity
+	 */
+	template <class T = Projectile>
 	float shoot(const sf::Vector2f& target);
 
 	/**
@@ -86,9 +94,13 @@ public:
 	void setMultiply(int n);
 
 protected:
+	template <class T = Projectile>
 	void createProjectile(const sf::Vector2f& offset, float angle);
 
 private:
+
+	void insert(const sf::Vector2f& pos, Entity* entity);
+
 	sf::Clock m_last_shot_at; // Store time for last shot
 	float     m_fire_delay;   // Time to wait between next shot
 	float     m_heat_cost;
@@ -102,6 +114,59 @@ private:
 	int                    m_multiply;
 };
 
-#include "Weapon.inl"
+template <class T>
+float Weapon::shoot(float angle)
+{
+	static const float ANGLE_VARIATION = 0.15f;
+	if (!m_inited)
+		return 0.f;
+
+	// If ready for next round
+	if (m_last_shot_at.getElapsedTime().asSeconds() >= m_fire_delay)
+	{
+		sf::Vector2f pos = m_owner->getPosition() + m_position;
+
+		switch (m_multiply)
+		{
+			case 1:
+				createProjectile(pos, angle);
+				break;
+			case 2:
+				pos.y -= m_texture->getSize().y / 2 - 1;
+				createProjectile<T>(pos, angle);
+				pos.y += m_texture->getSize().y + 2;
+				createProjectile(pos, angle);
+				break;
+			case 3:
+				createProjectile<T>(pos, angle);
+				createProjectile<T>(pos, angle - ANGLE_VARIATION);
+				createProjectile<T>(pos, angle + ANGLE_VARIATION);
+				break;
+		}
+
+		if (m_sound != NULL)
+		{
+			SoundSystem::playSound(*m_sound);
+		}
+		m_last_shot_at.restart();
+		return m_heat_cost;
+	}
+	return 0.f;
+}
+
+template <class T>
+float Weapon::shoot(const sf::Vector2f& target)
+{
+	sf::Vector2f pos = m_owner->getPosition() + m_position;
+	return shoot<T>(math::angle(pos, target));
+}
+
+template <class T>
+void Weapon::createProjectile(const sf::Vector2f& position, float angle)
+{
+	T* projectile = new T(m_owner, angle, *m_texture, m_velocity, m_damage);
+	insert(position, projectile);
+}
+
 
 #endif // WEAPON_HPP

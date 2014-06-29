@@ -2,7 +2,7 @@
 #define CANON_HPP
 
 #include "entities/MultiPartEntity.hpp"
-#include "items/Weapon.hpp"
+#include "entities/Weapon.hpp"
 
 class Canon: public MultiPartEntity
 {
@@ -13,7 +13,7 @@ public:
 	void onUpdate(float frametime);
 
 private:
-	Weapon<> m_weapon;
+	Weapon m_weapon;
 };
 
 #endif // CANON_HPP

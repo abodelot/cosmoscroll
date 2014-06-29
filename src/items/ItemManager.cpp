@@ -1,6 +1,7 @@
 #include <stdexcept>
+#include <iostream>
 #include "ItemManager.hpp"
-#include "Weapon.hpp"
+#include "entities/Weapon.hpp"
 #include "utils/tinyxml/tinyxml2.h"
 
 
@@ -124,6 +125,20 @@ void ItemManager::ParseGenericItems(tinyxml2::XMLElement* elem, const char* tagn
 	else
 	{
 		std::cerr << "item: tag " << tagname << " not found" << std::endl;
+	}
+}
+
+
+void ItemManager::InitWeapon(Weapon& weapon, const char* id, int level) const
+{
+	const WeaponData* data = GetWeaponData(id, level);
+	if (data == NULL)
+	{
+		std::cerr << "can't initialize weapon " << id << " (unknown id)" << std::endl;
+	}
+	else
+	{
+		data->InitWeapon(weapon);
 	}
 }
 

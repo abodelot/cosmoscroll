@@ -4,11 +4,10 @@
 #include "Damageable.hpp"
 #include "Animator.hpp"
 #include "PowerUp.hpp"
-#include "Missile.hpp"
 #include "core/Input.hpp"
 #include "core/ControlPanel.hpp"
 #include "core/ParticleSystem.hpp"
-#include "items/Weapon.hpp"
+#include "entities/Weapon.hpp"
 
 /**
  * Player's spaceship
@@ -72,6 +71,8 @@ private:
 	 */
 	void overheatAudioHint() const;
 
+	ControlPanel& panel_;
+
 	// Code Konami sequence
 	static const int KONAMI_CODE_LENGTH = 10;
 	Action::ID       m_konami_code[KONAMI_CODE_LENGTH];
@@ -88,9 +89,8 @@ private:
 	int   m_missiles;
 	int   m_icecubes;
 
-	ControlPanel& panel_;
-	Weapon<>        m_weapon;
-	Weapon<Missile> m_missile_launcher;
+	Weapon           m_weapon;
+	Weapon           m_missile_launcher;
 
 	Animator         m_animator;
 	const Animation& m_animation_up;

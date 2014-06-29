@@ -1,5 +1,6 @@
+#include <iostream>
 #include "WeaponData.hpp"
-#include "Weapon.hpp"
+#include "entities/Weapon.hpp"
 #include "core/Resources.hpp"
 #include "utils/I18n.hpp"
 #include "utils/tinyxml/tinyxml2.h"
@@ -88,3 +89,13 @@ const std::string& WeaponData::getID() const
 	return id_;
 }
 
+
+void WeaponData::InitWeapon(Weapon& weapon) const
+{
+	weapon.setTexture(m_texture);
+	weapon.setFireRate(fire_rate_);
+	weapon.setHeatCost(heat_cost_);
+	weapon.setDamage(damage_);
+	weapon.setVelociy(speed_);
+	weapon.setSound(sound_);
+}

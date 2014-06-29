@@ -2,13 +2,10 @@
 #include "entities/Player.hpp"
 #include "core/Resources.hpp"
 
-#define EYE_OFFSET_LEFT   sf::Vector2f(105, 55)
-#define EYE_OFFSET_RIGHT  sf::Vector2f(190, 55)
-#define MOUTH_OFFSET      sf::Vector2f(143, 128)
-
 #define MAX_X  350.f
 #define MIN_Y  60.f
 #define MAX_Y  (EntityManager::getInstance().getHeight() - getHeight() - 60.f)
+
 
 EvilBoss::EvilBoss():
 	m_state(EVIL),
@@ -24,15 +21,12 @@ EvilBoss::EvilBoss():
 	// Init weapons
 	m_eye_left.init("fireball");
 	m_eye_left.setOwner(this);
-	m_eye_left.setPosition(EYE_OFFSET_LEFT);
+	m_eye_left.setPosition(sf::Vector2f(105, 55));
 	m_eye_right.init("fireball");
 	m_eye_right.setOwner(this);
-	m_eye_right.setPosition(EYE_OFFSET_RIGHT);
+	m_eye_right.setPosition(sf::Vector2f(190, 55));
 	// hack: disable sound on the second eye so it won't be played twice
 	m_eye_right.setSound(NULL);
-
-	m_mouth.setOwner(this); // (this one must inited later)
-	m_mouth.setPosition(MOUTH_OFFSET);
 }
 
 
@@ -48,11 +42,6 @@ void EvilBoss::onUpdate(float frametime)
 
 	m_eye_left.shoot(target_pos);
 	m_eye_right.shoot(target_pos);
-
-	if (m_mouth.isInited())
-	{
-		m_mouth.shoot(target_pos);
-	}
 
 	const sf::Vector2f& pos = getPosition();
 	if ((int) pos.y < MIN_Y || (int) pos.y > MAX_Y)
@@ -82,12 +71,12 @@ void EvilBoss::takeDamage(int damage)
 		{
 			case MORE_EVIL:
 				setTextureRect(sf::IntRect(240, 0, 240, 160));
-				m_mouth.init("laser-pink");
+				m_eye_left.setMultiply(2);
+				m_eye_right.setMultiply(2);
 				m_next_state = DAMN_EVIL;
 				break;
 			case DAMN_EVIL:
 				setTextureRect(sf::IntRect(240 * 2, 0, 240, 160));
-				m_mouth.setMultiply(3);
 				m_eye_left.setMultiply(3);
 				m_eye_right.setMultiply(3);
 				break;

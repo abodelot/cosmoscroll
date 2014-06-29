@@ -3,7 +3,7 @@
 
 #include "entities/MultiPartEntity.hpp"
 #include "entities/Animator.hpp"
-#include "items/Weapon.hpp"
+#include "entities/Weapon.hpp"
 
 class BrainBoss: public MultiPartEntity
 {
@@ -22,7 +22,7 @@ private:
 	State      m_state;
 	float      m_state_timer;
 	Animator   m_eye_animator;
-	Weapon<>   m_weapon;
+	Weapon     m_weapon;
 	float      m_weapon_angle;
 	float      m_xspeed;
 };

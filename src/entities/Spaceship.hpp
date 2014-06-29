@@ -3,7 +3,7 @@
 
 #include "Damageable.hpp"
 #include "Animator.hpp"
-#include "items/Weapon.hpp"
+#include "entities/Weapon.hpp"
 
 class Spaceship: public Damageable
 {
@@ -27,7 +27,7 @@ public:
 
 	Spaceship* clone() const;
 
-	Weapon<>& getWeapon() { return m_weapon; }
+	Weapon& getWeapon() { return m_weapon; }
 
 	void setPoints(int points);
 	int getPoints() const;
@@ -43,7 +43,7 @@ private:
 	MovementPattern m_movement;
 
 	int       m_points;
-	Weapon<>  m_weapon;
+	Weapon    m_weapon;
 	Entity*   m_target;
 	Animator  m_animator;
 

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Game.hpp"
 #include "Constants.hpp"
 #include "UserSettings.hpp"

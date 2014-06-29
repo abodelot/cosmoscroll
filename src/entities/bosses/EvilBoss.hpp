@@ -2,7 +2,7 @@
 #define EVILBOSS_HPP
 
 #include "entities/Damageable.hpp"
-#include "items/Weapon.hpp"
+#include "entities/Weapon.hpp"
 
 
 /**
@@ -30,9 +30,8 @@ private:
 	State        m_state;
 	State        m_next_state;
 	sf::Vector2f m_speed;
-	Weapon<>     m_eye_left;
-	Weapon<>     m_eye_right;
-	Weapon<>     m_mouth;
+	Weapon       m_eye_left;
+	Weapon       m_eye_right;
 	Entity*      m_target;
 };
 

@@ -1,8 +1,5 @@
-#include <cassert>
-#include <typeinfo>
-#include <SFML/System.hpp>
-
 #include "Player.hpp"
+#include "Missile.hpp"
 #include "EntityManager.hpp"
 #include "core/UserSettings.hpp"
 #include "core/MessageSystem.hpp"
@@ -25,10 +22,10 @@ const int MAX_ICECUBES = 5;
 
 
 Player::Player():
+	panel_(ControlPanel::getInstance()),
 	m_speed(0.f),
 	m_missiles(0),
 	m_icecubes(0),
-	panel_(ControlPanel::getInstance()),
 	// Preload animations
 	m_animation_up(EntityManager::getInstance().getAnimation("player-up")),
 	m_animation_down(EntityManager::getInstance().getAnimation("player-down")),
@@ -207,7 +204,7 @@ void Player::onActionDown(Action::ID action)
 			if (m_missiles > 0 && m_missile_launcher.isReady())
 			{
 				panel_.SetMissiles(--m_missiles);
-				m_missile_launcher.shoot(0);
+				m_missile_launcher.shoot<Missile>(0);
 			}
 			else
 			{
