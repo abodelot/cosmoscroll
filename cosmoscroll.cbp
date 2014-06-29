@@ -124,6 +124,8 @@
 		<Unit filename="src/entities/Projectile.hpp" />
 		<Unit filename="src/entities/Spaceship.cpp" />
 		<Unit filename="src/entities/Spaceship.hpp" />
+		<Unit filename="src/entities/Weapon.cpp" />
+		<Unit filename="src/entities/Weapon.hpp" />
 		<Unit filename="src/entities/bosses/BrainBoss.cpp" />
 		<Unit filename="src/entities/bosses/BrainBoss.hpp" />
 		<Unit filename="src/entities/bosses/EvilBoss.cpp" />
@@ -169,12 +171,10 @@
 		<Unit filename="src/gui/layouts/VBoxLayout.hpp" />
 		<Unit filename="src/items/GenericItemData.cpp" />
 		<Unit filename="src/items/GenericItemData.hpp" />
-		<Unit filename="src/items/ItemData.cpp" />
-		<Unit filename="src/items/ItemData.hpp" />
+		<Unit filename="src/items/Item.cpp" />
+		<Unit filename="src/items/Item.hpp" />
 		<Unit filename="src/items/ItemManager.cpp" />
 		<Unit filename="src/items/ItemManager.hpp" />
-		<Unit filename="src/items/Weapon.hpp" />
-		<Unit filename="src/items/Weapon.inl" />
 		<Unit filename="src/items/WeaponData.cpp" />
 		<Unit filename="src/items/WeaponData.hpp" />
 		<Unit filename="src/scenes/AboutMenu.cpp" />

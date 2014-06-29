@@ -3,13 +3,13 @@
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
-#include "ItemData.hpp"
+#include "Item.hpp"
 #include "entities/Projectile.hpp"
 
 
 class Weapon;
 
-class WeaponData: public ItemData
+class WeaponData: public Item
 {
 public:
 	WeaponData();

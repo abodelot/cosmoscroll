@@ -7,7 +7,7 @@
 
 
 WeaponData::WeaponData():
-	ItemData(ItemData::WEAPON),
+	Item(Item::WEAPON),
 	m_texture(NULL)
 {
 	sound_ = NULL;
@@ -48,7 +48,7 @@ bool WeaponData::loadClassFromXml(tinyxml2::XMLElement* elem)
 
 bool WeaponData::loadFromXml(tinyxml2::XMLElement* elem)
 {
-	ItemData::LoadFromXml(elem); // fetch price and level
+	Item::LoadFromXml(elem); // fetch price and level
 
 	if (elem->QueryFloatAttribute("heat_cost", &heat_cost_) != tinyxml2::XML_SUCCESS)
 	{

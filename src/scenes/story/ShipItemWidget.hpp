@@ -2,12 +2,12 @@
 #define SHIPITEMWIDGET_HPP
 
 #include "gui/Widget.hpp"
-#include "items/ItemData.hpp"
+#include "items/Item.hpp"
 
 class ShipItemWidget: public gui::Widget
 {
 public:
-	ShipItemWidget(gui::Menu* parent, ItemData::Type type, const sf::Font& font);
+	ShipItemWidget(gui::Menu* parent, Item::Type type, const sf::Font& font);
 
 	/**
 	 * Refresh the item informations displayed in the UI
@@ -25,8 +25,8 @@ private:
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	ItemData::Type m_type;
-	int            m_level;
+	Item::Type m_type;
+	int        m_level;
 
 	sf::Text   m_txt_name;
 	sf::Text   m_txt_level;

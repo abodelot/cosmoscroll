@@ -113,27 +113,27 @@ void Player::onInit()
 	panel_.setScore(0);
 
 	// Check new shield item
-	shield_max_ = items.GetGenericItemData(ItemData::SHIELD, UserSettings::getItemLevel(ItemData::SHIELD))->GetValue();
+	shield_max_ = items.GetGenericItemData(Item::SHIELD, UserSettings::getItemLevel(Item::SHIELD))->GetValue();
 	panel_.SetMaxShield(shield_max_);
 	setShield(shield_); // Keep previous shield value
 
 	// Check hull item
-	hp_max_ = items.GetGenericItemData(ItemData::HULL, UserSettings::getItemLevel(ItemData::HULL))->GetValue();
+	hp_max_ = items.GetGenericItemData(Item::HULL, UserSettings::getItemLevel(Item::HULL))->GetValue();
 	panel_.SetMaxShipHP(hp_max_);
 	setHP(hp_max_); // Repair spaceship
 	panel_.SetShipHP(getHP());
 
 	// Check engine item
-	m_speed = items.GetGenericItemData(ItemData::ENGINE, UserSettings::getItemLevel(ItemData::ENGINE))->GetValue();
+	m_speed = items.GetGenericItemData(Item::ENGINE, UserSettings::getItemLevel(Item::ENGINE))->GetValue();
 
 	// Check heatsink item
-	heat_max_ = items.GetGenericItemData(ItemData::HEATSINK, UserSettings::getItemLevel(ItemData::HEATSINK))->GetValue();
+	heat_max_ = items.GetGenericItemData(Item::HEATSINK, UserSettings::getItemLevel(Item::HEATSINK))->GetValue();
 	panel_.SetMaxHeat(heat_max_);
 	heat_ = 0; // Force cooldown
 	panel_.SetHeat(heat_);
 
 	// Check weapon item
-	m_weapon.init("laser-red", UserSettings::getItemLevel(ItemData::WEAPON));
+	m_weapon.init("laser-red", UserSettings::getItemLevel(Item::WEAPON));
 }
 
 

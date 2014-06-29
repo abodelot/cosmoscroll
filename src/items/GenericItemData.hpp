@@ -1,15 +1,15 @@
 #ifndef GENERICITEMDATA_HPP
 #define GENERICITEMDATA_HPP
 
-#include "ItemData.hpp"
+#include "Item.hpp"
 
 /**
  * Any item with an extra int field
  */
-class GenericItemData: public ItemData
+class GenericItemData: public Item
 {
 public:
-	GenericItemData(ItemData::Type type);
+	GenericItemData(Item::Type type);
 
 	bool LoadFromXml(tinyxml2::XMLElement* elem) override;
 
@@ -18,7 +18,7 @@ public:
 	int GetValue() const;
 
 private:
-	int int_value_;
+	int m_value;
 };
 
 #endif // GENERICITEMDATA_HPP

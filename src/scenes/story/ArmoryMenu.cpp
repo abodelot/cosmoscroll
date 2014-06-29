@@ -17,9 +17,9 @@ ArmoryMenu::ArmoryMenu()
 	gui::VBoxLayout layout(100, 90);
 	layout.SetSpacing(0, 0);
 	const sf::Font& font = Resources::getFont("Vera.ttf");
-	for (int i = 0; i < ItemData::_COUNT; ++i)
+	for (int i = 0; i < Item::_COUNT; ++i)
 	{
-		m_items[i] = new ShipItemWidget(this, (ItemData::Type) i, font);
+		m_items[i] = new ShipItemWidget(this, (Item::Type) i, font);
 		m_items[i]->SetCallbackID(1);
 		layout.Add(m_items[i]);
 	}
@@ -38,7 +38,7 @@ void ArmoryMenu::OnFocus()
 {
 	// Refresh UI
 	m_credits->setCredits(UserSettings::getCredits());
-	for (int i = 0; i < ItemData::_COUNT; ++i)
+	for (int i = 0; i < Item::_COUNT; ++i)
 	{
 		m_items[i]->refresh();
 	}

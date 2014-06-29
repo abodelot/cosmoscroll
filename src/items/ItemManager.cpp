@@ -50,17 +50,17 @@ int ItemManager::LoadItems(const std::string& filename)
 		elem_class = elem_class->NextSiblingElement();
 	}
 	// generic items
-	ParseGenericItems(root, "shields", ItemData::SHIELD);
-	ParseGenericItems(root, "heatsinks", ItemData::HEATSINK);
-	ParseGenericItems(root, "hulls", ItemData::HULL);
-	ParseGenericItems(root, "engines", ItemData::ENGINE);
+	ParseGenericItems(root, "shields", Item::SHIELD);
+	ParseGenericItems(root, "heatsinks", Item::HEATSINK);
+	ParseGenericItems(root, "hulls", Item::HULL);
+	ParseGenericItems(root, "engines", Item::ENGINE);
 	return items_.size() + weapons_.size();
 }
 
 
-const ItemData* ItemManager::GetItemData(ItemData::Type type, int level) const
+const Item* ItemManager::GetItemData(Item::Type type, int level) const
 {
-	const ItemData* data = GetGenericItemData(type, level);
+	const Item* data = GetGenericItemData(type, level);
 	if (data != NULL)
 	{
 		return data;
@@ -75,7 +75,7 @@ const ItemData* ItemManager::GetItemData(ItemData::Type type, int level) const
 		}
 	}
 #ifdef DEBUG
-	std::cout << "[ItemManager] item not found: " << ItemData::TypeToString(type) << ", level " << level << std::endl;
+	std::cout << "[ItemManager] item not found: " << Item::TypeToString(type) << ", level " << level << std::endl;
 #endif
 	return NULL;
 }
@@ -94,7 +94,7 @@ const WeaponData* ItemManager::GetWeaponData(const char* id, int level) const
 }
 
 
-const GenericItemData* ItemManager::GetGenericItemData(ItemData::Type type, int level) const
+const GenericItemData* ItemManager::GetGenericItemData(Item::Type type, int level) const
 {
 	for (GenericItemList::const_iterator it = items_.begin(); it != items_.end(); ++it)
 	{
@@ -108,7 +108,7 @@ const GenericItemData* ItemManager::GetGenericItemData(ItemData::Type type, int 
 }
 
 
-void ItemManager::ParseGenericItems(tinyxml2::XMLElement* elem, const char* tagname, ItemData::Type type)
+void ItemManager::ParseGenericItems(tinyxml2::XMLElement* elem, const char* tagname, Item::Type type)
 {
 	elem = elem->FirstChildElement(tagname);
 	if (elem != NULL)

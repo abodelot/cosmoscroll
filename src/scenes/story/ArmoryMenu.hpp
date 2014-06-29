@@ -16,7 +16,7 @@ public:
 private:
 	void EventCallback(int id) override;
 
-	ShipItemWidget*      m_items[ItemData::_COUNT];
+	ShipItemWidget*      m_items[Item::_COUNT];
 	CreditCounterWidget* m_credits;
 };
 

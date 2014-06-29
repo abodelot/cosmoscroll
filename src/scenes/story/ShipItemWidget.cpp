@@ -7,7 +7,7 @@
 #include "utils/SFML_Helper.hpp"
 
 
-ShipItemWidget::ShipItemWidget(gui::Menu* parent, ItemData::Type type, const sf::Font& font):
+ShipItemWidget::ShipItemWidget(gui::Menu* parent, Item::Type type, const sf::Font& font):
 	gui::Widget(parent, true),
 	m_type(type)
 {
@@ -21,7 +21,7 @@ ShipItemWidget::ShipItemWidget(gui::Menu* parent, ItemData::Type type, const sf:
 	//m_name.setStyle(sf::Text::Bold);
 	m_txt_name.setCharacterSize(16);
 	m_txt_name.setPosition(10, 5);
-	m_txt_name.setString(_t(ItemData::TypeToString(m_type)));
+	m_txt_name.setString(_t(Item::TypeToString(m_type)));
 
 	// Item current level
 	m_txt_level.setFont(font);
@@ -87,7 +87,7 @@ void ShipItemWidget::refresh()
 	// Get current item level
 	m_level = UserSettings::getItemLevel(m_type);
 	m_txt_level.setString(I18n::templatize("armory.item_level", "{level}", m_level));
-	const ItemData* item = ItemManager::GetInstance().GetItemData(m_type, m_level);
+	const Item* item = ItemManager::GetInstance().GetItemData(m_type, m_level);
 	m_txt_description.setString(item->getDescription());
 
 	// Get next item level
@@ -125,11 +125,11 @@ void ShipItemWidget::refresh()
 bool ShipItemWidget::buyNextLevel() const
 {
 	int next_level = m_level + 1;
-	const ItemData* data = ItemManager::GetInstance().GetItemData(m_type, next_level);
+	const Item* item = ItemManager::GetInstance().GetItemData(m_type, next_level);
 
-	if (data && UserSettings::getCredits() >= data->getPrice())
+	if (item && UserSettings::getCredits() >= item->getPrice())
 	{
-		UserSettings::updateCredits(-data->getPrice());
+		UserSettings::updateCredits(-item->getPrice());
 		UserSettings::setItemLevel(m_type, next_level);
 
 		SoundSystem::playSound("cash-register.ogg");

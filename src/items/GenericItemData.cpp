@@ -4,30 +4,30 @@
 #include "utils/tinyxml/tinyxml2.h"
 
 
-GenericItemData::GenericItemData(ItemData::Type type):
-	ItemData(type),
-	int_value_(0)
+GenericItemData::GenericItemData(Item::Type type):
+	Item(type),
+	m_value(0)
 {
 }
 
 
 bool GenericItemData::LoadFromXml(tinyxml2::XMLElement* elem)
 {
-	ItemData::LoadFromXml(elem);
+	Item::LoadFromXml(elem);
 
 	const char* attribute = NULL;
 	switch (getType())
 	{
-		case ItemData::HULL:
+		case Item::HULL:
 			attribute = "hp";
 			break;
-		case ItemData::ENGINE:
+		case Item::ENGINE:
 			attribute = "speed";
 			break;
-		case ItemData::SHIELD:
+		case Item::SHIELD:
 			attribute = "points";
 			break;
-		case ItemData::HEATSINK:
+		case Item::HEATSINK:
 			attribute = "heat";
 			break;
 		default:
@@ -35,7 +35,7 @@ bool GenericItemData::LoadFromXml(tinyxml2::XMLElement* elem)
 	}
 	if (attribute != NULL)
 	{
-		elem->QueryIntAttribute(attribute, &int_value_);
+		elem->QueryIntAttribute(attribute, &m_value);
 	}
 	return true;
 }
@@ -47,30 +47,30 @@ std::wstring GenericItemData::getDescription() const
 	const char* keyword = "";
 	switch (getType())
 	{
-		case ItemData::HEATSINK:
+		case Item::HEATSINK:
 			template_str = "item.heatsink_info";
 			keyword      = "{heat}";
 			break;
-		case ItemData::HULL:
+		case Item::HULL:
 			template_str = "item.hull_info";
 			keyword      = "{hp}";
 			break;
-		case ItemData::ENGINE:
+		case Item::ENGINE:
 			template_str = "item.engine_info";
 			keyword      = "{speed}";
 			break;
-		case ItemData::SHIELD:
+		case Item::SHIELD:
 			template_str = "item.shield_info";
 			keyword      = "{points}";
 			break;
 		default:
 			break;
 	}
-	return I18n::templatize(template_str, keyword, int_value_);
+	return I18n::templatize(template_str, keyword, m_value);
 }
 
 
 int GenericItemData::GetValue() const
 {
-	return int_value_;
+	return m_value;
 }

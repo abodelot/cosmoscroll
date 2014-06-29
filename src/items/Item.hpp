@@ -1,5 +1,5 @@
-#ifndef ITEMDATA_HPP
-#define ITEMDATA_HPP
+#ifndef ITEM_HPP
+#define ITEM_HPP
 
 #include <string>
 
@@ -8,8 +8,7 @@ namespace tinyxml2
 class XMLElement;
 }
 
-
-class ItemData
+class Item
 {
 public:
 	enum Type
@@ -20,10 +19,9 @@ public:
 		HEATSINK,
 		WEAPON,
 		_COUNT,
-		_UNSET
 	};
 
-	ItemData(Type type);
+	Item(Type type);
 
 	static const char* TypeToString(Type type);
 
@@ -45,4 +43,4 @@ private:
 	int m_price;
 };
 
-#endif // ITEMDATA_HPP
+#endif // ITEM_HPP

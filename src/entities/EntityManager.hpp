@@ -9,7 +9,6 @@
 
 #include "Animation.hpp"
 #include "core/ParticleSystem.hpp"
-#include "Weapon.hpp"
 
 class LevelManager;
 class Entity;

@@ -15,20 +15,20 @@ UserSettings::Init UserSettings::s_ctor;
 
 UserSettings::Init::Init()
 {
-	for (int i = 0; i < ItemData::_COUNT; ++i)
+	for (int i = 0; i < Item::_COUNT; ++i)
 	{
 		s_items[i] = 1;
 	}
 }
 
 
-int UserSettings::getItemLevel(ItemData::Type type)
+int UserSettings::getItemLevel(Item::Type type)
 {
 	return s_items[type];
 }
 
 
-void UserSettings::setItemLevel(ItemData::Type type, int level)
+void UserSettings::setItemLevel(Item::Type type, int level)
 {
 	if (level < 1)
 		level = 1;
@@ -88,14 +88,14 @@ void UserSettings::loadFromConfig(IniParser& config)
 	s_credits = config.get("credits", 0);
 	s_highscore = config.get("arcade_highscore", 0);
 
-	s_items[ItemData::WEAPON] =   config.get("lvl_laser", 1);
-	s_items[ItemData::SHIELD] =   config.get("lvl_shield", 1);
-	s_items[ItemData::HULL] =     config.get("lvl_hull", 1);
-	s_items[ItemData::ENGINE] =   config.get("lvl_engine", 1);
-	s_items[ItemData::HEATSINK] = config.get("lvl_heatsink", 1);
-	for (int i = 0; i < ItemData::_COUNT; ++i)
+	s_items[Item::WEAPON] =   config.get("lvl_laser", 1);
+	s_items[Item::SHIELD] =   config.get("lvl_shield", 1);
+	s_items[Item::HULL] =     config.get("lvl_hull", 1);
+	s_items[Item::ENGINE] =   config.get("lvl_engine", 1);
+	s_items[Item::HEATSINK] = config.get("lvl_heatsink", 1);
+	for (int i = 0; i < Item::_COUNT; ++i)
 	{
-		setItemLevel((ItemData::Type) i, s_items[i]);
+		setItemLevel((Item::Type) i, s_items[i]);
 	}
 
 	config.seekSection("Keyboard");
@@ -133,11 +133,11 @@ void UserSettings::saveToConfig(IniParser& config)
 	config.set("last_unlocked_level", LevelManager::getInstance().getLastUnlocked());
 	config.set("credits",             s_credits);
 	config.set("arcade_highscore",    s_highscore);
-	config.set("lvl_laser",    s_items[ItemData::WEAPON]);
-	config.set("lvl_shield",   s_items[ItemData::SHIELD]);
-	config.set("lvl_hull",     s_items[ItemData::HULL]);
-	config.set("lvl_engine",   s_items[ItemData::ENGINE]);
-	config.set("lvl_heatsink", s_items[ItemData::HEATSINK]);
+	config.set("lvl_laser",    s_items[Item::WEAPON]);
+	config.set("lvl_shield",   s_items[Item::SHIELD]);
+	config.set("lvl_hull",     s_items[Item::HULL]);
+	config.set("lvl_engine",   s_items[Item::ENGINE]);
+	config.set("lvl_heatsink", s_items[Item::HEATSINK]);
 
 	config.seekSection("Keyboard");
 	config.set("move_up",    Input::getKeyBinding(Action::UP));

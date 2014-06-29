@@ -42,19 +42,6 @@ static Spaceship::MovementPattern parse_movement_pattern(const tinyxml2::XMLElem
 	return Spaceship::LINE;
 }
 
-/*
-En mode arcade, la difficulté est progressive
-Cette constante est le temps, en secondes, avant l'apparition d'entitées de valeur max N + 1
-
-valeur max :  	apparait à partir de :
-1 point       	0
-2 points      	DROPPABLE_STEP
-3 points      	DROPPABLE_STEP * 2
-4 points      	DROPPABLE_STEP * 3
-...
-*/
-#define DROPPABLE_STEP 25
-
 
 EntityManager& EntityManager::getInstance()
 {
@@ -489,6 +476,7 @@ Player* EntityManager::getPlayer() const
 
 Entity* EntityManager::createRandomEntity()
 {
+
 	if (math::rand(0, 9) == 0)
 	{
 		// Spawn asteroid
@@ -496,8 +484,20 @@ Entity* EntityManager::createRandomEntity()
 	}
 	else
 	{
+		// Progressive difficulty: the longer elapsed time is, the strongest entities are
+		// DROP_DELAY_STEP is time to wait before an entity type is able to be spawned
+
+		// Entities points:    Cannot appear before (seconds):
+		// 1 point             0
+		// 2 points            DROP_DELAY_STEP
+		// 3 points            DROP_DELAY_STEP * 2
+		// 4 points            DROP_DELAY_STEP * 3
+		// etc.
+
+		static const int DROP_DELAY_STEP = 25;
+
 		// Update index of the strongest spawnable spaceship
-		max_droppable_points_ = timer_ / DROPPABLE_STEP + 1;
+		max_droppable_points_ = timer_ / DROP_DELAY_STEP + 1;
 
 		for (size_t i = max_droppable_index_; i < uniques_.size(); ++i)
 		{
