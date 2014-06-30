@@ -42,6 +42,16 @@ public:
 
 	void onDestroy();
 
+	void setMaxHeat(int heat);
+
+	void setMaxHP(int hp);
+
+	void setSpeed(float speed);
+
+	void setMaxShield(int shield);
+
+	Weapon& getLaser();
+
 private:
 	enum TimedPowerUp
 	{
@@ -71,7 +81,7 @@ private:
 	 */
 	void overheatAudioHint() const;
 
-	ControlPanel& panel_;
+	ControlPanel& m_panel;
 
 	// Code Konami sequence
 	static const int KONAMI_CODE_LENGTH = 10;
@@ -80,17 +90,15 @@ private:
 	bool             m_konami_code_activated;
 
 	float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
-	bool overheated_;
-	float heat_, heat_max_;
-	float shield_timer_;
-	int shield_, shield_max_;
-	int hp_max_;
-	float m_speed;
-	int   m_missiles;
-	int   m_icecubes;
-
-	Weapon           m_weapon;
-	Weapon           m_missile_launcher;
+	bool   m_overheat;
+	float  m_heat, m_max_heat;
+	int    m_shield, m_max_shield;
+	int    m_max_hp;
+	float  m_speed;
+	int    m_missiles;
+	int    m_icecubes;
+	Weapon m_weapon;
+	Weapon m_missile_launcher;
 
 	Animator         m_animator;
 	const Animation& m_animation_up;

@@ -22,11 +22,11 @@ FlyingSaucerBoss::FlyingSaucerBoss():
 
 	m_left_tube.init("laser-pink");
 	m_left_tube.setOwner(this);
-	m_left_tube.setPosition({34, 122});
+	m_left_tube.setPosition(34, 122);
 	m_left_tube.setMultiply(2);
 	m_right_tube.init("laser-pink");
 	m_right_tube.setOwner(this);
-	m_right_tube.setPosition({157, 122});
+	m_right_tube.setPosition(157, 122);
 	m_right_tube.setMultiply(2);
 	setTeam(Entity::BAD);
 	m_target = NULL;

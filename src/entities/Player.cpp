@@ -9,8 +9,6 @@
 #include "utils/I18n.hpp"
 #include "utils/Math.hpp"
 
-#define WEAPON_POSITION             sf::Vector2f(54, 24)
-
 #define BONUS_SPEED_FACTOR 1.5
 
 // time to wait from overheat to heat 0 (seconds)
@@ -22,7 +20,13 @@ const int MAX_ICECUBES = 5;
 
 
 Player::Player():
-	panel_(ControlPanel::getInstance()),
+	m_panel(ControlPanel::getInstance()),
+	m_overheat(false),
+	m_heat(0.f),
+	m_max_heat(0.f),
+	m_shield(0),
+	m_max_shield(0),
+	m_max_hp(0),
 	m_speed(0.f),
 	m_missiles(0),
 	m_icecubes(0),
@@ -39,18 +43,14 @@ Player::Player():
 	m_animator.setAnimation(*this, m_animation_normal);
 
 	// Init weapons
+	int xweapon = 54, yweapon = 24;
 	m_weapon.init("laser-red");
 	m_weapon.setOwner(this);
-	m_weapon.setPosition(WEAPON_POSITION);
+	m_weapon.setPosition(xweapon, yweapon);
 
 	m_missile_launcher.init("missile");
 	m_missile_launcher.setOwner(this);
-	m_missile_launcher.setPosition(WEAPON_POSITION);
-
-	overheated_ = false;
-	shield_timer_ = 0;
-	shield_ = 0;
-	heat_ = 0;
+	m_missile_launcher.setPosition(xweapon, yweapon);
 
 	// Init timed bonus
 	for (int i = 0; i < TIMED_BONUS_COUNT; ++i)
@@ -59,11 +59,11 @@ Player::Player():
 	}
 
 	// Init control panel
-	panel_.SetCoolers(m_icecubes);
-	panel_.SetMissiles(m_missiles);
-	panel_.SetOverheat(false);
-	panel_.ActiveSpeedPowerUp(0);
-	panel_.ActiveAttackPowerUp(0, PowerUp::DOUBLE_SHOT);
+	m_panel.setIcecubes(m_icecubes);
+	m_panel.setMissiles(m_missiles);
+	m_panel.setOverheat(m_overheat);
+	m_panel.ActiveSpeedPowerUp(0);
+	m_panel.ActiveAttackPowerUp(0, PowerUp::DOUBLE_SHOT);
 
 	// Init Konami code sequence
 	m_konami_code[0] = Action::UP;
@@ -106,34 +106,31 @@ Player::~Player()
 
 void Player::onInit()
 {
-	const ItemManager& items = ItemManager::GetInstance();
+	const ItemManager& items = ItemManager::getInstance();
 
 	// Reset score
 	m_score = 0;
-	panel_.setScore(0);
+	m_panel.setScore(0);
 
-	// Check new shield item
-	shield_max_ = items.GetGenericItemData(Item::SHIELD, UserSettings::getItemLevel(Item::SHIELD))->GetValue();
-	panel_.SetMaxShield(shield_max_);
-	setShield(shield_); // Keep previous shield value
+	// Equip Shield item
+	items.getItem(Item::SHIELD, UserSettings::getItemLevel(Item::SHIELD)).equip(*this);
+	setShield(m_shield); // Keep previous shield value
 
-	// Check hull item
-	hp_max_ = items.GetGenericItemData(Item::HULL, UserSettings::getItemLevel(Item::HULL))->GetValue();
-	panel_.SetMaxShipHP(hp_max_);
-	setHP(hp_max_); // Repair spaceship
-	panel_.SetShipHP(getHP());
+	// Equip Hull item and repair spaceship
+	items.getItem(Item::HULL, UserSettings::getItemLevel(Item::HULL)).equip(*this);
+	setHP(m_max_hp);
+	m_panel.setHP(m_max_hp);
 
-	// Check engine item
-	m_speed = items.GetGenericItemData(Item::ENGINE, UserSettings::getItemLevel(Item::ENGINE))->GetValue();
+	// Equip Engine item
+	items.getItem(Item::ENGINE, UserSettings::getItemLevel(Item::ENGINE)).equip(*this);
 
-	// Check heatsink item
-	heat_max_ = items.GetGenericItemData(Item::HEATSINK, UserSettings::getItemLevel(Item::HEATSINK))->GetValue();
-	panel_.SetMaxHeat(heat_max_);
-	heat_ = 0; // Force cooldown
-	panel_.SetHeat(heat_);
+	// Equip Heatsink item and for cooldown
+	items.getItem(Item::HEATSINK, UserSettings::getItemLevel(Item::HEATSINK)).equip(*this);
+	m_heat = 0;
+	m_panel.setHeat(m_heat);
 
-	// Check weapon item
-	m_weapon.init("laser-red", UserSettings::getItemLevel(Item::WEAPON));
+	// Equip Weapon item
+	items.getItem(Item::WEAPON, UserSettings::getItemLevel(Item::WEAPON)).equip(*this);
 }
 
 
@@ -146,7 +143,7 @@ int Player::getScore() const
 void Player::updateScore(int diff)
 {
 	m_score += diff;
-	panel_.setScore(m_score);
+	m_panel.setScore(m_score);
 }
 
 
@@ -157,7 +154,7 @@ void Player::overheatAudioHint() const
 	static int current_index = 0;
 
 	// Get heat value between 0 and 1
-	float heat_percent = heat_ / heat_max_;
+	float heat_percent = m_heat / m_max_heat;
 	if (current_index < thresholds_count && heat_percent > thresholds[current_index])
 	{
 		// New threshold reached
@@ -190,10 +187,10 @@ void Player::onActionDown(Action::ID action)
 				m_snowflakes_emitter.createParticles(40);
 
 				// Reset heat
-				panel_.SetCoolers(--m_icecubes);
-				heat_ = 0.f;
-				overheated_ = false;
-				panel_.SetOverheat(false);
+				m_panel.setIcecubes(--m_icecubes);
+				m_heat = 0.f;
+				m_overheat = false;
+				m_panel.setOverheat(false);
 			}
 			else
 			{
@@ -203,7 +200,7 @@ void Player::onActionDown(Action::ID action)
 		case Action::USE_MISSILE:
 			if (m_missiles > 0 && m_missile_launcher.isReady())
 			{
-				panel_.SetMissiles(--m_missiles);
+				m_panel.setMissiles(--m_missiles);
 				m_missile_launcher.shoot<Missile>(0);
 			}
 			else
@@ -212,7 +209,7 @@ void Player::onActionDown(Action::ID action)
 			}
 			break;
 		case Action::USE_LASER:
-			if (overheated_)
+			if (m_overheat)
 			{
 				SoundSystem::playSound("disabled.ogg");
 			}
@@ -260,7 +257,7 @@ void Player::onUpdate(float frametime)
 	m_animator.updateSubRect(*this, frametime);
 
 	// Weapons
-	if (!overheated_)
+	if (!m_overheat)
 	{
 		float h = 0.f;
 		if (Input::isPressed(Action::USE_LASER))
@@ -268,11 +265,11 @@ void Player::onUpdate(float frametime)
 			h += m_weapon.shoot(0);
 		}
 
-		heat_ += h;
-		if (heat_ >= heat_max_)
+		m_heat += h;
+		if (m_heat >= m_max_heat)
 		{
-			overheated_ = true;
-			panel_.SetOverheat(true);
+			m_overheat = true;
+			m_panel.setOverheat(true);
 			MessageSystem::write(_t("panel.overheat"), getPosition());
 		}
 		if (h > 0)
@@ -315,20 +312,20 @@ void Player::onUpdate(float frametime)
 	m_shield_emitter.setPosition(getCenter());
 
 	// Cooling heatsink
-	if (heat_ > 0.f)
+	if (m_heat > 0.f)
 	{
-		heat_ -= frametime * heat_max_ / COOLING_DELAY;
-		if (heat_ <= 0.f)
+		m_heat -= frametime * m_max_heat / COOLING_DELAY;
+		if (m_heat <= 0.f)
 		{
-			heat_ = 0.f;
-			if (overheated_ )
+			m_heat = 0.f;
+			if (m_overheat )
 			{
-				overheated_ = false;
-				panel_.SetOverheat(false);
+				m_overheat = false;
+				m_panel.setOverheat(false);
 			}
 		}
 	}
-	panel_.SetHeat(static_cast<int>(heat_));
+	m_panel.setHeat(m_heat);
 
 	// Decrase powerups timers
 	for (int i = 0; i < TIMED_BONUS_COUNT; ++i)
@@ -353,21 +350,21 @@ void Player::takeDamage(int damage)
 	if (damage == 0)
 		return;
 
-	if (shield_ > 0)
+	if (m_shield > 0)
 	{
-		shield_ -= damage;
-		if (shield_ < 0)
-			shield_ = 0;
+		m_shield -= damage;
+		if (m_shield < 0)
+			m_shield = 0;
 
 		SoundSystem::playSound("shield-damage.ogg");
-		m_shield_emitter.createParticles(shield_);
-		panel_.SetShield(shield_);
+		m_shield_emitter.createParticles(m_shield);
+		m_panel.setShield(m_shield);
 	}
 	else
 	{
 		Damageable::takeDamage(damage);
 		SoundSystem::playSound("ship-damage.ogg");
-		panel_.SetShipHP(getHP());
+		m_panel.setHP(getHP());
 	}
 }
 
@@ -383,7 +380,7 @@ void Player::onCollision(PowerUp& powerup)
 
 			bonus_[T_TRISHOT] = 0;
 			bonus_[T_DOUBLESHOT] += TIMED_BONUS_DURATION;
-			panel_.ActiveAttackPowerUp(bonus_[T_DOUBLESHOT], powerup.getType());
+			m_panel.ActiveAttackPowerUp(bonus_[T_DOUBLESHOT], powerup.getType());
 			break;
 
 		case PowerUp::TRIPLE_SHOT:
@@ -392,7 +389,7 @@ void Player::onCollision(PowerUp& powerup)
 
 			bonus_[T_DOUBLESHOT] = 0;
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
-			panel_.ActiveAttackPowerUp(bonus_[T_TRISHOT], powerup.getType());
+			m_panel.ActiveAttackPowerUp(bonus_[T_TRISHOT], powerup.getType());
 			break;
 
 		case PowerUp::SPEED:
@@ -402,42 +399,42 @@ void Player::onCollision(PowerUp& powerup)
 				m_smoke_emitter.createParticles(120);
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
-			panel_.ActiveSpeedPowerUp(bonus_[T_SPEED]);
+			m_panel.ActiveSpeedPowerUp(bonus_[T_SPEED]);
 			break;
 
 		// immediate bonus
 		case PowerUp::REPAIR:
-			if (getHP() < hp_max_)
-				panel_.SetShipHP(updateHP(1));
+			if (getHP() < m_max_hp)
+				m_panel.setHP(updateHP(1));
 			break;
 
 		case PowerUp::FULL_REPAIR:
-			setHP(hp_max_);
-			panel_.SetShipHP(hp_max_);
+			setHP(m_max_hp);
+			m_panel.setHP(m_max_hp);
 			m_powerup_emitter.setPosition(getCenter());
 			m_powerup_emitter.createParticles(50);
 			break;
 
 		case PowerUp::SHIELD:
-			if (shield_ < shield_max_)
-				setShield(shield_ + 1);
+			if (m_shield < m_max_shield)
+				setShield(m_shield + 1);
 			break;
 
 		case PowerUp::FULL_SHIELD:
-			setShield(shield_max_);
-			panel_.SetShield(shield_max_);
+			setShield(m_max_shield);
+			m_panel.setShield(m_max_shield);
 			m_powerup_emitter.setPosition(getCenter());
 			m_powerup_emitter.createParticles(50);
 			break;
 
 		case PowerUp::ICECUBE:
 			if (m_icecubes < MAX_ICECUBES)
-				panel_.SetCoolers(++m_icecubes);
+				m_panel.setIcecubes(++m_icecubes);
 			break;
 
 		case PowerUp::MISSILE:
 			if (m_missiles < MAX_MISSILES)
-				panel_.SetMissiles(++m_missiles);
+				m_panel.setMissiles(++m_missiles);
 			break;
 
 		default:
@@ -478,12 +475,45 @@ void Player::DisableTimedPowerUp(TimedPowerUp tbonus)
 
 void Player::setShield(int count)
 {
-	shield_ = count;
+	m_shield = count;
 	// Update particles
 	m_shield_emitter.createParticles(count);
 
 	// Update panel count
-	panel_.SetShield(count);
+	m_panel.setShield(count);
+}
+
+
+void Player::setMaxHeat(int heat)
+{
+	m_max_heat = heat;
+	m_panel.setMaxHeat(heat);
+}
+
+
+void Player::setMaxHP(int hp)
+{
+	m_max_hp = hp;
+	m_panel.setMaxHP(hp);
+}
+
+
+void Player::setSpeed(float speed)
+{
+	m_speed = speed;
+}
+
+
+void Player::setMaxShield(int shield)
+{
+	m_max_shield = shield;
+	m_panel.setMaxShield(shield);
+}
+
+
+Weapon& Player::getLaser()
+{
+	return m_weapon;
 }
 
 
@@ -492,20 +522,18 @@ void Player::applyKonamiCode()
 	m_konami_code_activated = true;
 
 	// Set max hp
-	hp_max_ = 10;
-	panel_.SetMaxShipHP(hp_max_);
-	setHP(hp_max_);
-	panel_.SetShipHP(hp_max_);
+	setMaxHP(10);
+	setHP(m_max_hp);
+	m_panel.setHP(m_max_hp);
 
 	// Set max shield
-	shield_max_ = 10;
-	panel_.SetMaxShield(shield_max_);
-	setShield(shield_max_);
+	setMaxShield(10);
+	setShield(m_max_shield);
 
 	m_icecubes = 42;
-	panel_.SetCoolers(42);
+	m_panel.setIcecubes(42);
 	m_missiles = 42;
-	panel_.SetMissiles(42);
+	m_panel.setMissiles(42);
 
 	m_weapon.setMultiply(3);
 	m_missile_launcher.setMultiply(3);

@@ -8,7 +8,7 @@
 
 #define APP_AUTHOR      "Alexandre Bodelot <alexandre.bodelot@gmail.com>"
 #define APP_VERSION     "0.4"
-#define APP_LICENSE     "GPL 3"
+#define APP_LICENSE     "GPLv3"
 
 #define COSMOSCROLL_DIRECTORY "cosmoscroll"
 #define COSMOSCROLL_WEBSITE   "http://cosmoscroll.googlecode.com"
@@ -28,8 +28,10 @@
 #define COSMO_SERVER_KEY      "secret"
 
 // XML Resources checksums
-#define MD5SUM_ANIMATIONS "6432c2b6e1ea80b4e2dfa22b5fb5cdea"
-#define MD5SUM_SPACESHIPS "9fa447de35fcbc83b092391c4ef76f3c"
-#define MD5SUM_ITEMS      "96b220b011b29e7a45d5f671bdc27c0e"
+#define MD5SUM_ANIMATIONS "c384010d708d346f804e6dab6746bc5d"
+#define MD5SUM_LEVELS     "b4401b4a66a8e32595721fd62469c430"
+#define MD5SUM_SPACESHIPS "b390d81b64d63c52f77ab78b426c780a"
+#define MD5SUM_UPGRADES   "ef95f140ad72940c53d0ffe78d4a2e61"
+#define MD5SUM_WEAPONS    "102e1c8103039eff8deff52363cd8a06"
 
 #endif // CONSTANTS_HPP

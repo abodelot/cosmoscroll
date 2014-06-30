@@ -1,5 +1,4 @@
 #include "Weapon.hpp"
-#include "items/ItemManager.hpp"
 #include "EntityManager.hpp"
 
 
@@ -11,22 +10,22 @@ Weapon::Weapon():
 	m_texture(NULL),
 	m_sound(NULL),
 	m_owner(NULL),
-	m_inited(false),
 	m_multiply(1)
 {
 }
 
 
-void Weapon::init(const char* weapon_id, int level)
+void Weapon::init(const std::string& id)
 {
-	ItemManager::GetInstance().InitWeapon(*this, weapon_id, level);
-	m_inited = true;
-}
+	const Weapon& weapon = EntityManager::getInstance().getWeapon(id);
 
-
-bool Weapon::isInited() const
-{
-	return m_inited;
+	// Only copy attributes from XML document
+	m_fire_delay = weapon.m_fire_delay;
+	m_heat_cost = weapon.m_heat_cost;
+	m_velocity = weapon.m_velocity;
+	m_damage = weapon.m_damage;
+	m_texture = weapon.m_texture;
+	m_sound = weapon.m_sound;
 }
 
 
@@ -66,9 +65,9 @@ void Weapon::setSound(const sf::SoundBuffer* sound)
 }
 
 
-void Weapon::setPosition(const sf::Vector2f& pos)
+void Weapon::setPosition(int x, int y)
 {
-	m_position = pos;
+	m_position = sf::Vector2f(x, y);
 }
 
 

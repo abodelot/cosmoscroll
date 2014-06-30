@@ -18,9 +18,11 @@
 #define CONFIG_FILENAME   "cosmoscroll.ini"
 
 #define XML_LEVELS      "/xml/levels.xml"
-#define XML_ITEMS       "/xml/items.xml"
+#define XML_UPGRADES    "/xml/upgrades.xml"
+#define XML_WEAPONS     "/xml/weapons.xml"
 #define XML_ANIMATIONS  "/xml/animations.xml"
 #define XML_SPACESHIPS  "/xml/spaceships.xml"
+
 
 
 Game& Game::getInstance()
@@ -98,8 +100,11 @@ void Game::loadResources(const std::string& data_path)
 	std::cout << "* loading " << XML_LEVELS << "..." << std::endl;
 	LevelManager::getInstance().loadLevelFile(resources_dir + XML_LEVELS);
 
-	std::cout << "* loading " << XML_ITEMS << "..." << std::endl;
-	ItemManager::GetInstance().LoadItems(resources_dir + XML_ITEMS);
+	std::cout << "* loading " << XML_UPGRADES << "..." << std::endl;
+	ItemManager::getInstance().loadFromXML(resources_dir + XML_UPGRADES);
+
+	std::cout << "* loading " << XML_WEAPONS << "..." << std::endl;
+	EntityManager::getInstance().loadWeapons(resources_dir + XML_WEAPONS);
 
 	std::cout << "* loading " << XML_ANIMATIONS << "..." << std::endl;
 	EntityManager::getInstance().loadAnimations(resources_dir + XML_ANIMATIONS);
@@ -350,8 +355,12 @@ bool Game::checkResourcesPurity(const std::string& resources_dir)
 	std::ifstream file;
 	MD5 md5sum;
 
-	file.open((resources_dir + XML_ITEMS).c_str());
-	check_passed &= (md5sum.Calculate(file) == MD5SUM_ITEMS);
+	file.open((resources_dir + XML_WEAPONS).c_str());
+	check_passed &= (md5sum.Calculate(file) == MD5SUM_WEAPONS);
+	file.close();
+
+	file.open((resources_dir + XML_UPGRADES).c_str());
+	check_passed &= (md5sum.Calculate(file) == MD5SUM_UPGRADES);
 	file.close();
 
 	file.open((resources_dir + XML_SPACESHIPS).c_str());

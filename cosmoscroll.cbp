@@ -169,14 +169,10 @@
 		<Unit filename="src/gui/layouts/Layout.hpp" />
 		<Unit filename="src/gui/layouts/VBoxLayout.cpp" />
 		<Unit filename="src/gui/layouts/VBoxLayout.hpp" />
-		<Unit filename="src/items/GenericItemData.cpp" />
-		<Unit filename="src/items/GenericItemData.hpp" />
 		<Unit filename="src/items/Item.cpp" />
 		<Unit filename="src/items/Item.hpp" />
 		<Unit filename="src/items/ItemManager.cpp" />
 		<Unit filename="src/items/ItemManager.hpp" />
-		<Unit filename="src/items/WeaponData.cpp" />
-		<Unit filename="src/items/WeaponData.hpp" />
 		<Unit filename="src/scenes/AboutMenu.cpp" />
 		<Unit filename="src/scenes/AboutMenu.hpp" />
 		<Unit filename="src/scenes/BaseMenu.cpp" />

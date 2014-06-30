@@ -326,7 +326,7 @@ void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 
 void EntityManager::loadAnimations(const std::string& filename)
 {
-	// Open XML file
+	// Open XML document
 	tinyxml2::XMLDocument doc;
 	if (doc.LoadFile(filename.c_str()) != 0)
 	{
@@ -334,7 +334,7 @@ void EntityManager::loadAnimations(const std::string& filename)
 		throw std::runtime_error(error);
 	}
 
-	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement();
+	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement("anim");
 	while (elem != NULL)
 	{
 		// Parse attributes
@@ -357,28 +357,112 @@ void EntityManager::loadAnimations(const std::string& filename)
 
 		if (ok)
 		{
-			// Add each frame in the animation
-			Animation* anim = &animations_[name];
+			// Create animation and add frames
+			Animation& animation = m_animations[name];
 			for (int i = 0; i < count; ++i)
-				anim->addFrame({x + i * width, y, width, height});
+				animation.addFrame({x + i * width, y, width, height});
 
 			if (reverse)
 			{
 				// Loop back to the begining
 				for (int i = count - 2; i >= 0; --i)
-					anim->addFrame({x + i * width, y, width, height});
+					animation.addFrame({x + i * width, y, width, height});
 			}
-			anim->setDelay(delay);
-			anim->setTexture(Resources::getTexture(img));
-			Collisions::registerTexture(&anim->getTexture());
+			animation.setDelay(delay);
+			animation.setTexture(Resources::getTexture(img));
+			Collisions::registerTexture(&animation.getTexture());
 		}
-		elem = elem->NextSiblingElement();
+		elem = elem->NextSiblingElement("anim");
 	}
 }
 
 
+const Animation& EntityManager::getAnimation(const std::string& id) const
+{
+	AnimationMap::const_iterator it = m_animations.find(id);
+	if (it == m_animations.end())
+		throw std::runtime_error("Animation '" + id + "' not found");
+
+	return it->second;
+}
+
+
+void EntityManager::loadWeapons(const std::string& filename)
+{
+	// Open XML document
+	tinyxml2::XMLDocument doc;
+	if (doc.LoadFile(filename.c_str()) != 0)
+	{
+		std::string error = "Cannot load weapons from " + filename + ": " + doc.GetErrorStr1();
+		throw std::runtime_error(error);
+	}
+
+	// Loop over 'weapon' tags
+	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement("weapon");
+	while (elem != NULL)
+	{
+		// Weapon ID
+		const char* p = elem->Attribute("id");
+		if (!p)
+			throw std::runtime_error("XML error: weapon.id is missing");
+
+		Weapon& weapon = m_weapons[p];
+
+		p = elem->Attribute("image"); // Projectile image
+		if (p)
+			weapon.setTexture(&Resources::getTexture(p));
+		else
+			std::cerr << "XML error: weapon.image is missing" << std::endl;
+
+		p = elem->Attribute("sound"); // Sound effect
+		if (p)
+			weapon.setSound(&Resources::getSoundBuffer(p));
+		else
+			std::cerr << "XML error: weapon.sound is missing" << std::endl;
+
+		float heatcost = 0.f;
+		if (elem->QueryFloatAttribute("heatcost", &heatcost) == 0)
+			weapon.setHeatCost(heatcost);
+		else
+			std::cerr << "XML error: weapon.heatcost is missing" << std::endl;
+
+		float firerate = 0.f;
+		if (elem->QueryFloatAttribute("firerate", &firerate) == 0)
+			weapon.setFireRate(firerate);
+		else
+			std::cerr << "XML error: weapon.firerate is missing" << std::endl;
+
+		int damage = 0;
+		if (elem->QueryIntAttribute("damage", &damage) == 0)
+			weapon.setDamage(damage);
+		else
+			std::cerr << "XML error: weapon.damage is missing" << std::endl;
+
+		int speed = 0;
+		if (elem->QueryIntAttribute("speed", &speed) == 0)
+			weapon.setVelociy(speed);
+		else
+			std::cerr << "XML error: weapon.speed is missing" << std::endl;
+
+		elem = elem->NextSiblingElement("weapon");
+	}
+}
+
+
+const Weapon& EntityManager::getWeapon(const std::string& id) const
+{
+	WeaponMap::const_iterator it = m_weapons.find(id);
+	if (it == m_weapons.end())
+		throw std::runtime_error("Weapon '" + id + "' not found");
+
+	return it->second;
+}
+
+
+
 void EntityManager::loadSpaceships(const std::string& filename)
 {
+	// Open XML document
 	tinyxml2::XMLDocument doc;
 	if (doc.LoadFile(filename.c_str()) != 0)
 	{
@@ -386,7 +470,7 @@ void EntityManager::loadSpaceships(const std::string& filename)
 		throw std::runtime_error(error);
 	}
 
-	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement();
+	tinyxml2::XMLElement* elem = doc.RootElement()->FirstChildElement("spaceship");
 	while (elem != NULL)
 	{
 		const char* id = elem->Attribute("id");
@@ -395,15 +479,15 @@ void EntityManager::loadSpaceships(const std::string& filename)
 
 		const char* animation = elem->Attribute("animation");
 		if (animation == NULL)
-			throw std::runtime_error("XML parse error: spaceship.animation is missing");
+			throw std::runtime_error("XML error: spaceship.animation is missing");
 
 		int hp = 0;
 		if (elem->QueryIntAttribute("hp", &hp) != tinyxml2::XML_SUCCESS)
-			throw std::runtime_error("XML parse error: spaceship.hp is missing");
+			throw std::runtime_error("XML error: spaceship.hp is missing");
 
 		int speed = 0;
 		if (elem->QueryIntAttribute("speed", &speed) != tinyxml2::XML_SUCCESS)
-			throw std::runtime_error("XML parse error: spaceship.speed is missing");
+			throw std::runtime_error("XML error: spaceship.speed is missing");
 
 		int points = 0;
 		elem->QueryIntAttribute("points", &points);
@@ -418,26 +502,24 @@ void EntityManager::loadSpaceships(const std::string& filename)
 		tinyxml2::XMLElement* weapon = elem->FirstChildElement();
 		if (weapon != NULL)
 		{
-			int w_x, w_y;
+			int wx, wy;
 			const char* weapon_id = weapon->Attribute("id");
 			if (weapon_id == NULL)
-				throw std::runtime_error("XML parse error: spaceship.weapon.id is missing");
+				throw std::runtime_error("XML error: spaceship.weapon.id is missing");
 
-			if (weapon->QueryIntAttribute("x", &w_x) != tinyxml2::XML_SUCCESS)
-				throw std::runtime_error("XML parse error: spaceship.weapon.x is missing");
+			if (weapon->QueryIntAttribute("x", &wx) != tinyxml2::XML_SUCCESS)
+				throw std::runtime_error("XML error: spaceship.weapon.x is missing");
 
-			if (weapon->QueryIntAttribute("y", &w_y) != tinyxml2::XML_SUCCESS)
-				throw std::runtime_error("XML parse error: spaceship.weapon.y is missing");
+			if (weapon->QueryIntAttribute("y", &wy) != tinyxml2::XML_SUCCESS)
+				throw std::runtime_error("XML error: spaceship.weapon.y is missing");
 
 			ship->getWeapon().init(weapon_id);
-			ship->getWeapon().setPosition({(float) w_x, (float) w_y});
+			ship->getWeapon().setPosition(wx, wy);
 		}
-#ifdef DEBUG
-		std::cout << "\t" << elem->Attribute("name") << " " << id << std::endl;
-#endif
+
 		m_spaceships[id] = ship;
 		RegisterUniqueEntity(ship);
-		elem = elem->NextSiblingElement();
+		elem = elem->NextSiblingElement("spaceship");
 	}
 }
 
@@ -454,19 +536,6 @@ Spaceship* EntityManager::createSpaceship(const std::string& id) const
 }
 
 
-const Animation& EntityManager::getAnimation(const std::string& key) const
-{
-	AnimationMap::const_iterator it;
-	it = animations_.find(key);
-	if (it == animations_.end())
-	{
-		std::string err = "Animation '" + key + "' doesn't exist";
-		throw std::runtime_error(err);
-	}
-	return it->second;
-}
-
-
 Player* EntityManager::getPlayer() const
 {
 	assert(m_player != NULL);
@@ -476,7 +545,6 @@ Player* EntityManager::getPlayer() const
 
 Entity* EntityManager::createRandomEntity()
 {
-
 	if (math::rand(0, 9) == 0)
 	{
 		// Spawn asteroid

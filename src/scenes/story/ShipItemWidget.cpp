@@ -21,7 +21,7 @@ ShipItemWidget::ShipItemWidget(gui::Menu* parent, Item::Type type, const sf::Fon
 	//m_name.setStyle(sf::Text::Bold);
 	m_txt_name.setCharacterSize(16);
 	m_txt_name.setPosition(10, 5);
-	m_txt_name.setString(_t(Item::TypeToString(m_type)));
+	m_txt_name.setString(_t(Item::typeToString(m_type)));
 
 	// Item current level
 	m_txt_level.setFont(font);
@@ -87,34 +87,30 @@ void ShipItemWidget::refresh()
 	// Get current item level
 	m_level = UserSettings::getItemLevel(m_type);
 	m_txt_level.setString(I18n::templatize("armory.item_level", "{level}", m_level));
-	const Item* item = ItemManager::GetInstance().GetItemData(m_type, m_level);
-	m_txt_description.setString(item->getDescription());
+	const Item& item = ItemManager::getInstance().getItem(m_type, m_level);
+	m_txt_description.setString(item.getDescription());
 
-	// Get next item level
+	// Check for next item level
 	int next_level = m_level + 1;
-	item = ItemManager::GetInstance().GetItemData(m_type, next_level);
-
-	// No next item => last level reached
-	if (item == NULL)
+	if (ItemManager::getInstance().hasItem(m_type, next_level))
 	{
+		const Item& next_item = ItemManager::getInstance().getItem(m_type, next_level);
+		m_txt_upgrade.setString(I18n::templatize("armory.upgrade_item", "{level}", next_level));
+		m_txt_price.setString(I18n::templatize("item.price", "{price}", next_item.getPrice()));
+		if (UserSettings::getCredits() >= next_item.getPrice())
+			m_txt_price.setColor(sf::Color::Green);
+		else
+			m_txt_price.setColor(sf::Color(255, 128, 0));
+	}
+	else
+	{
+		// No next item => last level reached
 		m_txt_upgrade.setString(_t("armory.max_level"));
 		m_txt_upgrade.setStyle(sf::Text::Italic);
 		m_txt_upgrade.setColor(sf::Color(255, 255, 255, 128));
 		m_txt_price.setString("");
-	}
-	else
-	{
-		m_txt_upgrade.setString(I18n::templatize("armory.upgrade_item", "{level}", next_level));
-		m_txt_price.setString(I18n::templatize("item.price", "{price}", item->getPrice()));
-		if (UserSettings::getCredits() >= item->getPrice())
-		{
-			m_txt_price.setColor(sf::Color::Green);
-		}
-		else
-		{
-			m_txt_price.setColor(sf::Color(255, 128, 0));
 
-		}
+
 	}
 	m_txt_upgrade.setPosition(270 - int(sfh::width(m_txt_upgrade)) / 2, 14);
 	m_txt_price.setPosition(270 - int(sfh::width(m_txt_price)) / 2, 32);
@@ -124,17 +120,22 @@ void ShipItemWidget::refresh()
 
 bool ShipItemWidget::buyNextLevel() const
 {
+	// Check for next item
 	int next_level = m_level + 1;
-	const Item* item = ItemManager::GetInstance().GetItemData(m_type, next_level);
-
-	if (item && UserSettings::getCredits() >= item->getPrice())
+	if (ItemManager::getInstance().hasItem(m_type, next_level))
 	{
-		UserSettings::updateCredits(-item->getPrice());
-		UserSettings::setItemLevel(m_type, next_level);
+		const Item& item = ItemManager::getInstance().getItem(m_type, next_level);
+		if (UserSettings::getCredits() >= item.getPrice())
+		{
+			UserSettings::updateCredits(-item.getPrice());
+			UserSettings::setItemLevel(m_type, next_level);
 
-		SoundSystem::playSound("cash-register.ogg");
-		return true;
+			SoundSystem::playSound("cash-register.ogg");
+			return true;
+		}
 	}
+
+
 	SoundSystem::playSound("disabled.ogg");
 	return false;
 }

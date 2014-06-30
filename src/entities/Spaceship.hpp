@@ -27,7 +27,7 @@ public:
 
 	Spaceship* clone() const;
 
-	Weapon& getWeapon() { return m_weapon; }
+	Weapon& getWeapon();
 
 	void setPoints(int points);
 	int getPoints() const;
@@ -51,6 +51,5 @@ private:
 	float     m_origin_y;
 	float     m_angle;
 };
-
 
 #endif // SPACESHIP_HPP

@@ -1,11 +1,10 @@
 #include <stdexcept>
 #include <iostream>
 #include "ItemManager.hpp"
-#include "entities/Weapon.hpp"
 #include "utils/tinyxml/tinyxml2.h"
 
 
-ItemManager& ItemManager::GetInstance()
+ItemManager& ItemManager::getInstance()
 {
 	static ItemManager self;
 	return self;
@@ -17,98 +16,43 @@ ItemManager::ItemManager()
 }
 
 
-ItemManager::~ItemManager()
+void ItemManager::loadFromXML(const std::string& filename)
 {
-}
-
-
-int ItemManager::LoadItems(const std::string& filename)
-{
+	// Open XML document
 	tinyxml2::XMLDocument doc;
 	if (doc.LoadFile(filename.c_str()) != 0)
 	{
-		std::string error = "Cannot load items from " + filename + ": " + doc.GetErrorStr1();
+		std::string error = "Cannot load items from '" + filename + "': " + doc.GetErrorStr1();
 		throw std::runtime_error(error);
 	}
 
 	tinyxml2::XMLElement* root = doc.RootElement();
-	// weapons
-	tinyxml2::XMLElement* elem_class = root->FirstChildElement("weapons")->FirstChildElement("class");
-	while (elem_class != NULL)
-	{
-		tinyxml2::XMLElement* elem_weapon = elem_class->FirstChildElement("weapon");
-		WeaponData data;
-		data.loadClassFromXml(elem_class);
-		while (elem_weapon != NULL)
-		{
-			if (data.loadFromXml(elem_weapon))
-			{
-				weapons_.push_back(data);
-			}
-			elem_weapon = elem_weapon->NextSiblingElement();
-		}
-		elem_class = elem_class->NextSiblingElement();
-	}
-	// generic items
-	ParseGenericItems(root, "shields", Item::SHIELD);
-	ParseGenericItems(root, "heatsinks", Item::HEATSINK);
-	ParseGenericItems(root, "hulls", Item::HULL);
-	ParseGenericItems(root, "engines", Item::ENGINE);
-	return items_.size() + weapons_.size();
+	parseItems(root, "weapons",   Item::WEAPON);
+	parseItems(root, "shields",   Item::SHIELD);
+	parseItems(root, "heatsinks", Item::HEATSINK);
+	parseItems(root, "hulls",     Item::HULL);
+	parseItems(root, "engines",   Item::ENGINE);
 }
 
 
-const Item* ItemManager::GetItemData(Item::Type type, int level) const
+bool ItemManager::hasItem(Item::Type type, int level) const
 {
-	const Item* data = GetGenericItemData(type, level);
-	if (data != NULL)
-	{
-		return data;
-	}
-
-	for (WeaponList::const_iterator it = weapons_.begin(); it != weapons_.end(); ++it)
-	{
-		data = &(*it);
-		if (data->getType() == type && data->getLevel() == level)
-		{
-			return data;
-		}
-	}
-#ifdef DEBUG
-	std::cout << "[ItemManager] item not found: " << Item::TypeToString(type) << ", level " << level << std::endl;
-#endif
-	return NULL;
+	ItemMap::const_iterator it = m_items.find(ItemID(type, level));
+	return it != m_items.end();
 }
 
 
-const WeaponData* ItemManager::GetWeaponData(const char* id, int level) const
+const Item& ItemManager::getItem(Item::Type type, int level) const
 {
-	for (WeaponList::const_iterator it = weapons_.begin(); it != weapons_.end(); ++it)
-	{
-		if (it->getID() == id && (level == it->getLevel()))
-		{
-			return &(*it);
-		}
-	}
-	return NULL;
+	ItemMap::const_iterator it = m_items.find(ItemID(type, level));
+	if (it == m_items.end())
+		throw std::runtime_error("Item <type:" + std::string(Item::typeToString(type)) + ", lvl:" + std::to_string(level) + "> not found");
+
+	return it->second;
 }
 
 
-const GenericItemData* ItemManager::GetGenericItemData(Item::Type type, int level) const
-{
-	for (GenericItemList::const_iterator it = items_.begin(); it != items_.end(); ++it)
-	{
-		const GenericItemData* data = &(*it);
-		if (data->getType() == type && data->getLevel() == level)
-		{
-			return data;
-		}
-	}
-	return NULL;
-}
-
-
-void ItemManager::ParseGenericItems(tinyxml2::XMLElement* elem, const char* tagname, Item::Type type)
+void ItemManager::parseItems(tinyxml2::XMLElement* elem, const char* tagname, Item::Type type)
 {
 	elem = elem->FirstChildElement(tagname);
 	if (elem != NULL)
@@ -116,30 +60,16 @@ void ItemManager::ParseGenericItems(tinyxml2::XMLElement* elem, const char* tagn
 		elem = elem->FirstChildElement();
 		while (elem != NULL)
 		{
-			GenericItemData data(type);
-			data.LoadFromXml(elem);
-			items_.push_back(data);
+			Item item(type);
+			item.loadFromXmlNode(elem);
+			// Store item, indexed Type + Level
+			ItemID id(type, item.getLevel());
+			m_items.insert(std::pair<ItemID, Item>(id, item));
 			elem = elem->NextSiblingElement();
 		}
 	}
 	else
 	{
-		std::cerr << "item: tag " << tagname << " not found" << std::endl;
+		std::cerr << "XML error: tag '" << tagname << "' not found" << std::endl;
 	}
 }
-
-
-void ItemManager::InitWeapon(Weapon& weapon, const char* id, int level) const
-{
-	const WeaponData* data = GetWeaponData(id, level);
-	if (data == NULL)
-	{
-		std::cerr << "can't initialize weapon " << id << " (unknown id)" << std::endl;
-	}
-	else
-	{
-		data->InitWeapon(weapon);
-	}
-}
-
-

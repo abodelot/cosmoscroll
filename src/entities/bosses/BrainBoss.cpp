@@ -27,7 +27,7 @@ BrainBoss::BrainBoss():
 	m_weapon.init("laser-green");
 	m_weapon.setFireRate(4);
 	m_weapon.setOwner(this);
-	m_weapon.setPosition(sf::Vector2f(8, 38));
+	m_weapon.setPosition(8, 38);
 }
 
 

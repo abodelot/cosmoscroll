@@ -16,9 +16,9 @@ Canon::Canon()
 	top.setDestructible(false);
 	addPart(top, (base.getWidth() - top.getWidth()) / 2, 0);
 
-	m_weapon.init("fireball", 2);
+	m_weapon.init("fireball");
 	m_weapon.setOwner(this);
-	m_weapon.setPosition({64, 8});
+	m_weapon.setPosition(64, 8);
 }
 
 

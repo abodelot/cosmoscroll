@@ -7,6 +7,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "Weapon.hpp"
 #include "Animation.hpp"
 #include "core/ParticleSystem.hpp"
 
@@ -86,30 +87,42 @@ public:
 	 */
 	size_t count() const;
 
-
-	/**
-	 * Allocate a new Spaceship with a given profile
-	 * @param id: spaceship-profile identifier
-	 * @return new spaceship
-	 */
-	Spaceship* createSpaceship(const std::string& id) const;
-
-	/**
-	 * Get an animation from its id
-	 */
-	const Animation& getAnimation(const std::string& key) const;
-
 	/**
 	 * Load animation definitions
-	 * @param filename: path to XML file
+	 * @param filename: path to XML document
 	 */
 	void loadAnimations(const std::string& filename);
 
 	/**
+	 * Get an animation
+	 * @param id: animation ID from XML document
+	 */
+	const Animation& getAnimation(const std::string& id) const;
+
+	/**
+	 * Load weapon definitions
+	 * @param filename path to XML document
+	 */
+	void loadWeapons(const std::string& filename);
+
+	/**
+	 * Get a weapon
+	 * @param id: weapon ID from XML document
+	 */
+	const Weapon& getWeapon(const std::string& id) const;
+
+	/**
 	 * Load spaceship definitions
-	 * @param filename: path to XML file
+	 * @param filename: path to XML document
 	 */
 	void loadSpaceships(const std::string& filename);
+
+	/**
+	 * Allocate a new Spaceship with a given profile
+	 * @param id: spaceship type ID from XML document
+	 * @return new allocated spaceship
+	 */
+	Spaceship* createSpaceship(const std::string& id) const;
 
 	/**
 	 * Get player entity
@@ -148,11 +161,14 @@ private:
 	 */
 	void RespawnPlayer();
 
+	typedef std::map<std::string, Animation> AnimationMap;
+	AnimationMap m_animations;
+
+	typedef std::map<std::string, Weapon> WeaponMap;
+	WeaponMap m_weapons;
+
 	typedef std::map<std::string, Spaceship*> SpaceshipMap;
 	SpaceshipMap m_spaceships;
-
-	typedef std::map<std::string, Animation> AnimationMap;
-	AnimationMap animations_;
 
 	typedef std::list<Entity*> EntityList;
 	EntityList m_entities;

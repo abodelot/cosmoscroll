@@ -1,57 +1,41 @@
 #ifndef ITEMMANAGER_HPP
 #define ITEMMANAGER_HPP
 
-#include <string>
-#include <list>
+#include <map>
+#include "Item.hpp"
 
-#include "WeaponData.hpp"
-#include "GenericItemData.hpp"
-
+/**
+ * Singleton for storing upgrade items
+ */
 class ItemManager
 {
 public:
-
-	static ItemManager& GetInstance();
+	static ItemManager& getInstance();
 
 	/**
 	 * Load items definitions from XML
 	 * @param filename: XML document
 	 */
-	int LoadItems(const std::string& filename);
+	void loadFromXML(const std::string& filename);
 
 	/**
-	 * Initialize weapon options
-	 * @param id: weapon XML id
-	 * @param weapon: weapon to initialize
+	 * Check if an item exists
 	 */
-	void InitWeapon(Weapon& weapon, const char* id, int level) const;
+	bool hasItem(Item::Type, int level) const;
 
 	/**
-	 * Get item data from any item type
+	 * Get an item
 	 */
-	const Item* GetItemData(Item::Type, int level) const;
-
-	/**
-	 * Get item data from a generic item
-	 */
-	const GenericItemData* GetGenericItemData(Item::Type, int level) const;
+	const Item& getItem(Item::Type type, int level) const;
 
 private:
 	ItemManager();
-	~ItemManager();
 
-	/**
-	 * Get item data from a weapon
-	 */
-	const WeaponData* GetWeaponData(const char* id, int level=1) const;
+	void parseItems(tinyxml2::XMLElement* elem, const char* tagname, Item::Type type);
 
-	void ParseGenericItems(tinyxml2::XMLElement* elem, const char* tagname, Item::Type type);
-
-	typedef std::list<WeaponData> WeaponList;
-	WeaponList weapons_;
-
-	typedef std::list<GenericItemData> GenericItemList;
-	GenericItemList items_;
+	typedef std::pair<Item::Type, int> ItemID; // An item is identified by Type + Level
+	typedef std::map<ItemID, Item> ItemMap;
+	ItemMap m_items;
 };
 
 #endif // ITEMMANAGER_HPP

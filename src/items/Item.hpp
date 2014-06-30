@@ -8,6 +8,11 @@ namespace tinyxml2
 class XMLElement;
 }
 
+class Player;
+
+/**
+ * Represents an item which can be equiped by the player
+ */
 class Item
 {
 public:
@@ -23,11 +28,11 @@ public:
 
 	Item(Type type);
 
-	static const char* TypeToString(Type type);
+	static const char* typeToString(Type type);
 
-	const char* TypeToString() const;
+	std::wstring toString() const;
 
-	virtual bool LoadFromXml(tinyxml2::XMLElement* elem);
+	void loadFromXmlNode(tinyxml2::XMLElement* elem);
 
 	Type getType() const;
 
@@ -35,9 +40,25 @@ public:
 
 	int getPrice() const;
 
-	virtual std::wstring getDescription() const = 0;
+	std::wstring getDescription() const;
+
+	void equip(Player& player) const;
 
 private:
+	union Data
+	{
+		int shield;
+		float speed;
+		int hp;
+		int heat;
+		struct weapon_t
+		{
+			float heatcost;
+			int   damage;
+		} weapon;
+	};
+
+	Data m_data;
 	Type m_type;
 	int m_level;
 	int m_price;

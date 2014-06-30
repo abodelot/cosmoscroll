@@ -1,6 +1,7 @@
 #ifndef WEAPON_HPP
 #define WEAPON_HPP
 
+#include <stdexcept>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
@@ -21,16 +22,7 @@ class Weapon
 public:
 	Weapon();
 
-	/**
-	 * Init weapon settings
-	 * @param weapon_id: see weapons.xml
-	 */
-	void init(const char* weapon_id, int level = 1);
-
-	/**
-	 * @return true if weapon has already been inited
-	 */
-	bool isInited() const;
+	void init(const std::string& id);
 
 	/**
 	 * Throw a projectile
@@ -79,7 +71,7 @@ public:
 	/**
 	 * Weapon position, relative to owner's position
 	 */
-	void setPosition(const sf::Vector2f& position);
+	void setPosition(int x, int y);
 
 	/**
 	 * Weapon's owner
@@ -98,7 +90,6 @@ protected:
 	void createProjectile(const sf::Vector2f& offset, float angle);
 
 private:
-
 	void insert(const sf::Vector2f& pos, Entity* entity);
 
 	sf::Clock m_last_shot_at; // Store time for last shot
@@ -109,7 +100,6 @@ private:
 	const sf::Texture*     m_texture;
 	const sf::SoundBuffer* m_sound;
 	Entity*                m_owner;
-	bool                   m_inited;
 	sf::Vector2f           m_position;
 	int                    m_multiply;
 };
@@ -118,8 +108,9 @@ template <class T>
 float Weapon::shoot(float angle)
 {
 	static const float ANGLE_VARIATION = 0.15f;
-	if (!m_inited)
-		return 0.f;
+	if (!m_texture)
+		throw std::runtime_error("Using unitialized weapon");
+
 
 	// If ready for next round
 	if (m_last_shot_at.getElapsedTime().asSeconds() >= m_fire_delay)
@@ -129,7 +120,7 @@ float Weapon::shoot(float angle)
 		switch (m_multiply)
 		{
 			case 1:
-				createProjectile(pos, angle);
+				createProjectile<T>(pos, angle);
 				break;
 			case 2:
 				pos.y -= m_texture->getSize().y / 2 - 1;

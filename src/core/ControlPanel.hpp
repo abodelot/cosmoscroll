@@ -41,33 +41,33 @@ public:
 	/**
 	 * Set current player HP and max HP
 	 */
-	void SetShipHP(int value);
-	void SetMaxShipHP(int max);
+	void setHP(int value);
+	void setMaxHP(int max);
 
 	/**
 	 * Set current shield points and max shield points
 	 */
-	void SetShield(int value);
-	void SetMaxShield(int max);
+	void setShield(int value);
+	void setMaxShield(int max);
 
 	/**
 	 * Set current heat and max heat
 	 */
-	void SetHeat(int value);
-	void SetMaxHeat(int max);
+	void setHeat(float value);
+	void setMaxHeat(float max);
 
 	/**
 	 * Enable/disable overheat effect on heat progress bar
 	 */
-	void SetOverheat(bool overheat);
+	void setOverheat(bool overheat);
 
 	// setters bonus slots ----------------------------------------------------
 
-	// Set coolers count
-	void SetCoolers(int coolers);
+	// Set icecubess count
+	void setIcecubes(int count);
 
 	// Set missiles count
-	void SetMissiles(int count);
+	void setMissiles(int count);
 
 	void ActiveSpeedPowerUp(int seconds);
 

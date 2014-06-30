@@ -26,7 +26,7 @@ GunTower::GunTower():
 
 	m_weapon.init("laser-pink");
 	m_weapon.setOwner(this);
-	m_weapon.setPosition({img_turret.getSize().x / 2.f, img_turret.getSize().y / 2.f});
+	m_weapon.setPosition(img_turret.getSize().x / 2.f, img_turret.getSize().y / 2.f);
 }
 
 

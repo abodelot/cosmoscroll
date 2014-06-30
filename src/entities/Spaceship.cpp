@@ -177,6 +177,12 @@ void Spaceship::onDestroy()
 }
 
 
+Weapon& Spaceship::getWeapon()
+{
+	return m_weapon;
+}
+
+
 void Spaceship::setPoints(int points)
 {
 	m_points = points;

@@ -19,7 +19,7 @@ TentaculatBoss::TentaculatBoss():
 	// init weapon
 	m_weapon.init("laser-pink");
 	m_weapon.setOwner(this);
-	m_weapon.setPosition({74, 42});
+	m_weapon.setPosition(74, 42);
 	m_weapon.setMultiply(3);
 
 	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("boss-tentacles"));

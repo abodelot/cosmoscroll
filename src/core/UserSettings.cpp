@@ -30,10 +30,8 @@ int UserSettings::getItemLevel(Item::Type type)
 
 void UserSettings::setItemLevel(Item::Type type, int level)
 {
-	if (level < 1)
-		level = 1;
-
-	if (ItemManager::GetInstance().GetItemData(type, level) == NULL)
+	// Reset level if item does not exist
+	if (!ItemManager::getInstance().hasItem(type, level))
 		level = 1;
 
 	s_items[type] = level;

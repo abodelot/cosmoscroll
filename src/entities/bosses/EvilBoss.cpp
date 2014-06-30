@@ -21,10 +21,10 @@ EvilBoss::EvilBoss():
 	// Init weapons
 	m_eye_left.init("fireball");
 	m_eye_left.setOwner(this);
-	m_eye_left.setPosition(sf::Vector2f(105, 55));
+	m_eye_left.setPosition(105, 55);
 	m_eye_right.init("fireball");
 	m_eye_right.setOwner(this);
-	m_eye_right.setPosition(sf::Vector2f(190, 55));
+	m_eye_right.setPosition(190, 55);
 	// hack: disable sound on the second eye so it won't be played twice
 	m_eye_right.setSound(NULL);
 }

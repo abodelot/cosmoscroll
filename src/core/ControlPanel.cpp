@@ -159,7 +159,7 @@ void ControlPanel::SetLevelDuration(int seconds)
 }
 
 
-void ControlPanel::SetOverheat(bool overheat)
+void ControlPanel::setOverheat(bool overheat)
 {
 	if (overheat)
 	{
@@ -174,49 +174,49 @@ void ControlPanel::SetOverheat(bool overheat)
 }
 
 
-void ControlPanel::SetShipHP(int value)
+void ControlPanel::setHP(int value)
 {
 	pbars_[ProgressBar::HP].SetValue(value);
 }
 
 
-void ControlPanel::SetMaxShipHP(int max)
+void ControlPanel::setMaxHP(int max)
 {
 	pbars_[ProgressBar::HP].max_value_ = max;
 }
 
 
-void ControlPanel::SetShield(int value)
+void ControlPanel::setShield(int value)
 {
 	pbars_[ProgressBar::SHIELD].SetValue(value);
 }
 
 
-void ControlPanel::SetMaxShield(int max)
+void ControlPanel::setMaxShield(int max)
 {
 	pbars_[ProgressBar::SHIELD].max_value_ = max;
 }
 
 
-void ControlPanel::SetHeat(int value)
+void ControlPanel::setHeat(float value)
 {
 	pbars_[ProgressBar::HEAT].SetValue(value);
 }
 
 
-void ControlPanel::SetMaxHeat(int max)
+void ControlPanel::setMaxHeat(float max)
 {
 	pbars_[ProgressBar::HEAT].max_value_ = max;
 }
 
 
-void ControlPanel::SetCoolers(int count)
+void ControlPanel::setIcecubes(int count)
 {
 	bs_coolers_.SetValue(count);
 }
 
 
-void ControlPanel::SetMissiles(int count)
+void ControlPanel::setMissiles(int count)
 {
 	bs_missiles_.SetValue(count);
 }
