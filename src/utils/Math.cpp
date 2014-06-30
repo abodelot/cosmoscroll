@@ -31,8 +31,8 @@ float rand(float begin, float end)
 
 void set_seed(unsigned int s)
 {
-    std::srand(s);
-    seed = s;
+	std::srand(s);
+	seed = s;
 }
 
 }

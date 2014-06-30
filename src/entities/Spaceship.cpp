@@ -146,16 +146,8 @@ void Spaceship::onUpdate(float frametime)
 			m_weapon.shoot(m_target->getCenter());
 			break;
 		case ON_SIGHT:
-		{
-			float my_y = getCenter().y;
-			float player_y = m_target->getCenter().y;
-			// if both Spaceships are roughly on the same Y axis
-			if (std::abs(player_y - my_y) < 30)
-			{
-				m_weapon.shoot(-math::PI);
-			}
+			m_weapon.shoot(-math::PI);
 			break;
-		}
 		case NONE:
 			break;
 	}

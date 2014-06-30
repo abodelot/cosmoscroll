@@ -86,7 +86,7 @@ public:
 	void setMultiply(int n);
 
 protected:
-	template <class T = Projectile>
+	template <class T>
 	void createProjectile(const sf::Vector2f& offset, float angle);
 
 private:
@@ -126,7 +126,7 @@ float Weapon::shoot(float angle)
 				pos.y -= m_texture->getSize().y / 2 - 1;
 				createProjectile<T>(pos, angle);
 				pos.y += m_texture->getSize().y + 2;
-				createProjectile(pos, angle);
+				createProjectile<T>(pos, angle);
 				break;
 			case 3:
 				createProjectile<T>(pos, angle);

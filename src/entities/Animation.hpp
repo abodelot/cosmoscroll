@@ -18,8 +18,8 @@ public:
 	float getDelay() const;
 
 	/**
-     * Texture containing the animation frames
-     */
+	 * Texture containing the animation frames
+	 */
 	void setTexture(const sf::Texture& texture);
 	const sf::Texture& getTexture() const;
 

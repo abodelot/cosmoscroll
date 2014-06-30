@@ -8,13 +8,13 @@
 
 
 #if defined(_WIN32) || defined(__WIN32__)
-    // Windows
-    #define SYS_WINDOWS
+	// Windows
+	define SYS_WINDOWS
 	#include <direct.h>     // _mkdir
 
 #elif defined(linux) || defined(__linux)
-    // Linux
-    #define SYS_LINUX
+	// Linux
+	#define SYS_LINUX
 
 #elif defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh)
 	// Mac OS

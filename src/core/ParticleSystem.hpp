@@ -190,7 +190,7 @@ public:
 	void clear();
 
 private:
-    ParticleSystem();
+	ParticleSystem();
 	~ParticleSystem();
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

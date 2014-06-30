@@ -118,7 +118,7 @@ private:
 	bool m_fullscreen;
 	bool m_vsync;
 	bool m_running;
-    bool m_resources_checked;
+	bool m_resources_checked;
 
 	// scenes
 	BaseScene* m_scenes[SC_COUNT];

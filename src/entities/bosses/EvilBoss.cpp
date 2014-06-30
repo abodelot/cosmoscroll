@@ -2,7 +2,7 @@
 #include "entities/Player.hpp"
 #include "core/Resources.hpp"
 
-#define MAX_X  350.f
+#define MAX_X  360.f
 #define MIN_Y  60.f
 #define MAX_Y  (EntityManager::getInstance().getHeight() - getHeight() - 60.f)
 
@@ -32,7 +32,7 @@ EvilBoss::EvilBoss():
 
 void EvilBoss::onInit()
 {
-    m_target = EntityManager::getInstance().getPlayer();
+	m_target = EntityManager::getInstance().getPlayer();
 }
 
 

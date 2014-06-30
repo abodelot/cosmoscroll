@@ -18,7 +18,7 @@ I18n& I18n::getInstance()
 
 I18n::I18n()
 {
-    for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 3; ++i)
 		m_code[i] = '\0';
 }
 

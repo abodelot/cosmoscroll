@@ -13,6 +13,7 @@
 
 
 FlyingSaucerBoss::FlyingSaucerBoss():
+	m_target(NULL),
 	m_timer(0),
 	m_angle(0)
 {
@@ -23,19 +24,16 @@ FlyingSaucerBoss::FlyingSaucerBoss():
 	m_left_tube.init("laser-pink");
 	m_left_tube.setOwner(this);
 	m_left_tube.setPosition(34, 122);
-	m_left_tube.setMultiply(2);
 	m_right_tube.init("laser-pink");
 	m_right_tube.setOwner(this);
 	m_right_tube.setPosition(157, 122);
-	m_right_tube.setMultiply(2);
 	setTeam(Entity::BAD);
-	m_target = NULL;
 }
 
 
 void FlyingSaucerBoss::onUpdate(float frametime)
 {
-    //Attack
+	//Attack
 	sf::Vector2f target_pos = m_target->getCenter();
 
 	m_left_tube.shoot(target_pos);
@@ -43,16 +41,16 @@ void FlyingSaucerBoss::onUpdate(float frametime)
 
 	if (getX() > CIRCLE_CENTER_X + CIRCLE_RADIUS)
 	{
-				move(-100 * frametime, 0);
-			}
-			else
-			{
-				sf::Vector2f pos(CIRCLE_CENTER_X, CIRCLE_CENTER_Y);
-				m_angle += CIRCLE_ROTATION_SPEED * frametime;
-				pos.x += CIRCLE_RADIUS * std::cos(m_angle);
-				pos.y -= CIRCLE_RADIUS * std::sin(m_angle);
-				setPosition(pos);
-			}
+		move(-100 * frametime, 0);
+	}
+	else
+	{
+		sf::Vector2f pos(CIRCLE_CENTER_X, CIRCLE_CENTER_Y);
+		m_angle += CIRCLE_ROTATION_SPEED * frametime;
+		pos.x += CIRCLE_RADIUS * std::cos(m_angle);
+		pos.y -= CIRCLE_RADIUS * std::sin(m_angle);
+		setPosition(pos);
+	}
 	updateDamageFlash(frametime);
 
 	m_timer += frametime;
@@ -75,5 +73,5 @@ void FlyingSaucerBoss::takeDamage(int damage)
 
 void FlyingSaucerBoss::onInit()
 {
-    m_target = EntityManager::getInstance().getPlayer();
+	m_target = EntityManager::getInstance().getPlayer();
 }

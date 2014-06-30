@@ -28,7 +28,7 @@ TentaculatBoss::TentaculatBoss():
 
 void TentaculatBoss::onInit()
 {
-    m_target = EntityManager::getInstance().getPlayer();
+	m_target = EntityManager::getInstance().getPlayer();
 }
 
 
