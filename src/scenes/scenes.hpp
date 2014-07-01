@@ -2,22 +2,22 @@
 #define SCENES_HPP
 
 // Game states
-#include "scenes/IntroScene.hpp"
-#include "scenes/InGameScene.hpp"
-#include "scenes/EndGameScene.hpp"
+#include "scenes/IntroScreen.hpp"
+#include "scenes/PlayScreen.hpp"
+#include "scenes/GameOverScreen.hpp"
 
 #include "scenes/PauseMenu.hpp"
 #include "scenes/MainMenu.hpp"
 #include "scenes/AboutMenu.hpp"
-#include "scenes/arcade/ArcadeMenu.hpp"
-#include "scenes/arcade/GameOverMenu.hpp"
-#include "scenes/arcade/BestScoresMenu.hpp"
-#include "scenes/story/LevelMenu.hpp"
-#include "scenes/story/ArmoryMenu.hpp"
-#include "scenes/options/OptionMenu.hpp"
-#include "scenes/options/KeyboardMenu.hpp"
-#include "scenes/options/JoystickMenu.hpp"
-#include "scenes/options/AudioMenu.hpp"
-#include "scenes/options/SettingsMenu.hpp"
+#include "scenes/InfinityMode/InfinityModeMenu.hpp"
+#include "scenes/InfinityMode/SendScoreMenu.hpp"
+#include "scenes/InfinityMode/LeaderboardMenu.hpp"
+#include "scenes/Levels/LevelMenu.hpp"
+#include "scenes/Levels/ArmoryMenu.hpp"
+#include "scenes/Options/OptionMenu.hpp"
+#include "scenes/Options/KeyboardMenu.hpp"
+#include "scenes/Options/JoystickMenu.hpp"
+#include "scenes/Options/AudioMenu.hpp"
+#include "scenes/Options/SettingsMenu.hpp"
 
 #endif // SCENES_HPP

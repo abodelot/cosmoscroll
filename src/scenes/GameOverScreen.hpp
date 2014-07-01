@@ -1,14 +1,15 @@
-#ifndef ENDGAMESCENE_HPP
-#define ENDGAMESCENE_HPP
+#ifndef GAMEOVERSCREEN_HPP
+#define GAMEOVERSCREEN_HPP
 
-#include "BaseScene.hpp"
+#include "Screen.hpp"
 
 class EntityManager;
+class ControlPanel;
 
-class EndGameScene: public BaseScene
+class GameOverScreen: public Screen
 {
 public:
-	EndGameScene();
+	GameOverScreen();
 
 	void OnEvent(const sf::Event& event) override;
 
@@ -24,7 +25,8 @@ private:
 	sf::Clock            m_started_at;
 	sf::Text             m_text;
 	const EntityManager& m_entities;
+	const ControlPanel&  m_panel;
 };
 
-#endif // ENDGAMESCENE_HPP
+#endif // GAMEOVERSCREEN_HPP
 

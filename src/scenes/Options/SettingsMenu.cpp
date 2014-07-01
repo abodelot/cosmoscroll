@@ -6,7 +6,7 @@
 
 SettingsMenu::SettingsMenu()
 {
-	SetTitle(_t("menu.settings.title"));
+	SetTitle(_t("settings.title"));
 
 	form_.SetOffset(90, 140);
 	form_.SetSpacing(10, 25);
@@ -15,12 +15,12 @@ SettingsMenu::SettingsMenu()
 	cb_fullscreen_ = new gui::CheckBox(this);
 	cb_fullscreen_->SetCallbackID(1);
 	cb_fullscreen_->Check(Game::getInstance().isFullscreen());
-	form_.AddRow(_t("menu.settings.fullscreen"), cb_fullscreen_);
+	form_.AddRow(_t("settings.fullscreen"), cb_fullscreen_);
 
 	cb_vsync_ = new gui::CheckBox(this);
 	cb_vsync_->SetCallbackID(2);
 	cb_vsync_->Check(Game::getInstance().isVerticalSync());
-	form_.AddRow(_t("menu.settings.vsync"), cb_vsync_);
+	form_.AddRow(_t("settings.vsync"), cb_vsync_);
 
 	opt_languages_ = new gui::OptionList(this);
 	opt_languages_->AddOption(L"English",  "en");
@@ -29,9 +29,9 @@ SettingsMenu::SettingsMenu()
 
 	opt_languages_->SelectByValue(I18n::getInstance().getCurrentLanguage());
 	opt_languages_->SetCallbackID(3);
-	form_.AddRow(_t("menu.settings.language"), opt_languages_);
+	form_.AddRow(_t("settings.language"), opt_languages_);
 
-	but_back_ = new CosmoButton(this, _t("menu.back"));
+	but_back_ = new CosmoButton(this, _t("back"));
 	but_back_->setPosition(210, 340);
 	but_back_->SetCallbackID(0);
 }
@@ -56,13 +56,13 @@ void SettingsMenu::EventCallback(int id)
 			Game::getInstance().reloadScenes();
 			ControlPanel::getInstance().refreshTextTranslations();
 			// re-load i18ned texts
-			SetTitle(_t("menu.settings.title"));
-			form_.GetLabelAt(0)->setString(_t("menu.settings.fullscreen"));
-			form_.GetLabelAt(1)->setString(_t("menu.settings.vsync"));
-			form_.GetLabelAt(2)->setString(_t("menu.settings.language"));
+			SetTitle(_t("settings.title"));
+			form_.GetLabelAt(0)->setString(_t("settings.fullscreen"));
+			form_.GetLabelAt(1)->setString(_t("settings.vsync"));
+			form_.GetLabelAt(2)->setString(_t("settings.language"));
 			form_.AlignRows();
 
-			but_back_->setString(_t("menu.back"));
+			but_back_->setString(_t("back"));
 			break;
 	}
 }

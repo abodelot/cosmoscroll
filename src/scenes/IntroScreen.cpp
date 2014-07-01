@@ -1,4 +1,4 @@
-#include "IntroScene.hpp"
+#include "IntroScreen.hpp"
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "core/SoundSystem.hpp"
@@ -12,7 +12,7 @@
 #define ZOOM_FACTOR 3
 
 
-IntroScene::IntroScene():
+IntroScreen::IntroScreen():
 	m_entities(EntityManager::getInstance())
 {
 	m_background.setTexture(Resources::getTexture("gui/background.png"));
@@ -36,7 +36,7 @@ IntroScene::IntroScene():
 }
 
 
-void IntroScene::OnEvent(const sf::Event& event)
+void IntroScreen::OnEvent(const sf::Event& event)
 {
 	Action::ID action = Input::feedEvent(event);
 	switch (action)
@@ -51,7 +51,7 @@ void IntroScene::OnEvent(const sf::Event& event)
 }
 
 
-void IntroScene::Update(float frametime)
+void IntroScreen::Update(float frametime)
 {
 	static bool jingle_played = false;
 
@@ -85,7 +85,7 @@ void IntroScene::Update(float frametime)
 }
 
 
-void IntroScene::Show(sf::RenderTarget& target) const
+void IntroScreen::Show(sf::RenderTarget& target) const
 {
 	target.draw(m_background);
 	target.draw(m_entities);

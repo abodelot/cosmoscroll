@@ -30,7 +30,7 @@ public:
 
 	void takeDamage(int damage) override;
 
-	inline bool HasCheated() const { return m_konami_code_activated; }
+	inline bool isCheater() const { return m_konami_code_activated; }
 
 	// callbacks ---------------------------------------------------------------
 

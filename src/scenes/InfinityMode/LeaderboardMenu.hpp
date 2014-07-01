@@ -1,12 +1,12 @@
-#ifndef BESTSCORESMENU_HPP
-#define BESTSCORESMENU_HPP
+#ifndef LEADERBOARDMENU_HPP
+#define LEADERBOARDMENU_HPP
 
 #include "scenes/BaseMenu.hpp"
 
-class BestScoresMenu: public BaseMenu
+class LeaderboardMenu: public BaseMenu
 {
 public:
-	BestScoresMenu();
+	LeaderboardMenu();
 
 	void OnFocus() override;
 	void Update(float frametime) override;
@@ -26,4 +26,4 @@ private:
 	QueryStatus querying_;
 };
 
-#endif // BESTSCORESMENU_HPP
+#endif // LEADERBOARDMENU_HPP

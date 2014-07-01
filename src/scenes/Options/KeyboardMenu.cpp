@@ -6,7 +6,7 @@
 KeyboardMenu::KeyboardMenu():
 	m_triggered(NULL)
 {
-	SetTitle(_t("menu.keyboard.title"));
+	SetTitle(_t("keyboard.title"));
 
 	gui::FormLayout form(80, 120);
 	form.SetSpacing(60, 10);
@@ -18,7 +18,7 @@ KeyboardMenu::KeyboardMenu():
 	but_cooler_  = addRow(form, Action::USE_COOLER);
 	but_missile_ = addRow(form, Action::USE_MISSILE);
 
-	gui::Button* back = new CosmoButton(this, _t("menu.back"));
+	gui::Button* back = new CosmoButton(this, _t("back"));
 	back->setPosition(210, 410);
 	back->SetCallbackID(9000);
 }

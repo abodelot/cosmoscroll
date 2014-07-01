@@ -15,11 +15,11 @@ MainMenu::MainMenu()
 	gui::VBoxLayout layout(210, 120);
 	layout.SetSpacing(0, 10);
 
-	layout.Add(new CosmoButton(this, _t("menu.main.story")))->SetCallbackID(1);
-	layout.Add(new CosmoButton(this, _t("menu.main.arcade")))->SetCallbackID(2);
-	layout.Add(new CosmoButton(this, _t("menu.main.options")))->SetCallbackID(3);
-	layout.Add(new CosmoButton(this, _t("menu.main.about")))->SetCallbackID(4);
-	layout.Add(new CosmoButton(this, _t("menu.main.quit")))->SetCallbackID(5);
+	layout.Add(new CosmoButton(this, _t("main.levels")))->SetCallbackID(1);
+	layout.Add(new CosmoButton(this, _t("main.infinity")))->SetCallbackID(2);
+	layout.Add(new CosmoButton(this, _t("main.options")))->SetCallbackID(3);
+	layout.Add(new CosmoButton(this, _t("main.about")))->SetCallbackID(4);
+	layout.Add(new CosmoButton(this, _t("main.quit")))->SetCallbackID(5);
 }
 
 
@@ -39,7 +39,7 @@ void MainMenu::EventCallback(int id)
 			game.setNextScene(Game::SC_LevelMenu);
 			break;
 		case 2:
-			game.setNextScene(Game::SC_ArcadeMenu);
+			game.setNextScene(Game::SC_InfinityModeMenu);
 			break;
 		case 3:
 			game.setNextScene(Game::SC_OptionMenu);

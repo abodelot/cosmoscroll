@@ -5,15 +5,15 @@
 
 OptionMenu::OptionMenu()
 {
-	SetTitle(_t("menu.options.title"));
+	SetTitle(_t("options.title"));
 
 	gui::VBoxLayout layout(210, 120);
 
-	layout.Add(new CosmoButton(this, _t("menu.options.keyboard")))->SetCallbackID(1);
-	layout.Add(new CosmoButton(this, _t("menu.options.joystick")))->SetCallbackID(2);
-	layout.Add(new CosmoButton(this, _t("menu.options.audio")))->SetCallbackID(3);
-	layout.Add(new CosmoButton(this, _t("menu.options.settings")))->SetCallbackID(4);
-	layout.Add(new CosmoButton(this, _t("menu.back")))->SetCallbackID(5);
+	layout.Add(new CosmoButton(this, _t("options.keyboard")))->SetCallbackID(1);
+	layout.Add(new CosmoButton(this, _t("options.joystick")))->SetCallbackID(2);
+	layout.Add(new CosmoButton(this, _t("options.audio")))->SetCallbackID(3);
+	layout.Add(new CosmoButton(this, _t("options.settings")))->SetCallbackID(4);
+	layout.Add(new CosmoButton(this, _t("back")))->SetCallbackID(5);
 }
 
 

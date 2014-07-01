@@ -9,22 +9,22 @@
 LevelMenu::LevelMenu():
 	m_levels(LevelManager::getInstance())
 {
-	SetTitle(_t("menu.story.title"));
+	SetTitle(_t("levels.title"));
 	m_credits = new CreditCounterWidget(this);
 
 	gui::FormLayout form(90, 120);
 	form.SetSpacing(10, 16);
 
 	m_opt_levels = new gui::OptionList(this);
-	form.AddRow(_t("menu.story.select"), m_opt_levels);
+	form.AddRow(_t("levels.select"), m_opt_levels);
 
 	m_lab_progresion = new gui::Label(this, "");
-	form.AddRow(_t("menu.story.progression"), m_lab_progresion);
+	form.AddRow(_t("levels.progression"), m_lab_progresion);
 
 	gui::VBoxLayout layout(210, 240);
-	layout.Add(new CosmoButton(this, _t("menu.story.play")))->SetCallbackID(1);
-	layout.Add(new CosmoButton(this, _t("menu.story.armory")))->SetCallbackID(2);
-	layout.Add(new CosmoButton(this, _t("menu.back_main_menu")))->SetCallbackID(0);
+	layout.Add(new CosmoButton(this, _t("levels.play")))->SetCallbackID(1);
+	layout.Add(new CosmoButton(this, _t("levels.armory")))->SetCallbackID(2);
+	layout.Add(new CosmoButton(this, _t("back_main_menu")))->SetCallbackID(0);
 }
 
 
@@ -81,7 +81,7 @@ void LevelMenu::EventCallback(int id)
 			ControlPanel::getInstance().SetGameInfo(s);
 			// Init entity manager
 			EntityManager::getInstance().InitMode(EntityManager::MODE_STORY);
-			Game::getInstance().setNextScene(Game::SC_InGameScene);
+			Game::getInstance().setNextScene(Game::SC_PlayScreen);
 			break;
 		}
 		// Armory menu

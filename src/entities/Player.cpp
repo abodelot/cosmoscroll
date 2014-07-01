@@ -128,6 +128,8 @@ void Player::onInit()
 	items.getItem(Item::HEATSINK, UserSettings::getItemLevel(Item::HEATSINK)).equip(*this);
 	m_heat = 0;
 	m_panel.setHeat(m_heat);
+	m_overheat = false;
+	m_panel.setOverheat(false);
 
 	// Equip Weapon item
 	items.getItem(Item::WEAPON, UserSettings::getItemLevel(Item::WEAPON)).equip(*this);

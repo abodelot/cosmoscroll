@@ -1,7 +1,7 @@
-#ifndef INTROSCENE_HPP
-#define INTROSCENE_HPP
+#ifndef INTROSCREEN_HPP
+#define INTROSCREEN_HPP
 
-#include "BaseScene.hpp"
+#include "Screen.hpp"
 
 class EntityManager;
 class Player;
@@ -9,10 +9,10 @@ class Player;
 /**
  * Interactive splash screen displayed at game launch
  */
-class IntroScene: public BaseScene
+class IntroScreen: public Screen
 {
 public:
-	IntroScene();
+	IntroScreen();
 
 	void OnEvent(const sf::Event& event) override;
 
@@ -28,5 +28,5 @@ private:
 	Player* ship_;
 };
 
-#endif // INTROSCENE_HPP
+#endif // INTROSCREEN_HPP
 

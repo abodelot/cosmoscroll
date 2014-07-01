@@ -28,7 +28,7 @@ ArmoryMenu::ArmoryMenu()
 	m_credits = new CreditCounterWidget(this);
 
 	// Back button
-	gui::Button* but_back = new CosmoButton(this, _t("menu.back"));
+	gui::Button* but_back = new CosmoButton(this, _t("back"));
 	but_back->setPosition(210, 410);
 	but_back->SetCallbackID(2);
 }

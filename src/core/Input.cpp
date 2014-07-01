@@ -321,7 +321,7 @@ std::wstring Input::buttonToString(unsigned int button)
 	if (button < sf::Joystick::ButtonCount)
 	{
 		std::wostringstream oss;
-		oss << _t("menu.joystick.button") << L' ' << button;
+		oss << _t("joystick.button") << L' ' << button;
 		return oss.str();
 	}
 	return L"Invalid";

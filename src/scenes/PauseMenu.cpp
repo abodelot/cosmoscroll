@@ -10,13 +10,13 @@
 
 PauseMenu::PauseMenu()
 {
-	SetTitle(_t("menu.pause.title"), 120);
+	SetTitle(_t("pause.title"), 120);
 	SetBackground(sf::Sprite());
 
 	gui::VBoxLayout layout(210, 200);
-	layout.Add(new CosmoButton(this, _t("menu.pause.resume")))->SetCallbackID(1);
-	layout.Add(new CosmoButton(this, _t("menu.back_main_menu")))->SetCallbackID(2);
-	layout.Add(new CosmoButton(this, _t("menu.pause.quit")))->SetCallbackID(3);
+	layout.Add(new CosmoButton(this, _t("pause.resume")))->SetCallbackID(1);
+	layout.Add(new CosmoButton(this, _t("back_main_menu")))->SetCallbackID(2);
+	layout.Add(new CosmoButton(this, _t("pause.quit")))->SetCallbackID(3);
 }
 
 
@@ -27,7 +27,7 @@ void PauseMenu::OnEvent(const sf::Event& event)
 	{
 		 // Resume game
 		SoundSystem::playMusic();
-		Game::getInstance().setNextScene(Game::SC_InGameScene);
+		Game::getInstance().setNextScene(Game::SC_PlayScreen);
 	}
 	else
 	{
@@ -51,7 +51,7 @@ void PauseMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 1:
-			game.setNextScene(Game::SC_InGameScene);
+			game.setNextScene(Game::SC_PlayScreen);
 			SoundSystem::playMusic();
 			break;
 		case 2:

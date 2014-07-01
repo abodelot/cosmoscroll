@@ -11,7 +11,7 @@ CreditCounterWidget::CreditCounterWidget(gui::Menu* parent):
 
 	m_credit_label.setFont(*parent->GetWidgetStyle().global_font);
 	m_credit_label.setCharacterSize(18);
-	m_credit_label.setString(_t("menu.story.credits"));
+	m_credit_label.setString(_t("levels.credits"));
 	m_credit_label.setPosition((sfh::width(m_background) - sfh::width(m_credit_label)) / 2, 10);
 
 	m_credit_value.setFont(*parent->GetWidgetStyle().global_font);

@@ -1,28 +1,28 @@
 ## GERMAN
 ## translated by eXpl0it3r
 
-menu.back = Zurück
-menu.back_main_menu = Zurück zum Hauptmenü
-menu.submit = Abschicken
-menu.cancel = Abbrechen
+back = Zurück
+back_main_menu = Zurück zum Hauptmenü
+submit = Abschicken
+cancel = Abbrechen
 
-# Main menu
-menu.main.story = Story-Modus
-menu.main.arcade = Arcade-Modus
-menu.main.options = Optionen
-menu.main.about = Über
-menu.main.quit = Beenden
+# MainMenu
+main.levels = Levels
+main.infinity = Infinity-Modus
+main.options = Optionen
+main.about = Über
+main.quit = Beenden
 
-# Story menu
-menu.story.title = Story-Modus
-menu.story.credits = Kredits:
-menu.story.select = Wählen Sie ein Level:
-menu.story.progression = Fortschritt:
-menu.story.level = Level {number}
-menu.story.play = Spielen
-menu.story.armory = Zeughaus
+# LevelMenu
+levels.title = Levels
+levels.credits = Kredits:
+levels.select = Wählen Sie ein Level:
+levels.progression = Fortschritt:
+levels.level = Level {number}
+levels.play = Spielen
+levels.armory = Zeughaus
 
-# Armory menu
+# ArmoryMenu
 armory.title = Zeughaus
 armory.item_level = Ebene {level}
 armory.item_current_level = Aktuelle Ebene: {level}
@@ -31,71 +31,72 @@ armory.max_level = Max Ebene erreicht
 armory.buy = Kaufen
 armory.upgrade_item = Upgrade auf Ebene {level}
 
-# Pause menu
-menu.pause.title = Pause
-menu.pause.resume = Spiel fortsetzen
-menu.pause.quit = Spiel beenden
+# PauseMenu
+pause.title = Pause
+pause.resume = Spiel fortsetzen
+pause.quit = Spiel beenden
 
-# Arcade menu
-menu.arcade.title = Arcade-Modus
-menu.arcade.play = Spielen
-menu.arcade.best_scores = Zeige bester Score
+# InfinityModeMenu
+infinity.title = Infinity-Modus
+infinity.play = Spielen
+infinity.leaderboard = Zeige bester Score
 
-# Best scores menu
-menu.best_scores.title = Online Highscores
+# LeaderboardMenu
+leaderboard.title = Online Highscores
+leaderboard.wait = Please wait...
 
-# Game over menu
-menu.gameover.title = Game Over
-menu.gameover.pseudo = Dein Name:
-menu.gameover.send_score = Sende meinen Score
-menu.gameover.play_again = Noch einmal spielen
-menu.gameover.new_record = Dein Score: {score}\nGlückwunsch, Neuer Highscore!
-menu.gameover.no_record = Dein Score: {score}\nStreng dich an!
-menu.gameover.error_cheat = Upload verweigert: Du hast gecheated!
-menu.gameover.error_altered_res = Upload verweigert: Spielressourcen wurden modifiziert!
+# SendScoreMenu
+sendscore.title = Game Over
+sendscore.pseudo = Dein Name:
+sendscore.send_score = Sende meinen Score
+sendscore.play_again = Noch einmal spielen
+sendscore.new_record = Dein Score: {score}\nGlückwunsch, Neuer Highscore!
+sendscore.no_record = Dein Score: {score}\nStreng dich an!
+sendscore.error_cheat = Upload verweigert: Du hast gecheated!
+sendscore.error_altered_res = Upload verweigert: Spielressourcen wurden modifiziert!
 
-# Options menu
-menu.options.title = Optionen
-menu.options.keyboard = Tastatur Einstellungen
-menu.options.joystick = Joystick Einstellungen
-menu.options.audio = Sound und Musik
-menu.options.settings = Preferenzen
+# OptionMenu
+options.title = Optionen
+options.keyboard = Tastatur Einstellungen
+options.joystick = Joystick Einstellungen
+options.audio = Sound und Musik
+options.settings = Preferenzen
 
-# Keyboard menu
-menu.keyboard.title = Tastatur Einstellungen
+# KeyboardMenu
+keyboard.title = Tastatur Einstellungen
 
-# Joystick menu
-menu.joystick.title = Joystick Einstellungen
-menu.joystick.button = Knopf
-menu.joystick.sensitivity = Joystick Empfindlichkeit:
+# JoystickMenu
+joystick.title = Joystick Einstellungen
+joystick.button = Knopf
+joystick.sensitivity = Joystick Empfindlichkeit:
 
-# Audio menu
-menu.audio.title = Sound und Musik
-menu.audio.music = Musik:
-menu.audio.enable_music = Aktiviere Musik:
-menu.audio.music_volume = Musik Lautstärke:
-menu.audio.enable_sound = Aktiviere Soundeffekte:
-menu.audio.sound_volume = Soundeffekte Lautstärke:
+# AudioMenu
+audio.title = Sound und Musik
+audio.music = Musik:
+audio.enable_music = Aktiviere Musik:
+audio.music_volume = Musik Lautstärke:
+audio.enable_sound = Aktiviere Soundeffekte:
+audio.sound_volume = Soundeffekte Lautstärke:
 
-# Settings menu
-menu.settings.title = Preferenzen
-menu.settings.vsync = Vertikale Synchronisation:
-menu.settings.fullscreen = Vollbildmodus:
-menu.settings.language = Sprache:
+# SettingsMenu
+settings.title = Preferenzen
+settings.vsync = Vertikale Synchronisation:
+settings.fullscreen = Vollbildmodus:
+settings.language = Sprache:
 
-# About menu
-menu.about.title = Über CosmoScroll
-menu.about.contact = Kontakt:
-menu.about.website = Webseite:
-menu.about.version = Version:
-menu.about.licence = Lizenz:
+# AboutMenu
+about.title = Über CosmoScroll
+about.contact = Kontakt:
+about.website = Webseite:
+about.version = Version:
+about.licence = Lizenz:
 
-# End of game
-endgame.game_over = Game Over
-endgame.level_completed = Level {level} abgeschlossen!\nKredits: +{credits}
-endgame.last_level_completed = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\nKredits: +{credits}
+# GameOverScreen
+gameover.title = Game Over
+gameover.level_completed = Level {level} abgeschlossen!\nKredits: +{credits}
+gameover.last_level_completed = Herzlichen Glückwunsch!\n\nSie haben das Spiel beendet!\nKredits: +{credits}
 
-# Control panel
+# ControlPanel
 panel.bar_hp = Schiff
 panel.bar_shield = Schirm
 panel.bar_heat = Hitze

@@ -5,14 +5,14 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-#include "BaseScene.hpp"
+#include "Screen.hpp"
 #include "CosmoButton.hpp"
 #include "../gui/gui.hpp"
 
 /**
  * Base class for scenes with interactive gui
  */
-class BaseMenu: public BaseScene, public gui::Menu
+class BaseMenu: public Screen, public gui::Menu
 {
 public:
 	BaseMenu();

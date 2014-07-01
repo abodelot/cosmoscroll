@@ -1,15 +1,15 @@
-#ifndef BASESCENE_HPP
-#define BASESCENE_HPP
+#ifndef SCREEN_HPP
+#define SCREEN_HPP
 
 #include <SFML/Graphics.hpp>
 
 /**
- * Base interface for scenes
+ * Base interface for screens
  */
-class BaseScene
+class Screen
 {
 public:
-	virtual ~BaseScene() {}
+	virtual ~Screen() {}
 
 	/**
 	 * On event callback
@@ -33,4 +33,4 @@ public:
 	virtual void Show(sf::RenderTarget& target) const = 0;
 };
 
-#endif // BASESCENE_HPP
+#endif // SCREEN_HPP

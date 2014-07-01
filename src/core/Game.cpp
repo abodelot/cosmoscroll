@@ -173,7 +173,7 @@ void Game::writeConfig() const
 int Game::run()
 {
 	// Set the first displayed scene at launch
-	setNextScene(SC_IntroScene);
+	setNextScene(SC_IntroScreen);
 
 	sf::Clock clock;
 	while (m_running)
@@ -216,25 +216,25 @@ sf::RenderWindow& Game::getWindow()
 }
 
 
-void Game::setNextScene(Scene enum_scene)
+void Game::setNextScene(ScreenID screen_id)
 {
 #define CASE_SCENE(__scene__) \
 	case Game::SC_ ## __scene__:\
 		new_scene = new __scene__();\
 		break
 
-	if (m_scenes[enum_scene] == NULL)
+	if (m_scenes[screen_id] == NULL)
 	{
-		BaseScene *new_scene = NULL;
-		switch (enum_scene)
+		Screen *new_scene = NULL;
+		switch (screen_id)
 		{
-			CASE_SCENE(IntroScene);
+			CASE_SCENE(IntroScreen);
 			CASE_SCENE(MainMenu);
-			CASE_SCENE(InGameScene);
-			CASE_SCENE(EndGameScene);
-			CASE_SCENE(ArcadeMenu);
-			CASE_SCENE(GameOverMenu);
-			CASE_SCENE(BestScoresMenu);
+			CASE_SCENE(PlayScreen);
+			CASE_SCENE(GameOverScreen);
+			CASE_SCENE(InfinityModeMenu);
+			CASE_SCENE(SendScoreMenu);
+			CASE_SCENE(LeaderboardMenu);
 			CASE_SCENE(PauseMenu);
 			CASE_SCENE(AboutMenu);
 			CASE_SCENE(LevelMenu);
@@ -248,10 +248,10 @@ void Game::setNextScene(Scene enum_scene)
 			default:
 				return;
 		}
-		m_scenes[enum_scene] = new_scene;
+		m_scenes[screen_id] = new_scene;
 
 	}
-	m_current_scene = m_scenes[enum_scene];
+	m_current_scene = m_scenes[screen_id];
 	m_current_scene->OnFocus();
 }
 

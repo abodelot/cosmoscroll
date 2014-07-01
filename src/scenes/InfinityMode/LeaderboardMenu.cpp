@@ -1,16 +1,16 @@
 #include <SFML/Network.hpp>
 
-#include "BestScoresMenu.hpp"
+#include "LeaderboardMenu.hpp"
 #include "core/Game.hpp"
 #include "core/Resources.hpp"
 #include "core/Constants.hpp"
 #include "utils/I18n.hpp"
 
 
-BestScoresMenu::BestScoresMenu()
+LeaderboardMenu::LeaderboardMenu()
 {
-	SetTitle(_t("menu.best_scores.title"));
-	gui::Button* b = new CosmoButton(this, _t("menu.back"));
+	SetTitle(_t("leaderboard.title"));
+	gui::Button* b = new CosmoButton(this, _t("back"));
 	b->setPosition(210, 420);
 	b->SetCallbackID(1);
 
@@ -21,18 +21,18 @@ BestScoresMenu::BestScoresMenu()
 }
 
 
-void BestScoresMenu::EventCallback(int id)
+void LeaderboardMenu::EventCallback(int id)
 {
 	switch (id)
 	{
 		case 1:
-			Game::getInstance().setNextScene(Game::SC_ArcadeMenu);
+			Game::getInstance().setNextScene(Game::SC_InfinityModeMenu);
 			break;
 	}
 }
 
 
-void BestScoresMenu::Update(float frametime)
+void LeaderboardMenu::Update(float frametime)
 {
 	if (querying_ == DONE)
 	{
@@ -74,15 +74,15 @@ void BestScoresMenu::Update(float frametime)
 }
 
 
-void BestScoresMenu::Show(sf::RenderTarget& target) const
+void LeaderboardMenu::Show(sf::RenderTarget& target) const
 {
 	BaseMenu::Show(target);
 	target.draw(m_content);
 }
 
 
-void BestScoresMenu::OnFocus()
+void LeaderboardMenu::OnFocus()
 {
-	m_content.setString("Please wait ...");
+	m_content.setString(_t("leaderboard.wait"));
 	querying_ = NOT_STARTED;
 }

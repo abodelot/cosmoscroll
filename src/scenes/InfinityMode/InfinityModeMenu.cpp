@@ -1,4 +1,4 @@
-#include "ArcadeMenu.hpp"
+#include "InfinityModeMenu.hpp"
 #include "utils/I18n.hpp"
 #include "core/Game.hpp"
 #include "core/UserSettings.hpp"
@@ -6,18 +6,18 @@
 #include "entities/EntityManager.hpp"
 
 
-ArcadeMenu::ArcadeMenu()
+InfinityModeMenu::InfinityModeMenu()
 {
-	SetTitle(_t("menu.arcade.title"));
+	SetTitle(_t("infinity.title"));
 
 	gui::VBoxLayout layout(210, 120);
-	layout.Add(new CosmoButton(this, _t("menu.arcade.play")))->SetCallbackID(1);
-	layout.Add(new CosmoButton(this, _t("menu.arcade.best_scores")))->SetCallbackID(2);
-	layout.Add(new CosmoButton(this, _t("menu.back_main_menu")))->SetCallbackID(3);
+	layout.Add(new CosmoButton(this, _t("infinity.play")))->SetCallbackID(1);
+	layout.Add(new CosmoButton(this, _t("infinity.leaderboard")))->SetCallbackID(2);
+	layout.Add(new CosmoButton(this, _t("back_main_menu")))->SetCallbackID(3);
 }
 
 
-void ArcadeMenu::EventCallback(int id)
+void InfinityModeMenu::EventCallback(int id)
 {
 	Game& game = Game::getInstance();
 	switch (id)
@@ -25,10 +25,10 @@ void ArcadeMenu::EventCallback(int id)
 		case 1:
 			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
 			ControlPanel::getInstance().setHighscore(UserSettings::getHighscore());
-			game.setNextScene(Game::SC_InGameScene);
+			game.setNextScene(Game::SC_PlayScreen);
 			break;
 		case 2:
-			game.setNextScene(Game::SC_BestScoresMenu);
+			game.setNextScene(Game::SC_LeaderboardMenu);
 			break;
 		case 3:
 			game.setNextScene(Game::SC_MainMenu);

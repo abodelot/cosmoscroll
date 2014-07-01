@@ -1,28 +1,28 @@
 ## ENGLISH
 ## Translation reference
 
-menu.back = Back
-menu.back_main_menu = Back to main menu
-menu.submit = Submit
-menu.cancel = Cancel
+back = Back
+back_main_menu = Back to main menu
+submit = Submit
+cancel = Cancel
 
-# Main menu
-menu.main.story = Story mode
-menu.main.arcade = Arcade mode
-menu.main.options = Options
-menu.main.about = About
-menu.main.quit = Quit
+# MainMenu
+main.levels = Levels
+main.infinity = Infinity Mode
+main.options = Options
+main.about = About
+main.quit = Quit
 
-# Story menu
-menu.story.title = Story mode
-menu.story.credits = Credits:
-menu.story.select = Select a level:
-menu.story.progression = Progression:
-menu.story.level = Level {number}
-menu.story.play = Play
-menu.story.armory = Armory
+# LevelMenu
+levels.title = Levels
+levels.credits = Credits:
+levels.select = Select a level:
+levels.progression = Progression:
+levels.level = Level {number}
+levels.play = Play
+levels.armory = Armory
 
-# Armory menu
+# ArmoryMenu
 armory.title = Armory
 armory.item_level = Level {level}
 armory.item_current_level = Current level: {level}
@@ -31,71 +31,72 @@ armory.max_level = Max level reached
 armory.buy = Buy
 armory.upgrade_item = Upgrade to level {level}
 
-# Pause menu
-menu.pause.title = Paused
-menu.pause.resume = Resume game
-menu.pause.quit = Exit game
+# PauseMenu
+pause.title = Paused
+pause.resume = Resume game
+pause.quit = Exit game
 
-# Arcade menu
-menu.arcade.title = Arcade Mode
-menu.arcade.play = Play
-menu.arcade.best_scores = View best scores
+# InfinityModeMenu
+infinity.title = Arcade Mode
+infinity.play = Play
+infinity.leaderboard = View best scores
 
-# Best scores menu
-menu.best_scores.title = Online High Scores
+# LeaderboardMenu
+leaderboard.title = Online High Scores
+leaderboard.wait = Please wait...
 
-# Game over menu
-menu.gameover.title = Game Over
-menu.gameover.send_score = Send my score
-menu.gameover.pseudo = Your name:
-menu.gameover.play_again = Play again
-menu.gameover.new_record = Your score: {score}\nCongratulations, new High Score!
-menu.gameover.no_record = Your score: {score}\nPlease try again!
-menu.gameover.error_cheat = Upload denied: you've cheated!
-menu.gameover.error_altered_res = Upload denied: game resources have been modified
+# SendScoreMenu
+sendscore.title = Game Over
+sendscore.send_score = Send my score
+sendscore.pseudo = Your name:
+sendscore.play_again = Play again
+sendscore.new_record = Your score: {score}\nCongratulations, new High Score!
+sendscore.no_record = Your score: {score}\nPlease try again!
+sendscore.error_cheat = Upload denied: you've cheated!
+sendscore.error_altered_res = Upload denied: game resources have been modified
 
-# Options menu
-menu.options.title = Options
-menu.options.keyboard = Keyboard configuration
-menu.options.joystick = Joystick configuration
-menu.options.audio = Sound and music
-menu.options.settings = Settings
+# OptionMenu
+options.title = Options
+options.keyboard = Keyboard configuration
+options.joystick = Joystick configuration
+options.audio = Sound and music
+options.settings = Settings
 
-# Keyboard menu
-menu.keyboard.title = Keyboard configuration
+# KeyboardMenu
+keyboard.title = Keyboard configuration
 
-# Joystick menu
-menu.joystick.title = Joystick configuration
-menu.joystick.button = Button
-menu.joystick.sensitivity = Joystick sensitivity:
+# JoystickMenu
+joystick.title = Joystick configuration
+joystick.button = Button
+joystick.sensitivity = Joystick sensitivity:
 
-# Audio menu
-menu.audio.title = Sound and music
-menu.audio.music = Music:
-menu.audio.enable_music = Enable music:
-menu.audio.music_volume = Music volume:
-menu.audio.enable_sound = Enable sound:
-menu.audio.sound_volume = Sound volume:
+# AudioMenu
+audio.title = Sound and music
+audio.music = Music:
+audio.enable_music = Enable music:
+audio.music_volume = Music volume:
+audio.enable_sound = Enable sound:
+audio.sound_volume = Sound volume:
 
-# Settings menu
-menu.settings.title = Settings
-menu.settings.vsync = Vertical synchronization:
-menu.settings.fullscreen = Fullscreen:
-menu.settings.language = Language:
+# SettingsMenu
+settings.title = Settings
+settings.vsync = Vertical synchronization:
+settings.fullscreen = Fullscreen:
+settings.language = Language:
 
-# About menu
-menu.about.title = About CosmoScroll
-menu.about.contact = Contact:
-menu.about.website = Website:
-menu.about.version = Version:
-menu.about.licence = License:
+# AboutMmenu
+about.title = About CosmoScroll
+about.contact = Contact:
+about.website = Website:
+about.version = Version:
+about.licence = License:
 
-# End of game
-endgame.game_over = Game Over
-endgame.level_completed = Level {level} cleared!\nCredits: +{credits}
-endgame.last_level_completed = Congratulations!\n\nYou've finished the game!\nCredits: +{credits}
+# GameOverScreen
+gameover.title = Game Over
+gameover.level_completed = Level {level} cleared!\nCredits: +{credits}
+gameover.last_level_completed = Congratulations!\n\nYou've finished the game!\nCredits: +{credits}
 
-# Control panel
+# ControlPanel
 panel.bar_hp = Hull
 panel.bar_shield = Shield
 panel.bar_heat = Heat

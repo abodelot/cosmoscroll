@@ -1,7 +1,7 @@
-#ifndef INGAMESCENE_HPP
-#define INGAMESCENE_HPP
+#ifndef PLAYSCREEN_HPP
+#define PLAYSCREEN_HPP
 
-#include "BaseScene.hpp"
+#include "Screen.hpp"
 
 class EntityManager;
 class ControlPanel;
@@ -9,10 +9,10 @@ class ControlPanel;
 /**
  * Playing state
  */
-class InGameScene: public BaseScene
+class PlayScreen: public Screen
 {
 public:
-	InGameScene();
+	PlayScreen();
 
 	void OnEvent(const sf::Event& event) override;
 
@@ -29,5 +29,5 @@ private:
 	ControlPanel&  m_panel;
 };
 
-#endif // INGAMESCENE_HPP
+#endif // PLAYSCREEN_HPP
 

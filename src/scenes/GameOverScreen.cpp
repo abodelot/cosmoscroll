@@ -1,4 +1,4 @@
-#include "EndGameScene.hpp"
+#include "GameOverScreen.hpp"
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "core/Resources.hpp"
@@ -16,8 +16,9 @@
 #define SCREEN_DURATION 7
 
 
-EndGameScene::EndGameScene():
-	m_entities(EntityManager::getInstance())
+GameOverScreen::GameOverScreen():
+	m_entities(EntityManager::getInstance()),
+	m_panel(ControlPanel::getInstance())
 {
 	m_text.setCharacterSize(40);
 	m_text.setColor(sf::Color::White);
@@ -25,7 +26,7 @@ EndGameScene::EndGameScene():
 }
 
 
-void EndGameScene::OnEvent(const sf::Event& event)
+void GameOverScreen::OnEvent(const sf::Event& event)
 {
 	Action::ID action = Input::feedEvent(event);
 	if (action == Action::VALIDATE)
@@ -33,7 +34,7 @@ void EndGameScene::OnEvent(const sf::Event& event)
 }
 
 
-void EndGameScene::OnFocus()
+void GameOverScreen::OnFocus()
 {
 	SoundSystem::stopMusic();
 	m_started_at.restart();
@@ -41,7 +42,7 @@ void EndGameScene::OnFocus()
 	if (m_entities.getPlayer()->isDead())
 	{
 		SoundSystem::playSound("game-over.ogg");
-		m_text.setString(_t("endgame.game_over"));
+		m_text.setString(_t("gameover.title"));
 	}
 	else
 	{
@@ -55,11 +56,11 @@ void EndGameScene::OnFocus()
 		// If last level completed
 		if (current == levels.getLevelCount())
 		{
-			m_text.setString(I18n::templatize("endgame.last_level_completed", "{credits}", earned_credits));
+			m_text.setString(I18n::templatize("gameover.last_level_completed", "{credits}", earned_credits));
 		}
 		else
 		{
-			m_text.setString(I18n::templatize("endgame.level_completed", "{level}", current, "{credits}", earned_credits));
+			m_text.setString(I18n::templatize("gameover.level_completed", "{level}", current, "{credits}", earned_credits));
 			// Unlock next level
 			if (current == levels.getLastUnlocked())
 			{
@@ -77,7 +78,7 @@ void EndGameScene::OnFocus()
 }
 
 
-void EndGameScene::Update(float frametime)
+void GameOverScreen::Update(float frametime)
 {
 	Player* player = m_entities.getPlayer();
 	if (player->isDead())
@@ -93,18 +94,18 @@ void EndGameScene::Update(float frametime)
 }
 
 
-void EndGameScene::Show(sf::RenderTarget& target) const
+void GameOverScreen::Show(sf::RenderTarget& target) const
 {
-	target.draw(ControlPanel::getInstance());
+	target.draw(m_panel);
 	target.draw(m_entities);
 	target.draw(m_text);
 }
 
 
-void EndGameScene::goNextScreen() const
+void GameOverScreen::goNextScreen() const
 {
 	if (m_entities.GetMode() == EntityManager::MODE_STORY)
 		Game::getInstance().setNextScene(Game::SC_LevelMenu);
 	else
-		Game::getInstance().setNextScene(Game::SC_GameOverMenu);
+		Game::getInstance().setNextScene(Game::SC_SendScoreMenu);
 }

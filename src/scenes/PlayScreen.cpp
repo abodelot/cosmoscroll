@@ -1,4 +1,4 @@
-#include "InGameScene.hpp"
+#include "PlayScreen.hpp"
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "core/UserSettings.hpp"
@@ -8,14 +8,14 @@
 #include "entities/Player.hpp"
 
 
-InGameScene::InGameScene():
+PlayScreen::PlayScreen():
 	m_entities(EntityManager::getInstance()),
 	m_panel(ControlPanel::getInstance())
 {
 }
 
 
-void InGameScene::OnEvent(const sf::Event& event)
+void PlayScreen::OnEvent(const sf::Event& event)
 {
 	Action::ID action = Input::feedEvent(event);
 	switch (action)
@@ -51,7 +51,7 @@ void InGameScene::OnEvent(const sf::Event& event)
 }
 
 
-void InGameScene::OnFocus()
+void PlayScreen::OnFocus()
 {
 	Game::getInstance().getWindow().setMouseCursorVisible(false);
 	Game::getInstance().getWindow().setKeyRepeatEnabled(false);
@@ -60,11 +60,11 @@ void InGameScene::OnFocus()
 }
 
 
-void InGameScene::Update(float frametime)
+void PlayScreen::Update(float frametime)
 {
 	if (m_entities.spawnBadGuys())
 	{
-		Game::getInstance().setNextScene(Game::SC_EndGameScene);
+		Game::getInstance().setNextScene(Game::SC_GameOverScreen);
 	}
 	else
 	{
@@ -75,14 +75,14 @@ void InGameScene::Update(float frametime)
 }
 
 
-void InGameScene::Show(sf::RenderTarget& target) const
+void PlayScreen::Show(sf::RenderTarget& target) const
 {
 	target.draw(m_entities);
 	target.draw(m_panel);
 }
 
 
-void InGameScene::setPanelOnTop(bool top)
+void PlayScreen::setPanelOnTop(bool top)
 {
 	if (top)
 	{

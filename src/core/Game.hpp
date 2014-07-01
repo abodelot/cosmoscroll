@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class BaseScene;
+class Screen;
 
 /**
  * Game controller singleton
@@ -11,14 +11,14 @@ class BaseScene;
 class Game
 {
 public:
-	enum Scene
+	enum ScreenID
 	{
-		SC_IntroScene,
-		SC_InGameScene,
-		SC_EndGameScene,
-		SC_ArcadeMenu,
-		SC_GameOverMenu,
-		SC_BestScoresMenu,
+		SC_IntroScreen,
+		SC_PlayScreen,
+		SC_GameOverScreen,
+		SC_InfinityModeMenu,
+		SC_SendScoreMenu,
+		SC_LeaderboardMenu,
 		SC_PauseMenu,
 		SC_MainMenu,
 		SC_AboutMenu,
@@ -72,7 +72,7 @@ public:
 	/**
 	 * Set next scene to be displayed
 	 */
-	void setNextScene(Scene scene);
+	void setNextScene(ScreenID screen);
 
 	void reloadScenes();
 
@@ -120,9 +120,9 @@ private:
 	bool m_running;
 	bool m_resources_checked;
 
-	// scenes
-	BaseScene* m_scenes[SC_COUNT];
-	BaseScene* m_current_scene;
+	// Screens
+	Screen* m_scenes[SC_COUNT];
+	Screen* m_current_scene;
 
 	std::string m_app_dir; // Directory from which application is running
 	std::string m_config_filename;

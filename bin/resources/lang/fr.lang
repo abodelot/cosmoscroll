@@ -1,28 +1,28 @@
 ## FRENCH
-## translated by Cosmoscroll team
 
-menu.back = Retour
-menu.back_main_menu = Retour menu principal
-menu.submit = Envoyer
-menu.cancel = Annuler
 
-# Menu principal
-menu.main.story = Mode Histoire
-menu.main.arcade = Mode Arcade
-menu.main.options = Options
-menu.main.about = À propos
-menu.main.quit = Quitter
+back = Retour
+back_main_menu = Retour menu principal
+submit = Envoyer
+cancel = Annuler
 
-# Menu Histoire
-menu.story.title = Mode Histoire
-menu.story.credits = Crédits :
-menu.story.select = Sélectionnez un niveau :
-menu.story.progression = Avancement :
-menu.story.level = Niveau {number}
-menu.story.play = Jouer
-menu.story.armory = Armurerie
+# MainMenu
+main.levels = Niveaux
+main.infinity = Mode Infini
+main.options = Options
+main.about = À propos
+main.quit = Quitter
 
-# Menu armurerie
+# LevelMenu
+levels.title = Niveaux
+levels.credits = Crédits :
+levels.select = Sélectionnez un niveau :
+levels.progression = Avancement :
+levels.level = Niveau {number}
+levels.play = Jouer
+levels.armory = Armurerie
+
+# ArmoryMenu
 armory.title = Armurerie
 armory.item_level = Niveau {level}
 armory.item_current_level = Niveau actuel : {level}
@@ -31,71 +31,72 @@ armory.max_level = Niveau max atteint
 armory.buy = Acheter
 armory.upgrade_item = Passer au niveau {level}
 
-# Menu pause
-menu.pause.title = Pause
-menu.pause.resume = Reprendre la partie
-menu.pause.quit = Quitter le jeu
+# PauseMenu
+pause.title = Pause
+pause.resume = Reprendre la partie
+pause.quit = Quitter le jeu
 
-# Arcade menu
-menu.arcade.title = Mode Arcade
-menu.arcade.play = Jouer
-menu.arcade.best_scores = Meilleurs scores
+# InfinityModeMenu
+infinity.title = Mode infini
+infinity.play = Jouer
+infinity.leaderboard = Meilleurs scores
 
-# Best scores menu
-menu.best_scores.title = Records en ligne
+# LeaderboardMenu
+leaderboard.title = Records en ligne
+leaderboard.wait = Veuillez patienter...
 
-# Menu game over
-menu.gameover.title = Game Over
-menu.gameover.pseudo = Votre nom :
-menu.gameover.send_score = Envoyer mon score
-menu.gameover.play_again = Rejouer
-menu.gameover.new_record = Votre score : {score}\nFélicitations, nouveau record !
-menu.gameover.no_record = Votre score : {score}\nEssayez encore !
-menu.gameover.error_cheat = Envoi interdit pour les tricheurs !
-menu.gameover.error_altered_res = Envoi interdit, version du jeu modifiée
+# SendScoreMenu
+sendscore.title = Game Over
+sendscore.pseudo = Votre nom :
+sendscore.send_score = Envoyer mon score
+sendscore.play_again = Rejouer
+sendscore.new_record = Votre score : {score}\nFélicitations, nouveau record !
+sendscore.no_record = Votre score : {score}\nEssayez encore !
+sendscore.error_cheat = Envoi interdit pour les tricheurs !
+sendscore.error_altered_res = Envoi interdit, version du jeu modifiée
 
-# Menu options
-menu.options.title = Options
-menu.options.keyboard = Configuration clavier
-menu.options.joystick = Configuration joystick
-menu.options.audio = Son et musique
-menu.options.settings = Préférences
+# OptionMenu
+options.title = Options
+options.keyboard = Configuration clavier
+options.joystick = Configuration joystick
+options.audio = Son et musique
+options.settings = Préférences
 
-# Menu clavier
-menu.keyboard.title = Configuration clavier
+# KeyboardMenu
+keyboard.title = Configuration clavier
 
-# Menu joystick
-menu.joystick.title = Configuration joystick
-menu.joystick.button = Bouton
-menu.joystick.sensitivity = Sensibilité du joystick :
+# JoystickMenu
+joystick.title = Configuration joystick
+joystick.button = Bouton
+joystick.sensitivity = Sensibilité du joystick :
 
-# Menu sons
-menu.audio.title = Son et musique
-menu.audio.music = Musique :
-menu.audio.enable_music = Activer la musique :
-menu.audio.music_volume = Volume de la musique :
-menu.audio.enable_sound = Activer les sons :
-menu.audio.sound_volume = Volume du son :
+# AudioMenu
+audio.title = Son et musique
+audio.music = Musique :
+audio.enable_music = Activer la musique :
+audio.music_volume = Volume de la musique :
+audio.enable_sound = Activer les sons :
+audio.sound_volume = Volume du son :
 
-# Menu préférences
-menu.settings.title = Préférences
-menu.settings.vsync = Synchronisation verticale :
-menu.settings.fullscreen = Plein écran :
-menu.settings.language = Langue :
+# SettingsMenu
+settings.title = Préférences
+settings.vsync = Synchronisation verticale :
+settings.fullscreen = Plein écran :
+settings.language = Langue :
 
-# Menu à propos
-menu.about.title = À propos de CosmoScroll
-menu.about.contact = Contact :
-menu.about.website = Site web :
-menu.about.version = Version :
-menu.about.licence = Licence :
+# AboutMenu
+about.title = À propos de CosmoScroll
+about.contact = Contact :
+about.website = Site web :
+about.version = Version :
+about.licence = Licence :
 
-# Fin de jeu
-endgame.game_over = Game Over
-endgame.level_completed = Niveau {level} terminé !\nCrédits : +{credits}
-endgame.last_level_completed = Félicitations !\n\nVous avez terminé le jeu!\nCrédits : +{credits}
+# GameOverScreen
+gameover.title = Game Over
+gameover.level_completed = Niveau {level} terminé !\nCrédits : +{credits}
+gameover.last_level_completed = Félicitations !\n\nVous avez terminé le jeu!\nCrédits : +{credits}
 
-# Panneau de contrôle
+# ControlPanel
 panel.bar_hp = Coque
 panel.bar_shield = Bouclier
 panel.bar_heat = Chaleur

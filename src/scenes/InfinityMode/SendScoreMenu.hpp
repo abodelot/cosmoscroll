@@ -1,19 +1,19 @@
-#ifndef GAMEOVERMENU_HPP
-#define GAMEOVERMENU_HPP
+#ifndef SENDSCOREMENU_HPP
+#define SENDSCOREMENU_HPP
 
 #include "scenes/BaseMenu.hpp"
 
-class GameOverMenu: public BaseMenu
+class SendScoreMenu: public BaseMenu
 {
 public:
-	GameOverMenu();
+	SendScoreMenu();
 
 	void OnFocus() override;
 
 private:
 	void EventCallback(int id) override;
 
-	void UploadScore();
+	void uploadScore();
 
 	int score_;
 	gui::Label* lab_result_;
@@ -23,5 +23,5 @@ private:
 	gui::TextBox* txt_pseudo_;
 };
 
-#endif // GAMEOVERMENU_HPP
+#endif // SENDSCOREMENU_HPP
 

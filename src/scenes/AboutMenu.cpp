@@ -7,13 +7,13 @@
 
 AboutMenu::AboutMenu()
 {
-	SetTitle(_t("menu.about.title"));
+	SetTitle(_t("about.title"));
 
 	std::wostringstream oss;
 	oss << VERSION_STRING << "\n"
-	    << _t("menu.about.contact") << " " << APP_AUTHOR << "\n"
-	    << _t("menu.about.website") << " " << COSMOSCROLL_WEBSITE << "\n"
-	    << _t("menu.about.licence") << " " << APP_LICENSE << "\n\n"
+	    << _t("about.contact") << " " << APP_AUTHOR << "\n"
+	    << _t("about.website") << " " << COSMOSCROLL_WEBSITE << "\n"
+	    << _t("about.licence") << " " << APP_LICENSE << "\n\n"
 	    << "Build: " << __DATE__;
 
 	gui::Label* about_text = new gui::Label(this, oss.str());
@@ -23,7 +23,7 @@ AboutMenu::AboutMenu()
 
 	new gui::Image(this, Resources::getTexture("gui/libraries-logo.png"), 70, 280);
 
-	gui::Button* b = new CosmoButton(this, _t("menu.back"));
+	gui::Button* b = new CosmoButton(this, _t("back"));
 	b->setPosition(210, 410);
 	b->SetCallbackID(1);
 }
