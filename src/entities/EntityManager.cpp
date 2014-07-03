@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <iostream>
+#include <cassert>
 #include "EntityManager.hpp"
 #include "Asteroid.hpp"
 #include "Player.hpp"
