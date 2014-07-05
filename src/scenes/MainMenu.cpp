@@ -9,8 +9,8 @@
 
 MainMenu::MainMenu()
 {
-	title_.setTexture(Resources::getTexture("gui/cosmoscroll-logo.png"));
-	title_.setPosition((APP_WIDTH - sfh::width(title_)) / 2, 12);
+	m_title.setTexture(Resources::getTexture("gui/cosmoscroll-logo.png"));
+	m_title.setPosition((APP_WIDTH - sfh::width(m_title)) / 2, 12);
 
 	gui::VBoxLayout layout(210, 120);
 	layout.SetSpacing(0, 10);
@@ -23,10 +23,10 @@ MainMenu::MainMenu()
 }
 
 
-void MainMenu::Show(sf::RenderTarget& target) const
+void MainMenu::draw(sf::RenderTarget& target) const
 {
-	BaseMenu::Show(target);
-	target.draw(title_);
+	BaseMenu::draw(target);
+	target.draw(m_title);
 }
 
 
@@ -36,16 +36,16 @@ void MainMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 1:
-			game.setNextScene(Game::SC_LevelMenu);
+			game.setCurrentScreen(Game::SC_LevelMenu);
 			break;
 		case 2:
-			game.setNextScene(Game::SC_InfinityModeMenu);
+			game.setCurrentScreen(Game::SC_InfinityModeMenu);
 			break;
 		case 3:
-			game.setNextScene(Game::SC_OptionMenu);
+			game.setCurrentScreen(Game::SC_OptionMenu);
 			break;
 		case 4:
-			game.setNextScene(Game::SC_AboutMenu);
+			game.setCurrentScreen(Game::SC_AboutMenu);
 			break;
 		case 5:
 			game.quit();

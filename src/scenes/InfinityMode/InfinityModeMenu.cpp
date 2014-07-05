@@ -8,7 +8,7 @@
 
 InfinityModeMenu::InfinityModeMenu()
 {
-	SetTitle(_t("infinity.title"));
+	setTitle(_t("infinity.title"));
 
 	gui::VBoxLayout layout(210, 120);
 	layout.Add(new CosmoButton(this, _t("infinity.play")))->SetCallbackID(1);
@@ -25,13 +25,13 @@ void InfinityModeMenu::EventCallback(int id)
 		case 1:
 			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
 			ControlPanel::getInstance().setHighscore(UserSettings::getHighscore());
-			game.setNextScene(Game::SC_PlayScreen);
+			game.setCurrentScreen(Game::SC_PlayScreen);
 			break;
 		case 2:
-			game.setNextScene(Game::SC_LeaderboardMenu);
+			game.setCurrentScreen(Game::SC_LeaderboardMenu);
 			break;
 		case 3:
-			game.setNextScene(Game::SC_MainMenu);
+			game.setCurrentScreen(Game::SC_MainMenu);
 			break;
 	}
 }

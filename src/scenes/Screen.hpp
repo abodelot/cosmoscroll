@@ -12,25 +12,25 @@ public:
 	virtual ~Screen() {}
 
 	/**
-	 * On event callback
+	 * The screen received an event
 	 */
-	virtual void OnEvent(const sf::Event& event) = 0;
+	virtual void onEvent(const sf::Event& event) = 0;
 
 	/**
-	 * On focus callback (this scene became the current one)
+	 * The screen is the current one
 	 */
-	virtual void OnFocus() {}
+	virtual void onFocus() {}
 
 	/**
-	 * Update scene
+	 * Update screen
 	 * @param frametime: time elapsed in the current frame
 	 */
-	virtual void Update(float frametime) { (void) frametime; }
+	virtual void update(float frametime) = 0;
 
 	/**
-	 * Display scene
+	 * Display screen on render target
 	 */
-	virtual void Show(sf::RenderTarget& target) const = 0;
+	virtual void draw(sf::RenderTarget& target) const = 0;
 };
 
 #endif // SCREEN_HPP

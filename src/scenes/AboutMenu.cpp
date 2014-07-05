@@ -7,7 +7,7 @@
 
 AboutMenu::AboutMenu()
 {
-	SetTitle(_t("about.title"));
+	setTitle(_t("about.title"));
 
 	std::wostringstream oss;
 	oss << VERSION_STRING << "\n"
@@ -33,7 +33,7 @@ void AboutMenu::EventCallback(int id)
 {
 	if (id == 1)
 	{
-		Game::getInstance().setNextScene(Game::SC_MainMenu);
+		Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
 	}
 }
 

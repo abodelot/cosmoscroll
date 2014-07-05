@@ -13,8 +13,9 @@ class KeyboardMenu: public BaseMenu
 public:
 	KeyboardMenu();
 
-	void OnEvent(const sf::Event& event);
-	void OnFocus();
+	void onEvent(const sf::Event& event) override;
+
+	void onFocus() override;
 
 private:
 	void EventCallback(int id) override;

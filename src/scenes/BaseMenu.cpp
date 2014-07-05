@@ -5,67 +5,68 @@
 #include "utils/SFML_Helper.hpp"
 
 
-gui::WidgetStyle BaseMenu::global_style_;
+gui::WidgetStyle BaseMenu::m_gui_style;
 
-BaseMenu::BaseMenu(): gui::Menu(global_style_)
+BaseMenu::BaseMenu():
+	gui::Menu(m_gui_style),
+	m_ui_background(Resources::getTexture("gui/main-screen.png")),
+	m_scrolling_background(Resources::getTexture("gui/background.png"))
 {
-	SetBackground(sf::Sprite(Resources::getTexture("gui/main-screen.png")));
-	scrolling_background_.setTexture(Resources::getTexture("gui/background.png"));
-
-	GetWidgetStyle().global_font = &Resources::getFont("hemi-head.ttf");
-	GetWidgetStyle().global_fixed_font = &Resources::getFont("VeraMono.ttf");
+	m_gui_style.global_font = &Resources::getFont("hemi-head.ttf");
+	m_gui_style.global_fixed_font = &Resources::getFont("VeraMono.ttf");
 }
 
 
-void BaseMenu::OnEvent(const sf::Event& event)
+void BaseMenu::onEvent(const sf::Event& event)
 {
 	// propaging events to gui
 	gui::Menu::OnEvent(event);
 }
 
 
-void BaseMenu::Update(float frametime)
+void BaseMenu::update(float frametime)
 {
-	static const int SPEED = 30;
 	static float y = 0;
-	y -= SPEED * frametime;
+	// Apply vertical scrolling
+	y -= 30.f * frametime;
 	if (y < 0)
 	{
 		y = APP_HEIGHT;
 	}
-	scrolling_background_.setPosition(0, y);
+	m_scrolling_background.setPosition(0, y);
 
 	// updating gui
 	gui::Menu::Update(frametime);
 }
 
 
-void BaseMenu::Show(sf::RenderTarget& target) const
+void BaseMenu::draw(sf::RenderTarget& target) const
 {
-	// drawing background twice for scrolling purpose
-	target.draw(scrolling_background_);
-	scrolling_background_.setOrigin(0.f, sfh::height(scrolling_background_));
-	target.draw(scrolling_background_);
-	scrolling_background_.setOrigin(0.f, 0.f);
+	// Draw scrolling background twice
+	target.draw(m_scrolling_background);
+	m_scrolling_background.setOrigin(0.f, sfh::height(m_scrolling_background));
+	target.draw(m_scrolling_background);
+	m_scrolling_background.setOrigin(0.f, 0.f);
 
-	// drawing gui
+	// Draw gui
+	target.draw(m_ui_background);
 	gui::Menu::Show(target);
-	target.draw(title_);
+	target.draw(m_title);
 }
 
 
-void BaseMenu::SetTitle(const sf::String& text, int y)
+void BaseMenu::setTitle(const sf::String& text, int y)
 {
-	title_.setFont(*GetWidgetStyle().global_font);
-	title_.setCharacterSize(40);
-	title_.setString(text);
-	title_.setPosition((int) (APP_WIDTH - sfh::width(title_)) / 2, y);
+	m_title.setFont(*m_gui_style.global_font);
+	m_title.setCharacterSize(40);
+	m_title.setString(text);
+	m_title.setPosition((int) (APP_WIDTH - sfh::width(m_title)) / 2, y);
 }
 
 
-const sf::Text& BaseMenu::GetTitle() const
+const sf::Text& BaseMenu::getTitle() const
 {
-	return title_;
+	return m_title;
 }
 
 

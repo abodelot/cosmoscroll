@@ -70,11 +70,14 @@ public:
 	void quit();
 
 	/**
-	 * Set next scene to be displayed
+	 * Set screen to be displayed
 	 */
-	void setNextScene(ScreenID screen);
+	void setCurrentScreen(ScreenID screen);
 
-	void reloadScenes();
+	/**
+	 * Deallocate loaded screens, except the current one
+	 */
+	void unloadScreens();
 
 	/**
 	 * Holds fullscreen mode property
@@ -121,8 +124,8 @@ private:
 	bool m_resources_checked;
 
 	// Screens
-	Screen* m_scenes[SC_COUNT];
-	Screen* m_current_scene;
+	Screen* m_screens[SC_COUNT];
+	Screen* m_current_screen;
 
 	std::string m_app_dir; // Directory from which application is running
 	std::string m_config_filename;

@@ -52,8 +52,8 @@ sendscore.send_score = Sende meinen Score
 sendscore.play_again = Noch einmal spielen
 sendscore.new_record = Dein Score: {score}\nGlückwunsch, Neuer Highscore!
 sendscore.no_record = Dein Score: {score}\nStreng dich an!
-sendscore.error_cheat = Upload verweigert: Du hast gecheated!
-sendscore.error_altered_res = Upload verweigert: Spielressourcen wurden modifiziert!
+sendscore.error_cheat = Upload verweigert:\nDu hast gecheated!
+sendscore.error_altered_res = Upload verweigert:\nSpielressourcen wurden modifiziert!
 
 # OptionMenu
 options.title = Optionen

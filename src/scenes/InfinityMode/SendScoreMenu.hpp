@@ -3,19 +3,22 @@
 
 #include "scenes/BaseMenu.hpp"
 
+/**
+ * Ask player name and upload score to the leaderboard
+ */
 class SendScoreMenu: public BaseMenu
 {
 public:
 	SendScoreMenu();
 
-	void OnFocus() override;
+	void onFocus() override;
 
 private:
 	void EventCallback(int id) override;
 
 	void uploadScore();
 
-	int score_;
+	int m_score;
 	gui::Label* lab_result_;
 	CosmoButton* but_send_score_;
 	CosmoButton* but_commit_;

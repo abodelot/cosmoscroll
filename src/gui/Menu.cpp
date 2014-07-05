@@ -5,12 +5,12 @@
 using namespace gui;
 
 
-Menu::Menu(WidgetStyle& style)
+Menu::Menu(WidgetStyle& style):
+	theme_(style)
 {
 	focus_ = NULL;
 	focus_index_ = -1;
 	hovered_widget_ = NULL;
-	theme_ = &style;
 }
 
 
@@ -184,7 +184,6 @@ void Menu::Update(float frametime)
 
 void Menu::Show(sf::RenderTarget& target) const
 {
-	target.draw(background_);
 	for (WidgetList::const_iterator it = widgets_.begin(); it != widgets_.end(); ++it)
 	{
 		if ((**it).IsVisible())
@@ -211,18 +210,12 @@ void Menu::AddWidget(Widget* widget)
 }
 
 
-void Menu::SetBackground(const sf::Sprite& sprite)
-{
-	background_ = sprite;
-}
-
-
 void Menu::EventCallback(int) {}
 
 
 WidgetStyle& Menu::GetWidgetStyle()
 {
-	return *theme_;
+	return theme_;
 }
 
 

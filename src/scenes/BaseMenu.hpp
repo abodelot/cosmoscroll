@@ -17,25 +17,26 @@ class BaseMenu: public Screen, public gui::Menu
 public:
 	BaseMenu();
 
-	void OnEvent(const sf::Event& event) override;
+	void onEvent(const sf::Event& event) override;
 
-	void Update(float frametime) override;
+	void update(float frametime) override;
 
-	void Show(sf::RenderTarget& target) const override;
+	void draw(sf::RenderTarget& target) const override;
 
 protected:
 	/**
 	 * Set menu title (top of the screen)
 	 */
-	void SetTitle(const sf::String& text, int y = 20);
-	const sf::Text& GetTitle() const;
+	void setTitle(const sf::String& text, int y = 20);
+	const sf::Text& getTitle() const;
 
 	void OnWidgetFocused() override;
 
 private:
-	sf::Text title_;
-	mutable sf::Sprite scrolling_background_;
-	static gui::WidgetStyle global_style_;
+	sf::Text           m_title;
+	sf::Sprite         m_ui_background;
+	mutable sf::Sprite m_scrolling_background;
+	static gui::WidgetStyle m_gui_style;
 };
 
 #endif // BASEMENU_HPP

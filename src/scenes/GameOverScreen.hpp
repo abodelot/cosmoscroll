@@ -11,13 +11,13 @@ class GameOverScreen: public Screen
 public:
 	GameOverScreen();
 
-	void OnEvent(const sf::Event& event) override;
+	void onEvent(const sf::Event& event) override;
 
-	void OnFocus() override;
+	void onFocus() override;
 
-	void Update(float frametime) override;
+	void update(float frametime) override;
 
-	void Show(sf::RenderTarget& target) const override;
+	void draw(sf::RenderTarget& target) const override;
 
 private:
 	void goNextScreen() const;

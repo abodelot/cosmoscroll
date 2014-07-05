@@ -11,7 +11,7 @@
 
 ArmoryMenu::ArmoryMenu()
 {
-	SetTitle(_t("armory.title"));
+	setTitle(_t("armory.title"));
 
 	// Upgrade item
 	gui::VBoxLayout layout(100, 90);
@@ -34,7 +34,7 @@ ArmoryMenu::ArmoryMenu()
 }
 
 
-void ArmoryMenu::OnFocus()
+void ArmoryMenu::onFocus()
 {
 	// Refresh UI
 	m_credits->setCredits(UserSettings::getCredits());
@@ -50,10 +50,10 @@ void ArmoryMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 1:
-			OnFocus();
+			onFocus();
 			break;
 		case 2:
-			Game::getInstance().setNextScene(Game::SC_LevelMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
 			break;
 	}
 }

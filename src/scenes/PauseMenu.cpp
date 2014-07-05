@@ -10,8 +10,7 @@
 
 PauseMenu::PauseMenu()
 {
-	SetTitle(_t("pause.title"), 120);
-	SetBackground(sf::Sprite());
+	setTitle(_t("pause.title"), 120);
 
 	gui::VBoxLayout layout(210, 200);
 	layout.Add(new CosmoButton(this, _t("pause.resume")))->SetCallbackID(1);
@@ -20,23 +19,23 @@ PauseMenu::PauseMenu()
 }
 
 
-void PauseMenu::OnEvent(const sf::Event& event)
+void PauseMenu::onEvent(const sf::Event& event)
 {
 	Action::ID action = Input::feedEvent(event);
 	if (action == Action::PAUSE)
 	{
 		 // Resume game
 		SoundSystem::playMusic();
-		Game::getInstance().setNextScene(Game::SC_PlayScreen);
+		Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
 	}
 	else
 	{
-		BaseMenu::OnEvent(event);
+		BaseMenu::onEvent(event);
 	}
 }
 
 
-void PauseMenu::OnFocus()
+void PauseMenu::onFocus()
 {
 	Game::getInstance().getWindow().setMouseCursorVisible(true);
 	Game::getInstance().getWindow().setKeyRepeatEnabled(true);
@@ -51,11 +50,11 @@ void PauseMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 1:
-			game.setNextScene(Game::SC_PlayScreen);
+			game.setCurrentScreen(Game::SC_PlayScreen);
 			SoundSystem::playMusic();
 			break;
 		case 2:
-			game.setNextScene(Game::SC_MainMenu);
+			game.setCurrentScreen(Game::SC_MainMenu);
 			break;
 		case 3:
 			game.quit();
@@ -64,17 +63,17 @@ void PauseMenu::EventCallback(int id)
 }
 
 
-void PauseMenu::Update(float frametime)
+void PauseMenu::update(float frametime)
 {
 	ParticleSystem::getInstance().update(frametime);
 }
 
 
-void PauseMenu::Show(sf::RenderTarget& target) const
+void PauseMenu::draw(sf::RenderTarget& target) const
 {
 	target.draw(ControlPanel::getInstance());
 	target.draw(EntityManager::getInstance());
-	target.draw(GetTitle());
+	target.draw(getTitle());
 	gui::Menu::Show(target);
 }
 

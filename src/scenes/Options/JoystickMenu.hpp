@@ -13,8 +13,9 @@ class JoystickMenu: public BaseMenu
 public:
 	JoystickMenu();
 
-	void OnEvent(const sf::Event& event) override;
-	void OnFocus() override;
+	void onEvent(const sf::Event& event) override;
+
+	void onFocus() override;
 
 private:
 	void EventCallback(int id) override;

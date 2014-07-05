@@ -9,7 +9,7 @@
 LevelMenu::LevelMenu():
 	m_levels(LevelManager::getInstance())
 {
-	SetTitle(_t("levels.title"));
+	setTitle(_t("levels.title"));
 	m_credits = new CreditCounterWidget(this);
 
 	gui::FormLayout form(90, 120);
@@ -28,7 +28,7 @@ LevelMenu::LevelMenu():
 }
 
 
-void LevelMenu::OnFocus()
+void LevelMenu::onFocus()
 {
 	m_credits->setCredits(UserSettings::getCredits());
 	size_t nb_levels = m_levels.getLevelCount();
@@ -59,7 +59,7 @@ void LevelMenu::EventCallback(int id)
 	{
 		// Back to main menu
 		case 0:
-			Game::getInstance().setNextScene(Game::SC_MainMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
 			break;
 
 		// Launch selected level
@@ -81,12 +81,12 @@ void LevelMenu::EventCallback(int id)
 			ControlPanel::getInstance().SetGameInfo(s);
 			// Init entity manager
 			EntityManager::getInstance().InitMode(EntityManager::MODE_STORY);
-			Game::getInstance().setNextScene(Game::SC_PlayScreen);
+			Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
 			break;
 		}
 		// Armory menu
 		case 2:
-			Game::getInstance().setNextScene(Game::SC_ArmoryMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_ArmoryMenu);
 			break;
 	}
 }

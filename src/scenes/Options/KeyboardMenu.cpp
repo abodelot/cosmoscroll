@@ -6,7 +6,7 @@
 KeyboardMenu::KeyboardMenu():
 	m_triggered(NULL)
 {
-	SetTitle(_t("keyboard.title"));
+	setTitle(_t("keyboard.title"));
 
 	gui::FormLayout form(80, 120);
 	form.SetSpacing(60, 10);
@@ -24,7 +24,7 @@ KeyboardMenu::KeyboardMenu():
 }
 
 
-void KeyboardMenu::OnEvent(const sf::Event& event)
+void KeyboardMenu::onEvent(const sf::Event& event)
 {
 	if (m_triggered != NULL)
 	{
@@ -36,7 +36,7 @@ void KeyboardMenu::OnEvent(const sf::Event& event)
 				// Bind action to pressed key
 				Action::ID action = m_triggered->getAction();
 				Input::setKeyBinding(event.key.code, action);
-				OnFocus();
+				onFocus();
 			}
 			else
 			{
@@ -53,7 +53,7 @@ void KeyboardMenu::OnEvent(const sf::Event& event)
 }
 
 
-void KeyboardMenu::OnFocus()
+void KeyboardMenu::onFocus()
 {
 	m_triggered = NULL;
 	// Refresh labels
@@ -81,7 +81,7 @@ void KeyboardMenu::EventCallback(int id)
 		case Action::USE_COOLER:  m_triggered = but_cooler_;  break;
 		case Action::USE_MISSILE: m_triggered = but_missile_; break;
 		case 9000:
-			Game::getInstance().setNextScene(Game::SC_OptionMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
 			break;
 	}
 	// We are now waiting for user input

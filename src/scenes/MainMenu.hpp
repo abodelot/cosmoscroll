@@ -11,12 +11,12 @@ class MainMenu: public BaseMenu
 public:
 	MainMenu();
 
-	void Show(sf::RenderTarget& target) const override;
+	void draw(sf::RenderTarget& target) const override;
 
 private:
 	void EventCallback(int id) override;
 
-	sf::Sprite title_;
+	sf::Sprite m_title;
 };
 
 #endif // MAINMENU_HPP

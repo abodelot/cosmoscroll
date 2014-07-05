@@ -53,7 +53,7 @@ sendscore.play_again = Rejouer
 sendscore.new_record = Votre score : {score}\nFélicitations, nouveau record !
 sendscore.no_record = Votre score : {score}\nEssayez encore !
 sendscore.error_cheat = Envoi interdit pour les tricheurs !
-sendscore.error_altered_res = Envoi interdit, version du jeu modifiée
+sendscore.error_altered_res = Envoi interdit :\nles ressources du jeu ont été modifiées
 
 # OptionMenu
 options.title = Options

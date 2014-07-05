@@ -13,7 +13,7 @@
 #include "utils/I18n.hpp"
 
 // Switch to next menu after this delay
-#define SCREEN_DURATION 7
+const float SCREEN_DURATION = 7.f;
 
 
 GameOverScreen::GameOverScreen():
@@ -26,7 +26,7 @@ GameOverScreen::GameOverScreen():
 }
 
 
-void GameOverScreen::OnEvent(const sf::Event& event)
+void GameOverScreen::onEvent(const sf::Event& event)
 {
 	Action::ID action = Input::feedEvent(event);
 	if (action == Action::VALIDATE)
@@ -34,7 +34,7 @@ void GameOverScreen::OnEvent(const sf::Event& event)
 }
 
 
-void GameOverScreen::OnFocus()
+void GameOverScreen::onFocus()
 {
 	SoundSystem::stopMusic();
 	m_started_at.restart();
@@ -78,7 +78,7 @@ void GameOverScreen::OnFocus()
 }
 
 
-void GameOverScreen::Update(float frametime)
+void GameOverScreen::update(float frametime)
 {
 	Player* player = m_entities.getPlayer();
 	if (player->isDead())
@@ -94,7 +94,7 @@ void GameOverScreen::Update(float frametime)
 }
 
 
-void GameOverScreen::Show(sf::RenderTarget& target) const
+void GameOverScreen::draw(sf::RenderTarget& target) const
 {
 	target.draw(m_panel);
 	target.draw(m_entities);
@@ -105,7 +105,7 @@ void GameOverScreen::Show(sf::RenderTarget& target) const
 void GameOverScreen::goNextScreen() const
 {
 	if (m_entities.GetMode() == EntityManager::MODE_STORY)
-		Game::getInstance().setNextScene(Game::SC_LevelMenu);
+		Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
 	else
-		Game::getInstance().setNextScene(Game::SC_SendScoreMenu);
+		Game::getInstance().setCurrentScreen(Game::SC_SendScoreMenu);
 }

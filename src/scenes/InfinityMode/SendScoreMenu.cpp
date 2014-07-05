@@ -11,17 +11,17 @@
 #include "utils/md5/md5.hpp"
 
 
-SendScoreMenu::SendScoreMenu()
+SendScoreMenu::SendScoreMenu():
+	m_score(0)
 {
-	SetTitle(_t("sendscore.title"));
+	setTitle(_t("sendscore.title"));
 
-	score_ = 0;
 	lab_result_ = new gui::Label(this, "", 120, 120);
 	lab_result_->setCharacterSize(30);
 
-	lab_pseudo_ = new gui::Label(this, _t("sendscore.pseudo"), 100, 200);
+	lab_pseudo_ = new gui::Label(this, _t("sendscore.pseudo"), 120, 200);
 
-	txt_pseudo_ = new gui::TextBox(this, 210, 200, 30, 40);
+	txt_pseudo_ = new gui::TextBox(this, 240, 200, 20, 40);
 	txt_pseudo_->SetCallbackID(3);
 
 	but_commit_ = new CosmoButton(this, _t("submit"));
@@ -41,19 +41,18 @@ SendScoreMenu::SendScoreMenu()
 }
 
 
-void SendScoreMenu::OnFocus()
+void SendScoreMenu::onFocus()
 {
-	EntityManager& entities = EntityManager::getInstance();
-
-	score_ = entities.getPlayer()->getScore();
-	if (score_ > UserSettings::getHighscore())
+	// Get player score and check if new highscore
+	m_score = EntityManager::getInstance().getPlayer()->getScore();
+	if (m_score > UserSettings::getHighscore())
 	{
-		UserSettings::setHighscore(score_);
-		lab_result_->setString(I18n::templatize("sendscore.new_record", "{score}", score_));
+		UserSettings::setHighscore(m_score);
+		lab_result_->setString(I18n::templatize("sendscore.new_record", "{score}", m_score));
 	}
 	else
 	{
-		lab_result_->setString(I18n::templatize("sendscore.no_record", "{score}", score_));
+		lab_result_->setString(I18n::templatize("sendscore.no_record", "{score}", m_score));
 	}
 	lab_result_->setCharacterSize(30);
 
@@ -79,10 +78,10 @@ void SendScoreMenu::EventCallback(int id)
 		case 1:
 			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
 			ControlPanel::getInstance().setHighscore(UserSettings::getHighscore());
-			Game::getInstance().setNextScene(Game::SC_PlayScreen);
+			Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
 			break;
 		case 2:
-			Game::getInstance().setNextScene(Game::SC_MainMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
 			break;
 		case 3:
 			if (EntityManager::getInstance().getPlayer()->isCheater())
@@ -110,7 +109,7 @@ void SendScoreMenu::uploadScore()
 	if (str_name.empty())
 		return;
 
-	std::string str_score = std::to_string(score_);
+	std::string str_score = std::to_string(m_score);
 
 	// COSMO_SERVER_KEY is a salt, producing a different salted key for each couple (name, score)
 	MD5 key(str_name + str_score + COSMO_SERVER_KEY);
@@ -134,7 +133,7 @@ void SendScoreMenu::uploadScore()
 	switch (response.getStatus())
 	{
 		case sf::Http::Response::Ok:
-			Game::getInstance().setNextScene(Game::SC_LeaderboardMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_LeaderboardMenu);
 			break;
 		case sf::Http::Response::ConnectionFailed:
 			lab_result_->setString("Couldn't connect to CosmoScroll server");

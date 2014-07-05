@@ -7,12 +7,13 @@
 #include "entities/Player.hpp"
 #include "utils/SFML_Helper.hpp"
 
-#define DURATION    6.f
-#define JINGLE_TIME 3.f
-#define ZOOM_FACTOR 3
+const float DURATION =  6.f;
+const float JINGLE_TIME = 3.f;
+const float ZOOM_FACTOR = 3.f;
 
 
 IntroScreen::IntroScreen():
+	m_elapsed(0),
 	m_entities(EntityManager::getInstance())
 {
 	m_background.setTexture(Resources::getTexture("gui/background.png"));
@@ -24,68 +25,66 @@ IntroScreen::IntroScreen():
 	m_title.setPosition(APP_WIDTH / 2, APP_HEIGHT / 2);
 
 	// Display a player ship instance in the intro scene
-	ship_ = new Player();
-	ship_->setPosition(0, 100);
+	m_spaceship = new Player();
+	m_spaceship->setPosition(0, 100);
 
 	// Allow the player ship to go beyond screen limits during the intro scene
 	m_entities.setPosition(-500, 0);
 	m_entities.resize(2000, 2000);
-	m_entities.addEntity(ship_);
-
-	elapsed_ = 0.f;
+	m_entities.addEntity(m_spaceship);
 }
 
 
-void IntroScreen::OnEvent(const sf::Event& event)
+void IntroScreen::onEvent(const sf::Event& event)
 {
 	Action::ID action = Input::feedEvent(event);
 	switch (action)
 	{
 		case Action::VALIDATE:
-			elapsed_ = DURATION;
+			m_elapsed = DURATION;
 			break;
 		default:
-			ship_->onActionDown(action);
+			m_spaceship->onActionDown(action);
 			break;
 	}
 }
 
 
-void IntroScreen::Update(float frametime)
+void IntroScreen::update(float frametime)
 {
 	static bool jingle_played = false;
 
-	elapsed_ += frametime;
+	m_elapsed += frametime;
 	// play cosmoscroll jingle once
-	if (!jingle_played && elapsed_ >= JINGLE_TIME)
+	if (!jingle_played && m_elapsed >= JINGLE_TIME)
 	{
 		jingle_played = true;
 		SoundSystem::playSound("title.ogg");
 	}
 
 	m_entities.update(frametime);
-	ship_->move(200 * frametime, 30 * frametime);
+	m_spaceship->move(200 * frametime, 30 * frametime);
 
 	// Zooming
 	sf::IntRect rect = m_title.getTextureRect();
-	float width = rect.width * ZOOM_FACTOR * (DURATION - elapsed_) / DURATION;
-	float height = rect.height * ZOOM_FACTOR * (DURATION - elapsed_) / DURATION;
+	float width = rect.width * ZOOM_FACTOR * (DURATION - m_elapsed) / DURATION;
+	float height = rect.height * ZOOM_FACTOR * (DURATION - m_elapsed) / DURATION;
 	sfh::resize(m_title, width, height);
 
 	// Fading
-	m_title.setColor(sf::Color(255, 255, 255, (sf::Uint8) (255 * elapsed_ / DURATION)));
+	m_title.setColor(sf::Color(255, 255, 255, (sf::Uint8) (255 * m_elapsed / DURATION)));
 
-	if (elapsed_ >= DURATION)
+	if (m_elapsed >= DURATION)
 	{
 		// make entity manager ready for game use and restore original size
 		m_entities.clearEntities();
 		m_entities.resize(APP_WIDTH, APP_HEIGHT - ControlPanel::HEIGHT);
-		Game::getInstance().setNextScene(Game::SC_MainMenu);
+		Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
 	}
 }
 
 
-void IntroScreen::Show(sf::RenderTarget& target) const
+void IntroScreen::draw(sf::RenderTarget& target) const
 {
 	target.draw(m_background);
 	target.draw(m_entities);

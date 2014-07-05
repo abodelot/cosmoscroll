@@ -31,11 +31,6 @@ public:
 	void AddWidget(Widget* widget);
 
 	/**
-	 * Fond du menu
-	 */
-	void SetBackground(const sf::Sprite& sprite);
-
-	/**
 	 * Méthode appelée lorsqu'un widget du menu déclenche un événement
 	 */
 	virtual void EventCallback(int id);
@@ -93,9 +88,7 @@ private:
 	int focus_index_;
 	Widget* focus_;
 	Widget* hovered_widget_;
-	sf::Sprite background_;
-
-	WidgetStyle* theme_;
+	WidgetStyle& theme_;
 };
 
 }

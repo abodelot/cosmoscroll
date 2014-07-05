@@ -14,18 +14,18 @@ class IntroScreen: public Screen
 public:
 	IntroScreen();
 
-	void OnEvent(const sf::Event& event) override;
+	void onEvent(const sf::Event& event) override;
 
-	void Update(float frametime) override;
+	void update(float frametime) override;
 
-	void Show(sf::RenderTarget& target) const override;
+	void draw(sf::RenderTarget& target) const override;
 
 private:
-	float elapsed_;
-	sf::Sprite m_background;
-	sf::Sprite m_title;
+	float          m_elapsed;
+	sf::Sprite     m_background;
+	sf::Sprite     m_title;
 	EntityManager& m_entities;
-	Player* ship_;
+	Player*        m_spaceship;
 };
 
 #endif // INTROSCREEN_HPP

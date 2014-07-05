@@ -6,7 +6,7 @@
 JoystickMenu::JoystickMenu():
 	m_triggered(NULL)
 {
-	SetTitle(_t("joystick.title"));
+	setTitle(_t("joystick.title"));
 
 	gui::FormLayout form(110, 120);
 	form.SetSpacing(20, 16);
@@ -25,7 +25,7 @@ JoystickMenu::JoystickMenu():
 }
 
 
-void JoystickMenu::OnEvent(const sf::Event& event)
+void JoystickMenu::onEvent(const sf::Event& event)
 {
 	if (m_triggered != NULL)
 	{
@@ -35,7 +35,7 @@ void JoystickMenu::OnEvent(const sf::Event& event)
 			// Binding action to pressed button
 			Action::ID action = m_triggered->getAction();
 			Input::setButtonBinding(event.joystickButton.button, action);
-			OnFocus();
+			onFocus();
 		}
 		else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 		{
@@ -51,7 +51,7 @@ void JoystickMenu::OnEvent(const sf::Event& event)
 }
 
 
-void JoystickMenu::OnFocus()
+void JoystickMenu::onFocus()
 {
 	m_triggered = NULL;
 	// Refresh labels
@@ -77,7 +77,7 @@ void JoystickMenu::EventCallback(int id)
 			Input::setJoystickDeadzone(100 - sl_joystick_->GetValue());
 			break;
 		case 9001:
-			Game::getInstance().setNextScene(Game::SC_OptionMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
 			break;
 	}
 	// We are now waiting for user input

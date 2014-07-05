@@ -11,7 +11,7 @@ class LevelMenu: public BaseMenu
 public:
 	LevelMenu();
 
-	void OnFocus() override;
+	void onFocus() override;
 
 private:
 	void EventCallback(int id) override;

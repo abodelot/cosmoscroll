@@ -35,14 +35,14 @@ Game& Game::getInstance()
 Game::Game():
 	m_fullscreen(false),
 	m_vsync(false),
-	m_running(true)
+	m_running(true),
+	m_current_screen(NULL)
 {
-	// Scenes will be allocated only if requested
+	// Screens will be allocated on the fly
 	for (int i = 0; i < SC_COUNT; ++i)
 	{
-		m_scenes[i] = NULL;
+		m_screens[i] = NULL;
 	}
-	m_current_scene = NULL;
 
 	// Default configuration file location
 	m_config_filename = FileSystem::initSettingsDirectory(COSMOSCROLL_DIRECTORY) + "/" + CONFIG_FILENAME;
@@ -53,12 +53,12 @@ Game::~Game()
 {
 	m_window.close();
 
-	// Delete allocated scenes
+	// Delete allocated screens
 	for (int i = 0; i < SC_COUNT; ++i)
 	{
-		if (m_scenes[i] != NULL)
+		if (m_screens[i] != NULL)
 		{
-			delete m_scenes[i];
+			delete m_screens[i];
 		}
 	}
 }
@@ -173,7 +173,7 @@ void Game::writeConfig() const
 int Game::run()
 {
 	// Set the first displayed scene at launch
-	setNextScene(SC_IntroScreen);
+	setCurrentScreen(SC_IntroScreen);
 
 	sf::Clock clock;
 	while (m_running)
@@ -185,25 +185,25 @@ int Game::run()
 			Action::ID action = Input::feedEvent(event);
 			switch (action)
 			{
-				// These events are always handled on each scene
+				// These events are always handled on each screen
 				case Action::EXIT_APP:
 					quit();
 					break;
 				case Action::TAKE_SCREENSHOT:
 					takeScreenshot();
 					break;
-				// Other events are send to the current scene
+				// Other events are send to the current screen
 				default:
-					m_current_scene->OnEvent(event);
+					m_current_screen->onEvent(event);
 					break;
 			}
 		}
 		// Update the current scene
 		m_window.clear();
-		m_current_scene->Update(clock.restart().asSeconds());
+		m_current_screen->update(clock.restart().asSeconds());
 
 		// Display the current scene
-		m_current_scene->Show(m_window);
+		m_current_screen->draw(m_window);
 		m_window.display();
 	}
 	return EXIT_SUCCESS;
@@ -216,16 +216,16 @@ sf::RenderWindow& Game::getWindow()
 }
 
 
-void Game::setNextScene(ScreenID screen_id)
+void Game::setCurrentScreen(ScreenID screen_id)
 {
-#define CASE_SCENE(__scene__) \
-	case Game::SC_ ## __scene__:\
-		new_scene = new __scene__();\
+#define CASE_SCENE(__screenclass__) \
+	case Game::SC_ ## __screenclass__:\
+		new_sreen = new __screenclass__();\
 		break
 
-	if (m_scenes[screen_id] == NULL)
+	if (m_screens[screen_id] == NULL)
 	{
-		Screen *new_scene = NULL;
+		Screen* new_sreen = NULL;
 		switch (screen_id)
 		{
 			CASE_SCENE(IntroScreen);
@@ -248,11 +248,25 @@ void Game::setNextScene(ScreenID screen_id)
 			default:
 				return;
 		}
-		m_scenes[screen_id] = new_scene;
+		m_screens[screen_id] = new_sreen;
 
 	}
-	m_current_scene = m_scenes[screen_id];
-	m_current_scene->OnFocus();
+	m_current_screen = m_screens[screen_id];
+	m_current_screen->onFocus();
+}
+
+
+void Game::unloadScreens()
+{
+	for (int i = 0; i < SC_COUNT; ++i)
+	{
+		// Do not deallocate the current screen
+		if (m_screens[i] != NULL && m_screens[i] != m_current_screen)
+		{
+			delete m_screens[i];
+			m_screens[i] = NULL;
+		}
+	}
 }
 
 
@@ -332,20 +346,6 @@ void Game::setVerticalSync(bool vsync)
 bool Game::isVerticalSync() const
 {
 	return m_vsync;
-}
-
-
-void Game::reloadScenes()
-{
-	// Delete all allocated scenes but the current one
-	for (int i = 0; i < SC_COUNT; ++i)
-	{
-		if (m_scenes[i] != NULL && m_scenes[i] != m_current_scene)
-		{
-			delete m_scenes[i];
-			m_scenes[i] = NULL;
-		}
-	}
 }
 
 

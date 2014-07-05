@@ -3,14 +3,19 @@
 
 #include "scenes/BaseMenu.hpp"
 
+/**
+ * Display online highscores
+ */
 class LeaderboardMenu: public BaseMenu
 {
 public:
 	LeaderboardMenu();
 
-	void OnFocus() override;
-	void Update(float frametime) override;
-	void Show(sf::RenderTarget& target) const override;
+	void onFocus() override;
+
+	void update(float frametime) override;
+
+	void draw(sf::RenderTarget& target) const override;
 
 private:
 	void EventCallback(int id) override;
@@ -23,7 +28,7 @@ private:
 		IN_PROGRESS,
 		DONE
 	};
-	QueryStatus querying_;
+	QueryStatus m_querying;
 };
 
 #endif // LEADERBOARDMENU_HPP

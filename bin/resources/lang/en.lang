@@ -52,8 +52,8 @@ sendscore.pseudo = Your name:
 sendscore.play_again = Play again
 sendscore.new_record = Your score: {score}\nCongratulations, new High Score!
 sendscore.no_record = Your score: {score}\nPlease try again!
-sendscore.error_cheat = Upload denied: you've cheated!
-sendscore.error_altered_res = Upload denied: game resources have been modified
+sendscore.error_cheat = Upload denied:\nyou've cheated!
+sendscore.error_altered_res = Upload denied:\ngame resources have been modified
 
 # OptionMenu
 options.title = Options

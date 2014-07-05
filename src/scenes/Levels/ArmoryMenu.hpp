@@ -11,7 +11,7 @@ class ArmoryMenu: public BaseMenu
 public:
 	ArmoryMenu();
 
-	void OnFocus() override;
+	void onFocus() override;
 
 private:
 	void EventCallback(int id) override;

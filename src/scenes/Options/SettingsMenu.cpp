@@ -6,7 +6,7 @@
 
 SettingsMenu::SettingsMenu()
 {
-	SetTitle(_t("settings.title"));
+	setTitle(_t("settings.title"));
 
 	form_.SetOffset(90, 140);
 	form_.SetSpacing(10, 25);
@@ -42,7 +42,7 @@ void SettingsMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 0:
-			Game::getInstance().setNextScene(Game::SC_OptionMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
 			break;
 		case  1:
 			Game::getInstance().setFullscreen(cb_fullscreen_->Checked());
@@ -53,10 +53,10 @@ void SettingsMenu::EventCallback(int id)
 		case 3:
 			I18n::getInstance().loadFromCode(opt_languages_->GetSelectedOption());
 			// delete other scenes
-			Game::getInstance().reloadScenes();
+			Game::getInstance().unloadScreens();
 			ControlPanel::getInstance().refreshTextTranslations();
 			// re-load i18ned texts
-			SetTitle(_t("settings.title"));
+			setTitle(_t("settings.title"));
 			form_.GetLabelAt(0)->setString(_t("settings.fullscreen"));
 			form_.GetLabelAt(1)->setString(_t("settings.vsync"));
 			form_.GetLabelAt(2)->setString(_t("settings.language"));

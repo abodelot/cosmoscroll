@@ -6,7 +6,7 @@
 
 AudioMenu::AudioMenu()
 {
-	SetTitle(_t("audio.title"));
+	setTitle(_t("audio.title"));
 
 	gui::FormLayout form(60, 120);
 	form.SetSpacing(40, 20);
@@ -42,7 +42,7 @@ void AudioMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 0:
-			Game::getInstance().setNextScene(Game::SC_OptionMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
 			break;
 		case 2:
 			SoundSystem::enableMusic(cb_music_->Checked());

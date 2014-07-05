@@ -15,7 +15,7 @@ PlayScreen::PlayScreen():
 }
 
 
-void PlayScreen::OnEvent(const sf::Event& event)
+void PlayScreen::onEvent(const sf::Event& event)
 {
 	Action::ID action = Input::feedEvent(event);
 	switch (action)
@@ -29,7 +29,7 @@ void PlayScreen::OnEvent(const sf::Event& event)
 			setPanelOnTop(false);
 			break;
 		case Action::PAUSE:
-			Game::getInstance().setNextScene(Game::SC_PauseMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_PauseMenu);
 			break;
 		default:
 			m_entities.getPlayer()->onActionDown(action);
@@ -43,7 +43,7 @@ void PlayScreen::OnEvent(const sf::Event& event)
 			m_entities.getPlayer()->onActionUp(Input::matchKey(event.key.code));
 			break;
 		case sf::Event::LostFocus:
-			Game::getInstance().setNextScene(Game::SC_PauseMenu);
+			Game::getInstance().setCurrentScreen(Game::SC_PauseMenu);
 			break;
 		default:
 			break;
@@ -51,7 +51,7 @@ void PlayScreen::OnEvent(const sf::Event& event)
 }
 
 
-void PlayScreen::OnFocus()
+void PlayScreen::onFocus()
 {
 	Game::getInstance().getWindow().setMouseCursorVisible(false);
 	Game::getInstance().getWindow().setKeyRepeatEnabled(false);
@@ -60,11 +60,11 @@ void PlayScreen::OnFocus()
 }
 
 
-void PlayScreen::Update(float frametime)
+void PlayScreen::update(float frametime)
 {
 	if (m_entities.spawnBadGuys())
 	{
-		Game::getInstance().setNextScene(Game::SC_GameOverScreen);
+		Game::getInstance().setCurrentScreen(Game::SC_GameOverScreen);
 	}
 	else
 	{
@@ -75,7 +75,7 @@ void PlayScreen::Update(float frametime)
 }
 
 
-void PlayScreen::Show(sf::RenderTarget& target) const
+void PlayScreen::draw(sf::RenderTarget& target) const
 {
 	target.draw(m_entities);
 	target.draw(m_panel);

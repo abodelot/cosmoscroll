@@ -5,7 +5,7 @@
 
 OptionMenu::OptionMenu()
 {
-	SetTitle(_t("options.title"));
+	setTitle(_t("options.title"));
 
 	gui::VBoxLayout layout(210, 120);
 
@@ -23,19 +23,19 @@ void OptionMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 1:
-			game.setNextScene(Game::SC_KeyboardMenu);
+			game.setCurrentScreen(Game::SC_KeyboardMenu);
 			break;
 		case 2:
-			game.setNextScene(Game::SC_JoystickMenu);
+			game.setCurrentScreen(Game::SC_JoystickMenu);
 			break;
 		case 3:
-			game.setNextScene(Game::SC_AudioMenu);
+			game.setCurrentScreen(Game::SC_AudioMenu);
 			break;
 		case 4:
-			game.setNextScene(Game::SC_SettingsMenu);
+			game.setCurrentScreen(Game::SC_SettingsMenu);
 			break;
 		case 5:
-			game.setNextScene(Game::SC_MainMenu);
+			game.setCurrentScreen(Game::SC_MainMenu);
 			break;
 	}
 }
