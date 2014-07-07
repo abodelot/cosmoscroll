@@ -104,7 +104,7 @@ void GameOverScreen::draw(sf::RenderTarget& target) const
 
 void GameOverScreen::goNextScreen() const
 {
-	if (m_entities.GetMode() == EntityManager::MODE_STORY)
+	if (m_entities.getMode() == EntityManager::LEVELS_MODE)
 		Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
 	else
 		Game::getInstance().setCurrentScreen(Game::SC_SendScoreMenu);

@@ -22,6 +22,7 @@ private:
 	State      m_state;
 	float      m_state_timer;
 	Animator   m_eye_animator;
+	Animator   m_animator;
 	Weapon     m_weapon;
 	float      m_weapon_angle;
 	float      m_xspeed;

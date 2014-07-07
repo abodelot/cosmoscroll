@@ -9,14 +9,25 @@ Animator::Animator():
 }
 
 
+void Animator::setAnimation(sf::Sprite& sprite, const Animation& animation)
+{
+	m_animation = &animation;
+	reset(sprite);
+}
+
+
+const Animation* Animator::getAnimation() const
+{
+	return m_animation;
+}
+
+
 void Animator::reset(sf::Sprite& sprite)
 {
 	if (m_animation != NULL)
 	{
 		sprite.setTexture(m_animation->getTexture());
-		sprite.setTextureRect(m_animation->getFrame(0));
-		m_timer = m_animation->getDelay();
-		m_frame = 0;
+		setFrame(sprite, 0);
 	}
 }
 
@@ -33,14 +44,13 @@ void Animator::updateSubRect(sf::Sprite& sprite, float frametime)
 }
 
 
-void Animator::setAnimation(sf::Sprite& sprite, const Animation& animation)
+void Animator::setFrame(sf::Sprite& sprite, size_t index)
 {
-	m_animation = &animation;
-	reset(sprite);
+	if (index < m_animation->getFrameCount())
+	{
+		m_frame = index;
+		m_timer = m_animation->getDelay();
+		sprite.setTextureRect(m_animation->getFrame(index));
+	}
 }
 
-
-const Animation* Animator::getAnimation() const
-{
-	return m_animation;
-}

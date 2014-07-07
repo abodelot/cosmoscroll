@@ -13,6 +13,10 @@ class Animator
 public:
 	Animator();
 
+	void setAnimation(sf::Sprite& sprite, const Animation& animation);
+
+	const Animation* getAnimation() const;
+
 	void reset(sf::Sprite& sprite);
 
 	/**
@@ -21,12 +25,11 @@ public:
 	 */
 	void updateSubRect(sf::Sprite& sprite, float frametime);
 
-	void setAnimation(sf::Sprite& sprite, const Animation& animation);
-	const Animation* getAnimation() const;
+	void setFrame(sf::Sprite&, size_t index);
 
 private:
 	const Animation* m_animation;
-	int              m_frame; // current frame index
+	size_t           m_frame; // current frame index
 	float            m_timer;
 };
 

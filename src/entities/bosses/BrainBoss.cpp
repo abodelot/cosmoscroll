@@ -15,9 +15,10 @@ BrainBoss::BrainBoss():
 	setTeam(Entity::BAD);
 
 	Part brain(ID_BRAIN);
-	brain.setTexture(Resources::getTexture("entities/brain-boss.png"));
-	brain.setTextureRect(sf::IntRect(0, 0, 96, 96));
+//	brain.setTexture(Resources::getTexture("entities/brain-boss.png"));
+//	brain.setTextureRect(sf::IntRect(0, 0, 96, 96));
 	brain.setDestructible(false);
+	m_animator.setAnimation(brain, EntityManager::getInstance().getAnimation("brain-boss"));
 	addPart(brain, 0, 0);
 
 	Part eye(ID_EYE, 150);
@@ -34,10 +35,7 @@ BrainBoss::BrainBoss():
 void BrainBoss::onUpdate(float frametime)
 {
 	updateParts(frametime);
-
-	Part& eye = getPartAt(1);
-	m_eye_animator.updateSubRect(eye, frametime);
-
+	m_animator.updateSubRect(getPartAt(0), frametime);
 	m_state_timer += frametime;
 	switch (m_state)
 	{
@@ -63,6 +61,11 @@ void BrainBoss::onUpdate(float frametime)
 			{
 				m_state_timer = 0.f;
 				m_state = WAIT;
+				m_eye_animator.setFrame(getPartAt(1), 4);
+			}
+			else
+			{
+				m_eye_animator.updateSubRect(getPartAt(1), frametime);
 			}
 			break;
 		}

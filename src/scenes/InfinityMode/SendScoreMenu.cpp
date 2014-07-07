@@ -76,7 +76,7 @@ void SendScoreMenu::EventCallback(int id)
 			but_send_score_->SetVisible(false);
 			break;
 		case 1:
-			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
+			EntityManager::getInstance().setMode(EntityManager::INFINITY_MODE);
 			ControlPanel::getInstance().setHighscore(UserSettings::getHighscore());
 			Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
 			break;

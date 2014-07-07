@@ -90,7 +90,7 @@ void ControlPanel::Init(EntityManager::Mode mode)
 	game_mode_ = mode;
 	switch (mode)
 	{
-		case EntityManager::MODE_STORY:
+		case EntityManager::LEVELS_MODE:
 			sfh::setX(level_cursor_, LEVEL_BAR_X);
 			break;
 		default:
@@ -142,7 +142,7 @@ void ControlPanel::SetTimer(float seconds)
 		wstr_self_replace(text, L"{sec}", sec.size() > 1 ? sec : L"0" + sec);
 		timer_.setString(text);
 		previous = rounded;
-		if (game_mode_ == EntityManager::MODE_STORY)
+		if (game_mode_ == EntityManager::LEVELS_MODE)
 		{
 			int max_progress = sfh::width(level_bar_) - sfh::width(level_cursor_);
 			int progress = max_progress * rounded / level_duration_;
@@ -269,7 +269,7 @@ void ControlPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(timer_, states);
 	target.draw(str_points_, states);
 
-	if (game_mode_ == EntityManager::MODE_STORY)
+	if (game_mode_ == EntityManager::LEVELS_MODE)
 	{
 		target.draw(level_bar_, states);
 		target.draw(level_cursor_, states);

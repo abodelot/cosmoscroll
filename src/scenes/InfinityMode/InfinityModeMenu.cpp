@@ -23,7 +23,7 @@ void InfinityModeMenu::EventCallback(int id)
 	switch (id)
 	{
 		case 1:
-			EntityManager::getInstance().InitMode(EntityManager::MODE_ARCADE);
+			EntityManager::getInstance().setMode(EntityManager::INFINITY_MODE);
 			ControlPanel::getInstance().setHighscore(UserSettings::getHighscore());
 			game.setCurrentScreen(Game::SC_PlayScreen);
 			break;

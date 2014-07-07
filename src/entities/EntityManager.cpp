@@ -52,6 +52,7 @@ EntityManager& EntityManager::getInstance()
 
 
 EntityManager::EntityManager():
+	m_mode(INFINITY_MODE),
 	m_particles(ParticleSystem::getInstance()),
 	m_player(NULL),
 	m_levels(LevelManager::getInstance())
@@ -59,7 +60,6 @@ EntityManager::EntityManager():
 	resize(0, 0);
 
 	more_bad_guys_ = &EntityManager::arcadeModeCallback;
-	mode_ = MODE_ARCADE;
 	timer_ = 0.f;
 
 	layer1_.m_speed = BACKGROUND_SPEED;
@@ -97,14 +97,10 @@ EntityManager::EntityManager():
 EntityManager::~EntityManager()
 {
 	clearEntities();
-	for (size_t i = 0; i < uniques_.size(); ++i)
-	{
-		delete uniques_[i];
-	}
 }
 
 
-void EntityManager::InitMode(Mode mode)
+void EntityManager::setMode(Mode mode)
 {
 	// re-init particles
 	m_particles.clear();
@@ -114,11 +110,11 @@ void EntityManager::InitMode(Mode mode)
 
 	switch (mode)
 	{
-		case MODE_STORY:
+		case LEVELS_MODE:
 			ControlPanel::getInstance().SetLevelDuration(m_levels.getDuration());
 			more_bad_guys_ = &EntityManager::storyModeCallback;
 			// le vaisseau du joueur est conservé d'un niveau à l'autre
-			if (mode_ != MODE_STORY || m_player == NULL || m_player->getHP() <= 0)
+			if (m_mode != LEVELS_MODE || m_player == NULL || m_player->getHP() <= 0)
 			{
 				RespawnPlayer();
 			}
@@ -169,7 +165,7 @@ void EntityManager::InitMode(Mode mode)
 			}
 			break;
 
-		case MODE_ARCADE:
+		case INFINITY_MODE:
 		{
 			more_bad_guys_ = &EntityManager::arcadeModeCallback;
 			// on démarre toujours le mode arcade avec un nouveau vaisseau
@@ -191,14 +187,14 @@ void EntityManager::InitMode(Mode mode)
 			break;
 		}
 	}
-	mode_ = mode;
+	m_mode = mode;
 	timer_ = 0.f;
 }
 
 
-EntityManager::Mode EntityManager::GetMode() const
+EntityManager::Mode EntityManager::getMode() const
 {
-	return mode_;
+	return m_mode;
 }
 
 
@@ -350,8 +346,7 @@ void EntityManager::loadAnimations(const std::string& filename)
 		ok &= (elem->QueryIntAttribute("count", &count) == tinyxml2::XML_SUCCESS);
 		float delay = 0.f;
 		ok &= (elem->QueryFloatAttribute("delay", &delay) == tinyxml2::XML_SUCCESS);
-		bool reverse = false;
-		elem->QueryBoolAttribute("reverse", &reverse);
+
 		int x = 0, y = 0;
 		elem->QueryIntAttribute("x", &x);
 		elem->QueryIntAttribute("y", &y);
@@ -363,12 +358,6 @@ void EntityManager::loadAnimations(const std::string& filename)
 			for (int i = 0; i < count; ++i)
 				animation.addFrame({x + i * width, y, width, height});
 
-			if (reverse)
-			{
-				// Loop back to the begining
-				for (int i = count - 2; i >= 0; --i)
-					animation.addFrame({x + i * width, y, width, height});
-			}
 			animation.setDelay(delay);
 			animation.setTexture(Resources::getTexture(img));
 			Collisions::registerTexture(&animation.getTexture());
@@ -494,10 +483,10 @@ void EntityManager::loadSpaceships(const std::string& filename)
 		elem->QueryIntAttribute("points", &points);
 
 		// Create spaceship instance
-		Spaceship* ship = new Spaceship(getAnimation(animation), hp, speed);
-		ship->setPoints(points);
-		ship->setMovementPattern(parse_movement_pattern(elem));
-		ship->setAttackPattern(parse_attack_pattern(elem));
+		Spaceship ship(getAnimation(animation), hp, speed);
+		ship.setPoints(points);
+		ship.setMovementPattern(parse_movement_pattern(elem));
+		ship.setAttackPattern(parse_attack_pattern(elem));
 
 		// Parse weapon tag
 		tinyxml2::XMLElement* weapon = elem->FirstChildElement();
@@ -514,12 +503,21 @@ void EntityManager::loadSpaceships(const std::string& filename)
 			if (weapon->QueryIntAttribute("y", &wy) != tinyxml2::XML_SUCCESS)
 				throw std::runtime_error("XML error: spaceship.weapon.y is missing");
 
-			ship->getWeapon().init(weapon_id);
-			ship->getWeapon().setPosition(wx, wy);
+			ship.getWeapon().init(weapon_id);
+			ship.getWeapon().setPosition(wx, wy);
 		}
 
-		m_spaceships[id] = ship;
-		RegisterUniqueEntity(ship);
+		// Insert spaceship in Spaceship map (LEVELS_MODE: access by id)
+		m_spaceships.insert(std::make_pair(id, ship));
+
+		// Insert spaceship in sorted vector (INFINITY_MODE: random access)
+		std::vector<Spaceship>::iterator it = m_sorted_ships.begin();
+		while (it != m_sorted_ships.end() && it->getPoints() < ship.getPoints())
+		{
+			++it;
+		}
+		m_sorted_ships.insert(it, ship);
+
 		elem = elem->NextSiblingElement("spaceship");
 	}
 }
@@ -528,12 +526,10 @@ void EntityManager::loadSpaceships(const std::string& filename)
 Spaceship* EntityManager::createSpaceship(const std::string& id) const
 {
 	SpaceshipMap::const_iterator it = m_spaceships.find(id);
-	if (it != m_spaceships.end())
-	{
-		return it->second->clone();
-	}
-	std::cerr << "Couldn't create spaceship width id: " << id << std::endl;
-	return NULL;
+	if (it == m_spaceships.end())
+		std::cerr << "Cannot create spaceship with id '" << id << "'" << std::endl;
+
+	return it->second.clone();
 }
 
 
@@ -568,10 +564,9 @@ Entity* EntityManager::createRandomEntity()
 		// Update index of the strongest spawnable spaceship
 		max_droppable_points_ = timer_ / DROP_DELAY_STEP + 1;
 
-		for (size_t i = max_droppable_index_; i < uniques_.size(); ++i)
+		for (size_t i = max_droppable_index_; i < m_sorted_ships.size(); ++i)
 		{
-			Spaceship* spaceship = uniques_[i];
-			if (spaceship->getPoints() <= max_droppable_points_)
+			if (m_sorted_ships[i].getPoints() <= max_droppable_points_)
 			{
 				max_droppable_index_ = i;
 			}
@@ -580,19 +575,8 @@ Entity* EntityManager::createRandomEntity()
 				break;
 			}
 		}
-		return uniques_[math::rand(0, max_droppable_index_)]->clone();
+		return m_sorted_ships[math::rand(0, max_droppable_index_)].clone();
 	}
-}
-
-
-void EntityManager::RegisterUniqueEntity(Spaceship* entity)
-{
-	std::vector<Spaceship*>::iterator it = uniques_.begin();
-	while (it != uniques_.end() && (**it).getPoints() < entity->getPoints())
-	{
-		++it;
-	}
-	uniques_.insert(it, entity);
 }
 
 

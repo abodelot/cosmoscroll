@@ -9,11 +9,11 @@
 
 #include "Weapon.hpp"
 #include "Animation.hpp"
+#include "Spaceship.hpp"
 #include "core/ParticleSystem.hpp"
 
 class LevelManager;
 class Entity;
-class Spaceship;
 class Player;
 
 
@@ -29,8 +29,8 @@ public:
 
 	enum Mode
 	{
-		MODE_STORY,
-		MODE_ARCADE
+		LEVELS_MODE,
+		INFINITY_MODE
 	};
 
 	/**
@@ -42,9 +42,9 @@ public:
 	 * Initialiser un mode de jeu avant une partie
 	 * Initialize a game mode before a game
 	 */
-	void InitMode(Mode mode);
+	void setMode(Mode mode);
 
-	Mode GetMode() const;
+	Mode getMode() const;
 
 	/**
 	 * Resize the universe dimensions
@@ -140,7 +140,6 @@ private:
 	~EntityManager();
 
 	Entity* createRandomEntity();
-	void RegisterUniqueEntity(Spaceship* entity);
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -161,25 +160,25 @@ private:
 	 */
 	void RespawnPlayer();
 
+	Mode m_mode;
+
 	typedef std::map<std::string, Animation> AnimationMap;
 	AnimationMap m_animations;
 
 	typedef std::map<std::string, Weapon> WeaponMap;
 	WeaponMap m_weapons;
 
-	typedef std::map<std::string, Spaceship*> SpaceshipMap;
+	typedef std::map<std::string, Spaceship> SpaceshipMap;
 	SpaceshipMap m_spaceships;
 
 	typedef std::list<Entity*> EntityList;
 	EntityList m_entities;
 
-	std::vector<Spaceship*> uniques_;
+	std::vector<Spaceship> m_sorted_ships;
 
 	int m_width;
 	int m_height;
 	int decor_height_;
-
-	Mode mode_;
 
 	class StarsEmitter: public ParticleSystem::Emitter
 	{
