@@ -18,7 +18,7 @@ class Player;
 
 
 /**
- * Gestionnaire de la vie, l'univers et tout le reste
+ * Singleton factory and manager for entities
  */
 class EntityManager: public sf::Drawable, public sf::Transformable
 {
@@ -83,11 +83,6 @@ public:
 	void clearEntities();
 
 	/**
-	 * Number of managed entites
-	 */
-	size_t count() const;
-
-	/**
 	 * Load animation definitions
 	 * @param filename: path to XML document
 	 */
@@ -129,7 +124,7 @@ public:
 	 */
 	Player* getPlayer() const;
 
-	inline float GetTimer() const { return timer_; }
+	inline float getTimer() const { return m_timer; }
 
 	void createImpactParticles(const sf::Vector2f& pos, size_t count);
 	void createGreenParticles(const sf::Vector2f& pos, size_t count);
@@ -144,23 +139,24 @@ private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	/**
-	 * Spawn randomly next entities, using Arcade Mode
+	 * Randomly spawn next entities in INFINITY_MODE
 	 * @return true if there are entities left
 	 */
-	bool arcadeModeCallback();
+	bool infinityModeCallback();
 
 	/**
-	 * Spawn next entities in the level, using Story Mode
+	 * Spawn next entities in the level in LEVELS_MODE
 	 * @return true if there are entities left
 	 */
-	bool storyModeCallback();
+	bool levelsCallback();
 
 	/**
 	 * Re-allocate player
 	 */
-	void RespawnPlayer();
+	void respawnPlayer();
 
-	Mode m_mode;
+	typedef std::list<Entity*> EntityList;
+	EntityList m_entities;
 
 	typedef std::map<std::string, Animation> AnimationMap;
 	AnimationMap m_animations;
@@ -169,17 +165,23 @@ private:
 	WeaponMap m_weapons;
 
 	typedef std::map<std::string, Spaceship> SpaceshipMap;
-	SpaceshipMap m_spaceships;
+	SpaceshipMap m_spaceships; // ID-indexed spaceships (Levels mode)
 
-	typedef std::list<Entity*> EntityList;
-	EntityList m_entities;
+	std::vector<Spaceship> m_sorted_ships; // Random access (Infinity mode)
 
-	std::vector<Spaceship> m_sorted_ships;
+	bool (EntityManager::*m_spawnMethod)();
 
-	int m_width;
-	int m_height;
-	int decor_height_;
+	Mode          m_mode;
+	float         m_timer;
+	Player*       m_player;
+	int           m_width;
+	int           m_height;
+	int           m_decor_height;
+	LevelManager& m_levels;
+	int           m_max_droppable_index;
+	int           m_max_droppable_points;
 
+	// Particles ---------------------------------------------------------------
 	class StarsEmitter: public ParticleSystem::Emitter
 	{
 	protected:
@@ -193,35 +195,27 @@ private:
 	ParticleSystem::Emitter m_green_emitter;
 	StarsEmitter            m_stars_emitter;
 
-	Player* m_player;
-	bool (EntityManager::*more_bad_guys_)();
-	float timer_;
-	LevelManager& m_levels;
-
-	int max_droppable_index_;
-	int max_droppable_points_;
-
+	// Parallax scrolling ------------------------------------------------------
 	class ParallaxLayer: public sf::Drawable
 	{
 	public:
-		friend class EntityManager;
-
 		ParallaxLayer();
-		void scroll(float frametime);
+
+		void resetScrolling();
+		void scroll(float delta);
 		void setTexture(const sf::Texture& texture);
 		void setColor(const sf::Color& color);
 
 	private:
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-		float         m_speed;
-		sf::Sprite    m_background;
-		sf::Sprite    m_background2;
-		sf::BlendMode m_blend_mode;
+		const sf::Texture* m_texture;
+		sf::Vertex         m_vertices[8];
+		sf::BlendMode      m_blend_mode;
 	};
 
-	ParallaxLayer layer1_;
-	ParallaxLayer layer2_;
+	ParallaxLayer m_layer1;
+	ParallaxLayer m_layer2;
 };
 
 #endif // ENTITYMANAGER_HPP

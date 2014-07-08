@@ -38,29 +38,29 @@ ControlPanel::ControlPanel():
 	const sf::Font& font = Resources::getFont("Vera.ttf");
 
 	// init progress bar
-	pbars_[ProgressBar::HP].Init(_t("panel.bar_hp"), font, BAR_SHIP);
+	pbars_[ProgressBar::HP].init(_t("panel.bar_hp"), font, BAR_SHIP);
 	pbars_[ProgressBar::HP].setPosition(42, 7);
 
-	pbars_[ProgressBar::SHIELD].Init(_t("panel.bar_shield"), font, BAR_SHIELD);
+	pbars_[ProgressBar::SHIELD].init(_t("panel.bar_shield"), font, BAR_SHIELD);
 	pbars_[ProgressBar::SHIELD].setPosition(42, 22);
 
-	pbars_[ProgressBar::HEAT].Init(_t("panel.bar_heat"), font, BAR_HEAT);
+	pbars_[ProgressBar::HEAT].init(_t("panel.bar_heat"), font, BAR_HEAT);
 	pbars_[ProgressBar::HEAT].setPosition(42, 37);
 
 	bar_mask_.setTexture(Resources::getTexture("gui/score-board-bar-mask.png"));
 	bar_mask_.setPosition(101, 6);
 
 	// init bonus counters
-	bs_coolers_.Init(PowerUp::ICECUBE, PowerUpSlot::COUNTER, font);
+	bs_coolers_.init(PowerUp::ICECUBE, PowerUpSlot::COUNTER, font);
 	bs_coolers_.setPosition(256, 8);
 
-	bs_missiles_.Init(PowerUp::MISSILE, PowerUpSlot::COUNTER, font);
+	bs_missiles_.init(PowerUp::MISSILE, PowerUpSlot::COUNTER, font);
 	bs_missiles_.setPosition(256, 31);
 
-	bs_attack_.Init(PowerUp::DOUBLE_SHOT, PowerUpSlot::TIMER, font);
+	bs_attack_.init(PowerUp::DOUBLE_SHOT, PowerUpSlot::TIMER, font);
 	bs_attack_.setPosition(334, 8);
 
-	bs_speed_.Init(PowerUp::SPEED, PowerUpSlot::TIMER, font);
+	bs_speed_.init(PowerUp::SPEED, PowerUpSlot::TIMER, font);
 	bs_speed_.setPosition(334, 31);
 
 	// right container
@@ -85,7 +85,7 @@ ControlPanel::ControlPanel():
 }
 
 
-void ControlPanel::Init(EntityManager::Mode mode)
+void ControlPanel::setMode(EntityManager::Mode mode)
 {
 	game_mode_ = mode;
 	switch (mode)
@@ -100,16 +100,16 @@ void ControlPanel::Init(EntityManager::Mode mode)
 }
 
 
-void ControlPanel::Update(float frametime)
+void ControlPanel::update(float frametime)
 {
-	bs_missiles_.Update(frametime);
-	bs_coolers_.Update(frametime);
-	bs_speed_.Update(frametime);
-	bs_attack_.Update(frametime);
+	bs_missiles_.update(frametime);
+	bs_coolers_.update(frametime);
+	bs_speed_.update(frametime);
+	bs_attack_.update(frametime);
 }
 
 
-void ControlPanel::SetGameInfo(const sf::String& text)
+void ControlPanel::setGameInfo(const sf::String& text)
 {
 	game_info_.setString(text);
 }
@@ -127,9 +127,9 @@ void ControlPanel::setHighscore(int highscore)
 }
 
 
-void ControlPanel::SetTimer(float seconds)
+void ControlPanel::setElapsedTime(float seconds)
 {
-	static int previous = -1; // negative, to force update at first call
+	static int previous = -1; // < 0, to force update at first call
 	int rounded = (int) seconds;
 	// Update every second
 	if (rounded != previous)
@@ -153,7 +153,7 @@ void ControlPanel::SetTimer(float seconds)
 }
 
 
-void ControlPanel::SetLevelDuration(int seconds)
+void ControlPanel::setLevelDuration(int seconds)
 {
 	level_duration_ = seconds > 0 ? seconds : 1;
 }
@@ -176,7 +176,7 @@ void ControlPanel::setOverheat(bool overheat)
 
 void ControlPanel::setHP(int value)
 {
-	pbars_[ProgressBar::HP].SetValue(value);
+	pbars_[ProgressBar::HP].setValue(value);
 }
 
 
@@ -188,7 +188,7 @@ void ControlPanel::setMaxHP(int max)
 
 void ControlPanel::setShield(int value)
 {
-	pbars_[ProgressBar::SHIELD].SetValue(value);
+	pbars_[ProgressBar::SHIELD].setValue(value);
 }
 
 
@@ -200,7 +200,7 @@ void ControlPanel::setMaxShield(int max)
 
 void ControlPanel::setHeat(float value)
 {
-	pbars_[ProgressBar::HEAT].SetValue(value);
+	pbars_[ProgressBar::HEAT].setValue(value);
 }
 
 
@@ -212,26 +212,26 @@ void ControlPanel::setMaxHeat(float max)
 
 void ControlPanel::setIcecubes(int count)
 {
-	bs_coolers_.SetValue(count);
+	bs_coolers_.setValue(count);
 }
 
 
 void ControlPanel::setMissiles(int count)
 {
-	bs_missiles_.SetValue(count);
+	bs_missiles_.setValue(count);
 }
 
 
-void ControlPanel::ActiveSpeedPowerUp(int seconds)
+void ControlPanel::activeSpeedPowerUp(int seconds)
 {
-	bs_speed_.SetValue(seconds);
+	bs_speed_.setValue(seconds);
 }
 
 
-void ControlPanel::ActiveAttackPowerUp(int seconds, PowerUp::Type bonus_type)
+void ControlPanel::activeAttackPowerUp(int seconds, PowerUp::Type bonus_type)
 {
 	bs_attack_.icon_.setTextureRect(PowerUp::getTextureRect(bonus_type));
-	bs_attack_.SetValue(seconds);
+	bs_attack_.setValue(seconds);
 }
 
 
@@ -283,7 +283,7 @@ ControlPanel::ProgressBar::ProgressBar()
 }
 
 
-void ControlPanel::ProgressBar::Init(const sf::String& text, const sf::Font& font, const sf::Color& color)
+void ControlPanel::ProgressBar::init(const sf::String& text, const sf::Font& font, const sf::Color& color)
 {
 	label_.setFont(font);
 	label_.setString(text);
@@ -305,7 +305,7 @@ void ControlPanel::ProgressBar::setPosition(int x, int y)
 }
 
 
-void ControlPanel::ProgressBar::SetValue(int value)
+void ControlPanel::ProgressBar::setValue(int value)
 {
 	// resize progress bar
 	value = value > 0 ? value : 0;
@@ -324,7 +324,7 @@ void ControlPanel::ProgressBar::SetValue(int value)
 
 // PowerUpSlot ------------------------------------------------------------------
 
-void ControlPanel::PowerUpSlot::Init(PowerUp::Type bonus_type, Type type, const sf::Font& font)
+void ControlPanel::PowerUpSlot::init(PowerUp::Type bonus_type, Type type, const sf::Font& font)
 {
 	icon_.setTexture(Resources::getTexture("entities/power-ups.png"));
 	icon_.setTextureRect(PowerUp::getTextureRect(bonus_type));
@@ -351,7 +351,7 @@ void ControlPanel::PowerUpSlot::setPosition(int x, int y)
 }
 
 
-void ControlPanel::PowerUpSlot::SetValue(int count)
+void ControlPanel::PowerUpSlot::setValue(int count)
 {
 	switch (type_)
 	{
@@ -370,7 +370,7 @@ void ControlPanel::PowerUpSlot::SetValue(int count)
 }
 
 
-void ControlPanel::PowerUpSlot::Update(float frametime)
+void ControlPanel::PowerUpSlot::update(float frametime)
 {
 	switch (type_)
 	{

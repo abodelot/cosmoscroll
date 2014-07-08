@@ -52,22 +52,17 @@ EntityManager& EntityManager::getInstance()
 
 
 EntityManager::EntityManager():
+	m_spawnMethod(&EntityManager::infinityModeCallback),
 	m_mode(INFINITY_MODE),
-	m_particles(ParticleSystem::getInstance()),
+	m_timer(0),
 	m_player(NULL),
-	m_levels(LevelManager::getInstance())
+	m_width(0),
+	m_height(0),
+	m_decor_height(0),
+	m_levels(LevelManager::getInstance()),
+	m_particles(ParticleSystem::getInstance())
 {
-	resize(0, 0);
-
-	more_bad_guys_ = &EntityManager::arcadeModeCallback;
-	timer_ = 0.f;
-
-	layer1_.m_speed = BACKGROUND_SPEED;
-	layer2_.m_speed = FOREGROUND_SPEED;
-
-	decor_height_ = 0;
-
-	// hack, pre-load some resources to avoid in game loading
+	// HACK: pre-load some resources to avoid in game loading
 	Resources::getSoundBuffer("asteroid-break.ogg");
 	Resources::getSoundBuffer("door-opening.ogg");
 	Resources::getSoundBuffer("boom.ogg");
@@ -106,17 +101,17 @@ void EntityManager::setMode(Mode mode)
 	m_particles.clear();
 	MessageSystem::clear();
 
-	ControlPanel::getInstance().Init(mode);
+	ControlPanel::getInstance().setMode(mode);
 
 	switch (mode)
 	{
 		case LEVELS_MODE:
-			ControlPanel::getInstance().SetLevelDuration(m_levels.getDuration());
-			more_bad_guys_ = &EntityManager::storyModeCallback;
+			ControlPanel::getInstance().setLevelDuration(m_levels.getDuration());
+			m_spawnMethod = &EntityManager::levelsCallback;
 			// le vaisseau du joueur est conservé d'un niveau à l'autre
 			if (m_mode != LEVELS_MODE || m_player == NULL || m_player->getHP() <= 0)
 			{
-				RespawnPlayer();
+				respawnPlayer();
 			}
 			else
 			{
@@ -139,17 +134,17 @@ void EntityManager::setMode(Mode mode)
 			// Set background images
 			if (m_levels.getBottomLayer())
 			{
-				layer1_.setTexture(*m_levels.getBottomLayer());
-				layer1_.setColor(sf::Color::White);
+				m_layer1.setTexture(*m_levels.getBottomLayer());
+				m_layer1.setColor(sf::Color::White);
 			}
 
 			if (m_levels.getTopLayer())
 			{
-				layer2_.setTexture(*m_levels.getTopLayer());
-				layer2_.setColor(m_levels.getLayerColor());
+				m_layer2.setTexture(*m_levels.getTopLayer());
+				m_layer2.setColor(m_levels.getLayerColor());
 			}
 
-			decor_height_ = m_levels.getDecorHeight();
+			m_decor_height = m_levels.getDecorHeight();
 			m_stars_emitter.createParticles(m_levels.getStarsCount());
 
 			// Set background music
@@ -167,28 +162,27 @@ void EntityManager::setMode(Mode mode)
 
 		case INFINITY_MODE:
 		{
-			more_bad_guys_ = &EntityManager::arcadeModeCallback;
-			// on démarre toujours le mode arcade avec un nouveau vaisseau
-			RespawnPlayer();
-			// fog with random color on layer 2,
-			sf::Color color(math::rand(0, 40), math::rand(0, 40), math::rand(20, 60));
-			layer1_.setTexture(Resources::getTexture("layers/blue.jpg"));
-			layer1_.setColor(color);
-			layer2_.setTexture(Resources::getTexture("layers/fog.png"));
-			layer2_.setColor(color);
+			m_spawnMethod = &EntityManager::infinityModeCallback;
+			respawnPlayer();
 
-			decor_height_ = 0;
+			// Fog with random color on layer 2,
+			sf::Color color(math::rand(0, 40), math::rand(0, 40), math::rand(20, 60));
+			m_layer1.setTexture(Resources::getTexture("layers/blue.jpg"));
+			m_layer1.setColor(color);
+			m_layer2.setTexture(Resources::getTexture("layers/fog.png"));
+			m_layer2.setColor(color);
+
+			m_decor_height = 0;
 			m_stars_emitter.createParticles(math::rand(50, 100));
 			SoundSystem::openMusicFromFile(Resources::getSearchPath() + "/music/spacesong.mod");
 			SoundSystem::playMusic();
-
-			max_droppable_index_ = 1;
-			max_droppable_points_ = 0;
+			m_max_droppable_index = 1;
+			m_max_droppable_points = 0;
 			break;
 		}
 	}
 	m_mode = mode;
-	timer_ = 0.f;
+	m_timer = 0.f;
 }
 
 
@@ -209,7 +203,7 @@ void EntityManager::update(float frametime)
 {
 	EntityList::iterator it, it2;
 
-	sf::FloatRect r1, r2;
+	// Update and collision
 	for (it = m_entities.begin(); it != m_entities.end();)
 	{
 		Entity& entity = **it;
@@ -244,19 +238,18 @@ void EntityManager::update(float frametime)
 		}
 	}
 
-	// Update and collision
-	if (decor_height_ > 0)
+	// HACK: decor height applies only on player
+	if (m_decor_height > 0)
 	{
-		// FIXME: decor height applies only on player
 		float player_y = m_player->getY();
-		if (player_y < decor_height_)
+		if (player_y < m_decor_height)
 		{
-			m_player->setY(decor_height_ + 1);
+			m_player->setY(m_decor_height + 1);
 			m_player->takeDamage(1);
 		}
-		else if ((player_y + m_player->getHeight()) > (m_height - decor_height_))
+		else if ((player_y + m_player->getHeight()) > (m_height - m_decor_height))
 		{
-			m_player->setY(m_height - decor_height_ - m_player->getHeight() - 1);
+			m_player->setY(m_height - m_decor_height - m_player->getHeight() - 1);
 			m_player->takeDamage(1);
 		}
 	}
@@ -264,11 +257,11 @@ void EntityManager::update(float frametime)
 	m_particles.update(frametime);
 	MessageSystem::update(frametime);
 
-	// parallax scrolling
-	layer1_.scroll(frametime);
-	layer2_.scroll(frametime);
+	// Parallax scrolling
+	m_layer1.scroll(BACKGROUND_SPEED * frametime);
+	m_layer2.scroll(FOREGROUND_SPEED * frametime);
 
-	timer_ += frametime;
+	m_timer += frametime;
 }
 
 
@@ -289,15 +282,9 @@ void EntityManager::clearEntities()
 }
 
 
-size_t EntityManager::count() const
-{
-	return m_entities.size();
-}
-
-
 bool EntityManager::spawnBadGuys()
 {
-	return !(this->*more_bad_guys_)() || m_player == NULL || m_player->isDead();
+	return !(this->*m_spawnMethod)() || m_player == NULL || m_player->isDead();
 }
 
 
@@ -306,8 +293,8 @@ void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 	states.transform *= getTransform();
 
 	// Draw background layers
-	target.draw(layer1_, states);
-	target.draw(layer2_, states);
+	target.draw(m_layer1, states);
+	target.draw(m_layer2, states);
 
 	// Draw effects
 	target.draw(m_particles, states);
@@ -449,7 +436,6 @@ const Weapon& EntityManager::getWeapon(const std::string& id) const
 }
 
 
-
 void EntityManager::loadSpaceships(const std::string& filename)
 {
 	// Open XML document
@@ -558,34 +544,33 @@ Entity* EntityManager::createRandomEntity()
 		// 3 points            DROP_DELAY_STEP * 2
 		// 4 points            DROP_DELAY_STEP * 3
 		// etc.
-
 		static const int DROP_DELAY_STEP = 25;
 
 		// Update index of the strongest spawnable spaceship
-		max_droppable_points_ = timer_ / DROP_DELAY_STEP + 1;
+		m_max_droppable_points = m_timer / DROP_DELAY_STEP + 1;
 
-		for (size_t i = max_droppable_index_; i < m_sorted_ships.size(); ++i)
+		for (size_t i = m_max_droppable_index; i < m_sorted_ships.size(); ++i)
 		{
-			if (m_sorted_ships[i].getPoints() <= max_droppable_points_)
+			if (m_sorted_ships[i].getPoints() <= m_max_droppable_points)
 			{
-				max_droppable_index_ = i;
+				m_max_droppable_index = i;
 			}
 			else
 			{
 				break;
 			}
 		}
-		return m_sorted_ships[math::rand(0, max_droppable_index_)].clone();
+		return m_sorted_ships[math::rand(0, m_max_droppable_index)].clone();
 	}
 }
 
 
-bool EntityManager::arcadeModeCallback()
+bool EntityManager::infinityModeCallback()
 {
 	// Number of max entities = time / STEP + START
 	const int STEP = 8;
 	const int START = 1;
-	if (count() < timer_ / STEP + START)
+	if (m_entities.size() < m_timer / STEP + START)
 	{
 		Entity* entity = createRandomEntity();
 		entity->setX(m_width - 1);
@@ -598,24 +583,24 @@ bool EntityManager::arcadeModeCallback()
 }
 
 
-bool EntityManager::storyModeCallback()
+bool EntityManager::levelsCallback()
 {
 	// Move entities from the spawn queue to the EntityManager
-	Entity* next = m_levels.spawnNextEntity(timer_);
+	Entity* next = m_levels.spawnNextEntity(m_timer);
 	while (next != NULL)
 	{
 		next->move(next->getOrigin());
 		addEntity(next);
-		next = m_levels.spawnNextEntity(timer_);
+		next = m_levels.spawnNextEntity(m_timer);
 	}
 
 	// The current level is completed when there is no remaining entities in the
 	// LevelManager's spawn queue and Player is the only entity still active
-	return m_levels.getSpawnQueueSize() > 0 || count() > 1;
+	return m_levels.getSpawnQueueSize() > 0 || m_entities.size() > 1;
 }
 
 
-void EntityManager::RespawnPlayer()
+void EntityManager::respawnPlayer()
 {
 	clearEntities();
 	m_player = new Player();
@@ -641,8 +626,8 @@ void EntityManager::createGreenParticles(const sf::Vector2f& pos, size_t count)
 
 void EntityManager::StarsEmitter::onParticleCreated(ParticleSystem::Particle& particle) const
 {
-	particle.position = sf::Vector2f(math::rand(0, EntityManager::getInstance().getWidth()),
-	                                 math::rand(0, EntityManager::getInstance().getHeight()));
+	particle.position.x = math::rand(0, EntityManager::getInstance().getWidth());
+	particle.position.y = math::rand(0, EntityManager::getInstance().getHeight());
 }
 
 
@@ -657,57 +642,80 @@ void EntityManager::StarsEmitter::onParticleUpdated(ParticleSystem::Particle& pa
 
 // ParallaxLayer ---------------------------------------------------------------
 
-EntityManager::ParallaxLayer::ParallaxLayer()
+EntityManager::ParallaxLayer::ParallaxLayer():
+	m_texture(NULL),
+	m_blend_mode(sf::BlendAlpha)
 {
-	m_speed = 0.f;
-	m_background.setPosition(0.f, 0.f);
-	m_background2.setPosition(0.f, 0.f);
-	m_blend_mode = sf::BlendAlpha;
 }
 
 
-void EntityManager::ParallaxLayer::scroll(float frametime)
+void EntityManager::ParallaxLayer::resetScrolling()
 {
-	float x = m_background.getPosition().x - m_speed * frametime;
-	float width = m_background.getTextureRect().width;
-	if (x <= -width)
+	if (m_texture)
 	{
-		x = 0.f;
+		sf::Vector2u size = m_texture->getSize();
+
+		// Set 1st image at (0, 0)
+		m_vertices[0].position = sf::Vector2f(0, 0);
+		m_vertices[1].position = sf::Vector2f(size.x, 0);
+		m_vertices[2].position = sf::Vector2f(size.x, size.y);
+		m_vertices[3].position = sf::Vector2f(0, size.y);
+
+		// Set 2nd image at (size.x, 0)
+		m_vertices[4].position = sf::Vector2f(size.x, 0);
+		m_vertices[5].position = sf::Vector2f(size.x * 2, 0);
+		m_vertices[6].position = sf::Vector2f(size.x * 2, size.y);
+		m_vertices[7].position = sf::Vector2f(size.x, size.y);
 	}
-	m_background.setPosition(x, 0.f);
-	m_background2.setPosition(x + width, 0.f);
+}
+
+
+void EntityManager::ParallaxLayer::scroll(float delta)
+{
+	for (int i = 0; i < 8; ++i)
+		m_vertices[i].position.x -= delta;
+
+	if (m_vertices[1].position.x < 0)
+		resetScrolling();
 }
 
 
 void EntityManager::ParallaxLayer::setTexture(const sf::Texture& texture)
 {
-	m_background.setTexture(texture, true);
-	m_background.setPosition(0.f, 0.f);
-	m_background2.setTexture(texture, true);
-	m_background2.setPosition(texture.getSize().x, 0.f);
+	m_texture = &texture;
+	sf::Vector2u size = texture.getSize();
+
+	// Set 1st image's texture coords
+	m_vertices[0].texCoords = sf::Vector2f(0, 0);
+	m_vertices[1].texCoords = sf::Vector2f(size.x, 0);
+	m_vertices[2].texCoords = sf::Vector2f(size.x, size.y);
+	m_vertices[3].texCoords = sf::Vector2f(0, size.y);
+
+	// Set 2nd image's texture coords
+	for (int i = 0; i < 4; ++i)
+		m_vertices[i + 4].texCoords = m_vertices[i].texCoords;
+
+	resetScrolling();
 }
 
 
 void EntityManager::ParallaxLayer::setColor(const sf::Color& color)
 {
-	if (color != sf::Color::White)
-	{
-		m_background.setColor(color);
-		m_background2.setColor(color);
-		m_blend_mode = sf::BlendAdd;
-	}
-	else
-	{
-		m_background.setColor(sf::Color::White);
-		m_background2.setColor(sf::Color::White);
-		m_blend_mode = sf::BlendAlpha;
-	}
+	for (int i = 0; i < 8; ++i)
+		m_vertices[i].color = color;
+
+	// If a color is provided, layer is additive (useful for "fog" top layer)
+	m_blend_mode = color != sf::Color::White ? sf::BlendAdd : sf::BlendAlpha;
 }
 
 
 void EntityManager::ParallaxLayer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	states.blendMode = m_blend_mode;
-	target.draw(m_background, states);
-	target.draw(m_background2, states);
+	if (m_texture)
+	{
+		states.blendMode = m_blend_mode;
+		states.texture = m_texture;
+		target.draw(m_vertices, 8, sf::Quads, states);
+	}
 }
+

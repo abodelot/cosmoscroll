@@ -16,25 +16,25 @@ public:
 
 	static ControlPanel& getInstance();
 
-	void Init(EntityManager::Mode mode);
+	void setMode(EntityManager::Mode mode);
 
-	void Update(float frametime);
+	void update(float frametime);
 
 	/**
 	 * @param text: texte d'information
 	 */
-	void SetGameInfo(const sf::String& text);
+	void setGameInfo(const sf::String& text);
 
 	void setScore(int score);
 	void setHighscore(int highscore);
 
 	/**
-	 * @param seconds: nombre de secondes écoulées
+	 * @param seconds: elapsed time
 	 */
-	void SetTimer(float seconds);
+	void setElapsedTime(float seconds);
 
 	// Set durée du niveau courant, en secondes
-	void SetLevelDuration(int seconds);
+	void setLevelDuration(int seconds);
 
 	// setters progress bars --------------------------------------------------
 
@@ -69,9 +69,9 @@ public:
 	// Set missiles count
 	void setMissiles(int count);
 
-	void ActiveSpeedPowerUp(int seconds);
+	void activeSpeedPowerUp(int seconds);
 
-	void ActiveAttackPowerUp(int seconds, PowerUp::Type bonus_type);
+	void activeAttackPowerUp(int seconds, PowerUp::Type bonus_type);
 
 	void refreshTextTranslations();
 
@@ -90,36 +90,33 @@ private:
 
 		ProgressBar();
 
-		void Init(const sf::String& text, const sf::Font& font, const sf::Color& color);
+		void init(const sf::String& text, const sf::Font& font, const sf::Color& color);
 
 		// Set progress bar value
-		void SetValue(int value);
+		void setValue(int value);
 
 		// Set widget position
 		void setPosition(int x, int y);
 
 		sf::Text label_;
-
 		sf::RectangleShape bar_;
 		sf::Text value_;
 		int max_value_;
 	};
 
-	class PowerUpSlot: public sf::Drawable
+	struct PowerUpSlot: public sf::Drawable
 	{
-	friend class ControlPanel;
-	public:
 		enum Type { COUNTER, TIMER };
 
-		void Init(PowerUp::Type bonus_type, Type type, const sf::Font& font);
-		// set widget position
+		void init(PowerUp::Type bonus_type, Type type, const sf::Font& font);
+
+		// Set widget position
 		void setPosition(int x, int y);
 
-		void SetValue(int value);
+		void setValue(int value);
 
-		void Update(float frametime);
+		void update(float frametime);
 
-	private:
 		void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 		sf::Sprite icon_;
@@ -141,14 +138,13 @@ private:
 	sf::Sprite m_background;
 
 	EntityManager::Mode game_mode_;
-	// story
+	// levels
 	int level_duration_;
 	sf::Sprite level_cursor_;
 	sf::Sprite level_bar_;
-	// arcade
+	// infinity mode
 	sf::Text str_points_;
 	sf::Sprite bar_mask_;
 };
 
 #endif // CONTROLPANEL_HPP
-

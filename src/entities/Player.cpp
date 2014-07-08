@@ -62,8 +62,8 @@ Player::Player():
 	m_panel.setIcecubes(m_icecubes);
 	m_panel.setMissiles(m_missiles);
 	m_panel.setOverheat(m_overheat);
-	m_panel.ActiveSpeedPowerUp(0);
-	m_panel.ActiveAttackPowerUp(0, PowerUp::DOUBLE_SHOT);
+	m_panel.activeSpeedPowerUp(0);
+	m_panel.activeAttackPowerUp(0, PowerUp::DOUBLE_SHOT);
 
 	// Init Konami code sequence
 	m_konami_code[0] = Action::UP;
@@ -382,7 +382,7 @@ void Player::onCollision(PowerUp& powerup)
 
 			bonus_[T_TRISHOT] = 0;
 			bonus_[T_DOUBLESHOT] += TIMED_BONUS_DURATION;
-			m_panel.ActiveAttackPowerUp(bonus_[T_DOUBLESHOT], powerup.getType());
+			m_panel.activeAttackPowerUp(bonus_[T_DOUBLESHOT], powerup.getType());
 			break;
 
 		case PowerUp::TRIPLE_SHOT:
@@ -391,7 +391,7 @@ void Player::onCollision(PowerUp& powerup)
 
 			bonus_[T_DOUBLESHOT] = 0;
 			bonus_[T_TRISHOT] += TIMED_BONUS_DURATION;
-			m_panel.ActiveAttackPowerUp(bonus_[T_TRISHOT], powerup.getType());
+			m_panel.activeAttackPowerUp(bonus_[T_TRISHOT], powerup.getType());
 			break;
 
 		case PowerUp::SPEED:
@@ -401,7 +401,7 @@ void Player::onCollision(PowerUp& powerup)
 				m_smoke_emitter.createParticles(120);
 			}
 			bonus_[T_SPEED] += TIMED_BONUS_DURATION;
-			m_panel.ActiveSpeedPowerUp(bonus_[T_SPEED]);
+			m_panel.activeSpeedPowerUp(bonus_[T_SPEED]);
 			break;
 
 		// immediate bonus

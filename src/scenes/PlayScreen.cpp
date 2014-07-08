@@ -69,8 +69,8 @@ void PlayScreen::update(float frametime)
 	else
 	{
 		m_entities.update(frametime);
-		m_panel.Update(frametime);
-		m_panel.SetTimer(m_entities.GetTimer());
+		m_panel.update(frametime);
+		m_panel.setElapsedTime(m_entities.getTimer());
 	}
 }
 

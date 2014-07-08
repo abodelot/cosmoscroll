@@ -92,16 +92,19 @@ protected:
 private:
 	void insert(const sf::Vector2f& pos, Entity* entity);
 
-	sf::Clock m_last_shot_at; // Store time for last shot
-	float     m_fire_delay;   // Time to wait between next shot
-	float     m_heat_cost;
-	int       m_velocity;
-	int       m_damage;
+	// Weapon-type attributes
+	float                  m_fire_delay;   // Time to wait between next shot
+	float                  m_heat_cost;
+	int                    m_velocity;
+	int                    m_damage;
 	const sf::Texture*     m_texture;
 	const sf::SoundBuffer* m_sound;
-	Entity*                m_owner;
-	sf::Vector2f           m_position;
-	int                    m_multiply;
+
+	// Weapon usage
+	Entity*      m_owner;
+	sf::Clock    m_last_shot_at; // Store time for last shot
+	sf::Vector2f m_position;
+	int          m_multiply;
 };
 
 template <class T>
