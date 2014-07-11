@@ -1,9 +1,9 @@
 #include "WidgetStyle.hpp"
 
-#define DEFAULT_COLOR    sf::Color(0, 0xde, 0)
-#define DEFAULT_BG_COLOR sf::Color(0x66, 0x66, 0x66)
-#define FOCUS_COLOR      sf::Color(0x70, 0xde, 0)
-#define FOCUS_BG_COLOR   sf::Color(0x99, 0x99, 0x99)
+#define DEFAULT_COLOR    sf::Color(0x3e, 0xde, 0)
+#define DEFAULT_BG_COLOR sf::Color(0x70, 0x70, 0x70)
+#define FOCUS_COLOR      sf::Color(0x3e, 0xde, 0)
+#define FOCUS_BG_COLOR   sf::Color(0x50, 0x50, 0x50)
 
 using namespace gui;
 
@@ -12,7 +12,7 @@ WidgetStyle::WidgetStyle()
 	global_text_size = 20;
 	global_font = NULL;
 	global_fixed_font = NULL;
-	global_border_color = sf::Color(0x44, 0x44, 0x44);
+	global_border_color = sf::Color(0x30, 0x30, 0x30);
 
 	label_text_color = sf::Color::White;
 

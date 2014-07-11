@@ -24,7 +24,6 @@
 #define XML_SPACESHIPS  "/xml/spaceships.xml"
 
 
-
 Game& Game::getInstance()
 {
 	static Game self;
@@ -33,7 +32,6 @@ Game& Game::getInstance()
 
 
 Game::Game():
-	m_fullscreen(false),
 	m_vsync(false),
 	m_running(true),
 	m_current_screen(NULL)
@@ -80,7 +78,7 @@ void Game::loadResources(const std::string& data_path)
 	Resources::setSearchPath(resources_dir);
 
 	// Splash screen
-	createWindow();
+	setResolution(sf::Vector2u(APP_WIDTH, APP_HEIGHT));
 	sf::Sprite s(Resources::getTexture("gui/cosmoscroll-logo.png"));
 	s.setPosition({(APP_WIDTH - s.getTextureRect().width) / 2.f,
 				   (APP_HEIGHT - s.getTextureRect().height) / 2.f});
@@ -130,17 +128,18 @@ bool Game::loadConfig()
 	if (config.load(m_config_filename))
 	{
 		std::cout << "* loading configuration from " << m_config_filename << std::endl;
-		// Window
 		config.seekSection("Window");
-		m_vsync = config.get("vsync", m_vsync);
-		m_fullscreen = config.get("fullscreen", m_fullscreen);
 
+		// Window resolution
+		sf::Vector2u size;
+		size.x = config.get("width", APP_WIDTH);
+		size.y = config.get("height", APP_HEIGHT);
+		setResolution(size);
+
+		// Vertical sync
+		m_vsync = config.get("vsync", m_vsync);
 		if (m_vsync)
 			m_window.setVerticalSyncEnabled(m_vsync);
-
-		// Recreate the window if fullscreen
-		if (m_fullscreen)
-			createWindow();
 
 		// Load user settings and player progression
 		UserSettings::loadFromConfig(config);
@@ -158,7 +157,8 @@ void Game::writeConfig() const
 
 	// Window
 	config.seekSection("Window");
-	config.set("fullscreen", m_fullscreen);
+	config.set("width", m_window.getSize().x);
+	config.set("height", m_window.getSize().y);
 	config.set("vsync", m_vsync);
 
 	// Save user settings and player progression
@@ -295,44 +295,29 @@ void Game::takeScreenshot() const
 }
 
 
-void Game::createWindow()
+void Game::setResolution(const sf::Vector2u& size)
 {
-	if (m_window.isOpen())
-		m_window.close();
+	if (size == m_window.getSize())
+		return;
 
-	int style = m_fullscreen ? sf::Style::Fullscreen : sf::Style::Close;
-	m_window.create(sf::VideoMode(APP_WIDTH, APP_HEIGHT), APP_TITLE, style);
-	m_window.setKeyRepeatEnabled(false);
+	// Create window
+	m_window.create(sf::VideoMode(size.x, size.y), APP_TITLE, sf::Style::Close);
+	sf::View view = sf::View(sf::FloatRect(0, 0, APP_WIDTH, APP_HEIGHT));
+	m_window.setView(view);
 
 	if (m_vsync)
 		m_window.setVerticalSyncEnabled(m_vsync);
 	else
 		m_window.setFramerateLimit(APP_FPS);
 
-	if (!m_fullscreen)
-	{
-		// Center window on desktop
-		sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-		m_window.setPosition(sf::Vector2i((desktop.width - APP_WIDTH) / 2, (desktop.height - APP_HEIGHT) / 2));
+	// Center window on desktop
+	sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+	m_window.setPosition(sf::Vector2i((desktop.width - size.x) / 2, (desktop.height - size.y) / 2));
 
-		// Set window app icon
-		static sf::Image icon = Resources::getTexture("gui/icon.bmp").copyToImage();
-		icon.createMaskFromColor(sf::Color(0xff, 0, 0xff));
-		m_window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-	}
-}
-
-
-void Game::setFullscreen(bool fullscreen)
-{
-	m_fullscreen = fullscreen;
-	createWindow();
-}
-
-
-bool Game::isFullscreen() const
-{
-	return m_fullscreen;
+	// Set window app icon
+	sf::Image icon = Resources::getTexture("gui/icon.bmp").copyToImage();
+	icon.createMaskFromColor(sf::Color(0xff, 0, 0xff));
+	m_window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 }
 
 

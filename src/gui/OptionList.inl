@@ -4,8 +4,6 @@
 namespace gui
 {
 
-const float ARROW_MIN_SCALE = 0.5f;
-const float ARROW_MAX_SCALE = 1.1f;
 const float BOX_PADDING = 4;
 
 template <class T>
@@ -14,8 +12,6 @@ OptionList<T>::OptionList(Menu* owner) :
 {
 	current_opt_ = -1;
 	max_opt_width_ = 0;
-	dir_ = 1;
-	scale_ = 1;
 	align_ = Align::LEFT;
 	const WidgetStyle& style = owner->GetWidgetStyle();
 	text_size_ = style.global_text_size;
@@ -233,18 +229,6 @@ void OptionList<T>::OnMouseWheelMoved(int delta)
 }
 
 template <class T>
-void OptionList<T>::Update(float frametime)
-{
-	if (scale_ > ARROW_MAX_SCALE || scale_ < ARROW_MIN_SCALE)
-	{
-		dir_ *= -1;
-	}
-	scale_ = scale_ + frametime * 0.95 * dir_;
-	left_arrow_.setScale(scale_, scale_);
-	right_arrow_.setScale(scale_, scale_);
-}
-
-template <class T>
 sf::Vector2f OptionList<T>::ComputeIndentAlign(const sf::Text& option) const
 {
 	int x = text_size_ + BOX_PADDING * 3;
@@ -270,9 +254,6 @@ void OptionList<T>::OnStateChanged(State::EState state)
 	switch (state)
 	{
 		case State::DEFAULT:
-			scale_ = 1;
-			left_arrow_.setScale(scale_, scale_);
-			right_arrow_.setScale(scale_, scale_);
 			left_arrow_.setFillColor(style.optlist_arrow_color);
 			right_arrow_.setFillColor(style.optlist_arrow_color);
 			box_.setFillColor(style.optlist_bg_color);

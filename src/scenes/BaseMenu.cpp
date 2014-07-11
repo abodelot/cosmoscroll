@@ -1,4 +1,5 @@
 #include "BaseMenu.hpp"
+#include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
@@ -8,7 +9,7 @@
 gui::WidgetStyle BaseMenu::m_gui_style;
 
 BaseMenu::BaseMenu():
-	gui::Menu(m_gui_style),
+	gui::Menu(Game::getInstance().getWindow(), m_gui_style),
 	m_ui_background(Resources::getTexture("gui/main-screen.png")),
 	m_scrolling_background(Resources::getTexture("gui/background.png"))
 {

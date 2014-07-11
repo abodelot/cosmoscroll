@@ -6,7 +6,8 @@
 using namespace gui;
 
 
-Menu::Menu(WidgetStyle& style):
+Menu::Menu(const sf::RenderWindow& window, WidgetStyle& style):
+	window_(window),
 	theme_(style)
 {
 	focus_ = NULL;
@@ -154,9 +155,10 @@ void Menu::OnEvent(const sf::Event& event)
 				// que le clic soit prise en compte
 				if (hovered_widget_ != NULL && focus_ == hovered_widget_)
 				{
-				    int x = event.mouseButton.x - focus_->getPosition().x;
-				    int y = event.mouseButton.y - focus_->getPosition().y;
-					focus_->OnMouseClicked(x, y);
+					sf::Vector2f mouse = window_.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+				    mouse.x -= focus_->getPosition().x;
+				    mouse.y -= focus_->getPosition().y;
+					focus_->OnMouseClicked(mouse.x, mouse.y);
 				}
 			}
 			break;
@@ -316,13 +318,11 @@ bool Menu::FocusPreviousWidget()
 
 Widget* Menu::GetHoveredWidget(int x, int y) const
 {
-	// transformation des coords absolues en coords relatives
-	//x -= getPosition().x;
-	//y -= getPosition().y;
+	sf::Vector2f mouse = window_.mapPixelToCoords(sf::Vector2i(x, y));
 	WidgetList::const_iterator it = widgets_.begin();
 	for (; it != widgets_.end(); ++it)
 	{
-		if ((**it).CanGrabFocus() && (**it).ContainsPoint(x, y))
+		if ((**it).CanGrabFocus() && (**it).ContainsPoint(mouse.x, mouse.y))
 		{
 			return *it;
 		}
@@ -330,12 +330,3 @@ Widget* Menu::GetHoveredWidget(int x, int y) const
 	return NULL;
 }
 
-
-/*void Menu::ActiveFocused()
-{
-	if (focus_ != NULL)
-	{
-		focus_->Active();
-		OnWidgetActived();
-	}
-}*/

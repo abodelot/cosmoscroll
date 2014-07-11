@@ -20,7 +20,7 @@ class Widget;
 class Menu
 {
 public:
-	Menu(WidgetStyle& style);
+	Menu(const sf::RenderWindow& window, WidgetStyle& style);
 
 	virtual ~Menu();
 
@@ -90,6 +90,7 @@ private:
 	int focus_index_;
 	Widget* focus_;
 	Widget* hovered_widget_;
+	const sf::RenderWindow& window_;
 	WidgetStyle& theme_;
 };
 

@@ -81,7 +81,7 @@ audio.sound_volume = Soundeffekte Lautstärke:
 # SettingsMenu
 settings.title = Preferenzen
 settings.vsync = Vertikale Synchronisation:
-settings.fullscreen = Vollbildmodus:
+settings.resolution = Auflösung:
 settings.language = Sprache:
 
 # AboutMenu

@@ -1,5 +1,6 @@
 #include "SettingsMenu.hpp"
 #include "core/Game.hpp"
+#include "core/Constants.hpp"
 #include "core/ControlPanel.hpp"
 #include "utils/I18n.hpp"
 
@@ -8,32 +9,33 @@ SettingsMenu::SettingsMenu()
 {
 	setTitle(_t("settings.title"));
 
-	form_.SetOffset(90, 140);
-	form_.SetSpacing(10, 25);
-	form_.SetLabelAlignment(gui::Align::RIGHT);
+	m_form.SetOffset(90, 140);
+	m_form.SetSpacing(10, 25);
+	m_form.SetLabelAlignment(gui::Align::RIGHT);
 
-	cb_fullscreen_ = new gui::CheckBox(this);
-	cb_fullscreen_->SetCallbackID(1);
-	cb_fullscreen_->Check(Game::getInstance().isFullscreen());
-	form_.AddRow(_t("settings.fullscreen"), cb_fullscreen_);
+	m_vsync = new gui::CheckBox(this);
+	m_vsync->SetCallbackID(1);
+	m_vsync->Check(Game::getInstance().isVerticalSync());
+	m_form.AddRow(_t("settings.vsync"), m_vsync);
 
-	cb_vsync_ = new gui::CheckBox(this);
-	cb_vsync_->SetCallbackID(2);
-	cb_vsync_->Check(Game::getInstance().isVerticalSync());
-	form_.AddRow(_t("settings.vsync"), cb_vsync_);
+	m_resolutions = new gui::OptionList<sf::Vector2u>(this);
+	m_resolutions->SetCallbackID(2);
+	addResolution(APP_WIDTH, APP_HEIGHT);
+	addResolution(APP_WIDTH * 2, APP_HEIGHT * 2);
+	m_resolutions->SelectByValue(Game::getInstance().getWindow().getSize());
+	m_form.AddRow(_t("settings.resolution"), m_resolutions);
 
-	opt_languages_ = new gui::OptionList<std::string>(this);
-	opt_languages_->Add(L"English",  "en");
-	opt_languages_->Add(L"Français", "fr");
-	opt_languages_->Add(L"Deutsch",  "de");
+	m_languages = new gui::OptionList<std::string>(this);
+	m_languages->Add(L"English",  "en");
+	m_languages->Add(L"Français", "fr");
+	m_languages->Add(L"Deutsch",  "de");
+	m_languages->SelectByValue(I18n::getInstance().getCurrentLanguage());
+	m_languages->SetCallbackID(3);
+	m_form.AddRow(_t("settings.language"), m_languages);
 
-	opt_languages_->SelectByValue(I18n::getInstance().getCurrentLanguage());
-	opt_languages_->SetCallbackID(3);
-	form_.AddRow(_t("settings.language"), opt_languages_);
-
-	but_back_ = new CosmoButton(this, _t("back"));
-	but_back_->setPosition(210, 340);
-	but_back_->SetCallbackID(0);
+	m_back = new CosmoButton(this, _t("back"));
+	m_back->SetCallbackID(4);
+	m_back->setPosition(210, 340);
 }
 
 
@@ -41,28 +43,35 @@ void SettingsMenu::EventCallback(int id)
 {
 	switch (id)
 	{
-		case 0:
-			Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
-			break;
-		case  1:
-			Game::getInstance().setFullscreen(cb_fullscreen_->Checked());
+		case 1:
+			Game::getInstance().setVerticalSync(m_vsync->Checked());
 			break;
 		case 2:
-			Game::getInstance().setVerticalSync(cb_vsync_->Checked());
+			Game::getInstance().setResolution(m_resolutions->GetSelectedValue());
 			break;
 		case 3:
-			I18n::getInstance().loadFromCode(opt_languages_->GetSelectedValue());
+			I18n::getInstance().loadFromCode(m_languages->GetSelectedValue());
 			// delete other scenes
 			Game::getInstance().unloadScreens();
 			ControlPanel::getInstance().refreshTextTranslations();
 			// re-load i18ned texts
 			setTitle(_t("settings.title"));
-			form_.GetLabelAt(0)->setString(_t("settings.fullscreen"));
-			form_.GetLabelAt(1)->setString(_t("settings.vsync"));
-			form_.GetLabelAt(2)->setString(_t("settings.language"));
-			form_.AlignRows();
-
-			but_back_->setString(_t("back"));
+			m_form.GetLabelAt(0)->setString(_t("settings.vsync"));
+			m_form.GetLabelAt(1)->setString(_t("settings.resolution"));
+			m_form.GetLabelAt(2)->setString(_t("settings.language"));
+			m_form.AlignRows();
+			m_back->setString(_t("back"));
+			break;
+		case 4:
+			Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
 			break;
 	}
+}
+
+
+void SettingsMenu::addResolution(size_t width, size_t height)
+{
+	char buffer[16];
+	std::snprintf(buffer, sizeof buffer, "%ux%u", width, height);
+	m_resolutions->Add(buffer, sf::Vector2u(width, height));
 }

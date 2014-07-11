@@ -80,10 +80,9 @@ public:
 	void unloadScreens();
 
 	/**
-	 * Holds fullscreen mode property
+	 * Set the render window resolution
 	 */
-	void setFullscreen(bool fullscreen);
-	bool isFullscreen() const;
+	void setResolution(const sf::Vector2u& size);
 
 	/**
 	 * Holds vertical synchronization property
@@ -99,8 +98,6 @@ public:
 private:
 	Game();
 	~Game();
-
-	void createWindow();
 
 	/**
 	 * Save the configuration
@@ -118,7 +115,6 @@ private:
 	bool checkResourcesPurity(const std::string& resources_dir);
 
 	sf::RenderWindow m_window;
-	bool m_fullscreen;
 	bool m_vsync;
 	bool m_running;
 	bool m_resources_checked;

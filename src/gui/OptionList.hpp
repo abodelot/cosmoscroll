@@ -53,9 +53,6 @@ public:
 	 */
 	void SetAlign(Align::EAlign align);
 
-	// inherited
-	void Update(float frametime);
-
 	// inherited callbacks
 	void OnKeyPressed(sf::Keyboard::Key key);
 	void OnMouseClicked(int x, int y);
@@ -85,8 +82,6 @@ private:
 	ItemVector options_;
 	int current_opt_;
 	size_t max_opt_width_;
-	int dir_;
-	float scale_;
 	Align::EAlign align_;
 	int text_size_;
 	sf::RectangleShape box_;

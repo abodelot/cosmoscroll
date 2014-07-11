@@ -81,7 +81,7 @@ audio.sound_volume = Volume du son :
 # SettingsMenu
 settings.title = Préférences
 settings.vsync = Synchronisation verticale :
-settings.fullscreen = Plein écran :
+settings.resolution = Résolution :
 settings.language = Langue :
 
 # AboutMenu

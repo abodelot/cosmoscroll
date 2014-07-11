@@ -11,12 +11,13 @@ public:
 private:
 	void EventCallback(int id) override;
 
-	gui::CheckBox* cb_fullscreen_;
-	gui::CheckBox* cb_vsync_;
-	gui::OptionList<std::string>* opt_languages_;
+	void addResolution(size_t width, size_t height);
 
-	gui::Button* but_back_;
-	gui::FormLayout form_;
+	gui::CheckBox*                 m_vsync;
+	gui::OptionList<sf::Vector2u>* m_resolutions;
+	gui::OptionList<std::string>*  m_languages;
+	gui::Button*                   m_back;
+	gui::FormLayout                m_form;
 };
 
 #endif // SETTINGSMENU_HPP
