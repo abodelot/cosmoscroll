@@ -4,12 +4,14 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "Widget.hpp"
+
 #include "WidgetStyle.hpp"
 
 
 namespace gui
 {
+
+class Widget;
 
 /**
  * Gestionnaire et conteneur d'éléments graphiques

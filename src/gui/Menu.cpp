@@ -1,4 +1,5 @@
 #include "Menu.hpp"
+#include "Widget.hpp"
 #include <cstdio>
 #define JOY_DEADZONE	50.f
 

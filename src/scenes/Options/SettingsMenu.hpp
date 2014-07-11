@@ -13,7 +13,7 @@ private:
 
 	gui::CheckBox* cb_fullscreen_;
 	gui::CheckBox* cb_vsync_;
-	gui::OptionList* opt_languages_;
+	gui::OptionList<std::string>* opt_languages_;
 
 	gui::Button* but_back_;
 	gui::FormLayout form_;

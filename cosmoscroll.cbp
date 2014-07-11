@@ -151,7 +151,6 @@
 		<Unit filename="src/gui/Label.hpp" />
 		<Unit filename="src/gui/Menu.cpp" />
 		<Unit filename="src/gui/Menu.hpp" />
-		<Unit filename="src/gui/OptionList.cpp" />
 		<Unit filename="src/gui/OptionList.hpp" />
 		<Unit filename="src/gui/ProgressBar.cpp" />
 		<Unit filename="src/gui/ProgressBar.hpp" />

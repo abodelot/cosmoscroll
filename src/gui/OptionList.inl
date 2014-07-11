@@ -1,18 +1,15 @@
-#include <cassert>
-
-#include "OptionList.hpp"
 #include "Menu.hpp"
 #include "utils/SFML_Helper.hpp"
 
-#define ARROW_MIN_SCALE   0.5f
-#define ARROW_MAX_SCALE   1.1f
+namespace gui
+{
 
-#define BOX_PADDING      4
+const float ARROW_MIN_SCALE = 0.5f;
+const float ARROW_MAX_SCALE = 1.1f;
+const float BOX_PADDING = 4;
 
-using namespace gui;
-
-
-OptionList::OptionList(Menu* owner) :
+template <class T>
+OptionList<T>::OptionList(Menu* owner) :
 	Widget(owner, true)
 {
 	current_opt_ = -1;
@@ -48,8 +45,8 @@ OptionList::OptionList(Menu* owner) :
 	OnStateChanged(GetState());
 }
 
-
-void OptionList::BuildBoxes()
+template <class T>
+void OptionList<T>::BuildBoxes()
 {
 	int inside_box_width = max_opt_width_ + BOX_PADDING * 2;
 	int arrow_box_width = text_size_ + BOX_PADDING * 2;
@@ -78,14 +75,8 @@ void OptionList::BuildBoxes()
 	Resize(total_width, arrow_box_width);
 }
 
-
-void OptionList::AddOption(const sf::String& option)
-{
-	AddOption(option, "");
-}
-
-
-void OptionList::AddOption(const sf::String& option, const std::string& value)
+template <class T>
+void OptionList<T>::Add(const sf::String& option, const T& value)
 {
 	sf::Text str;
 	str.setString(option);
@@ -105,52 +96,46 @@ void OptionList::AddOption(const sf::String& option, const std::string& value)
 		BuildBoxes();
 	}
 	str.setPosition(ComputeIndentAlign(str));
-	std::pair<sf::Text, std::string> pair(str, value);
-	options_.push_back(pair);
+	options_.push_back(Item(str, value));
 }
 
-
-int OptionList::GetNbItems() const
+template <class T>
+size_t OptionList<T>::GetSize() const
 {
 	return options_.size();
 }
 
-
-std::string OptionList::GetOptionAt(int index) const
+template <class T>
+const T& OptionList<T>::GetValueAt(int index) const
 {
-	assert(index >= 0 && index < (int) options_.size());
-	const std::pair<sf::Text, std::string>& select = options_[index];
-	if (select.second.size() == 0)
-	{
-		return select.first.getString();
-	}
-	return select.second;
+	const Item& item = options_.at(index);
+	return item.second;
 }
 
-
-std::string OptionList::GetSelectedOption() const
+template <class T>
+const T& OptionList<T>::GetSelectedValue() const
 {
-	return GetOptionAt(current_opt_);
+	return GetValueAt(current_opt_);
 }
 
-
-int OptionList::GetSelectedOptionIndex() const
+template <class T>
+int OptionList<T>::GetSelectedIndex() const
 {
 	return current_opt_;
 }
 
-
-void OptionList::Select(int index)
+template <class T>
+void OptionList<T>::Select(int index)
 {
-	if (index >= 0 && index < (int) options_.size() && index != current_opt_)
+	if (index > 0 && index < (int) options_.size() && index != current_opt_)
 	{
 		current_opt_ = index;
 		CallTheCallback();
 	}
 }
 
-
-void OptionList::SelectByValue(const std::string& value)
+template <class T>
+void OptionList<T>::SelectByValue(const T& value)
 {
 	for (size_t i = 0; i < options_.size(); ++i)
 	{
@@ -162,25 +147,25 @@ void OptionList::SelectByValue(const std::string& value)
 	}
 }
 
-
-void OptionList::Clear()
+template <class T>
+void OptionList<T>::Clear()
 {
 	current_opt_ = -1;
 	options_.clear();
 }
 
-
-void OptionList::SetAlign(Align::EAlign align)
+template <class T>
+void OptionList<T>::SetAlign(Align::EAlign align)
 {
 	align_ = align;
-	for (std::vector<Item>::iterator it = options_.begin(); it != options_.end(); ++it)
+	for (typename ItemVector::iterator it = options_.begin(); it != options_.end(); ++it)
 	{
 		it->first.setPosition(ComputeIndentAlign(it->first));
 	}
 }
 
-
-void OptionList::OnKeyPressed(sf::Keyboard::Key key)
+template <class T>
+void OptionList<T>::OnKeyPressed(sf::Keyboard::Key key)
 {
 	if (options_.empty())
 	{
@@ -211,8 +196,8 @@ void OptionList::OnKeyPressed(sf::Keyboard::Key key)
 	}
 }
 
-
-void OptionList::OnMouseClicked(int x, int y)
+template <class T>
+void OptionList<T>::OnMouseClicked(int x, int y)
 {
 	(void) y;
 	int trigger_width = text_size_ + BOX_PADDING * 2;
@@ -233,8 +218,8 @@ void OptionList::OnMouseClicked(int x, int y)
 	}
 }
 
-
-void OptionList::OnMouseWheelMoved(int delta)
+template <class T>
+void OptionList<T>::OnMouseWheelMoved(int delta)
 {
 	if (delta < 0)
 	{
@@ -247,8 +232,8 @@ void OptionList::OnMouseWheelMoved(int delta)
 	CallTheCallback();
 }
 
-
-void OptionList::Update(float frametime)
+template <class T>
+void OptionList<T>::Update(float frametime)
 {
 	if (scale_ > ARROW_MAX_SCALE || scale_ < ARROW_MIN_SCALE)
 	{
@@ -259,8 +244,8 @@ void OptionList::Update(float frametime)
 	right_arrow_.setScale(scale_, scale_);
 }
 
-
-sf::Vector2f OptionList::ComputeIndentAlign(const sf::Text& option) const
+template <class T>
+sf::Vector2f OptionList<T>::ComputeIndentAlign(const sf::Text& option) const
 {
 	int x = text_size_ + BOX_PADDING * 3;
 	int y = (GetHeight() - sfh::height(option)) / 2;
@@ -278,8 +263,8 @@ sf::Vector2f OptionList::ComputeIndentAlign(const sf::Text& option) const
 	return sf::Vector2f(x, y);
 }
 
-
-void OptionList::OnStateChanged(State::EState state)
+template <class T>
+void OptionList<T>::OnStateChanged(State::EState state)
 {
 	const WidgetStyle& style = GetOwner()->GetWidgetStyle();
 	switch (state)
@@ -305,8 +290,8 @@ void OptionList::OnStateChanged(State::EState state)
 	}
 }
 
-
-void OptionList::draw(sf::RenderTarget& target, sf::RenderStates states) const
+template <class T>
+void OptionList<T>::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 	target.draw(box_, states);
@@ -319,15 +304,16 @@ void OptionList::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 }
 
-
-int OptionList::PreviousIndex() const
+template <class T>
+int OptionList<T>::PreviousIndex() const
 {
 	return current_opt_ > 0 ? current_opt_ - 1 : options_.size() - 1;
 }
 
-
-int OptionList::NextIndex() const
+template <class T>
+int OptionList<T>::NextIndex() const
 {
 	return current_opt_ == (int) options_.size() - 1 ? 0 : current_opt_ + 1;
 }
 
+}

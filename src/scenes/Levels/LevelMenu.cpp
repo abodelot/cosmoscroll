@@ -15,7 +15,7 @@ LevelMenu::LevelMenu():
 	gui::FormLayout form(90, 120);
 	form.SetSpacing(10, 16);
 
-	m_opt_levels = new gui::OptionList(this);
+	m_opt_levels = new gui::OptionList<int>(this);
 	form.AddRow(_t("levels.select"), m_opt_levels);
 
 	m_lab_progresion = new gui::Label(this, "");
@@ -46,7 +46,7 @@ void LevelMenu::onFocus()
 		bool activable = i <= last_unlocked;
 		if (activable)
 		{
-			m_opt_levels->AddOption(std::to_string(i));
+			m_opt_levels->Add(std::to_string(i), i);
 		}
 	}
 	m_opt_levels->Select(current - 1);
@@ -65,7 +65,7 @@ void LevelMenu::EventCallback(int id)
 		// Launch selected level
 		case 1:
 		{
-			int selected_level = m_opt_levels->GetSelectedOptionIndex() + 1;
+			int selected_level = m_opt_levels->GetSelectedValue();
 			// Load selected level in the level manager
 			m_levels.setCurrent(selected_level);
 			m_levels.initCurrentLevel();

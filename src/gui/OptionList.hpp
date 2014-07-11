@@ -13,6 +13,7 @@ namespace gui
  * Une liste défilante d'options
  * callback si : choix modifié
  */
+template <class T>
 class OptionList: public Widget
 {
 public:
@@ -21,29 +22,28 @@ public:
 	/**
 	 * Ajouter une option à la liste
 	 */
-	void AddOption(const sf::String& option);
-	void AddOption(const sf::String& display, const std::string& value);
+	void Add(const sf::String& display, const T& value);
 
-	int GetNbItems() const;
+	size_t GetSize() const;
 
-	std::string GetOptionAt(int index) const;
+	const T& GetValueAt(int index) const;
 
 	/**
 	 * Get option index currently selected (first is 0)
 	 */
-	int GetSelectedOptionIndex() const;
+	int GetSelectedIndex() const;
 
 	/**
 	 * Get selected option value
 	 * shortcut for GetOptionAt(GetSelectedOptionIndex())
 	 */
-	std::string GetSelectedOption() const;
+	const T& GetSelectedValue() const;
 
 	/**
 	 * Set the current displayed item
 	 */
 	void Select(int index);
-	void SelectByValue(const std::string& value);
+	void SelectByValue(const T& value);
 
 	// supprimer toutes les options
 	void Clear();
@@ -79,21 +79,24 @@ private:
 	int PreviousIndex() const;
 	int NextIndex() const;
 
-	sf::RectangleShape box_;
-	sf::RectangleShape inside_box_;
-	sf::ConvexShape left_arrow_;
-	sf::ConvexShape right_arrow_;
-	typedef std::pair<sf::Text, std::string> Item;
-	std::vector<Item> options_;
+	typedef std::pair<sf::Text, T> Item;
+	typedef std::vector<Item> ItemVector;
+
+	ItemVector options_;
 	int current_opt_;
 	size_t max_opt_width_;
 	int dir_;
 	float scale_;
 	Align::EAlign align_;
-
 	int text_size_;
+	sf::RectangleShape box_;
+	sf::RectangleShape inside_box_;
+	sf::ConvexShape left_arrow_;
+	sf::ConvexShape right_arrow_;
 };
 
 }
+
+#include "OptionList.inl"
 
 #endif // GUI_OPTIONLIST_HPP

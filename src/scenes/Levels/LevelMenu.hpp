@@ -16,11 +16,11 @@ public:
 private:
 	void EventCallback(int id) override;
 
-	sf::Text             m_title;
-	LevelManager&        m_levels;
-	CreditCounterWidget* m_credits;
-	gui::OptionList*     m_opt_levels;
-	gui::Label*          m_lab_progresion;
+	sf::Text              m_title;
+	LevelManager&         m_levels;
+	CreditCounterWidget*  m_credits;
+	gui::OptionList<int>* m_opt_levels;
+	gui::Label*           m_lab_progresion;
 };
 
 #endif // LEVELMENU_HPP

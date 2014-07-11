@@ -22,10 +22,10 @@ SettingsMenu::SettingsMenu()
 	cb_vsync_->Check(Game::getInstance().isVerticalSync());
 	form_.AddRow(_t("settings.vsync"), cb_vsync_);
 
-	opt_languages_ = new gui::OptionList(this);
-	opt_languages_->AddOption(L"English",  "en");
-	opt_languages_->AddOption(L"Français", "fr");
-	opt_languages_->AddOption(L"Deutsch",  "de");
+	opt_languages_ = new gui::OptionList<std::string>(this);
+	opt_languages_->Add(L"English",  "en");
+	opt_languages_->Add(L"Français", "fr");
+	opt_languages_->Add(L"Deutsch",  "de");
 
 	opt_languages_->SelectByValue(I18n::getInstance().getCurrentLanguage());
 	opt_languages_->SetCallbackID(3);
@@ -51,7 +51,7 @@ void SettingsMenu::EventCallback(int id)
 			Game::getInstance().setVerticalSync(cb_vsync_->Checked());
 			break;
 		case 3:
-			I18n::getInstance().loadFromCode(opt_languages_->GetSelectedOption());
+			I18n::getInstance().loadFromCode(opt_languages_->GetSelectedValue());
 			// delete other scenes
 			Game::getInstance().unloadScreens();
 			ControlPanel::getInstance().refreshTextTranslations();
