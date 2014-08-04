@@ -7,9 +7,10 @@
 	<anim name="scoot"       img="entities/bandit-scoot.png"       width="48" height="32" count="2" delay="0.1" />
 	<anim name="interceptor" img="entities/bandit-interceptor.png" width="56" height="48" count="2" delay="0.1" />
 	<anim name="gunship"     img="entities/bandit-gunship.png"     width="64" height="48" count="2" delay="0.1" />
-	<anim name="saucer"      img="entities/flying-saucer.png" width="48" height="48" count="4" delay="0.1" />
-	<anim name="mine"        img="entities/mine.png"          width="32" height="32" count="2" delay="0.2" />
-	<anim name="h-mine"      img="entities/mine-heavy.png"    width="48" height="48" count="2" delay="0.2" />
+	<anim name="flying-saucer"     img="entities/flying-saucer.png" width="48" height="48" count="4" delay="0.1" />
+	<anim name="flying-saucer-big" img="entities/flying-saucer-big.png" width="64" height="48" count="2" delay="0.2"/>
+	<anim name="mine"        img="entities/mine.png"          width="32" height="32" count="8" delay="0.1" />
+	<anim name="h-mine"      img="entities/mine-heavy.png"    width="48" height="48" count="8" delay="0.1" />
 	<anim name="explosion"   img="entities/explosion.png"     width="64" height="64" count="11" delay="0.12" />
 	<anim name="boss-tentacles" img="entities/boss-tentacles.png" width="140" height="100" count="6" delay="0.12" />
 	<anim name="brain-boss" img="entities/brain-boss.png" width="96" height="96" count="2" delay="0.4" />

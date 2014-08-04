@@ -15,8 +15,11 @@
 	<spaceship id="b3" name="Bandit Gunship" animation="gunship" hp="12" speed="80" move="circle" attack="auto_aim" points="5">
 		<weapon id="laser-blue" x="3" y="34"/>
 	</spaceship>
-	<spaceship id="s1" name="Flying Saucer" animation="saucer" hp="8" speed="90" move="sinus" attack="auto_aim" points="3">
+	<spaceship id="s1" name="Flying Saucer" animation="flying-saucer" hp="8" speed="90" move="sinus" attack="auto_aim" points="3">
 		<weapon id="laser-pink" x="0" y="24"/>
+	</spaceship>
+	<spaceship id="s2" name="Flying Saucer Big" animation="flying-saucer-big" hp="12" speed="100" move="sinus" attack="on_sight" points="5">
+		<weapon id="laser-pink" x="32" y="48"/>
 	</spaceship>
 	<spaceship id="m1" name="Mine"   animation="mine" hp="12" move="magnet" speed="60" points="2"/>
 	<spaceship id="m2" name="Mine 2" animation="h-mine" hp="24" move="magnet" speed="80" points="4"/>
