@@ -13,7 +13,6 @@
 #include "Label.hpp"
 #include "Image.hpp"
 #include "OptionList.hpp"
-#include "ProgressBar.hpp"
 #include "Slider.hpp"
 #include "TextBox.hpp"
 // layouts

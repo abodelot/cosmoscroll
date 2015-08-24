@@ -71,7 +71,7 @@ void SettingsMenu::EventCallback(int id)
 
 void SettingsMenu::addResolution(size_t width, size_t height)
 {
-	char buffer[16];
-	std::snprintf(buffer, sizeof buffer, "%ux%u", width, height);
-	m_resolutions->Add(buffer, sf::Vector2u(width, height));
+	std::ostringstream oss;
+	oss << width << "x" << height;
+	m_resolutions->Add(oss.str(), sf::Vector2u(width, height));
 }
