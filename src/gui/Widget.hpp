@@ -103,6 +103,8 @@ protected:
 	 */
 	virtual void OnCallbackTriggered() {}
 
+	void CenterText(sf::Text& text);
+
 private:
 	Menu* owner_;
 	int callback_id_;

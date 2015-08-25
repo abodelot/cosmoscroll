@@ -28,13 +28,6 @@ public:
 
 	void setColor(const sf::Color& color);
 
-	void SetTextPadding(int x, int y);
-
-	/**
-	 * Indiquer l'alignement du texte
-	 */
-	virtual void SetAlign(Align::EAlign align);
-
 	// callbacks
 	virtual void OnKeyPressed(sf::Keyboard::Key code);
 	virtual void OnMouseClicked(int, int);
@@ -48,7 +41,6 @@ protected:
 
 private:
 	sf::Text text_;
-	Align::EAlign align_;
 };
 
 }

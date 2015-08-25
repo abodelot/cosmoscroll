@@ -13,8 +13,6 @@ ConfigButton::ConfigButton(gui::Menu* owner, Action::ID action):
 {
 	m_background.setTexture(Resources::getTexture("gui/button-config.png"));
 	m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
-	SetTextPadding(0, -2);
-	SetAlign(gui::Align::CENTER);
 	SetCallbackID(action);
 	OnStateChanged(GetState());
 }

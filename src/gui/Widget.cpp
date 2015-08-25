@@ -84,3 +84,14 @@ void Widget::CallTheCallback()
 		owner_->EventCallback(callback_id_);
 	}
 }
+
+
+void Widget::CenterText(sf::Text& text)
+{
+	const sf::FloatRect& rect = text.getLocalBounds();
+	// Cast position to int for pixel-perfect rendering
+	text.setPosition(
+		(int) (width_ - rect.width) / 2,
+		(int) (height_ - rect.height) / 2 - rect.top
+	);
+}

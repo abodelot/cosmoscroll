@@ -48,11 +48,6 @@ public:
 	// supprimer toutes les options
 	void Clear();
 
-	/**
-	 * Indiquer l'alignement du texte des options
-	 */
-	void SetAlign(Align::EAlign align);
-
 	// inherited callbacks
 	void OnKeyPressed(sf::Keyboard::Key key);
 	void OnMouseClicked(int x, int y);
@@ -68,11 +63,6 @@ private:
 
 	void BuildBoxes();
 
-	/**
-	 * Calculer l'indentation d'une option selon l'alignement courant
-	 */
-	sf::Vector2f ComputeIndentAlign(const sf::Text& option) const;
-
 	int PreviousIndex() const;
 	int NextIndex() const;
 
@@ -82,7 +72,6 @@ private:
 	ItemVector options_;
 	int current_opt_;
 	size_t max_opt_width_;
-	Align::EAlign align_;
 	int text_size_;
 	sf::RectangleShape box_;
 	sf::RectangleShape inside_box_;

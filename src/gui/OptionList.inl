@@ -12,7 +12,6 @@ OptionList<T>::OptionList(Menu* owner) :
 {
 	current_opt_ = -1;
 	max_opt_width_ = 0;
-	align_ = Align::LEFT;
 	const WidgetStyle& style = owner->GetWidgetStyle();
 	text_size_ = style.global_text_size;
 
@@ -91,7 +90,7 @@ void OptionList<T>::Add(const sf::String& option, const T& value)
 		max_opt_width_ = width;
 		BuildBoxes();
 	}
-	str.setPosition(ComputeIndentAlign(str));
+	CenterText(str);
 	options_.push_back(Item(str, value));
 }
 
@@ -148,16 +147,6 @@ void OptionList<T>::Clear()
 {
 	current_opt_ = -1;
 	options_.clear();
-}
-
-template <class T>
-void OptionList<T>::SetAlign(Align::EAlign align)
-{
-	align_ = align;
-	for (typename ItemVector::iterator it = options_.begin(); it != options_.end(); ++it)
-	{
-		it->first.setPosition(ComputeIndentAlign(it->first));
-	}
 }
 
 template <class T>
@@ -226,25 +215,6 @@ void OptionList<T>::OnMouseWheelMoved(int delta)
 		current_opt_ = NextIndex();
 	}
 	CallTheCallback();
-}
-
-template <class T>
-sf::Vector2f OptionList<T>::ComputeIndentAlign(const sf::Text& option) const
-{
-	int x = text_size_ + BOX_PADDING * 3;
-	int y = (GetHeight() - sfh::height(option)) / 2;
-	switch (align_)
-	{
-		case Align::CENTER:
-			x += (max_opt_width_ - sfh::width(option)) / 2;
-			break;
-		case Align::RIGHT:
-			x += max_opt_width_ - sfh::width(option);
-			break;
-		default:
-			break;
-	}
-	return sf::Vector2f(x, y);
 }
 
 template <class T>

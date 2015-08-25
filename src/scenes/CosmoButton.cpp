@@ -11,9 +11,7 @@ CosmoButton::CosmoButton(gui::Menu* owner, const sf::String& text) :
 	m_background(Resources::getTexture("gui/button.png"))
 {
 	m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
-
-	SetTextPadding(0, 8);
-	SetAlign(gui::Align::CENTER);
+	setString(text);
 	OnStateChanged(GetState());
 }
 
