@@ -3,10 +3,10 @@ cosmoscroll.layout
 cosmoscroll.depend
 
 # Executable
-bin/cosmoscroll
+cosmoscroll
 
-# Screenshots
-bin/screenshots
+# Screenshots directory
+/screenshots
 
 # Compiled object files
 *.o

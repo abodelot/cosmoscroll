@@ -195,7 +195,7 @@
 			<ship id="b1" y="250" />
 			<ship id="b1" y="205" t="1"/>
 			<ship id="b1" y="290" t="1"/>
-			<decor id="gate" y="0" t="2"/>
+			<decor id="gate" y="0" t="3"/>
 			<ship id="b2" y="200" t="7"/>
 			<ship id="b2" y="100" t="2"/>
 			<decor id="canon" t="2"/>
@@ -247,7 +247,6 @@
 			<ship id="b1" y="300" t="1.2"/>
 			<ship id="m1" y="50"/>
 			<ship id="b2" y="340" t="1.2"/>
-			<ship id="b2" y="140" t="1.2"/>
 			<ship id="b1" y="180" t="1.2"/>
 			<ship id="b2" y="280" t="1.2"/>
 			<ship id="b1" y="300" t="1.2"/>

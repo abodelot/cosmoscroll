@@ -1,4 +1,4 @@
-TARGET   := bin/cosmoscroll
+TARGET   := cosmoscroll
 SRCDIR   := src
 SRC      := $(shell find $(SRCDIR) -name "*.cpp" -type f)
 OBJDIR   := obj

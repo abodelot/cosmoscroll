@@ -11,10 +11,10 @@
 #define APP_LICENSE     "GPLv3"
 
 #define COSMOSCROLL_DIRECTORY "cosmoscroll"
-#define COSMOSCROLL_WEBSITE   "http://cosmoscroll.googlecode.com"
+#define COSMOSCROLL_WEBSITE   "http://github.com/abodelot/cosmoscroll"
 
 #define VERSION_STRING   APP_TITLE " " APP_VERSION "\n\n" \
-                         "Copyright (C) 2008-2014 project contributors.\n" \
+                         "Copyright (C) 2008-2015 project contributors.\n" \
                          "This is free software; see the source for copying conditions.  There is NO\n" \
                          "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
