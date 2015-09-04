@@ -12,13 +12,10 @@
 #define PROG_BAR_HEIGHT      10
 #define PROG_BAR_TEXT_LENGTH 60   // label length (pixels) on progress bars
 
-#define Y_LINE_1       10 // Y first line
-#define Y_LINE_2       30 // Y second line
-#define TEXT_PADDING_Y 3  // Y text offset
 #define TEXT_SIZE      12
 
-#define LEVEL_BAR_X 425
-#define LEVEL_BAR_Y 41
+#define LEVEL_BAR_X 420
+#define LEVEL_BAR_Y 22
 
 #define BAR_SHIP   sf::Color(0xc6, 0x00, 0x00)
 #define BAR_SHIELD sf::Color(0x00, 0x80, 0xe0)
@@ -64,15 +61,15 @@ ControlPanel::ControlPanel():
 	bs_speed_.setPosition(334, 31);
 
 	// right container
-	timer_.setPosition(430, 12);
+	timer_.setPosition(480, 6);
 	timer_.setFont(font);
 	timer_.setCharacterSize(TEXT_SIZE);
 
-	game_info_.setPosition(530, 12);
+	game_info_.setPosition(450, 33);
 	game_info_.setFont(font);
 	game_info_.setCharacterSize(TEXT_SIZE);
 
-	str_points_.setPosition(530, 26);
+	str_points_.setPosition(530, 33);
 	str_points_.setCharacterSize(TEXT_SIZE);
 	str_points_.setFont(font);
 
@@ -80,7 +77,7 @@ ControlPanel::ControlPanel():
 	level_bar_.setTexture(Resources::getTexture("gui/level-bar.png"));
 	level_bar_.setPosition(LEVEL_BAR_X, LEVEL_BAR_Y);
 	level_cursor_.setTexture(Resources::getTexture("gui/level-cursor.png"));
-	level_cursor_.setPosition(LEVEL_BAR_X, LEVEL_BAR_Y - 2);
+	level_cursor_.setPosition(LEVEL_BAR_X, LEVEL_BAR_Y);
 	level_duration_ = 0;
 }
 

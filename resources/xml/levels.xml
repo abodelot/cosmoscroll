@@ -222,22 +222,21 @@
 				<ship id="b1c" y="150"/>
 				<ship id="b1c" y="180"/>
 			</loop>
-			<wait t="1"/>
+			<wait t="2"/>
 			<loop count="2">
 				<ship id="b1c" y="160" t="1"/>
 				<ship id="b1c" y="190"/>
 				<ship id="b1c" y="220"/>
 				<ship id="b1c" y="250"/>
 			</loop>
-			<wait t="1"/>
+			<wait t="2"/>
 			<loop count="2">
 				<ship id="b1c" y="240" t="1"/>
 				<ship id="b1c" y="270"/>
 				<ship id="b1c" y="300"/>
 				<ship id="b1c" y="330"/>
 			</loop>
-			<ship id="b2" y="340" t="6"/>
-			<ship id="b2" y="140" t="1.2"/>
+			<ship id="b2" y="140" t="6"/>
 			<ship id="b2" y="300" t="1.2"/>
 			<ship id="b2" y="220" t="1.2"/>
 			<ship id="m1" y="120"/>
