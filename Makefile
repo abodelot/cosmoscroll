@@ -35,3 +35,18 @@ mrproper: clean
 
 all: mrproper $(TARGET)
 
+APP_NAME=$(TARGET)
+# Extract version number from latest tag (v0.1 => 0.1)
+APP_VERSION=`git describe --tags --abbrev=0 | cut -c2-`
+# Example: linux-64bits
+APP_ARCH=`uname -s | tr '[:upper:]' '[:lower:]'`-`getconf LONG_BIT`bits
+
+PACKAGE_NAME=$(APP_NAME)_$(APP_VERSION)_$(APP_ARCH).tar.gz
+tarball: $(TARGET)
+	@tar -cvzf $(PACKAGE_NAME) --directory .. \
+		cosmoscroll/COPYING \
+		cosmoscroll/README.md \
+		cosmoscroll/resources \
+		cosmoscroll/$(TARGET)
+	@echo "\033[1;32mgenerated archive: $(PACKAGE_NAME)\033[0m"
+

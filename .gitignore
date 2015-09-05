@@ -1,7 +1,3 @@
-# Code::Blocks
-cosmoscroll.layout
-cosmoscroll.depend
-
 # Executable
 cosmoscroll
 
@@ -11,3 +7,9 @@ cosmoscroll
 # Compiled object files
 *.o
 
+# Generated tarballs
+*.tar.gz
+
+# Code::Blocks files
+cosmoscroll.layout
+cosmoscroll.depend
