@@ -3,7 +3,6 @@
 #include "core/Constants.hpp"
 #include "core/SoundSystem.hpp"
 #include "core/Resources.hpp"
-#include "utils/SFML_Helper.hpp"
 
 
 gui::WidgetStyle BaseMenu::m_gui_style;
@@ -61,7 +60,8 @@ void BaseMenu::setTitle(const sf::String& text, int y)
 	m_title.setFont(*m_gui_style.global_font);
 	m_title.setCharacterSize(40);
 	m_title.setString(text);
-	m_title.setPosition((int) (APP_WIDTH - sfh::width(m_title)) / 2, y);
+	int x = (APP_WIDTH - m_title.getLocalBounds().width) / 2;
+	m_title.setPosition(x, y);
 }
 
 

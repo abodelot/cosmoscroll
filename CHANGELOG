@@ -1,0 +1,121 @@
+CosmoScroll 0.5 - Unreleased
+
+  * Gameplay
+  - Extended all levels
+  - Added 2 new end bosses
+  - Improved movement patterns for enemy spaceships
+  - Removed secondary weapon (confusing)
+  - Removed hardcore mode (useless)
+  - Removed shield auto-regeneration (too easy)
+  - Added 'full repair' and 'full shield' power-ups
+
+  * Display
+  - Improved sprites for asteroids, spaceships and power-ups
+  - Improved level progress bar design
+  - Display binding conflicts in keyboard and joystick layout menus
+  - New armory menu, more user-friendly
+  - Replaced fullscreen mode with a zoomed mode (resolution x2)
+
+  * Misc
+  - Improved particle system rendering performance with vertex arrays
+  - Added 4 new background musics
+  - Migrated from SFML 1.6 to 2.1
+  - Migrated project repository from googlecode to github
+  - c++11 compiler is now required
+
+
+CosmoScroll 0.4 - Released on 2012-07-22
+
+  * Gameplay
+  - Player can collect credits by destroying enemies in Level Mode
+  - Collected credits can be spent in Armory Menu to upgrade the spaceship
+  - 6 components available for upgrades: Energy Shield, Armor, Engine, Heatsink, Laser Cannon and Plasma Cannon
+  - Import spaceship upgraded in Level Mode when playing in Arcade Mode
+  - Added 2 new enemy spaceships
+  - Added interactive decors in levels (doors, turrets and cannons)
+  - Play audio signal when heat level raises
+  - Escape no longer quit the game without confirmation (use Alt-F4 for this instead)
+
+  * Display
+  - New design for the control panel
+  - Display a timer for each temporary power-up in the control panel
+  - Decors and spaceships flash in red when damaged
+  - Parallax scrolling, with new background images
+  - Animation when player is destroyed
+  - Improved smoke effect
+  - Window centered on desktop at start
+
+  * Misc
+  - Different background music for each level
+  - Added German translation
+  - Enable/disable vertical synchronization in settings menu
+  - Added new sound effects
+  - Optimized pixel-perfect collisions
+  - Configuration saved in the OS settings directory
+  - The game can be launched from any directory (doesn't require to be in game directory anymore)
+  - Fixed wrong md5 checksums on 64 bits platforms
+  - Fixed players allowed to send score with an empty pseudo
+  - Dependencies included in Linux release
+
+
+CosmoScroll 0.3 - Released on 2011-05-24
+
+  * Gameplay
+  - Player can upload his score to the online leaderboard in Arcarde Mode
+  - Added menu for fetching highscores from the online leaderboard
+  - More balanced difficulty in Arcade Mode: the more you play, the more powerful the enemies are
+  - Scoring in Arcade Mode is now points-based (instead of time-based)
+  - Added hardcore mode: replay all levels with stronger enemies once the game is finished
+  - Added sinus-wave movement for enemy spaceships
+  - Player cannot shot himself anymore with his own missiles
+  - Removed "bad" power-ups, added "double laser" power-up
+  - Story Mode has now 8 levels
+  - Added 1 mini-boss in levels
+  - Fixed bug with joystick sensitivity
+  - Fixed bug in collision detection with end boss's shots
+
+  * Display
+  - Asteroids spin on themselves
+  - Show a level progress bar in Story Mode
+  - Added fullscreen mode
+
+  * Misc
+  - Play sounds for enemy spaceships' weapons
+  - Menus are more user-friendly and mouse-compatible with new widgets (buttons, sliders, checkboxes, listboxes)
+  - Added menu to set language
+  - Added menu to toggle and set music volume and sound volume
+  - Added menu to set joystick sensitivity
+
+
+CosmoScroll 0.2 - Released on 2010-03-13
+
+  * Gameplay
+  - Power-ups do not block shots anymore
+  - Pixel-perfect collision system
+  - Player's spaceship is not reset anymore between levels
+  - Disabled friendly-fire for enemy spaceships (but they can collide with asteroids)
+  - Story Mode has now 7 levels
+  - Added 2 new spaceships
+  - Added 4 new power-ups
+  - Pause the game when window is not focused anymore
+
+  * Display
+  - Show key names instead of code numbers in the keyboard configuration menu
+  - Ability to move the control panel at the top or the bottom of the screen
+  - Slower scrolling for background stars
+  - Added animated sprites for spaceships
+
+  * Misc
+  - Ability to save screenshots
+  - Easter egg: user can control the spaceship in the intro screen
+  - Added 1 new background music
+  - Save sound volume and music volume in settings file
+  - Define game objects (weapons, animations, spaceships) in XML files
+  - Level can contain more complex XML scripting
+  - I18n support: French and English translations available, the game detects the default system locale
+
+
+CosmoScroll 0.1 - Released on 2008-12-17
+
+  - First public release
+

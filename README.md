@@ -1,6 +1,8 @@
 # CosmoScroll
 
-A space-based shoot'em up game, written in C++ using the SFML library.
+CosmoScroll is a space-based shoot'em up game. Inspired by games such as R-Type and Gradius, it features side-scrolling, retro-looking graphics and chiptune music.
+
+This project is written in C++ with the SFML library. It also uses DUMB for playing modules files, and TinyXML for parsing XML files.
 
 - Author: Alexandre Bodelot <alexandre.bodelot@gmail.com>
 - Website: http://github.com/abodelot/cosmoscroll
@@ -93,4 +95,3 @@ You can reset the game by deleting this file, a new one will be created the next
 - hemi-head.tff: [Typodermic Fonts Inc.](http://www.dafont.com/hemi-head.font)
 - Vera.ttf: [Gnome Project](http://www.dafont.com/bitstream-vera-sans.font)
 - VeraMono.ttf: [Gnome Project](http://www.dafont.com/bitstream-vera-mono.font)
-
