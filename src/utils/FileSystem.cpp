@@ -9,8 +9,12 @@
 
 #if defined(_WIN32) || defined(__WIN32__)
 	// Windows
-	define SYS_WINDOWS
+	#define SYS_WINDOWS
 	#include <direct.h>     // _mkdir
+	#if defined(_MSC_VER)
+		#define S_ISDIR(mode) (((mode) & S_IFMT) == S_IFDIR)
+		#define S_ISREG(mode) (((mode) & S_IFMT) == S_IFREG)
+	#endif
 
 #elif defined(linux) || defined(__linux)
 	// Linux
