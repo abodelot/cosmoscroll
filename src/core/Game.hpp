@@ -11,120 +11,120 @@ class Screen;
 class Game
 {
 public:
-	enum ScreenID
-	{
-		SC_IntroScreen,
-		SC_PlayScreen,
-		SC_GameOverScreen,
-		SC_InfinityModeMenu,
-		SC_SendScoreMenu,
-		SC_LeaderboardMenu,
-		SC_PauseMenu,
-		SC_MainMenu,
-		SC_AboutMenu,
-		SC_LevelMenu,
-		SC_ArmoryMenu,
-		SC_OptionMenu,
-		SC_KeyboardMenu,
-		SC_JoystickMenu,
-		SC_SettingsMenu,
-		SC_AudioMenu,
+    enum ScreenID
+    {
+        SC_IntroScreen,
+        SC_PlayScreen,
+        SC_GameOverScreen,
+        SC_InfinityModeMenu,
+        SC_SendScoreMenu,
+        SC_LeaderboardMenu,
+        SC_PauseMenu,
+        SC_MainMenu,
+        SC_AboutMenu,
+        SC_LevelMenu,
+        SC_ArmoryMenu,
+        SC_OptionMenu,
+        SC_KeyboardMenu,
+        SC_JoystickMenu,
+        SC_SettingsMenu,
+        SC_AudioMenu,
 
-		SC_COUNT
-	};
+        SC_COUNT
+    };
 
-	static Game& getInstance();
+    static Game& getInstance();
 
-	/**
-	 * @param path: name by which the program was called
-	 */
-	void init(const std::string& path);
+    /**
+     * @param path: name by which the program was called
+     */
+    void init(const std::string& path);
 
-	void loadResources(const std::string& data_dir);
+    void loadResources(const std::string& data_dir);
 
-	/**
-	 * Override location of the configuration file
-	 * @param config_path: directory of file
-	 */
-	void setConfigFile(const std::string& config_path);
+    /**
+     * Override location of the configuration file
+     * @param config_path: directory of file
+     */
+    void setConfigFile(const std::string& config_path);
 
-	/**
-	 * Load the configuration file
-	 */
-	bool loadConfig();
+    /**
+     * Load the configuration file
+     */
+    bool loadConfig();
 
-	/**
-	 * Enter application main loop
-	 * @return error code
-	 */
-	int run();
+    /**
+     * Enter application main loop
+     * @return error code
+     */
+    int run();
 
-	/**
-	 * Get application rendering window
-	 */
-	sf::RenderWindow& getWindow();
+    /**
+     * Get application rendering window
+     */
+    sf::RenderWindow& getWindow();
 
-	/**
-	 * Save settings and exit application
-	 */
-	void quit();
+    /**
+     * Save settings and exit application
+     */
+    void quit();
 
-	/**
-	 * Set screen to be displayed
-	 */
-	void setCurrentScreen(ScreenID screen);
+    /**
+     * Set screen to be displayed
+     */
+    void setCurrentScreen(ScreenID screen);
 
-	/**
-	 * Deallocate loaded screens, except the current one
-	 */
-	void unloadScreens();
+    /**
+     * Deallocate loaded screens, except the current one
+     */
+    void unloadScreens();
 
-	/**
-	 * Set the render window resolution
-	 */
-	void setResolution(const sf::Vector2u& size);
+    /**
+     * Set the render window resolution
+     */
+    void setResolution(const sf::Vector2u& size);
 
-	/**
-	 * Holds vertical synchronization property
-	 */
-	void setVerticalSync(bool vsync);
-	bool isVerticalSync() const;
+    /**
+     * Holds vertical synchronization property
+     */
+    void setVerticalSync(bool vsync);
+    bool isVerticalSync() const;
 
-	/**
-	 * Check is game resources have been modified (see MD5 checksums)
-	 */
-	bool resourcesChecked() const;
+    /**
+     * Check is game resources have been modified (see MD5 checksums)
+     */
+    bool resourcesChecked() const;
 
 private:
-	Game();
-	~Game();
+    Game();
+    ~Game();
 
-	/**
-	 * Save the configuration
-	 */
-	void writeConfig() const;
+    /**
+     * Save the configuration
+     */
+    void writeConfig() const;
 
-	/**
-	 * Take a screenshot and save the image to screenshot_dir_
-	 */
-	void takeScreenshot() const;
+    /**
+     * Take a screenshot and save the image to screenshot_dir_
+     */
+    void takeScreenshot() const;
 
-	/**
-	 * Check game data files are unaltered
-	 */
-	bool checkResourcesPurity(const std::string& resources_dir);
+    /**
+     * Check game data files are unaltered
+     */
+    bool checkResourcesPurity(const std::string& resources_dir);
 
-	sf::RenderWindow m_window;
-	bool m_vsync;
-	bool m_running;
-	bool m_resources_checked;
+    sf::RenderWindow m_window;
+    bool m_vsync;
+    bool m_running;
+    bool m_resources_checked;
 
-	// Screens
-	Screen* m_screens[SC_COUNT];
-	Screen* m_current_screen;
+    // Screens
+    Screen* m_screens[SC_COUNT];
+    Screen* m_current_screen;
 
-	std::string m_app_dir; // Directory from which application is running
-	std::string m_config_filename;
+    std::string m_app_dir; // Directory from which application is running
+    std::string m_config_filename;
 };
 
 #endif // GAME_HPP

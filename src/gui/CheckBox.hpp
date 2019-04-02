@@ -13,34 +13,34 @@ namespace gui
 class CheckBox: public Widget
 {
 public:
-	CheckBox(Menu* owner);
+    CheckBox(Menu* owner);
 
-	/**
-	 * @return true si la case à cocher est cochée
-	 */
-	bool Checked() const;
+    /**
+     * @return true si la case à cocher est cochée
+     */
+    bool Checked() const;
 
-	/**
-	 * Check/uncheck the checkbox
-	 */
-	void Check(bool checked);
+    /**
+     * Check/uncheck the checkbox
+     */
+    void Check(bool checked);
 
-	// inherited callbacks
-	void OnKeyPressed(sf::Keyboard::Key code);
-	void OnMouseClicked(int, int);
+    // inherited callbacks
+    void OnKeyPressed(sf::Keyboard::Key code);
+    void OnMouseClicked(int, int);
 
 protected:
-	// inherited
-	void OnStateChanged(State::EState state);
+    // inherited
+    void OnStateChanged(State::EState state);
 
 private:
-	// inherited
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    // inherited
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	bool checked_;
-	sf::RectangleShape box_;
-	sf::RectangleShape v1_;
-	sf::RectangleShape v2_;
+    bool checked_;
+    sf::RectangleShape box_;
+    sf::RectangleShape v1_;
+    sf::RectangleShape v2_;
 };
 
 }

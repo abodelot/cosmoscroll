@@ -13,92 +13,92 @@ class Projectile;
 class Entity: public sf::Sprite
 {
 public:
-	struct BoundingBox
-	{
-		BoundingBox();
-		BoundingBox(float l, float t, float r, float b);
+    struct BoundingBox
+    {
+        BoundingBox();
+        BoundingBox(float l, float t, float r, float b);
 
-		float left;
-		float top;
-		float right;
-		float bottom;
-	};
+        float left;
+        float top;
+        float right;
+        float bottom;
+    };
 
-	enum Team
-	{
-		GOOD, NEUTRAL, BAD
-	};
+    enum Team
+    {
+        GOOD, NEUTRAL, BAD
+    };
 
-	Entity();
+    Entity();
 
-	/**
-	 * If true, entity will be removed from the scene
-	 */
-	bool isDead() const;
+    /**
+     * If true, entity will be removed from the scene
+     */
+    bool isDead() const;
 
-	/**
-	 * Destroy entity and trigger onDestroy callback
-	 */
-	void kill();
+    /**
+     * Destroy entity and trigger onDestroy callback
+     */
+    void kill();
 
-	Team getTeam() const;
+    Team getTeam() const;
 
-	// implement to trigger collision callbacks
-	virtual void collides(Entity& entity) = 0;
+    // implement to trigger collision callbacks
+    virtual void collides(Entity& entity) = 0;
 
-	/**
-	 * Register texture for pixel-perfect collision when attached to sprite
-	 */
-	void setTexture(const sf::Texture& texture);
+    /**
+     * Register texture for pixel-perfect collision when attached to sprite
+     */
+    void setTexture(const sf::Texture& texture);
 
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	/**
-	 * Called when entity is inserted in the entity manager
-	 */
-	virtual void onInit() {}
+    /**
+     * Called when entity is inserted in the entity manager
+     */
+    virtual void onInit() {}
 
-	/**
-	 * Called each frame
-	 */
-	virtual void onUpdate(float frametime) = 0;
+    /**
+     * Called each frame
+     */
+    virtual void onUpdate(float frametime) = 0;
 
-	/**
-	 * Called when entity is killed during the game
-	 */
-	virtual void onDestroy() {}
+    /**
+     * Called when entity is killed during the game
+     */
+    virtual void onDestroy() {}
 
-	virtual void onCollision(Entity&)     {}
-	virtual void onCollision(Damageable&) {}
-	virtual void onCollision(PowerUp&)    {}
-	virtual void onCollision(Projectile&) {}
+    virtual void onCollision(Entity&)     {}
+    virtual void onCollision(Damageable&) {}
+    virtual void onCollision(PowerUp&)    {}
+    virtual void onCollision(Projectile&) {}
 
-	// helpers -----------------------------------------------------------------
+    // helpers -----------------------------------------------------------------
 
-	BoundingBox getBoundingBox() const;
+    BoundingBox getBoundingBox() const;
 
-	inline float getWidth() const  { return getTextureRect().width; }
-	inline float getHeight() const { return getTextureRect().height; }
+    inline float getWidth() const  { return getTextureRect().width; }
+    inline float getHeight() const { return getTextureRect().height; }
 
-	inline float getX() const { return getPosition().x; }
-	inline float getY() const { return getPosition().y; }
-	inline void setX(float x) { setPosition(x, getPosition().y); }
-	inline void setY(float y) { setPosition(getPosition().x, y); }
+    inline float getX() const { return getPosition().x; }
+    inline float getY() const { return getPosition().y; }
+    inline void setX(float x) { setPosition(x, getPosition().y); }
+    inline void setY(float y) { setPosition(getPosition().x, y); }
 
-	sf::Vector2f getCenter() const;
+    sf::Vector2f getCenter() const;
 
-	// ugly hacks --------------------------------------------------------------
+    // ugly hacks --------------------------------------------------------------
 
-	virtual float getSpeedX() const { return 0.f; }
-	virtual float getSpeedY() const { return 0.f; }
+    virtual float getSpeedX() const { return 0.f; }
+    virtual float getSpeedY() const { return 0.f; }
 
 protected:
-	void setTeam(Team team);
+    void setTeam(Team team);
 
 private:
-	bool m_dead;
-	Team m_team;
+    bool m_dead;
+    Team m_team;
 };
 
 #endif // ENTITY_HPP

@@ -5,27 +5,27 @@ using namespace gui;
 
 Widget::Widget(Menu* owner, bool focusable)
 {
-	focusable_ = focusable;
-	state_ = State::DEFAULT;
-	visible_ = true;
-	callback_id_ = -1;
-	owner_ = owner;
-	width_ = 0;
-	height_ = 0;
-	owner->AddWidget(this);
+    focusable_ = focusable;
+    state_ = State::DEFAULT;
+    visible_ = true;
+    callback_id_ = -1;
+    owner_ = owner;
+    width_ = 0;
+    height_ = 0;
+    owner->AddWidget(this);
 }
 
 
 void Widget::SetState(State::EState state)
 {
-	OnStateChanged(state);
-	state_ = state;
+    OnStateChanged(state);
+    state_ = state;
 }
 
 
 State::EState Widget::GetState() const
 {
-	return state_;
+    return state_;
 }
 
 
@@ -35,63 +35,63 @@ void Widget::Update(float) {}
 
 bool Widget::ContainsPoint(float x, float y)
 {
-	return (x >= getPosition().x) && (x <= getPosition().x + width_) && (y >= getPosition().y) && (y <= getPosition().y + height_);
+    return (x >= getPosition().x) && (x <= getPosition().x + width_) && (y >= getPosition().y) && (y <= getPosition().y + height_);
 }
 
 
 void Widget::Resize(int width, int height)
 {
-	width_ = width;
-	height_ = height;
+    width_ = width;
+    height_ = height;
 }
 
 
 int Widget::GetWidth() const
 {
-	return width_;
+    return width_;
 }
 
 
 int Widget::GetHeight() const
 {
-	return height_;
+    return height_;
 }
 
 
 bool Widget::CanGrabFocus() const
 {
-	return focusable_ && visible_ && state_ != State::DISABLED;
+    return focusable_ && visible_ && state_ != State::DISABLED;
 }
 
 
 bool Widget::IsFocused() const
 {
-	return this == GetOwner()->GetFocusedWidget();
+    return this == GetOwner()->GetFocusedWidget();
 }
 
 
 Menu* Widget::GetOwner() const
 {
-	return owner_;
+    return owner_;
 }
 
 
 void Widget::CallTheCallback()
 {
-	OnCallbackTriggered();
-	if (callback_id_ != -1)
-	{
-		owner_->EventCallback(callback_id_);
-	}
+    OnCallbackTriggered();
+    if (callback_id_ != -1)
+    {
+        owner_->EventCallback(callback_id_);
+    }
 }
 
 
 void Widget::CenterText(sf::Text& text)
 {
-	const sf::FloatRect& rect = text.getLocalBounds();
-	// Cast position to int for pixel-perfect rendering
-	text.setPosition(
-		(int) (width_ - rect.width) / 2,
-		(int) (height_ - rect.height) / 2 - rect.top
-	);
+    const sf::FloatRect& rect = text.getLocalBounds();
+    // Cast position to int for pixel-perfect rendering
+    text.setPosition(
+        (int) (width_ - rect.width) / 2,
+        (int) (height_ - rect.height) / 2 - rect.top
+    );
 }

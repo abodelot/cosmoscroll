@@ -17,95 +17,95 @@ const float SCREEN_DURATION = 7.f;
 
 
 GameOverScreen::GameOverScreen():
-	m_entities(EntityManager::getInstance()),
-	m_panel(ControlPanel::getInstance())
+    m_entities(EntityManager::getInstance()),
+    m_panel(ControlPanel::getInstance())
 {
-	m_text.setCharacterSize(40);
-	m_text.setColor(sf::Color::White);
-	m_text.setFont(Resources::getFont("hemi-head.ttf"));
+    m_text.setCharacterSize(40);
+    m_text.setColor(sf::Color::White);
+    m_text.setFont(Resources::getFont("hemi-head.ttf"));
 }
 
 
 void GameOverScreen::onEvent(const sf::Event& event)
 {
-	Action::ID action = Input::feedEvent(event);
-	if (action == Action::VALIDATE)
-		goNextScreen();
+    Action::ID action = Input::feedEvent(event);
+    if (action == Action::VALIDATE)
+        goNextScreen();
 }
 
 
 void GameOverScreen::onFocus()
 {
-	SoundSystem::stopMusic();
-	m_started_at.restart();
+    SoundSystem::stopMusic();
+    m_started_at.restart();
 
-	if (m_entities.getPlayer()->isDead())
-	{
-		SoundSystem::playSound("game-over.ogg");
-		m_text.setString(_t("gameover.title"));
-	}
-	else
-	{
-		// Level completed, collect $$$
-		SoundSystem::playSound("end-level.ogg");
-		int earned_credits = m_entities.getPlayer()->getScore();
-		UserSettings::updateCredits(earned_credits);
+    if (m_entities.getPlayer()->isDead())
+    {
+        SoundSystem::playSound("game-over.ogg");
+        m_text.setString(_t("gameover.title"));
+    }
+    else
+    {
+        // Level completed, collect $$$
+        SoundSystem::playSound("end-level.ogg");
+        int earned_credits = m_entities.getPlayer()->getScore();
+        UserSettings::updateCredits(earned_credits);
 
-		LevelManager& levels = LevelManager::getInstance();
-		size_t current = levels.getCurrent();
-		// If last level completed
-		if (current == levels.getLevelCount())
-		{
-			m_text.setString(I18n::templatize("gameover.last_level_completed", "{credits}", earned_credits));
-		}
-		else
-		{
-			m_text.setString(I18n::templatize("gameover.level_completed", "{level}", current, "{credits}", earned_credits));
-			// Unlock next level
-			if (current == levels.getLastUnlocked())
-			{
-				levels.unlockNextLevel();
-			}
-		}
-	}
-	// Center text on screen
-	float width = m_text.getLocalBounds().width;
-	float height = m_text.getLocalBounds().height;
-	m_text.setPosition((APP_WIDTH - width) / 2, (APP_HEIGHT - height) / 2);
+        LevelManager& levels = LevelManager::getInstance();
+        size_t current = levels.getCurrent();
+        // If last level completed
+        if (current == levels.getLevelCount())
+        {
+            m_text.setString(I18n::templatize("gameover.last_level_completed", "{credits}", earned_credits));
+        }
+        else
+        {
+            m_text.setString(I18n::templatize("gameover.level_completed", "{level}", current, "{credits}", earned_credits));
+            // Unlock next level
+            if (current == levels.getLastUnlocked())
+            {
+                levels.unlockNextLevel();
+            }
+        }
+    }
+    // Center text on screen
+    float width = m_text.getLocalBounds().width;
+    float height = m_text.getLocalBounds().height;
+    m_text.setPosition((APP_WIDTH - width) / 2, (APP_HEIGHT - height) / 2);
 
-	Game::getInstance().getWindow().setMouseCursorVisible(true);
-	Game::getInstance().getWindow().setKeyRepeatEnabled(true);
+    Game::getInstance().getWindow().setMouseCursorVisible(true);
+    Game::getInstance().getWindow().setKeyRepeatEnabled(true);
 }
 
 
 void GameOverScreen::update(float frametime)
 {
-	Player* player = m_entities.getPlayer();
-	if (player->isDead())
-	{
-		// Falling animation
-		player->move(-100 * frametime, 100 * frametime);
-		player->rotate(-60 * frametime);
-	}
-	ParticleSystem::getInstance().update(frametime);
+    Player* player = m_entities.getPlayer();
+    if (player->isDead())
+    {
+        // Falling animation
+        player->move(-100 * frametime, 100 * frametime);
+        player->rotate(-60 * frametime);
+    }
+    ParticleSystem::getInstance().update(frametime);
 
-	if (m_started_at.getElapsedTime().asSeconds() >= SCREEN_DURATION)
-		goNextScreen();
+    if (m_started_at.getElapsedTime().asSeconds() >= SCREEN_DURATION)
+        goNextScreen();
 }
 
 
 void GameOverScreen::draw(sf::RenderTarget& target) const
 {
-	target.draw(m_panel);
-	target.draw(m_entities);
-	target.draw(m_text);
+    target.draw(m_panel);
+    target.draw(m_entities);
+    target.draw(m_text);
 }
 
 
 void GameOverScreen::goNextScreen() const
 {
-	if (m_entities.getMode() == EntityManager::LEVELS_MODE)
-		Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
-	else
-		Game::getInstance().setCurrentScreen(Game::SC_SendScoreMenu);
+    if (m_entities.getMode() == EntityManager::LEVELS_MODE)
+        Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
+    else
+        Game::getInstance().setCurrentScreen(Game::SC_SendScoreMenu);
 }

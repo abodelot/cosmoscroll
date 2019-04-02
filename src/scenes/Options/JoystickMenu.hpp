@@ -11,23 +11,23 @@
 class JoystickMenu: public BaseMenu
 {
 public:
-	JoystickMenu();
+    JoystickMenu();
 
-	void onEvent(const sf::Event& event) override;
+    void onEvent(const sf::Event& event) override;
 
-	void onFocus() override;
+    void onFocus() override;
 
 private:
-	void EventCallback(int id) override;
+    void EventCallback(int id) override;
 
-	ConfigButton* addRow(gui::FormLayout& form, Action::ID action);
+    ConfigButton* addRow(gui::FormLayout& form, Action::ID action);
 
-	ConfigButton* m_triggered;
-	ConfigButton* but_weapon_;
-	ConfigButton* but_missile_;
-	ConfigButton* but_cooler_;
-	ConfigButton* but_pause_;
-	gui::Slider* sl_joystick_;
+    ConfigButton* m_triggered;
+    ConfigButton* but_weapon_;
+    ConfigButton* but_missile_;
+    ConfigButton* but_cooler_;
+    ConfigButton* but_pause_;
+    gui::Slider* sl_joystick_;
 };
 
 #endif // JOYSTICKMENU_HPP

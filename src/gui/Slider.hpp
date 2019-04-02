@@ -12,40 +12,40 @@ namespace gui
 class Slider: public Widget
 {
 public:
-	/**
-	 * @param owner: menu propriétaire du slider
-	 * @param w: largeur
-	 * @param h: hauteur (-1 => taille de texte du menu)
-	 */
-	Slider(Menu* owner, int w, int h=-1);
+    /**
+     * @param owner: menu propriétaire du slider
+     * @param w: largeur
+     * @param h: hauteur (-1 => taille de texte du menu)
+     */
+    Slider(Menu* owner, int w, int h=-1);
 
-	/**
-	 * Indiquer le pas de variation de la poignée
-	 */
-	void SetQuantum(int quantum);
+    /**
+     * Indiquer le pas de variation de la poignée
+     */
+    void SetQuantum(int quantum);
 
-	int GetValue() const;
-	void SetValue(int value);
+    int GetValue() const;
+    void SetValue(int value);
 
-	// inherited callbacks
-	void OnKeyPressed(sf::Keyboard::Key code);
-	void OnMouseClicked(int x, int y);
-	void OnMouseWheelMoved(int delta);
+    // inherited callbacks
+    void OnKeyPressed(sf::Keyboard::Key code);
+    void OnMouseClicked(int x, int y);
+    void OnMouseWheelMoved(int delta);
 
 protected:
-	// inherited
-	void OnStateChanged(State::EState state);
+    // inherited
+    void OnStateChanged(State::EState state);
 
 private:
-	// inherited
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    // inherited
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	void UpdateHandle(int value);
+    void UpdateHandle(int value);
 
-	sf::RectangleShape bar_;
-	sf::RectangleShape handle_;
-	int handle_index_;
-	int quantum_;
+    sf::RectangleShape bar_;
+    sf::RectangleShape handle_;
+    int handle_index_;
+    int quantum_;
 };
 
 }

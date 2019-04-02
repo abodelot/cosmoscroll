@@ -9,15 +9,15 @@
 class ArmoryMenu: public BaseMenu
 {
 public:
-	ArmoryMenu();
+    ArmoryMenu();
 
-	void onFocus() override;
+    void onFocus() override;
 
 private:
-	void EventCallback(int id) override;
+    void EventCallback(int id) override;
 
-	ShipItemWidget*      m_items[Item::_COUNT];
-	CreditCounterWidget* m_credits;
+    ShipItemWidget*      m_items[Item::_COUNT];
+    CreditCounterWidget* m_credits;
 };
 
 #endif // ARMORY_HPP

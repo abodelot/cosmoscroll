@@ -15,30 +15,30 @@ namespace gui
 class FormLayout: public Layout
 {
 public:
-	FormLayout(float x=0.f, float y=0.f);
+    FormLayout(float x=0.f, float y=0.f);
 
-	void AddRow(const sf::String& label, Widget* widget);
+    void AddRow(const sf::String& label, Widget* widget);
 
-	/**
-	 * Holds the horizontal alignment of the labels (left or right).
-	 */
-	void SetLabelAlignment(Align::EAlign align);
-	Align::EAlign GetLabelAlignmenent() const;
+    /**
+     * Holds the horizontal alignment of the labels (left or right).
+     */
+    void SetLabelAlignment(Align::EAlign align);
+    Align::EAlign GetLabelAlignmenent() const;
 
-	Label* GetLabelAt(int index);
+    Label* GetLabelAt(int index);
 
-	/**
-	 * Force refresh (if widgets contents have been modified)
-	 */
-	void AlignRows();
+    /**
+     * Force refresh (if widgets contents have been modified)
+     */
+    void AlignRows();
 private:
 
 
-	typedef std::pair<Label*, Widget*> FormRow;
+    typedef std::pair<Label*, Widget*> FormRow;
 
-	std::vector<FormRow> rows_;
-	int label_width_;
-	Align::EAlign label_alignment_;
+    std::vector<FormRow> rows_;
+    int label_width_;
+    Align::EAlign label_alignment_;
 };
 
 }

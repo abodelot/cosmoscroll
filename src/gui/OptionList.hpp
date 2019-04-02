@@ -17,66 +17,66 @@ template <class T>
 class OptionList: public Widget
 {
 public:
-	OptionList(Menu* owner);
+    OptionList(Menu* owner);
 
-	/**
-	 * Ajouter une option à la liste
-	 */
-	void Add(const sf::String& display, const T& value);
+    /**
+     * Ajouter une option à la liste
+     */
+    void Add(const sf::String& display, const T& value);
 
-	size_t GetSize() const;
+    size_t GetSize() const;
 
-	const T& GetValueAt(int index) const;
+    const T& GetValueAt(int index) const;
 
-	/**
-	 * Get option index currently selected (first is 0)
-	 */
-	int GetSelectedIndex() const;
+    /**
+     * Get option index currently selected (first is 0)
+     */
+    int GetSelectedIndex() const;
 
-	/**
-	 * Get selected option value
-	 * shortcut for GetOptionAt(GetSelectedOptionIndex())
-	 */
-	const T& GetSelectedValue() const;
+    /**
+     * Get selected option value
+     * shortcut for GetOptionAt(GetSelectedOptionIndex())
+     */
+    const T& GetSelectedValue() const;
 
-	/**
-	 * Set the current displayed item
-	 */
-	void Select(int index);
-	void SelectByValue(const T& value);
+    /**
+     * Set the current displayed item
+     */
+    void Select(int index);
+    void SelectByValue(const T& value);
 
-	// supprimer toutes les options
-	void Clear();
+    // supprimer toutes les options
+    void Clear();
 
-	// inherited callbacks
-	void OnKeyPressed(sf::Keyboard::Key key);
-	void OnMouseClicked(int x, int y);
-	void OnMouseWheelMoved(int delta);
+    // inherited callbacks
+    void OnKeyPressed(sf::Keyboard::Key key);
+    void OnMouseClicked(int x, int y);
+    void OnMouseWheelMoved(int delta);
 
 protected:
-	// inherited
-	void OnStateChanged(State::EState state);
+    // inherited
+    void OnStateChanged(State::EState state);
 
 private:
-	// inherited
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    // inherited
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	void BuildBoxes();
+    void BuildBoxes();
 
-	int PreviousIndex() const;
-	int NextIndex() const;
+    int PreviousIndex() const;
+    int NextIndex() const;
 
-	typedef std::pair<sf::Text, T> Item;
-	typedef std::vector<Item> ItemVector;
+    typedef std::pair<sf::Text, T> Item;
+    typedef std::vector<Item> ItemVector;
 
-	ItemVector options_;
-	int current_opt_;
-	size_t max_opt_width_;
-	int text_size_;
-	sf::RectangleShape box_;
-	sf::RectangleShape inside_box_;
-	sf::ConvexShape left_arrow_;
-	sf::ConvexShape right_arrow_;
+    ItemVector options_;
+    int current_opt_;
+    size_t max_opt_width_;
+    int text_size_;
+    sf::RectangleShape box_;
+    sf::RectangleShape inside_box_;
+    sf::ConvexShape left_arrow_;
+    sf::ConvexShape right_arrow_;
 };
 
 }

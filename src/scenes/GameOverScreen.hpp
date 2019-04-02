@@ -9,23 +9,23 @@ class ControlPanel;
 class GameOverScreen: public Screen
 {
 public:
-	GameOverScreen();
+    GameOverScreen();
 
-	void onEvent(const sf::Event& event) override;
+    void onEvent(const sf::Event& event) override;
 
-	void onFocus() override;
+    void onFocus() override;
 
-	void update(float frametime) override;
+    void update(float frametime) override;
 
-	void draw(sf::RenderTarget& target) const override;
+    void draw(sf::RenderTarget& target) const override;
 
 private:
-	void goNextScreen() const;
+    void goNextScreen() const;
 
-	sf::Clock            m_started_at;
-	sf::Text             m_text;
-	const EntityManager& m_entities;
-	const ControlPanel&  m_panel;
+    sf::Clock            m_started_at;
+    sf::Text             m_text;
+    const EntityManager& m_entities;
+    const ControlPanel&  m_panel;
 };
 
 #endif // GAMEOVERSCREEN_HPP

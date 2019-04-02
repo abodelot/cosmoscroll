@@ -9,14 +9,14 @@
 class MainMenu: public BaseMenu
 {
 public:
-	MainMenu();
+    MainMenu();
 
-	void draw(sf::RenderTarget& target) const override;
+    void draw(sf::RenderTarget& target) const override;
 
 private:
-	void EventCallback(int id) override;
+    void EventCallback(int id) override;
 
-	sf::Sprite m_title;
+    sf::Sprite m_title;
 };
 
 #endif // MAINMENU_HPP

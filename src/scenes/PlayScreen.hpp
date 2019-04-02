@@ -12,21 +12,21 @@ class ControlPanel;
 class PlayScreen: public Screen
 {
 public:
-	PlayScreen();
+    PlayScreen();
 
-	void onEvent(const sf::Event& event) override;
+    void onEvent(const sf::Event& event) override;
 
-	void onFocus() override;
+    void onFocus() override;
 
-	void update(float frametime) override;
+    void update(float frametime) override;
 
-	void draw(sf::RenderTarget& target) const override;
+    void draw(sf::RenderTarget& target) const override;
 
 private:
-	void setPanelOnTop(bool top);
+    void setPanelOnTop(bool top);
 
-	EntityManager& m_entities;
-	ControlPanel&  m_panel;
+    EntityManager& m_entities;
+    ControlPanel&  m_panel;
 };
 
 #endif // PLAYSCREEN_HPP

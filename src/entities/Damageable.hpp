@@ -9,31 +9,31 @@
 class Damageable: public Entity
 {
 public:
-	Damageable();
+    Damageable();
 
-	virtual void collides(Entity& entity);
+    virtual void collides(Entity& entity);
 
-	virtual void takeDamage(int damage);
+    virtual void takeDamage(int damage);
 
-	int getHP() const;
+    int getHP() const;
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	void onCollision(Damageable& entity);
-	void onCollision(Projectile& projectile);
-	void onDestroy();
+    void onCollision(Damageable& entity);
+    void onCollision(Projectile& projectile);
+    void onDestroy();
 
-	void initDamageFlash();
+    void initDamageFlash();
 protected:
-	void setHP(int hp);
-	int updateHP(int diff);
+    void setHP(int hp);
+    int updateHP(int diff);
 
 
-	void updateDamageFlash(float frametime);
+    void updateDamageFlash(float frametime);
 
 private:
-	int   m_hp;
-	float m_flash_timer;
+    int   m_hp;
+    float m_flash_timer;
 };
 
 #endif // DAMAGEABLE_HPP

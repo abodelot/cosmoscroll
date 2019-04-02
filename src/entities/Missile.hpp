@@ -7,19 +7,19 @@
 class Missile: public Projectile
 {
 public:
-	Missile(Entity* emitter, float angle, const sf::Texture& image, int speed, int damage);
+    Missile(Entity* emitter, float angle, const sf::Texture& image, int speed, int damage);
 
-	~Missile();
+    ~Missile();
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	void onUpdate(float frametime) override;
-	void onDestroy() override;
+    void onUpdate(float frametime) override;
+    void onDestroy() override;
 
 private:
-	float   m_angle;
-	Entity* m_owner;
-	ParticleSystem::Emitter m_smoke_emitter;
+    float   m_angle;
+    Entity* m_owner;
+    ParticleSystem::Emitter m_smoke_emitter;
 
 };
 

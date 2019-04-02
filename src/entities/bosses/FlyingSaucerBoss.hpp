@@ -8,20 +8,20 @@
 class FlyingSaucerBoss: public Damageable
 {
 public:
-	FlyingSaucerBoss();
+    FlyingSaucerBoss();
 
-	void onUpdate(float frametime) override;
+    void onUpdate(float frametime) override;
 
-	void takeDamage(int damage) override;
+    void takeDamage(int damage) override;
 
-	void onInit() override;
+    void onInit() override;
 
 private:
-	Entity* m_target;
-	float m_timer;
-	float m_angle;
-	Weapon m_left_tube;
-	Weapon m_right_tube;
+    Entity* m_target;
+    float m_timer;
+    float m_angle;
+    Weapon m_left_tube;
+    Weapon m_right_tube;
 };
 
 

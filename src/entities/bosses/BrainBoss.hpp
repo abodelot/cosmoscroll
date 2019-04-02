@@ -8,24 +8,24 @@
 class BrainBoss: public MultiPartEntity
 {
 public:
-	BrainBoss();
+    BrainBoss();
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	void onUpdate(float frametime) override;
-	void onPartDestroyed(const Part& part) override;
-	void onPartDamaged(const Part& part) override;
+    void onUpdate(float frametime) override;
+    void onPartDestroyed(const Part& part) override;
+    void onPartDamaged(const Part& part) override;
 
 private:
-	enum State { WAIT, WAIT_ATTACK, MOVE };
+    enum State { WAIT, WAIT_ATTACK, MOVE };
 
-	State      m_state;
-	float      m_state_timer;
-	Animator   m_eye_animator;
-	Animator   m_animator;
-	Weapon     m_weapon;
-	float      m_weapon_angle;
-	float      m_xspeed;
+    State      m_state;
+    float      m_state_timer;
+    Animator   m_eye_animator;
+    Animator   m_animator;
+    Weapon     m_weapon;
+    float      m_weapon_angle;
+    float      m_xspeed;
 };
 
 #endif // BRAINBOSS_HPP

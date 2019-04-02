@@ -16,52 +16,52 @@ class Player;
 class Item
 {
 public:
-	enum Type
-	{
-		HULL,
-		ENGINE,
-		SHIELD,
-		HEATSINK,
-		WEAPON,
-		_COUNT,
-	};
+    enum Type
+    {
+        HULL,
+        ENGINE,
+        SHIELD,
+        HEATSINK,
+        WEAPON,
+        _COUNT,
+    };
 
-	Item(Type type);
+    Item(Type type);
 
-	static const char* typeToString(Type type);
+    static const char* typeToString(Type type);
 
-	std::wstring toString() const;
+    std::wstring toString() const;
 
-	void loadFromXmlNode(tinyxml2::XMLElement* elem);
+    void loadFromXmlNode(tinyxml2::XMLElement* elem);
 
-	Type getType() const;
+    Type getType() const;
 
-	int getLevel() const;
+    int getLevel() const;
 
-	int getPrice() const;
+    int getPrice() const;
 
-	std::wstring getDescription() const;
+    std::wstring getDescription() const;
 
-	void equip(Player& player) const;
+    void equip(Player& player) const;
 
 private:
-	union Data
-	{
-		int shield;
-		float speed;
-		int hp;
-		int heat;
-		struct weapon_t
-		{
-			float heatcost;
-			int   damage;
-		} weapon;
-	};
+    union Data
+    {
+        int shield;
+        float speed;
+        int hp;
+        int heat;
+        struct weapon_t
+        {
+            float heatcost;
+            int   damage;
+        } weapon;
+    };
 
-	Data m_data;
-	Type m_type;
-	int m_level;
-	int m_price;
+    Data m_data;
+    Type m_type;
+    int m_level;
+    int m_price;
 };
 
 #endif // ITEM_HPP

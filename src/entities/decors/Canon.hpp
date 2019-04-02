@@ -7,13 +7,13 @@
 class Canon: public MultiPartEntity
 {
 public:
-	Canon();
+    Canon();
 
-	void onInit();
-	void onUpdate(float frametime);
+    void onInit();
+    void onUpdate(float frametime);
 
 private:
-	Weapon m_weapon;
+    Weapon m_weapon;
 };
 
 #endif // CANON_HPP

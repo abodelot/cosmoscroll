@@ -16,7 +16,7 @@ extern const float PI;
  */
 inline float to_radians(float degrees)
 {
-	return degrees * PI / 180;
+    return degrees * PI / 180;
 }
 
 /**
@@ -24,9 +24,9 @@ inline float to_radians(float degrees)
  */
 inline float to_degrees(float radians)
 {
-	// Normalize between 0 and 360
-	float degrees = int(radians / PI * 180) % 360;
-	return degrees < 0 ? degrees + 360 : degrees;
+    // Normalize between 0 and 360
+    float degrees = int(radians / PI * 180) % 360;
+    return degrees < 0 ? degrees + 360 : degrees;
 }
 
 /**
@@ -36,9 +36,9 @@ inline float to_degrees(float radians)
 template <class Vec>
 inline void translate(Vec& point, float angle, float distance)
 {
-	// Flip on the Y-axis: (0, 0) is upper left
-	point.x = point.x + distance * std::cos(angle);
-	point.y = point.y - distance * std::sin(angle);
+    // Flip on the Y-axis: (0, 0) is upper left
+    point.x = point.x + distance * std::cos(angle);
+    point.y = point.y - distance * std::sin(angle);
 }
 
 /**
@@ -47,8 +47,8 @@ inline void translate(Vec& point, float angle, float distance)
 template <class Vec>
 inline float distance(const Vec& a, const Vec& b = Vec())
 {
-	// Sqrt((x1 - x2)² + (y1 - y2)²)
-	return std::sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+    // Sqrt((x1 - x2)² + (y1 - y2)²)
+    return std::sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }
 
 /**
@@ -57,8 +57,8 @@ inline float distance(const Vec& a, const Vec& b = Vec())
 template <class Vec>
 inline float angle(const Vec& a, const Vec& b = Vec())
 {
-	// Flip on the Y-axis: (0, 0) is upper left
-	return -std::atan2(b.y - a.y, b.x - a.x);
+    // Flip on the Y-axis: (0, 0) is upper left
+    return -std::atan2(b.y - a.y, b.x - a.x);
 }
 
 // Random ----------------------------------------------------------------------
@@ -91,7 +91,7 @@ void set_seed(unsigned int seed);
 template <class T>
 inline T clamp(T value, T min, T max)
 {
-	return value < min ? min : (value > max ? max : value);
+    return value < min ? min : (value > max ? max : value);
 }
 
 }

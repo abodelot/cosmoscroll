@@ -9,18 +9,18 @@ class LevelManager;
 class LevelMenu: public BaseMenu
 {
 public:
-	LevelMenu();
+    LevelMenu();
 
-	void onFocus() override;
+    void onFocus() override;
 
 private:
-	void EventCallback(int id) override;
+    void EventCallback(int id) override;
 
-	sf::Text              m_title;
-	LevelManager&         m_levels;
-	CreditCounterWidget*  m_credits;
-	gui::OptionList<int>* m_opt_levels;
-	gui::Label*           m_lab_progresion;
+    sf::Text              m_title;
+    LevelManager&         m_levels;
+    CreditCounterWidget*  m_credits;
+    gui::OptionList<int>* m_opt_levels;
+    gui::Label*           m_lab_progresion;
 };
 
 #endif // LEVELMENU_HPP

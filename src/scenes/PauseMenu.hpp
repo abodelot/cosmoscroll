@@ -6,18 +6,18 @@
 class PauseMenu: public BaseMenu
 {
 public:
-	PauseMenu();
+    PauseMenu();
 
-	void onEvent(const sf::Event& event) override;
+    void onEvent(const sf::Event& event) override;
 
-	void onFocus() override;
+    void onFocus() override;
 
-	void update(float frametime) override;
+    void update(float frametime) override;
 
-	void draw(sf::RenderTarget& target) const override;
+    void draw(sf::RenderTarget& target) const override;
 
 private:
-	void EventCallback(int id) override;
+    void EventCallback(int id) override;
 };
 
 #endif // PAUSEMENU_HPP

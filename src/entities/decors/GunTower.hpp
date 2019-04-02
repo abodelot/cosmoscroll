@@ -7,15 +7,15 @@
 class GunTower: public MultiPartEntity
 {
 public:
-	GunTower();
+    GunTower();
 
-	void onInit();
+    void onInit();
 
-	void onUpdate(float frametime);
+    void onUpdate(float frametime);
 
 private:
-	Weapon   m_weapon;
-	Entity*  m_target;
+    Weapon   m_weapon;
+    Entity*  m_target;
 };
 
 #endif // GUN_TOWER_HPP

@@ -7,33 +7,33 @@
 class ShipItemWidget: public gui::Widget
 {
 public:
-	ShipItemWidget(gui::Menu* parent, Item::Type type, const sf::Font& font);
+    ShipItemWidget(gui::Menu* parent, Item::Type type, const sf::Font& font);
 
-	/**
-	 * Refresh the item informations displayed in the UI
-	 */
-	void refresh();
+    /**
+     * Refresh the item informations displayed in the UI
+     */
+    void refresh();
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	void OnStateChanged(gui::State::EState state) override;
-	void OnKeyPressed(sf::Keyboard::Key code) override;
-	void OnMouseClicked(int x, int y) override;
+    void OnStateChanged(gui::State::EState state) override;
+    void OnKeyPressed(sf::Keyboard::Key code) override;
+    void OnMouseClicked(int x, int y) override;
 
 private:
-	bool buyNextLevel() const;
+    bool buyNextLevel() const;
 
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	Item::Type m_type;
-	int        m_level;
+    Item::Type m_type;
+    int        m_level;
 
-	sf::Text   m_txt_name;
-	sf::Text   m_txt_level;
-	sf::Text   m_txt_description;
-	sf::Text   m_txt_price;
-	sf::Text   m_txt_upgrade;
-	sf::Sprite m_background;
+    sf::Text   m_txt_name;
+    sf::Text   m_txt_level;
+    sf::Text   m_txt_description;
+    sf::Text   m_txt_price;
+    sf::Text   m_txt_upgrade;
+    sf::Sprite m_background;
 };
 
 #endif // SHIPITEMWIDGET_HPP

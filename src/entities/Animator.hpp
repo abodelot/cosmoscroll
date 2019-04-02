@@ -11,26 +11,26 @@
 class Animator
 {
 public:
-	Animator();
+    Animator();
 
-	void setAnimation(sf::Sprite& sprite, const Animation& animation);
+    void setAnimation(sf::Sprite& sprite, const Animation& animation);
 
-	const Animation* getAnimation() const;
+    const Animation* getAnimation() const;
 
-	void reset(sf::Sprite& sprite);
+    void reset(sf::Sprite& sprite);
 
-	/**
-	 * Update texture subrect on a animated sprite
-	 * @param sprite: sprite to update
-	 */
-	void updateSubRect(sf::Sprite& sprite, float frametime);
+    /**
+     * Update texture subrect on a animated sprite
+     * @param sprite: sprite to update
+     */
+    void updateSubRect(sf::Sprite& sprite, float frametime);
 
-	void setFrame(sf::Sprite&, size_t index);
+    void setFrame(sf::Sprite&, size_t index);
 
 private:
-	const Animation* m_animation;
-	size_t           m_frame; // current frame index
-	float            m_timer;
+    const Animation* m_animation;
+    size_t           m_frame; // current frame index
+    float            m_timer;
 };
 
 #endif // ANIMATOR_HPP

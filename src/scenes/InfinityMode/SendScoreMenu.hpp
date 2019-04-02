@@ -9,21 +9,21 @@
 class SendScoreMenu: public BaseMenu
 {
 public:
-	SendScoreMenu();
+    SendScoreMenu();
 
-	void onFocus() override;
+    void onFocus() override;
 
 private:
-	void EventCallback(int id) override;
+    void EventCallback(int id) override;
 
-	void uploadScore();
+    void uploadScore();
 
-	int m_score;
-	gui::Label* lab_result_;
-	CosmoButton* but_send_score_;
-	CosmoButton* but_commit_;
-	gui::Label* lab_pseudo_;
-	gui::TextBox* txt_pseudo_;
+    int m_score;
+    gui::Label* lab_result_;
+    CosmoButton* but_send_score_;
+    CosmoButton* but_commit_;
+    gui::Label* lab_pseudo_;
+    gui::TextBox* txt_pseudo_;
 };
 
 #endif // SENDSCOREMENU_HPP

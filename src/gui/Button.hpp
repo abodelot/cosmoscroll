@@ -13,34 +13,34 @@ namespace gui
 class Button: public Widget
 {
 public:
-	/**
-	 * @param owner: menu propriétaire du bouton
-	 * @param text: contenu affiché
-	 * @param w: largeur (-1 pour largeur automatiquement adaptée au texte)
-	 * @param h: hauteur (-1 pour hauteur automatiquement adaptée au texte)
-	 */
-	Button(Menu* owner, const sf::String& text, int w = -1, int h = -1);
+    /**
+     * @param owner: menu propriétaire du bouton
+     * @param text: contenu affiché
+     * @param w: largeur (-1 pour largeur automatiquement adaptée au texte)
+     * @param h: hauteur (-1 pour hauteur automatiquement adaptée au texte)
+     */
+    Button(Menu* owner, const sf::String& text, int w = -1, int h = -1);
 
-	/**
-	 * Indiquer le texte affiché sur le bouton
-	 */
-	void setString(const sf::String& text);
+    /**
+     * Indiquer le texte affiché sur le bouton
+     */
+    void setString(const sf::String& text);
 
-	void setColor(const sf::Color& color);
+    void setColor(const sf::Color& color);
 
-	// callbacks
-	virtual void OnKeyPressed(sf::Keyboard::Key code);
-	virtual void OnMouseClicked(int, int);
+    // callbacks
+    virtual void OnKeyPressed(sf::Keyboard::Key code);
+    virtual void OnMouseClicked(int, int);
 
 protected:
-	// override
-	virtual void OnStateChanged(State::EState state);
+    // override
+    virtual void OnStateChanged(State::EState state);
 
-	// override
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    // override
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
-	sf::Text text_;
+    sf::Text text_;
 };
 
 }

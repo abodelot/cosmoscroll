@@ -5,26 +5,26 @@
 
 Explosion::Explosion()
 {
-	m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("explosion"));
-	SoundSystem::playSound("boom.ogg");
+    m_animator.setAnimation(*this, EntityManager::getInstance().getAnimation("explosion"));
+    SoundSystem::playSound("boom.ogg");
 
-	setOrigin(getWidth() / 2, getHeight() / 2);
+    setOrigin(getWidth() / 2, getHeight() / 2);
 }
 
 
 void Explosion::collides(Entity& entity)
 {
-	entity.onCollision(*this);
+    entity.onCollision(*this);
 }
 
 
 void Explosion::onUpdate(float frametime)
 {
-	move(-EntityManager::FOREGROUND_SPEED * frametime, 0);
+    move(-EntityManager::FOREGROUND_SPEED * frametime, 0);
 
-	m_animator.updateSubRect(*this, frametime);
-	if (m_clock.getElapsedTime().asSeconds() > m_animator.getAnimation()->getDuration())
-	{
-		kill();
-	}
+    m_animator.updateSubRect(*this, frametime);
+    if (m_clock.getElapsedTime().asSeconds() > m_animator.getAnimation()->getDuration())
+    {
+        kill();
+    }
 }

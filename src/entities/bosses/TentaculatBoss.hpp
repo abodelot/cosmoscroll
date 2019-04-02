@@ -8,23 +8,23 @@
 class TentaculatBoss: public Damageable
 {
 public:
-	TentaculatBoss();
+    TentaculatBoss();
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	void onInit() override;
-	void onUpdate(float frametime) override;
-	void onDestroy() override;
+    void onInit() override;
+    void onUpdate(float frametime) override;
+    void onDestroy() override;
 
 private:
-	enum State { INIT, LURK, IDLE, CHARGE };
+    enum State { INIT, LURK, IDLE, CHARGE };
 
-	State        m_state;
-	float        m_timer;
-	sf::Vector2f m_speed;
-	Weapon       m_weapon;
-	Entity*      m_target;
-	Animator     m_animator;
+    State        m_state;
+    float        m_timer;
+    sf::Vector2f m_speed;
+    Weapon       m_weapon;
+    Entity*      m_target;
+    Animator     m_animator;
 };
 
 #endif // TENTACULATBOSS_HPP

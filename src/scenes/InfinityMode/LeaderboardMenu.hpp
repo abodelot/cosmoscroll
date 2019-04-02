@@ -9,26 +9,26 @@
 class LeaderboardMenu: public BaseMenu
 {
 public:
-	LeaderboardMenu();
+    LeaderboardMenu();
 
-	void onFocus() override;
+    void onFocus() override;
 
-	void update(float frametime) override;
+    void update(float frametime) override;
 
-	void draw(sf::RenderTarget& target) const override;
+    void draw(sf::RenderTarget& target) const override;
 
 private:
-	void EventCallback(int id) override;
+    void EventCallback(int id) override;
 
-	sf::Text m_content;
+    sf::Text m_content;
 
-	enum QueryStatus
-	{
-		NOT_STARTED,
-		IN_PROGRESS,
-		DONE
-	};
-	QueryStatus m_querying;
+    enum QueryStatus
+    {
+        NOT_STARTED,
+        IN_PROGRESS,
+        DONE
+    };
+    QueryStatus m_querying;
 };
 
 #endif // LEADERBOARDMENU_HPP

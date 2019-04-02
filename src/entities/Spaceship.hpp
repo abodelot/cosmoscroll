@@ -8,48 +8,48 @@
 class Spaceship: public Damageable
 {
 public:
-	enum MovementPattern
-	{
-		MAGNET, LINE, SINUS, CIRCLE
-	};
+    enum MovementPattern
+    {
+        MAGNET, LINE, SINUS, CIRCLE
+    };
 
-	enum AttackPattern
-	{
-		AUTO_AIM, ON_SIGHT, NONE
-	};
+    enum AttackPattern
+    {
+        AUTO_AIM, ON_SIGHT, NONE
+    };
 
-	Spaceship(const Animation& animation, int hp, int speed);
-	~Spaceship();
+    Spaceship(const Animation& animation, int hp, int speed);
+    ~Spaceship();
 
-	void setMovementPattern(MovementPattern movement);
+    void setMovementPattern(MovementPattern movement);
 
-	void setAttackPattern(AttackPattern attack);
+    void setAttackPattern(AttackPattern attack);
 
-	Spaceship* clone() const;
+    Spaceship* clone() const;
 
-	Weapon& getWeapon();
+    Weapon& getWeapon();
 
-	void setPoints(int points);
-	int getPoints() const;
+    void setPoints(int points);
+    int getPoints() const;
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	void onInit() override;
-	void onUpdate(float frametime) override;
-	void onDestroy() override;
+    void onInit() override;
+    void onUpdate(float frametime) override;
+    void onDestroy() override;
 
 private:
-	AttackPattern   m_attack;
-	MovementPattern m_movement;
+    AttackPattern   m_attack;
+    MovementPattern m_movement;
 
-	int       m_points;
-	Weapon    m_weapon;
-	Entity*   m_target;
-	Animator  m_animator;
+    int       m_points;
+    Weapon    m_weapon;
+    Entity*   m_target;
+    Animator  m_animator;
 
-	int       m_speed;
-	float     m_origin_y;
-	float     m_angle;
+    int       m_speed;
+    float     m_origin_y;
+    float     m_angle;
 };
 
 #endif // SPACESHIP_HPP

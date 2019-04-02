@@ -28,18 +28,18 @@
 template <typename T>
 inline int str_self_replace(T& target, const T& look_for, const T& replace_by)
 {
-	int cpt = 0;
-	size_t pos = target.find(look_for, 0);
-	size_t step = replace_by.size();
-	size_t offset = look_for.size();
+    int cpt = 0;
+    size_t pos = target.find(look_for, 0);
+    size_t step = replace_by.size();
+    size_t offset = look_for.size();
 
-	while (pos != std::string::npos)
-	{
-		target.replace(pos, offset, replace_by);
-		pos = target.find(look_for, pos + step);
-		++cpt;
-	}
-	return cpt;
+    while (pos != std::string::npos)
+    {
+        target.replace(pos, offset, replace_by);
+        pos = target.find(look_for, pos + step);
+        ++cpt;
+    }
+    return cpt;
 }
 
 /**
@@ -51,9 +51,9 @@ inline int str_self_replace(T& target, const T& look_for, const T& replace_by)
 template <typename T>
 inline T str_replace(const T& str, const T& look_for, const T& replace_by)
 {
-	T result = str;
-	str_self_replace(result, look_for, replace_by);
-	return result;
+    T result = str;
+    str_self_replace(result, look_for, replace_by);
+    return result;
 }
 
 /**

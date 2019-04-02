@@ -9,66 +9,66 @@
 class MultiPartEntity: public Entity
 {
 public:
-	class Part: public Damageable
-	{
-	public:
-		friend class MultiPartEntity;
+    class Part: public Damageable
+    {
+    public:
+        friend class MultiPartEntity;
 
-		Part(int id = -1, int hp = 1);
+        Part(int id = -1, int hp = 1);
 
-		void onUpdate(float frametime) override;
+        void onUpdate(float frametime) override;
 
-		void takeDamage(int damage) override;
+        void takeDamage(int damage) override;
 
-		int getID() const;
+        int getID() const;
 
-		void setDestructible(bool destructible);
+        void setDestructible(bool destructible);
 
-		void setParent(MultiPartEntity* parent);
+        void setParent(MultiPartEntity* parent);
 
-		void onDestroy() override;
+        void onDestroy() override;
 
-	private:
-		int  m_id;
-		bool m_destructible;
-		MultiPartEntity* m_parent;
-	};
+    private:
+        int  m_id;
+        bool m_destructible;
+        MultiPartEntity* m_parent;
+    };
 
-	MultiPartEntity();
+    MultiPartEntity();
 
-	void collides(Entity& entity);
+    void collides(Entity& entity);
 
-	// callbacks ---------------------------------------------------------------
+    // callbacks ---------------------------------------------------------------
 
-	virtual void onPartDestroyed(const Part&) {};
-	virtual void onPartDamaged(const Part&) {};
+    virtual void onPartDestroyed(const Part&) {};
+    virtual void onPartDamaged(const Part&) {};
 
-	float getSpeedX() const override; // hack for decors
+    float getSpeedX() const override; // hack for decors
 
 protected:
-	void updateParts(float frametime);
+    void updateParts(float frametime);
 
-	void addPart(Part& part, float x=0.f, float y=0.f);
+    void addPart(Part& part, float x=0.f, float y=0.f);
 
-	Part& getPartAt(size_t index);
+    Part& getPartAt(size_t index);
 
-	/**
-	 * Get the first part matching a given ID
-	 */
-	Part* getPartByID(int id);
+    /**
+     * Get the first part matching a given ID
+     */
+    Part* getPartByID(int id);
 
-	/**
-	 * Destroy parts matching a given ID
-	 * @param id: part id
-	 * @return nb parts destroyed
-	 */
-	int destroyPartByID(int id);
+    /**
+     * Destroy parts matching a given ID
+     * @param id: part id
+     * @return nb parts destroyed
+     */
+    int destroyPartByID(int id);
 
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-	typedef std::vector<Part> PartVector;
-	PartVector m_parts;
+    typedef std::vector<Part> PartVector;
+    PartVector m_parts;
 };
 
 

@@ -20,78 +20,78 @@ class Widget;
 class Menu
 {
 public:
-	Menu(const sf::RenderWindow& window, WidgetStyle& style);
+    Menu(const sf::RenderWindow& window, WidgetStyle& style);
 
-	virtual ~Menu();
+    virtual ~Menu();
 
-	void OnEvent(const sf::Event& event);
+    void OnEvent(const sf::Event& event);
 
-	void Update(float frametime);
+    void Update(float frametime);
 
-	void Show(sf::RenderTarget& target) const;
+    void Show(sf::RenderTarget& target) const;
 
-	void AddWidget(Widget* widget);
+    void AddWidget(Widget* widget);
 
-	/**
-	 * Méthode appelée lorsqu'un widget du menu déclenche un événement
-	 */
-	virtual void EventCallback(int id);
+    /**
+     * Méthode appelée lorsqu'un widget du menu déclenche un événement
+     */
+    virtual void EventCallback(int id);
 
-	const Widget* GetFocusedWidget() const;
+    const Widget* GetFocusedWidget() const;
 
-	/**
-	 * Récupérer le thème des widgets
-	 */
-	WidgetStyle& GetWidgetStyle();
+    /**
+     * Récupérer le thème des widgets
+     */
+    WidgetStyle& GetWidgetStyle();
 
 protected:
-	bool FocusWidget(const Widget* widget);
+    bool FocusWidget(const Widget* widget);
 
-	// callbacks
-	virtual void OnWidgetHovered() {};
-	virtual void OnWidgetFocused() {};
+    // callbacks
+    virtual void OnWidgetHovered() {};
+    virtual void OnWidgetFocused() {};
 
-	/**
-	 * Sélectionner un widget dans le menu
-	 * @param index: position du widget
-	 * @return true si le widget a pris le focus, sinon false
-	 */
-	bool FocusWidget(int index);
+    /**
+     * Sélectionner un widget dans le menu
+     * @param index: position du widget
+     * @return true si le widget a pris le focus, sinon false
+     */
+    bool FocusWidget(int index);
 
-	/**
-	 * Sélectionner le premier widget possible
-	 * @return true si un widget a pris le focus, sinon false
-	 */
-	bool FocusFirstWidget();
+    /**
+     * Sélectionner le premier widget possible
+     * @return true si un widget a pris le focus, sinon false
+     */
+    bool FocusFirstWidget();
 
-	/**
-	 * Sélectionner le prochain widget
-	 * @return true si un widget a pris le focus, sinon false
-	 */
-	bool FocusNextWidget();
+    /**
+     * Sélectionner le prochain widget
+     * @return true si un widget a pris le focus, sinon false
+     */
+    bool FocusNextWidget();
 
-	/**
-	 * Sélectionner le widget précédent
-	 * @return true si un widget a pris le focus, sinon false
-	 */
-	bool FocusPreviousWidget();
+    /**
+     * Sélectionner le widget précédent
+     * @return true si un widget a pris le focus, sinon false
+     */
+    bool FocusPreviousWidget();
 
-	/**
-	 * Obtenir un widget positionné sous un point
-	 * @param x: position x
-	 * @param y: position y
-	 * @return widget sous le point, ou NULL
-	 */
-	Widget* GetHoveredWidget(int x, int y) const;
+    /**
+     * Obtenir un widget positionné sous un point
+     * @param x: position x
+     * @param y: position y
+     * @return widget sous le point, ou NULL
+     */
+    Widget* GetHoveredWidget(int x, int y) const;
 
 private:
-	typedef std::vector<Widget*> WidgetList;
-	WidgetList widgets_;
-	int focus_index_;
-	Widget* focus_;
-	Widget* hovered_widget_;
-	const sf::RenderWindow& window_;
-	WidgetStyle& theme_;
+    typedef std::vector<Widget*> WidgetList;
+    WidgetList widgets_;
+    int focus_index_;
+    Widget* focus_;
+    Widget* hovered_widget_;
+    const sf::RenderWindow& window_;
+    WidgetStyle& theme_;
 };
 
 }

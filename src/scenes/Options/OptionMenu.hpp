@@ -6,10 +6,10 @@
 class OptionMenu: public BaseMenu
 {
 public:
-	OptionMenu();
+    OptionMenu();
 
 private:
-	void EventCallback(int id) override;
+    void EventCallback(int id) override;
 };
 
 #endif // OPTIONMENU_HPP

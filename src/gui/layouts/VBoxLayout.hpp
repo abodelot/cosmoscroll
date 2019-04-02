@@ -14,9 +14,9 @@ class Widget;
 class VBoxLayout: public Layout
 {
 public:
-	VBoxLayout(float x, float y);
+    VBoxLayout(float x, float y);
 
-	Widget* Add(Widget* widget);
+    Widget* Add(Widget* widget);
 
 };
 

@@ -12,20 +12,20 @@ class Player;
 class IntroScreen: public Screen
 {
 public:
-	IntroScreen();
+    IntroScreen();
 
-	void onEvent(const sf::Event& event) override;
+    void onEvent(const sf::Event& event) override;
 
-	void update(float frametime) override;
+    void update(float frametime) override;
 
-	void draw(sf::RenderTarget& target) const override;
+    void draw(sf::RenderTarget& target) const override;
 
 private:
-	float          m_elapsed;
-	sf::Sprite     m_background;
-	sf::Sprite     m_title;
-	EntityManager& m_entities;
-	Player*        m_spaceship;
+    float          m_elapsed;
+    sf::Sprite     m_background;
+    sf::Sprite     m_title;
+    EntityManager& m_entities;
+    Player*        m_spaceship;
 };
 
 #endif // INTROSCREEN_HPP

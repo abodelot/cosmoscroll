@@ -10,15 +10,15 @@
 class Explosion: public Entity
 {
 public:
-	Explosion();
+    Explosion();
 
-	void collides(Entity& entity);
+    void collides(Entity& entity);
 
-	void onUpdate(float frametime);
+    void onUpdate(float frametime);
 
 private:
-	Animator  m_animator;
-	sf::Clock m_clock;
+    Animator  m_animator;
+    sf::Clock m_clock;
 };
 
 #endif // EXPLOSION_HPP

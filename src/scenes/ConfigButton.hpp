@@ -10,27 +10,27 @@
 class ConfigButton: public gui::Button
 {
 public:
-	ConfigButton(gui::Menu* owner, Action::ID action = Action::NONE);
+    ConfigButton(gui::Menu* owner, Action::ID action = Action::NONE);
 
-	// Set button label based on keyboard key binded to the internal action
-	void setKeyboardLabel();
+    // Set button label based on keyboard key binded to the internal action
+    void setKeyboardLabel();
 
-	// Set button label based on joystick button binded to the internal action
-	void setJoystickLabel();
+    // Set button label based on joystick button binded to the internal action
+    void setJoystickLabel();
 
-	Action::ID getAction() const;
+    Action::ID getAction() const;
 
 protected:
-	void OnStateChanged(gui::State::EState state) override;
+    void OnStateChanged(gui::State::EState state) override;
 
-	void OnCallbackTriggered() override;
+    void OnCallbackTriggered() override;
 
 private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-	sf::Sprite m_background;
-	Action::ID m_action;
-	bool       m_error;
+    sf::Sprite m_background;
+    Action::ID m_action;
+    bool       m_error;
 };
 
 

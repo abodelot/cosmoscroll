@@ -12,37 +12,37 @@ namespace sfh
 template <class T>
 inline void setX(T& obj, float x)
 {
-	obj.setPosition(x, obj.getPosition().y);
+    obj.setPosition(x, obj.getPosition().y);
 }
 
 template <class T>
 inline void setY(T& obj, float y)
 {
-	obj.setPosition(obj.getPosition().x, y);
+    obj.setPosition(obj.getPosition().x, y);
 }
 
 template <class T>
 float width(const T& obj)
 {
-	return obj.getLocalBounds().width * obj.getScale().x;
+    return obj.getLocalBounds().width * obj.getScale().x;
 }
 
 template <class T>
 inline float height(const T& obj)
 {
-	return obj.getLocalBounds().height * obj.getScale().y;
+    return obj.getLocalBounds().height * obj.getScale().y;
 }
 
 template <class T>
 float right(const T& obj)
 {
-	return obj.getPosition().x + width(obj);
+    return obj.getPosition().x + width(obj);
 }
 
 template <class T>
 inline float bottom(const T& obj)
 {
-	return obj.getPosition().y + height(obj);
+    return obj.getPosition().y + height(obj);
 }
 
 

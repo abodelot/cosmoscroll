@@ -6,10 +6,10 @@
 class InfinityModeMenu: public BaseMenu
 {
 public:
-	InfinityModeMenu();
+    InfinityModeMenu();
 
 private:
-	void EventCallback(int id) override;
+    void EventCallback(int id) override;
 };
 
 #endif // INFINITYMODEMENU_HPP
