@@ -1,4 +1,5 @@
 #include <SFML/Network.hpp>
+#include "vendor/md5/md5.hpp"
 
 #include "SendScoreMenu.hpp"
 #include "core/Game.hpp"
@@ -8,7 +9,6 @@
 #include "entities/EntityManager.hpp"
 #include "entities/Player.hpp"
 #include "utils/I18n.hpp"
-#include "utils/md5/md5.hpp"
 
 
 SendScoreMenu::SendScoreMenu():
@@ -124,7 +124,7 @@ void SendScoreMenu::uploadScore()
     request.setUri(COSMO_SERVER_URI);
     std::string body = "name=" + str_name
                      + "&score=" + str_score
-                     + "&key=" + key.GetHash()
+                     + "&key=" + key.getHash()
                      + "&version=" + APP_VERSION;
     request.setBody(body);
 

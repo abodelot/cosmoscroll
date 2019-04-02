@@ -29,21 +29,21 @@ documentation and/or software.
 class MD5
 {
 public:
-	MD5();
-	MD5(const std::string& source);
-	MD5(std::ifstream& file);
-	MD5(const unsigned char* source, size_t len);
+    MD5();
+    MD5(const std::string& source);
+    MD5(std::ifstream& file);
+    MD5(const unsigned char* source, size_t len);
 
-	std::string Calculate(const std::string& source);
-	std::string Calculate(std::ifstream& file);
-	std::string Calculate(const unsigned char* source, size_t len);
+    std::string calculate(const std::string& source);
+    std::string calculate(std::ifstream& file);
+    std::string calculate(const unsigned char* source, size_t len);
 
-	std::string GetHash() const;
-	const unsigned char* GetRawHash() const { return m_rawHash; }
+    std::string getHash() const;
+    const unsigned char* getRawHash() const;
 
 private:
-	std::string	m_sHash;
-	unsigned char m_rawHash[16];
+    std::string m_sHash;
+    unsigned char m_rawHash[16];
 };
 
 #endif // MD5_HPP

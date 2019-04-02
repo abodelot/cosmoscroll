@@ -6,7 +6,7 @@ This project is written in C++ with the SFML library. It also uses DUMB for play
 
 - Author: Alexandre Bodelot <alexandre.bodelot@gmail.com>
 - Website: http://github.com/abodelot/cosmoscroll
-- License: GPL (see `COPYING` file)
+- License: GPL (see `LICENSE` file)
 
 
 ## How to play?

@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Item.hpp"
 #include "entities/Player.hpp"
-#include "utils/tinyxml/tinyxml2.h"
 #include "utils/I18n.hpp"
+#include "vendor/tinyxml/tinyxml2.h"
 
 
 Item::Item(Type type):

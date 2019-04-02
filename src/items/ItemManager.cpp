@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include <iostream>
 #include "ItemManager.hpp"
-#include "utils/tinyxml/tinyxml2.h"
+#include "vendor/tinyxml/tinyxml2.h"
 
 
 ItemManager& ItemManager::getInstance()

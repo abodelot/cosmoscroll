@@ -11,7 +11,7 @@
 #include "core/MessageSystem.hpp"
 #include "core/Resources.hpp"
 #include "core/Collisions.hpp"
-#include "utils/tinyxml/tinyxml2.h"
+#include "vendor/tinyxml/tinyxml2.h"
 
 
 /**

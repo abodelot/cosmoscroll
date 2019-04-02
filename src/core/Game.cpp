@@ -1,4 +1,6 @@
 #include <iostream>
+#include "vendor/md5/md5.hpp"
+
 #include "Game.hpp"
 #include "Constants.hpp"
 #include "UserSettings.hpp"
@@ -11,7 +13,6 @@
 #include "utils/I18n.hpp"
 #include "utils/IniParser.hpp"
 #include "utils/FileSystem.hpp"
-#include "utils/md5/md5.hpp"
 #include "scenes/scenes.hpp"
 
 // config and data files
@@ -301,7 +302,7 @@ void Game::setResolution(const sf::Vector2u& size)
         return;
 
     // Create window
-    m_window.create(sf::VideoMode(size.x, size.y), APP_TITLE, sf::Style::Close);
+    m_window.create(sf::VideoMode(size.x, size.y, 16), APP_TITLE, sf::Style::Close);
     sf::View view = sf::View(sf::FloatRect(0, 0, APP_WIDTH, APP_HEIGHT));
     m_window.setView(view);
 
@@ -338,23 +339,24 @@ bool Game::checkResourcesPurity(const std::string& resources_dir)
 {
     bool check_passed = true;
     std::ifstream file;
-    MD5 md5sum;
+    MD5 md5;
 
     file.open((resources_dir + XML_WEAPONS).c_str());
-    check_passed &= (md5sum.Calculate(file) == MD5SUM_WEAPONS);
+    check_passed &= (md5.calculate(file) == MD5SUM_WEAPONS);
     file.close();
 
     file.open((resources_dir + XML_UPGRADES).c_str());
-    check_passed &= (md5sum.Calculate(file) == MD5SUM_UPGRADES);
+    check_passed &= (md5.calculate(file) == MD5SUM_UPGRADES);
     file.close();
 
     file.open((resources_dir + XML_SPACESHIPS).c_str());
-    check_passed &= (md5sum.Calculate(file) == MD5SUM_SPACESHIPS);
+    check_passed &= (md5.calculate(file) == MD5SUM_SPACESHIPS);
     file.close();
 
     file.open((resources_dir + XML_ANIMATIONS).c_str());
-    check_passed &= (md5sum.Calculate(file) == MD5SUM_ANIMATIONS);
+    check_passed &= (md5.calculate(file) == MD5SUM_ANIMATIONS);
     file.close();
+
     return check_passed;
 }
 

@@ -7,9 +7,13 @@ cosmoscroll
 # Compiled object files
 *.o
 
+# Makefile dependencies
+*.d
+
 # Generated tarballs
 *.tar.gz
 
 # Code::Blocks files
 cosmoscroll.layout
 cosmoscroll.depend
+.swp

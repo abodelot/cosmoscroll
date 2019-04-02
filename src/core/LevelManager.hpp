@@ -6,7 +6,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-#include "utils/tinyxml/tinyxml2.h"
+#include "vendor/tinyxml/tinyxml2.h"
 
 class Entity;
 
