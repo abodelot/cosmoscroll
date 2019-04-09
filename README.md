@@ -45,7 +45,7 @@ CosmoScroll should compile on any system supported by SFML (Windows, Linux, MacO
 
 First, you must install the following libraries:
 
-- [SFML](http://www.sfml-dev.org/), version >= 2.1
+- [SFML](http://www.sfml-dev.org/), version >= 2.4
 - [libdumb](http://dumb.sourceforge.net/) (for Debian/Ubuntu, simply install the `libdumb1-dev` package)
 
 Run the `make` command if you are using a UNIX-based system with the `gcc` compiler, or you can use the Code::Blocks project file (`cosmoscroll.cbp`).

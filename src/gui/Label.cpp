@@ -8,7 +8,7 @@ Label::Label(Menu* owner, const sf::String& text, int x, int y) :
     Widget(owner, false)
 {
     const WidgetStyle& style = owner->GetWidgetStyle();
-    text_.setColor(style.label_text_color);
+    text_.setFillColor(style.label_text_color);
     text_.setFont(*style.global_font);
     text_.setCharacterSize(style.global_text_size);
     text_.setPosition(0, 0);

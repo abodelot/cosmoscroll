@@ -22,7 +22,7 @@ void MessageSystem::write(const sf::String& str, const sf::Vector2f& pos, const 
     node->text.setCharacterSize(10);
     node->text.setString(str);
     node->text.setPosition(pos);
-    node->text.setColor(color);
+    node->text.setFillColor(color);
     node->lifetime = 0.f;
 
     // Prepend the node in the linked list
@@ -57,9 +57,9 @@ void MessageSystem::update(float frametime)
             node->text.move(MESSAGE_SPEED_X * frametime, MESSAGE_SPEED_Y * frametime);
 
             // Apply fading
-            sf::Color color = node->text.getColor();
+            sf::Color color = node->text.getFillColor();
             color.a = (MESSAGE_LIFETIME - node->lifetime) * 255 / MESSAGE_LIFETIME;
-            node->text.setColor(color);
+            node->text.setFillColor(color);
 
             previous = node;
             node = node->next;

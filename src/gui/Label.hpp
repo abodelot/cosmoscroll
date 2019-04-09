@@ -24,8 +24,8 @@ public:
     const sf::Font& getFont() const { return *text_.getFont(); }
 
     // text color
-    void setColor(const sf::Color& color) { text_.setColor(color); }
-    const sf::Color& getColor() const { return text_.getColor(); }
+    void setColor(const sf::Color& color) { text_.setFillColor(color); }
+    const sf::Color& getColor() const { return text_.getFillColor(); }
 
     // text style
     void setStyle(int flag) { text_.setStyle(flag); }

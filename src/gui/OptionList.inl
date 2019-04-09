@@ -76,7 +76,7 @@ void OptionList<T>::Add(const sf::String& option, const T& value)
     sf::Text str;
     str.setString(option);
     str.setCharacterSize(text_size_);
-    str.setColor(GetOwner()->GetWidgetStyle().label_text_color);
+    str.setFillColor(GetOwner()->GetWidgetStyle().label_text_color);
     str.setFont(*GetOwner()->GetWidgetStyle().global_font);
 
     if (current_opt_ == -1)

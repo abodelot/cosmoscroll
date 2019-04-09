@@ -26,13 +26,13 @@ ShipItemWidget::ShipItemWidget(gui::Menu* parent, Item::Type type, const sf::Fon
     // Item current level
     m_txt_level.setFont(font);
     m_txt_level.setCharacterSize(10);
-    m_txt_level.setColor(sf::Color::White);
+    m_txt_level.setFillColor(sf::Color::White);
     m_txt_level.setPosition(75, 24);
 
     // Item description
     m_txt_description.setFont(font);
     m_txt_description.setCharacterSize(10);
-    m_txt_description.setColor(sf::Color::White);
+    m_txt_description.setFillColor(sf::Color::White);
     m_txt_description.setPosition(75, 40);
 
     m_txt_upgrade.setFont(font);
@@ -53,11 +53,11 @@ void ShipItemWidget::OnStateChanged(gui::State::EState state)
     {
     case gui::State::DEFAULT:
         m_background.setTextureRect(sf::IntRect(0, 0, 340, 60));
-        m_txt_name.setColor(sf::Color::White);
+        m_txt_name.setFillColor(sf::Color::White);
         break;
     case gui::State::FOCUSED:
         m_background.setTextureRect(sf::IntRect(0, 60, 340, 60));
-        m_txt_name.setColor(sf::Color(0, 255, 255));
+        m_txt_name.setFillColor(sf::Color(0, 255, 255));
         SoundSystem::playSound("menu-select.ogg");
         break;
     default:
@@ -98,16 +98,16 @@ void ShipItemWidget::refresh()
         m_txt_upgrade.setString(I18n::templatize("armory.upgrade_item", "{level}", next_level));
         m_txt_price.setString(I18n::templatize("item.price", "{price}", next_item.getPrice()));
         if (UserSettings::getCredits() >= next_item.getPrice())
-            m_txt_price.setColor(sf::Color::Green);
+            m_txt_price.setFillColor(sf::Color::Green);
         else
-            m_txt_price.setColor(sf::Color(255, 128, 0));
+            m_txt_price.setFillColor(sf::Color(255, 128, 0));
     }
     else
     {
         // No next item => last level reached
         m_txt_upgrade.setString(_t("armory.max_level"));
         m_txt_upgrade.setStyle(sf::Text::Italic);
-        m_txt_upgrade.setColor(sf::Color(255, 255, 255, 128));
+        m_txt_upgrade.setFillColor(sf::Color(255, 255, 255, 128));
         m_txt_price.setString("");
 
 

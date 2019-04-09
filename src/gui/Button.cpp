@@ -20,7 +20,9 @@ Button::Button(Menu* owner, const sf::String& text, int w, int h) :
     const WidgetStyle& style = owner->GetWidgetStyle();
     text_.setCharacterSize(style.global_text_size);
     text_.setFont(*style.global_font);
-    text_.setColor(style.button_text_color);
+    text_.setFillColor(style.button_text_color);
+    text_.setOutlineColor(sf::Color::Black);
+    text_.setOutlineThickness(1);
     OnStateChanged(GetState());
 }
 
@@ -34,7 +36,7 @@ void Button::setString(const sf::String& text)
 
 void Button::setColor(const sf::Color& color)
 {
-    text_.setColor(color);
+    text_.setFillColor(color);
 }
 
 
@@ -58,10 +60,10 @@ void Button::OnStateChanged(State::EState state)
     switch (state)
     {
         case State::DEFAULT:
-            text_.setColor(GetOwner()->GetWidgetStyle().button_text_color);
+            text_.setFillColor(GetOwner()->GetWidgetStyle().button_text_color);
             break;
         case State::FOCUSED:
-            text_.setColor(GetOwner()->GetWidgetStyle().button_text_color_focus);
+            text_.setFillColor(GetOwner()->GetWidgetStyle().button_text_color_focus);
             break;
         default:
             break;

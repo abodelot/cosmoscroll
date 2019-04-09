@@ -21,7 +21,7 @@ GameOverScreen::GameOverScreen():
     m_panel(ControlPanel::getInstance())
 {
     m_text.setCharacterSize(40);
-    m_text.setColor(sf::Color::White);
+    m_text.setFillColor(sf::Color::White);
     m_text.setFont(Resources::getFont("hemi-head.ttf"));
 }
 

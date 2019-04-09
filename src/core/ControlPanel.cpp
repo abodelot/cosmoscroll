@@ -161,12 +161,12 @@ void ControlPanel::setOverheat(bool overheat)
     if (overheat)
     {
         pbars_[ProgressBar::HEAT].bar_.setFillColor(BAR_OVERHEAT);
-        pbars_[ProgressBar::HEAT].label_.setColor(BAR_OVERHEAT);
+        pbars_[ProgressBar::HEAT].label_.setFillColor(BAR_OVERHEAT);
     }
     else
     {
         pbars_[ProgressBar::HEAT].bar_.setFillColor(BAR_HEAT);
-        pbars_[ProgressBar::HEAT].label_.setColor(sf::Color::White);
+        pbars_[ProgressBar::HEAT].label_.setFillColor(sf::Color::White);
     }
 }
 
@@ -285,7 +285,7 @@ void ControlPanel::ProgressBar::init(const sf::String& text, const sf::Font& fon
     label_.setFont(font);
     label_.setString(text);
     label_.setCharacterSize(TEXT_SIZE);
-    label_.setColor(sf::Color::White);
+    label_.setFillColor(sf::Color::White);
     bar_.setSize(sf::Vector2f(0, PROG_BAR_HEIGHT));
     bar_.setFillColor(color);
     value_.setFont(font);
@@ -327,7 +327,7 @@ void ControlPanel::PowerUpSlot::init(PowerUp::Type bonus_type, Type type, const 
     icon_.setTextureRect(PowerUp::getTextureRect(bonus_type));
 
     label_.setCharacterSize(TEXT_SIZE);
-    label_.setColor(sf::Color::White);
+    label_.setFillColor(sf::Color::White);
     label_.setString(type == COUNTER ? "x 0" : "-");
     label_.setFont(font);
 

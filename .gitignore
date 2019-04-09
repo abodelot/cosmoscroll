@@ -16,4 +16,4 @@ cosmoscroll
 # Code::Blocks files
 cosmoscroll.layout
 cosmoscroll.depend
-.swp
+*.swp

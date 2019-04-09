@@ -18,7 +18,7 @@ TextBox::TextBox(Menu* owner, int x, int y, size_t visible_chars, int max_length
 {
     const WidgetStyle& style = owner->GetWidgetStyle();
     display_text_.setFont(*style.global_fixed_font);
-    display_text_.setColor(style.textbox_color);
+    display_text_.setFillColor(style.textbox_color);
     display_text_.setCharacterSize(16);
 
     visible_chars_ = visible_chars;
