@@ -3,21 +3,18 @@
 
 #include "Layout.hpp"
 
-namespace gui
-{
+namespace gui {
 
 class Widget;
 
 /**
  * Vertical box layout: lines up widgets vertically
  */
-class VBoxLayout: public Layout
-{
+class VBoxLayout: public Layout {
 public:
     VBoxLayout(float x, float y);
 
-    Widget* Add(Widget* widget);
-
+    Widget* add(Widget* widget);
 };
 
 }

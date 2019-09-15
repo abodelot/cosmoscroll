@@ -1,17 +1,19 @@
 #include "EvilBoss.hpp"
 #include "entities/Player.hpp"
+#include "entities/EntityManager.hpp"
 #include "core/Resources.hpp"
+#include "core/Services.hpp"
 
 #define MAX_X  360.f
 #define MIN_Y  60.f
-#define MAX_Y  (EntityManager::getInstance().getHeight() - getHeight() - 60.f)
+#define MAX_Y  (EntityManager::getInstance().getSize().y - getHeight() - 60.f)
 
 
 EvilBoss::EvilBoss():
     m_state(EVIL),
     m_next_state(MORE_EVIL),
     m_speed(-100.f, 70.f),
-    m_target(NULL)
+    m_target(nullptr)
 {
     setTexture(Resources::getTexture("entities/evil-boss.png"));
     setTextureRect(sf::IntRect(0, 0, 240, 160));
@@ -26,15 +28,13 @@ EvilBoss::EvilBoss():
     m_eye_right.setOwner(this);
     m_eye_right.setPosition(190, 55);
     // hack: disable sound on the second eye so it won't be played twice
-    m_eye_right.setSound(NULL);
+    m_eye_right.setSound(nullptr);
 }
-
 
 void EvilBoss::onInit()
 {
     m_target = EntityManager::getInstance().getPlayer();
 }
-
 
 void EvilBoss::onUpdate(float frametime)
 {
@@ -44,16 +44,17 @@ void EvilBoss::onUpdate(float frametime)
     m_eye_right.shoot(target_pos);
 
     const sf::Vector2f& pos = getPosition();
-    if ((int) pos.y < MIN_Y || (int) pos.y > MAX_Y)
-    {
-        if      (pos.y < MIN_Y) setY(MIN_Y);
-        else if (pos.y > MAX_Y) setY(MAX_Y);
+    if ((int) pos.y < MIN_Y || (int) pos.y > MAX_Y) {
+        if (pos.y < MIN_Y) {
+            setY(MIN_Y);
+        } else if (pos.y > MAX_Y) {
+            setY(MAX_Y);
+        }
         m_speed.y *= -1;
     }
     move(0, m_speed.y * frametime);
 
-    if (pos.x > MAX_X)
-    {
+    if (pos.x > MAX_X) {
         move(m_speed.x * frametime, 0);
     }
 
@@ -64,11 +65,9 @@ void EvilBoss::onUpdate(float frametime)
 void EvilBoss::takeDamage(int damage)
 {
     Damageable::takeDamage(damage);
-    if (getHP() < m_next_state && getHP() > 0 && m_state != m_next_state)
-    {
+    if (getHP() < m_next_state && getHP() > 0 && m_state != m_next_state) {
         m_state = m_next_state;
-        switch (m_state)
-        {
+        switch (m_state) {
             case MORE_EVIL:
                 setTextureRect(sf::IntRect(240, 0, 240, 160));
                 m_eye_left.setMultiply(2);
@@ -86,10 +85,9 @@ void EvilBoss::takeDamage(int damage)
     }
 }
 
-
 void EvilBoss::onDestroy()
 {
     EntityManager::getInstance().createGreenParticles(getCenter(), 300);
     // Low-pitched explosion
-    SoundSystem::playSound("boom.ogg", 0.2f);
+    Services::getSoundSystem().playSound("boom.ogg", 0.2f);
 }

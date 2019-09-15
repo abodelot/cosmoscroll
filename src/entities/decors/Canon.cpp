@@ -24,15 +24,11 @@ Canon::Canon()
 
 void Canon::onInit()
 {
-    // Always positionned on bottom
-    setY(EntityManager::getInstance().getHeight() - (18 + 128));
 }
 
 
 void Canon::onUpdate(float frametime)
 {
-    move(-EntityManager::FOREGROUND_SPEED * frametime, 0.f);
     updateParts(frametime);
-
     m_weapon.shoot(math::PI / 2.f);
 }

@@ -14,11 +14,9 @@ public:
      */
     void refresh();
 
-    // callbacks ---------------------------------------------------------------
-
-    void OnStateChanged(gui::State::EState state) override;
-    void OnKeyPressed(sf::Keyboard::Key code) override;
-    void OnMouseClicked(int x, int y) override;
+    void onStateChanged(gui::State::EState state) override;
+    void onKeyPressed(sf::Keyboard::Key code) override;
+    void onMouseClicked(int x, int y) override;
 
 private:
     bool buyNextLevel() const;
@@ -28,11 +26,11 @@ private:
     Item::Type m_type;
     int        m_level;
 
-    sf::Text   m_txt_name;
-    sf::Text   m_txt_level;
-    sf::Text   m_txt_description;
-    sf::Text   m_txt_price;
-    sf::Text   m_txt_upgrade;
+    sf::Text   m_txtName;
+    sf::Text   m_txtLevel;
+    sf::Text   m_txtDescription;
+    sf::Text   m_txtPrice;
+    sf::Text   m_txtUpgrade;
     sf::Sprite m_background;
 };
 

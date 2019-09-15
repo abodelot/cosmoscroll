@@ -1,13 +1,12 @@
 #include "Label.hpp"
 #include "Menu.hpp"
 
-namespace gui
-{
+namespace gui {
 
 Label::Label(Menu* owner, const sf::String& text, int x, int y) :
     Widget(owner, false)
 {
-    const WidgetStyle& style = owner->GetWidgetStyle();
+    const WidgetStyle& style = owner->getWidgetStyle();
     text_.setFillColor(style.label_text_color);
     text_.setFont(*style.global_font);
     text_.setCharacterSize(style.global_text_size);
@@ -22,7 +21,7 @@ void Label::setString(const sf::String& text)
 {
     text_.setString(text);
     const sf::FloatRect& rect = text_.getGlobalBounds();
-    Resize(rect.width, std::max<float>(rect.height, Widget::MIN_HEIGHT));
+    resize(rect.width, std::max<float>(rect.height, Widget::MIN_HEIGHT));
 }
 
 

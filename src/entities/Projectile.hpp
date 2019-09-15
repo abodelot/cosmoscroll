@@ -25,10 +25,11 @@ public:
     // callbacks ---------------------------------------------------------------
 
     void onUpdate(float frametime);
+    void onTileCollision();
 
 private:
     sf::Vector2f m_speed;
-    int          m_damage;
+    int m_damage;
 };
 
 #endif // PROJECTILE_HPP

@@ -1,5 +1,6 @@
 #include "Entity.hpp"
 #include "core/Collisions.hpp"
+#include "core/Services.hpp"
 
 
 Entity::Entity():
@@ -55,5 +56,11 @@ sf::Vector2f Entity::getCenter() const
 void Entity::setTexture(const sf::Texture& texture)
 {
     sf::Sprite::setTexture(texture);
-    Collisions::registerTexture(&texture);
+    Services::getCollisions().registerTexture(&texture);
+}
+
+
+void Entity::setSpawnPosition(const sf::Vector2f& position)
+{
+    sf::Sprite::setPosition(position);
 }

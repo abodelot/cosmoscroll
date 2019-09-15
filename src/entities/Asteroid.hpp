@@ -6,11 +6,9 @@
 /**
  * Asteroid object, split into smaller asteroids when destroyed
  */
-class Asteroid: public Damageable
-{
+class Asteroid: public Damageable {
 public:
-    enum Size
-    {
+    enum Size {
         SMALL, MEDIUM, BIG
     };
 
@@ -18,13 +16,11 @@ public:
      * @param size: size type
      * @param angle: movement direction
      */
-    Asteroid(Size size, float angle=180);
+    Asteroid(Size size=BIG, float angle=180);
 
-    // callbacks ---------------------------------------------------------------
+    void onUpdate(float frametime) override;
 
-    void onUpdate(float frametime);
-
-    void onDestroy();
+    void onDestroy() override;
 
 private:
     /**
@@ -34,7 +30,7 @@ private:
 
     Size         m_size;
     sf::Vector2f m_speed;
-    int          m_rotation_speed;
+    int          m_rotationSpeed;
 };
 
 #endif // ASTEROID_HPP

@@ -10,8 +10,7 @@ namespace gui
  * Une case à cocher pour un choix binaire
  * callback appelée quand : choix modifié
  */
-class CheckBox: public Widget
-{
+class CheckBox: public Widget {
 public:
     CheckBox(Menu* owner);
 
@@ -25,17 +24,14 @@ public:
      */
     void Check(bool checked);
 
-    // inherited callbacks
-    void OnKeyPressed(sf::Keyboard::Key code);
-    void OnMouseClicked(int, int);
+    void onKeyPressed(sf::Keyboard::Key code) override;
+    void onMouseClicked(int, int) override;
 
 protected:
-    // inherited
-    void OnStateChanged(State::EState state);
+    void onStateChanged(State::EState state) override;
 
 private:
-    // inherited
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     bool checked_;
     sf::RectangleShape box_;

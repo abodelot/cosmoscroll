@@ -9,12 +9,12 @@ VBoxLayout::VBoxLayout(float x, float y): Layout(x, y)
 }
 
 
-Widget* VBoxLayout::Add(Widget* widget)
+Widget* VBoxLayout::add(Widget* widget)
 {
-    sf::Vector2f pos = GetOffset();
+    sf::Vector2f pos = getOffset();
     widget->setPosition(pos);
     // compute next widget position
-    pos.y += widget->GetHeight() + GetSpacing().y;
-    SetOffset(pos.x, pos.y);
+    pos.y += widget->getHeight() + getSpacing().y;
+    setOffset(pos.x, pos.y);
     return widget;
 }

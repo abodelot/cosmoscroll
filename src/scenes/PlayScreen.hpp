@@ -4,7 +4,8 @@
 #include "Screen.hpp"
 
 class EntityManager;
-class ControlPanel;
+class MessageSystem;
+class Game;
 
 /**
  * Playing state
@@ -23,10 +24,9 @@ public:
     void draw(sf::RenderTarget& target) const override;
 
 private:
-    void setPanelOnTop(bool top);
-
     EntityManager& m_entities;
-    ControlPanel&  m_panel;
+    Game& m_game;
+    MessageSystem& m_messageSystem;
 };
 
 #endif // PLAYSCREEN_HPP

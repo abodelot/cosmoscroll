@@ -1,12 +1,10 @@
 #ifndef ANIMATION_HPP
 #define ANIMATION_HPP
 
-#include <vector>
 #include <SFML/Graphics.hpp>
+#include <vector>
 
-
-class Animation
-{
+class Animation {
 public:
     Animation();
 
@@ -52,5 +50,4 @@ private:
     float                    m_delay;
 };
 
-#endif // ANIMATION_HPP
-
+#endif

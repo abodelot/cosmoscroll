@@ -5,12 +5,9 @@
 #include "entities/Animator.hpp"
 #include "entities/Weapon.hpp"
 
-class BrainBoss: public MultiPartEntity
-{
+class BrainBoss: public MultiPartEntity {
 public:
     BrainBoss();
-
-    // callbacks ---------------------------------------------------------------
 
     void onUpdate(float frametime) override;
     void onPartDestroyed(const Part& part) override;
@@ -20,7 +17,7 @@ private:
     enum State { WAIT, WAIT_ATTACK, MOVE };
 
     State      m_state;
-    float      m_state_timer;
+    float      m_stateTimer;
     Animator   m_eye_animator;
     Animator   m_animator;
     Weapon     m_weapon;

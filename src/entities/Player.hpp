@@ -5,9 +5,10 @@
 #include "Animator.hpp"
 #include "PowerUp.hpp"
 #include "core/Input.hpp"
-#include "core/ControlPanel.hpp"
-#include "core/ParticleEmitter.hpp"
+#include "particles/ParticleEmitter.hpp"
 #include "entities/Weapon.hpp"
+
+class HUD;
 
 /**
  * Player's spaceship
@@ -30,17 +31,19 @@ public:
 
     void takeDamage(int damage) override;
 
-    inline bool isCheater() const { return m_konami_code_activated; }
+    inline bool isCheater() const { return m_konamiCodeActivated; }
 
     // callbacks ---------------------------------------------------------------
 
-    void onInit();
+    void onInit() override;
 
-    void onUpdate(float frametime);
+    void onUpdate(float frametime) override;
 
-    void onCollision(PowerUp& powerup);
+    void onCollision(PowerUp& powerup) override;
 
-    void onDestroy();
+    void onTileCollision() override;
+
+    void onDestroy() override;
 
     void setMaxHeat(int heat);
 
@@ -58,7 +61,7 @@ private:
         T_DOUBLESHOT,
         T_TRISHOT,
         T_SPEED,
-        TIMED_BONUS_COUNT
+        TIMED_POWERUP_COUNT
     };
 
     /**
@@ -69,7 +72,7 @@ private:
     /**
      * Apply some upgrades when konami code sequence is activated
      */
-    void applyKonamiCode();
+    void toggleKonamiCode();
 
     /**
      * Set shield points
@@ -81,15 +84,13 @@ private:
      */
     void overheatAudioHint() const;
 
-    ControlPanel& m_panel;
-
     // Code Konami sequence
     static const int KONAMI_CODE_LENGTH = 10;
-    Action::ID       m_konami_code[KONAMI_CODE_LENGTH];
-    int              m_current_konami_index;
-    bool             m_konami_code_activated;
+    Action::ID m_konamiCode[KONAMI_CODE_LENGTH];
+    int        m_currentKonamiIndex;
+    bool       m_konamiCodeActivated;
 
-    float bonus_[TIMED_BONUS_COUNT]; // timers des bonus
+    float  m_powerUps[TIMED_POWERUP_COUNT]; // timers, in seconds
     bool   m_overheat;
     float  m_heat, m_max_heat;
     int    m_shield, m_max_shield;
@@ -98,21 +99,18 @@ private:
     int    m_missiles;
     int    m_icecubes;
     Weapon m_weapon;
-    Weapon m_missile_launcher;
+    Weapon m_missileLauncher;
 
-    Animator         m_animator;
-    const Animation& m_animation_up;
-    const Animation& m_animation_down;
-    const Animation& m_animation_normal;
+    Animator m_animator;
+    int      m_score;
 
-    int              m_score;
-
-    class ShieldEmitter: public ParticleEmitter
-    {
+    class ShieldEmitter: public ParticleEmitter {
     public:
+        using ParticleEmitter::ParticleEmitter;
+
         void createParticles(size_t count);
 
-        void onParticleUpdated(ParticleSystem::Particle& particle, float frametime) const override;
+        void onParticleUpdated(Particle& particle, float frametime) const override;
     };
 
     ShieldEmitter   m_shieldEmitter;
@@ -120,7 +118,8 @@ private:
     ParticleEmitter m_smokeEmitter;
     ParticleEmitter m_snowflakesEmitter;
     ParticleEmitter m_powerupEmitter;
+
+    HUD& m_hud;
 };
 
 #endif // PLAYER_HPP
-

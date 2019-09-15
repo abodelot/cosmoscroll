@@ -3,14 +3,12 @@
 
 #include "Widget.hpp"
 
-namespace gui
-{
+namespace gui {
 
 /**
  * Callback appelée quand : valeur modifiée
  */
-class Slider: public Widget
-{
+class Slider: public Widget {
 public:
     /**
      * @param owner: menu propriétaire du slider
@@ -22,25 +20,22 @@ public:
     /**
      * Indiquer le pas de variation de la poignée
      */
-    void SetQuantum(int quantum);
+    void setQuantum(int quantum);
 
-    int GetValue() const;
-    void SetValue(int value);
+    int getValue() const;
+    void setValue(int value);
 
-    // inherited callbacks
-    void OnKeyPressed(sf::Keyboard::Key code);
-    void OnMouseClicked(int x, int y);
-    void OnMouseWheelMoved(int delta);
+    void onKeyPressed(sf::Keyboard::Key code) override;
+    void onMouseClicked(int x, int y) override;
+    void onMouseWheelMoved(int delta) override;
 
 protected:
-    // inherited
-    void OnStateChanged(State::EState state);
+    void onStateChanged(State::EState state) override;
 
 private:
-    // inherited
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    void UpdateHandle(int value);
+    void updateHandle(int value);
 
     sf::RectangleShape bar_;
     sf::RectangleShape handle_;

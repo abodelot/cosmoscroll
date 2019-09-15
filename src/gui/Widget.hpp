@@ -37,11 +37,11 @@ public:
     /**
      * Holds widget state (for display purpose only)
      */
-    void SetState(State::EState state);
-    State::EState GetState() const;
+    void setState(State::EState state);
+    State::EState getState() const;
 
-    inline void SetVisible(bool visible) { visible_ = visible; }
-    inline bool IsVisible() const { return visible_; }
+    inline void setVisible(bool visible) { visible_ = visible; }
+    inline bool isVisible() const { return visible_; }
 
     void setCallback(std::function<void(void)> callback);
 
@@ -49,35 +49,35 @@ public:
      * Mise à jour du widget
      * @param frametime: temps de la frame courante
      */
-    virtual void Update(float frametime);
+    virtual void update(float frametime);
 
     // callbacks des événements -----------------------------------------------
 
-    virtual void OnKeyPressed(sf::Keyboard::Key) {}
+    virtual void onKeyPressed(sf::Keyboard::Key) {}
 
-    virtual void OnTextEntered(sf::Uint32) {}
+    virtual void onTextEntered(sf::Uint32) {}
 
-    virtual void OnMouseClicked(int, int) {}
+    virtual void onMouseClicked(int, int) {}
 
-    virtual void OnMouseWheelMoved(int) {}
+    virtual void onMouseWheelMoved(int) {}
 
     /**
      * Holds widget dimension
      */
-    void Resize(int width, int height);
-    int GetWidth() const;
-    int GetHeight() const;
+    void resize(int width, int height);
+    int getWidth() const;
+    int getHeight() const;
 
     /**
      * @return true si le widget peut prendre le focus, sinon false
      */
-    bool CanGrabFocus() const;
+    bool canGrabFocus() const;
 
-    bool IsFocused() const;
+    bool isFocused() const;
 
-    Menu* GetOwner() const;
+    Menu* getOwner() const;
 
-    bool ContainsPoint(float x, float y);
+    bool containsPoint(float x, float y);
 
 protected:
     void triggerCallback();
@@ -86,12 +86,12 @@ protected:
      * Callback état modifié
      * @param state: nouvel état du widget
      */
-    virtual void OnStateChanged(State::EState) {}
+    virtual void onStateChanged(State::EState) {}
 
     /**
      * Callback si callback déclenchée
      */
-    virtual void OnCallbackTriggered() {}
+    virtual void onCallbackTriggered() {}
 
     void centerText(sf::Text& text);
 
@@ -102,7 +102,7 @@ private:
     int height_;
     bool focusable_;
     bool visible_;
-    State::EState state_;
+    State::EState m_state;
 };
 
 }

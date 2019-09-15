@@ -4,8 +4,6 @@
 #include "scenes/BaseMenu.hpp"
 #include "CreditCounterWidget.hpp"
 
-class LevelManager;
-
 class LevelMenu: public BaseMenu
 {
 public:
@@ -15,10 +13,9 @@ public:
 
 private:
     sf::Text              m_title;
-    LevelManager&         m_levels;
     CreditCounterWidget*  m_credits;
-    gui::OptionList<int>* m_opt_levels;
-    gui::Label*           m_lab_progresion;
+    gui::OptionList<int>* m_optLevels;
+    gui::Label*           m_labProgresion;
 };
 
-#endif // LEVELMENU_HPP
+#endif

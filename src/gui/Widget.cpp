@@ -9,68 +9,71 @@ Widget::Widget(Menu* owner, bool focusable):
     height_(0),
     focusable_(focusable),
     visible_(true),
-    state_(State::DEFAULT)
+    m_state(State::DEFAULT)
 {
-    owner->AddWidget(this);
+    owner->addWidget(this);
 }
 
 
-void Widget::SetState(State::EState state)
+void Widget::setState(State::EState state)
 {
-    OnStateChanged(state);
-    state_ = state;
+    onStateChanged(state);
+    m_state = state;
 }
 
 
-State::EState Widget::GetState() const
+State::EState Widget::getState() const
 {
-    return state_;
+    return m_state;
 }
 
 
-void Widget::Update(float)
+void Widget::update(float)
 {
 }
 
 
-bool Widget::ContainsPoint(float x, float y)
+bool Widget::containsPoint(float x, float y)
 {
-    return (x >= getPosition().x) && (x <= getPosition().x + width_) && (y >= getPosition().y) && (y <= getPosition().y + height_);
+    return (x >= getPosition().x) &&
+        (x <= getPosition().x + width_) &&
+        (y >= getPosition().y) &&
+        (y <= getPosition().y + height_);
 }
 
 
-void Widget::Resize(int width, int height)
+void Widget::resize(int width, int height)
 {
     width_ = width;
     height_ = height;
 }
 
 
-int Widget::GetWidth() const
+int Widget::getWidth() const
 {
     return width_;
 }
 
 
-int Widget::GetHeight() const
+int Widget::getHeight() const
 {
     return height_;
 }
 
 
-bool Widget::CanGrabFocus() const
+bool Widget::canGrabFocus() const
 {
-    return focusable_ && visible_ && state_ != State::DISABLED;
+    return focusable_ && visible_ && m_state != State::DISABLED;
 }
 
 
-bool Widget::IsFocused() const
+bool Widget::isFocused() const
 {
-    return this == GetOwner()->GetFocusedWidget();
+    return this == getOwner()->getFocusedWidget();
 }
 
 
-Menu* Widget::GetOwner() const
+Menu* Widget::getOwner() const
 {
     return owner_;
 }

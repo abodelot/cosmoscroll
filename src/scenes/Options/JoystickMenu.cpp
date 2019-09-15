@@ -1,6 +1,6 @@
 #include "JoystickMenu.hpp"
 #include "core/Game.hpp"
-#include "utils/I18n.hpp"
+#include "core/Services.hpp"
 
 
 JoystickMenu::JoystickMenu():
@@ -9,7 +9,7 @@ JoystickMenu::JoystickMenu():
     setTitle(_t("joystick.title"));
 
     gui::FormLayout form(110, 120);
-    form.SetSpacing(20, 16);
+    form.setSpacing(20, 16);
     but_weapon_  = addRow(form, Action::USE_LASER);
     but_missile_ = addRow(form, Action::USE_MISSILE);
     but_cooler_  = addRow(form, Action::USE_COOLER);
@@ -25,26 +25,20 @@ JoystickMenu::JoystickMenu():
 
 void JoystickMenu::onEvent(const sf::Event& event)
 {
-    if (m_triggered != nullptr)
-    {
+    if (m_triggered != nullptr) {
         // Waiting for user input: bypass GUI event handler
-        if (event.type == sf::Event::JoystickButtonPressed)
-        {
+        if (event.type == sf::Event::JoystickButtonPressed) {
             // Binding action to pressed button
             Action::ID action = m_triggered->getAction();
             Input::setButtonBinding(event.joystickButton.button, action);
             onFocus();
-        }
-        else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-        {
+        } else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
             // Cancel input and reset button label
             m_triggered->setJoystickLabel();
             m_triggered = nullptr;
         }
-    }
-    else
-    {
-        gui::Menu::OnEvent(event);
+    } else {
+        gui::Menu::onEvent(event);
     }
 }
 

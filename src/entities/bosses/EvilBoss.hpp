@@ -5,11 +5,7 @@
 #include "entities/Weapon.hpp"
 
 
-/**
- * Il est très méchant, et il en veut !
- */
-class EvilBoss: public Damageable
-{
+class EvilBoss: public Damageable {
 public:
     EvilBoss();
 
@@ -22,8 +18,7 @@ public:
     void onDestroy() override;
 
 private:
-    enum State
-    {
+    enum State {
         EVIL = 900, MORE_EVIL = 600, DAMN_EVIL = 300
     };
 

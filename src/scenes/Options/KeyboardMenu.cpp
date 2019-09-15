@@ -1,6 +1,6 @@
 #include "KeyboardMenu.hpp"
 #include "core/Game.hpp"
-#include "utils/I18n.hpp"
+#include "core/Services.hpp"
 
 
 KeyboardMenu::KeyboardMenu():
@@ -9,7 +9,7 @@ KeyboardMenu::KeyboardMenu():
     setTitle(_t("keyboard.title"));
 
     gui::FormLayout form(140, 120);
-    form.SetSpacing(20, 10);
+    form.setSpacing(20, 10);
     but_up_      = addRow(form, Action::UP);
     but_down_    = addRow(form, Action::DOWN);
     but_left_    = addRow(form, Action::LEFT);
@@ -28,29 +28,22 @@ KeyboardMenu::KeyboardMenu():
 
 void KeyboardMenu::onEvent(const sf::Event& event)
 {
-    if (m_triggered != nullptr)
-    {
+    if (m_triggered != nullptr) {
         // Waiting for user input: bypass GUI event handler
-        if (event.type == sf::Event::KeyPressed)
-        {
-            if (event.key.code != sf::Keyboard::Escape)
-            {
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code != sf::Keyboard::Escape) {
                 // Bind action to pressed key
                 Action::ID action = m_triggered->getAction();
                 Input::setKeyBinding(event.key.code, action);
                 onFocus();
-            }
-            else
-            {
+            } else {
                 // Cancel input and reset button label
                 m_triggered->setKeyboardLabel();
                 m_triggered = nullptr;
             }
         }
-    }
-    else
-    {
-        gui::Menu::OnEvent(event);
+    } else {
+        gui::Menu::onEvent(event);
     }
 }
 

@@ -4,18 +4,19 @@
 #include "entities/MultiPartEntity.hpp"
 #include "entities/Weapon.hpp"
 
-class GunTower: public MultiPartEntity
-{
+class GunTower: public MultiPartEntity {
 public:
     GunTower();
 
-    void onInit();
+    void onInit() override;
 
-    void onUpdate(float frametime);
+    void onUpdate(float frametime) override;
+
+    void onPartDestroyed(const Part&) override;
 
 private:
     Weapon   m_weapon;
     Entity*  m_target;
 };
 
-#endif // GUN_TOWER_HPP
+#endif

@@ -5,32 +5,32 @@ using namespace gui;
 
 Layout::Layout(float x, float y)
 {
-    SetOffset(x, y);
-    SetSpacing(10, 10);
+    setOffset(x, y);
+    setSpacing(10, 10);
 }
 
 
-void Layout::SetOffset(float x, float y)
+void Layout::setOffset(float x, float y)
 {
     offset_.x = x;
     offset_.y = y;
 }
 
 
-const sf::Vector2f& Layout::GetOffset() const
+const sf::Vector2f& Layout::getOffset() const
 {
     return offset_;
 }
 
 
-void Layout::SetSpacing(float x, float y)
+void Layout::setSpacing(float x, float y)
 {
     spacing_.x = x;
     spacing_.y = y;
 }
 
 
-const sf::Vector2f& Layout::GetSpacing() const
+const sf::Vector2f& Layout::getSpacing() const
 {
     return spacing_;
 }

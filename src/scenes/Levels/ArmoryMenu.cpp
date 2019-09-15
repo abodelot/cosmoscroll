@@ -6,7 +6,6 @@
 #include "core/SoundSystem.hpp"
 #include "utils/I18n.hpp"
 #include "scenes/ConfigButton.hpp"
-#include "items/ItemManager.hpp"
 
 
 ArmoryMenu::ArmoryMenu()
@@ -15,15 +14,14 @@ ArmoryMenu::ArmoryMenu()
 
     // Upgrade item
     gui::VBoxLayout layout(100, 90);
-    layout.SetSpacing(0, 0);
+    layout.setSpacing(0, 0);
     const sf::Font& font = Resources::getFont("Vera.ttf");
-    for (int i = 0; i < Item::_COUNT; ++i)
-    {
+    for (int i = 0; i < Item::_COUNT; ++i) {
         m_items[i] = new ShipItemWidget(this, (Item::Type) i, font);
         m_items[i]->setCallback([this]() {
             onFocus();
         });
-        layout.Add(m_items[i]);
+        layout.add(m_items[i]);
     }
 
     // Credit counter
@@ -37,13 +35,11 @@ ArmoryMenu::ArmoryMenu()
     });
 }
 
-
 void ArmoryMenu::onFocus()
 {
     // Refresh UI
     m_credits->setCredits(UserSettings::getCredits());
-    for (int i = 0; i < Item::_COUNT; ++i)
-    {
+    for (int i = 0; i < Item::_COUNT; ++i) {
         m_items[i]->refresh();
     }
 }

@@ -1,15 +1,16 @@
 #include "Weapon.hpp"
 #include "EntityManager.hpp"
+#include "core/Services.hpp"
 
 
 Weapon::Weapon():
-    m_fire_delay(1.f),
+    m_fire_delay(0.1f),
     m_heat_cost(0),
     m_velocity(0),
     m_damage(0),
-    m_texture(NULL),
-    m_sound(NULL),
-    m_owner(NULL),
+    m_texture(nullptr),
+    m_sound(nullptr),
+    m_owner(nullptr),
     m_multiply(1)
 {
 }
@@ -17,7 +18,7 @@ Weapon::Weapon():
 
 void Weapon::init(const std::string& id)
 {
-    const Weapon& weapon = EntityManager::getInstance().getWeapon(id);
+    const Weapon& weapon = Services::getFactory().getWeapon(id);
 
     // Only copy attributes from XML document
     m_fire_delay = weapon.m_fire_delay;
@@ -79,7 +80,7 @@ void Weapon::setOwner(Entity* owner)
 
 bool Weapon::isReady() const
 {
-    return m_last_shot_at.getElapsedTime().asSeconds() >= m_fire_delay;
+    return m_lastShotAt.getElapsedTime().asSeconds() >= m_fire_delay;
 }
 
 
@@ -89,9 +90,15 @@ void Weapon::setMultiply(int n)
 }
 
 
-void Weapon::insert(const sf::Vector2f& pos, Entity* projectile)
+void Weapon::addProjectile(Projectile* projectile) const
 {
-    projectile->setPosition(pos);
     EntityManager::getInstance().addEntity(projectile);
 }
 
+
+void Weapon::playSound() const
+{
+    if (m_sound != nullptr) {
+        Services::getSoundSystem().playSound(*m_sound);
+    }
+}

@@ -1,237 +1,220 @@
 #include "Menu.hpp"
 #include "utils/SFML_Helper.hpp"
 
-namespace gui
-{
+namespace gui {
 
-const float BOX_PADDING = 4;
+constexpr float BOX_PADDING = 4;
 
 template <class T>
 OptionList<T>::OptionList(Menu* owner) :
     Widget(owner, true)
 {
-    current_opt_ = -1;
-    max_opt_width_ = 0;
-    const WidgetStyle& style = owner->GetWidgetStyle();
-    text_size_ = style.global_text_size;
+    m_currentOpt = -1;
+    m_maxOptWidth = 0;
+    const WidgetStyle& style = owner->getWidgetStyle();
+    m_textSize = style.global_text_size;
 
     // left arrow
-    left_arrow_.setPointCount(3);
-    left_arrow_.setPoint(0, sf::Vector2f(0, text_size_ / 2));
-    left_arrow_.setPoint(1, sf::Vector2f(text_size_, 0));
-    left_arrow_.setPoint(2, sf::Vector2f(text_size_, text_size_));
-    left_arrow_.setOrigin(text_size_ / 2, text_size_ / 2);
-    left_arrow_.setPosition(BOX_PADDING + text_size_ / 2, BOX_PADDING + text_size_ / 2);
-    left_arrow_.setOutlineThickness(1);
-    left_arrow_.setOutlineColor(style.global_border_color);
+    m_leftArrow.setPointCount(3);
+    m_leftArrow.setPoint(0, sf::Vector2f(0, m_textSize / 2));
+    m_leftArrow.setPoint(1, sf::Vector2f(m_textSize, 0));
+    m_leftArrow.setPoint(2, sf::Vector2f(m_textSize, m_textSize));
+    m_leftArrow.setOrigin(m_textSize / 2, m_textSize / 2);
+    m_leftArrow.setPosition(BOX_PADDING + m_textSize / 2, BOX_PADDING + m_textSize / 2);
+    m_leftArrow.setOutlineThickness(1);
+    m_leftArrow.setOutlineColor(style.global_border_color);
 
     // right arrow
-    right_arrow_.setPointCount(3);
-    right_arrow_.setPoint(0, sf::Vector2f(0, 0));
-    right_arrow_.setPoint(1, sf::Vector2f(text_size_, text_size_ / 2));
-    right_arrow_.setPoint(2, sf::Vector2f(0, text_size_));
-    right_arrow_.setOrigin(text_size_ / 2, text_size_ / 2);
+    m_rightArrow.setPointCount(3);
+    m_rightArrow.setPoint(0, sf::Vector2f(0, 0));
+    m_rightArrow.setPoint(1, sf::Vector2f(m_textSize, m_textSize / 2));
+    m_rightArrow.setPoint(2, sf::Vector2f(0, m_textSize));
+    m_rightArrow.setOrigin(m_textSize / 2, m_textSize / 2);
 
-    right_arrow_.setPosition(0, BOX_PADDING + text_size_ / 2);
-    right_arrow_.setOutlineThickness(1);
-    right_arrow_.setOutlineColor(style.global_border_color);
+    m_rightArrow.setPosition(0, BOX_PADDING + m_textSize / 2);
+    m_rightArrow.setOutlineThickness(1);
+    m_rightArrow.setOutlineColor(style.global_border_color);
 
     // call Resize later, boxes aren't builded yet
-    OnStateChanged(GetState());
-    Resize(0, Widget::MIN_HEIGHT);
+    onStateChanged(getState());
+    resize(0, Widget::MIN_HEIGHT);
 }
 
 template <class T>
-void OptionList<T>::BuildBoxes()
+void OptionList<T>::buildBoxes()
 {
-    int inside_box_width = max_opt_width_ + BOX_PADDING * 2;
-    int arrow_box_width = text_size_ + BOX_PADDING * 2;
+    int m_insideBoxwidth = m_maxOptWidth + BOX_PADDING * 2;
+    int arrow_box_width = m_textSize + BOX_PADDING * 2;
 
-    if (inside_box_width < arrow_box_width)
-        inside_box_width = arrow_box_width;
+    if (m_insideBoxwidth < arrow_box_width)
+        m_insideBoxwidth = arrow_box_width;
 
-    int total_width = inside_box_width + arrow_box_width * 2;
-    const WidgetStyle& style = GetOwner()->GetWidgetStyle();
+    int total_width = m_insideBoxwidth + arrow_box_width * 2;
+    const WidgetStyle& style = getOwner()->getWidgetStyle();
 
-    inside_box_.setSize(sf::Vector2f(inside_box_width, arrow_box_width));
-    inside_box_.setOutlineThickness(1);
-    inside_box_.setOutlineColor(style.global_border_color);
-    inside_box_.setFillColor(style.optlist_bg_color);
-    inside_box_.setPosition(arrow_box_width, 0);
+    m_insideBox.setSize(sf::Vector2f(m_insideBoxwidth, arrow_box_width));
+    m_insideBox.setOutlineThickness(1);
+    m_insideBox.setOutlineColor(style.global_border_color);
+    m_insideBox.setFillColor(style.optlist_bg_color);
+    m_insideBox.setPosition(arrow_box_width, 0);
 
-    right_arrow_.setPosition(arrow_box_width + inside_box_width + BOX_PADDING + text_size_ / 2, right_arrow_.getPosition().y);
-    SetState(IsFocused() ? State::FOCUSED : State::DEFAULT);
+    m_rightArrow.setPosition(arrow_box_width + m_insideBoxwidth + BOX_PADDING + m_textSize / 2, m_rightArrow.getPosition().y);
+    setState(isFocused() ? State::FOCUSED : State::DEFAULT);
 
-    Resize(total_width, arrow_box_width);
+    resize(total_width, arrow_box_width);
 }
 
 template <class T>
-void OptionList<T>::Add(const sf::String& option, const T& value)
+void OptionList<T>::add(const sf::String& option, const T& value)
 {
     sf::Text str;
     str.setString(option);
-    str.setCharacterSize(text_size_);
-    str.setFillColor(GetOwner()->GetWidgetStyle().label_text_color);
-    str.setFont(*GetOwner()->GetWidgetStyle().global_font);
+    str.setCharacterSize(m_textSize);
+    str.setFillColor(getOwner()->getWidgetStyle().label_text_color);
+    str.setFont(*getOwner()->getWidgetStyle().global_font);
     str.setOutlineThickness(1.f);
     str.setOutlineColor(sf::Color::Black);
 
-    if (current_opt_ == -1)
-    {
-        current_opt_ = 0;
+    if (m_currentOpt == -1) {
+        m_currentOpt = 0;
     }
-    // resize widget if needed
+    // Resize widget if needed
     int width = sfh::width(str);
-    if (width > (int) max_opt_width_)
-    {
-        max_opt_width_ = width;
-        BuildBoxes();
+    if (width > m_maxOptWidth) {
+        m_maxOptWidth = width;
+        buildBoxes();
     }
     centerText(str);
-    options_.push_back(Item(str, value));
+    m_options.push_back(Item(str, value));
 }
 
 template <class T>
-size_t OptionList<T>::GetSize() const
+int OptionList<T>::getSize() const
 {
-    return options_.size();
+    return m_options.size();
 }
 
 template <class T>
-const T& OptionList<T>::GetValueAt(int index) const
+const T& OptionList<T>::getValueAt(int index) const
 {
-    const Item& item = options_.at(index);
+    const Item& item = m_options.at(index);
     return item.second;
 }
 
 template <class T>
-const T& OptionList<T>::GetSelectedValue() const
+const T& OptionList<T>::getSelectedValue() const
 {
-    return GetValueAt(current_opt_);
+    return getValueAt(m_currentOpt);
 }
 
 template <class T>
-int OptionList<T>::GetSelectedIndex() const
+int OptionList<T>::getSelectedIndex() const
 {
-    return current_opt_;
+    return m_currentOpt;
 }
 
 template <class T>
-void OptionList<T>::Select(int index)
+void OptionList<T>::select(int index)
 {
-    if (index > 0 && index < (int) options_.size() && index != current_opt_)
-    {
-        current_opt_ = index;
+    if (index > 0 && index < (int) m_options.size() && index != m_currentOpt) {
+        m_currentOpt = index;
         triggerCallback();
     }
 }
 
 template <class T>
-void OptionList<T>::SelectByValue(const T& value)
+void OptionList<T>::selectByValue(const T& value)
 {
-    for (size_t i = 0; i < options_.size(); ++i)
-    {
-        if (options_[i].second == value)
-        {
-            Select(i);
+    for (size_t i = 0; i < m_options.size(); ++i) {
+        if (m_options[i].second == value) {
+            select(i);
             return;
         }
     }
 }
 
 template <class T>
-void OptionList<T>::Clear()
+void OptionList<T>::clear()
 {
-    current_opt_ = -1;
-    options_.clear();
+    m_currentOpt = -1;
+    m_options.clear();
 }
 
 template <class T>
-void OptionList<T>::OnKeyPressed(sf::Keyboard::Key key)
+void OptionList<T>::onKeyPressed(sf::Keyboard::Key key)
 {
-    if (options_.empty())
-    {
+    if (m_options.empty()) {
         return;
     }
-    int opt = current_opt_;
-    switch (key)
-    {
+    int opt = m_currentOpt;
+    switch (key) {
         case sf::Keyboard::Left:
-            opt = PreviousIndex();
+            opt = previousIndex();
             break;
         case sf::Keyboard::Right:
-            opt = NextIndex();
+            opt = nextIndex();
             break;
         case sf::Keyboard::Home:
             opt = 0;
             break;
         case sf::Keyboard::End:
-            opt = options_.size() - 1;
+            opt = m_options.size() - 1;
             break;
         default:
             break;
     }
-    if (opt != current_opt_)
-    {
-        current_opt_ = opt;
+    if (opt != m_currentOpt) {
+        m_currentOpt = opt;
         triggerCallback();
     }
 }
 
 template <class T>
-void OptionList<T>::OnMouseClicked(int x, int y)
+void OptionList<T>::onMouseClicked(int x, int y)
 {
     (void) y;
-    int trigger_width = text_size_ + BOX_PADDING * 2;
-    int opt = current_opt_;
-    if (x > 0 && x < trigger_width)
-    {
-        opt = PreviousIndex();
-    }
-    else if (x > (GetWidth() - trigger_width) && x < GetWidth())
-    {
-        opt = NextIndex();
+    const int triggerWidth = m_textSize + BOX_PADDING * 2;
+    int opt = m_currentOpt;
+    if (x > 0 && x < triggerWidth) {
+        opt = previousIndex();
+    } else if (x > (getWidth() - triggerWidth) && x < getWidth()) {
+        opt = nextIndex();
     }
 
-    if (opt != current_opt_)
-    {
-        current_opt_ = opt;
+    if (opt != m_currentOpt) {
+        m_currentOpt = opt;
         triggerCallback();
     }
 }
 
 template <class T>
-void OptionList<T>::OnMouseWheelMoved(int delta)
+void OptionList<T>::onMouseWheelMoved(int delta)
 {
-    if (delta < 0)
-    {
-        current_opt_ = PreviousIndex();
-    }
-    else
-    {
-        current_opt_ = NextIndex();
+    if (delta < 0) {
+        m_currentOpt = previousIndex();
+    } else {
+        m_currentOpt = nextIndex();
     }
     triggerCallback();
 }
 
 template <class T>
-void OptionList<T>::OnStateChanged(State::EState state)
+void OptionList<T>::onStateChanged(State::EState state)
 {
-    const WidgetStyle& style = GetOwner()->GetWidgetStyle();
-    switch (state)
-    {
+    const WidgetStyle& style = getOwner()->getWidgetStyle();
+    switch (state) {
         case State::DEFAULT:
-            inside_box_.setFillColor(style.optlist_bg_color);
-            left_arrow_.setFillColor(style.optlist_arrow_color);
-            right_arrow_.setFillColor(style.optlist_arrow_color);
+            m_insideBox.setFillColor(style.optlist_bg_color);
+            m_leftArrow.setFillColor(style.optlist_arrow_color);
+            m_rightArrow.setFillColor(style.optlist_arrow_color);
             break;
         case State::FOCUSED:
-            inside_box_.setFillColor(style.optlist_bg_color_focus);
-            left_arrow_.setFillColor(style.optlist_arrow_color_focus);
-            right_arrow_.setFillColor(style.optlist_arrow_color_focus);
+            m_insideBox.setFillColor(style.optlist_bg_color_focus);
+            m_leftArrow.setFillColor(style.optlist_arrow_color_focus);
+            m_rightArrow.setFillColor(style.optlist_arrow_color_focus);
             break;
         case State::HOVERED:
-            inside_box_.setFillColor(style.optlist_bg_color_focus);
+            m_insideBox.setFillColor(style.optlist_bg_color_focus);
         default:
             break;
     }
@@ -241,25 +224,24 @@ template <class T>
 void OptionList<T>::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     states.transform *= getTransform();
-    target.draw(inside_box_, states);
-    target.draw(left_arrow_, states);
-    target.draw(right_arrow_, states);
-    if (current_opt_ != -1)
-    {
-        target.draw(options_[current_opt_].first, states);
+    target.draw(m_insideBox, states);
+    target.draw(m_leftArrow, states);
+    target.draw(m_rightArrow, states);
+    if (m_currentOpt != -1) {
+        target.draw(m_options[m_currentOpt].first, states);
     }
 }
 
 template <class T>
-int OptionList<T>::PreviousIndex() const
+int OptionList<T>::previousIndex() const
 {
-    return current_opt_ > 0 ? current_opt_ - 1 : options_.size() - 1;
+    return m_currentOpt > 0 ? m_currentOpt - 1 : m_options.size() - 1;
 }
 
 template <class T>
-int OptionList<T>::NextIndex() const
+int OptionList<T>::nextIndex() const
 {
-    return current_opt_ == (int) options_.size() - 1 ? 0 : current_opt_ + 1;
+    return m_currentOpt == (int) m_options.size() - 1 ? 0 : m_currentOpt + 1;
 }
 
 }

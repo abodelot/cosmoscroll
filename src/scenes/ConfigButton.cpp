@@ -1,9 +1,9 @@
 #include "ConfigButton.hpp"
 #include "core/Resources.hpp"
 
-const int       BUTTON_WIDTH  = 120;
-const int       BUTTON_HEIGHT = 25;
-const sf::Color ERROR_COLOR   = sf::Color(255, 200, 0);
+static constexpr int   BUTTON_WIDTH  = 120;
+static constexpr int   BUTTON_HEIGHT = 25;
+static const sf::Color ERROR_COLOR   = sf::Color(255, 200, 0);
 
 
 ConfigButton::ConfigButton(gui::Menu* owner, Action::ID action):
@@ -14,7 +14,7 @@ ConfigButton::ConfigButton(gui::Menu* owner, Action::ID action):
     m_background.setTexture(Resources::getTexture("gui/button-config.png"));
     m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
     setTextSize(14);
-    OnStateChanged(GetState());
+    onStateChanged(getState());
 }
 
 
@@ -25,7 +25,7 @@ void ConfigButton::setKeyboardLabel()
 
     // Check for error and refresh label
     m_error = key == sf::Keyboard::Unknown;
-    OnStateChanged(GetState());
+    onStateChanged(getState());
 }
 
 
@@ -36,7 +36,7 @@ void ConfigButton::setJoystickLabel()
 
     // Check for error and refresh label
     m_error = button == sf::Joystick::ButtonCount;
-    OnStateChanged(GetState());
+    onStateChanged(getState());
 }
 
 
@@ -46,11 +46,10 @@ Action::ID ConfigButton::getAction() const
 }
 
 
-void ConfigButton::OnStateChanged(gui::State::EState state)
+void ConfigButton::onStateChanged(gui::State::EState state)
 {
-    gui::Button::OnStateChanged(state);
-    switch (state)
-    {
+    gui::Button::onStateChanged(state);
+    switch (state) {
         case gui::State::DEFAULT:
             m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             break;
@@ -64,8 +63,7 @@ void ConfigButton::OnStateChanged(gui::State::EState state)
             break;
     }
 
-    if (m_error)
-    {
+    if (m_error) {
         // Override label color when binding is invalid
         setTextColor(ERROR_COLOR);
     }
@@ -78,4 +76,3 @@ void ConfigButton::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(m_background, states);
     target.draw((gui::Button) *this);
 }
-

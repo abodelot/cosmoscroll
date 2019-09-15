@@ -1,7 +1,7 @@
 #include "PowerUp.hpp"
 #include "EntityManager.hpp"
 #include "core/Resources.hpp"
-#include "utils/I18n.hpp"
+#include "core/Services.hpp"
 #include "utils/Math.hpp"
 
 
@@ -29,8 +29,7 @@ void PowerUp::dropRandom(const sf::Vector2f& position)
 
 sf::String PowerUp::getDescription() const
 {
-    switch (m_type)
-    {
+    switch (m_type) {
         case REPAIR:      return _t("powerup.repair");
         case FULL_REPAIR: return _t("powerup.full_repair");
         case SHIELD:      return _t("powerup.shield");
@@ -56,11 +55,3 @@ sf::IntRect PowerUp::getTextureRect(Type type)
     // PowerUp::Type enumeration has the same order than the spritesheet (16x16 resolution)
     return sf::IntRect(type * 16, 0, 16, 16);
 }
-
-// callbacks -------------------------------------------------------------------
-
-void PowerUp::onUpdate(float frametime)
-{
-    move(-EntityManager::FOREGROUND_SPEED * frametime, 0);
-}
-

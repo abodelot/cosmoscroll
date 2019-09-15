@@ -1,8 +1,8 @@
-#include <ctime>
 #include "Math.hpp"
 
-namespace math
-{
+#include <ctime>
+
+namespace math {
 
 // Set the random numbers sequence seed with the current system time, so that it is always different
 unsigned int static set_random_seed()
@@ -13,8 +13,7 @@ unsigned int static set_random_seed()
 }
 
 
-const float PI = 3.14159265f;
-unsigned int seed = set_random_seed();
+unsigned int g_seed = set_random_seed();
 
 
 int rand(int begin, int end)
@@ -32,7 +31,7 @@ float rand(float begin, float end)
 void set_seed(unsigned int s)
 {
     std::srand(s);
-    seed = s;
+    g_seed = s;
 }
 
 }

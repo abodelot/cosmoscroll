@@ -30,8 +30,7 @@ public:
     // text style
     void setStyle(int flag) { text_.setStyle(flag); }
 private:
-    // inherited
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     sf::Text text_;
 };

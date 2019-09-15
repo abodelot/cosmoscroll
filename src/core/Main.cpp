@@ -1,8 +1,8 @@
-#include <cstdio>
-#include <cstring>
+#include "Constants.hpp"
 #include "Game.hpp"
 
-#include "Constants.hpp"
+#include <cstdio>
+#include <cstring>
 
 
 int usage(const char *pn)
@@ -10,8 +10,9 @@ int usage(const char *pn)
     // Stick to the program name
     const char* n = strrchr(pn, '/'); // Unix systems
 
-    if (n == NULL)
+    if (n == NULL) {
         n = strrchr(pn, '\\'); // Windows systems
+    }
 
     printf("usage: %s [-c config_file] [-r resources_dir] [-h] [-v]\n\n", n == NULL ? pn : n + 1);
     puts("If config_file is a directory, the game will look for a configuration file named");
@@ -31,8 +32,7 @@ int version(void)
 const char* get_arg(int index, char** args)
 {
     const char* arg_value = args[index + 1];
-    if (arg_value == NULL)
-    {
+    if (arg_value == NULL) {
         fprintf(stderr, "option %s takes an argument\n", args[index]);
         exit(EXIT_FAILURE);
     }
@@ -47,8 +47,7 @@ int main(int argc, char* argv[])
     std::string res_dir = DEFAULT_RESOURCES_DIR;
 
     // parse args
-    for (int i = 0; i < argc; ++i)
-    {
+    for (int i = 0; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg == "-v" || arg == "-version")
             return version();
@@ -62,8 +61,7 @@ int main(int argc, char* argv[])
 
     Game& game = Game::getInstance();
     game.init(argv[0]);
-    if (!config_file.empty())
-    {
+    if (!config_file.empty()) {
         game.setConfigFile(config_file);
     }
     game.loadResources(res_dir);

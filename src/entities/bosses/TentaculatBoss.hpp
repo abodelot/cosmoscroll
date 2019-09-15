@@ -17,7 +17,7 @@ public:
     void onDestroy() override;
 
 private:
-    enum State { INIT, LURK, IDLE, CHARGE };
+    enum State { LURK, IDLE, CHARGE };
 
     State        m_state;
     float        m_timer;

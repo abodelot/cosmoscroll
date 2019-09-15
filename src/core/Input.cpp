@@ -19,8 +19,6 @@ Input::Init::Init()
     Input::setKeyBinding(sf::Keyboard::Down,     Action::DOWN);
     Input::setKeyBinding(sf::Keyboard::Left,     Action::LEFT);
     Input::setKeyBinding(sf::Keyboard::Right,    Action::RIGHT);
-    Input::setKeyBinding(sf::Keyboard::PageUp,   Action::PANEL_UP);
-    Input::setKeyBinding(sf::Keyboard::PageDown, Action::PANEL_DOWN);
     Input::setKeyBinding(sf::Keyboard::Escape,   Action::PAUSE);
     Input::setKeyBinding(sf::Keyboard::Space,    Action::USE_LASER);
     Input::setKeyBinding(sf::Keyboard::LControl, Action::USE_COOLER);
@@ -52,34 +50,29 @@ Action::ID Input::matchButton(unsigned int button)
 
 Action::ID Input::feedEvent(const sf::Event& event)
 {
-    switch (event.type)
-    {
-        case sf::Event::KeyPressed:
-        {
+    switch (event.type) {
+        case sf::Event::KeyPressed: {
             Action::ID action = matchKey(event.key.code);
             if (action != Action::NONE)
                 s_pressed[action] = true;
 
             return action;
         }
-        case sf::Event::KeyReleased:
-        {
+        case sf::Event::KeyReleased: {
             Action::ID action = matchKey(event.key.code);
             if (action != Action::NONE)
                 s_pressed[action] = false;
 
             break;
         }
-        case sf::Event::JoystickButtonPressed:
-        {
+        case sf::Event::JoystickButtonPressed: {
             Action::ID action = matchButton(event.joystickButton.button);
             if (action != Action::NONE)
                 s_pressed[action] = true;
 
             return action;
         }
-        case sf::Event::JoystickButtonReleased:
-        {
+        case sf::Event::JoystickButtonReleased: {
             Action::ID action = matchButton(event.joystickButton.button);
             if (action != Action::NONE)
                 s_pressed[action] = false;
@@ -87,33 +80,26 @@ Action::ID Input::feedEvent(const sf::Event& event)
             break;
         }
         case sf::Event::JoystickMoved:
-            if (event.joystickMove.axis == sf::Joystick::X)
-            {
-                if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD)
-                {
+            if (event.joystickMove.axis == sf::Joystick::X) {
+                if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD) {
                     s_pressed[Action::RIGHT] = true;
                     return Action::RIGHT;
                 }
                 s_pressed[Action::RIGHT] = false;
 
-                if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD)
-                {
+                if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD) {
                     s_pressed[Action::LEFT] = true;
                     return Action::LEFT;
                 }
                 s_pressed[Action::LEFT] = false;
-            }
-            else if (event.joystickMove.axis == sf::Joystick::Y)
-            {
-                if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD)
-                {
+            } else if (event.joystickMove.axis == sf::Joystick::Y) {
+                if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD) {
                     s_pressed[Action::DOWN] = true;
                     return Action::DOWN;
                 }
                 s_pressed[Action::DOWN] = false;
 
-                if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD)
-                {
+                if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD) {
                     s_pressed[Action::UP] = true;
                     return Action::UP;
                 }
@@ -139,16 +125,13 @@ bool Input::isPressed(Action::ID action)
 
 void Input::setKeyBinding(sf::Keyboard::Key key, Action::ID action)
 {
-    if (key < sf::Keyboard::KeyCount)
-    {
+    if (key < sf::Keyboard::KeyCount) {
         // Disable old key
         s_keys[getKeyBinding(action)] = Action::NONE;
         // Bind new key
         s_keys[key] = action;
         s_pressed[action] = false;
-    }
-    else
-    {
+    } else {
         std::cerr << "[Input] invalid key binding ignored: " << key << std::endl;
     }
 }
@@ -156,10 +139,10 @@ void Input::setKeyBinding(sf::Keyboard::Key key, Action::ID action)
 
 sf::Keyboard::Key Input::getKeyBinding(Action::ID action)
 {
-    for (auto& item: s_keys)
-    {
-        if (item.second == action)
+    for (auto& item: s_keys) {
+        if (item.second == action) {
             return item.first;
+        }
     }
     return sf::Keyboard::Unknown;
 }
@@ -167,16 +150,13 @@ sf::Keyboard::Key Input::getKeyBinding(Action::ID action)
 
 void Input::setButtonBinding(unsigned int joystick_button, Action::ID action)
 {
-    if (joystick_button < sf::Joystick::ButtonCount)
-    {
+    if (joystick_button < sf::Joystick::ButtonCount) {
         // Disable old button
         s_buttons[getButtonBinding(action)] = Action::NONE;
         // Bind new button
         s_buttons[joystick_button] = action;
         s_pressed[action] = false;
-    }
-    else
-    {
+    } else {
         std::cerr << "[Input] invalid joystick button binding ignored: "  << joystick_button << std::endl;
     }
 }
@@ -184,10 +164,10 @@ void Input::setButtonBinding(unsigned int joystick_button, Action::ID action)
 
 unsigned int Input::getButtonBinding(Action::ID action)
 {
-    for (auto& item: s_buttons)
-    {
-        if (item.second == action)
+    for (auto& item: s_buttons) {
+        if (item.second == action) {
             return item.first;
+        }
     }
     return sf::Joystick::ButtonCount;
 }
@@ -195,8 +175,7 @@ unsigned int Input::getButtonBinding(Action::ID action)
 
 const char* Input::keyToString(sf::Keyboard::Key key)
 {
-    switch (key)
-    {
+    switch (key) {
         case sf::Keyboard::A:         return "A";
         case sf::Keyboard::B:         return "B";
         case sf::Keyboard::C:         return "C";
@@ -307,8 +286,7 @@ const char* Input::keyToString(sf::Keyboard::Key key)
 
 sf::String Input::buttonToString(unsigned int button)
 {
-    if (button < sf::Joystick::ButtonCount)
-    {
+    if (button < sf::Joystick::ButtonCount) {
         std::ostringstream oss;
         oss << _t("joystick.button") << ' ' << button;
         return oss.str();
@@ -319,8 +297,7 @@ sf::String Input::buttonToString(unsigned int button)
 
 const sf::String& Action::toString(Action::ID action)
 {
-    switch (action)
-    {
+    switch (action) {
         case Action::PAUSE:       return _t("action.pause");
         case Action::UP:          return _t("action.up");
         case Action::DOWN:        return _t("action.down");

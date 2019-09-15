@@ -2,7 +2,7 @@
 
 
 Animation::Animation():
-    m_texture(NULL),
+    m_texture(nullptr),
     m_delay(1.f)
 {
 }
@@ -54,4 +54,3 @@ size_t Animation::getFrameCount() const
 {
     return m_frames.size();
 }
-

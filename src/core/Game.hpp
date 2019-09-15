@@ -85,7 +85,13 @@ public:
      * Holds vertical synchronization property
      */
     void setVerticalSync(bool vsync);
+
     bool isVerticalSync() const;
+
+    /**
+     * Restore default view on window
+     */
+    void resetView();
 
 private:
     Game();
@@ -102,6 +108,7 @@ private:
     void takeScreenshot() const;
 
     sf::RenderWindow m_window;
+    sf::View m_view;
     bool m_vsync;
     bool m_running;
 

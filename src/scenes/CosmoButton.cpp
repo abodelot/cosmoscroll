@@ -1,9 +1,9 @@
 #include "CosmoButton.hpp"
-#include "core/SoundSystem.hpp"
+#include "core/Services.hpp"
 #include "core/Resources.hpp"
 
-const int BUTTON_WIDTH  = 220;
-const int BUTTON_HEIGHT = 40;
+static constexpr int BUTTON_WIDTH  = 220;
+static constexpr int BUTTON_HEIGHT = 40;
 
 
 CosmoButton::CosmoButton(gui::Menu* owner, const sf::String& text) :
@@ -12,20 +12,19 @@ CosmoButton::CosmoButton(gui::Menu* owner, const sf::String& text) :
 {
     m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
     setString(text);
-    OnStateChanged(GetState());
+    onStateChanged(getState());
 }
 
 
-void CosmoButton::OnStateChanged(gui::State::EState state)
+void CosmoButton::onStateChanged(gui::State::EState state)
 {
-    switch (state)
-    {
+    switch (state) {
         case gui::State::DEFAULT:
             m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
             break;
         case gui::State::HOVERED:
             m_background.setTextureRect(sf::IntRect(0, BUTTON_HEIGHT, BUTTON_WIDTH, BUTTON_HEIGHT));
-            SoundSystem::playSound("menu-select.ogg");
+            Services::getSoundSystem().playSound("menu-select.ogg");
             break;
         case gui::State::FOCUSED:
             m_background.setTextureRect(sf::IntRect(0, BUTTON_HEIGHT * 2, BUTTON_WIDTH, BUTTON_HEIGHT));
@@ -33,13 +32,13 @@ void CosmoButton::OnStateChanged(gui::State::EState state)
         default:
             break;
     }
-    gui::Button::OnStateChanged(state);
+    gui::Button::onStateChanged(state);
 }
 
 
-void CosmoButton::OnCallbackTriggered()
+void CosmoButton::onCallbackTriggered()
 {
-    SoundSystem::playSound("menu-valid.ogg");
+    Services::getSoundSystem().playSound("menu-valid.ogg");
 }
 
 

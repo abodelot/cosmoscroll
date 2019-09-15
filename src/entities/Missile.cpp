@@ -2,13 +2,15 @@
 #include "EntityManager.hpp"
 #include "Player.hpp"
 #include "core/Resources.hpp"
+#include "core/Services.hpp"
 #include "utils/Math.hpp"
 
 
 Missile::Missile(Entity* emitter, float angle, const sf::Texture& texture, int speed, int damage):
     Projectile(emitter, angle, texture, speed, damage),
     m_angle(angle),
-    m_owner(emitter)
+    m_owner(emitter),
+    m_smokeEmitter(Services::getParticleSystem())
 {
     m_smokeEmitter.setTextureRect(sf::IntRect(0, 0, 16, 16));
     m_smokeEmitter.setLooping(true);
@@ -29,14 +31,13 @@ Missile::~Missile()
 void Missile::onUpdate(float frametime)
 {
     Projectile::onUpdate(frametime);
-    m_smokeEmitter.setPosition(getX() - 6, getY() - 3);
+    m_smokeEmitter.setPosition(getPosition());
 }
 
 
 void Missile::onDestroy()
 {
-    for (int i = 0; i < 20; ++i)
-    {
+    for (int i = 0; i < 20; ++i) {
         float angle = math::rand(m_angle - math::PI / 2, m_angle + math::PI / 2);
         float speed = math::rand(200, 600);
 
@@ -45,4 +46,3 @@ void Missile::onDestroy()
         EntityManager::getInstance().addEntity(p);
     }
 }
-

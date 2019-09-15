@@ -6,76 +6,76 @@
 
 #include "Widget.hpp"
 
-namespace gui
-{
+namespace gui {
 
 /**
- * Une liste défilante d'options
- * callback si : choix modifié
+ * Horizontal select box
+ * callback: selection changed
  */
 template <class T>
-class OptionList: public Widget
-{
+class OptionList: public Widget {
 public:
     OptionList(Menu* owner);
 
     /**
-     * Ajouter une option à la liste
+     * Add a choice to the list
      */
-    void Add(const sf::String& display, const T& value);
+    void add(const sf::String& label, const T& value);
 
-    size_t GetSize() const;
+    /**
+     * Get number of choices
+     */
+    int getSize() const;
 
-    const T& GetValueAt(int index) const;
+    const T& getValueAt(int index) const;
 
     /**
      * Get option index currently selected (first is 0)
      */
-    int GetSelectedIndex() const;
+    int getSelectedIndex() const;
 
     /**
      * Get selected option value
-     * shortcut for GetOptionAt(GetSelectedOptionIndex())
+     * shortcut for GetOptionAt(getSelectedOptionIndex())
      */
-    const T& GetSelectedValue() const;
+    const T& getSelectedValue() const;
 
     /**
      * Set the current displayed item
      */
-    void Select(int index);
-    void SelectByValue(const T& value);
+    void select(int index);
+    void selectByValue(const T& value);
 
-    // supprimer toutes les options
-    void Clear();
+    /**
+     * Remove all set options
+     */
+    void clear();
 
-    // inherited callbacks
-    void OnKeyPressed(sf::Keyboard::Key key);
-    void OnMouseClicked(int x, int y);
-    void OnMouseWheelMoved(int delta);
+    void onKeyPressed(sf::Keyboard::Key key) override;
+    void onMouseClicked(int x, int y) override;
+    void onMouseWheelMoved(int delta) override;
 
 protected:
-    // inherited
-    void OnStateChanged(State::EState state);
+    void onStateChanged(State::EState state) override;
 
 private:
-    // inherited
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    void BuildBoxes();
+    void buildBoxes();
 
-    int PreviousIndex() const;
-    int NextIndex() const;
+    int previousIndex() const;
+    int nextIndex() const;
 
     typedef std::pair<sf::Text, T> Item;
     typedef std::vector<Item> ItemVector;
 
-    ItemVector options_;
-    int current_opt_;
-    size_t max_opt_width_;
-    int text_size_;
-    sf::RectangleShape inside_box_;
-    sf::ConvexShape left_arrow_;
-    sf::ConvexShape right_arrow_;
+    ItemVector m_options;
+    int m_currentOpt;
+    int m_maxOptWidth;
+    int m_textSize;
+    sf::RectangleShape m_insideBox;
+    sf::ConvexShape m_leftArrow;
+    sf::ConvexShape m_rightArrow;
 };
 
 }

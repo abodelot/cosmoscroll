@@ -1,12 +1,12 @@
 #include "UserSettings.hpp"
-#include "LevelManager.hpp"
+#include "core/Services.hpp"
 #include "Input.hpp"
 #include "SoundSystem.hpp"
-#include "utils/IniParser.hpp"
+#include "core/Factory.hpp"
 #include "utils/I18n.hpp"
-#include "items/ItemManager.hpp"
+#include "utils/IniParser.hpp"
 
-bool UserSettings::panel_on_top = true;
+bool UserSettings::show_hud = true;
 
 int UserSettings::s_credits = 0;
 int UserSettings::s_items[] = {0};
@@ -14,8 +14,7 @@ UserSettings::Init UserSettings::s_ctor;
 
 UserSettings::Init::Init()
 {
-    for (int i = 0; i < Item::_COUNT; ++i)
-    {
+    for (int i = 0; i < Item::_COUNT; ++i) {
         s_items[i] = 1;
     }
 }
@@ -30,8 +29,9 @@ int UserSettings::getItemLevel(Item::Type type)
 void UserSettings::setItemLevel(Item::Type type, int level)
 {
     // Reset level if item does not exist
-    if (!ItemManager::getInstance().hasItem(type, level))
+    if (!Services::getFactory().hasItem(type, level)) {
         level = 1;
+    }
 
     s_items[type] = level;
 }
@@ -54,21 +54,21 @@ void UserSettings::loadFromConfig(IniParser& config)
     config.seekSection("Settings");
     // language
     std::string lang = config.get("language");
-    if (lang.empty() || !I18n::getInstance().loadFromCode(lang))
-    {
-        I18n::getInstance().loadFromLocale();
+    if (lang.empty() || !g_i18n.loadFromCode(lang)) {
+        g_i18n.loadFromLocale();
     }
 
     // Panel position
-    panel_on_top = config.get("panel_on_top", panel_on_top);
+    show_hud = config.get("show_hud", show_hud);
 
     config.seekSection("Player");
 
     int level = config.get("last_unlocked_level", 1);
-    LevelManager::getInstance().setLastUnlocked(level);
+    LevelParser& levelParser = Services::getLevelParser();
+    levelParser.setLastUnlocked(level);
 
     level = config.get("current_level", 1);
-    LevelManager::getInstance().setCurrent(level);
+    levelParser.setCurrent(level);
 
     s_credits = config.get("credits", 0);
 
@@ -77,8 +77,7 @@ void UserSettings::loadFromConfig(IniParser& config)
     s_items[Item::HULL] =     config.get("lvl_hull", 1);
     s_items[Item::ENGINE] =   config.get("lvl_engine", 1);
     s_items[Item::HEATSINK] = config.get("lvl_heatsink", 1);
-    for (int i = 0; i < Item::_COUNT; ++i)
-    {
+    for (int i = 0; i < Item::_COUNT; ++i) {
         setItemLevel((Item::Type) i, s_items[i]);
     }
 
@@ -98,22 +97,24 @@ void UserSettings::loadFromConfig(IniParser& config)
     Input::setButtonBinding(config.get("missile", Input::getButtonBinding(Action::USE_MISSILE)), Action::USE_MISSILE);
 
     config.seekSection("Audio");
-    SoundSystem::enableMusic(config.get("enable_music", true));
-    SoundSystem::setMusicVolume(config.get("music_volume", 100));
-    SoundSystem::enableSound(config.get("enable_sound", true));
-    SoundSystem::setSoundVolume(config.get("sound_volume", 100));
+    SoundSystem& soundSystem = Services::getSoundSystem();
+    soundSystem.enableMusic(config.get("enable_music", true));
+    soundSystem.setMusicVolume(config.get("music_volume", 100));
+    soundSystem.enableSound(config.get("enable_sound", true));
+    soundSystem.setSoundVolume(config.get("sound_volume", 100));
 }
 
 
 void UserSettings::saveToConfig(IniParser& config)
 {
     config.seekSection("Settings");
-    config.set("panel_on_top", panel_on_top);
-    config.set("language", I18n::getInstance().getCurrentLanguage());
+    config.set("show_hud", show_hud);
+    config.set("language", g_i18n.getCurrentLanguage());
 
     config.seekSection("Player");
-    config.set("current_level",       LevelManager::getInstance().getCurrent());
-    config.set("last_unlocked_level", LevelManager::getInstance().getLastUnlocked());
+    LevelParser& levelParser = Services::getLevelParser();
+    config.set("current_level",       levelParser.getCurrent());
+    config.set("last_unlocked_level", levelParser.getLastUnlocked());
     config.set("credits",             s_credits);
     config.set("lvl_laser",    s_items[Item::WEAPON]);
     config.set("lvl_shield",   s_items[Item::SHIELD]);
@@ -137,8 +138,9 @@ void UserSettings::saveToConfig(IniParser& config)
     config.set("missile",     Input::getButtonBinding(Action::USE_MISSILE));
 
     config.seekSection("Audio");
-    config.set("enable_music", SoundSystem::isMusicEnabled());
-    config.set("music_volume", SoundSystem::getMusicVolume());
-    config.set("enable_sound", SoundSystem::isSoundEnabled());
-    config.set("sound_volume", SoundSystem::getSoundVolume());
+    SoundSystem& soundSystem = Services::getSoundSystem();
+    config.set("enable_music", soundSystem.isMusicEnabled());
+    config.set("music_volume", soundSystem.getMusicVolume());
+    config.set("enable_sound", soundSystem.isSoundEnabled());
+    config.set("sound_volume", soundSystem.getSoundVolume());
 }

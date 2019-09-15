@@ -1,8 +1,7 @@
 #include "PauseMenu.hpp"
 #include "core/Input.hpp"
 #include "core/Game.hpp"
-#include "core/ControlPanel.hpp"
-#include "core/ParticleSystem.hpp"
+#include "core/Services.hpp"
 #include "core/SoundSystem.hpp"
 #include "entities/EntityManager.hpp"
 #include "utils/I18n.hpp"
@@ -13,14 +12,14 @@ PauseMenu::PauseMenu()
     setTitle(_t("pause.title"), 120);
 
     gui::VBoxLayout layout(210, 200);
-    layout.Add(new CosmoButton(this, _t("pause.resume")))->setCallback([]() {
+    layout.add(new CosmoButton(this, _t("pause.resume")))->setCallback([]() {
         Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
-        SoundSystem::playMusic();
+        Services::getSoundSystem().playMusic();
     });
-    layout.Add(new CosmoButton(this, _t("back_main_menu")))->setCallback([]() {
+    layout.add(new CosmoButton(this, _t("back_main_menu")))->setCallback([]() {
         Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
     });
-    layout.Add(new CosmoButton(this, _t("pause.quit")))->setCallback([]() {
+    layout.add(new CosmoButton(this, _t("pause.quit")))->setCallback([]() {
         Game::getInstance().quit();
     });
 }
@@ -29,14 +28,11 @@ PauseMenu::PauseMenu()
 void PauseMenu::onEvent(const sf::Event& event)
 {
     Action::ID action = Input::feedEvent(event);
-    if (action == Action::PAUSE)
-    {
+    if (action == Action::PAUSE) {
          // Resume game
-        SoundSystem::playMusic();
+        Services::getSoundSystem().playMusic();
         Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
-    }
-    else
-    {
+    } else {
         BaseMenu::onEvent(event);
     }
 }
@@ -47,21 +43,22 @@ void PauseMenu::onFocus()
     Game::getInstance().getWindow().setMouseCursorVisible(true);
     Game::getInstance().getWindow().setKeyRepeatEnabled(true);
 
-    SoundSystem::pauseMusic();
+    Services::getSoundSystem().pauseMusic();
 }
 
 
 void PauseMenu::update(float frametime)
 {
-    ParticleSystem::getInstance().update(frametime);
+    Services::getParticleSystem().update(frametime);
 }
 
 
 void PauseMenu::draw(sf::RenderTarget& target) const
 {
-    target.draw(ControlPanel::getInstance());
     target.draw(EntityManager::getInstance());
+    Game::getInstance().resetView();
+    target.draw(Services::getHUD());
     target.draw(getTitle());
-    gui::Menu::Show(target);
+    gui::Menu::show(target);
 }
 

@@ -1,56 +1,49 @@
 #include "LevelMenu.hpp"
 #include "core/Game.hpp"
 #include "core/UserSettings.hpp"
-#include "core/LevelManager.hpp"
-#include "core/ControlPanel.hpp"
+#include "core/Services.hpp"
 #include "utils/I18n.hpp"
 
 
-LevelMenu::LevelMenu():
-    m_levels(LevelManager::getInstance())
+LevelMenu::LevelMenu()
 {
     setTitle(_t("levels.title"));
     m_credits = new CreditCounterWidget(this);
 
     gui::FormLayout form(90, 120);
-    form.SetSpacing(10, 16);
+    form.setSpacing(10, 16);
 
-    m_opt_levels = new gui::OptionList<int>(this);
-    form.addRow(_t("levels.select"), m_opt_levels);
+    m_optLevels = new gui::OptionList<int>(this);
+    form.addRow(_t("levels.select"), m_optLevels);
 
-    m_lab_progresion = new gui::Label(this, "");
-    form.addRow(_t("levels.progression"), m_lab_progresion);
+    m_labProgresion = new gui::Label(this, "");
+    form.addRow(_t("levels.progression"), m_labProgresion);
 
     gui::VBoxLayout layout(210, 240);
     // Play selected level
-    layout.Add(new CosmoButton(this, _t("levels.play")))->setCallback([this]() {
-        int selected_level = m_opt_levels->GetSelectedValue();
-        // Load selected level in the level manager
-        m_levels.setCurrent(selected_level);
-        m_levels.initCurrentLevel();
+    layout.add(new CosmoButton(this, _t("levels.play")))->setCallback([this]() {
+        const int selectedLevel = m_optLevels->getSelectedValue();
+        // Parse selected level
+        LevelParser& levelParser = Services::getLevelParser();
+        levelParser.setCurrent(selectedLevel);
 
-#ifdef DEBUG
-        printf("level %u (music: %s)\n", selected_level, m_levels.getMusicName());
-        printf(" - available points: %d\n", m_levels.getTotalPoints());
-        printf(" - entities:         %d\n", m_levels.getSpawnQueueSize());
-        printf(" - duration:      %02d:%02d\n", (int) m_levels.getDuration() / 60, (int) m_levels.getDuration() % 60);
-#endif
-        // Init control panel
-        ControlPanel::getInstance().setGameInfo(
-            I18n::templatize("panel.level", "{level}", selected_level)
-        );
+        printf("-> level %u (map: %s, music: %s)\n", selectedLevel, levelParser.getTilemapPath(), levelParser.getMusicName());
+
+        // Init HUD with level number
+        Services::getHUD().setLevelNumber(selectedLevel);
+
         // Init entity manager
-        EntityManager::getInstance().initialize();
+        EntityManager::getInstance().initializeLevel();
         Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
     });
 
     // Go to armory menu
-    layout.Add(new CosmoButton(this, _t("levels.armory")))->setCallback([]() {
+    layout.add(new CosmoButton(this, _t("levels.armory")))->setCallback([]() {
         Game::getInstance().setCurrentScreen(Game::SC_ArmoryMenu);
     });
 
     // Back to main menu
-    layout.Add(new CosmoButton(this, _t("back_main_menu")))->setCallback([]() {
+    layout.add(new CosmoButton(this, _t("back_main_menu")))->setCallback([]() {
         Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
     });
 }
@@ -59,23 +52,22 @@ LevelMenu::LevelMenu():
 void LevelMenu::onFocus()
 {
     m_credits->setCredits(UserSettings::getCredits());
-    size_t nb_levels = m_levels.getLevelCount();
-    size_t current = m_levels.getCurrent();
-    size_t last_unlocked = m_levels.getLastUnlocked();
+    LevelParser& levelParser = Services::getLevelParser();
+    size_t nb_levels = levelParser.getLevelCount();
+    size_t current = levelParser.getCurrent();
+    size_t last_unlocked = levelParser.getLastUnlocked();
 
     std::string progression = std::to_string(last_unlocked) + "/"
         + std::to_string(nb_levels);
-    m_lab_progresion->setString(progression);
+    m_labProgresion->setString(progression);
 
     // option widget
-    m_opt_levels->Clear();
-    for (size_t i = 1; i <= nb_levels; ++i)
-    {
+    m_optLevels->clear();
+    for (size_t i = 1; i <= nb_levels; ++i) {
         bool activable = i <= last_unlocked;
-        if (activable)
-        {
-            m_opt_levels->Add(std::to_string(i), i);
+        if (activable) {
+            m_optLevels->add(std::to_string(i), i);
         }
     }
-    m_opt_levels->Select(current - 1);
+    m_optLevels->select(current - 1);
 }

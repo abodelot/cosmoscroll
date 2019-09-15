@@ -36,14 +36,12 @@ public:
 
     MultiPartEntity();
 
-    void collides(Entity& entity);
+    void collides(Entity& entity) override;
 
     // callbacks ---------------------------------------------------------------
 
     virtual void onPartDestroyed(const Part&) {};
     virtual void onPartDamaged(const Part&) {};
-
-    float getSpeedX() const override; // hack for decors
 
 protected:
     void updateParts(float frametime);

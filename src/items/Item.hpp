@@ -3,8 +3,7 @@
 
 #include <SFML/System/String.hpp>
 
-namespace tinyxml2
-{
+namespace tinyxml2 {
 class XMLElement;
 }
 
@@ -13,11 +12,9 @@ class Player;
 /**
  * Represents an item which can be equiped by the player
  */
-class Item
-{
+class Item {
 public:
-    enum Type
-    {
+    enum Type {
         HULL,
         ENGINE,
         SHIELD,
@@ -45,14 +42,12 @@ public:
     void equip(Player& player) const;
 
 private:
-    union Data
-    {
+    union Data {
         int shield;
         float speed;
         int hp;
         int heat;
-        struct weapon_t
-        {
+        struct weapon_t {
             float heatcost;
             int   damage;
         } weapon;

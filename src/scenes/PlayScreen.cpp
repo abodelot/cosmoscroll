@@ -2,15 +2,16 @@
 #include "core/Game.hpp"
 #include "core/Constants.hpp"
 #include "core/UserSettings.hpp"
+#include "core/Services.hpp"
 #include "core/Input.hpp"
-#include "core/ControlPanel.hpp"
 #include "entities/EntityManager.hpp"
 #include "entities/Player.hpp"
 
 
 PlayScreen::PlayScreen():
     m_entities(EntityManager::getInstance()),
-    m_panel(ControlPanel::getInstance())
+    m_game(Game::getInstance()),
+    m_messageSystem(Services::getMessageSystem())
 {
 }
 
@@ -18,18 +19,11 @@ PlayScreen::PlayScreen():
 void PlayScreen::onEvent(const sf::Event& event)
 {
     Action::ID action = Input::feedEvent(event);
-    switch (action)
-    {
+    switch (action) {
         case Action::NONE:
             break;
-        case Action::PANEL_UP:
-            setPanelOnTop(true);
-            break;
-        case Action::PANEL_DOWN:
-            setPanelOnTop(false);
-            break;
         case Action::PAUSE:
-            Game::getInstance().setCurrentScreen(Game::SC_PauseMenu);
+            m_game.setCurrentScreen(Game::SC_PauseMenu);
             break;
         default:
             m_entities.getPlayer()->onActionDown(action);
@@ -37,13 +31,12 @@ void PlayScreen::onEvent(const sf::Event& event)
     }
 
     // Handle some special cases for player animations and window focus
-    switch (event.type)
-    {
+    switch (event.type) {
         case sf::Event::KeyReleased:
             m_entities.getPlayer()->onActionUp(Input::matchKey(event.key.code));
             break;
         case sf::Event::LostFocus:
-            Game::getInstance().setCurrentScreen(Game::SC_PauseMenu);
+            m_game.setCurrentScreen(Game::SC_PauseMenu);
             break;
         default:
             break;
@@ -53,24 +46,23 @@ void PlayScreen::onEvent(const sf::Event& event)
 
 void PlayScreen::onFocus()
 {
-    Game::getInstance().getWindow().setMouseCursorVisible(false);
-    Game::getInstance().getWindow().setKeyRepeatEnabled(false);
-
-    setPanelOnTop(UserSettings::panel_on_top);
+    m_messageSystem.clear();
+    m_game.getWindow().setMouseCursorVisible(false);
+    m_game.getWindow().setKeyRepeatEnabled(false);
 }
 
 
 void PlayScreen::update(float frametime)
 {
-    if (m_entities.spawnBadGuys())
-    {
-        Game::getInstance().setCurrentScreen(Game::SC_GameOverScreen);
-    }
-    else
-    {
+    if (m_entities.gameOverOrCompleted()) {
+        m_game.setCurrentScreen(Game::SC_GameOverScreen);
+    } else {
         m_entities.update(frametime);
-        m_panel.update(frametime);
-        m_panel.setElapsedTime(m_entities.getTimer());
+        m_messageSystem.update(frametime);
+        HUD& hud = Services::getHUD();
+        hud.update(frametime);
+        hud.setElapsedTime(m_entities.getTimer());
+        hud.setPlayerPosition(m_entities.getPlayer()->getX());
     }
 }
 
@@ -78,21 +70,9 @@ void PlayScreen::update(float frametime)
 void PlayScreen::draw(sf::RenderTarget& target) const
 {
     target.draw(m_entities);
-    target.draw(m_panel);
-}
+    // Draw messages
+    target.draw(m_messageSystem);
+    m_game.resetView();
 
-
-void PlayScreen::setPanelOnTop(bool top)
-{
-    if (top)
-    {
-        m_panel.setPosition(0, 0);
-        m_entities.setPosition(0, ControlPanel::HEIGHT);
-    }
-    else
-    {
-        m_panel.setPosition(0, APP_HEIGHT - ControlPanel::HEIGHT);
-        m_entities.getInstance().setPosition(0, 0);
-    }
-    UserSettings::panel_on_top = top;
+    target.draw(Services::getHUD());
 }

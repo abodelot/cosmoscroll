@@ -13,7 +13,7 @@ CheckBox::CheckBox(Menu* owner) :
     Widget(owner, true)
 {
     checked_ = false;
-    const WidgetStyle& style = owner->GetWidgetStyle();
+    const WidgetStyle& style = owner->getWidgetStyle();
 
     box_.setSize(sf::Vector2f(SIZE, SIZE));
     box_.setFillColor(style.ckbox_bg_color);
@@ -35,8 +35,8 @@ CheckBox::CheckBox(Menu* owner) :
 
 
 
-    Resize(SIZE, SIZE);
-    OnStateChanged(GetState());
+    resize(SIZE, SIZE);
+    onStateChanged(getState());
 }
 
 
@@ -52,28 +52,26 @@ void CheckBox::Check(bool checked)
 }
 
 
-void CheckBox::OnKeyPressed(sf::Keyboard::Key code)
+void CheckBox::onKeyPressed(sf::Keyboard::Key code)
 {
-    if (code == sf::Keyboard::Return)
-    {
+    if (code == sf::Keyboard::Return) {
         checked_ = !checked_;
         triggerCallback();
     }
 }
 
 
-void CheckBox::OnMouseClicked(int, int)
+void CheckBox::onMouseClicked(int, int)
 {
     checked_ = !checked_;
     triggerCallback();
 }
 
 
-void CheckBox::OnStateChanged(State::EState state)
+void CheckBox::onStateChanged(State::EState state)
 {
-    const WidgetStyle& style = GetOwner()->GetWidgetStyle();
-    switch (state)
-    {
+    const WidgetStyle& style = getOwner()->getWidgetStyle();
+    switch (state) {
         case State::DEFAULT:
             box_.setFillColor(style.ckbox_bg_color);
             v1_.setFillColor(style.ckbox_v_color);

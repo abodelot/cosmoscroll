@@ -1,9 +1,9 @@
-#include <iostream>
 #include "Item.hpp"
 #include "entities/Player.hpp"
-#include "utils/I18n.hpp"
+#include "core/Services.hpp"
 #include "vendor/tinyxml/tinyxml2.h"
 
+#include <iostream>
 
 Item::Item(Type type):
     m_type(type),
@@ -15,8 +15,7 @@ Item::Item(Type type):
 
 const char* Item::typeToString(Type type)
 {
-    switch (type)
-    {
+    switch (type) {
         case Item::ENGINE:   return "item.engine";
         case Item::HULL:     return "item.hull";
         case Item::SHIELD:   return "item.shield";
@@ -41,8 +40,7 @@ void Item::loadFromXmlNode(tinyxml2::XMLElement* elem)
     elem->QueryIntAttribute("level", &m_level);
 
     // Type-specefic attributes
-    switch (getType())
-    {
+    switch (getType()) {
         case Item::HULL:
             if (elem->QueryIntAttribute("hp", &m_data.hp) != 0)
                 std::cerr << "XML error: 'hull.hp' is missing" << std::endl;
@@ -97,22 +95,21 @@ int Item::getPrice() const
 
 sf::String Item::getDescription() const
 {
-    switch (m_type)
-    {
+    switch (m_type) {
         case Item::HEATSINK:
-            return I18n::templatize("item.heatsink_info", "{heat}", m_data.heat);
+            return _t("item.heatsink_info", "{heat}", m_data.heat);
 
         case Item::HULL:
-            return I18n::templatize("item.hull_info", "{hp}", m_data.hp);
+            return _t("item.hull_info", "{hp}", m_data.hp);
 
         case Item::ENGINE:
-            return I18n::templatize("item.engine_info", "{speed}", (int) m_data.speed);
+            return _t("item.engine_info", "{speed}", (int) m_data.speed);
 
         case Item::SHIELD:
-            return I18n::templatize("item.shield_info", "{points}", m_data.shield);
+            return _t("item.shield_info", "{points}", m_data.shield);
 
         case Item::WEAPON:
-            return I18n::templatize("item.laser_info", "{dmg}", m_data.weapon.damage);
+            return _t("item.laser_info", "{dmg}", m_data.weapon.damage);
 
         default:
             break;
@@ -123,8 +120,7 @@ sf::String Item::getDescription() const
 
 void Item::equip(Player& player) const
 {
-    switch (m_type)
-    {
+    switch (m_type) {
         case Item::HEATSINK:
             player.setMaxHeat(m_data.heat);
             break;
@@ -141,8 +137,7 @@ void Item::equip(Player& player) const
             player.setMaxShield(m_data.shield);
             break;
 
-        case Item::WEAPON:
-        {
+        case Item::WEAPON: {
             Weapon& weapon = player.getLaser();
             weapon.setDamage(m_data.weapon.damage);
             weapon.setHeatCost(m_data.weapon.heatcost);

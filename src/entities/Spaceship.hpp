@@ -4,18 +4,15 @@
 #include "Damageable.hpp"
 #include "Animator.hpp"
 #include "entities/Weapon.hpp"
-#include "core/ParticleEmitter.hpp"
+#include "particles/ParticleEmitter.hpp"
 
-class Spaceship: public Damageable
-{
+class Spaceship: public Damageable {
 public:
-    enum MovementPattern
-    {
+    enum MovementPattern {
         MAGNET, LINE, SINUS, CIRCLE
     };
 
-    enum AttackPattern
-    {
+    enum AttackPattern {
         AUTO_AIM, ON_SIGHT, NONE
     };
 
@@ -55,12 +52,12 @@ private:
     Animator  m_animator;
 
     int       m_speed;
-    float     m_origin_y;
+    sf::Vector2f m_spawnPosition;
     float     m_angle;
 
-    bool m_engineEmitterEnabled;
     ParticleEmitter m_engineEmitter;
-    sf::Vector2f m_engineOffset;
+    bool            m_engineEmitterEnabled;
+    sf::Vector2f    m_engineOffset;
 };
 
 #endif // SPACESHIP_HPP

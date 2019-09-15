@@ -5,65 +5,66 @@
 #include "vendor/sfMod/sfMod.hpp"
 
 /**
- * Static class for playing sound effects and music
+ * Class for playing sound effects and music
  */
-class SoundSystem
-{
+class SoundSystem {
 public:
+    SoundSystem();
+
     /**
      * Control music
      */
-    static bool openMusicFromFile(const std::string& path);
-    static void playMusic();
-    static void stopMusic();
-    static void pauseMusic();
+    bool openMusicFromFile(const std::string& path);
+    void playMusic();
+    void stopMusic();
+    void pauseMusic();
 
     /**
      * Play a sound effect
      * @param name: sound buffer filename in the Resources class loader
      */
-    static void playSound(const std::string& name, float pitch = 1.f);
-    static void playSound(const sf::SoundBuffer& soundbuffer, float pitch = 1.f);
+    void playSound(const std::string& name, float pitch = 1.f);
+    void playSound(const sf::SoundBuffer& soundbuffer, float pitch = 1.f);
 
     /**
      * Control music volume
      */
-    static void setMusicVolume(int volume);
-    static int getMusicVolume();
+    void setMusicVolume(int volume);
+    int getMusicVolume() const;
 
     /**
      * Control sound effects volume
      */
-    static void setSoundVolume(int volume);
-    static int getSoundVolume();
+    void setSoundVolume(int volume);
+    int getSoundVolume() const;
 
     /**
      * Turn music on/off
      */
-    static void enableMusic(bool enabled);
-    static bool isMusicEnabled();
+    void enableMusic(bool enabled);
+    bool isMusicEnabled() const;
 
     /**
      * Turn sound effects on/off
      */
-    static void enableSound(bool enabled);
-    static bool isSoundEnabled();
+    void enableSound(bool enabled);
+    bool isSoundEnabled() const;
 
     /**
      * Stop music and sound effects
      */
-    static void atExit();
+    void atExit();
 
 private:
     static const int MAX_SOUNDS = 20;
 
-    static sf::Sound   m_sounds[MAX_SOUNDS];
-    static int         m_last_sound_played;
-    static sfmod::Mod  m_music;
-    static int         m_music_volume;
-    static int         m_sound_volume;
-    static bool        m_enable_music;
-    static bool        m_enable_sound;
+    sf::Sound  m_sounds[MAX_SOUNDS];
+    int        m_lastSoundPlayed;
+    sfmod::Mod m_music;
+    int        m_musicVolume;
+    int        m_soundVolume;
+    bool       m_enableMusic;
+    bool       m_enableSound;
 };
 
-#endif // SOUNDSYSTEM_HPP
+#endif

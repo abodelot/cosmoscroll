@@ -6,14 +6,12 @@
 #include "Layout.hpp"
 #include "../Label.hpp"
 
-namespace gui
-{
+namespace gui {
 
 /**
  * Convenience layout which manages forms of widgets (right) and their associated labels (left).
  */
-class FormLayout: public Layout
-{
+class FormLayout: public Layout {
 public:
     FormLayout(float x=0.f, float y=0.f);
 

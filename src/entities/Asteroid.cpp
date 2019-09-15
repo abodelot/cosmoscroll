@@ -1,17 +1,17 @@
 #include "Asteroid.hpp"
 #include "EntityManager.hpp"
-#include "core/SoundSystem.hpp"
+#include "core/Services.hpp"
 #include "core/Resources.hpp"
 #include "utils/Math.hpp"
 
-#define BASE_SPEED         80
-#define ROTATION_SPEED_MIN 10
-#define ROTATION_SPEED_MAX 80
+static constexpr float BASE_SPEED = 80;
+static constexpr float ROTATION_SPEED_MIN = 10;
+static constexpr float ROTATION_SPEED_MAX = 80;
 
 
 Asteroid::Asteroid(Size size, float angle):
     m_size(size),
-    m_rotation_speed(math::rand(ROTATION_SPEED_MIN, ROTATION_SPEED_MAX))
+    m_rotationSpeed(math::rand(ROTATION_SPEED_MIN, ROTATION_SPEED_MAX))
 {
     setHP(size * 2 + 1);
     setTexture(Resources::getTexture("entities/asteroids.png"));
@@ -30,37 +30,34 @@ Asteroid::Asteroid(Size size, float angle):
 void Asteroid::onUpdate(float frametime)
 {
     move(m_speed.x * frametime, m_speed.y * frametime);
-    rotate(m_rotation_speed * frametime);
+    rotate(m_rotationSpeed * frametime);
 }
 
 
 void Asteroid::onDestroy()
 {
     sf::Vector2f pos = getPosition();
-    switch (m_size)
-    {
+    switch (m_size) {
         case BIG:
             // Create 3 medium asteroids
-            for (int i = 0; i < 3; ++i)
-            {
+            for (int i = 0; i < 3; ++i) {
                 Asteroid* asteroid = new Asteroid(MEDIUM, math::rand(0, 360));
                 asteroid->setPosition(pos);
                 EntityManager::getInstance().addEntity(asteroid);
             }
-            SoundSystem::playSound("asteroid-break.ogg", 0.5f);
+            Services::getSoundSystem().playSound("asteroid-break.ogg", 0.5f);
             break;
         case MEDIUM:
             // Create 3 small asteroids
-            for (int i = 0; i < 3; ++i)
-            {
+            for (int i = 0; i < 3; ++i) {
                 Asteroid* asteroid = new Asteroid(SMALL, math::rand(0, 360));
                 asteroid->setPosition(pos);
                 EntityManager::getInstance().addEntity(asteroid);
             }
-            SoundSystem::playSound("asteroid-break.ogg", 0.75f);
+            Services::getSoundSystem().playSound("asteroid-break.ogg", 0.75f);
             break;
         default:
-            SoundSystem::playSound("asteroid-break.ogg", 1.f);
+            Services::getSoundSystem().playSound("asteroid-break.ogg", 1.f);
             break;
     }
     EntityManager::getInstance().createImpactParticles(getPosition(), 10);
@@ -71,8 +68,7 @@ void Asteroid::setRandomImage()
 {
     // Pick a random sprite (each size has 6 sprites)
     int x = math::rand(0, 5);
-    switch (m_size)
-    {
+    switch (m_size) {
         case BIG:
             setTextureRect(sf::IntRect(0 + x * 48, 0, 48, 48)); // 48*48px
             break;
@@ -84,5 +80,3 @@ void Asteroid::setRandomImage()
             break;
     }
 }
-
-

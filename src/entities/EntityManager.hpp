@@ -3,36 +3,30 @@
 
 #include <string>
 #include <list>
-#include <map>
 #include <vector>
+#include <queue>
 #include <SFML/Graphics.hpp>
 
-#include "Weapon.hpp"
-#include "Animation.hpp"
-#include "Spaceship.hpp"
-#include "core/ParticleSystem.hpp"
+#include "core/Tileset.hpp"
+#include "core/Tilemap.hpp"
+#include "core/ParallaxLayer.hpp"
+#include "particles/ParticleSystem.hpp"
+#include "particles/ParticleEmitter.hpp"
 
-class LevelManager;
 class Entity;
 class Player;
-
 
 /**
  * Singleton factory and manager for entities
  */
-class EntityManager: public sf::Drawable, public sf::Transformable
-{
+class EntityManager: public sf::Drawable {
 public:
-    // background image speed for parallax scrolling
-    static const int BACKGROUND_SPEED = 20;
-    static const int FOREGROUND_SPEED = 80;
-
     /**
      * @return instance unique
      */
     static EntityManager& getInstance();
 
-    void initialize();
+    void initializeLevel();
 
     /**
      * Resize the universe dimensions
@@ -40,21 +34,15 @@ public:
     void resize(int width, int height);
 
     /**
-     * @return universe width
+     * @return universe size, in pixels
      */
-    inline int getWidth() const {return m_width;};
-
-    /**
-     * @return universe height
-     */
-    inline int getHeight() const{return m_height;};
+    inline const sf::Vector2i& getSize() const { return m_size; };
 
     /**
      * Spawn next enemies
      * @return true if game over
      */
-    bool spawnBadGuys();
-    bool spawnEntities();
+    bool gameOverOrCompleted() const;
 
     /**
      * Update managed entities and resolve collisions
@@ -72,51 +60,23 @@ public:
     void clearEntities();
 
     /**
-     * Load animation definitions
-     * @param filename: path to XML document
-     */
-    void loadAnimations(const std::string& filename);
-
-    /**
-     * Get an animation
-     * @param id: animation ID from XML document
-     */
-    const Animation& getAnimation(const std::string& id) const;
-
-    /**
-     * Load weapon definitions
-     * @param filename path to XML document
-     */
-    void loadWeapons(const std::string& filename);
-
-    /**
-     * Get a weapon
-     * @param id: weapon ID from XML document
-     */
-    const Weapon& getWeapon(const std::string& id) const;
-
-    /**
-     * Load spaceship definitions
-     * @param filename: path to XML document
-     */
-    void loadSpaceships(const std::string& filename);
-
-    /**
-     * Allocate a new Spaceship with a given profile
-     * @param id: spaceship type ID from XML document
-     * @return new allocated spaceship
-     */
-    Spaceship* createSpaceship(const std::string& id) const;
-
-    /**
      * Get player entity
      */
     Player* getPlayer() const;
 
+    void scheduleForSpawning(Entity* entity);
+
     inline float getTimer() const { return m_timer; }
+
+    /**
+     * Get rectangle area currently displayed by the view
+     */
+    sf::FloatRect getViewZone() const;
 
     void createImpactParticles(const sf::Vector2f& pos, size_t count);
     void createGreenParticles(const sf::Vector2f& pos, size_t count);
+
+    void toggleFastScrolling();
 
 private:
     EntityManager();
@@ -125,65 +85,59 @@ private:
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+    void spawnEntities();
+
     /**
      * Re-allocate player
      */
     void respawnPlayer();
 
+    void clearSpawnQueue();
+
+    bool collidesWithTilemap(const sf::FloatRect& rect, Entity& entity) const;
+
     typedef std::list<Entity*> EntityList;
     EntityList m_entities;
 
-    typedef std::map<std::string, Animation> AnimationMap;
-    AnimationMap m_animations;
-
-    typedef std::map<std::string, Weapon> WeaponMap;
-    WeaponMap m_weapons;
-
-    typedef std::map<std::string, Spaceship> SpaceshipMap;
-    SpaceshipMap m_spaceships; // ID-indexed spaceships
-
+    sf::View      m_view;
     float         m_timer;
+    float         m_traveled;
+    float         m_scrollingSpeed;
+    float         m_stopScrollingAt;
     Player*       m_player;
-    int           m_width;
-    int           m_height;
-    int           m_decor_height;
-    LevelManager& m_levels;
+    sf::Vector2i  m_size;
+
+    // Entity are sorted by X position in the spawn queue, so we don't need to loop on the entire
+    // queue when looking up for the next entity to spawn
+    struct PosComparator {
+        bool operator()(const Entity* a, const Entity* b) const;
+    };
+    std::priority_queue<Entity*, std::vector<Entity*>, PosComparator> m_spawnQueue;
 
     // Particles ---------------------------------------------------------------
-    class StarsEmitter: public ParticleEmitter
-    {
+    class StarsEmitter: public ParticleEmitter {
+        using ParticleEmitter::ParticleEmitter;
+
     protected:
-        void onParticleUpdated(ParticleSystem::Particle& particle, float) const override;
+        void onParticleUpdated(Particle& particle, float) const override;
 
-        void onParticleCreated(ParticleSystem::Particle& particle) const override;
+        void onParticleCreated(Particle& particle) const override;
     };
 
-    ParticleSystem& m_particles;
-    ParticleEmitter m_impact_emitter;
-    ParticleEmitter m_green_emitter;
-    StarsEmitter    m_stars_emitter;
+    ParticleSystem& m_particleSystem;
+    ParticleEmitter m_impactEmitter;
+    ParticleEmitter m_greenEmitter;
+    StarsEmitter    m_starsEmitter;
 
-    // Parallax scrolling ------------------------------------------------------
-    class ParallaxLayer: public sf::Drawable
-    {
-    public:
-        ParallaxLayer();
+    std::vector<ParallaxLayer> m_layers;
 
-        void resetScrolling();
-        void scroll(float delta);
-        void setTexture(const sf::Texture& texture);
-        void setColor(const sf::Color& color);
+    Tileset m_tileset;
+    Tilemap m_tilemap;
 
-    private:
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-        const sf::Texture* m_texture;
-        sf::Vertex         m_vertices[8];
-        sf::BlendMode      m_blend_mode;
-    };
-
-    ParallaxLayer m_layer1;
-    ParallaxLayer m_layer2;
+    mutable sf::RectangleShape m_collision;
+    mutable sf::RectangleShape m_collisionPoint;
+    mutable sf::RectangleShape m_allPoints[8];
+    mutable sf::RectangleShape m_allCheckTiles[8];
 };
 
-#endif // ENTITYMANAGER_HPP
+#endif

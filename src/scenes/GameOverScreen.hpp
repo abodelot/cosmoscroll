@@ -4,10 +4,8 @@
 #include "Screen.hpp"
 
 class EntityManager;
-class ControlPanel;
 
-class GameOverScreen: public Screen
-{
+class GameOverScreen: public Screen {
 public:
     GameOverScreen();
 
@@ -20,11 +18,9 @@ public:
     void draw(sf::RenderTarget& target) const override;
 
 private:
-    sf::Clock            m_started_at;
+    sf::Clock            m_startedAt;
     sf::Text             m_text;
     const EntityManager& m_entities;
-    const ControlPanel&  m_panel;
 };
 
-#endif // GAMEOVERSCREEN_HPP
-
+#endif

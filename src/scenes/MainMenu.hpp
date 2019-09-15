@@ -6,8 +6,7 @@
 /**
  * Application main menu
  */
-class MainMenu: public BaseMenu
-{
+class MainMenu: public BaseMenu {
 public:
     MainMenu();
 

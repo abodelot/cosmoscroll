@@ -1,24 +1,20 @@
 #ifndef WEAPON_HPP
 #define WEAPON_HPP
 
-#include <stdexcept>
+#include "Projectile.hpp"
+#include "utils/Math.hpp"
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
-#include "Projectile.hpp"
-#include "utils/Math.hpp"
-#include "core/SoundSystem.hpp"
+#include <stdexcept>
 
 class Entity;
-
 
 /**
  * Represents a weapon and can throw projectiles
  * Must be associated to an owner entity.
  */
-
-class Weapon
-{
+class Weapon {
 public:
     Weapon();
 
@@ -64,7 +60,7 @@ public:
     void setVelociy(int velocity);
 
     /**
-     * Sound effect play when shooting, NULL if no sound
+     * Sound effect play when shooting, nullptr if no sound
      */
     void setSound(const sf::SoundBuffer* sound);
 
@@ -87,10 +83,12 @@ public:
 
 protected:
     template <class T>
-    void createProjectile(const sf::Vector2f& offset, float angle);
+    void createProjectile(const sf::Vector2f& offset, float angle) const;
 
 private:
-    void insert(const sf::Vector2f& pos, Entity* entity);
+    void addProjectile(Projectile* projectile) const;
+
+    void playSound() const;
 
     // Weapon-type attributes
     float                  m_fire_delay;   // Time to wait between next shot
@@ -102,7 +100,7 @@ private:
 
     // Weapon usage
     Entity*      m_owner;
-    sf::Clock    m_last_shot_at; // Store time for last shot
+    sf::Clock    m_lastShotAt; // Store time for last shot
     sf::Vector2f m_position;
     int          m_multiply;
 };
@@ -111,17 +109,15 @@ template <class T>
 float Weapon::shoot(float angle)
 {
     static const float ANGLE_VARIATION = 0.15f;
-    if (!m_texture)
+    if (!m_texture) {
         throw std::runtime_error("Using unitialized weapon");
-
+    }
 
     // If ready for next round
-    if (m_last_shot_at.getElapsedTime().asSeconds() >= m_fire_delay)
-    {
+    if (m_lastShotAt.getElapsedTime().asSeconds() >= m_fire_delay) {
         sf::Vector2f pos = m_owner->getPosition() + m_position;
 
-        switch (m_multiply)
-        {
+        switch (m_multiply) {
             case 1:
                 createProjectile<T>(pos, angle);
                 break;
@@ -138,11 +134,8 @@ float Weapon::shoot(float angle)
                 break;
         }
 
-        if (m_sound != NULL)
-        {
-            SoundSystem::playSound(*m_sound);
-        }
-        m_last_shot_at.restart();
+        playSound();
+        m_lastShotAt.restart();
         return m_heat_cost;
     }
     return 0.f;
@@ -156,11 +149,12 @@ float Weapon::shoot(const sf::Vector2f& target)
 }
 
 template <class T>
-void Weapon::createProjectile(const sf::Vector2f& position, float angle)
+void Weapon::createProjectile(const sf::Vector2f& position, float angle) const
 {
     T* projectile = new T(m_owner, angle, *m_texture, m_velocity, m_damage);
-    insert(position, projectile);
+    projectile->setPosition(position);
+    addProjectile(projectile);
 }
 
 
-#endif // WEAPON_HPP
+#endif

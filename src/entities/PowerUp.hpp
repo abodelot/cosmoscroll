@@ -6,11 +6,9 @@
 /**
  * Passive entity, can be picked up by the player
  */
-class PowerUp: public Entity
-{
+class PowerUp: public Entity {
 public:
-    enum Type
-    {
+    enum Type {
         REPAIR,       // +1 hp
         FULL_REPAIR,  // Restore all hp
         SHIELD,       // +1 shield
@@ -41,13 +39,8 @@ public:
 
     static sf::IntRect getTextureRect(Type type);
 
-    // callbacks ---------------------------------------------------------------
-
-    void onUpdate(float frametime);
-
 private:
     Type m_type;
 };
 
-#endif // POWERUP_HPP
-
+#endif

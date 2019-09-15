@@ -18,149 +18,121 @@ Menu::Menu(const sf::RenderWindow& window, WidgetStyle& style):
 
 Menu::~Menu()
 {
-    for (WidgetList::iterator it = widgets_.begin(); it != widgets_.end(); ++it)
-    {
+    for (WidgetList::iterator it = widgets_.begin(); it != widgets_.end(); ++it) {
         delete *it;
     }
 }
 
 
-void Menu::OnEvent(const sf::Event& event)
+void Menu::onEvent(const sf::Event& event)
 {
     Widget* new_hovered = NULL;
     Widget* new_focus = NULL;
-    switch (event.type)
-    {
+    switch (event.type) {
         case sf::Event::KeyPressed:
-            switch (event.key.code)
-            {
+            switch (event.key.code) {
                 case sf::Keyboard::Up:
-                    FocusPreviousWidget();
+                    focusPreviousWidget();
                     break;
                 case sf::Keyboard::Down:
-                    FocusNextWidget();
+                    focusNextWidget();
                     break;
                 default:
-                    if (focus_ != NULL)
-                    {
-                        focus_->OnKeyPressed(event.key.code);
+                    if (focus_ != NULL) {
+                        focus_->onKeyPressed(event.key.code);
                     }
                     break;
             }
             break;
 
         case sf::Event::JoystickButtonPressed:
-            if (event.joystickButton.button == 0 && focus_ != NULL)
-            {
+            if (event.joystickButton.button == 0 && focus_ != NULL) {
                 // first joystick button is mapped to "return" key
-                focus_->OnKeyPressed(sf::Keyboard::Return);
+                focus_->onKeyPressed(sf::Keyboard::Return);
             }
             break;
 
         case sf::Event::JoystickMoved:
-            if (event.joystickMove.axis == sf::Joystick::X)
-            {
-                if (focus_ != NULL)
-                {    // map to "left" and "right" keys
-                    if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD)
-                    {
-                        focus_->OnKeyPressed(sf::Keyboard::Right);
-                    }
-                    else if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD)
-                    {
-                        focus_->OnKeyPressed(sf::Keyboard::Left);
+            if (event.joystickMove.axis == sf::Joystick::X) {
+                if (focus_ != NULL) {    // map to "left" and "right" keys
+                    if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD) {
+                        focus_->onKeyPressed(sf::Keyboard::Right);
+                    } else if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD) {
+                        focus_->onKeyPressed(sf::Keyboard::Left);
                     }
                 }
-            }
-            else if (event.joystickMove.axis == sf::Joystick::Y)
-            {    // map to "up" and "down" key
-                if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD)
-                {
-                    FocusNextWidget();
-                }
-                else if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD)
-                {
-                    FocusPreviousWidget();
+            } else if (event.joystickMove.axis == sf::Joystick::Y) {    // map to "up" and "down" key
+                if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD) {
+                    focusNextWidget();
+                } else if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD) {
+                    focusPreviousWidget();
                 }
             }
             break;
 
         case sf::Event::TextEntered:
-            if (focus_ != NULL)
-            {
-                focus_->OnTextEntered(event.text.unicode);
+            if (focus_ != NULL) {
+                focus_->onTextEntered(event.text.unicode);
             }
             break;
 
         case sf::Event::MouseMoved:
-            new_hovered = GetHoveredWidget(event.mouseMove.x, event.mouseMove.y);
+            new_hovered = getHoveredWidget(event.mouseMove.x, event.mouseMove.y);
             // si un nouveau widget est hovered
-            if (new_hovered != NULL && new_hovered != hovered_widget_)
-            {
+            if (new_hovered != NULL && new_hovered != hovered_widget_) {
                 // si la souris passe instantanément au dessus d'un autre widget,
                 // l'ancien widget est toujours en hovered !
-                if (hovered_widget_ != NULL)
-                {
-                    hovered_widget_->SetState(focus_ == hovered_widget_ ? State::FOCUSED : State::DEFAULT);
+                if (hovered_widget_ != NULL) {
+                    hovered_widget_->setState(focus_ == hovered_widget_ ? State::FOCUSED : State::DEFAULT);
                 }
                 hovered_widget_ = new_hovered;
-                hovered_widget_->SetState(State::HOVERED);
+                hovered_widget_->setState(State::HOVERED);
 
-                OnWidgetHovered();
-            }
-            else if (new_hovered == NULL && hovered_widget_ != NULL)
-            {
+                onWidgetHovered();
+            } else if (new_hovered == NULL && hovered_widget_ != NULL) {
                 // la souris a quitté hovered_widget_
-                hovered_widget_->SetState(focus_ == hovered_widget_ ? State::FOCUSED : State::DEFAULT);
+                hovered_widget_->setState(focus_ == hovered_widget_ ? State::FOCUSED : State::DEFAULT);
                 hovered_widget_ = NULL;
             }
             break;
 
         case sf::Event::MouseButtonPressed:
-            if (event.mouseButton.button == sf::Mouse::Left)
-            {
+            if (event.mouseButton.button == sf::Mouse::Left) {
                 // OPTMIZE: utiliser le pointeur hovered_widget_ ?
                 // on vérifie si un widget doit prendre le focus (clic souris)
-                new_focus = GetHoveredWidget(event.mouseButton.x, event.mouseButton.y);
-                if (new_focus != NULL && new_focus != focus_)
-                {
-                    if (focus_ != NULL)
-                    {
-                        focus_->SetState(State::DEFAULT);
+                new_focus = getHoveredWidget(event.mouseButton.x, event.mouseButton.y);
+                if (new_focus != NULL && new_focus != focus_) {
+                    if (focus_ != NULL) {
+                        focus_->setState(State::DEFAULT);
                     }
                     focus_ = new_focus;
-                    focus_->SetState(State::FOCUSED);
+                    focus_->setState(State::FOCUSED);
 
-                    OnWidgetFocused();
-                }
-                else if (new_focus == NULL && focus_ != NULL)
-                {
+                    onWidgetFocused();
+                } else if (new_focus == NULL && focus_ != NULL) {
                     // focus_ a perdu le focus
-                    focus_->SetState(State::DEFAULT);
+                    focus_->setState(State::DEFAULT);
                     focus_ = NULL;
                 }
             }
             break;
 
         case sf::Event::MouseButtonReleased:
-            if (event.mouseButton.button == sf::Mouse::Left)
-            {
+            if (event.mouseButton.button == sf::Mouse::Left) {
                 // la souris doit toujours être au-dessus du widget pour
                 // que le clic soit prise en compte
-                if (hovered_widget_ != NULL && focus_ == hovered_widget_)
-                {
+                if (hovered_widget_ != NULL && focus_ == hovered_widget_) {
                     sf::Vector2f mouse = window_.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
                     mouse.x -= focus_->getPosition().x;
                     mouse.y -= focus_->getPosition().y;
-                    focus_->OnMouseClicked(mouse.x, mouse.y);
+                    focus_->onMouseClicked(mouse.x, mouse.y);
                 }
             }
             break;
 
         case sf::Event::MouseWheelMoved:
-            if (focus_ != NULL)
-            {
-                focus_->OnMouseWheelMoved(event.mouseWheel.delta);
+            if (focus_ != NULL) {
+                focus_->onMouseWheelMoved(event.mouseWheel.delta);
             }
             break;
 
@@ -170,28 +142,25 @@ void Menu::OnEvent(const sf::Event& event)
 }
 
 
-void Menu::Update(float frametime)
+void Menu::update(float frametime)
 {
-    if (focus_ != NULL)
-    {
-        focus_->Update(frametime);
+    if (focus_ != NULL) {
+        focus_->update(frametime);
     }
 }
 
 
-void Menu::Show(sf::RenderTarget& target) const
+void Menu::show(sf::RenderTarget& target) const
 {
-    for (WidgetList::const_iterator it = widgets_.begin(); it != widgets_.end(); ++it)
-    {
-        if ((**it).IsVisible())
-        {
+    for (WidgetList::const_iterator it = widgets_.begin(); it != widgets_.end(); ++it) {
+        if ((**it).isVisible()) {
             target.draw(**it);
         }
     }
 }
 
 
-void Menu::AddWidget(Widget* widget)
+void Menu::addWidget(Widget* widget)
 {
     /*WidgetList::iterator it = widgets_.begin();
     while (it != widgets_.end() && (**it).getPosition().y < widget->getPosition().y)
@@ -200,64 +169,58 @@ void Menu::AddWidget(Widget* widget)
     }
     widgets_.insert(it, widget);*/
     widgets_.push_back(widget);
-    if (focus_index_ == -1)
-    {
-        FocusWidget(widgets_.size() - 1);
+    if (focus_index_ == -1) {
+        focusWidget(widgets_.size() - 1);
     }
 }
 
 
-WidgetStyle& Menu::GetWidgetStyle()
+WidgetStyle& Menu::getWidgetStyle()
 {
     return theme_;
 }
 
 
-const Widget* Menu::GetFocusedWidget() const
+const Widget* Menu::getFocusedWidget() const
 {
     return focus_;
 }
 
 
-bool Menu::FocusWidget(int index)
+bool Menu::focusWidget(int index)
 {
     if (index < (int) widgets_.size()
-        && widgets_[index]->CanGrabFocus())
-    {
+        && widgets_[index]->canGrabFocus()) {
+
         focus_index_ = index;
-        if (focus_ != NULL)
-        {
-            focus_->SetState(State::DEFAULT);
+        if (focus_ != NULL) {
+            focus_->setState(State::DEFAULT);
         }
         focus_ = widgets_[index];
-        focus_->SetState(State::FOCUSED);
+        focus_->setState(State::FOCUSED);
 
-        OnWidgetFocused();
+        onWidgetFocused();
         return true;
     }
     return false;
 }
 
 
-bool Menu::FocusWidget(const Widget* widget)
+bool Menu::focusWidget(const Widget* widget)
 {
-    for (int i = 0; i < (int) widgets_.size(); ++i)
-    {
-        if (widgets_[i] == widget)
-        {
-            return FocusWidget(i);
+    for (int i = 0; i < (int) widgets_.size(); ++i) {
+        if (widgets_[i] == widget) {
+            return focusWidget(i);
         }
     }
     return false;
 }
 
 
-bool Menu::FocusFirstWidget()
+bool Menu::focusFirstWidget()
 {
-    for (int i = 0; i < (int) widgets_.size(); ++i)
-    {
-        if (FocusWidget(i))
-        {
+    for (int i = 0; i < (int) widgets_.size(); ++i) {
+        if (focusWidget(i)) {
             return true;
         }
     }
@@ -267,19 +230,15 @@ bool Menu::FocusFirstWidget()
 // TODO: UNE SEULE boucle avec un ternaire next / previous?
 // + gérer les widgets disabled
 // que faire si tous disabled ?
-bool Menu::FocusNextWidget()
+bool Menu::focusNextWidget()
 {
-    for (int i = focus_index_ + 1; i < (int) widgets_.size(); ++i)
-    {
-        if (FocusWidget(i))
-        {
+    for (int i = focus_index_ + 1; i < (int) widgets_.size(); ++i) {
+        if (focusWidget(i)) {
             return true;
         }
     }
-    for (int i = 0; i < focus_index_; ++i)
-    {
-        if (FocusWidget(i))
-        {
+    for (int i = 0; i < focus_index_; ++i) {
+        if (focusWidget(i)) {
             return true;
         }
     }
@@ -287,19 +246,15 @@ bool Menu::FocusNextWidget()
 }
 
 
-bool Menu::FocusPreviousWidget()
+bool Menu::focusPreviousWidget()
 {
-    for (int i = focus_index_ - 1; i >= 0; --i)
-    {
-        if (FocusWidget(i))
-        {
+    for (int i = focus_index_ - 1; i >= 0; --i) {
+        if (focusWidget(i)) {
             return true;
         }
     }
-    for (int i = (int) widgets_.size() - 1; i > focus_index_; --i)
-    {
-        if (FocusWidget(i))
-        {
+    for (int i = (int) widgets_.size() - 1; i > focus_index_; --i) {
+        if (focusWidget(i)) {
             return true;
         }
     }
@@ -307,14 +262,12 @@ bool Menu::FocusPreviousWidget()
 }
 
 
-Widget* Menu::GetHoveredWidget(int x, int y) const
+Widget* Menu::getHoveredWidget(int x, int y) const
 {
     sf::Vector2f mouse = window_.mapPixelToCoords(sf::Vector2i(x, y));
     WidgetList::const_iterator it = widgets_.begin();
-    for (; it != widgets_.end(); ++it)
-    {
-        if ((**it).CanGrabFocus() && (**it).ContainsPoint(mouse.x, mouse.y))
-        {
+    for (; it != widgets_.end(); ++it) {
+        if ((**it).canGrabFocus() && (**it).containsPoint(mouse.x, mouse.y)) {
             return *it;
         }
     }

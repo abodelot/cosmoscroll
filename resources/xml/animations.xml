@@ -1,10 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <animations>
-  <anim name="player"           img="entities/player.png" y="0"   width="54" height="40" count="1" delay="0"/>
-  <anim name="player-down"      img="entities/player.png" y="40"  width="54" height="40" count="1" delay="0"/>
-  <anim name="player-up"        img="entities/player.png" y="80"  width="54" height="40" count="1" delay="0"/>
-  <anim name="player-destroyed" img="entities/player.png" y="120" width="54" height="40" count="1" delay="0"/>
-  <anim name="scoot"            img="entities/bandit-scoot.png"       width="40" height="32" count="1" delay="0"/>
+  <anim
+      name="egg"
+      img="entities/egg.png"
+      width="32"
+      height="64"
+      count="5"
+      delay="0.2"/>
+  <anim
+      name="egg-reverse"
+      img="entities/egg-reverse.png"
+      width="32"
+      height="64"
+      count="5"
+      delay="0.2"/>
+  <anim
+      name="scoot"
+      img="entities/bandit-scoot.png"
+      width="40"
+      height="32"
+      count="1"
+      delay="0"/>
+  <anim name="player"           img="entities/player.png" y="0"   width="54" height="38" count="1" delay="0"/>
+  <anim name="player-down"      img="entities/player.png" y="38"  width="54" height="38" count="1" delay="0"/>
+  <anim name="player-up"        img="entities/player.png" y="76"  width="54" height="38" count="1" delay="0"/>
+  <anim name="player-destroyed" img="entities/player.png" y="114" width="54" height="38" count="1" delay="0"/>
   <anim name="interceptor"      img="entities/bandit-interceptor.png" width="48" height="48" count="1" delay="0"/>
   <anim name="gunship"          img="entities/bandit-gunship.png"     width="56" height="48" count="1" delay="0"/>
   <anim name="flying-saucer"     img="entities/flying-saucer.png"     width="48" height="48" count="4" delay="0.05"/>

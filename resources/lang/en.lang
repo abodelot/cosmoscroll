@@ -59,6 +59,7 @@ audio.sound_volume = Sound volume:
 
 # SettingsMenu
 settings.title = Settings
+settings.hud = Show HUD:
 settings.vsync = Vertical synchronization:
 settings.resolution = Resolution:
 settings.language = Language:

@@ -9,62 +9,60 @@ Slider::Slider(Menu* owner, int w, int h) :
 {
     if (h == -1)
     {
-        h = owner->GetWidgetStyle().global_text_size;
+        h = owner->getWidgetStyle().global_text_size;
     }
     bar_.setSize(sf::Vector2f(w, h));
     bar_.setOutlineThickness(1);
-    bar_.setOutlineColor(owner->GetWidgetStyle().global_border_color);
+    bar_.setOutlineColor(owner->getWidgetStyle().global_border_color);
 
     handle_.setSize(sf::Vector2f(h, h));
     handle_.setOutlineThickness(1);
-    handle_.setOutlineColor(owner->GetWidgetStyle().global_border_color);
+    handle_.setOutlineColor(owner->getWidgetStyle().global_border_color);
 
-    SetState(State::DEFAULT);
+    setState(State::DEFAULT);
 
     handle_index_ = 0;
     quantum_ = 10;
 
-    Resize(w, h);
-    OnStateChanged(GetState());
+    resize(w, h);
+    onStateChanged(getState());
 }
 
 
-void Slider::SetQuantum(int quantum)
+void Slider::setQuantum(int quantum)
 {
-    if (quantum > 0 && quantum < 100)
-    {
+    if (quantum > 0 && quantum < 100) {
         quantum_ = quantum;
     }
 }
 
 
-int Slider::GetValue() const
+int Slider::getValue() const
 {
     return handle_index_;
 }
 
 
-void Slider::SetValue(int value)
+void Slider::setValue(int value)
 {
-    UpdateHandle(value);
+    updateHandle(value);
 }
 
 
-void Slider::OnKeyPressed(sf::Keyboard::Key key)
+void Slider::onKeyPressed(sf::Keyboard::Key key)
 {
-    switch (key)
-    {
+    switch (key) {
         case sf::Keyboard::Left:
-            UpdateHandle(handle_index_ - quantum_);
+            updateHandle(handle_index_ - quantum_);
             break;
         case sf::Keyboard::Right:
-            UpdateHandle(handle_index_ + quantum_);
+            updateHandle(handle_index_ + quantum_);
             break;
         case sf::Keyboard::Home:
-            UpdateHandle(0);
+            updateHandle(0);
             break;
         case sf::Keyboard::End:
-            UpdateHandle(100);
+            updateHandle(100);
             break;
         default:
             break;
@@ -72,24 +70,23 @@ void Slider::OnKeyPressed(sf::Keyboard::Key key)
 }
 
 
-void Slider::OnMouseClicked(int x, int y)
+void Slider::onMouseClicked(int x, int y)
 {
     (void) y;
-    UpdateHandle(100 * x / GetWidth());
+    updateHandle(100 * x / getWidth());
 }
 
 
-void Slider::OnMouseWheelMoved(int delta)
+void Slider::onMouseWheelMoved(int delta)
 {
-    UpdateHandle(handle_index_ + (delta > 0 ? quantum_ : -quantum_));
+    updateHandle(handle_index_ + (delta > 0 ? quantum_ : -quantum_));
 }
 
 
-void Slider::OnStateChanged(State::EState state)
+void Slider::onStateChanged(State::EState state)
 {
-    const WidgetStyle& style = GetOwner()->GetWidgetStyle();
-    switch (state)
-    {
+    const WidgetStyle& style = getOwner()->getWidgetStyle();
+    switch (state) {
         case State::DEFAULT:
             bar_.setFillColor(style.slider_bg_color);
             handle_.setFillColor(style.slider_handle_color);
@@ -112,31 +109,25 @@ void Slider::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 
-void Slider::UpdateHandle(int value)
+void Slider::updateHandle(int value)
 {
-    if (value < 0)
-    {
+    if (value < 0) {
         value = 0;
-    }
-    else if (value > 100)
-    {
+    } else if (value > 100) {
         value = 100;
-    }
-    else
-    {
+    } else {
         // round value to a quantum multiple
         int temp = value + quantum_ / 2;
         value = temp - temp % quantum_;
     }
+
     // check if value actually changed
-    if (value != handle_index_)
-    {
+    if (value != handle_index_) {
         handle_index_ = value;
         triggerCallback();
     }
     // then update handle sprite (handle is a square, size is Rect.Height)
     sf::Vector2f pos = handle_.getPosition();
-    pos.x = (GetWidth() - GetHeight()) * handle_index_ / 100;
+    pos.x = (getWidth() - getHeight()) * handle_index_ / 100;
     handle_.setPosition(pos);
 }
-

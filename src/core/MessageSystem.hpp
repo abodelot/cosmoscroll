@@ -2,42 +2,41 @@
 #define MESSAGESYSTEM_HPP
 
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 /**
- * Static class for displaying animated messages
+ * Display animated messages
  */
-class MessageSystem
-{
+class MessageSystem: public sf::Drawable {
 public:
-    static void setFont(const sf::Font& font);
+    MessageSystem();
+
+    void setFont(const sf::Font& font);
 
     /**
      * Add the message \a str at position \a pos, with color \a color
      */
-    static void write(const sf::String& str, const sf::Vector2f& pos, const sf::Color& color = sf::Color::White);
+    void write(const sf::String& str, const sf::Vector2f& pos, const sf::Color& color = sf::Color::White);
 
     /**
      *
      */
-    static void update(float frametime);
+    void update(float frametime);
 
-    static void clear();
-
-    static void show(sf::RenderTarget& target, sf::RenderStates states);
+    void clear();
 
 private:
-    MessageSystem();
-    MessageSystem(const MessageSystem&);
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    struct Node
-    {
+    struct Message {
         sf::Text text;
-        Node*    next;
-        float    lifetime;
+        float lifetime;
     };
 
-    static Node*           s_first;
-    static const sf::Font* s_font;
+    std::vector<Message> m_messages;
+    float m_speedX;
+    float m_speedY;
+    const sf::Font* m_font;
 };
 
-#endif // MESSAGESYSTEM_HPP
+#endif

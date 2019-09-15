@@ -2,7 +2,6 @@
 #include "Projectile.hpp"
 #include "Explosion.hpp"
 #include "EntityManager.hpp"
-#include "core/ParticleSystem.hpp"
 
 #define FLASH_DELAY 0.3f
 
@@ -22,8 +21,7 @@ void Damageable::collides(Entity& entity)
 
 void Damageable::onCollision(Damageable& entity)
 {
-    if (getTeam() != entity.getTeam() && m_hp > 0 && entity.m_hp > 0)
-    {
+    if (getTeam() != entity.getTeam() && m_hp > 0 && entity.m_hp > 0) {
         takeDamage(1);
         entity.takeDamage(1);
     }
@@ -33,8 +31,7 @@ void Damageable::onCollision(Damageable& entity)
 void Damageable::onCollision(Projectile& projectile)
 {
     // Ignore friendly fire
-    if (getTeam() != projectile.getTeam() && m_hp > 0)
-    {
+    if (getTeam() != projectile.getTeam() && m_hp > 0) {
         takeDamage(projectile.getDamage());
         // Destroy projectile
         EntityManager::getInstance().createImpactParticles(projectile.getPosition(), 10);
@@ -43,9 +40,15 @@ void Damageable::onCollision(Projectile& projectile)
 }
 
 
+void Damageable::onTileCollision()
+{
+    kill();
+}
+
+
 void Damageable::onDestroy()
 {
-    Explosion* explosion = new Explosion;
+    Explosion* explosion = new Explosion();
     explosion->setPosition(getCenter());
     EntityManager::getInstance().addEntity(explosion);
 }
@@ -53,16 +56,14 @@ void Damageable::onDestroy()
 
 void Damageable::takeDamage(int damage)
 {
-    if (m_hp <= 0) // Prevent from calling onDestroy twice by mistake
+    if (m_hp <= 0) { // Prevent from calling onDestroy twice by mistake
         return;
+    }
 
     m_hp -= damage;
-    if (m_hp <= 0)
-    {
+    if (m_hp <= 0) {
         kill();
-    }
-    else
-    {
+    } else {
         initDamageFlash();
     }
 }
@@ -88,20 +89,19 @@ int Damageable::updateHP(int diff)
 
 void Damageable::initDamageFlash()
 {
-    if (m_flash_timer <= 0)
+    if (m_flash_timer <= 0) {
         m_flash_timer = FLASH_DELAY;
+    }
 }
 
 
 void Damageable::updateDamageFlash(float frametime)
 {
-    if (m_flash_timer >= 0)
-    {
+    if (m_flash_timer >= 0) {
         m_flash_timer -= frametime;
         int value = 255 - (255 * m_flash_timer / FLASH_DELAY);
         setColor(sf::Color(255, value, value));
-        if (m_flash_timer <= 0)
-        {
+        if (m_flash_timer <= 0) {
             setColor(sf::Color::White);
         }
     }

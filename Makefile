@@ -6,13 +6,16 @@ OBJ     := $(SRC:%.cpp=$(OBJDIR)/%.o)
 DEP     := $(SRC:%.cpp=$(OBJDIR)/%.d)
 
 CC      := g++
-CFLAGS  := -MMD -MP -I$(SRCDIR) -std=c++11 -pedantic -O2
-WFLAGS  := -Wall -Wextra -Wwrite-strings
+CFLAGS  := -MMD -MP -I$(SRCDIR) -std=c++17 -pedantic -O2
+WFLAGS  := -Wall -Wextra -Wshadow -Wuseless-cast -Wwrite-strings
 LDFLAGS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lmodplug
 
 C_GREEN  := \033[1;32m
 C_YELLOW := \033[1;33m
 C_NONE   := \033[0m
+
+dev: $(TARGET)
+	@./$(TARGET)
 
 $(TARGET): $(OBJ)
 	@echo "$(C_GREEN)linking$(C_NONE) $@"
@@ -21,7 +24,7 @@ $(TARGET): $(OBJ)
 $(OBJDIR)/%.o: %.cpp
 	@echo "$(C_GREEN)compiling\033[0m $<"
 	@mkdir -p $(shell dirname $@)
-	@$(CC) $(CFLAGS) $(WFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -g $(WFLAGS) -c $< -o $@
 
 -include $(DEP)
 
@@ -48,3 +51,8 @@ tarball: $(TARGET)
 		cosmoscroll/resources \
 		cosmoscroll/$(TARGET)
 	@echo "$(C_GREEN)tarball$(C_NONE) $(TARBALL_NAME)"
+
+
+# Linter commands
+lint:
+	clang-format src/core/*.cpp --dry-run --Werror

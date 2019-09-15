@@ -2,29 +2,30 @@
 #include "EntityManager.hpp"
 #include "Player.hpp"
 #include "utils/Math.hpp"
-#include "core/ParticleSystem.hpp"
+#include "core/Services.hpp"
 #include "core/MessageSystem.hpp"
 
 // bonus freq = 1 / DROP_LUCK
-#define DROP_LUCK 8
+#define DROP_LUCK 1
 
 // sinus movement settings
-#define SINUS_AMPLITUDE 60
-#define SINUS_FREQUENCE 0.02
+static constexpr float SINUS_AMPLITUDE = 60;
+static constexpr float SINUS_FREQUENCE = 0.02;
 
 // circle movement settings
-#define CIRCLE_X_START  400
-#define CIRCLE_RADIUS   60
-#define CIRCLE_ROTATION_SPEED (math::PI * 0.8)
+static constexpr float CIRCLE_RADIUS = 60;
+static constexpr float CIRCLE_RAD_PER_SEC = math::PI * 0.8;
 
 Spaceship::Spaceship(const Animation& animation, int hp, int speed):
     m_attack(NONE),
     m_movement(LINE),
     m_points(1),
-    m_target(NULL),
+    m_target(nullptr),
     m_speed(speed),
-    m_origin_y(0.f),
-    m_angle(0.f),
+    // For CIRCLE movement, start the angle at PI (top of circle), so spaceship remains on its
+    // inital Y axis, and starts moving immediately to the left (in a counter-clock wise rotation).
+    m_angle(math::PI),
+    m_engineEmitter(Services::getParticleSystem()),
     m_engineEmitterEnabled(false)
 {
     setTexture(animation.getTexture());
@@ -43,39 +44,25 @@ Spaceship::~Spaceship()
 
 void Spaceship::onInit()
 {
-    if (m_movement == SINUS)
-    {
+    m_spawnPosition = getPosition();
+    if (m_movement == SINUS) {
+        // Adjust initial position to ensure spaceship will always be within the screen boundaries
         float y = getY();
-        // Compute maximal Y position according to the wave's amplitude
-        // (So the spaceship is always within the screen's boundaries)
-        float y_max = EntityManager::getInstance().getHeight() - SINUS_AMPLITUDE - getHeight();
-        if (y < SINUS_AMPLITUDE)
-            m_origin_y = SINUS_AMPLITUDE;
-        else if (y > y_max)
-            m_origin_y = y_max;
-        else
-            m_origin_y = y;
+        if (y < SINUS_AMPLITUDE) {
+            m_spawnPosition.y = SINUS_AMPLITUDE;
+        } else {
+            // Compute maximal Y position according to the wave's amplitude
+            float maxY = EntityManager::getInstance().getSize().y - SINUS_AMPLITUDE - getHeight();
+            if (y > maxY)
+                m_spawnPosition.y = maxY;
+        }
 
-        setY(m_origin_y);
-    }
-    else if (m_movement == CIRCLE)
-    {
-        float y = getY();
-        float y_max = EntityManager::getInstance().getHeight() - CIRCLE_RADIUS - getHeight();
-        if (y < CIRCLE_RADIUS)
-            m_origin_y = CIRCLE_RADIUS;
-        else if (y > y_max)
-            m_origin_y = y_max;
-        else
-            m_origin_y = y;
-
-        setY(m_origin_y);
+        setPosition(m_spawnPosition);
     }
 
     m_target = EntityManager::getInstance().getPlayer();
 
-    if (m_engineEmitterEnabled)
-    {
+    if (m_engineEmitterEnabled) {
         m_engineEmitter.setTextureRect({32, 9, 3, 3});
         m_engineEmitter.setAngle(math::PI * 2, 0.1);
         m_engineEmitter.setParticleColor(sf::Color::Yellow, sf::Color(255, 0, 0, 0));
@@ -115,13 +102,11 @@ void Spaceship::onUpdate(float frametime)
 
     // Apply movement pattern
     float delta = m_speed * frametime;
-    switch (m_movement)
-    {
+    switch (m_movement) {
         case LINE:
             move(-delta, 0);
             break;
-        case MAGNET:
-        {
+        case MAGNET: {
             sf::Vector2f pos = getPosition();
 
             // Translate position towards target's position
@@ -129,33 +114,24 @@ void Spaceship::onUpdate(float frametime)
             setPosition(pos);
             break;
         }
-        case SINUS:
-        {
+        case SINUS: {
             sf::Vector2f pos = getPosition();
             pos.x -= delta;
-            pos.y = std::sin(pos.x * SINUS_FREQUENCE) * SINUS_AMPLITUDE + m_origin_y;
+            pos.y = std::sin(pos.x * SINUS_FREQUENCE) * SINUS_AMPLITUDE + m_spawnPosition.y;
             setPosition(pos);
             break;
         }
-        case CIRCLE:
-            // Move in a straight line until CIRCLE_X_START is reached
-            if (getX() > CIRCLE_X_START + CIRCLE_RADIUS)
-            {
-                move(-delta, 0);
-            }
-            else
-            {
-                sf::Vector2f pos(CIRCLE_X_START, m_origin_y);
-                m_angle += CIRCLE_ROTATION_SPEED * frametime;
-                pos.x += CIRCLE_RADIUS * std::cos(m_angle);
-                pos.y -= CIRCLE_RADIUS * std::sin(m_angle);
-                setPosition(pos);
-            }
+        case CIRCLE: {
+            sf::Vector2f pos(m_spawnPosition);
+            m_angle += CIRCLE_RAD_PER_SEC * frametime;
+            pos.x += CIRCLE_RADIUS * std::cos(m_angle);
+            pos.y -= CIRCLE_RADIUS * std::sin(m_angle);
+            setPosition(pos);
             break;
+        }
     }
 
-    switch (m_attack)
-    {
+    switch (m_attack) {
         case AUTO_AIM:
             m_weapon.shoot(m_target->getCenter());
             break;
@@ -178,13 +154,15 @@ void Spaceship::onUpdate(float frametime)
 void Spaceship::onDestroy()
 {
     Damageable::onDestroy();
-    if (math::rand(1, DROP_LUCK) == 1)
-    {
+    if (math::rand(1, DROP_LUCK) == 1) {
         PowerUp::dropRandom(getPosition());
     }
 
     EntityManager::getInstance().getPlayer()->updateScore(m_points);
-    MessageSystem::write("+" + std::to_string(m_points), getPosition(), sf::Color(255, 128, 0));
+    Services::getMessageSystem().write(
+        "+" + std::to_string(m_points),
+        getPosition(),
+        sf::Color(255, 128, 0));
 }
 
 

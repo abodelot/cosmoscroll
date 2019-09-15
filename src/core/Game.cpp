@@ -1,22 +1,22 @@
-#include <iostream>
-
 #include "Game.hpp"
 #include "Constants.hpp"
+#include "Services.hpp"
+#include "Factory.hpp"
 #include "UserSettings.hpp"
-#include "LevelManager.hpp"
+#include "LevelParser.hpp"
 #include "Resources.hpp"
 #include "SoundSystem.hpp"
 #include "MessageSystem.hpp"
 #include "entities/EntityManager.hpp"
-#include "items/ItemManager.hpp"
-#include "utils/I18n.hpp"
 #include "utils/IniParser.hpp"
+#include "utils/I18n.hpp"
 #include "utils/FileSystem.hpp"
 #include "scenes/scenes.hpp"
 
-// config and data files
-#define CONFIG_FILENAME   "cosmoscroll.ini"
+#include <iostream>
 
+// config and data files
+#define CONFIG_FILENAME "cosmoscroll.ini"
 #define XML_LEVELS      "/xml/levels.xml"
 #define XML_UPGRADES    "/xml/upgrades.xml"
 #define XML_WEAPONS     "/xml/weapons.xml"
@@ -34,12 +34,11 @@ Game& Game::getInstance()
 Game::Game():
     m_vsync(false),
     m_running(true),
-    m_current_screen(NULL)
+    m_current_screen(nullptr)
 {
     // Screens will be allocated on the fly
-    for (int i = 0; i < SC_COUNT; ++i)
-    {
-        m_screens[i] = NULL;
+    for (int i = 0; i < SC_COUNT; ++i) {
+        m_screens[i] = nullptr;
     }
 
     // Default configuration file location
@@ -52,10 +51,8 @@ Game::~Game()
     m_window.close();
 
     // Delete allocated screens
-    for (int i = 0; i < SC_COUNT; ++i)
-    {
-        if (m_screens[i] != NULL)
-        {
+    for (int i = 0; i < SC_COUNT; ++i) {
+        if (m_screens[i] != nullptr) {
             delete m_screens[i];
         }
     }
@@ -79,49 +76,49 @@ void Game::loadResources(const std::string& data_path)
     sf::Sprite s(Resources::getTexture("gui/cosmoscroll-logo.png"));
     s.setPosition(
         (APP_WIDTH - s.getTextureRect().width) / 2.f,
-        (APP_HEIGHT - s.getTextureRect().height) / 2.f
-    );
+        (APP_HEIGHT - s.getTextureRect().height) / 2.f);
     m_window.draw(s);
     m_window.display();
 
     // Init other modules
-    I18n::getInstance().setDataPath(resources_dir + "/lang");
-    MessageSystem::setFont(Resources::getFont("Vera.ttf"));
+    g_i18n.setDataPath(resources_dir + "/lang");
+    Services::getMessageSystem().setFont(Resources::getFont("Vera.ttf"));
 
-    // Load XML resources
+    // Load XML levels
     std::cout << "* loading " << XML_LEVELS << "..." << std::endl;
-    LevelManager::getInstance().loadLevelFile(resources_dir + XML_LEVELS);
+    Services::getLevelParser().loadLevelFile(resources_dir + XML_LEVELS);
 
+    // Load XML resources exposed by Factory
+    Factory& factory = Services::getFactory();
     std::cout << "* loading " << XML_UPGRADES << "..." << std::endl;
-    ItemManager::getInstance().loadFromXML(resources_dir + XML_UPGRADES);
+    factory.loadItemsFromXml(resources_dir + XML_UPGRADES);
 
     std::cout << "* loading " << XML_WEAPONS << "..." << std::endl;
-    EntityManager::getInstance().loadWeapons(resources_dir + XML_WEAPONS);
+    factory.loadWeaponsFromXml(resources_dir + XML_WEAPONS);
 
     std::cout << "* loading " << XML_ANIMATIONS << "..." << std::endl;
-    EntityManager::getInstance().loadAnimations(resources_dir + XML_ANIMATIONS);
+    factory.loadAnimationsFromXml(resources_dir + XML_ANIMATIONS);
 
     std::cout << "* loading " << XML_SPACESHIPS << "..." << std::endl;
-    EntityManager::getInstance().loadSpaceships(resources_dir + XML_SPACESHIPS);
+    factory.loadSpaceshipsFromXml(resources_dir + XML_SPACESHIPS);
 }
 
 
 void Game::setConfigFile(const std::string& config_path)
 {
-    if (filesystem::is_directory(config_path))
+    if (filesystem::is_directory(config_path)) {
         m_config_filename = config_path + "/" + CONFIG_FILENAME;
-
-    else
+    } else {
         m_config_filename = config_path;
+    }
 }
 
 
 bool Game::loadConfig()
 {
     IniParser config;
-    if (config.load(m_config_filename))
-    {
-        std::cout << "* loading configuration from " << m_config_filename << std::endl;
+    if (config.load(m_config_filename)) {
+        std::cout << "* [Game] loading configuration from " << m_config_filename << std::endl;
         config.seekSection("Window");
 
         // Window resolution
@@ -132,15 +129,16 @@ bool Game::loadConfig()
 
         // Vertical sync
         m_vsync = config.get("vsync", m_vsync);
-        if (m_vsync)
+        if (m_vsync) {
             m_window.setVerticalSyncEnabled(m_vsync);
+        }
 
         // Load user settings and player progression
         UserSettings::loadFromConfig(config);
         return true;
     }
     std::cout << "Couldn't load configuration file '" << m_config_filename << "', using default settings" << std::endl;
-    I18n::getInstance().loadFromLocale();
+    g_i18n.loadFromLocale();
     return false;
 }
 
@@ -159,26 +157,26 @@ void Game::writeConfig() const
     UserSettings::saveToConfig(config);
 
     // Save configuration to file
-    if (config.save(m_config_filename))
+    if (config.save(m_config_filename)) {
         std::cout << "* configuration saved to " << m_config_filename << std::endl;
+    }
 }
 
 
 int Game::run()
 {
+    Services::getHUD().initialize();
+
     // Set the first displayed scene at launch
     setCurrentScreen(SC_IntroScreen);
 
     sf::Clock clock;
-    while (m_running)
-    {
+    while (m_running) {
         // Poll events
         sf::Event event;
-        while (m_window.pollEvent(event))
-        {
+        while (m_window.pollEvent(event)) {
             Action::ID action = Input::feedEvent(event);
-            switch (action)
-            {
+            switch (action) {
                 // These events are always handled on each screen
                 case Action::EXIT_APP:
                     quit();
@@ -203,12 +201,10 @@ int Game::run()
     return EXIT_SUCCESS;
 }
 
-
 sf::RenderWindow& Game::getWindow()
 {
     return m_window;
 }
-
 
 void Game::setCurrentScreen(ScreenID screen_id)
 {
@@ -217,11 +213,9 @@ void Game::setCurrentScreen(ScreenID screen_id)
         new_sreen = new __screenclass__();\
         break
 
-    if (m_screens[screen_id] == NULL)
-    {
-        Screen* new_sreen = NULL;
-        switch (screen_id)
-        {
+    if (m_screens[screen_id] == nullptr) {
+        Screen* new_sreen = nullptr;
+        switch (screen_id) {
             CASE_SCENE(IntroScreen);
             CASE_SCENE(MainMenu);
             CASE_SCENE(PlayScreen);
@@ -240,7 +234,6 @@ void Game::setCurrentScreen(ScreenID screen_id)
                 return;
         }
         m_screens[screen_id] = new_sreen;
-
     }
     m_current_screen = m_screens[screen_id];
     m_current_screen->onFocus();
@@ -249,22 +242,19 @@ void Game::setCurrentScreen(ScreenID screen_id)
 
 void Game::unloadScreens()
 {
-    for (int i = 0; i < SC_COUNT; ++i)
-    {
+    for (int i = 0; i < SC_COUNT; ++i) {
         // Do not deallocate the current screen
-        if (m_screens[i] != NULL && m_screens[i] != m_current_screen)
-        {
+        if (m_screens[i] != nullptr && m_screens[i] != m_current_screen) {
             delete m_screens[i];
-            m_screens[i] = NULL;
+            m_screens[i] = nullptr;
         }
     }
 }
 
-
 void Game::quit()
 {
     m_running = false;
-    SoundSystem::atExit();
+    Services::getSoundSystem().atExit();
     writeConfig();
 }
 
@@ -273,19 +263,19 @@ void Game::takeScreenshot() const
 {
     // Create screenshots directory if it doesn't exist yet
     std::string screenshot_dir = m_app_dir + DEFAULT_SCREENSHOT_DIR;
-    if (!filesystem::is_directory(screenshot_dir))
+    if (!filesystem::is_directory(screenshot_dir)) {
         filesystem::create_directory(screenshot_dir);
+    }
 
     char current_time[20]; // YYYY-MM-DD_HH-MM-SS + \0
-    time_t t = time(NULL);
+    time_t t = time(nullptr);
     strftime(current_time, sizeof current_time, "%Y-%m-%d_%H-%M-%S", localtime(&t));
     std::string filename = screenshot_dir + "/" + current_time + ".png";
 
     sf::Texture texture;
     texture.create(m_window.getSize().x, m_window.getSize().y);
     texture.update(m_window);
-    if (texture.copyToImage().saveToFile(filename))
-    {
+    if (texture.copyToImage().saveToFile(filename)) {
         std::cout << "screenshot saved to " << filename << std::endl;
     }
 }
@@ -293,18 +283,20 @@ void Game::takeScreenshot() const
 
 void Game::setResolution(const sf::Vector2u& size)
 {
-    if (size == m_window.getSize())
+    if (size == m_window.getSize()) {
         return;
+    }
 
     // Create window
     m_window.create(sf::VideoMode(size.x, size.y, 16), APP_TITLE, sf::Style::Close);
-    sf::View view = sf::View(sf::FloatRect(0, 0, APP_WIDTH, APP_HEIGHT));
-    m_window.setView(view);
+    m_view = sf::View(sf::FloatRect(0, 0, APP_WIDTH, APP_HEIGHT));
+    m_window.setView(m_view);
 
-    if (m_vsync)
+    if (m_vsync) {
         m_window.setVerticalSyncEnabled(m_vsync);
-    else
+    } else {
         m_window.setFramerateLimit(APP_FPS);
+    }
 
     // Center window on desktop
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -327,4 +319,10 @@ void Game::setVerticalSync(bool vsync)
 bool Game::isVerticalSync() const
 {
     return m_vsync;
+}
+
+
+void Game::resetView()
+{
+    m_window.setView(m_view);
 }

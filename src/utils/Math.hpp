@@ -4,12 +4,11 @@
 #include <cmath>
 #include <cstdlib>
 
-namespace math
-{
+namespace math {
 
 // Trigonometry ----------------------------------------------------------------
 
-extern const float PI;
+static constexpr float PI = 3.14159265f;
 
 /**
  * Convert degrees to radians
@@ -66,7 +65,7 @@ inline float angle(const Vec& a, const Vec& b = Vec())
 /**
  * Random generator seed, initialized to current timestamp
  */
-extern unsigned int seed;
+extern unsigned int g_seed;
 
 /**
  * Get a random int value between begin and end

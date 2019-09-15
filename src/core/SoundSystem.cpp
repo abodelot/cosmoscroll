@@ -1,31 +1,23 @@
 #include "SoundSystem.hpp"
 #include "Resources.hpp"
+#include "utils/Math.hpp"
 
-
-sf::Sound     SoundSystem::m_sounds[MAX_SOUNDS];
-int           SoundSystem::m_last_sound_played = 0;
-sfmod::Mod    SoundSystem::m_music;
-int           SoundSystem::m_music_volume = 100;
-int           SoundSystem::m_sound_volume = 100;
-bool          SoundSystem::m_enable_music = true;
-bool          SoundSystem::m_enable_sound = true;
-
-template <class T>
-static inline void clamp(T& value, T min, T max)
+SoundSystem::SoundSystem():
+    m_lastSoundPlayed(0),
+    m_music(),
+    m_musicVolume(100),
+    m_soundVolume(100),
+    m_enableMusic(true),
+    m_enableSound(true)
 {
-    if (value > max)
-        value = max;
-    else if (value < min)
-        value = min;
 }
 
 
 bool SoundSystem::openMusicFromFile(const std::string& path)
 {
-    if (m_music.loadFromFile(path))
-    {
+    if (m_music.loadFromFile(path)) {
         m_music.setLoop(true);
-        m_music.setVolume(m_music_volume);
+        m_music.setVolume(m_musicVolume);
         return true;
     }
     return false;
@@ -34,8 +26,7 @@ bool SoundSystem::openMusicFromFile(const std::string& path)
 
 void SoundSystem::playMusic()
 {
-    if (m_enable_music)
-    {
+    if (m_enableMusic) {
         m_music.play();
     }
 }
@@ -61,88 +52,81 @@ void SoundSystem::playSound(const std::string& name, float pitch)
 
 void SoundSystem::playSound(const sf::SoundBuffer& soundbuffer, float pitch)
 {
-    if (m_enable_sound)
-    {
-        if (m_last_sound_played == MAX_SOUNDS)
-        {
-            m_last_sound_played = 0;
+    if (m_enableSound) {
+        if (m_lastSoundPlayed == MAX_SOUNDS) {
+            m_lastSoundPlayed = 0;
         }
-        sf::Sound& sound = m_sounds[m_last_sound_played];
-        if (sound.getStatus() == sf::Sound::Playing)
-        {
+        sf::Sound& sound = m_sounds[m_lastSoundPlayed];
+        if (sound.getStatus() == sf::Sound::Playing) {
             sound.stop();
         }
         sound.setBuffer(soundbuffer);
         sound.setPitch(pitch);
         sound.play();
-        ++m_last_sound_played;
+        ++m_lastSoundPlayed;
     }
 }
 
 
 void SoundSystem::setMusicVolume(int volume)
 {
-    clamp(volume, 0, 100);
-    m_music_volume = volume;
+    m_musicVolume = math::clamp(volume, 0, 100);
     m_music.setVolume(volume);
 }
 
 
-int SoundSystem::getMusicVolume()
+int SoundSystem::getMusicVolume() const
 {
-    return m_music_volume;
+    return m_musicVolume;
 }
 
 
 void SoundSystem::setSoundVolume(int volume)
 {
-    clamp(volume, 0, 100);
-    m_sound_volume = volume;
-    for (int i = 0; i < MAX_SOUNDS; ++i)
-    {
+    m_soundVolume = math::clamp(volume, 0, 100);
+    for (int i = 0; i < MAX_SOUNDS; ++i) {
         m_sounds[i].setVolume(volume);
     }
 }
 
 
-int SoundSystem::getSoundVolume()
+int SoundSystem::getSoundVolume() const
 {
-    return m_sound_volume;
+    return m_soundVolume;
 }
 
 
 void SoundSystem::enableMusic(bool enabled)
 {
-    m_enable_music = enabled;
-    if (!enabled)
+    m_enableMusic = enabled;
+    if (!enabled) {
         stopMusic();
+    }
 }
 
 
 void SoundSystem::enableSound(bool enabled)
 {
-    m_enable_sound = enabled;
+    m_enableSound = enabled;
 }
 
 
-bool SoundSystem::isMusicEnabled()
+bool SoundSystem::isMusicEnabled() const
 {
-    return m_enable_music;
+    return m_enableMusic;
 }
 
 
-bool SoundSystem::isSoundEnabled()
+bool SoundSystem::isSoundEnabled() const
 {
-    return m_enable_sound;
+    return m_enableSound;
 }
 
 
 void SoundSystem::atExit()
 {
-    for (int i = 0; i < MAX_SOUNDS; ++i)
-    {
-        if (m_sounds[i].getStatus() == sf::Sound::Playing)
-        {
+    for (int i = 0; i < MAX_SOUNDS; ++i) {
+        if (m_sounds[i].getStatus() == sf::Sound::Playing) {
             m_sounds[i].stop();
         }
     }

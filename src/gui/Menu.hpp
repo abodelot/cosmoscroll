@@ -7,9 +7,7 @@
 
 #include "WidgetStyle.hpp"
 
-
-namespace gui
-{
+namespace gui {
 
 class Widget;
 
@@ -17,59 +15,57 @@ class Widget;
  * Gestionnaire et conteneur d'éléments graphiques
  * Classe à dériver pour implémenter ses propres menus
  */
-class Menu
-{
+class Menu {
 public:
     Menu(const sf::RenderWindow& window, WidgetStyle& style);
 
     virtual ~Menu();
 
-    void OnEvent(const sf::Event& event);
+    void onEvent(const sf::Event& event);
 
-    void Update(float frametime);
+    void update(float frametime);
 
-    void Show(sf::RenderTarget& target) const;
+    void show(sf::RenderTarget& target) const;
 
-    void AddWidget(Widget* widget);
+    void addWidget(Widget* widget);
 
-    const Widget* GetFocusedWidget() const;
+    const Widget* getFocusedWidget() const;
 
     /**
      * Récupérer le thème des widgets
      */
-    WidgetStyle& GetWidgetStyle();
+    WidgetStyle& getWidgetStyle();
 
 protected:
-    bool FocusWidget(const Widget* widget);
+    bool focusWidget(const Widget* widget);
 
-    // callbacks
-    virtual void OnWidgetHovered() {};
-    virtual void OnWidgetFocused() {};
+    virtual void onWidgetHovered() {};
+    virtual void onWidgetFocused() {};
 
     /**
      * Sélectionner un widget dans le menu
      * @param index: position du widget
      * @return true si le widget a pris le focus, sinon false
      */
-    bool FocusWidget(int index);
+    bool focusWidget(int index);
 
     /**
      * Sélectionner le premier widget possible
      * @return true si un widget a pris le focus, sinon false
      */
-    bool FocusFirstWidget();
+    bool focusFirstWidget();
 
     /**
      * Sélectionner le prochain widget
      * @return true si un widget a pris le focus, sinon false
      */
-    bool FocusNextWidget();
+    bool focusNextWidget();
 
     /**
      * Sélectionner le widget précédent
      * @return true si un widget a pris le focus, sinon false
      */
-    bool FocusPreviousWidget();
+    bool focusPreviousWidget();
 
     /**
      * Obtenir un widget positionné sous un point
@@ -77,7 +73,7 @@ protected:
      * @param y: position y
      * @return widget sous le point, ou NULL
      */
-    Widget* GetHoveredWidget(int x, int y) const;
+    Widget* getHoveredWidget(int x, int y) const;
 
 private:
     typedef std::vector<Widget*> WidgetList;

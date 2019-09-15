@@ -10,11 +10,9 @@ class Projectile;
 /**
  * Abstract base class for game objects
  */
-class Entity: public sf::Sprite
-{
+class Entity: public sf::Sprite {
 public:
-    enum Team
-    {
+    enum Team {
         GOOD, NEUTRAL, BAD
     };
 
@@ -40,6 +38,7 @@ public:
      */
     void setTexture(const sf::Texture& texture);
 
+    virtual void setSpawnPosition(const sf::Vector2f& pos);
 
     // callbacks ---------------------------------------------------------------
 
@@ -51,7 +50,7 @@ public:
     /**
      * Called each frame
      */
-    virtual void onUpdate(float frametime) = 0;
+    virtual void onUpdate(float frametime) { (void) frametime; }
 
     /**
      * Called when entity is killed during the game
@@ -62,6 +61,7 @@ public:
     virtual void onCollision(Damageable&) {}
     virtual void onCollision(PowerUp&)    {}
     virtual void onCollision(Projectile&) {}
+    virtual void onTileCollision() {};
 
     // helpers -----------------------------------------------------------------
 
@@ -76,11 +76,6 @@ public:
     inline void setY(float y) { setPosition(getPosition().x, y); }
 
     sf::Vector2f getCenter() const;
-
-    // ugly hacks --------------------------------------------------------------
-
-    virtual float getSpeedX() const { return 0.f; }
-    virtual float getSpeedY() const { return 0.f; }
 
 protected:
     void setTeam(Team team);

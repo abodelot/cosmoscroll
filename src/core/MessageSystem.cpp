@@ -1,68 +1,53 @@
 #include "MessageSystem.hpp"
 
 #define MESSAGE_LIFETIME      5.f
-#define MESSAGE_SPEED_X       0.f
-#define MESSAGE_SPEED_Y     -50.f
 
 
-MessageSystem::Node* MessageSystem::s_first = NULL;
-const sf::Font*      MessageSystem::s_font  = NULL;
+MessageSystem::MessageSystem():
+    m_speedX(0),
+    m_speedY(-50.f),
+    m_font(nullptr)
+{
+}
 
 
 void MessageSystem::setFont(const sf::Font& font)
 {
-    s_font = &font;
+    m_font = &font;
 }
 
 
 void MessageSystem::write(const sf::String& str, const sf::Vector2f& pos, const sf::Color& color)
 {
-    Node* node = new Node;
-    node->text.setFont(*s_font);
-    node->text.setCharacterSize(10);
-    node->text.setString(str);
-    node->text.setPosition(pos);
-    node->text.setFillColor(color);
-    node->lifetime = 0.f;
+    Message message;
+    message.text.setFont(*m_font);
+    message.text.setCharacterSize(10);
+    message.text.setString(str);
+    message.text.setPosition(pos);
+    message.text.setFillColor(color);
+    message.lifetime = 0.f;
 
-    // Prepend the node in the linked list
-    node->next = s_first;
-    s_first = node;
+    m_messages.emplace_back(message);
 }
 
 
 void MessageSystem::update(float frametime)
 {
-    Node* node = s_first;
-    Node* previous = NULL;
-    while (node != NULL)
-    {
-        node->lifetime += frametime;
-        if (node->lifetime >= MESSAGE_LIFETIME)
-        {
-            // Previous node must be linked to the next node
-            if (previous == NULL)
-                s_first = node->next;
-            else
-                previous->next = node->next;
-
-            // Delete current node
-            Node* next = node->next;
-            delete node;
-            node = next;
-        }
-        else
-        {
+    for (std::vector<Message>::iterator it = m_messages.begin(); it != m_messages.end();) {
+        Message& message = *it;
+        message.lifetime += frametime;
+        if (message.lifetime >= MESSAGE_LIFETIME) {
+            it = m_messages.erase(it);
+        } else {
             // Move text
-            node->text.move(MESSAGE_SPEED_X * frametime, MESSAGE_SPEED_Y * frametime);
+            message.text.move(0 * frametime, m_speedY * frametime);
 
             // Apply fading
-            sf::Color color = node->text.getFillColor();
-            color.a = (MESSAGE_LIFETIME - node->lifetime) * 255 / MESSAGE_LIFETIME;
-            node->text.setFillColor(color);
+            sf::Color color = message.text.getFillColor();
+            color.a = (MESSAGE_LIFETIME - message.lifetime) * 255 / MESSAGE_LIFETIME;
+            message.text.setFillColor(color);
 
-            previous = node;
-            node = node->next;
+            ++it;
         }
     }
 }
@@ -70,21 +55,13 @@ void MessageSystem::update(float frametime)
 
 void MessageSystem::clear()
 {
-    Node* node = s_first;
-    while (node != NULL)
-    {
-        Node* next = node->next;
-        delete node;
-        node = next;
-    }
-    s_first = NULL;
+    m_messages.clear();
 }
 
 
-void MessageSystem::show(sf::RenderTarget& target, sf::RenderStates states)
+void MessageSystem::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    for (Node* node = s_first; node != NULL; node = node->next)
-    {
-        target.draw(node->text, states);
+    for (const Message& message: m_messages) {
+        target.draw(message.text, states);
     }
 }

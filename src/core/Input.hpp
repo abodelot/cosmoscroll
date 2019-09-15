@@ -4,11 +4,9 @@
 #include <map>
 #include <SFML/Window.hpp>
 
-class Action
-{
+class Action {
 public:
-    enum ID
-    {
+    enum ID {
         NONE,
         UP,
         DOWN,
@@ -20,16 +18,13 @@ public:
         TAKE_SCREENSHOT,
         PAUSE,
         EXIT_APP,
-        PANEL_UP,
-        PANEL_DOWN,
         VALIDATE
     };
 
     static const sf::String& toString(ID action);
 };
 
-class Input
-{
+class Input {
 public:
     /**
      * Give an event to process

@@ -2,7 +2,7 @@
 
 
 Animator::Animator():
-    m_animation(NULL),
+    m_animation(nullptr),
     m_frame(0),
     m_timer(0.f)
 {
@@ -24,8 +24,7 @@ const Animation* Animator::getAnimation() const
 
 void Animator::reset(sf::Sprite& sprite)
 {
-    if (m_animation != NULL)
-    {
+    if (m_animation) {
         sprite.setTexture(m_animation->getTexture());
         setFrame(sprite, 0);
     }
@@ -35,8 +34,7 @@ void Animator::reset(sf::Sprite& sprite)
 void Animator::updateSubRect(sf::Sprite& sprite, float frametime)
 {
     m_timer -= frametime;
-    if (m_timer <= 0)
-    {
+    if (m_timer <= 0) {
         m_timer = m_animation->getDelay();
         m_frame = (m_frame + 1) % m_animation->getFrameCount(); // Next frame
         sprite.setTextureRect(m_animation->getFrame(m_frame));
@@ -46,8 +44,7 @@ void Animator::updateSubRect(sf::Sprite& sprite, float frametime)
 
 void Animator::setFrame(sf::Sprite& sprite, size_t index)
 {
-    if (index < m_animation->getFrameCount())
-    {
+    if (index < m_animation->getFrameCount()) {
         m_frame = index;
         m_timer = m_animation->getDelay();
         sprite.setTextureRect(m_animation->getFrame(index));

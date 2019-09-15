@@ -30,14 +30,13 @@ protected:
     void setTitle(const sf::String& text, int y = 12);
     const sf::Text& getTitle() const;
 
-    void OnWidgetFocused() override;
+    void onWidgetFocused() override;
 
 private:
     sf::Text           m_title;
-    sf::Sprite         m_ui_background;
-    mutable sf::Sprite m_scrolling_background;
-    static gui::WidgetStyle m_gui_style;
+    sf::Sprite         m_uiBackground;
+    mutable sf::Sprite m_scrollingBackground;
+    static gui::WidgetStyle s_guiStyle;
 };
 
 #endif // BASEMENU_HPP
-

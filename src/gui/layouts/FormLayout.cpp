@@ -12,8 +12,8 @@ FormLayout::FormLayout(float x, float y):
 
 void FormLayout::addRow(const sf::String& strLabel, Widget* widget)
 {
-    Label* label = new Label(widget->GetOwner(), strLabel);
-    m_maxLabelWidth = std::max(m_maxLabelWidth, label->GetWidth());
+    Label* label = new Label(widget->getOwner(), strLabel);
+    m_maxLabelWidth = std::max(m_maxLabelWidth, label->getWidth());
 
     // Append in form
     m_rows.push_back(FormRow(label, widget));
@@ -32,7 +32,7 @@ void FormLayout::recomputeLabelWidth()
     m_maxLabelWidth = 0;
     for (size_t i = 0; i < m_rows.size(); ++i)
     {
-        m_maxLabelWidth = std::max(m_maxLabelWidth, m_rows[i].first->GetWidth());
+        m_maxLabelWidth = std::max(m_maxLabelWidth, m_rows[i].first->getWidth());
     }
     alignRows();
 }
@@ -40,7 +40,7 @@ void FormLayout::recomputeLabelWidth()
 
 void FormLayout::alignRows()
 {
-    sf::Vector2f offset = GetOffset();
+    sf::Vector2f offset = getOffset();
     for (size_t i = 0; i < m_rows.size(); ++i)
     {
         Label* label = m_rows[i].first;
@@ -49,11 +49,11 @@ void FormLayout::alignRows()
         label->setPosition(offset.x, offset.y);
 
         float widgetY = offset.y;
-        if (widget->GetHeight() < Widget::MIN_HEIGHT)
+        if (widget->getHeight() < Widget::MIN_HEIGHT)
         {
-            widgetY += (Widget::MIN_HEIGHT - widget->GetHeight()) / 2;
+            widgetY += (Widget::MIN_HEIGHT - widget->getHeight()) / 2;
         }
-        widget->setPosition(offset.x + m_maxLabelWidth + GetSpacing().x, widgetY);
-        offset.y += std::max(label->GetHeight(), widget->GetHeight()) + GetSpacing().y;
+        widget->setPosition(offset.x + m_maxLabelWidth + getSpacing().x, widgetY);
+        offset.y += std::max(label->getHeight(), widget->getHeight()) + getSpacing().y;
     }
 }

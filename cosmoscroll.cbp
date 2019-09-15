@@ -53,9 +53,9 @@
 		</Build>
 		<Compiler>
 			<Add option="-pedantic" />
-			<Add option="-std=c++11" />
 			<Add option="-Wextra" />
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 			<Add directory="src/" />
 		</Compiler>
 		<Linker>
@@ -64,7 +64,7 @@
 			<Add library="sfml-system" />
 			<Add library="sfml-audio" />
 			<Add library="sfml-network" />
-			<Add library="dumb" />
+			<Add library="modplug" />
 		</Linker>
 		<Unit filename="resources/xml/animations.xml" />
 		<Unit filename="resources/xml/levels.xml" />
@@ -74,25 +74,31 @@
 		<Unit filename="src/core/Collisions.cpp" />
 		<Unit filename="src/core/Collisions.hpp" />
 		<Unit filename="src/core/Constants.hpp" />
-		<Unit filename="src/core/ControlPanel.cpp" />
-		<Unit filename="src/core/ControlPanel.hpp" />
+		<Unit filename="src/core/Factory.cpp" />
+		<Unit filename="src/core/Factory.hpp" />
 		<Unit filename="src/core/Game.cpp" />
 		<Unit filename="src/core/Game.hpp" />
+		<Unit filename="src/core/HUD.cpp" />
+		<Unit filename="src/core/HUD.hpp" />
 		<Unit filename="src/core/Input.cpp" />
 		<Unit filename="src/core/Input.hpp" />
-		<Unit filename="src/core/LevelManager.cpp" />
-		<Unit filename="src/core/LevelManager.hpp" />
+		<Unit filename="src/core/LevelParser.cpp" />
+		<Unit filename="src/core/LevelParser.hpp" />
 		<Unit filename="src/core/Main.cpp" />
 		<Unit filename="src/core/MessageSystem.cpp" />
 		<Unit filename="src/core/MessageSystem.hpp" />
-		<Unit filename="src/core/ParticleEmitter.cpp" />
-		<Unit filename="src/core/ParticleEmitter.hpp" />
-		<Unit filename="src/core/ParticleSystem.cpp" />
-		<Unit filename="src/core/ParticleSystem.hpp" />
+		<Unit filename="src/core/ParallaxLayer.cpp" />
+		<Unit filename="src/core/ParallaxLayer.hpp" />
 		<Unit filename="src/core/Resources.cpp" />
 		<Unit filename="src/core/Resources.hpp" />
+		<Unit filename="src/core/Services.cpp" />
+		<Unit filename="src/core/Services.hpp" />
 		<Unit filename="src/core/SoundSystem.cpp" />
 		<Unit filename="src/core/SoundSystem.hpp" />
+		<Unit filename="src/core/Tilemap.cpp" />
+		<Unit filename="src/core/Tilemap.hpp" />
+		<Unit filename="src/core/Tileset.cpp" />
+		<Unit filename="src/core/Tileset.hpp" />
 		<Unit filename="src/core/UserSettings.cpp" />
 		<Unit filename="src/core/UserSettings.hpp" />
 		<Unit filename="src/entities/Animation.cpp" />
@@ -109,6 +115,8 @@
 		<Unit filename="src/entities/EntityManager.hpp" />
 		<Unit filename="src/entities/Explosion.cpp" />
 		<Unit filename="src/entities/Explosion.hpp" />
+		<Unit filename="src/entities/FakeTile.cpp" />
+		<Unit filename="src/entities/FakeTile.hpp" />
 		<Unit filename="src/entities/Missile.cpp" />
 		<Unit filename="src/entities/Missile.hpp" />
 		<Unit filename="src/entities/MultiPartEntity.cpp" />
@@ -151,8 +159,6 @@
 		<Unit filename="src/gui/OptionList.inl" />
 		<Unit filename="src/gui/Slider.cpp" />
 		<Unit filename="src/gui/Slider.hpp" />
-		<Unit filename="src/gui/TextBox.cpp" />
-		<Unit filename="src/gui/TextBox.hpp" />
 		<Unit filename="src/gui/Widget.cpp" />
 		<Unit filename="src/gui/Widget.hpp" />
 		<Unit filename="src/gui/WidgetStyle.cpp" />
@@ -166,8 +172,11 @@
 		<Unit filename="src/gui/layouts/VBoxLayout.hpp" />
 		<Unit filename="src/items/Item.cpp" />
 		<Unit filename="src/items/Item.hpp" />
-		<Unit filename="src/items/ItemManager.cpp" />
-		<Unit filename="src/items/ItemManager.hpp" />
+		<Unit filename="src/particles/Particle.hpp" />
+		<Unit filename="src/particles/ParticleEmitter.cpp" />
+		<Unit filename="src/particles/ParticleEmitter.hpp" />
+		<Unit filename="src/particles/ParticleSystem.cpp" />
+		<Unit filename="src/particles/ParticleSystem.hpp" />
 		<Unit filename="src/scenes/AboutMenu.cpp" />
 		<Unit filename="src/scenes/AboutMenu.hpp" />
 		<Unit filename="src/scenes/BaseMenu.cpp" />
@@ -214,18 +223,16 @@
 		<Unit filename="src/utils/IniParser.hpp" />
 		<Unit filename="src/utils/Math.cpp" />
 		<Unit filename="src/utils/Math.hpp" />
-		<Unit filename="src/utils/ModMusic.cpp" />
-		<Unit filename="src/utils/ModMusic.hpp" />
 		<Unit filename="src/utils/SFML_Helper.cpp" />
 		<Unit filename="src/utils/SFML_Helper.hpp" />
 		<Unit filename="src/utils/StringUtils.cpp" />
 		<Unit filename="src/utils/StringUtils.hpp" />
+		<Unit filename="src/vendor/sfMod/Error.h" />
+		<Unit filename="src/vendor/sfMod/sfMod.cpp" />
+		<Unit filename="src/vendor/sfMod/sfMod.hpp" />
 		<Unit filename="src/vendor/tinyxml/tinyxml2.cpp" />
 		<Unit filename="src/vendor/tinyxml/tinyxml2.h" />
 		<Extensions>
-			<envvars />
-			<code_completion />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

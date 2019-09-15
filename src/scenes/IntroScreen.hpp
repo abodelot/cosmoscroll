@@ -9,8 +9,7 @@ class Player;
 /**
  * Interactive splash screen displayed at game launch
  */
-class IntroScreen: public Screen
-{
+class IntroScreen: public Screen {
 public:
     IntroScreen();
 
@@ -26,7 +25,7 @@ private:
     sf::Sprite     m_title;
     EntityManager& m_entities;
     Player*        m_spaceship;
+    bool           m_jinglePlayed;
 };
 
-#endif // INTROSCREEN_HPP
-
+#endif

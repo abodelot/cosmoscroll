@@ -3,12 +3,13 @@
 
 #include "entities/Damageable.hpp"
 #include "entities/Weapon.hpp"
+#include <SFML/System/Vector2.hpp>
 
-
-class FlyingSaucerBoss: public Damageable
-{
+class FlyingSaucerBoss: public Damageable {
 public:
     FlyingSaucerBoss();
+
+    void setSpawnPosition(const sf::Vector2f& position) override;
 
     void onUpdate(float frametime) override;
 
@@ -20,9 +21,9 @@ private:
     Entity* m_target;
     float m_timer;
     float m_angle;
-    Weapon m_left_tube;
-    Weapon m_right_tube;
+    Weapon m_leftTube;
+    Weapon m_rightTube;
+    sf::Vector2f m_spawnPosition;
 };
 
-
-#endif // FLYINGSAUCERBOSS_HPP
+#endif

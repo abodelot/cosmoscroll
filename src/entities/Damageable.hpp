@@ -6,12 +6,11 @@
 /**
  * Base class for damageable entities with hit points
  */
-class Damageable: public Entity
-{
+class Damageable: public Entity {
 public:
     Damageable();
 
-    virtual void collides(Entity& entity);
+    virtual void collides(Entity& entity) override;
 
     virtual void takeDamage(int damage);
 
@@ -19,15 +18,16 @@ public:
 
     // callbacks ---------------------------------------------------------------
 
-    void onCollision(Damageable& entity);
-    void onCollision(Projectile& projectile);
-    void onDestroy();
+    void onCollision(Damageable& entity) override;
+    void onCollision(Projectile& projectile) override;
+    void onTileCollision() override;
+    void onDestroy() override;
 
     void initDamageFlash();
+
 protected:
     void setHP(int hp);
     int updateHP(int diff);
-
 
     void updateDamageFlash(float frametime);
 
@@ -37,4 +37,3 @@ private:
 };
 
 #endif // DAMAGEABLE_HPP
-

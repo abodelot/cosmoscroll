@@ -2,7 +2,7 @@
 #define MISSILE_HPP
 
 #include "Projectile.hpp"
-#include "core/ParticleEmitter.hpp"
+#include "particles/ParticleEmitter.hpp"
 
 class Missile: public Projectile
 {
@@ -17,7 +17,7 @@ public:
     void onDestroy() override;
 
 private:
-    float   m_angle;
+    float m_angle;
     Entity* m_owner;
     ParticleEmitter m_smokeEmitter;
 

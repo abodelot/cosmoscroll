@@ -30,16 +30,13 @@ public:
 
     void setTextColor(const sf::Color& color);
 
-    // callbacks
-    virtual void OnKeyPressed(sf::Keyboard::Key code);
-    virtual void OnMouseClicked(int, int);
+    virtual void onKeyPressed(sf::Keyboard::Key code) override;
+    virtual void onMouseClicked(int, int) override;
 
 protected:
-    // override
-    virtual void OnStateChanged(State::EState state);
+    virtual void onStateChanged(State::EState state) override;
 
-    // override
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
     sf::Text text_;

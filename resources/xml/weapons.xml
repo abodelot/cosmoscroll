@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <weapons>
-	<weapon id="laser-red" damage="1" image="ammo/laser-red.png" sound="laser-red.ogg" firerate="8" speed="420" heatcost="1.4" />
-	<weapon id="laser-green" damage="1" image="ammo/laser-green.png" sound="laser-green.ogg" firerate="1" speed="300" heatcost="1" />
-	<weapon id="laser-pink" damage="2" image="ammo/laser-pink.png" sound="laser-pink.ogg" firerate="1" speed="340" heatcost="1" />
-	<weapon id="laser-blue" damage="3" image="ammo/laser-blue.png" sound="laser-blue.ogg" firerate="1" speed="380" heatcost="1" />
-	<weapon id="fireball" damage="10" image="ammo/fireball.png" sound="canon.ogg" firerate="1.5" speed="400" heatcost="0" />
-	<weapon id="missile" damage="10" image="ammo/missile.png" sound="missile-gasfire.ogg" firerate="1" speed="300" heatcost="5" />
+    <weapon id="laser-red" damage="1" image="ammo/laser-red.png" sound="laser-red.ogg" firerate="8" speed="400" heatcost="1.4" />
+    <weapon id="laser-green" damage="1" image="ammo/laser-green.png" sound="laser-green.ogg" firerate="1" speed="200" />
+    <weapon id="egg" damage="1" image="ammo/egg-shoot.png" sound="egg.ogg" firerate="1" speed="100" />
+    <weapon id="laser-pink" damage="2" image="ammo/laser-pink.png" sound="laser-pink.ogg" firerate="1" speed="340" />
+    <weapon id="laser-blue" damage="3" image="ammo/laser-blue.png" sound="laser-blue.ogg" firerate="1" speed="380" />
+    <weapon id="fireball" damage="10" image="ammo/fireball.png" sound="canon.ogg" firerate="1.5" speed="400" />
+    <weapon id="missile" damage="10" image="ammo/missile.png" sound="missile-gasfire.ogg" firerate="1" speed="300" />
 </weapons>
 

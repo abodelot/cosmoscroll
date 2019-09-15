@@ -8,8 +8,7 @@
 /**
  * Utilitary class for associating a sprite to an animation
  */
-class Animator
-{
+class Animator {
 public:
     Animator();
 

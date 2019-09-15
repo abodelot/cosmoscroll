@@ -8,7 +8,7 @@ Image::Image(Menu* parent, const sf::Texture& img, float x, float y):
 {
     m_texture.setTexture(img);
     setPosition(x, y);
-    Resize(img.getSize().x, img.getSize().y);
+    resize(img.getSize().x, img.getSize().y);
 }
 
 

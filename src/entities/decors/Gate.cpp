@@ -1,7 +1,7 @@
 #include "Gate.hpp"
-#include "entities/EntityManager.hpp"
 #include "core/Resources.hpp"
 #include "core/SoundSystem.hpp"
+#include "core/Services.hpp"
 
 #define DOOR_DELAY 2.f
 
@@ -15,8 +15,9 @@ Gate::Gate():
 {
     Part cell(ID_CELL, 16);
     cell.setTexture(Resources::getTexture("entities/decor-energy-cell.png"));
-    m_cell_animator1.setAnimation(cell, EntityManager::getInstance().getAnimation("energy-cell"));
-    addPart(cell, 0, 28);
+    const Animation& energyCellAnimation = Services::getFactory().getAnimation("energy-cell");
+    m_cell_animator1.setAnimation(cell, energyCellAnimation);
+    addPart(cell, 0, 16);
 
     Part base_top(ID_BASE);
     base_top.setTexture(Resources::getTexture("entities/decor-top.png"));
@@ -34,26 +35,23 @@ Gate::Gate():
     base_bottom.setDestructible(false);
     addPart(base_bottom, 32, getHeight());
 
-    m_cell_animator2.setAnimation(cell, EntityManager::getInstance().getAnimation("energy-cell"));
-    addPart(cell, 0, 332);
+    m_cell_animator2.setAnimation(cell, energyCellAnimation);
+    addPart(cell, 0, getHeight() - cell.getHeight() - 16);
 }
 
 
 void Gate::onUpdate(float frametime)
 {
-    move(-EntityManager::FOREGROUND_SPEED * frametime, 0.f);
     m_cell_animator1.updateSubRect(getPartAt(0), frametime);
     m_cell_animator2.updateSubRect(getPartAt(4), frametime);
     updateParts(frametime);
 
-    if (m_door_timer > 0)
-    {
+    if (m_door_timer > 0) {
         float delta_door = m_door_height * m_door_timer / DOOR_DELAY;
         Part* door = getPartByID(ID_DOOR);
         sf::IntRect subrect(0, (m_door_height - delta_door), door->getWidth(), delta_door);
         m_door_timer -= frametime;
-        if (m_door_timer <= 0)
-        {
+        if (m_door_timer <= 0) {
             subrect.top = m_door_height;
         }
         door->setTextureRect(subrect);
@@ -63,14 +61,12 @@ void Gate::onUpdate(float frametime)
 
 void Gate::onPartDestroyed(const Part& part)
 {
-    if (part.getID() == ID_CELL)
-    {
+    if (part.getID() == ID_CELL) {
         --m_energy_cells_count;
-        // Star open door timer when all cells are destroyed
-        if (m_energy_cells_count == 0)
-        {
+        // Start open door timer when all cells are destroyed
+        if (m_energy_cells_count == 0) {
             m_door_timer = DOOR_DELAY;
-            SoundSystem::playSound("door-opening.ogg");
+            Services::getSoundSystem().playSound("door-opening.ogg");
         }
     }
 }

@@ -3,25 +3,23 @@
 
 #include <SFML/System/Vector2.hpp>
 
-namespace gui
-{
+namespace gui {
 
 /**
  * Base class for widget layout handler
  */
-class Layout
-{
+class Layout {
 public:
     Layout(float x, float y);
 
-    void SetOffset(float x,float y);
-    const sf::Vector2f& GetOffset() const;
+    void setOffset(float x,float y);
+    const sf::Vector2f& getOffset() const;
 
     /**
      * Holds the spacing between widgets inside the layout.
      */
-    void SetSpacing(float x, float y);
-    const sf::Vector2f& GetSpacing() const;
+    void setSpacing(float x, float y);
+    const sf::Vector2f& getSpacing() const;
 
 private:
     sf::Vector2f offset_;

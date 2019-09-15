@@ -1,6 +1,7 @@
 #include "MultiPartEntity.hpp"
 #include "EntityManager.hpp"
 #include "Explosion.hpp"
+#include "core/Services.hpp"
 #include "core/Collisions.hpp"
 
 
@@ -13,16 +14,13 @@ MultiPartEntity::MultiPartEntity()
 void MultiPartEntity::collides(Entity& entity)
 {
     // Reverse it because elements drawn on top need to be checked first
-    for (PartVector::reverse_iterator part = m_parts.rbegin(); part != m_parts.rend(); ++part)
-    {
-        if (!part->isDead())
-        {
+    for (PartVector::reverse_iterator part = m_parts.rbegin(); part != m_parts.rend(); ++part) {
+        if (!part->isDead()) {
             // HACK: the part's position is relative to the MultiPartEntity's position,
             // so we need to move the part to its absolute position to test the collision
             sf::Vector2f relative_pos = part->getPosition();
             part->move(getPosition());
-            if (Collisions::pixelPerfectTest(entity, *part))
-            {
+            if (Services::getCollisions().pixelPerfectTest(entity, *part)) {
                 // Restore original Part's position
                 part->setPosition(relative_pos);
                 entity.collides(*part);
@@ -36,16 +34,9 @@ void MultiPartEntity::collides(Entity& entity)
 
 void MultiPartEntity::updateParts(float frametime)
 {
-    for (size_t i = 0; i < m_parts.size(); ++i)
-    {
+    for (size_t i = 0; i < m_parts.size(); ++i) {
         m_parts[i].onUpdate(frametime);
     }
-}
-
-
-float MultiPartEntity::getSpeedX() const
-{
-    return -EntityManager::FOREGROUND_SPEED;
 }
 
 
@@ -73,25 +64,21 @@ MultiPartEntity::Part& MultiPartEntity::getPartAt(size_t index)
 
 MultiPartEntity::Part* MultiPartEntity::getPartByID(int id)
 {
-    for (size_t i = 0; i < m_parts.size(); ++i)
-    {
-        if (m_parts[i].getID() == id)
-        {
+    for (size_t i = 0; i < m_parts.size(); ++i) {
+        if (m_parts[i].getID() == id) {
             return &m_parts[i];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
 int MultiPartEntity::destroyPartByID(int id)
 {
     int nb_destroyed = 0;
-    for (size_t i = 0; i < m_parts.size(); ++i)
-    {
+    for (size_t i = 0; i < m_parts.size(); ++i) {
         Part& part = m_parts[i];
-        if (part.getID() == id && part.getHP() > 0)
-        {
+        if (part.getID() == id && part.getHP() > 0) {
             part.kill();
             ++nb_destroyed;
         }
@@ -103,10 +90,10 @@ int MultiPartEntity::destroyPartByID(int id)
 void MultiPartEntity::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     states.transform *= getTransform();
-    for (const Part& part: m_parts)
-    {
-        if (part.getHP() > 0)
+    for (const Part& part: m_parts) {
+        if (part.getHP() > 0) {
             target.draw(part, states);
+        }
     }
 }
 
@@ -115,7 +102,7 @@ void MultiPartEntity::draw(sf::RenderTarget& target, sf::RenderStates states) co
 MultiPartEntity::Part::Part(int id, int hp):
     m_id(id),
     m_destructible(true),
-    m_parent(NULL)
+    m_parent(nullptr)
 {
     setHP(hp);
 }
@@ -129,8 +116,7 @@ void MultiPartEntity::Part::onUpdate(float frametime)
 
 void MultiPartEntity::Part::takeDamage(int damage)
 {
-    if (m_destructible)
-    {
+    if (m_destructible) {
         Damageable::takeDamage(damage);
         m_parent->onPartDamaged(*this);
     }

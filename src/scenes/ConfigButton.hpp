@@ -7,8 +7,7 @@
 /**
  * Small sprite-based button for key-bindings menus
  */
-class ConfigButton: public gui::Button
-{
+class ConfigButton: public gui::Button {
 public:
     ConfigButton(gui::Menu* owner, Action::ID action = Action::NONE);
 
@@ -21,7 +20,7 @@ public:
     Action::ID getAction() const;
 
 protected:
-    void OnStateChanged(gui::State::EState state) override;
+    void onStateChanged(gui::State::EState state) override;
 
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

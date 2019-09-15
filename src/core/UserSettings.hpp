@@ -5,8 +5,7 @@
 
 class IniParser;
 
-class UserSettings
-{
+class UserSettings {
 public:
     static void loadFromConfig(IniParser& config);
     static void saveToConfig(IniParser& config);
@@ -18,7 +17,7 @@ public:
     static void updateCredits(int diff);
 
     // Settings
-    static bool panel_on_top;
+    static bool show_hud;
 
 private:
     static int s_credits;
