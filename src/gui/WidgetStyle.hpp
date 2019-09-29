@@ -15,6 +15,7 @@ public:
     int global_text_size;
     const sf::Font* global_font;
     const sf::Font* global_fixed_font;
+    const sf::Font* global_title_font;
     sf::Color global_border_color;
 
     // label

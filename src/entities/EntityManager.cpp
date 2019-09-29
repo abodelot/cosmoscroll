@@ -475,7 +475,7 @@ void EntityManager::loadSpaceships(const std::string& filename)
         ship.setAttackPattern(parse_attack_pattern(elem));
 
         // Parse weapon tag
-        tinyxml2::XMLElement* weapon = elem->FirstChildElement();
+        tinyxml2::XMLElement* weapon = elem->FirstChildElement("weapon");
         if (weapon != NULL)
         {
             int wx, wy;
@@ -491,6 +491,15 @@ void EntityManager::loadSpaceships(const std::string& filename)
 
             ship.getWeapon().init(weapon_id);
             ship.getWeapon().setPosition(wx, wy);
+        }
+
+        // Parse engine tag
+        tinyxml2::XMLElement* engine = elem->FirstChildElement("engine");
+        if (engine != NULL) {
+            sf::Vector2f engine_offset;
+            engine->QueryFloatAttribute("x", &engine_offset.x);
+            engine->QueryFloatAttribute("y", &engine_offset.y);
+            ship.enableEngineEffect(engine_offset);
         }
 
         // Insert spaceship in Spaceship map (LEVELS_MODE: access by id)

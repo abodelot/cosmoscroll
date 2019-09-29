@@ -23,8 +23,6 @@ public:
 protected:
     void OnStateChanged(gui::State::EState state) override;
 
-    void OnCallbackTriggered() override;
-
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -35,4 +33,3 @@ private:
 
 
 #endif // CONFIGBUTTON_HPP
-

@@ -288,7 +288,6 @@ void ParticleSystem::update(float frametime)
             vertices[2].position  = sf::Vector2f(right,        bottom);
             vertices[3].position  = sf::Vector2f(right,        p.position.y);
 
-
             // Each point is rotated around the particle center
             sf::Vector2f center(p.position.x + r.width / 2, p.position.y + r.height / 2);
             float sin = -std::sin(p.angle);

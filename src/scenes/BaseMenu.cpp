@@ -12,8 +12,9 @@ BaseMenu::BaseMenu():
     m_ui_background(Resources::getTexture("gui/main-screen.png")),
     m_scrolling_background(Resources::getTexture("gui/background.png"))
 {
-    m_gui_style.global_font = &Resources::getFont("hemi-head.ttf");
+    m_gui_style.global_font = &Resources::getFont("Vera.ttf");
     m_gui_style.global_fixed_font = &Resources::getFont("VeraMono.ttf");
+    m_gui_style.global_title_font = &Resources::getFont("hemi-head.ttf");
 }
 
 
@@ -57,9 +58,11 @@ void BaseMenu::draw(sf::RenderTarget& target) const
 
 void BaseMenu::setTitle(const sf::String& text, int y)
 {
-    m_title.setFont(*m_gui_style.global_font);
-    m_title.setCharacterSize(40);
+    m_title.setFont(*m_gui_style.global_title_font);
+    m_title.setCharacterSize(50);
     m_title.setString(text);
+    m_title.setOutlineColor(sf::Color::Black);
+    m_title.setOutlineThickness(1);
     int x = (APP_WIDTH - m_title.getLocalBounds().width) / 2;
     m_title.setPosition(x, y);
 }

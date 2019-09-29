@@ -57,16 +57,16 @@ sendscore.error_altered_res = Upload verweigert:\nSpielressourcen wurden modifiz
 
 # OptionMenu
 options.title = Optionen
-options.keyboard = Tastatur Einstellungen
-options.joystick = Joystick Einstellungen
+options.keyboard = Tastatur
+options.joystick = Joystick
 options.audio = Sound und Musik
 options.settings = Preferenzen
 
 # KeyboardMenu
-keyboard.title = Tastatur Einstellungen
+keyboard.title = Tastatur
 
 # JoystickMenu
-joystick.title = Joystick Einstellungen
+joystick.title = Joystick
 joystick.button = Knopf
 joystick.sensitivity = Joystick Empfindlichkeit:
 

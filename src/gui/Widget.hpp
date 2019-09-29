@@ -103,7 +103,7 @@ protected:
      */
     virtual void OnCallbackTriggered() {}
 
-    void CenterText(sf::Text& text);
+    void centerText(sf::Text& text);
 
 private:
     Menu* owner_;

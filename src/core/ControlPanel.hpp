@@ -90,7 +90,7 @@ private:
 
         ProgressBar();
 
-        void init(const sf::String& text, const sf::Font& font, const sf::Color& color);
+        void init(const sf::String& text, const sf::Color& color);
 
         // Set progress bar value
         void setValue(int value);
@@ -108,7 +108,7 @@ private:
     {
         enum Type { COUNTER, TIMER };
 
-        void init(PowerUp::Type bonus_type, Type type, const sf::Font& font);
+        void init(PowerUp::Type bonus_type, Type type);
 
         // Set widget position
         void setPosition(int x, int y);

@@ -27,7 +27,7 @@ protected:
     /**
      * Set menu title (top of the screen)
      */
-    void setTitle(const sf::String& text, int y = 20);
+    void setTitle(const sf::String& text, int y = 12);
     const sf::Text& getTitle() const;
 
     void OnWidgetFocused() override;

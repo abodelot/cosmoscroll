@@ -4,6 +4,7 @@
 #include "Damageable.hpp"
 #include "Animator.hpp"
 #include "entities/Weapon.hpp"
+#include "core/ParticleSystem.hpp"
 
 class Spaceship: public Damageable
 {
@@ -29,6 +30,12 @@ public:
 
     Weapon& getWeapon();
 
+    /**
+     * Enable engine particle effect
+     * @param offset: particle emitter origin, relative to spaceship position
+     */
+    void enableEngineEffect(const sf::Vector2f& offset);
+
     void setPoints(int points);
     int getPoints() const;
 
@@ -50,6 +57,10 @@ private:
     int       m_speed;
     float     m_origin_y;
     float     m_angle;
+
+    bool m_engineEmitterEnabled;
+    ParticleSystem::Emitter m_engineEmitter;
+    sf::Vector2f m_engineOffset;
 };
 
 #endif // SPACESHIP_HPP

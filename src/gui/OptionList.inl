@@ -78,6 +78,8 @@ void OptionList<T>::Add(const sf::String& option, const T& value)
     str.setCharacterSize(text_size_);
     str.setFillColor(GetOwner()->GetWidgetStyle().label_text_color);
     str.setFont(*GetOwner()->GetWidgetStyle().global_font);
+    str.setOutlineThickness(1.f);
+    str.setOutlineColor(sf::Color::Black);
 
     if (current_opt_ == -1)
     {
@@ -90,7 +92,7 @@ void OptionList<T>::Add(const sf::String& option, const T& value)
         max_opt_width_ = width;
         BuildBoxes();
     }
-    CenterText(str);
+    centerText(str);
     options_.push_back(Item(str, value));
 }
 

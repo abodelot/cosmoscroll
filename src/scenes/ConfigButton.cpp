@@ -14,6 +14,7 @@ ConfigButton::ConfigButton(gui::Menu* owner, Action::ID action):
     m_background.setTexture(Resources::getTexture("gui/button-config.png"));
     m_background.setTextureRect(sf::IntRect(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT));
     SetCallbackID(action);
+    setTextSize(14);
     OnStateChanged(GetState());
 }
 
@@ -67,13 +68,8 @@ void ConfigButton::OnStateChanged(gui::State::EState state)
     if (m_error)
     {
         // Override label color when binding is invalid
-        setColor(ERROR_COLOR);
+        setTextColor(ERROR_COLOR);
     }
-}
-
-
-void ConfigButton::OnCallbackTriggered()
-{
 }
 
 

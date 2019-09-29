@@ -86,12 +86,13 @@ void Widget::CallTheCallback()
 }
 
 
-void Widget::CenterText(sf::Text& text)
+void Widget::centerText(sf::Text& text)
 {
-    const sf::FloatRect& rect = text.getLocalBounds();
+    float textHeight = text.getFont()->getLineSpacing(text.getCharacterSize());
+    float textWidth = text.getLocalBounds().width;
     // Cast position to int for pixel-perfect rendering
     text.setPosition(
-        (int) (width_ - rect.width) / 2,
-        (int) (height_ - rect.height) / 2 - rect.top
+        (int) (width_ - textWidth) / 2,
+        (int) (height_ - textHeight) / 2
     );
 }

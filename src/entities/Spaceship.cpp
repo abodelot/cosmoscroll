@@ -24,7 +24,8 @@ Spaceship::Spaceship(const Animation& animation, int hp, int speed):
     m_target(NULL),
     m_speed(speed),
     m_origin_y(0.f),
-    m_angle(0.f)
+    m_angle(0.f),
+    m_engineEmitterEnabled(false)
 {
     setTexture(animation.getTexture());
     setTeam(Entity::BAD);
@@ -72,6 +73,18 @@ void Spaceship::onInit()
     }
 
     m_target = EntityManager::getInstance().getPlayer();
+
+    if (m_engineEmitterEnabled)
+    {
+        m_engineEmitter.setTextureRect({32, 9, 3, 3});
+        m_engineEmitter.setAngle(math::PI * 2, 0.1);
+        m_engineEmitter.setParticleColor(sf::Color::Yellow, sf::Color(255, 0, 0, 0));
+        m_engineEmitter.setLooping(true);
+        m_engineEmitter.setScale(2, 1);
+        m_engineEmitter.setLifetime(0.2);
+        m_engineEmitter.setSpeed(150, 10);
+        m_engineEmitter.createParticles(40);
+    }
 }
 
 
@@ -125,6 +138,7 @@ void Spaceship::onUpdate(float frametime)
             break;
         }
         case CIRCLE:
+            // Move in a straight line until CIRCLE_X_START is reached
             if (getX() > CIRCLE_X_START + CIRCLE_RADIUS)
             {
                 move(-delta, 0);
@@ -153,6 +167,11 @@ void Spaceship::onUpdate(float frametime)
     }
 
     updateDamageFlash(frametime);
+
+    if (m_engineEmitterEnabled)
+    {
+        m_engineEmitter.setPosition(getPosition() + m_engineOffset);
+    }
 }
 
 
@@ -175,6 +194,13 @@ Weapon& Spaceship::getWeapon()
 }
 
 
+void Spaceship::enableEngineEffect(const sf::Vector2f& offset)
+{
+    m_engineEmitterEnabled = true;
+    m_engineOffset = offset;
+}
+
+
 void Spaceship::setPoints(int points)
 {
     m_points = points;
@@ -185,4 +211,3 @@ int Spaceship::getPoints() const
 {
     return m_points;
 }
-

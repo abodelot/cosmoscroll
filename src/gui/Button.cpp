@@ -15,7 +15,6 @@ Button::Button(Menu* owner, const sf::String& text, int w, int h) :
     int height = h == -1 ? sfh::height(text_) : h;
 
     Resize(width, height);
-    CenterText(text_);
 
     const WidgetStyle& style = owner->GetWidgetStyle();
     text_.setCharacterSize(style.global_text_size);
@@ -30,11 +29,18 @@ Button::Button(Menu* owner, const sf::String& text, int w, int h) :
 void Button::setString(const sf::String& text)
 {
     text_.setString(text);
-    CenterText(text_);
+    centerText(text_);
 }
 
 
-void Button::setColor(const sf::Color& color)
+void Button::setTextSize(int size)
+{
+    text_.setCharacterSize(size);
+    centerText(text_);
+}
+
+
+void Button::setTextColor(const sf::Color& color)
 {
     text_.setFillColor(color);
 }

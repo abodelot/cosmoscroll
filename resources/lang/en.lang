@@ -57,16 +57,16 @@ sendscore.error_altered_res = Upload denied:\ngame resources have been modified
 
 # OptionMenu
 options.title = Options
-options.keyboard = Keyboard configuration
-options.joystick = Joystick configuration
+options.keyboard = Keyboard
+options.joystick = Joystick
 options.audio = Sound and music
 options.settings = Settings
 
 # KeyboardMenu
-keyboard.title = Keyboard configuration
+keyboard.title = Keyboard
 
 # JoystickMenu
-joystick.title = Joystick configuration
+joystick.title = Joystick
 joystick.button = Button
 joystick.sensitivity = Joystick sensitivity:
 

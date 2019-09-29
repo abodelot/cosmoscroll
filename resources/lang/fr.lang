@@ -57,16 +57,16 @@ sendscore.error_altered_res = Envoi interdit :\nles ressources du jeu ont été 
 
 # OptionMenu
 options.title = Options
-options.keyboard = Configuration clavier
-options.joystick = Configuration joystick
+options.keyboard = Clavier
+options.joystick = Joystick
 options.audio = Son et musique
 options.settings = Préférences
 
 # KeyboardMenu
-keyboard.title = Configuration clavier
+keyboard.title = Clavier
 
 # JoystickMenu
-joystick.title = Configuration joystick
+joystick.title = Joystick
 joystick.button = Bouton
 joystick.sensitivity = Sensibilité du joystick :
 

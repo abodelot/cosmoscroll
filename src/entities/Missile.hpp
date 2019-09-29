@@ -7,7 +7,7 @@
 class Missile: public Projectile
 {
 public:
-    Missile(Entity* emitter, float angle, const sf::Texture& image, int speed, int damage);
+    Missile(Entity* emitter, float angle, const sf::Texture& texture, int speed, int damage);
 
     ~Missile();
 

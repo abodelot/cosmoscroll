@@ -10,13 +10,12 @@ CreditCounterWidget::CreditCounterWidget(gui::Menu* parent):
     m_background.setTexture(Resources::getTexture("gui/credit-counter.png"));
 
     m_credit_label.setFont(*parent->GetWidgetStyle().global_font);
-    m_credit_label.setCharacterSize(18);
+    m_credit_label.setCharacterSize(14);
     m_credit_label.setString(_t("levels.credits"));
-    m_credit_label.setPosition((sfh::width(m_background) - sfh::width(m_credit_label)) / 2, 10);
+    m_credit_label.setPosition((int) (sfh::width(m_background) - sfh::width(m_credit_label)) / 2, 10);
 
     m_credit_value.setFont(*parent->GetWidgetStyle().global_font);
-    m_credit_value.setCharacterSize(20);
-
+    m_credit_value.setCharacterSize(18);
 
     setPosition(444, 90);
 }
@@ -25,7 +24,7 @@ CreditCounterWidget::CreditCounterWidget(gui::Menu* parent):
 void CreditCounterWidget::setCredits(int credits)
 {
     m_credit_value.setString(std::to_string(credits));
-    m_credit_value.setPosition((sfh::width(m_background) - sfh::width(m_credit_value)) / 2, 26);
+    m_credit_value.setPosition((int) (sfh::width(m_background) - sfh::width(m_credit_value)) / 2, 26);
 }
 
 

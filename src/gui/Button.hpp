@@ -26,7 +26,9 @@ public:
      */
     void setString(const sf::String& text);
 
-    void setColor(const sf::Color& color);
+    void setTextSize(int size);
+
+    void setTextColor(const sf::Color& color);
 
     // callbacks
     virtual void OnKeyPressed(sf::Keyboard::Key code);

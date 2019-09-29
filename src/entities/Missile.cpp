@@ -5,8 +5,8 @@
 #include "utils/Math.hpp"
 
 
-Missile::Missile(Entity* emitter, float angle, const sf::Texture& image, int speed, int damage):
-    Projectile(emitter, angle, image, speed, damage),
+Missile::Missile(Entity* emitter, float angle, const sf::Texture& texture, int speed, int damage):
+    Projectile(emitter, angle, texture, speed, damage),
     m_angle(angle),
     m_owner(emitter)
 {

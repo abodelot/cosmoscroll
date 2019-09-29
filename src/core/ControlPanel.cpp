@@ -22,6 +22,16 @@
 #define BAR_HEAT   sf::Color(0x44, 0xc0, 0x00)
 #define BAR_OVERHEAT sf::Color(0xff, 0x88, 0x00)
 
+
+void defaultTextStyle(sf::Text& text)
+{
+    static const sf::Font& font = Resources::getFont("Vera.ttf");
+    text.setFont(font);
+    text.setCharacterSize(TEXT_SIZE);
+    text.setOutlineColor(sf::Color(0, 0, 0, 128));
+    text.setOutlineThickness(1.f);
+}
+
 ControlPanel& ControlPanel::getInstance()
 {
     static ControlPanel self;
@@ -32,48 +42,43 @@ ControlPanel& ControlPanel::getInstance()
 ControlPanel::ControlPanel():
     m_background(Resources::getTexture("gui/score-board.png"))
 {
-    const sf::Font& font = Resources::getFont("Vera.ttf");
-
-    // init progress bar
-    pbars_[ProgressBar::HP].init(_t("panel.bar_hp"), font, BAR_SHIP);
+    // Init progress bars
+    pbars_[ProgressBar::HP].init(_t("panel.bar_hp"), BAR_SHIP);
     pbars_[ProgressBar::HP].setPosition(42, 7);
 
-    pbars_[ProgressBar::SHIELD].init(_t("panel.bar_shield"), font, BAR_SHIELD);
+    pbars_[ProgressBar::SHIELD].init(_t("panel.bar_shield"), BAR_SHIELD);
     pbars_[ProgressBar::SHIELD].setPosition(42, 22);
 
-    pbars_[ProgressBar::HEAT].init(_t("panel.bar_heat"), font, BAR_HEAT);
+    pbars_[ProgressBar::HEAT].init(_t("panel.bar_heat"), BAR_HEAT);
     pbars_[ProgressBar::HEAT].setPosition(42, 37);
 
     bar_mask_.setTexture(Resources::getTexture("gui/score-board-bar-mask.png"));
     bar_mask_.setPosition(101, 6);
 
-    // init bonus counters
-    bs_coolers_.init(PowerUp::ICECUBE, PowerUpSlot::COUNTER, font);
+    // Init power-up counters
+    bs_coolers_.init(PowerUp::ICECUBE, PowerUpSlot::COUNTER);
     bs_coolers_.setPosition(256, 8);
 
-    bs_missiles_.init(PowerUp::MISSILE, PowerUpSlot::COUNTER, font);
+    bs_missiles_.init(PowerUp::MISSILE, PowerUpSlot::COUNTER);
     bs_missiles_.setPosition(256, 31);
 
-    bs_attack_.init(PowerUp::DOUBLE_SHOT, PowerUpSlot::TIMER, font);
+    bs_attack_.init(PowerUp::DOUBLE_SHOT, PowerUpSlot::TIMER);
     bs_attack_.setPosition(334, 8);
 
-    bs_speed_.init(PowerUp::SPEED, PowerUpSlot::TIMER, font);
+    bs_speed_.init(PowerUp::SPEED, PowerUpSlot::TIMER);
     bs_speed_.setPosition(334, 31);
 
-    // right container
+    // Right container texts
     timer_.setPosition(480, 6);
-    timer_.setFont(font);
-    timer_.setCharacterSize(TEXT_SIZE);
+    defaultTextStyle(timer_);
 
     game_info_.setPosition(450, 33);
-    game_info_.setFont(font);
-    game_info_.setCharacterSize(TEXT_SIZE);
+    defaultTextStyle(game_info_);
 
     str_points_.setPosition(530, 33);
-    str_points_.setCharacterSize(TEXT_SIZE);
-    str_points_.setFont(font);
+    defaultTextStyle(str_points_);
 
-    // story mode
+    // Story mode
     level_bar_.setTexture(Resources::getTexture("gui/level-bar.png"));
     level_bar_.setPosition(LEVEL_BAR_X, LEVEL_BAR_Y);
     level_cursor_.setTexture(Resources::getTexture("gui/level-cursor.png"));
@@ -280,16 +285,13 @@ ControlPanel::ProgressBar::ProgressBar()
 }
 
 
-void ControlPanel::ProgressBar::init(const sf::String& text, const sf::Font& font, const sf::Color& color)
+void ControlPanel::ProgressBar::init(const sf::String& text, const sf::Color& color)
 {
-    label_.setFont(font);
     label_.setString(text);
-    label_.setCharacterSize(TEXT_SIZE);
-    label_.setFillColor(sf::Color::White);
+    defaultTextStyle(label_);
     bar_.setSize(sf::Vector2f(0, PROG_BAR_HEIGHT));
     bar_.setFillColor(color);
-    value_.setFont(font);
-    value_.setCharacterSize(TEXT_SIZE);
+    defaultTextStyle(value_);
 }
 
 
@@ -321,15 +323,13 @@ void ControlPanel::ProgressBar::setValue(int value)
 
 // PowerUpSlot ------------------------------------------------------------------
 
-void ControlPanel::PowerUpSlot::init(PowerUp::Type bonus_type, Type type, const sf::Font& font)
+void ControlPanel::PowerUpSlot::init(PowerUp::Type bonus_type, Type type)
 {
     icon_.setTexture(Resources::getTexture("entities/power-ups.png"));
     icon_.setTextureRect(PowerUp::getTextureRect(bonus_type));
 
-    label_.setCharacterSize(TEXT_SIZE);
-    label_.setFillColor(sf::Color::White);
     label_.setString(type == COUNTER ? "x 0" : "-");
-    label_.setFont(font);
+    defaultTextStyle(label_);
 
     glow_.setTexture(Resources::getTexture("gui/bonus-glow.png"));
     glow_.setColor(sf::Color(255, 255, 255, 0));

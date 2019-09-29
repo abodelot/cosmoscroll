@@ -80,27 +80,36 @@ Player::Player():
     m_konami_code_activated = false;
 
     // Init particles emitters
-    m_shield_emitter.setTextureRect(sf::IntRect(40, 0, 8, 8));
-    m_shield_emitter.setLifetime(0);
+    m_shieldEmitter.setTextureRect(sf::IntRect(40, 0, 8, 8));
+    m_shieldEmitter.setLifetime(0);
 
-    m_smoke_emitter.setTextureRect(sf::IntRect(0, 0, 16, 16));
-    m_smoke_emitter.setLooping(true);
-    m_smoke_emitter.setSpeed(50, 25);
-    m_smoke_emitter.setLifetime(1.5);
-    m_smoke_emitter.setAngle(-math::PI, 0.5);
-    m_smoke_emitter.setScale(0.5, 1.5);
+    m_smokeEmitter.setTextureRect(sf::IntRect(0, 0, 16, 16));
+    m_smokeEmitter.setLooping(true);
+    m_smokeEmitter.setSpeed(50, 25);
+    m_smokeEmitter.setLifetime(1.5);
+    m_smokeEmitter.setAngle(-math::PI, 0.5);
+    m_smokeEmitter.setScale(0.5, 1.5);
 
-    m_snowflakes_emitter.setTextureRect(sf::IntRect(16, 0, 16, 16));
-    m_snowflakes_emitter.setScale(0.2, 1.5);
+    m_snowflakesEmitter.setTextureRect(sf::IntRect(16, 0, 16, 16));
+    m_snowflakesEmitter.setScale(0.2, 1.5);
 
-    m_powerup_emitter.setTextureRect(sf::IntRect(32, 0, 8, 8));
+    m_engineEmitter.setTextureRect({32, 9, 3, 3});
+    m_engineEmitter.setAngle(-math::PI, 0.2);
+    m_engineEmitter.setParticleColor(sf::Color::Yellow, sf::Color(255, 0, 0, 0));
+    m_engineEmitter.setLooping(true);
+    m_engineEmitter.setScale(2, 1);
+    m_engineEmitter.setLifetime(0.5);
+    m_engineEmitter.setSpeed(60, 0);
+
+    m_powerupEmitter.setTextureRect(sf::IntRect(32, 0, 8, 8));
 }
 
 
 Player::~Player()
 {
-    m_smoke_emitter.clearParticles();
-    m_shield_emitter.clearParticles();
+    m_engineEmitter.clearParticles();
+    m_smokeEmitter.clearParticles();
+    m_shieldEmitter.clearParticles();
 }
 
 
@@ -133,6 +142,8 @@ void Player::onInit()
 
     // Equip Weapon item
     items.getItem(Item::WEAPON, UserSettings::getItemLevel(Item::WEAPON)).equip(*this);
+
+    m_engineEmitter.createParticles(60);
 }
 
 
@@ -185,8 +196,8 @@ void Player::onActionDown(Action::ID action)
             {
                 // Play sound effect and launch particles
                 SoundSystem::playSound("cooler.ogg");
-                m_snowflakes_emitter.setPosition(getCenter());
-                m_snowflakes_emitter.createParticles(40);
+                m_snowflakesEmitter.setPosition(getCenter());
+                m_snowflakesEmitter.createParticles(40);
 
                 // Reset heat
                 m_panel.setIcecubes(--m_icecubes);
@@ -255,9 +266,6 @@ void Player::onUpdate(float frametime)
 {
     static const EntityManager& manager = EntityManager::getInstance();
 
-    // Animation
-    m_animator.updateSubRect(*this, frametime);
-
     // Weapons
     if (!m_overheat)
     {
@@ -310,8 +318,9 @@ void Player::onUpdate(float frametime)
 
     // Apply new position
     setPosition(pos);
-    m_smoke_emitter.setPosition(getX(), getY() + getHeight() / 2);
-    m_shield_emitter.setPosition(getCenter());
+    m_smokeEmitter.setPosition(getX(), getY() + 20);
+    m_engineEmitter.setPosition(getX(), getY() + 25);
+    m_shieldEmitter.setPosition(getCenter());
 
     // Cooling heatsink
     if (m_heat > 0.f)
@@ -359,7 +368,7 @@ void Player::takeDamage(int damage)
             m_shield = 0;
 
         SoundSystem::playSound("shield-damage.ogg");
-        m_shield_emitter.createParticles(m_shield);
+        m_shieldEmitter.createParticles(m_shield);
         m_panel.setShield(m_shield);
     }
     else
@@ -367,6 +376,11 @@ void Player::takeDamage(int damage)
         Damageable::takeDamage(damage);
         SoundSystem::playSound("ship-damage.ogg");
         m_panel.setHP(getHP());
+
+        if (getHP() == 1)
+        {
+            m_smokeEmitter.createParticles(100);
+        }
     }
 }
 
@@ -398,7 +412,7 @@ void Player::onCollision(PowerUp& powerup)
             if (bonus_[T_SPEED] == 0)
             {
                 m_speed *= BONUS_SPEED_FACTOR;
-                m_smoke_emitter.createParticles(120);
+                m_engineEmitter.setParticleColor(sf::Color::Cyan, sf::Color(0, 0, 255, 0));
             }
             bonus_[T_SPEED] += TIMED_BONUS_DURATION;
             m_panel.activeSpeedPowerUp(bonus_[T_SPEED]);
@@ -408,13 +422,15 @@ void Player::onCollision(PowerUp& powerup)
         case PowerUp::REPAIR:
             if (getHP() < m_max_hp)
                 m_panel.setHP(updateHP(1));
+            m_smokeEmitter.clearParticles();
             break;
 
         case PowerUp::FULL_REPAIR:
             setHP(m_max_hp);
             m_panel.setHP(m_max_hp);
-            m_powerup_emitter.setPosition(getCenter());
-            m_powerup_emitter.createParticles(50);
+            m_powerupEmitter.setPosition(getCenter());
+            m_powerupEmitter.createParticles(50);
+            m_smokeEmitter.clearParticles();
             break;
 
         case PowerUp::SHIELD:
@@ -425,8 +441,8 @@ void Player::onCollision(PowerUp& powerup)
         case PowerUp::FULL_SHIELD:
             setShield(m_max_shield);
             m_panel.setShield(m_max_shield);
-            m_powerup_emitter.setPosition(getCenter());
-            m_powerup_emitter.createParticles(50);
+            m_powerupEmitter.setPosition(getCenter());
+            m_powerupEmitter.createParticles(50);
             break;
 
         case PowerUp::ICECUBE:
@@ -466,7 +482,7 @@ void Player::DisableTimedPowerUp(TimedPowerUp tbonus)
             break;
         case T_SPEED:
             m_speed /= BONUS_SPEED_FACTOR;
-            m_smoke_emitter.clearParticles();
+            m_engineEmitter.setParticleColor(sf::Color::Yellow, sf::Color(255, 0, 0, 0));
             break;
         default:
             break;
@@ -479,7 +495,7 @@ void Player::setShield(int count)
 {
     m_shield = count;
     // Update particles
-    m_shield_emitter.createParticles(count);
+    m_shieldEmitter.createParticles(count);
 
     // Update panel count
     m_panel.setShield(count);
@@ -541,8 +557,8 @@ void Player::applyKonamiCode()
     m_missile_launcher.setMultiply(3);
 
     MessageSystem::write("KONAMI CODE ON", getPosition());
-    m_powerup_emitter.setPosition(getCenter());
-    m_powerup_emitter.createParticles(50);
+    m_powerupEmitter.setPosition(getCenter());
+    m_powerupEmitter.createParticles(50);
 }
 
 // Shield::Emitter -------------------------------------------------------------

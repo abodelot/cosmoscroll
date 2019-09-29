@@ -115,10 +115,11 @@ private:
         void onParticleUpdated(ParticleSystem::Particle& particle, float frametime) const override;
     };
 
-    ShieldEmitter           m_shield_emitter;
-    ParticleSystem::Emitter m_smoke_emitter;
-    ParticleSystem::Emitter m_snowflakes_emitter;
-    ParticleSystem::Emitter m_powerup_emitter;
+    ShieldEmitter           m_shieldEmitter;
+    ParticleSystem::Emitter m_engineEmitter;
+    ParticleSystem::Emitter m_smokeEmitter;
+    ParticleSystem::Emitter m_snowflakesEmitter;
+    ParticleSystem::Emitter m_powerupEmitter;
 };
 
 #endif // PLAYER_HPP

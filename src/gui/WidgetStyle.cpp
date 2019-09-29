@@ -12,6 +12,7 @@ WidgetStyle::WidgetStyle()
     global_text_size = 20;
     global_font = NULL;
     global_fixed_font = NULL;
+    global_title_font = NULL;
     global_border_color = sf::Color(0x30, 0x30, 0x30);
 
     label_text_color = sf::Color::White;

@@ -53,4 +53,3 @@ void Animator::setFrame(sf::Sprite& sprite, size_t index)
         sprite.setTextureRect(m_animation->getFrame(index));
     }
 }
-
