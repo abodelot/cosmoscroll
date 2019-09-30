@@ -4,12 +4,14 @@
 #include "core/Resources.hpp"
 #include "utils/I18n.hpp"
 
+#include <sstream>
+
 
 AboutMenu::AboutMenu()
 {
     setTitle(_t("about.title"));
 
-    std::wostringstream oss;
+    std::ostringstream oss;
     oss << VERSION_STRING << "\n"
         << _t("about.contact") << " " << APP_AUTHOR << "\n"
         << _t("about.website") << " " << COSMOSCROLL_WEBSITE << "\n"

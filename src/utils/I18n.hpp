@@ -3,6 +3,8 @@
 
 #include <map>
 #include <string>
+#include <iostream>
+#include <SFML/System/String.hpp>
 
 #include "StringUtils.hpp"
 
@@ -24,7 +26,7 @@ public:
      * @param key: text identifier
      * @return translated string
      */
-    const std::wstring& translate(const std::string& key) const;
+    const sf::String& translate(const std::string& key) const;
 
     /**
      * Get the language code currently used
@@ -51,26 +53,22 @@ public:
      * @return translated text with template \a search replaced by \a value
      */
     template <typename T>
-    static std::wstring templatize(const char* key, const std::string& search, T value)
+    static sf::String templatize(const char* key, const std::string& search, T value)
     {
-        return str_replace(getInstance().translate(key),
-                           std::wstring(search.begin(), search.end()),
-                           std::to_wstring(value));
+        sf::String str = getInstance().translate(key);
+        str.replace(search, std::to_string(value));
+        return str;
     }
 
     template <typename T1, typename T2>
-    static std::wstring templatize(const char* key, const std::string& search1, T1 value1,
-                                                    const std::string& search2, T2 value2)
+    static sf::String templatize(const char* key,
+        const std::string& search1, T1 value1,
+        const std::string& search2, T2 value2)
     {
-        // 1st template
-        std::wstring s = str_replace(getInstance().translate(key),
-                                     std::wstring(search1.begin(), search1.end()),
-                                     std::to_wstring(value1));
-        // 2nd template
-        str_self_replace(s,
-                         std::wstring(search2.begin(), search2.end()),
-                         std::to_wstring(value2));
-        return s;
+        sf::String str = getInstance().translate(key);
+        str.replace(search1, std::to_string(value1));
+        str.replace(search2, std::to_string(value2));
+        return str;
     }
 
 private:
@@ -82,10 +80,16 @@ private:
      */
     bool loadFromFile(const char* filename);
 
-    typedef std::map<std::string, std::wstring> TextMap;
+    typedef std::map<std::string, sf::String> TextMap;
     TextMap     m_content;
     char        m_code[3];
     std::string m_path;
 };
+
+inline std::ostream& operator<<(std::ostream& os, const sf::String& str)
+{
+    os << str.toAnsiString();
+    return os;
+}
 
 #endif // I18N_HPP

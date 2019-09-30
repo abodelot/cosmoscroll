@@ -25,7 +25,7 @@ public:
         VALIDATE
     };
 
-    static const std::wstring& toString(ID action);
+    static const sf::String& toString(ID action);
 };
 
 class Input
@@ -92,7 +92,7 @@ public:
     /**
      * Get string representation of a joystick button
      */
-    static std::wstring buttonToString(unsigned int button);
+    static sf::String buttonToString(unsigned int button);
 
 private:
     typedef std::map<sf::Keyboard::Key, Action::ID> KeyMap;

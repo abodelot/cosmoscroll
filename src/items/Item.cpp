@@ -28,7 +28,7 @@ const char* Item::typeToString(Type type)
 }
 
 
-std::wstring Item::toString() const
+sf::String Item::toString() const
 {
     return _t(typeToString(m_type));
 }
@@ -95,7 +95,7 @@ int Item::getPrice() const
 }
 
 
-std::wstring Item::getDescription() const
+sf::String Item::getDescription() const
 {
     switch (m_type)
     {
@@ -117,7 +117,7 @@ std::wstring Item::getDescription() const
         default:
             break;
     }
-    return std::wstring();
+    return "";
 }
 
 

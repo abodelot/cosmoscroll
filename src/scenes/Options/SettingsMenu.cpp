@@ -71,7 +71,8 @@ void SettingsMenu::EventCallback(int id)
 
 void SettingsMenu::addResolution(size_t width, size_t height)
 {
-    std::ostringstream oss;
-    oss << width << "x" << height;
-    m_resolutions->Add(oss.str(), sf::Vector2u(width, height));
+    m_resolutions->Add(
+        std::to_string(width) + "x" + std::to_string(height),
+        sf::Vector2u(width, height)
+    );
 }

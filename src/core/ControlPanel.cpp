@@ -120,12 +120,12 @@ void ControlPanel::setElapsedTime(float seconds)
     // Update every second
     if (rounded != previous)
     {
-        std::wstring text = _t("panel.timer");
-        std::wstring min = std::to_wstring(rounded / 60);
-        std::wstring sec = std::to_wstring(rounded % 60);
+        sf::String text = _t("panel.timer");
+        std::string min = std::to_string(rounded / 60);
+        std::string sec = std::to_string(rounded % 60);
         // Format on 2 digits
-        wstr_self_replace(text, L"{min}", min.size() > 1 ? min : L"0" + min);
-        wstr_self_replace(text, L"{sec}", sec.size() > 1 ? sec : L"0" + sec);
+        text.replace("{min}", min.size() > 1 ? min : "0" + min);
+        text.replace("{sec}", sec.size() > 1 ? sec : "0" + sec);
         timer_.setString(text);
         previous = rounded;
 

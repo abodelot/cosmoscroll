@@ -29,13 +29,13 @@ void I18n::setDataPath(const std::string& path)
 }
 
 
-const std::wstring& I18n::translate(const std::string& key) const
+const sf::String& I18n::translate(const std::string& key) const
 {
     TextMap::const_iterator it = m_content.find(key);
     if (it == m_content.end())
     {
         std::cerr << "[I18n] no translation found for key '" << key << "' (" << m_code << ")" << std::endl;
-        static std::wstring error(L"text not found");
+        static sf::String error("text not found");
         return error;
     }
     return it->second;
@@ -53,7 +53,7 @@ bool I18n::loadFromLocale()
     // Get system's locale, keep only the first two characters and make them lower-case
     // It's somewhat cross-platform! ("fr_Fr" => "fr", "French" => "fr")
     std::string locale(setlocale(LC_ALL, ""));
-    locale = str_lower(locale.substr(0, 2));
+    locale = utils::lower(locale.substr(0, 2));
 
     // Reset locale so other functions are not impacted
     setlocale(LC_ALL, "C");
@@ -67,9 +67,6 @@ bool I18n::loadFromLocale()
     std::cerr <<  "[I18n] warning: couldn't load any language!" << std::endl;
     return false;
 }
-
-
-
 
 
 bool I18n::loadFromCode(const std::string& code)
@@ -110,12 +107,12 @@ bool I18n::loadFromFile(const char* filename)
             size_t pos = line.find(TOKEN_SEPARATOR);
             if (pos != std::string::npos)
             {
-                std::string key = str_trim(line.substr(0, pos));
-                std::string text = str_trim(line.substr(pos + 1));
-                str_self_replace<std::string>(text, "\\n", "\n");
+                std::string key = utils::trim(line.substr(0, pos));
+                std::string content = utils::trim(line.substr(pos + 1));
 
-                // Decode utf-8 and convert to wide string
-                m_content[key] = decode_utf8(text);
+                // Decode utf-8 and convert to sf::String
+                m_content.emplace(key, sf::String::fromUtf8(content.begin(), content.end()));
+                m_content.at(key).replace("\\n", "\n");
             }
             else
             {
@@ -126,5 +123,3 @@ bool I18n::loadFromFile(const char* filename)
     }
     return false;
 }
-
-

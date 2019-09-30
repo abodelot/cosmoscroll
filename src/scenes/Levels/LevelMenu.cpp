@@ -35,9 +35,9 @@ void LevelMenu::onFocus()
     size_t current = m_levels.getCurrent();
     size_t last_unlocked = m_levels.getLastUnlocked();
 
-    std::ostringstream progression;
-    progression << last_unlocked << "/" << nb_levels;
-    m_lab_progresion->setString(progression.str());
+    std::string progression = std::to_string(last_unlocked) + "/"
+        + std::to_string(nb_levels);
+    m_lab_progresion->setString(progression);
 
     // option widget
     m_opt_levels->Clear();
@@ -77,8 +77,9 @@ void LevelMenu::EventCallback(int id)
     printf(" - duration:      %02d:%02d\n", (int) m_levels.getDuration() / 60, (int) m_levels.getDuration() % 60);
 #endif
             // Init control panel
-            std::wstring s = I18n::templatize("panel.level", "{level}", selected_level);
-            ControlPanel::getInstance().setGameInfo(s);
+            ControlPanel::getInstance().setGameInfo(
+                I18n::templatize("panel.level", "{level}", selected_level)
+            );
             // Init entity manager
             EntityManager::getInstance().initialize();
             Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);

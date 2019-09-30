@@ -1,7 +1,7 @@
 #ifndef ITEM_HPP
 #define ITEM_HPP
 
-#include <string>
+#include <SFML/System/String.hpp>
 
 namespace tinyxml2
 {
@@ -30,7 +30,7 @@ public:
 
     static const char* typeToString(Type type);
 
-    std::wstring toString() const;
+    sf::String toString() const;
 
     void loadFromXmlNode(tinyxml2::XMLElement* elem);
 
@@ -40,7 +40,7 @@ public:
 
     int getPrice() const;
 
-    std::wstring getDescription() const;
+    sf::String getDescription() const;
 
     void equip(Player& player) const;
 

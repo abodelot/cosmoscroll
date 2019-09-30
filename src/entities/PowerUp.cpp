@@ -27,9 +27,8 @@ void PowerUp::dropRandom(const sf::Vector2f& position)
 }
 
 
-const std::wstring& PowerUp::getDescription() const
+sf::String PowerUp::getDescription() const
 {
-    static const std::wstring error(L"n/a");
     switch (m_type)
     {
         case REPAIR:      return _t("powerup.repair");
@@ -41,9 +40,8 @@ const std::wstring& PowerUp::getDescription() const
         case DOUBLE_SHOT: return _t("powerup.double_shot");
         case TRIPLE_SHOT: return _t("powerup.triple_shot");
         case SPEED:       return _t("powerup.speed");
-        default:          break;
+        default:          return "";
     }
-    return error;
 }
 
 

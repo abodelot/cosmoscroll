@@ -316,19 +316,19 @@ const char* Input::keyToString(sf::Keyboard::Key key)
 }
 
 
-std::wstring Input::buttonToString(unsigned int button)
+sf::String Input::buttonToString(unsigned int button)
 {
     if (button < sf::Joystick::ButtonCount)
     {
-        std::wostringstream oss;
-        oss << _t("joystick.button") << L' ' << button;
+        std::ostringstream oss;
+        oss << _t("joystick.button") << ' ' << button;
         return oss.str();
     }
-    return L"Invalid";
+    return "Invalid";
 }
 
 
-const std::wstring& Action::toString(Action::ID action)
+const sf::String& Action::toString(Action::ID action)
 {
     switch (action)
     {

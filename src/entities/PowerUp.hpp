@@ -35,7 +35,7 @@ public:
     /**
      * Powerup's description text
      */
-    const std::wstring& getDescription() const;
+    sf::String getDescription() const;
 
     Type getType() const;
 
