@@ -5,7 +5,7 @@ CosmoScroll is a space-based shoot'em up game. Inspired by games such as R-Type 
 This project is written in C++ with the SFML library. It also uses DUMB for playing modules files, and TinyXML for parsing XML files.
 
 - Author: Alexandre Bodelot <alexandre.bodelot@gmail.com>
-- Website: http://github.com/abodelot/cosmoscroll
+- Website: https://github.com/abodelot/cosmoscroll
 - License: GPL (see `LICENSE` file)
 
 

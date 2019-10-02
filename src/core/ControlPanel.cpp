@@ -78,27 +78,11 @@ ControlPanel::ControlPanel():
     str_points_.setPosition(530, 33);
     defaultTextStyle(str_points_);
 
-    // Story mode
     level_bar_.setTexture(Resources::getTexture("gui/level-bar.png"));
     level_bar_.setPosition(LEVEL_BAR_X, LEVEL_BAR_Y);
     level_cursor_.setTexture(Resources::getTexture("gui/level-cursor.png"));
     level_cursor_.setPosition(LEVEL_BAR_X, LEVEL_BAR_Y);
     level_duration_ = 0;
-}
-
-
-void ControlPanel::setMode(EntityManager::Mode mode)
-{
-    game_mode_ = mode;
-    switch (mode)
-    {
-        case EntityManager::LEVELS_MODE:
-            sfh::setX(level_cursor_, LEVEL_BAR_X);
-            break;
-        default:
-            break;
-    }
-    setScore(0);
 }
 
 
@@ -144,13 +128,11 @@ void ControlPanel::setElapsedTime(float seconds)
         wstr_self_replace(text, L"{sec}", sec.size() > 1 ? sec : L"0" + sec);
         timer_.setString(text);
         previous = rounded;
-        if (game_mode_ == EntityManager::LEVELS_MODE)
-        {
-            int max_progress = sfh::width(level_bar_) - sfh::width(level_cursor_);
-            int progress = max_progress * rounded / level_duration_;
-            int x = LEVEL_BAR_X + (progress > max_progress ? max_progress : progress);
-            sfh::setX(level_cursor_, x);
-        }
+
+        int max_progress = sfh::width(level_bar_) - sfh::width(level_cursor_);
+        int progress = max_progress * rounded / level_duration_;
+        int x = LEVEL_BAR_X + (progress > max_progress ? max_progress : progress);
+        sfh::setX(level_cursor_, x);
     }
 }
 
@@ -271,11 +253,8 @@ void ControlPanel::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(timer_, states);
     target.draw(str_points_, states);
 
-    if (game_mode_ == EntityManager::LEVELS_MODE)
-    {
-        target.draw(level_bar_, states);
-        target.draw(level_cursor_, states);
-    }
+    target.draw(level_bar_, states);
+    target.draw(level_cursor_, states);
 }
 
 // ProgessBar -----------------------------------------------------------------

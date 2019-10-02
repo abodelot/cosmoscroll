@@ -8,7 +8,6 @@ cancel = Abbrechen
 
 # MainMenu
 main.levels = Levels
-main.infinity = Infinity-Modus
 main.options = Optionen
 main.about = Über
 main.quit = Beenden
@@ -35,25 +34,6 @@ armory.upgrade_item = Upgrade auf Ebene {level}
 pause.title = Pause
 pause.resume = Spiel fortsetzen
 pause.quit = Spiel beenden
-
-# InfinityModeMenu
-infinity.title = Infinity-Modus
-infinity.play = Spielen
-infinity.leaderboard = Zeige bester Score
-
-# LeaderboardMenu
-leaderboard.title = Online Highscores
-leaderboard.wait = Please wait...
-
-# SendScoreMenu
-sendscore.title = Game Over
-sendscore.pseudo = Dein Name:
-sendscore.send_score = Sende meinen Score
-sendscore.play_again = Noch einmal spielen
-sendscore.new_record = Dein Score: {score}\nGlückwunsch, Neuer Highscore!
-sendscore.no_record = Dein Score: {score}\nStreng dich an!
-sendscore.error_cheat = Upload verweigert:\nDu hast gecheated!
-sendscore.error_altered_res = Upload verweigert:\nSpielressourcen wurden modifiziert!
 
 # OptionMenu
 options.title = Optionen

@@ -16,9 +16,6 @@ public:
         SC_IntroScreen,
         SC_PlayScreen,
         SC_GameOverScreen,
-        SC_InfinityModeMenu,
-        SC_SendScoreMenu,
-        SC_LeaderboardMenu,
         SC_PauseMenu,
         SC_MainMenu,
         SC_AboutMenu,
@@ -90,11 +87,6 @@ public:
     void setVerticalSync(bool vsync);
     bool isVerticalSync() const;
 
-    /**
-     * Check is game resources have been modified (see MD5 checksums)
-     */
-    bool resourcesChecked() const;
-
 private:
     Game();
     ~Game();
@@ -105,19 +97,13 @@ private:
     void writeConfig() const;
 
     /**
-     * Take a screenshot and save the image to screenshot_dir_
+     * Take a screenshot and save the image to DEFAULT_SCREENSHOT_DIR
      */
     void takeScreenshot() const;
-
-    /**
-     * Check game data files are unaltered
-     */
-    bool checkResourcesPurity(const std::string& resources_dir);
 
     sf::RenderWindow m_window;
     bool m_vsync;
     bool m_running;
-    bool m_resources_checked;
 
     // Screens
     Screen* m_screens[SC_COUNT];

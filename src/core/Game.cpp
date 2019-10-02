@@ -1,5 +1,4 @@
 #include <iostream>
-#include "vendor/md5/md5.hpp"
 
 #include "Game.hpp"
 #include "Constants.hpp"
@@ -81,19 +80,16 @@ void Game::loadResources(const std::string& data_path)
     // Splash screen
     setResolution(sf::Vector2u(APP_WIDTH, APP_HEIGHT));
     sf::Sprite s(Resources::getTexture("gui/cosmoscroll-logo.png"));
-    s.setPosition({(APP_WIDTH - s.getTextureRect().width) / 2.f,
-                   (APP_HEIGHT - s.getTextureRect().height) / 2.f});
+    s.setPosition(
+        (APP_WIDTH - s.getTextureRect().width) / 2.f,
+        (APP_HEIGHT - s.getTextureRect().height) / 2.f
+    );
     m_window.draw(s);
     m_window.display();
 
     // Init other modules
     I18n::getInstance().setDataPath(resources_dir + "/lang");
     MessageSystem::setFont(Resources::getFont("Vera.ttf"));
-
-    // Check against MD5
-    m_resources_checked = checkResourcesPurity(resources_dir);
-    if (!m_resources_checked)
-        std::cerr << "* warning: MD5 checksum failed" << std::endl;
 
     // Load XML resources
     std::cout << "* loading " << XML_LEVELS << "..." << std::endl;
@@ -233,9 +229,6 @@ void Game::setCurrentScreen(ScreenID screen_id)
             CASE_SCENE(MainMenu);
             CASE_SCENE(PlayScreen);
             CASE_SCENE(GameOverScreen);
-            CASE_SCENE(InfinityModeMenu);
-            CASE_SCENE(SendScoreMenu);
-            CASE_SCENE(LeaderboardMenu);
             CASE_SCENE(PauseMenu);
             CASE_SCENE(AboutMenu);
             CASE_SCENE(LevelMenu);
@@ -337,36 +330,4 @@ void Game::setVerticalSync(bool vsync)
 bool Game::isVerticalSync() const
 {
     return m_vsync;
-}
-
-
-bool Game::checkResourcesPurity(const std::string& resources_dir)
-{
-    bool check_passed = true;
-    std::ifstream file;
-    MD5 md5;
-
-    file.open((resources_dir + XML_WEAPONS).c_str());
-    check_passed &= (md5.calculate(file) == MD5SUM_WEAPONS);
-    file.close();
-
-    file.open((resources_dir + XML_UPGRADES).c_str());
-    check_passed &= (md5.calculate(file) == MD5SUM_UPGRADES);
-    file.close();
-
-    file.open((resources_dir + XML_SPACESHIPS).c_str());
-    check_passed &= (md5.calculate(file) == MD5SUM_SPACESHIPS);
-    file.close();
-
-    file.open((resources_dir + XML_ANIMATIONS).c_str());
-    check_passed &= (md5.calculate(file) == MD5SUM_ANIMATIONS);
-    file.close();
-
-    return check_passed;
-}
-
-
-bool Game::resourcesChecked() const
-{
-    return m_resources_checked;
 }

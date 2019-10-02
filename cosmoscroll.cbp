@@ -176,12 +176,6 @@
 		<Unit filename="src/scenes/CosmoButton.hpp" />
 		<Unit filename="src/scenes/GameOverScreen.cpp" />
 		<Unit filename="src/scenes/GameOverScreen.hpp" />
-		<Unit filename="src/scenes/InfinityMode/InfinityModeMenu.cpp" />
-		<Unit filename="src/scenes/InfinityMode/InfinityModeMenu.hpp" />
-		<Unit filename="src/scenes/InfinityMode/LeaderboardMenu.cpp" />
-		<Unit filename="src/scenes/InfinityMode/LeaderboardMenu.hpp" />
-		<Unit filename="src/scenes/InfinityMode/SendScoreMenu.cpp" />
-		<Unit filename="src/scenes/InfinityMode/SendScoreMenu.hpp" />
 		<Unit filename="src/scenes/IntroScreen.cpp" />
 		<Unit filename="src/scenes/IntroScreen.hpp" />
 		<Unit filename="src/scenes/Levels/ArmoryMenu.cpp" />
@@ -224,10 +218,8 @@
 		<Unit filename="src/utils/SFML_Helper.hpp" />
 		<Unit filename="src/utils/StringUtils.cpp" />
 		<Unit filename="src/utils/StringUtils.hpp" />
-		<Unit filename="src/utils/md5/md5.cpp" />
-		<Unit filename="src/utils/md5/md5.hpp" />
-		<Unit filename="src/utils/tinyxml/tinyxml2.cpp" />
-		<Unit filename="src/utils/tinyxml/tinyxml2.h" />
+		<Unit filename="src/vendor/tinyxml/tinyxml2.cpp" />
+		<Unit filename="src/vendor/tinyxml/tinyxml2.h" />
 		<Extensions>
 			<envvars />
 			<code_completion />

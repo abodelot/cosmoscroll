@@ -80,7 +80,7 @@ void LevelMenu::EventCallback(int id)
             std::wstring s = I18n::templatize("panel.level", "{level}", selected_level);
             ControlPanel::getInstance().setGameInfo(s);
             // Init entity manager
-            EntityManager::getInstance().setMode(EntityManager::LEVELS_MODE);
+            EntityManager::getInstance().initialize();
             Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
             break;
         }

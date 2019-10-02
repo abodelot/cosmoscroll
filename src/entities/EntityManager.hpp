@@ -27,24 +27,12 @@ public:
     static const int BACKGROUND_SPEED = 20;
     static const int FOREGROUND_SPEED = 80;
 
-    enum Mode
-    {
-        LEVELS_MODE,
-        INFINITY_MODE
-    };
-
     /**
      * @return instance unique
      */
     static EntityManager& getInstance();
 
-    /**
-     * Initialiser un mode de jeu avant une partie
-     * Initialize a game mode before a game
-     */
-    void setMode(Mode mode);
-
-    Mode getMode() const;
+    void initialize();
 
     /**
      * Resize the universe dimensions
@@ -66,6 +54,7 @@ public:
      * @return true if game over
      */
     bool spawnBadGuys();
+    bool spawnEntities();
 
     /**
      * Update managed entities and resolve collisions
@@ -134,21 +123,7 @@ private:
     EntityManager(const EntityManager&);
     ~EntityManager();
 
-    Entity* createRandomEntity();
-
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-
-    /**
-     * Randomly spawn next entities in INFINITY_MODE
-     * @return true if there are entities left
-     */
-    bool infinityModeCallback();
-
-    /**
-     * Spawn next entities in the level in LEVELS_MODE
-     * @return true if there are entities left
-     */
-    bool levelsCallback();
 
     /**
      * Re-allocate player
@@ -165,21 +140,14 @@ private:
     WeaponMap m_weapons;
 
     typedef std::map<std::string, Spaceship> SpaceshipMap;
-    SpaceshipMap m_spaceships; // ID-indexed spaceships (Levels mode)
+    SpaceshipMap m_spaceships; // ID-indexed spaceships
 
-    std::vector<Spaceship> m_sorted_ships; // Random access (Infinity mode)
-
-    bool (EntityManager::*m_spawnMethod)();
-
-    Mode          m_mode;
     float         m_timer;
     Player*       m_player;
     int           m_width;
     int           m_height;
     int           m_decor_height;
     LevelManager& m_levels;
-    int           m_max_droppable_index;
-    int           m_max_droppable_points;
 
     // Particles ---------------------------------------------------------------
     class StarsEmitter: public ParticleSystem::Emitter

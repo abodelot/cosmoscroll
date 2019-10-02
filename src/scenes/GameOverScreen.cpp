@@ -30,7 +30,7 @@ void GameOverScreen::onEvent(const sf::Event& event)
 {
     Action::ID action = Input::feedEvent(event);
     if (action == Action::VALIDATE)
-        goNextScreen();
+        Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
 }
 
 
@@ -90,7 +90,7 @@ void GameOverScreen::update(float frametime)
     ParticleSystem::getInstance().update(frametime);
 
     if (m_started_at.getElapsedTime().asSeconds() >= SCREEN_DURATION)
-        goNextScreen();
+        Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
 }
 
 
@@ -99,13 +99,4 @@ void GameOverScreen::draw(sf::RenderTarget& target) const
     target.draw(m_panel);
     target.draw(m_entities);
     target.draw(m_text);
-}
-
-
-void GameOverScreen::goNextScreen() const
-{
-    if (m_entities.getMode() == EntityManager::LEVELS_MODE)
-        Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
-    else
-        Game::getInstance().setCurrentScreen(Game::SC_SendScoreMenu);
 }

@@ -16,8 +16,6 @@ public:
 
     static ControlPanel& getInstance();
 
-    void setMode(EntityManager::Mode mode);
-
     void update(float frametime);
 
     /**
@@ -136,15 +134,14 @@ private:
     sf::Text timer_;
     sf::Text game_info_;
     sf::Sprite m_background;
+    sf::Sprite bar_mask_;
 
-    EntityManager::Mode game_mode_;
     // levels
     int level_duration_;
     sf::Sprite level_cursor_;
     sf::Sprite level_bar_;
-    // infinity mode
+
     sf::Text str_points_;
-    sf::Sprite bar_mask_;
 };
 
 #endif // CONTROLPANEL_HPP

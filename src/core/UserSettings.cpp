@@ -8,7 +8,6 @@
 
 bool UserSettings::panel_on_top = true;
 
-int UserSettings::s_highscore = 0;
 int UserSettings::s_credits = 0;
 int UserSettings::s_items[] = {0};
 UserSettings::Init UserSettings::s_ctor;
@@ -50,18 +49,6 @@ void UserSettings::updateCredits(int diff)
 }
 
 
-int UserSettings::getHighscore()
-{
-    return s_highscore;
-}
-
-
-void UserSettings::setHighscore(int highscore)
-{
-    s_highscore = highscore;
-}
-
-
 void UserSettings::loadFromConfig(IniParser& config)
 {
     config.seekSection("Settings");
@@ -84,7 +71,6 @@ void UserSettings::loadFromConfig(IniParser& config)
     LevelManager::getInstance().setCurrent(level);
 
     s_credits = config.get("credits", 0);
-    s_highscore = config.get("arcade_highscore", 0);
 
     s_items[Item::WEAPON] =   config.get("lvl_laser", 1);
     s_items[Item::SHIELD] =   config.get("lvl_shield", 1);
@@ -130,7 +116,6 @@ void UserSettings::saveToConfig(IniParser& config)
     config.set("current_level",       LevelManager::getInstance().getCurrent());
     config.set("last_unlocked_level", LevelManager::getInstance().getLastUnlocked());
     config.set("credits",             s_credits);
-    config.set("arcade_highscore",    s_highscore);
     config.set("lvl_laser",    s_items[Item::WEAPON]);
     config.set("lvl_shield",   s_items[Item::SHIELD]);
     config.set("lvl_hull",     s_items[Item::HULL]);

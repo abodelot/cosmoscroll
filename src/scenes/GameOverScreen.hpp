@@ -20,8 +20,6 @@ public:
     void draw(sf::RenderTarget& target) const override;
 
 private:
-    void goNextScreen() const;
-
     sf::Clock            m_started_at;
     sf::Text             m_text;
     const EntityManager& m_entities;

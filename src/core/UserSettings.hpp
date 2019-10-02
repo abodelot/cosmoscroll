@@ -17,14 +17,10 @@ public:
     static int getCredits();
     static void updateCredits(int diff);
 
-    static int getHighscore();
-    static void setHighscore(int highscore);
-
     // Settings
     static bool panel_on_top;
 
 private:
-    static int s_highscore;
     static int s_credits;
     static int s_items[Item::_COUNT];
 

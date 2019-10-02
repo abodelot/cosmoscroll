@@ -52,8 +52,6 @@ EntityManager& EntityManager::getInstance()
 
 
 EntityManager::EntityManager():
-    m_spawnMethod(&EntityManager::infinityModeCallback),
-    m_mode(INFINITY_MODE),
     m_timer(0),
     m_player(NULL),
     m_width(0),
@@ -95,100 +93,65 @@ EntityManager::~EntityManager()
 }
 
 
-void EntityManager::setMode(Mode mode)
+void EntityManager::initialize()
 {
     // re-init particles
     m_particles.clear();
     MessageSystem::clear();
 
-    ControlPanel::getInstance().setMode(mode);
-
-    switch (mode)
+    ControlPanel::getInstance().setLevelDuration(m_levels.getDuration());
+    // le vaisseau du joueur est conservé d'un niveau à l'autre
+    if (m_player == NULL || m_player->getHP() <= 0)
     {
-        case LEVELS_MODE:
-            ControlPanel::getInstance().setLevelDuration(m_levels.getDuration());
-            m_spawnMethod = &EntityManager::levelsCallback;
-            // le vaisseau du joueur est conservé d'un niveau à l'autre
-            if (m_mode != LEVELS_MODE || m_player == NULL || m_player->getHP() <= 0)
-            {
-                respawnPlayer();
-            }
-            else
-            {
-                // Delete all entities but player
-                for (EntityList::iterator it = m_entities.begin(); it != m_entities.end();)
-                {
-                    if (*it != m_player)
-                    {
-                        delete *it;
-                        it = m_entities.erase(it);
-                    }
-                    else
-                    {
-                        ++it;
-                    }
-                }
-                m_player->setPosition(0, m_height / 2);
-                m_player->onInit();
-            }
-            // Set background images
-            if (m_levels.getBottomLayer())
-            {
-                m_layer1.setTexture(*m_levels.getBottomLayer());
-                m_layer1.setColor(sf::Color::White);
-            }
-
-            if (m_levels.getTopLayer())
-            {
-                m_layer2.setTexture(*m_levels.getTopLayer());
-                m_layer2.setColor(m_levels.getLayerColor());
-            }
-
-            m_decor_height = m_levels.getDecorHeight();
-            m_stars_emitter.createParticles(m_levels.getStarsCount());
-
-            // Set background music
-            if (m_levels.getMusicName() != NULL)
-            {
-                std::string filename = Resources::getSearchPath() + "/music/" + m_levels.getMusicName();
-                SoundSystem::openMusicFromFile(filename);
-                SoundSystem::playMusic();
-            }
-            else
-            {
-                SoundSystem::stopMusic();
-            }
-            break;
-
-        case INFINITY_MODE:
-        {
-            m_spawnMethod = &EntityManager::infinityModeCallback;
-            respawnPlayer();
-
-            // Fog with random color on layer 2,
-            sf::Color color(math::rand(0, 40), math::rand(0, 40), math::rand(20, 60));
-            m_layer1.setTexture(Resources::getTexture("layers/blue.jpg"));
-            m_layer1.setColor(color);
-            m_layer2.setTexture(Resources::getTexture("layers/fog.png"));
-            m_layer2.setColor(color);
-
-            m_decor_height = 0;
-            m_stars_emitter.createParticles(math::rand(50, 100));
-            SoundSystem::openMusicFromFile(Resources::getSearchPath() + "/music/spacesong.mod");
-            SoundSystem::playMusic();
-            m_max_droppable_index = 1;
-            m_max_droppable_points = 0;
-            break;
-        }
+        respawnPlayer();
     }
-    m_mode = mode;
+    else
+    {
+        // Delete all entities but player
+        for (EntityList::iterator it = m_entities.begin(); it != m_entities.end();)
+        {
+            if (*it != m_player)
+            {
+                delete *it;
+                it = m_entities.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
+        m_player->setPosition(0, m_height / 2);
+        m_player->onInit();
+    }
+    // Set background images
+    if (m_levels.getBottomLayer())
+    {
+        m_layer1.setTexture(*m_levels.getBottomLayer());
+        m_layer1.setColor(sf::Color::White);
+    }
+
+    if (m_levels.getTopLayer())
+    {
+        m_layer2.setTexture(*m_levels.getTopLayer());
+        m_layer2.setColor(m_levels.getLayerColor());
+    }
+
+    m_decor_height = m_levels.getDecorHeight();
+    m_stars_emitter.createParticles(m_levels.getStarsCount());
+
+    // Set background music
+    if (m_levels.getMusicName() != NULL)
+    {
+        std::string filename = Resources::getSearchPath() + "/music/" + m_levels.getMusicName();
+        SoundSystem::openMusicFromFile(filename);
+        SoundSystem::playMusic();
+    }
+    else
+    {
+        SoundSystem::stopMusic();
+    }
+
     m_timer = 0.f;
-}
-
-
-EntityManager::Mode EntityManager::getMode() const
-{
-    return m_mode;
 }
 
 
@@ -284,7 +247,7 @@ void EntityManager::clearEntities()
 
 bool EntityManager::spawnBadGuys()
 {
-    return !(this->*m_spawnMethod)() || m_player == NULL || m_player->isDead();
+    return !spawnEntities() || m_player == NULL || m_player->isDead();
 }
 
 
@@ -502,16 +465,8 @@ void EntityManager::loadSpaceships(const std::string& filename)
             ship.enableEngineEffect(engine_offset);
         }
 
-        // Insert spaceship in Spaceship map (LEVELS_MODE: access by id)
-        m_spaceships.insert(std::make_pair(id, ship));
-
-        // Insert spaceship in sorted vector (INFINITY_MODE: random access)
-        std::vector<Spaceship>::iterator it = m_sorted_ships.begin();
-        while (it != m_sorted_ships.end() && it->getPoints() < ship.getPoints())
-        {
-            ++it;
-        }
-        m_sorted_ships.insert(it, ship);
+        // Insert spaceship in Spaceship map
+        m_spaceships.emplace(id, ship);
 
         elem = elem->NextSiblingElement("spaceship");
     }
@@ -535,64 +490,7 @@ Player* EntityManager::getPlayer() const
 }
 
 
-Entity* EntityManager::createRandomEntity()
-{
-    if (math::rand(0, 9) == 0)
-    {
-        // Spawn asteroid
-        return new Asteroid(Asteroid::BIG);
-    }
-    else
-    {
-        // Progressive difficulty: the longer elapsed time is, the strongest entities are
-        // DROP_DELAY_STEP is time to wait before an entity type is able to be spawned
-
-        // Entities points:    Cannot appear before (seconds):
-        // 1 point             0
-        // 2 points            DROP_DELAY_STEP
-        // 3 points            DROP_DELAY_STEP * 2
-        // 4 points            DROP_DELAY_STEP * 3
-        // etc.
-        static const int DROP_DELAY_STEP = 25;
-
-        // Update index of the strongest spawnable spaceship
-        m_max_droppable_points = m_timer / DROP_DELAY_STEP + 1;
-
-        for (size_t i = m_max_droppable_index; i < m_sorted_ships.size(); ++i)
-        {
-            if (m_sorted_ships[i].getPoints() <= m_max_droppable_points)
-            {
-                m_max_droppable_index = i;
-            }
-            else
-            {
-                break;
-            }
-        }
-        return m_sorted_ships[math::rand(0, m_max_droppable_index)].clone();
-    }
-}
-
-
-bool EntityManager::infinityModeCallback()
-{
-    // Number of max entities = time / STEP + START
-    const int STEP = 8;
-    const int START = 1;
-    if (m_entities.size() < m_timer / STEP + START)
-    {
-        Entity* entity = createRandomEntity();
-        entity->setX(m_width - 1);
-        entity->setY(math::rand(0, m_height - (int) entity->getHeight()));
-        entity->move(entity->getOrigin());
-        addEntity(entity);
-    }
-    // Always true, spawn infinite entities, player will die eventually... :o)
-    return true;
-}
-
-
-bool EntityManager::levelsCallback()
+bool EntityManager::spawnEntities()
 {
     // Move entities from the spawn queue to the EntityManager
     Entity* next = m_levels.spawnNextEntity(m_timer);
