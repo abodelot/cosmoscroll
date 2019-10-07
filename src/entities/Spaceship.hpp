@@ -4,7 +4,7 @@
 #include "Damageable.hpp"
 #include "Animator.hpp"
 #include "entities/Weapon.hpp"
-#include "core/ParticleSystem.hpp"
+#include "core/ParticleEmitter.hpp"
 
 class Spaceship: public Damageable
 {
@@ -59,7 +59,7 @@ private:
     float     m_angle;
 
     bool m_engineEmitterEnabled;
-    ParticleSystem::Emitter m_engineEmitter;
+    ParticleEmitter m_engineEmitter;
     sf::Vector2f m_engineOffset;
 };
 

@@ -10,26 +10,26 @@ Missile::Missile(Entity* emitter, float angle, const sf::Texture& texture, int s
     m_angle(angle),
     m_owner(emitter)
 {
-    m_smoke_emitter.setTextureRect(sf::IntRect(0, 0, 16, 16));
-    m_smoke_emitter.setLooping(true);
-    m_smoke_emitter.setSpeed(50, 25);
-    m_smoke_emitter.setLifetime(1);
-    m_smoke_emitter.setAngle(angle - math::PI, 0.5);
-    m_smoke_emitter.setScale(0.5, 1.5);
-    m_smoke_emitter.createParticles(80);
+    m_smokeEmitter.setTextureRect(sf::IntRect(0, 0, 16, 16));
+    m_smokeEmitter.setLooping(true);
+    m_smokeEmitter.setSpeed(50, 25);
+    m_smokeEmitter.setLifetime(1);
+    m_smokeEmitter.setAngle(angle - math::PI, 0.5);
+    m_smokeEmitter.setScale(0.5, 1.5);
+    m_smokeEmitter.createParticles(80);
 }
 
 
 Missile::~Missile()
 {
-    m_smoke_emitter.clearParticles();
+    m_smokeEmitter.clearParticles();
 }
 
 
 void Missile::onUpdate(float frametime)
 {
     Projectile::onUpdate(frametime);
-    m_smoke_emitter.setPosition(getX() - 6, getY() - 3);
+    m_smokeEmitter.setPosition(getX() - 6, getY() - 3);
 }
 
 

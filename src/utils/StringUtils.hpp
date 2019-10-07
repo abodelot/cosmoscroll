@@ -6,6 +6,11 @@
 namespace utils {
 
 /**
+ * Return directory path from path if any, otherwise empty
+ */
+std::string dirname(const std::string& path);
+
+/**
  * Return a copy of the string with leading and trailing whitespace removed
  */
 std::string trim(const std::string& str);

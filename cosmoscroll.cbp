@@ -85,6 +85,8 @@
 		<Unit filename="src/core/Main.cpp" />
 		<Unit filename="src/core/MessageSystem.cpp" />
 		<Unit filename="src/core/MessageSystem.hpp" />
+		<Unit filename="src/core/ParticleEmitter.cpp" />
+		<Unit filename="src/core/ParticleEmitter.hpp" />
 		<Unit filename="src/core/ParticleSystem.cpp" />
 		<Unit filename="src/core/ParticleSystem.hpp" />
 		<Unit filename="src/core/Resources.cpp" />

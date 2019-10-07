@@ -64,10 +64,7 @@ Game::~Game()
 
 void Game::init(const std::string& path)
 {
-    size_t found = path.find_last_of("/\\");
-    m_app_dir = path.substr(0, found + 1);
-    if (m_app_dir.empty())
-        m_app_dir = "./";
+    m_app_dir = utils::dirname(path);
 }
 
 

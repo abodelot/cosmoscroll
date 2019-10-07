@@ -1,32 +1,11 @@
 #include "Entity.hpp"
 #include "core/Collisions.hpp"
 
-// BoundingBox -----------------------------------------------------------------
-
-Entity::BoundingBox::BoundingBox():
-    left(0.f),
-    top(0.f),
-    right(0.f),
-    bottom(0.f)
-{
-}
-
-
-Entity::BoundingBox::BoundingBox(float l, float t, float r, float b):
-    left(l),
-    top(t),
-    right(r),
-    bottom(b)
-{
-}
-
-// Entity ----------------------------------------------------------------------
 
 Entity::Entity():
     m_dead(false),
     m_team(NEUTRAL)
 {
-
 }
 
 
@@ -55,10 +34,12 @@ void Entity::setTeam(Team team)
 }
 
 
-Entity::BoundingBox Entity::getBoundingBox() const
+sf::FloatRect Entity::getBoundingBox() const
 {
     sf::Vector2f pos = getPosition() - getOrigin();
-    return BoundingBox(pos.x, pos.y, pos.x + getTextureRect().width, pos.y + getTextureRect().height);
+    return sf::FloatRect(
+        pos.x, pos.y, getTextureRect().width, getTextureRect().height
+    );
 }
 
 

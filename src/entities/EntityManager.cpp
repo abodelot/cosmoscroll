@@ -171,7 +171,7 @@ void EntityManager::update(float frametime)
     {
         Entity& entity = **it;
         entity.onUpdate(frametime);
-        Entity::BoundingBox box = entity.getBoundingBox();
+        sf::FloatRect box = entity.getBoundingBox();
 
         if (entity.isDead())
         {
@@ -179,7 +179,7 @@ void EntityManager::update(float frametime)
             delete *it;
             it = m_entities.erase(it);
         }
-        else if (box.right < 0 || box.bottom < 0 || box.left > m_width || box.top > m_height)
+        else if (box.left + box.width < 0 || box.top + box.height < 0 || box.left > m_width || box.top > m_height)
         {
             // Remove entities outside the entity manager
             delete *it;
@@ -625,4 +625,3 @@ void EntityManager::ParallaxLayer::draw(sf::RenderTarget& target, sf::RenderStat
         target.draw(m_vertices, 8, sf::Quads, states);
     }
 }
-

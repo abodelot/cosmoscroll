@@ -6,7 +6,7 @@
 #include "PowerUp.hpp"
 #include "core/Input.hpp"
 #include "core/ControlPanel.hpp"
-#include "core/ParticleSystem.hpp"
+#include "core/ParticleEmitter.hpp"
 #include "entities/Weapon.hpp"
 
 /**
@@ -107,7 +107,7 @@ private:
 
     int              m_score;
 
-    class ShieldEmitter: public ParticleSystem::Emitter
+    class ShieldEmitter: public ParticleEmitter
     {
     public:
         void createParticles(size_t count);
@@ -115,11 +115,11 @@ private:
         void onParticleUpdated(ParticleSystem::Particle& particle, float frametime) const override;
     };
 
-    ShieldEmitter           m_shieldEmitter;
-    ParticleSystem::Emitter m_engineEmitter;
-    ParticleSystem::Emitter m_smokeEmitter;
-    ParticleSystem::Emitter m_snowflakesEmitter;
-    ParticleSystem::Emitter m_powerupEmitter;
+    ShieldEmitter   m_shieldEmitter;
+    ParticleEmitter m_engineEmitter;
+    ParticleEmitter m_smokeEmitter;
+    ParticleEmitter m_snowflakesEmitter;
+    ParticleEmitter m_powerupEmitter;
 };
 
 #endif // PLAYER_HPP

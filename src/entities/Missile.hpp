@@ -2,7 +2,7 @@
 #define MISSILE_HPP
 
 #include "Projectile.hpp"
-#include "core/ParticleSystem.hpp"
+#include "core/ParticleEmitter.hpp"
 
 class Missile: public Projectile
 {
@@ -19,7 +19,7 @@ public:
 private:
     float   m_angle;
     Entity* m_owner;
-    ParticleSystem::Emitter m_smoke_emitter;
+    ParticleEmitter m_smokeEmitter;
 
 };
 

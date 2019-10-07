@@ -150,7 +150,7 @@ private:
     LevelManager& m_levels;
 
     // Particles ---------------------------------------------------------------
-    class StarsEmitter: public ParticleSystem::Emitter
+    class StarsEmitter: public ParticleEmitter
     {
     protected:
         void onParticleUpdated(ParticleSystem::Particle& particle, float) const override;
@@ -158,10 +158,10 @@ private:
         void onParticleCreated(ParticleSystem::Particle& particle) const override;
     };
 
-    ParticleSystem&         m_particles;
-    ParticleSystem::Emitter m_impact_emitter;
-    ParticleSystem::Emitter m_green_emitter;
-    StarsEmitter            m_stars_emitter;
+    ParticleSystem& m_particles;
+    ParticleEmitter m_impact_emitter;
+    ParticleEmitter m_green_emitter;
+    StarsEmitter    m_stars_emitter;
 
     // Parallax scrolling ------------------------------------------------------
     class ParallaxLayer: public sf::Drawable

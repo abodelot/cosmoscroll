@@ -3,6 +3,13 @@
 
 namespace utils {
 
+std::string dirname(const std::string& path)
+{
+    size_t last_separator = path.find_last_of("/\\");
+    std::string result = path.substr(0, last_separator + 1);
+    return result;
+}
+
 std::string trim(const std::string& str)
 {
     const char* WHITESPACES = " \t\n\r\0xb";
