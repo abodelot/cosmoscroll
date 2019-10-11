@@ -3,7 +3,7 @@
 
 const int       BUTTON_WIDTH  = 120;
 const int       BUTTON_HEIGHT = 25;
-const sf::Color ERROR_COLOR   = sf::Color(255, 220, 0);
+const sf::Color ERROR_COLOR   = sf::Color(255, 200, 0);
 
 
 ConfigButton::ConfigButton(gui::Menu* owner, Action::ID action):

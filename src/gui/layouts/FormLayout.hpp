@@ -17,28 +17,22 @@ class FormLayout: public Layout
 public:
     FormLayout(float x=0.f, float y=0.f);
 
-    void AddRow(const sf::String& label, Widget* widget);
+    void addRow(const sf::String& label, Widget* widget);
 
-    /**
-     * Holds the horizontal alignment of the labels (left or right).
-     */
-    void SetLabelAlignment(Align::EAlign align);
-    Align::EAlign GetLabelAlignmenent() const;
+    Label* getLabelAt(int index);
 
-    Label* GetLabelAt(int index);
+    void recomputeLabelWidth();
 
-    /**
-     * Force refresh (if widgets contents have been modified)
-     */
-    void AlignRows();
 private:
-
+    /**
+     * Recompute widgets position
+     */
+    void alignRows();
 
     typedef std::pair<Label*, Widget*> FormRow;
 
-    std::vector<FormRow> rows_;
-    int label_width_;
-    Align::EAlign label_alignment_;
+    std::vector<FormRow> m_rows;
+    int m_maxLabelWidth;
 };
 
 }

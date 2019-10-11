@@ -3,88 +3,57 @@
 using namespace gui;
 
 
-FormLayout::FormLayout(float x, float y): Layout(x, y)
+FormLayout::FormLayout(float x, float y):
+    Layout(x, y),
+    m_maxLabelWidth(0)
 {
-    label_alignment_ = Align::LEFT;
-    label_width_ = 0;
 }
 
 
-void FormLayout::AddRow(const sf::String& str_label, Widget* widget)
+void FormLayout::addRow(const sf::String& strLabel, Widget* widget)
 {
-    Label* label = new Label(widget->GetOwner(), str_label);
+    Label* label = new Label(widget->GetOwner(), strLabel);
+    m_maxLabelWidth = std::max(m_maxLabelWidth, label->GetWidth());
 
-    // compute y position from last widget
-    int y = 0;
-    if (rows_.size() > 0)
+    // Append in form
+    m_rows.push_back(FormRow(label, widget));
+    alignRows();
+}
+
+
+Label* FormLayout::getLabelAt(int index)
+{
+    return m_rows.at(index).first;
+}
+
+
+void FormLayout::recomputeLabelWidth()
+{
+    m_maxLabelWidth = 0;
+    for (size_t i = 0; i < m_rows.size(); ++i)
     {
-        int label_y = rows_.back().first->getPosition().y + rows_.back().first->GetHeight();
-        int widget_y = rows_.back().second->getPosition().y + rows_.back().second->GetHeight();
-        y = std::max(label_y, widget_y) + GetSpacing().y;
+        m_maxLabelWidth = std::max(m_maxLabelWidth, m_rows[i].first->GetWidth());
     }
-    else
+    alignRows();
+}
+
+
+void FormLayout::alignRows()
+{
+    sf::Vector2f offset = GetOffset();
+    for (size_t i = 0; i < m_rows.size(); ++i)
     {
-        y = GetOffset().y;
-    }
-    label->setPosition(label->getPosition().x, y);
-    widget->setPosition(widget->getPosition().x, y);
+        Label* label = m_rows[i].first;
+        Widget* widget = m_rows[i].second;
 
-    // label_width_ is the larger label inserted in the layout
-    if (label->GetWidth() > label_width_)
-        label_width_ = label->GetWidth();
+        label->setPosition(offset.x, offset.y);
 
-
-
-    // append in table
-    FormRow row(label, widget);
-    rows_.push_back(row);
-
-    AlignRows();
-}
-
-
-void FormLayout::SetLabelAlignment(Align::EAlign align)
-{
-    label_alignment_ = align;
-    AlignRows();
-}
-
-
-Align::EAlign FormLayout::GetLabelAlignmenent() const
-{
-    return label_alignment_;
-}
-
-
-Label* FormLayout::GetLabelAt(int index)
-{
-    if (index < (int) rows_.size())
-    {
-        return rows_[index].first;
-    }
-    return NULL;
-}
-
-
-void FormLayout::AlignRows()
-{
-
-    for (size_t i = 0; i < rows_.size(); ++i)
-    {
-        Label* current_lab = rows_[i].first;
-        int x = GetOffset().x;
-        switch (label_alignment_)
+        float widgetY = offset.y;
+        if (widget->GetHeight() < Widget::MIN_HEIGHT)
         {
-            case Align::LEFT:
-                x += GetSpacing().x;
-                break;
-            case Align::RIGHT:
-                x += GetSpacing().x + label_width_ - current_lab->GetWidth();
-                break;
-            default:
-                break;
+            widgetY += (Widget::MIN_HEIGHT - widget->GetHeight()) / 2;
         }
-        current_lab->setPosition(x, current_lab->getPosition().y);
-        rows_[i].second->setPosition(GetOffset().x + label_width_ + (GetSpacing().x * 2), rows_[i].second->getPosition().y);
+        widget->setPosition(offset.x + m_maxLabelWidth + GetSpacing().x, widgetY);
+        offset.y += std::max(label->GetHeight(), widget->GetHeight()) + GetSpacing().y;
     }
 }

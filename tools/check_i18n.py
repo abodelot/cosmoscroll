@@ -21,10 +21,10 @@ reference = get_strings(lang_dir + "en.lang")
 
 for f in os.listdir(lang_dir):
     if f != "en.lang":
-        print "* Checking " + f
+        print("* Checking " + f)
         strings = get_strings(lang_dir + f)
         if strings == reference:
-            print "  OK (%d strings)" % len(strings)
+            print("  OK (%d strings)" % len(strings))
         else:
-            print "  missing strings: " + ", ".join(reference.difference(strings))
-            print "  extra strings: " + ", ".join(strings.difference(reference))
+            print("  missing strings: " + ", ".join(reference.difference(strings)))
+            print("  extra strings: " + ", ".join(strings.difference(reference)))

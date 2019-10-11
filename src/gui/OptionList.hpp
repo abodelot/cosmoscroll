@@ -73,7 +73,6 @@ private:
     int current_opt_;
     size_t max_opt_width_;
     int text_size_;
-    sf::RectangleShape box_;
     sf::RectangleShape inside_box_;
     sf::ConvexShape left_arrow_;
     sf::ConvexShape right_arrow_;

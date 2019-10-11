@@ -100,7 +100,7 @@ void ShipItemWidget::refresh()
         if (UserSettings::getCredits() >= next_item.getPrice())
             m_txt_price.setFillColor(sf::Color::Green);
         else
-            m_txt_price.setFillColor(sf::Color(255, 128, 0));
+            m_txt_price.setFillColor(sf::Color(255, 200, 0));
     }
     else
     {
@@ -109,8 +109,6 @@ void ShipItemWidget::refresh()
         m_txt_upgrade.setStyle(sf::Text::Italic);
         m_txt_upgrade.setFillColor(sf::Color(255, 255, 255, 128));
         m_txt_price.setString("");
-
-
     }
     m_txt_upgrade.setPosition(270 - int(sfh::width(m_txt_upgrade)) / 2, 14);
     m_txt_price.setPosition(270 - int(sfh::width(m_txt_price)) / 2, 32);

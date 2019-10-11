@@ -16,10 +16,10 @@ LevelMenu::LevelMenu():
     form.SetSpacing(10, 16);
 
     m_opt_levels = new gui::OptionList<int>(this);
-    form.AddRow(_t("levels.select"), m_opt_levels);
+    form.addRow(_t("levels.select"), m_opt_levels);
 
     m_lab_progresion = new gui::Label(this, "");
-    form.AddRow(_t("levels.progression"), m_lab_progresion);
+    form.addRow(_t("levels.progression"), m_lab_progresion);
 
     gui::VBoxLayout layout(210, 240);
     layout.Add(new CosmoButton(this, _t("levels.play")))->SetCallbackID(1);

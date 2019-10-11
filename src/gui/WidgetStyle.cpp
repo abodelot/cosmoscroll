@@ -1,9 +1,9 @@
 #include "WidgetStyle.hpp"
 
-#define DEFAULT_COLOR    sf::Color(0x3e, 0xde, 0)
-#define DEFAULT_BG_COLOR sf::Color(0x70, 0x70, 0x70)
+#define DEFAULT_COLOR    sf::Color(0xaa, 0xaa, 0xaa)
+#define DEFAULT_BG_COLOR sf::Color(0x50, 0x50, 0x50)
 #define FOCUS_COLOR      sf::Color(0x3e, 0xde, 0)
-#define FOCUS_BG_COLOR   sf::Color(0x50, 0x50, 0x50)
+#define FOCUS_BG_COLOR   sf::Color(0x70, 0x70, 0x70)
 
 using namespace gui;
 

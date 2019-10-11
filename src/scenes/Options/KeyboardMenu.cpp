@@ -8,8 +8,8 @@ KeyboardMenu::KeyboardMenu():
 {
     setTitle(_t("keyboard.title"));
 
-    gui::FormLayout form(80, 120);
-    form.SetSpacing(60, 10);
+    gui::FormLayout form(140, 120);
+    form.SetSpacing(20, 10);
     but_up_      = addRow(form, Action::UP);
     but_down_    = addRow(form, Action::DOWN);
     but_left_    = addRow(form, Action::LEFT);
@@ -87,7 +87,7 @@ void KeyboardMenu::EventCallback(int id)
     // We are now waiting for user input
     if (m_triggered != NULL)
     {
-        m_triggered->setString(". . .");
+        m_triggered->setString("<press key>");
     }
 }
 
@@ -96,6 +96,6 @@ ConfigButton* KeyboardMenu::addRow(gui::FormLayout& form, Action::ID action)
 {
     ConfigButton* button = new ConfigButton(this, action);
     button->setKeyboardLabel();
-    form.AddRow(Action::toString(action), button);
+    form.addRow(Action::toString(action), button);
     return button;
 }

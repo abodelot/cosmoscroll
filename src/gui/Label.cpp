@@ -22,7 +22,7 @@ void Label::setString(const sf::String& text)
 {
     text_.setString(text);
     const sf::FloatRect& rect = text_.getGlobalBounds();
-    Resize(rect.width, rect.height);
+    Resize(rect.width, std::max<float>(rect.height, Widget::MIN_HEIGHT));
 }
 
 

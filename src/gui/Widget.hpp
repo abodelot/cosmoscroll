@@ -6,16 +6,6 @@
 namespace gui
 {
 
-namespace Align
-{
-    enum EAlign
-    {
-        LEFT,
-        RIGHT,
-        CENTER
-    };
-}
-
 namespace State
 {
     enum EState
@@ -30,11 +20,13 @@ namespace State
 class Menu;
 
 /**
- * Base de tous les éléments graphiques (classe abstraite)
+ * Abstract base class for GUI elements
  */
 class Widget: public sf::Drawable, public sf::Transformable
 {
 public:
+    static const int MIN_HEIGHT = 25;
+
     /**
      * @param owner: menu conteneur du widget
      * @param focsable: indique si le widget peut prendre le focus

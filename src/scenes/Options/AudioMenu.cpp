@@ -8,28 +8,28 @@ AudioMenu::AudioMenu()
 {
     setTitle(_t("audio.title"));
 
-    gui::FormLayout form(60, 120);
-    form.SetSpacing(40, 20);
+    gui::FormLayout form(90, 120);
+    form.SetSpacing(20, 20);
 
     cb_music_ = new gui::CheckBox(this);
     cb_music_->Check(SoundSystem::isMusicEnabled());
     cb_music_->SetCallbackID(2);
-    form.AddRow(_t("audio.enable_music"), cb_music_);
+    form.addRow(_t("audio.enable_music"), cb_music_);
 
     sl_music_vol_ = new gui::Slider(this, 200);
     sl_music_vol_->SetValue(SoundSystem::getMusicVolume());
     sl_music_vol_->SetCallbackID(3);
-    form.AddRow(_t("audio.music_volume"), sl_music_vol_);
+    form.addRow(_t("audio.music_volume"), sl_music_vol_);
 
     cb_sound_ = new gui::CheckBox(this);
     cb_sound_->Check(SoundSystem::isSoundEnabled());
     cb_sound_->SetCallbackID(4);
-    form.AddRow(_t("audio.enable_sound"), cb_sound_);
+    form.addRow(_t("audio.enable_sound"), cb_sound_);
 
     sl_sound_vol_ = new gui::Slider(this, 200);
     sl_sound_vol_->SetValue(SoundSystem::getSoundVolume());
     sl_sound_vol_->SetCallbackID(5);
-    form.AddRow(_t("audio.sound_volume"), sl_sound_vol_);
+    form.addRow(_t("audio.sound_volume"), sl_sound_vol_);
 
     gui::Button* b = new CosmoButton(this, _t("back"));
     b->setPosition(210, 335);

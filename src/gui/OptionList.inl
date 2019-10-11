@@ -38,6 +38,7 @@ OptionList<T>::OptionList(Menu* owner) :
 
     // call Resize later, boxes aren't builded yet
     OnStateChanged(GetState());
+    Resize(0, Widget::MIN_HEIGHT);
 }
 
 template <class T>
@@ -57,12 +58,6 @@ void OptionList<T>::BuildBoxes()
     inside_box_.setOutlineColor(style.global_border_color);
     inside_box_.setFillColor(style.optlist_bg_color);
     inside_box_.setPosition(arrow_box_width, 0);
-
-    box_.setSize(sf::Vector2f(total_width, arrow_box_width));
-    box_.setOutlineColor(style.global_border_color);
-    box_.setOutlineThickness(1);
-    box_.setFillColor(style.optlist_bg_color);
-
 
     right_arrow_.setPosition(arrow_box_width + inside_box_width + BOX_PADDING + text_size_ / 2, right_arrow_.getPosition().y);
     SetState(IsFocused() ? State::FOCUSED : State::DEFAULT);
@@ -226,18 +221,17 @@ void OptionList<T>::OnStateChanged(State::EState state)
     switch (state)
     {
         case State::DEFAULT:
+            inside_box_.setFillColor(style.optlist_bg_color);
             left_arrow_.setFillColor(style.optlist_arrow_color);
             right_arrow_.setFillColor(style.optlist_arrow_color);
-            box_.setFillColor(style.optlist_bg_color);
             break;
         case State::FOCUSED:
+            inside_box_.setFillColor(style.optlist_bg_color_focus);
             left_arrow_.setFillColor(style.optlist_arrow_color_focus);
             right_arrow_.setFillColor(style.optlist_arrow_color_focus);
-            box_.setFillColor(style.optlist_bg_color_focus);
             break;
-        /*case State::HOVERED:
-            box_.setColor(style.optlist_bg_color_focus);
-            break;*/
+        case State::HOVERED:
+            inside_box_.setFillColor(style.optlist_bg_color_focus);
         default:
             break;
     }
@@ -247,7 +241,6 @@ template <class T>
 void OptionList<T>::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     states.transform *= getTransform();
-    target.draw(box_, states);
     target.draw(inside_box_, states);
     target.draw(left_arrow_, states);
     target.draw(right_arrow_, states);

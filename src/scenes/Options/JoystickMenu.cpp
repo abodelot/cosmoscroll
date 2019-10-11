@@ -17,7 +17,7 @@ JoystickMenu::JoystickMenu():
 
     sl_joystick_ = new gui::Slider(this, 160);
     sl_joystick_->SetCallbackID(9000);
-    form.AddRow(_t("joystick.sensitivity"), sl_joystick_);
+    form.addRow(_t("joystick.sensitivity"), sl_joystick_);
 
     gui::Button* back = new CosmoButton(this, _t("back"));
     back->setPosition(210, 410);
@@ -83,7 +83,7 @@ void JoystickMenu::EventCallback(int id)
     // We are now waiting for user input
     if (m_triggered != NULL)
     {
-        m_triggered->setString(". . .");
+        m_triggered->setString("<press button>");
     }
 }
 
@@ -92,6 +92,6 @@ ConfigButton* JoystickMenu::addRow(gui::FormLayout& form, Action::ID action)
 {
     ConfigButton* button = new ConfigButton(this, action);
     button->setJoystickLabel();
-    form.AddRow(Action::toString(action), button);
+    form.addRow(Action::toString(action), button);
     return button;
 }
