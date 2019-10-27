@@ -15,10 +15,6 @@ JoystickMenu::JoystickMenu():
     but_cooler_  = addRow(form, Action::USE_COOLER);
     but_pause_   = addRow(form, Action::PAUSE);
 
-    sl_joystick_ = new gui::Slider(this, 160);
-    sl_joystick_->SetCallbackID(9000);
-    form.addRow(_t("joystick.sensitivity"), sl_joystick_);
-
     gui::Button* back = new CosmoButton(this, _t("back"));
     back->setPosition(210, 410);
     back->SetCallbackID(9001);
@@ -59,8 +55,6 @@ void JoystickMenu::onFocus()
     but_missile_->setJoystickLabel();
     but_cooler_->setJoystickLabel();
     but_pause_->setJoystickLabel();
-
-    sl_joystick_->SetValue(100 - Input::getJoystickDeadzone());
 }
 
 
@@ -73,9 +67,6 @@ void JoystickMenu::EventCallback(int id)
         case Action::USE_COOLER:  m_triggered = but_cooler_;  break;
         case Action::USE_MISSILE: m_triggered = but_missile_; break;
         case Action::PAUSE:       m_triggered = but_pause_;   break;
-        case 9000:
-            Input::setJoystickDeadzone(100 - sl_joystick_->GetValue());
-            break;
         case 9001:
             Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
             break;

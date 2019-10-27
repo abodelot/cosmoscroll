@@ -96,7 +96,6 @@ void UserSettings::loadFromConfig(IniParser& config)
     Input::setButtonBinding(config.get("laser",   Input::getButtonBinding(Action::USE_LASER)), Action::USE_LASER);
     Input::setButtonBinding(config.get("cooler",  Input::getButtonBinding(Action::USE_COOLER)), Action::USE_COOLER);
     Input::setButtonBinding(config.get("missile", Input::getButtonBinding(Action::USE_MISSILE)), Action::USE_MISSILE);
-    Input::setJoystickDeadzone(config.get("sensitivity", Input::getJoystickDeadzone()));
 
     config.seekSection("Audio");
     SoundSystem::enableMusic(config.get("enable_music", true));
@@ -136,7 +135,6 @@ void UserSettings::saveToConfig(IniParser& config)
     config.set("laser",       Input::getButtonBinding(Action::USE_LASER));
     config.set("cooler",      Input::getButtonBinding(Action::USE_COOLER));
     config.set("missile",     Input::getButtonBinding(Action::USE_MISSILE));
-    config.set("sensitivity", Input::getJoystickDeadzone());
 
     config.seekSection("Audio");
     config.set("enable_music", SoundSystem::isMusicEnabled());

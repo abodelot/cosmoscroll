@@ -75,16 +75,6 @@ public:
     static unsigned int getButtonBinding(Action::ID action);
 
     /**
-     * Set the amount the analog joystick must be tilted before triggering action
-     */
-    static void setJoystickDeadzone(int dead_zone);
-
-    /**
-     * Get the amount the analog joystick must be tilted before triggering action
-     */
-    static int getJoystickDeadzone();
-
-    /**
      * Get string representation of a key
      */
     static const char* keyToString(sf::Keyboard::Key key);
@@ -101,7 +91,6 @@ private:
     static KeyMap       s_keys;
     static ButtonMap    s_buttons;
     static ActionMap    s_pressed;
-    static int s_joystick_deadzone;
 
     static struct Init { Init(); } s_ctor; // Static ctor
 };

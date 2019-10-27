@@ -1,7 +1,7 @@
 #include "Menu.hpp"
 #include "Widget.hpp"
-#include <cstdio>
-#define JOY_DEADZONE    50.f
+
+#define JOYSTICK_AXIS_THRESHOLD 99.f
 
 using namespace gui;
 
@@ -49,7 +49,6 @@ void Menu::OnEvent(const sf::Event& event)
             }
             break;
 
-
         case sf::Event::JoystickButtonPressed:
             if (event.joystickButton.button == 0 && focus_ != NULL)
             {
@@ -58,17 +57,16 @@ void Menu::OnEvent(const sf::Event& event)
             }
             break;
 
-
         case sf::Event::JoystickMoved:
             if (event.joystickMove.axis == sf::Joystick::X)
             {
                 if (focus_ != NULL)
                 {    // map to "left" and "right" keys
-                    if (event.joystickMove.position > JOY_DEADZONE)
+                    if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD)
                     {
                         focus_->OnKeyPressed(sf::Keyboard::Right);
                     }
-                    else if (event.joystickMove.position < -JOY_DEADZONE)
+                    else if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD)
                     {
                         focus_->OnKeyPressed(sf::Keyboard::Left);
                     }
@@ -76,17 +74,16 @@ void Menu::OnEvent(const sf::Event& event)
             }
             else if (event.joystickMove.axis == sf::Joystick::Y)
             {    // map to "up" and "down" key
-                if (event.joystickMove.position > JOY_DEADZONE)
+                if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD)
                 {
                     FocusNextWidget();
                 }
-                else if (event.joystickMove.position < -JOY_DEADZONE)
+                else if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD)
                 {
                     FocusPreviousWidget();
                 }
             }
             break;
-
 
         case sf::Event::TextEntered:
             if (focus_ != NULL)
@@ -94,7 +91,6 @@ void Menu::OnEvent(const sf::Event& event)
                 focus_->OnTextEntered(event.text.unicode);
             }
             break;
-
 
         case sf::Event::MouseMoved:
             new_hovered = GetHoveredWidget(event.mouseMove.x, event.mouseMove.y);
@@ -119,7 +115,6 @@ void Menu::OnEvent(const sf::Event& event)
                 hovered_widget_ = NULL;
             }
             break;
-
 
         case sf::Event::MouseButtonPressed:
             if (event.mouseButton.button == sf::Mouse::Left)
@@ -146,7 +141,6 @@ void Menu::OnEvent(const sf::Event& event)
                 }
             }
             break;
-
 
         case sf::Event::MouseButtonReleased:
             if (event.mouseButton.button == sf::Mouse::Left)

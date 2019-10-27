@@ -3,10 +3,11 @@
 #include "Input.hpp"
 #include "utils/I18n.hpp"
 
+#define JOYSTICK_AXIS_THRESHOLD 99.f
+
 Input::KeyMap    Input::s_keys;
 Input::ButtonMap Input::s_buttons;
 Input::ActionMap Input::s_pressed;
-int              Input::s_joystick_deadzone = 50;
 Input::Init      Input::s_ctor;
 
 
@@ -88,14 +89,14 @@ Action::ID Input::feedEvent(const sf::Event& event)
         case sf::Event::JoystickMoved:
             if (event.joystickMove.axis == sf::Joystick::X)
             {
-                if (event.joystickMove.position > s_joystick_deadzone)
+                if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD)
                 {
                     s_pressed[Action::RIGHT] = true;
                     return Action::RIGHT;
                 }
                 s_pressed[Action::RIGHT] = false;
 
-                if (event.joystickMove.position < -s_joystick_deadzone)
+                if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD)
                 {
                     s_pressed[Action::LEFT] = true;
                     return Action::LEFT;
@@ -104,14 +105,14 @@ Action::ID Input::feedEvent(const sf::Event& event)
             }
             else if (event.joystickMove.axis == sf::Joystick::Y)
             {
-                if (event.joystickMove.position > s_joystick_deadzone)
+                if (event.joystickMove.position > JOYSTICK_AXIS_THRESHOLD)
                 {
                     s_pressed[Action::DOWN] = true;
                     return Action::DOWN;
                 }
                 s_pressed[Action::DOWN] = false;
 
-                if (event.joystickMove.position < -s_joystick_deadzone)
+                if (event.joystickMove.position < -JOYSTICK_AXIS_THRESHOLD)
                 {
                     s_pressed[Action::UP] = true;
                     return Action::UP;
@@ -189,18 +190,6 @@ unsigned int Input::getButtonBinding(Action::ID action)
             return item.first;
     }
     return sf::Joystick::ButtonCount;
-}
-
-
-void Input::setJoystickDeadzone(int dead_zone)
-{
-    s_joystick_deadzone = dead_zone;
-}
-
-
-int Input::getJoystickDeadzone()
-{
-    return s_joystick_deadzone;
 }
 
 

@@ -48,7 +48,6 @@ keyboard.title = Clavier
 # JoystickMenu
 joystick.title = Joystick
 joystick.button = Bouton
-joystick.sensitivity = Sensibilité du joystick :
 
 # AudioMenu
 audio.title = Son et musique

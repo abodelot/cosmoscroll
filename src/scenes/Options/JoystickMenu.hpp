@@ -27,7 +27,6 @@ private:
     ConfigButton* but_missile_;
     ConfigButton* but_cooler_;
     ConfigButton* but_pause_;
-    gui::Slider* sl_joystick_;
 };
 
 #endif // JOYSTICKMENU_HPP

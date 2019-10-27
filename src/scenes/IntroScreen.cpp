@@ -9,7 +9,7 @@
 
 const float DURATION =  6.f;
 const float JINGLE_TIME = 3.f;
-const float ZOOM_FACTOR = 3.f;
+const float TITLE_INITIAL_SCALE = 3.f;
 
 
 IntroScreen::IntroScreen():
@@ -66,10 +66,9 @@ void IntroScreen::update(float frametime)
     m_spaceship->move(200 * frametime, 30 * frametime);
 
     // Zooming
-    sf::IntRect rect = m_title.getTextureRect();
-    float width = rect.width * ZOOM_FACTOR * (DURATION - m_elapsed) / DURATION;
-    float height = rect.height * ZOOM_FACTOR * (DURATION - m_elapsed) / DURATION;
-    sfh::resize(m_title, width, height);
+    const float time = DURATION - m_elapsed;
+    const float scale = time * TITLE_INITIAL_SCALE / DURATION + 0.5f;
+    m_title.setScale(scale, scale);
 
     // Fading
     m_title.setColor(sf::Color(255, 255, 255, (sf::Uint8) (255 * m_elapsed / DURATION)));
@@ -90,5 +89,3 @@ void IntroScreen::draw(sf::RenderTarget& target) const
     target.draw(m_entities);
     target.draw(m_title);
 }
-
-
