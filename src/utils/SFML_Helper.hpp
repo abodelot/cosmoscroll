@@ -33,26 +33,9 @@ inline float height(const T& obj)
     return obj.getLocalBounds().height * obj.getScale().y;
 }
 
-template <class T>
-float right(const T& obj)
-{
-    return obj.getPosition().x + width(obj);
-}
-
-template <class T>
-inline float bottom(const T& obj)
-{
-    return obj.getPosition().y + height(obj);
-}
-
-
-sf::Vector2f size(const sf::Sprite& sprite);
+sf::Vector2f getSize(const sf::Sprite& sprite);
 void resize(sf::Sprite& sprite, float width, float height);
 sf::Vector2f getCenter(const sf::Sprite& sprite);
-
-sf::Vector2f size(const sf::Text& text);
-void resize(sf::Text& text, float width, float height);
-sf::Vector2f getCenter(const sf::Text& text);
 
 // Color -----------------------------------------------------------------------
 

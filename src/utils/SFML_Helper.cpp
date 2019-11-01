@@ -6,7 +6,7 @@ namespace sfh
 
 // Transformable ---------------------------------------------------------------
 
-sf::Vector2f size(const sf::Sprite& sprite)
+sf::Vector2f getSize(const sf::Sprite& sprite)
 {
     const sf::IntRect& rect = sprite.getTextureRect();
     return sf::Vector2f(rect.width * sprite.getScale().x, rect.height * sprite.getScale().y);
@@ -28,25 +28,6 @@ sf::Vector2f getCenter(const sf::Sprite& sprite)
     sf::Vector2f center = sprite.getPosition();
     center.x += sprite.getTextureRect().width  / 2.f;
     center.y += sprite.getTextureRect().height / 2.f;
-    return center;
-}
-
-
-void resize(sf::Text& text, float width, float height)
-{
-    int local_width  = text.getLocalBounds().width;
-    int local_height = text.getLocalBounds().height;
-
-    if ((local_width > 0) && (local_height > 0))
-        text.setScale(width / local_width, height / local_height);
-}
-
-
-sf::Vector2f getCenter(const sf::Text& text)
-{
-    sf::Vector2f center = text.getPosition();
-    center.x += text.getLocalBounds().width  / 2.f;
-    center.y += text.getLocalBounds().height / 2.f;
     return center;
 }
 

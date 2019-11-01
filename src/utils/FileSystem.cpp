@@ -1,11 +1,10 @@
+#include "FileSystem.hpp"
+
 #include <cstdlib>
 #include <cstdio>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <iostream>
-
-#include "FileSystem.hpp"
-
 
 #if defined(_WIN32) || defined(__WIN32__)
     // Windows
@@ -16,7 +15,7 @@
         #define S_ISREG(mode) (((mode) & S_IFMT) == S_IFREG)
     #endif
 
-#elif defined(linux) || defined(__linux)
+#elif defined(__linux__)
     // Linux
     #define SYS_LINUX
 
@@ -26,8 +25,9 @@
 
 #endif
 
+namespace filesystem {
 
-bool FileSystem::isDirectory(const std::string& path)
+bool is_directory(const std::string& path)
 {
     struct stat sb;
     if (stat(path.c_str(), &sb) == 0)
@@ -38,7 +38,7 @@ bool FileSystem::isDirectory(const std::string& path)
 }
 
 
-bool FileSystem::isFile(const std::string& path)
+bool is_file(const std::string& path)
 {
     struct stat sb;
     if (stat(path.c_str(), &sb) == 0)
@@ -49,7 +49,7 @@ bool FileSystem::isFile(const std::string& path)
 }
 
 
-bool FileSystem::createDirectory(const std::string& name)
+bool create_directory(const std::string& name)
 {
     bool success = false;
 
@@ -65,7 +65,7 @@ bool FileSystem::createDirectory(const std::string& name)
 }
 
 
-std::string FileSystem::initSettingsDirectory(const std::string& appname)
+std::string init_settings_directory(const std::string& appname)
 {
     std::string config_dir;
 
@@ -85,9 +85,11 @@ std::string FileSystem::initSettingsDirectory(const std::string& appname)
 #endif
 
     // Create directory if it doesn't already exist
-    if (!isDirectory(config_dir))
+    if (!is_directory(config_dir))
     {
-        createDirectory(config_dir);
+        create_directory(config_dir);
     }
     return config_dir;
+}
+
 }

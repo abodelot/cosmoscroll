@@ -1,9 +1,6 @@
 # Executable
 cosmoscroll
 
-# Screenshots directory
-/screenshots
-
 # Compiled object files
 *.o
 

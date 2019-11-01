@@ -14,7 +14,7 @@
 #include "Image.hpp"
 #include "OptionList.hpp"
 #include "Slider.hpp"
-#include "TextBox.hpp"
+
 // layouts
 #include "layouts/VBoxLayout.hpp"
 #include "layouts/FormLayout.hpp"

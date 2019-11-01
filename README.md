@@ -2,6 +2,8 @@
 
 CosmoScroll is a space-based shoot'em up game. Inspired by games such as R-Type and Gradius, it features side-scrolling, retro-looking graphics and chiptune music.
 
+![cosmoscroll](screenshots/cosmoscroll.png)
+
 This project is written in C++ with the SFML library. It also uses DUMB for playing modules files, and TinyXML for parsing XML files.
 
 - Author: Alexandre Bodelot <alexandre.bodelot@gmail.com>
@@ -16,7 +18,7 @@ This project is written in C++ with the SFML library. It also uses DUMB for play
 - Move spaceship: <kbd>Up</kbd>, <kbd>Down</kbd>, <kbd>Left</kbd>, <kbd>Right</kbd>
 - Fire: <kbd>Space</kbd>
 - Launch missile: <kbd>A</kbd>
-- User cooler power-up: <kbd>Left Ctrl</kbd>
+- Use ice cube power-up: <kbd>Left Ctrl</kbd>
 - Pause the game: <kbd>Escap</kbd>
 - Place HUD at the top of the screen: <kbd>Page Up</kbd>
 - Place HUD at the bottom of the screen: <kbd>Page Down</kbd>

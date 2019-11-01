@@ -43,7 +43,7 @@ Game::Game():
     }
 
     // Default configuration file location
-    m_config_filename = FileSystem::initSettingsDirectory(COSMOSCROLL_DIRECTORY) + "/" + CONFIG_FILENAME;
+    m_config_filename = filesystem::init_settings_directory(COSMOSCROLL_DIRECTORY) + "/" + CONFIG_FILENAME;
 }
 
 
@@ -108,7 +108,7 @@ void Game::loadResources(const std::string& data_path)
 
 void Game::setConfigFile(const std::string& config_path)
 {
-    if (FileSystem::isDirectory(config_path))
+    if (filesystem::is_directory(config_path))
         m_config_filename = config_path + "/" + CONFIG_FILENAME;
 
     else
@@ -273,8 +273,8 @@ void Game::takeScreenshot() const
 {
     // Create screenshots directory if it doesn't exist yet
     std::string screenshot_dir = m_app_dir + DEFAULT_SCREENSHOT_DIR;
-    if (!FileSystem::isDirectory(screenshot_dir))
-        FileSystem::createDirectory(screenshot_dir);
+    if (!filesystem::is_directory(screenshot_dir))
+        filesystem::create_directory(screenshot_dir);
 
     char current_time[20]; // YYYY-MM-DD_HH-MM-SS + \0
     time_t t = time(NULL);

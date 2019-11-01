@@ -14,7 +14,7 @@ ShipItemWidget::ShipItemWidget(gui::Menu* parent, Item::Type type, const sf::Fon
     m_background.setTexture(Resources::getTexture("gui/armory-item.png"));
     m_background.setTextureRect(sf::IntRect(0, 0, 340, 60));
 
-    sf::Vector2f size = sfh::size(m_background);
+    sf::Vector2f size = sfh::getSize(m_background);
 
     // Item name
     m_txt_name.setFont(font);
