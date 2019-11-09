@@ -15,10 +15,6 @@ public:
     void update(float frametime) override;
 
     void draw(sf::RenderTarget& target) const override;
-
-private:
-    void EventCallback(int id) override;
 };
 
 #endif // PAUSEMENU_HPP
-

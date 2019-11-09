@@ -18,8 +18,6 @@ public:
     void onFocus() override;
 
 private:
-    void EventCallback(int id) override;
-
     ConfigButton* addRow(gui::FormLayout& form, Action::ID action);
 
     ConfigButton* m_triggered;
@@ -33,4 +31,3 @@ private:
 };
 
 #endif // KEYBOARDMENU_HPP
-

@@ -7,10 +7,6 @@ class AboutMenu: public BaseMenu
 {
 public:
     AboutMenu();
-
-private:
-    void EventCallback(int id) override;
 };
 
 #endif // ABOUTMENU_HPP
-

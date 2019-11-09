@@ -22,9 +22,37 @@ LevelMenu::LevelMenu():
     form.addRow(_t("levels.progression"), m_lab_progresion);
 
     gui::VBoxLayout layout(210, 240);
-    layout.Add(new CosmoButton(this, _t("levels.play")))->SetCallbackID(1);
-    layout.Add(new CosmoButton(this, _t("levels.armory")))->SetCallbackID(2);
-    layout.Add(new CosmoButton(this, _t("back_main_menu")))->SetCallbackID(0);
+    // Play selected level
+    layout.Add(new CosmoButton(this, _t("levels.play")))->setCallback([this]() {
+        int selected_level = m_opt_levels->GetSelectedValue();
+        // Load selected level in the level manager
+        m_levels.setCurrent(selected_level);
+        m_levels.initCurrentLevel();
+
+#ifdef DEBUG
+        printf("level %u (music: %s)\n", selected_level, m_levels.getMusicName());
+        printf(" - available points: %d\n", m_levels.getTotalPoints());
+        printf(" - entities:         %d\n", m_levels.getSpawnQueueSize());
+        printf(" - duration:      %02d:%02d\n", (int) m_levels.getDuration() / 60, (int) m_levels.getDuration() % 60);
+#endif
+        // Init control panel
+        ControlPanel::getInstance().setGameInfo(
+            I18n::templatize("panel.level", "{level}", selected_level)
+        );
+        // Init entity manager
+        EntityManager::getInstance().initialize();
+        Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
+    });
+
+    // Go to armory menu
+    layout.Add(new CosmoButton(this, _t("levels.armory")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_ArmoryMenu);
+    });
+
+    // Back to main menu
+    layout.Add(new CosmoButton(this, _t("back_main_menu")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
+    });
 }
 
 
@@ -50,44 +78,4 @@ void LevelMenu::onFocus()
         }
     }
     m_opt_levels->Select(current - 1);
-}
-
-
-void LevelMenu::EventCallback(int id)
-{
-    switch (id)
-    {
-        // Back to main menu
-        case 0:
-            Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
-            break;
-
-        // Launch selected level
-        case 1:
-        {
-            int selected_level = m_opt_levels->GetSelectedValue();
-            // Load selected level in the level manager
-            m_levels.setCurrent(selected_level);
-            m_levels.initCurrentLevel();
-
-#ifdef DEBUG
-    printf("level %u (music: %s)\n", selected_level, m_levels.getMusicName());
-    printf(" - available points: %d\n", m_levels.getTotalPoints());
-    printf(" - entities:         %d\n", m_levels.getSpawnQueueSize());
-    printf(" - duration:      %02d:%02d\n", (int) m_levels.getDuration() / 60, (int) m_levels.getDuration() % 60);
-#endif
-            // Init control panel
-            ControlPanel::getInstance().setGameInfo(
-                I18n::templatize("panel.level", "{level}", selected_level)
-            );
-            // Init entity manager
-            EntityManager::getInstance().initialize();
-            Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
-            break;
-        }
-        // Armory menu
-        case 2:
-            Game::getInstance().setCurrentScreen(Game::SC_ArmoryMenu);
-            break;
-    }
 }

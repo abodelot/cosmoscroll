@@ -27,15 +27,7 @@ AboutMenu::AboutMenu()
 
     gui::Button* b = new CosmoButton(this, _t("back"));
     b->setPosition(210, 410);
-    b->SetCallbackID(1);
-}
-
-
-void AboutMenu::EventCallback(int id)
-{
-    if (id == 1)
-    {
+    b->setCallback([]() {
         Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
-    }
+    });
 }
-

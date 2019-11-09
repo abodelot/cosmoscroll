@@ -32,11 +32,6 @@ public:
 
     void AddWidget(Widget* widget);
 
-    /**
-     * Méthode appelée lorsqu'un widget du menu déclenche un événement
-     */
-    virtual void EventCallback(int id);
-
     const Widget* GetFocusedWidget() const;
 
     /**

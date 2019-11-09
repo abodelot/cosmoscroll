@@ -50,14 +50,14 @@ void Button::OnKeyPressed(sf::Keyboard::Key code)
 {
     if (code == sf::Keyboard::Return)
     {
-        CallTheCallback();
+        triggerCallback();
     }
 }
 
 
 void Button::OnMouseClicked(int, int)
 {
-    CallTheCallback();
+    triggerCallback();
 }
 
 

@@ -20,7 +20,9 @@ ArmoryMenu::ArmoryMenu()
     for (int i = 0; i < Item::_COUNT; ++i)
     {
         m_items[i] = new ShipItemWidget(this, (Item::Type) i, font);
-        m_items[i]->SetCallbackID(1);
+        m_items[i]->setCallback([this]() {
+            onFocus();
+        });
         layout.Add(m_items[i]);
     }
 
@@ -30,7 +32,9 @@ ArmoryMenu::ArmoryMenu()
     // Back button
     gui::Button* but_back = new CosmoButton(this, _t("back"));
     but_back->setPosition(210, 410);
-    but_back->SetCallbackID(2);
+    but_back->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
+    });
 }
 
 
@@ -41,19 +45,5 @@ void ArmoryMenu::onFocus()
     for (int i = 0; i < Item::_COUNT; ++i)
     {
         m_items[i]->refresh();
-    }
-}
-
-
-void ArmoryMenu::EventCallback(int id)
-{
-    switch (id)
-    {
-        case 1:
-            onFocus();
-            break;
-        case 2:
-            Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
-            break;
     }
 }

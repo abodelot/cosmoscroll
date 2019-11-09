@@ -70,7 +70,7 @@ void ShipItemWidget::OnKeyPressed(sf::Keyboard::Key code)
     if (code == sf::Keyboard::Return)
     {
         if (buyNextLevel())
-            CallTheCallback();
+            triggerCallback();
     }
 }
 
@@ -78,7 +78,7 @@ void ShipItemWidget::OnKeyPressed(sf::Keyboard::Key code)
 void ShipItemWidget::OnMouseClicked(int, int)
 {
     if (buyNextLevel())
-        CallTheCallback();
+        triggerCallback();
 }
 
 

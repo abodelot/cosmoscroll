@@ -132,7 +132,7 @@ void Slider::UpdateHandle(int value)
     if (value != handle_index_)
     {
         handle_index_ = value;
-        CallTheCallback();
+        triggerCallback();
     }
     // then update handle sprite (handle is a square, size is Rect.Height)
     sf::Vector2f pos = handle_.getPosition();

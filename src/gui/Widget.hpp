@@ -2,6 +2,7 @@
 #define GUI_WIDGET_HPP
 
 #include <SFML/Graphics.hpp>
+#include <functional>
 
 namespace gui
 {
@@ -42,6 +43,8 @@ public:
     inline void SetVisible(bool visible) { visible_ = visible; }
     inline bool IsVisible() const { return visible_; }
 
+    void setCallback(std::function<void(void)> callback);
+
     /**
      * Mise à jour du widget
      * @param frametime: temps de la frame courante
@@ -57,11 +60,6 @@ public:
     virtual void OnMouseClicked(int, int) {}
 
     virtual void OnMouseWheelMoved(int) {}
-
-    void SetCallbackID(int id)
-    {
-        callback_id_ = id;
-    }
 
     /**
      * Holds widget dimension
@@ -82,7 +80,7 @@ public:
     bool ContainsPoint(float x, float y);
 
 protected:
-    void CallTheCallback();
+    void triggerCallback();
 
     /**
      * Callback état modifié
@@ -99,7 +97,7 @@ protected:
 
 private:
     Menu* owner_;
-    int callback_id_;
+    std::function<void(void)> callback_;
     int width_;
     int height_;
     bool focusable_;

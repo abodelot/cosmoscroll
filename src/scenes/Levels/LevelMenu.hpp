@@ -14,8 +14,6 @@ public:
     void onFocus() override;
 
 private:
-    void EventCallback(int id) override;
-
     sf::Text              m_title;
     LevelManager&         m_levels;
     CreditCounterWidget*  m_credits;
@@ -24,4 +22,3 @@ private:
 };
 
 #endif // LEVELMENU_HPP
-

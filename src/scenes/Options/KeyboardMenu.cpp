@@ -4,7 +4,7 @@
 
 
 KeyboardMenu::KeyboardMenu():
-    m_triggered(NULL)
+    m_triggered(nullptr)
 {
     setTitle(_t("keyboard.title"));
 
@@ -20,15 +20,17 @@ KeyboardMenu::KeyboardMenu():
 
     gui::Button* back = new CosmoButton(this, _t("back"));
     back->setPosition(210, 410);
-    back->SetCallbackID(9000);
+    back->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
+    });
 }
 
 
 void KeyboardMenu::onEvent(const sf::Event& event)
 {
-    if (m_triggered != NULL)
+    if (m_triggered != nullptr)
     {
-        // By-pass GUI event handler
+        // Waiting for user input: bypass GUI event handler
         if (event.type == sf::Event::KeyPressed)
         {
             if (event.key.code != sf::Keyboard::Escape)
@@ -42,7 +44,7 @@ void KeyboardMenu::onEvent(const sf::Event& event)
             {
                 // Cancel input and reset button label
                 m_triggered->setKeyboardLabel();
-                m_triggered = NULL;
+                m_triggered = nullptr;
             }
         }
     }
@@ -55,7 +57,7 @@ void KeyboardMenu::onEvent(const sf::Event& event)
 
 void KeyboardMenu::onFocus()
 {
-    m_triggered = NULL;
+    m_triggered = nullptr;
     // Refresh labels
     but_up_->setKeyboardLabel();
     but_up_->setKeyboardLabel();
@@ -68,34 +70,15 @@ void KeyboardMenu::onFocus()
 }
 
 
-void KeyboardMenu::EventCallback(int id)
-{
-    // Input::Action enumerations are used as widget ids
-    switch (id)
-    {
-        case Action::UP:          m_triggered = but_up_;      break;
-        case Action::DOWN:        m_triggered = but_down_;    break;
-        case Action::LEFT:        m_triggered = but_left_;    break;
-        case Action::RIGHT:       m_triggered = but_right_;   break;
-        case Action::USE_LASER:   m_triggered = but_weapon_;  break;
-        case Action::USE_COOLER:  m_triggered = but_cooler_;  break;
-        case Action::USE_MISSILE: m_triggered = but_missile_; break;
-        case 9000:
-            Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
-            break;
-    }
-    // We are now waiting for user input
-    if (m_triggered != NULL)
-    {
-        m_triggered->setString("<press key>");
-    }
-}
-
-
 ConfigButton* KeyboardMenu::addRow(gui::FormLayout& form, Action::ID action)
 {
     ConfigButton* button = new ConfigButton(this, action);
     button->setKeyboardLabel();
+    button->setCallback([button, this]() {
+        m_triggered = button;
+        // We are now waiting for user input
+        m_triggered->setString("<press key>");
+    });
     form.addRow(Action::toString(action), button);
     return button;
 }

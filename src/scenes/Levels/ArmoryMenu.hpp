@@ -14,8 +14,6 @@ public:
     void onFocus() override;
 
 private:
-    void EventCallback(int id) override;
-
     ShipItemWidget*      m_items[Item::_COUNT];
     CreditCounterWidget* m_credits;
 };

@@ -207,9 +207,6 @@ void Menu::AddWidget(Widget* widget)
 }
 
 
-void Menu::EventCallback(int) {}
-
-
 WidgetStyle& Menu::GetWidgetStyle()
 {
     return theme_;

@@ -9,8 +9,6 @@ public:
     AudioMenu();
 
 private:
-    void EventCallback(int id) override;
-
     gui::CheckBox* cb_music_;
     gui::Slider* sl_music_vol_;
     gui::CheckBox* cb_sound_;
@@ -18,4 +16,3 @@ private:
 };
 
 #endif // AUDIOMENU_HPP
-

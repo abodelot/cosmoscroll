@@ -9,8 +9,6 @@ public:
     SettingsMenu();
 
 private:
-    void EventCallback(int id) override;
-
     void addResolution(size_t width, size_t height);
 
     gui::CheckBox*                 m_vsync;

@@ -122,7 +122,7 @@ void OptionList<T>::Select(int index)
     if (index > 0 && index < (int) options_.size() && index != current_opt_)
     {
         current_opt_ = index;
-        CallTheCallback();
+        triggerCallback();
     }
 }
 
@@ -174,7 +174,7 @@ void OptionList<T>::OnKeyPressed(sf::Keyboard::Key key)
     if (opt != current_opt_)
     {
         current_opt_ = opt;
-        CallTheCallback();
+        triggerCallback();
     }
 }
 
@@ -196,7 +196,7 @@ void OptionList<T>::OnMouseClicked(int x, int y)
     if (opt != current_opt_)
     {
         current_opt_ = opt;
-        CallTheCallback();
+        triggerCallback();
     }
 }
 
@@ -211,7 +211,7 @@ void OptionList<T>::OnMouseWheelMoved(int delta)
     {
         current_opt_ = NextIndex();
     }
-    CallTheCallback();
+    triggerCallback();
 }
 
 template <class T>

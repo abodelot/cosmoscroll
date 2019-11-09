@@ -4,7 +4,7 @@
 
 
 JoystickMenu::JoystickMenu():
-    m_triggered(NULL)
+    m_triggered(nullptr)
 {
     setTitle(_t("joystick.title"));
 
@@ -17,15 +17,17 @@ JoystickMenu::JoystickMenu():
 
     gui::Button* back = new CosmoButton(this, _t("back"));
     back->setPosition(210, 410);
-    back->SetCallbackID(9001);
+    back->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
+    });
 }
 
 
 void JoystickMenu::onEvent(const sf::Event& event)
 {
-    if (m_triggered != NULL)
+    if (m_triggered != nullptr)
     {
-        // By-pass GUI event handler
+        // Waiting for user input: bypass GUI event handler
         if (event.type == sf::Event::JoystickButtonPressed)
         {
             // Binding action to pressed button
@@ -37,7 +39,7 @@ void JoystickMenu::onEvent(const sf::Event& event)
         {
             // Cancel input and reset button label
             m_triggered->setJoystickLabel();
-            m_triggered = NULL;
+            m_triggered = nullptr;
         }
     }
     else
@@ -49,7 +51,7 @@ void JoystickMenu::onEvent(const sf::Event& event)
 
 void JoystickMenu::onFocus()
 {
-    m_triggered = NULL;
+    m_triggered = nullptr;
     // Refresh labels
     but_weapon_->setJoystickLabel();
     but_missile_->setJoystickLabel();
@@ -58,31 +60,15 @@ void JoystickMenu::onFocus()
 }
 
 
-void JoystickMenu::EventCallback(int id)
-{
-    // Input::Action enumerations are used as widget ids
-    switch (id)
-    {
-        case Action::USE_LASER:   m_triggered = but_weapon_;  break;
-        case Action::USE_COOLER:  m_triggered = but_cooler_;  break;
-        case Action::USE_MISSILE: m_triggered = but_missile_; break;
-        case Action::PAUSE:       m_triggered = but_pause_;   break;
-        case 9001:
-            Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
-            break;
-    }
-    // We are now waiting for user input
-    if (m_triggered != NULL)
-    {
-        m_triggered->setString("<press button>");
-    }
-}
-
-
 ConfigButton* JoystickMenu::addRow(gui::FormLayout& form, Action::ID action)
 {
     ConfigButton* button = new ConfigButton(this, action);
     button->setJoystickLabel();
+    button->setCallback([button, this]() {
+        m_triggered = button;
+        // We are now waiting for user input
+        m_triggered->setString("<press button>");
+    });
     form.addRow(Action::toString(action), button);
     return button;
 }

@@ -3,15 +3,14 @@
 
 using namespace gui;
 
-Widget::Widget(Menu* owner, bool focusable)
+Widget::Widget(Menu* owner, bool focusable):
+    owner_(owner),
+    width_(0),
+    height_(0),
+    focusable_(focusable),
+    visible_(true),
+    state_(State::DEFAULT)
 {
-    focusable_ = focusable;
-    state_ = State::DEFAULT;
-    visible_ = true;
-    callback_id_ = -1;
-    owner_ = owner;
-    width_ = 0;
-    height_ = 0;
     owner->AddWidget(this);
 }
 
@@ -29,8 +28,9 @@ State::EState Widget::GetState() const
 }
 
 
-void Widget::Update(float) {}
-
+void Widget::Update(float)
+{
+}
 
 
 bool Widget::ContainsPoint(float x, float y)
@@ -76,12 +76,17 @@ Menu* Widget::GetOwner() const
 }
 
 
-void Widget::CallTheCallback()
+void Widget::setCallback(std::function<void(void)> callback)
 {
-    OnCallbackTriggered();
-    if (callback_id_ != -1)
+    callback_ = callback;
+}
+
+
+void Widget::triggerCallback()
+{
+    if (callback_)
     {
-        owner_->EventCallback(callback_id_);
+        callback_();
     }
 }
 

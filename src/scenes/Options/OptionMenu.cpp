@@ -9,34 +9,19 @@ OptionMenu::OptionMenu()
 
     gui::VBoxLayout layout(210, 120);
 
-    layout.Add(new CosmoButton(this, _t("options.keyboard")))->SetCallbackID(1);
-    layout.Add(new CosmoButton(this, _t("options.joystick")))->SetCallbackID(2);
-    layout.Add(new CosmoButton(this, _t("options.audio")))->SetCallbackID(3);
-    layout.Add(new CosmoButton(this, _t("options.settings")))->SetCallbackID(4);
-    layout.Add(new CosmoButton(this, _t("back")))->SetCallbackID(5);
+    layout.Add(new CosmoButton(this, _t("options.keyboard")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_KeyboardMenu);
+    });
+    layout.Add(new CosmoButton(this, _t("options.joystick")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_JoystickMenu);
+    });
+    layout.Add(new CosmoButton(this, _t("options.audio")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_AudioMenu);
+    });
+    layout.Add(new CosmoButton(this, _t("options.settings")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_SettingsMenu);
+    });
+    layout.Add(new CosmoButton(this, _t("back")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
+    });
 }
-
-
-void OptionMenu::EventCallback(int id)
-{
-    Game& game = Game::getInstance();
-    switch (id)
-    {
-        case 1:
-            game.setCurrentScreen(Game::SC_KeyboardMenu);
-            break;
-        case 2:
-            game.setCurrentScreen(Game::SC_JoystickMenu);
-            break;
-        case 3:
-            game.setCurrentScreen(Game::SC_AudioMenu);
-            break;
-        case 4:
-            game.setCurrentScreen(Game::SC_SettingsMenu);
-            break;
-        case 5:
-            game.setCurrentScreen(Game::SC_MainMenu);
-            break;
-    }
-}
-

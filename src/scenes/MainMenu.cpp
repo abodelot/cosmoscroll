@@ -14,10 +14,18 @@ MainMenu::MainMenu()
     gui::VBoxLayout layout(210, 120);
     layout.SetSpacing(0, 14);
 
-    layout.Add(new CosmoButton(this, _t("main.levels")))->SetCallbackID(1);
-    layout.Add(new CosmoButton(this, _t("main.options")))->SetCallbackID(3);
-    layout.Add(new CosmoButton(this, _t("main.about")))->SetCallbackID(4);
-    layout.Add(new CosmoButton(this, _t("main.quit")))->SetCallbackID(5);
+    layout.Add(new CosmoButton(this, _t("main.levels")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_LevelMenu);
+    });
+    layout.Add(new CosmoButton(this, _t("main.options")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_OptionMenu);
+    });
+    layout.Add(new CosmoButton(this, _t("main.about")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_AboutMenu);
+    });
+    layout.Add(new CosmoButton(this, _t("main.quit")))->setCallback([]() {
+        Game::getInstance().quit();
+    });
 }
 
 
@@ -25,25 +33,4 @@ void MainMenu::draw(sf::RenderTarget& target) const
 {
     BaseMenu::draw(target);
     target.draw(m_title);
-}
-
-
-void MainMenu::EventCallback(int id)
-{
-    Game& game = Game::getInstance();
-    switch (id)
-    {
-        case 1:
-            game.setCurrentScreen(Game::SC_LevelMenu);
-            break;
-        case 3:
-            game.setCurrentScreen(Game::SC_OptionMenu);
-            break;
-        case 4:
-            game.setCurrentScreen(Game::SC_AboutMenu);
-            break;
-        case 5:
-            game.quit();
-            break;
-    }
 }

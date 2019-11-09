@@ -13,9 +13,16 @@ PauseMenu::PauseMenu()
     setTitle(_t("pause.title"), 120);
 
     gui::VBoxLayout layout(210, 200);
-    layout.Add(new CosmoButton(this, _t("pause.resume")))->SetCallbackID(1);
-    layout.Add(new CosmoButton(this, _t("back_main_menu")))->SetCallbackID(2);
-    layout.Add(new CosmoButton(this, _t("pause.quit")))->SetCallbackID(3);
+    layout.Add(new CosmoButton(this, _t("pause.resume")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_PlayScreen);
+        SoundSystem::playMusic();
+    });
+    layout.Add(new CosmoButton(this, _t("back_main_menu")))->setCallback([]() {
+        Game::getInstance().setCurrentScreen(Game::SC_MainMenu);
+    });
+    layout.Add(new CosmoButton(this, _t("pause.quit")))->setCallback([]() {
+        Game::getInstance().quit();
+    });
 }
 
 
@@ -41,25 +48,6 @@ void PauseMenu::onFocus()
     Game::getInstance().getWindow().setKeyRepeatEnabled(true);
 
     SoundSystem::pauseMusic();
-}
-
-
-void PauseMenu::EventCallback(int id)
-{
-    Game& game = Game::getInstance();
-    switch (id)
-    {
-        case 1:
-            game.setCurrentScreen(Game::SC_PlayScreen);
-            SoundSystem::playMusic();
-            break;
-        case 2:
-            game.setCurrentScreen(Game::SC_MainMenu);
-            break;
-        case 3:
-            game.quit();
-            break;
-    }
 }
 
 

@@ -57,7 +57,7 @@ void CheckBox::OnKeyPressed(sf::Keyboard::Key code)
     if (code == sf::Keyboard::Return)
     {
         checked_ = !checked_;
-        CallTheCallback();
+        triggerCallback();
     }
 }
 
@@ -65,7 +65,7 @@ void CheckBox::OnKeyPressed(sf::Keyboard::Key code)
 void CheckBox::OnMouseClicked(int, int)
 {
     checked_ = !checked_;
-    CallTheCallback();
+    triggerCallback();
 }
 
 
