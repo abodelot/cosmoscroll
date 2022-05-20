@@ -264,7 +264,7 @@ void Game::unloadScreens()
 void Game::quit()
 {
     m_running = false;
-    SoundSystem::stopAll();
+    SoundSystem::atExit();
     writeConfig();
 }
 

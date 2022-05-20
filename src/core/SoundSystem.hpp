@@ -2,7 +2,7 @@
 #define SOUNDSYSTEM_HPP
 
 #include <SFML/Audio.hpp>
-#include "utils/ModMusic.hpp"
+#include "vendor/sfMod/sfMod.hpp"
 
 /**
  * Static class for playing sound effects and music
@@ -52,14 +52,14 @@ public:
     /**
      * Stop music and sound effects
      */
-    static void stopAll();
+    static void atExit();
 
 private:
     static const int MAX_SOUNDS = 20;
 
     static sf::Sound   m_sounds[MAX_SOUNDS];
     static int         m_last_sound_played;
-    static ModMusic    m_music;
+    static sfmod::Mod  m_music;
     static int         m_music_volume;
     static int         m_sound_volume;
     static bool        m_enable_music;

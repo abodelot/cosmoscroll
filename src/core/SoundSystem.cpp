@@ -4,7 +4,7 @@
 
 sf::Sound     SoundSystem::m_sounds[MAX_SOUNDS];
 int           SoundSystem::m_last_sound_played = 0;
-ModMusic      SoundSystem::m_music;
+sfmod::Mod    SoundSystem::m_music;
 int           SoundSystem::m_music_volume = 100;
 int           SoundSystem::m_sound_volume = 100;
 bool          SoundSystem::m_enable_music = true;
@@ -22,8 +22,7 @@ static inline void clamp(T& value, T min, T max)
 
 bool SoundSystem::openMusicFromFile(const std::string& path)
 {
-    stopMusic();
-    if (m_music.openFromFile(path))
+    if (m_music.loadFromFile(path))
     {
         m_music.setLoop(true);
         m_music.setVolume(m_music_volume);
@@ -44,7 +43,7 @@ void SoundSystem::playMusic()
 
 void SoundSystem::stopMusic()
 {
-    m_music.stop();
+    m_music.unload();
 }
 
 
@@ -138,7 +137,7 @@ bool SoundSystem::isSoundEnabled()
 }
 
 
-void SoundSystem::stopAll()
+void SoundSystem::atExit()
 {
     for (int i = 0; i < MAX_SOUNDS; ++i)
     {

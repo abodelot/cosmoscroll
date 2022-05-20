@@ -8,7 +8,7 @@ DEP     := $(SRC:%.cpp=$(OBJDIR)/%.d)
 CC      := g++
 CFLAGS  := -MMD -MP -I$(SRCDIR) -std=c++11 -pedantic -O2
 WFLAGS  := -Wall -Wextra -Wwrite-strings
-LDFLAGS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -ldumb
+LDFLAGS := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lmodplug
 
 C_GREEN  := \033[1;32m
 C_YELLOW := \033[1;33m
